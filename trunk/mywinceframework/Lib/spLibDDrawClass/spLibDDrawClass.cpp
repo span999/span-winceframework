@@ -146,7 +146,8 @@ DWORD spLibDDraw::InitDDraw( void )
 		else
 		{
 			// Get Fullscreen mode.
-			dwFlagset = DDSCL_FULLSCREEN|DDSCL_EXCLUSIVE;
+			///dwFlagset = DDSCL_FULLSCREEN|DDSCL_EXCLUSIVE;
+			dwFlagset = DDSCL_FULLSCREEN;	///CE not support DDSCL_EXCLUSIVE flag
 		}
 		
 		hr = m_pDD->SetCooperativeLevel( m_hWnd, dwFlagset );
@@ -201,7 +202,8 @@ DWORD spLibDDraw::GetBitDepth( IDirectDrawSurface *pThisSurf )
 	
     if( NULL != pThisSurf )
     {
-        hr = pThisSurf->Lock( NULL, &m_ddsd, DDLOCK_WAIT, NULL );
+        ///hr = pThisSurf->Lock( NULL, &m_ddsd, DDLOCK_WAIT, NULL );
+		hr = pThisSurf->Lock( NULL, &m_ddsd, DDLOCK_WAITNOTBUSY, NULL );	///CE not support DDLOCK_WAIT flag
 		
 		if( hr != DD_OK )
 			spMessageBoxOut( TEXT("GetBitDepth:Lock fail !!") );
@@ -211,7 +213,7 @@ DWORD spLibDDraw::GetBitDepth( IDirectDrawSurface *pThisSurf )
             dwRet = m_ddsd.ddpfPixelFormat.dwRGBBitCount;
 
 			// Unlock surface
-            hr = g_pDDSBack->Unlock( NULL );
+            hr = pThisSurf->Unlock( NULL );
 			if( hr != DD_OK )
 				spMessageBoxOut( TEXT("GetBitDepth:Unlock fail !!") );
 		}
@@ -517,7 +519,8 @@ DWORD spLibDDraw::PrimaryBlt( RECT *prt, DWORD dwRGB )
 		}
 		
         // Blit 1x1 rectangle using solid color op
-        hr = m_pDDSPrimary->Blt( prt, NULL, NULL, DDBLT_WAIT | DDBLT_COLORFILL, &ddbfx );
+        ///hr = m_pDDSPrimary->Blt( prt, NULL, NULL, DDBLT_WAIT | DDBLT_COLORFILL, &ddbfx );
+		hr = m_pDDSPrimary->Blt( prt, NULL, NULL, DDBLT_COLORFILL, &ddbfx );	///CE not support DDBLT_WAIT flag
 		
 		if( hr != DD_OK )
 			spMessageBoxOut( TEXT("PrimaryBlt: Blt fail !!") );
@@ -562,7 +565,7 @@ BOOL spLibDDraw::PixelDraw( DWORD dwX, DWORD dwY, DWORD dwR, DWORD dwG, DWORD dw
 	hr = m_pDDSPrimary->Lock( LockRect, &m_ddsd, DDLOCK_WAITNOTBUSY, NULL );
 
 	BYTE * pPixelOffset = (BYTE*)m_ddsd.lpSurface + dwX * m_ddsd.lXPitch + dwY * m_ddsd.lPitch;
-	*(WORD*)pPixelOffset = CreateRGB( dwR, dwG, dwB );
+	*(WORD*)pPixelOffset = (WORD)CreateRGB( dwR, dwG, dwB );
 	hr = m_pDDSPrimary->Unlock( LockRect );
 
 	return bRet;
