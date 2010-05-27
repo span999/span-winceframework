@@ -1,0 +1,789 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--TO READ THIS HELP FILE, RIGHT-CLICK ON THE FILE NAME IN THE
+    SOLUTION EXPLORER PANE AND SELECT "VIEW IN BROWSER"
+
+#f8f7ef
+-->
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Microsoft Windows Mobile 5.0 Starter Kit</title>
+<style>
+<!--
+BODY         { background: url('Images/top-vc.gif') repeat-x; font-family: Verdana; font-size: 67% }
+.maindiv     { background: url('Images/side-vc.gif') repeat-y; padding-left: 55px; padding-top: 5px; position: relative; height: 50px }
+P            { margin-top: 0; margin-bottom: 6px; line-height:130% }
+H1           { margin-top: 20px; margin-bottom: 12px; font-size:190% }
+H2           { color: #585F56; left: -55px; position: relative; margin-top: 21px; margin-bottom: 9px; font-size:170% }
+H3           { margin-top: 21px; margin-bottom: 9px; font-size: 140%;  font-weight: bold}
+H4           { margin-top: 18px; margin-bottom: 9px; font-size: 140%; font-weight: bold}
+OL           { margin-top: 0; margin-bottom: 9px; line-height:130%}
+UL           { margin-top: 0; margin-bottom: 9px; line-height:130%}
+LI           { margin-top: 0; margin-bottom: 6px }
+BLOCKQUOTE   { margin-left: 20px }
+PRE          {font-family: "Courier New"; font-size:11.0pt; BACKGROUND: #FFFFCC;  padding-top: 6px; padding-bottom: 6px;}
+TABLE        { padding: 4px; BACKGROUND: #f8f7ef; BORDER: #DDDCD6 1px solid; BORDER-COLLAPSE: collapse; margin-bottom: 9px; }
+TR           { vertical-align: top} 
+TD           { padding: 4px; font-family: Verdana; font-size: 67%; line-height: 130%} 
+.contents    { line-height: 150%; font-color: #003300 }
+DIV.CodeBlock   { font-family: "Courier New"; font-size: 100%; margin-bottom: 6px; BACKGROUND: #f8f7ef; BORDER: #eeede6 1px solid; padding: 10px; }
+.CodeInline  { font-family: "Courier New" }
+.ProcedureLabel {margin-top: 12px; font-style: italic; font-weight: bold; color: #0D4CC3 } 
+.FileNameCol { padding: 6px; BACKGROUND: #eeede6; width=220px; font-weight: bold}
+.keyword { font-size:11.0pt;     font-family: "Courier New"; color: "blue"}
+.type { font-size:11.0pt;     font-family: "Courier New"; color: "teal"}
+.string{ font-size:11.0pt;     font-family: "Courier New"; color: "maroon"}
+-->
+</style>
+</head>
+
+<body topmargin="0" leftmargin="0" rightmargin="20" style="background-image: url('Images/top-vc.gif')">
+<div class="maindiv">
+
+<a name="top">
+
+<!-- MAIN CONTENT BEGINS -->
+
+</a>
+
+<p><a name="top">Microsoft Windows Mobile 5.0 Starter Kit </a></p>
+<h1><a name="top">Starter Kit: Today Screen Plug-in</a></h1>
+<p><b><a name="top">Contents:</a></b></p>
+
+<p class="contents">
+<a href="#Introduction_">Introduction</a>
+<br><a href="#Goals">Goals</a>
+<br><a href="#Building">Building and Installing the Plug-ins</a>
+
+<br>
+<a href="#Debugging">Debugging the Plug-ins</a><br>
+<a href="#How_It_Works_Today">How the Today Screen Plug-in Works</a><br>
+<a href="#How_It_Works_WMP">How the WMP Mobile Background UI Plug-in 
+Works</a>&nbsp;&nbsp;
+<br><a href="#Extending_the_Plugins">Extending the Plug-ins</a>
+<br><a href="#ForMoreInformation">For More Information</a>
+<br>
+
+</p>
+
+<h2>
+<A href="#top">
+<IMG src="Images/topjump-vc.gif" border="0" width="55" height="13"></A>
+<a name="Introduction_">Introduction</a>
+</h2>
+
+
+<p>
+<img border="0" src="Images/WMPStatusPlugin.JPG" width="240" height="320" align="right"><p>This 
+Microsoft Windows Mobile 5.0 Starter Kit is a complete Today Screen plug-in&nbsp;that is written in Visual C++ for a Microsoft Windows Mobile-based Pocket PC. The plug-in provides 
+information about the musical artist, album, track number, and track 
+title of whatever musical selection is currently playing in Microsoft Windows Media Player Mobile (WMP Mobile). By tapping the 
+WMPStatus plug-in, you can switch between Play and Pause mode in WMP Mobile.&nbsp; The 
+sample also includes a WMP Mobile background UI plug-in that is used to 
+control the current instance of the WMP Mobile. An installation 
+project for each plug-in is provided. The project comes ready to compile and 
+run.&nbsp; The <a href="#Extending_the_Plugins">Extending the Plug-ins</a> section contains information 
+on some additional customizations you may want to make.</p>
+<p><b>Note:</b> It is assumed that you have Visual Studio 2005, Windows Mobile 
+5.0 Pocket PC SDK, and ActiveSync 4.0 or later installed.</p>
+<p><b>Note:</b> This documentation assumes that you have a basic knowledge of 
+programming concepts and the Visual C++ environment. You must also have a basic 
+understanding of COM programming and its principles. You can learn more about 
+these topics in the product documentation by clicking <b>Help</b> on the File 
+Menu, or by positioning the mouse cursor on language keywords or user interface 
+elements such as windows or dialog boxes, and pressing <b>F1</b>.
+</p>
+
+<h2>
+<A href="#top">
+<IMG src="Images/topjump-vc.gif" border="0"></A>
+<a name="Goals">Goals</a>
+</h2>
+
+<p>After reading through this documentation, you will understand how 
+a Today Screen plug-in for a Windows Mobile-based Pocket PC works.&nbsp; You 
+will also gain an understanding of how to create a WMP Mobile background UI plug-in.&nbsp; This 
+documentation will explain the following tasks:</p>
+<ul>
+<li>How to create and install a Today Screen plug-in on a Windows Mobile-based 
+Pocket PC.</li>
+<li>How to receive State and Notification Broker notifications from WMP Mobile.</li>
+<li>How to create and install a WMP Mobile background UI&nbsp;plug-in.</li>
+<li>How to debug the Today Screen and WMP Mobile background UI plug-ins.</li>
+</ul>
+
+
+
+<h2>
+<A href="#top">
+<IMG src="Images/topjump-vc.gif" border="0"></A>
+<a name="Building">Building and Installing the Plug-in</a>s
+</h2>
+
+<h3><b>Building and Installing the Today Screen Plug-in</b></h3>
+<p>To build and install the WMPStatus Today Screen plug-in on a Windows Mobile-based 
+Pocket PC, follow these steps:</p>
+<ol>
+	<li>After loading the solution into Visual Studio 2005, right-click the WMPStatusPlugin project 
+	in the Solution Explorer, then select Build. Next, 
+	right-click the WMPStatusPluginCab project and select Build. The WMPStatusPluginCab.CAB file is created in the \...\WMPStatusPlugin\WMPStatusPluginCab\Debug 
+	directory.</li>
+	<li>The emulator works quite well for testing during development.&nbsp; Make 
+	sure that you have ActiveSync 4.0 or later installed so that you 
+	can &quot;cradle&quot; the emulator. Make sure that no other Windows Mobile-based 
+	device is currently cradled and connected to ActiveSync.&nbsp; On the Visual 
+	Studio 2005 Tools menu, click Device Emulator Manager to see the list of installed 
+	emulators.</li>
+	<li>Select the Windows Mobile 5.0 Pocket PC Emulator. On the Actions menu, click Connect.&nbsp; </li>
+	<li>After the connection is made, cradle the emulator by clicking Cradle 
+	from the Actions menu.&nbsp; </li>
+	<li>Copy and paste the \...\WMPStatusPlugin\WMPStatusPluginCab\Debug\WMPStatusPluginCab.CAB file output from your project 
+	to the emulator by using Microsoft Windows Explorer.</li>
+	<li>In the Windows Mobile 5.0 Pocket PC Emulator, use File Explorer to find 
+	the location to where you copied the WMPStatusPluginCab.CAB file. Tap the WMPStatusPluginCab.CAB file to install the Today Screen 
+	plug-in.</li>
+	<li>When installation is complete, you can use the Remote Registry Editor 
+	for the Pocket PC to verify that the plug-in has been registered correctly. From your 
+	development computer, click Start, point to All Programs, point to Microsoft 
+	Visual Studio 2005, point to Visual Studio Remote Tools, and then click 
+	Remote Registry Editor. Make sure that the Today Screen plug-in has been 
+	registered correctly by looking at the HKEY_LOCAL_MACHINE\Software\Microsoft\Today\Items\&lt;plug-in 
+	name&gt; registry subkey to confirm that the Today Screen plug-in is listed.</li>
+	<li>To load the DLL, you must force the Today Screen to refresh its 
+	plug-ins. In the Windows Mobile 5.0 Pocket PC Emulator, tap Settings, tap 
+	Personal, tap Today, and then tap Items. This forces a reload of all the 
+	Today Screen plug-ins. The WMPStatus plug-in should appear in the list and be 
+	selected.&nbsp; Tap OK and return to the Today Screen. The WMPStatus Today Screen 
+	plug-in appears.</li>
+	<li>Play some files on Windows Media Player Mobile to confirm that the song 
+	information displays and updates correctly in the Today Screen. Note that tapping on the Today Screen plug-in will not cause the Windows 
+	Media Player Mobile player to switch from Play to Pause mode yet as we 
+	have not yet created and installed the WMP Mobile plug-in.<br>
+&nbsp;</li>
+</ol>
+<p><b>Note</b>&nbsp; Today Screen plug-ins stay loaded in memory. If you need to 
+reinstall the Today Screen plug-in after you have edited the code, you must 
+first remove the previous version of the Today Screen plug-in. To do this, 
+follow these steps:</p>
+<ol>
+	<li>In the Windows Mobile 5.0 Pocket PC Emulator, tap Settings, tap 
+	System, and then tap Remove Programs.</li>
+	<li>Find and select the WMPStatus Today Screen plug-in, and then tap Remove.</li>
+	<li>To remove the Today Screen plug-in from memory, tap Settings, 
+	tap Personal, tap Today, and then tap Items. This will force a reload of all the 
+	registered Today Screen plug-ins.<br>
+&nbsp;</li>
+</ol>
+<h3><b>Building and Installing the WMP Mobile Background UI Plug-in</b></h3>
+<p>To build and install the WMP Mobile background UI plug-in, follow these steps:</p>
+<ol>
+	<li>Right-click the WMPlayerPlugin project, then select Build. Next, 
+	right-click the WMPlayerPluginCab project, then select Build. The WMPlayerPluginCab.CAB file is created in the \...\WMPlayerPlugin\WMPlayerPluginCab\Debug 
+	directory.</li>
+	<li>Copy and paste the WMPlayerPluginCab.CAB file output from your project to the 
+	emulator by using Windows Explorer.</li>
+	<li>In the Windows Mobile 5.0 Pocket PC Emulator, use File Explorer to find the location to where you copied the WMPlayerPluginCab.CAB file to and click on the file to install the plug-in</li>
+	<li>When installation is complete, you can use the Remote Registry Editor 
+	for the Pocket PC to verify that it has been registered correctly.&nbsp; On 
+	your development computer, click Start, point to All Programs, point to 
+	Microsoft Visual Studio 2005, point to Visual Studio Remote Tools, and then 
+	click Remote Registry Editor. Make sure that the WMP Mobile 
+	background UI plug-in has been registered correctly by looking at the HKEY_LOCAL_MACHINE\Software\Microsoft\MediaPlayer\UIPlugins\&lt;plug-in GUID&gt; 
+	registry subkey to confirm that the WMP Mobile background 
+	UI plug-in is listed. Also, make sure that the COM object has been 
+	registered correctly by looking at the HKEY_CLASSES_ROOT\CLSID\&lt;plug-in GUID&gt; 
+	registry subkey.</li>
+	<li>Start WMP Mobile and play some music.</li>
+	<li>Because the WMP Mobile plug-in is a background UI 
+	plug-in, there is no visual indication that it is loaded. To verify that the 
+	WMP Mobile background UI plug-in was loaded, 
+	click Start on your development computer, point to All Programs, point to 
+	Microsoft Visual Studio 2005, point to Visual Studio Remote Tools, point to 
+	Visual Studio Remote Tools, and then click Remote Process Viewer. You should 
+	see the plug-in listed in the processes.</li>
+	<li>You should now be able to use the Today Screen plug-in to switch between 
+	Play and Pause modes on the WMP Mobile player.</li>
+</ol>
+<p>&nbsp;</p>
+<p><b>Note</b>&nbsp; The Windows Media Player Mobile background UI plug-in is in 
+memory as long as WMP Mobile is running. To 
+remove the plug-in from memory, 
+follow these steps:</p>
+<ol>
+	<li>In the Windows Mobile 5.0 Pocket PC Emulator, tap Settings, tap 
+	System, tap Memory, tap Running Programs, and then select Windows Media.</li>
+	<li>Tap Stop to end the program and remove the DLL.<br>
+&nbsp;</li>
+</ol>
+
+
+
+<h2>
+<A href="#top">
+<IMG src="Images/topjump-vc.gif" border="0"></A>
+<a name="Debugging">Debugging the Plug-ins</a>
+</h2>
+<p>
+You can debug the Today Screen and WMP Mobile background UI plug-ins by using the Attach To Process feature in Visual Studio 
+2005. To do this, follow these steps:</p>
+<ol>
+	<li>Manually copy the debugging symbols in the .pdb files from the Debug 
+	directory to the installation directory of the DLL that is on the 
+	Windows Mobile 5.0 Pocket PC Emulator.&nbsp; In this sample, you would copy 
+	\...\WMPStatusPlugin\WMPStatusPlugin\Windows Mobile 5.0 Pocket PC SDK 
+(ARMV4I)\Debug\WMPStatusPlugin.pdb to the \Program Files\WMPStatusPluginCab 
+directory on the emulator and \...\WMPStatusPlugin\WMPlayerPlugin\Windows Mobile 5.0 Pocket PC SDK 
+(ARMV4I)\Debug\WMPlayerPlugin.pdb to the \Program Files\WMPlayerPluginCab directory.</li>
+	<li>On the Visual Studio 2005 Tools menu, select Attach To Process.</li>
+	<li>In the Attach to Process dialog, select Smart Device for the Transport. 
+	Select Windows Mobile 5.0 Pocket PC Emulator for the Qualifier, using the 
+	Browse button if necessary.</li>
+	<li>To debug the Today Screen plug-in, attach to the shell32.exe process. To 
+	debug the Windows Media Player Mobile background UI plug-in, attach to the 
+	wmplayer.exe process.</li>
+	<li>You should now be able to set break points and evaluate variables in the 
+	Today Screen plug-in or the WMP Mobile background UI 
+	plug-in.&nbsp;&nbsp; You can run two instances of Visual Studio 2005 to 
+	debug the Today Screen plug-in and the Windows Media Player Mobile 
+	background UI plug-in at the same time.</li>
+</ol>
+<p class="MsoNormal"><b>Note&nbsp; </b>If you become uncertain of the state of 
+the registry for the Windows Mobile 5.0 Pocket PC Emulator, or the state of the 
+file system, or other aspects of the Windows Mobile 5.0 Pocket PC Emulator, do a 
+hard reset of the Windows Mobile 5.0 Pocket PC Emulator. To do this, follow 
+these steps:</p>
+<ol>
+	<li>
+	<p class="MsoNormal">From the emulator container window,&nbsp; click the 
+	File menu, point to Reset, and then click Hard.</p></li>
+	<li>
+	<p class="MsoNormal">Re-install the Today Screen plug-in and the WMP Mobile background UI plug-in, and any other necessary files, on 
+	the Windows Mobile 5.0 Pocket PC Emulator.<b><br>
+&nbsp;</b></p></li>
+</ol>
+<h2>
+<A href="#top">
+<IMG src="Images/topjump-vc.gif" border="0"></A>
+<a name="How_It_Works_Today">How the Today Screen Plug-in Works</a>
+</h2>
+
+<h3><b>WMPStatusPlugin Project Program Files</b></h3>
+
+<p>The project contains eight different C++ source-code files. The source-code 
+files perform the following functions: </p>
+
+	<p>&nbsp;</p>
+
+<table width="97%" style="border-collapse: collapse">
+<tr><td style='width:100.0%;background:#eeede6;padding:3.0pt 3.0pt 3.0pt 3.0pt'>
+<p><b>Main Program</b></p> </td> </tr>
+<tr><td><p><i>WMPStatusPlugin.cpp</i></p></td> </tr>
+<tr><td><p>Contains the main plug-in program logic and the DllMain() entry 
+	point.</p></td></tr>
+</table>
+
+	<p>&nbsp;</p>
+
+<table border='0' cellspacing='0' cellpadding='0' width="97%">
+<tr><td style='width:100.0%;background:#eeede6;padding:3.0pt 3.0pt 3.0pt 3.0pt'>
+<p><b>Resource Files</b></p></td></tr>
+<tr><td><p><i>resource.h</i></p>
+	<p><i>icon1.ico</i></p>
+	<p><i>WMPStatusPlugin.rc</i></p></td></tr>
+<tr><td><p>Contains the resource information for the plug-in. The icon1.ico file 
+	contains a 16x16 icon that will be displayed in the Today Screen by the 
+	plug-in. </p></td></tr>
+</table>
+
+	<p>&nbsp;</p>
+
+	<table border='0' cellspacing='0' cellpadding='0' width="97%">
+<tr><td width="100%" style='width:100.0%;background:#eeede6;padding:3.0pt 3.0pt 3.0pt 3.0pt'>
+<p><b>Common Header File</b></p></td></tr>
+<tr><td><p><i>WMPCommon.h</i></p></td></tr>
+<tr><td><p>Contains the information common to both the Today Screen and WMP 
+	Mobile plug-ins.</p></td></tr>
+</table>
+
+	<p>&nbsp;</p>
+
+	<table border='0' cellspacing='0' cellpadding='0' width="97%" id="table1">
+<tr><td width="100%" style='width:100.0%;background:#eeede6;padding:3.0pt 3.0pt 3.0pt 3.0pt'>
+<b>Module Definiton File</b></td></tr>
+<tr><td><i>WMPStatusPlugin.def</i></td></tr>
+<tr><td>Contains the functions exported by the DLL.</td></tr>
+</table>
+
+	<h3>Key Functionality</h3>
+<p>In the main windows message loop you must handle the 
+<b>WM_TODAYCUSTOM_QUERYREFRESHCACHE</b>, <b>WM_LBUTTONUP</b>, and the custom notification 
+messages.</p>
+<p>The <b>WM_TODAYCUSTOM_QUERYREFRESHCACHE</b> message is sent to determine 
+whether the 
+plug-in needs to be refreshed. If this is the first time the plug-in has been 
+drawn or if the WMP Mobile data has changed, then you should return TRUE.</p>
+
+	<pre>
+ //check to see if a refresh is required
+case WM_TODAYCUSTOM_QUERYREFRESHCACHE:
+{
+  TODAYLISTITEM *ptliItem;
+
+  BOOL bReturn = FALSE;
+
+  // get the pointer to the item from the Today screen
+  ptliItem = (TODAYLISTITEM*)wParam;
+
+  // make sure we have a TODAYLISTITEM and that the shell is ready to go
+  if ((NULL == ptliItem) || (WaitForSingleObject(SHELL_API_READY_EVENT, 0) == WAIT_TIMEOUT))
+  {
+    return FALSE;
+  }
+
+  // check to see if our WMP data flag has been set, then reset it
+  bReturn = g_WMPStatusChanged;
+  g_WMPStatusChanged = FALSE;
+
+  // if this is the first time this is called, we should set our height
+  if (0 == ptliItem-&gt;cyp)
+  {
+    ptliItem-&gt;cyp = DRA::SCALEY(40);
+    bReturn = TRUE;
+  }
+
+  return bReturn;
+}
+</pre>
+
+
+<p>When the screen is tapped, you receive a <b>WM_LBUTTONUP</b> message.&nbsp; 
+You must 
+now tell the WMP Mobile plug-in to switch between the play/pause modes.</p>
+
+	<pre>
+case WM_LBUTTONUP: 
+  // toggle between play/pause if the WMP window is found
+  HWND hwndComm; 
+
+  // find the handle to the plug-in window
+  // find this value each time in case the WMP has been restarted by the user and the handle has changed
+  hwndComm = FindWindow(SZ_MEDIAPLAYERPLUGIN_COMMWINDOW_CLASSNAME, SZ_MEDIAPLAYERPLUGIN_COMMWINDOW_WINDOWNAME);
+
+  if (NULL != hwndComm)
+  {
+    // send a message to the WMP plug-in to toggle the play/pause state
+    PostMessage(hwndComm, WM_WMPTOGGLE, 0, 0);
+  }
+
+  break;</pre>
+
+
+<p>If the WMP Mobile data changes, one or more of the custom window messages 
+will be sent.&nbsp; Set the Changed flag so you know you need to update the 
+Today Screen plug-in.</p>
+
+	<pre>
+case WM_CHANGE_TRACKARTIST: 
+case WM_CHANGE_ALBUMTITLE: 
+case WM_CHANGE_TRACKNUMBER: 
+case WM_CHANGE_TRACKTITLE:
+  g_WMPStatusChanged = TRUE;
+  break;
+</pre>
+
+
+<p>Here is how the State and Notification Broker notifications are created.</p>
+
+	<pre>
+HRESULT RegisterNotifications()
+{
+  HRESULT hr;
+
+  // Make sure we aren't already registered.
+  UnregisterNotifications();
+
+  // Register track artist change notification.
+  hr = RegistryNotifyWindow(
+                     SN_MEDIAPLAYERTRACKARTIST_ROOT,
+                     SN_MEDIAPLAYERTRACKARTIST_PATH,
+                     SN_MEDIAPLAYERTRACKARTIST_VALUE,
+                     g_hWnd, 
+                     WM_CHANGE_TRACKARTIST,
+                     0,
+                     NULL,
+                     &amp;g_hNotify[0]
+                     );
+
+  if (SUCCEEDED(hr))
+  {
+    // Register album title change notification.
+    hr = RegistryNotifyWindow(
+                     SN_MEDIAPLAYERALBUMTITLE_ROOT,
+                     SN_MEDIAPLAYERALBUMTITLE_PATH,
+                     SN_MEDIAPLAYERALBUMTITLE_VALUE,
+                     g_hWnd, 
+                     WM_CHANGE_ALBUMTITLE,
+                     0,
+                     NULL,
+                     &amp;g_hNotify[1]
+                     );
+  }
+
+  if (SUCCEEDED(hr))
+  {
+    // Register track number change notification.
+    hr = RegistryNotifyWindow(
+                     SN_MEDIAPLAYERTRACKNUMBER_ROOT,
+                     SN_MEDIAPLAYERTRACKNUMBER_PATH,
+                     SN_MEDIAPLAYERTRACKNUMBER_VALUE,
+                     g_hWnd, 
+                     WM_CHANGE_TRACKNUMBER,
+                     0,
+                     NULL,
+                     &amp;g_hNotify[2]
+                     );
+  }
+
+  if (SUCCEEDED(hr))
+  {
+    // Register track title change notification.
+    hr = RegistryNotifyWindow(
+                     SN_MEDIAPLAYERTRACKTITLE_ROOT,
+                     SN_MEDIAPLAYERTRACKTITLE_PATH,
+                     SN_MEDIAPLAYERTRACKTITLE_VALUE,
+                     g_hWnd, 
+                     WM_CHANGE_TRACKTITLE,
+                     0,
+                     NULL,
+                     &amp;g_hNotify[3]
+                     );
+  }
+
+  return hr;
+}
+</pre>
+
+
+<p>The module definition file must export the <b>InitializeCustomItem</b> 
+function as follows:</p>
+
+	<pre>
+LIBRARY &quot;WMPStatusPlugin&quot;
+
+EXPORTS
+InitializeCustomItem @240 NONAME
+</pre>
+
+
+<p>
+Your installation program must contain some registry information about the 
+plug-in under the HKEY_LOCAL_MACHINE\Software\Microsoft\Today\Items\&lt;plug-in 
+name&gt; registry subkey.</p>
+<table border="1" width="100%" id="table7">
+	<tr>
+		<td bordercolor="#DDDCD6" bgcolor="#DDDCD6"><b>Type</b></td>
+		<td bordercolor="#DDDCD6" bgcolor="#DDDCD6"><b>Name</b></td>
+		<td bordercolor="#DDDCD6" bgcolor="#DDDCD6"><b>Value</b></td>
+	</tr>
+	<tr>
+		<td>String</td>
+		<td>DLL</td>
+		<td>&quot;%InstallDir%\&lt;plug-in name.dll&gt;&quot;</td>
+	</tr>
+	<tr>
+		<td>DWORD</td>
+		<td>Enabled</td>
+		<td>1 (Plug-in is enabled.)</td>
+	</tr>
+	<tr>
+		<td>DWORD</td>
+		<td>Options</td>
+		<td>1 (No options dialog is enabled.)</td>
+	</tr>
+	<tr>
+		<td>DWORD</td>
+		<td>Selectability</td>
+		<td>1 (Plug-in is selectable.&nbsp; Selections are handled automatically 
+		by the Today Screen. This allows the action button to toggle play/pause 
+		also.)</td>
+	</tr>
+	<tr>
+		<td>DWORD</td>
+		<td>Type</td>
+		<td>4 (Required type for Today Screen plug-ins)</td>
+	</tr>
+</table>
+<h2>
+<A href="#top">
+<IMG src="Images/topjump-vc.gif" border="0"></A>
+<a name="How_It_Works_WMP">How the WMP Mobile Background UI Plug-in 
+Works</a> </h2>
+
+<h3><b>WMPlayerPlugin Project Program Files</b></h3>
+<p>There is no easy-to-use method for controlling WMP Mobile from the Today Screen plug-in. The mechanism set up in this sample 
+is to send custom window messages from the Today Screen plug-in to the WMP 
+background UI plug-in.&nbsp; The WMP background UI plug-in then accesses the 
+current instance of WMP Mobile and tells it to play or pause.&nbsp; The WMP 
+background UI plug-in is a COM DLL that implements the <b>IWMPPluginUI</b> interface.&nbsp; 
+After the plug-in is registered, it will be loaded whenever the WMP Mobile is launched. 
+Note that this is the only type of plug-in supported by WMP Mobile. See the
+<a href="http://www.msdn.microsoft.com/library/default.asp?url=/library/en-us/wmplay10/mmp_sdk/windowsmediaplayer10sdk.asp">
+Windows Media Player 10 SDK</a> for further information. Note that WMP Mobile 
+only supports a subset of the Windows Media Player functionality.</p>
+
+<p><b>Note:<br>
+</b>If you modify this plug-in or create your own, you must generate a new GUID 
+and update the GUID in both the code and the WMPlayerPluginCab installation 
+projects registry settings under the&nbsp; HKEY_LOCAL_MACHINE\Software\Microsoft\MediaPlayer\UIPlugins\{plug-in 
+GUID} key. The Create GUID utility on the Visual Studio 2005 Tools menu can be used 
+for generate the new GUID.</p>
+<p><b><br>
+</b>The project contains six different C++ source-code files. The source-code 
+files perform the following functions: </p>
+
+	<p>&nbsp;</p>
+
+<table width="97%" style="border-collapse: collapse" id="table3">
+<tr><td style='width:100.0%;background:#eeede6;padding:3.0pt 3.0pt 3.0pt 3.0pt'>
+<b>Main Program</b></td> </tr>
+<tr><td><i>WMPlayerPlugin.cpp</i></td> </tr>
+<tr><td>Contains the main plug-in program logic and the DllMain() entry point.</td></tr>
+</table>
+
+	<p>&nbsp;</p>
+
+<table border='0' cellspacing='0' cellpadding='0' width="97%" id="table4">
+<tr><td style='width:100.0%;background:#eeede6;padding:3.0pt 3.0pt 3.0pt 3.0pt'>
+<b>Windows Media Player Header Files</b></td></tr>
+<tr><td><i>wmp.h</i><p><i>wmpplug.h</i></td></tr>
+<tr><td>Two header files from the Windows Media Player SDK.</td></tr>
+</table>
+
+	<p>&nbsp;</p>
+
+	<table border='0' cellspacing='0' cellpadding='0' width="97%" id="table5">
+<tr><td width="100%" style='width:100.0%;background:#eeede6;padding:3.0pt 3.0pt 3.0pt 3.0pt'>
+<b>Common Header File</b></td></tr>
+<tr><td><i>WMPCommon.h</i></td></tr>
+<tr><td>Contains the information common to both the Today Screen and WMP Mobile 
+	plug-ins.</td></tr>
+</table>
+
+	<p>&nbsp;</p>
+
+	<table border='0' cellspacing='0' cellpadding='0' width="97%" id="table8">
+<tr><td width="100%" style='width:100.0%;background:#eeede6;padding:3.0pt 3.0pt 3.0pt 3.0pt'>
+<b>COM Header File</b></td></tr>
+<tr><td><i>COMSupport.h</i></td></tr>
+<tr><td>Contains some COM utility functionality.</td></tr>
+</table>
+
+	<p>&nbsp;</p>
+
+	<table border='0' cellspacing='0' cellpadding='0' width="97%" id="table6">
+<tr><td width="100%" style='width:100.0%;background:#eeede6;padding:3.0pt 3.0pt 3.0pt 3.0pt'>
+<b>Module Definiton File</b></td></tr>
+<tr><td><i>WMPlayerPlugin.def</i></td></tr>
+<tr><td>Contains the functions exported by the DLL.</td></tr>
+</table>
+
+	<h3>Key Functionality</h3>
+
+
+<p>The WMP Mobile background UI plug-in must implement the <b>IWMPPluginUI</b> 
+interface.&nbsp; In this interface, the key method to implement is <b>SetCore</b>(), 
+which provides you with a pointer to the <b>IWMPCore</b> interface.</p>
+
+	<pre>
+HRESULT CMediaPlayerPlugin::SetCore(IWMPCore * pCore)
+{
+  // This method is called shortly after this instance is created, and allows
+  // us to hook up to Windows Media Player. Save the interface pointer.
+  //
+  // When WMP is shutting down, it calls SetCore(NULL) so we have to handle that
+  // as well.
+  if (m_pCore != NULL)
+  {
+    m_pCore-&gt;Release();
+  }
+
+  m_pCore = pCore;
+
+  if (m_pCore != NULL)
+  {
+    m_pCore-&gt;AddRef();
+  }
+
+  return S_OK;
+}
+</pre>
+
+
+<p>You also need to be sure to handle the custom window messages that are being sent  
+from the Today Screen plug-in. The main window message loop looks like this:</p>
+
+	<pre>
+LRESULT CMediaPlayerPlugin::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+  switch (uMsg)
+  {
+    // we have received the toggle message from the Today Screen plug-in
+    case WM_WMPTOGGLE:
+      ControlPlayer(uMsg);
+      break;
+
+    default:
+      break;
+  }
+
+  return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+</pre>
+
+
+<p>The <b>ControlPlayer</b>() function then switches WMP Mobile between play and 
+pause modes.</p>
+
+	<pre>
+VOID CMediaPlayerPlugin::ControlPlayer(UINT uMsg)
+{
+  IWMPControls * pControls;
+
+  // Get the 'IWMPControls' interface.
+  if (SUCCEEDED(m_pCore-&gt;get_controls(&amp;pControls)))
+  {
+    switch (uMsg)
+    {
+      // for the toggle message
+      case WM_WMPTOGGLE:
+        WMPPlayState wmpps;
+
+        // get the current state
+        if (SUCCEEDED(m_pCore-&gt;get_playState(&amp;wmpps)))
+        {
+          // if it playing a track, pause it
+          if (wmpps == wmppsPlaying)
+          {
+            pControls-&gt;pause();
+          }
+          // otherwise try to play the track
+          else
+          {
+            pControls-&gt;play();
+          }
+
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    pControls-&gt;Release();
+  }
+}
+</pre>
+
+
+<p>The module definition file for a WMP Mobile background UI plug-in must export 
+<b>DllGetClassObject</b>(), <b>DllCanUnloadNow</b>(), and <b>DllRegisterServer</b>() as follows:</p>
+
+	<pre>
+LIBRARY &quot;WMPlayerPlugin&quot;
+
+EXPORTS
+DllGetClassObject PRIVATE
+DllCanUnloadNow PRIVATE
+DllRegisterServer PRIVATE
+</pre>
+
+
+<p>
+Your installation program must contain some registry information about the 
+plug-in under the HKEY_LOCAL_MACHINE\Software\Microsoft\MediaPlayer\UIPlugins\{plug-in 
+GUID} key. The installation project should also set the <b>Register</b> property to
+<b>COM 
+Self Register</b> the component when it is installed. The following table lists 
+the registry keys that must be created:</p>
+<table border="1" width="100%" id="table9">
+	<tr>
+		<td bordercolor="#DDDCD6" bgcolor="#DDDCD6"><b>Type</b></td>
+		<td bordercolor="#DDDCD6" bgcolor="#DDDCD6"><b>Name</b></td>
+		<td bordercolor="#DDDCD6" bgcolor="#DDDCD6"><b>Value</b></td>
+	</tr>
+	<tr>
+		<td height="25">DWORD</td>
+		<td height="25">Capabilities</td>
+		<td height="25">1073741825&nbsp;&nbsp; &nbsp;(0x40000001)&nbsp; (0x00000001 
+		indicates it is a background plug-in; 0x40000000 indicates it should be 
+		auto loaded)</td>
+	</tr>
+	<tr>
+		<td>String</td>
+		<td>Description</td>
+		<td>Windows Media Player Plug-in Description</td>
+	</tr>
+	<tr>
+		<td>String</td>
+		<td>FriendlyName</td>
+		<td>Windows Media Player Plug-in Friendly Name</td>
+	</tr>
+	</table>
+<h2>
+<A href="#top">
+<IMG src="Images/topjump-vc.gif" border="0"></A><a name="Extending_the_Plugins">Extending 
+the Plug-ins </a>&nbsp;</h2>
+<p>
+To extend the functionality of the Today Screen plug-in or the WMP Mobile background UI plug-in, consider adding the following capabilities:</p>
+
+<ul>
+	<li>
+		<b>
+			<i>Add the ability to go to the next or previous track:</i>
+		</b>
+		<br>
+		Designate an area in the Today Screen plug-in to tap on to go the next 
+		track. Implement another custom window message to send to the WMP 
+		plug-in. Do the same for going to the previous track.</li>
+<li><b><i>Add the ability to scroll long titles in the Today Screen plug-in:</i></b><br>
+If the album or track title is too long, add the ability to slowly scroll the 
+title in the Today Screen plug-in window.</li>
+</ul>
+
+
+<h2><A href="#top">
+<IMG src="Images/topjump-vc.gif" border="0"></A>
+<a name="ForMoreInformation">For More Information</a>
+</h2>
+
+<h3>Online Resources</h3>
+
+<ul>
+<li>
+<a href="http://www.msdn.microsoft.com/library/default.asp?url=/library/en-us/wmplay10/mmp_sdk/windowsmediaplayer10sdk.asp">
+Windows Media Player 10 SDK</a>
+</li>
+<li>
+<a href="http://msdn.microsoft.com/mobility/">Mobility on MSDN</a>
+</li>
+<li>
+<a href="http://channel9.msdn.com/wiki/default.aspx/MobileDeveloper.StarterKits">
+Windows Mobile Starter Kits Wiki Page</a></li>
+</ul>
+
+<p>&nbsp;</p>
+
+
+<p>
+<a href="http://www.microsoft.com/info/cpyright.mspx">© Microsoft Corporation 
+and/or its suppliers. All rights reserved. Terms of Use.
+</a>
+</p>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WMPStatusPlugin", "WMPStatusPlugin\WMPStatusPlugin.vcproj", "{1E8A1BA4-A9EC-4BE6-8679-31CEACE37B9E}"
+EndProject
+Project("{B900F1C2-3D47-4FEC-85B3-04AAF18C3634}") = "WMPStatusPluginCab", "WMPStatusPluginCab\WMPStatusPluginCab.vddproj", "{671B696B-D777-485E-B500-56B3982DFA15}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WMPlayerPlugin", "WMPlayerPlugin\WMPlayerPlugin.vcproj", "{5D6458E1-57C2-4E30-9BB5-AA5E2FD5E5C2}"
+EndProject
+Project("{B900F1C2-3D47-4FEC-85B3-04AAF18C3634}") = "WMPlayerPluginCab", "WMPlayerPluginCab\WMPlayerPluginCab.vddproj", "{6E75DF09-7FA8-40BB-9629-CDFF0E1D0FBE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{B0BFF02D-93E9-4CEB-9E17-B3DADEC7A1BC}"
+	ProjectSection(SolutionItems) = preProject
+		EULA.txt = EULA.txt
+		Documentation\TodayPluginStarterKit.htm = Documentation\TodayPluginStarterKit.htm
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I) = Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+		Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I) = Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E8A1BA4-A9EC-4BE6-8679-31CEACE37B9E}.Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).ActiveCfg = Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+		{1E8A1BA4-A9EC-4BE6-8679-31CEACE37B9E}.Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).Build.0 = Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+		{1E8A1BA4-A9EC-4BE6-8679-31CEACE37B9E}.Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).Deploy.0 = Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+		{1E8A1BA4-A9EC-4BE6-8679-31CEACE37B9E}.Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).ActiveCfg = Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+		{1E8A1BA4-A9EC-4BE6-8679-31CEACE37B9E}.Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).Build.0 = Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+		{1E8A1BA4-A9EC-4BE6-8679-31CEACE37B9E}.Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).Deploy.0 = Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+		{671B696B-D777-485E-B500-56B3982DFA15}.Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).ActiveCfg = Debug
+		{671B696B-D777-485E-B500-56B3982DFA15}.Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).Build.0 = Debug
+		{671B696B-D777-485E-B500-56B3982DFA15}.Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).ActiveCfg = Release
+		{671B696B-D777-485E-B500-56B3982DFA15}.Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).Build.0 = Release
+		{5D6458E1-57C2-4E30-9BB5-AA5E2FD5E5C2}.Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).ActiveCfg = Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+		{5D6458E1-57C2-4E30-9BB5-AA5E2FD5E5C2}.Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).Build.0 = Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+		{5D6458E1-57C2-4E30-9BB5-AA5E2FD5E5C2}.Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).Deploy.0 = Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+		{5D6458E1-57C2-4E30-9BB5-AA5E2FD5E5C2}.Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).ActiveCfg = Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+		{5D6458E1-57C2-4E30-9BB5-AA5E2FD5E5C2}.Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).Build.0 = Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+		{5D6458E1-57C2-4E30-9BB5-AA5E2FD5E5C2}.Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).Deploy.0 = Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+		{6E75DF09-7FA8-40BB-9629-CDFF0E1D0FBE}.Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).ActiveCfg = Debug
+		{6E75DF09-7FA8-40BB-9629-CDFF0E1D0FBE}.Debug|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).Build.0 = Debug
+		{6E75DF09-7FA8-40BB-9629-CDFF0E1D0FBE}.Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).ActiveCfg = Release
+		{6E75DF09-7FA8-40BB-9629-CDFF0E1D0FBE}.Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
