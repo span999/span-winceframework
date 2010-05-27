@@ -5,3 +5,4 @@ DIRS= \
 	spExeTest \
 	spExeSysHALReboot \
 	spExeCPUUtilization \
+	spExeIllegalMemoryAccess \
