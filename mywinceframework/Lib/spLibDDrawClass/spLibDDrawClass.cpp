@@ -82,12 +82,32 @@ BOOL spLibDDraw::spLibTextDraw( LPCTSTR szError,... )
 	StringCchVPrintf(m_szTempString, (256), szError, vl);
 	
 	///MessageBox( NULL, m_szTempString, TEXT("spLibDDraw Msg:"), MB_OK|MB_SETFOREGROUND );
-	bRet = TextDraw( m_pDDSPrimary, m_szTempString );
+	///bRet = TextDraw( m_pDDSPrimary, m_szTempString );
+	bRet = TextDraw( 50, 50, m_pDDSPrimary, m_szTempString );
 	
     va_end(vl);
 	
 	return bRet;
 }
+
+BOOL spLibDDraw::spLibTextDraw( DWORD dwX, DWORD dwY, LPCTSTR szError,... )
+{
+	BOOL bRet = TRUE;
+	
+    va_list                     vl;
+
+    va_start(vl, szError);
+
+	StringCchVPrintf(m_szTempString, (256), szError, vl);
+	
+	///MessageBox( NULL, m_szTempString, TEXT("spLibDDraw Msg:"), MB_OK|MB_SETFOREGROUND );
+	bRet = TextDraw( dwX, dwY, m_pDDSPrimary, m_szTempString );
+	
+    va_end(vl);
+	
+	return bRet;
+}
+
 
 void spLibDDraw::spMessageBoxOut( LPCTSTR szError,... )
 {
@@ -619,6 +639,49 @@ BOOL spLibDDraw::TextDraw( IDirectDrawSurface *pThisSurf, TCHAR *szString )
             ExtTextOut(hdc, 
 		       50, 
 		       50,
+		       0,                        // fuOptions
+		       NULL,                     // lprc
+               szString, 
+		       nMsg,
+		       NULL);                    // lpDx
+			
+			pThisSurf->ReleaseDC(hdc);
+			bRet = TRUE;
+        }
+        else
+			spMessageBoxOut( dFAIL, TEXT("TextDraw: GetDC fail !!") );
+    }
+	else
+		spMessageBoxOut( dFAIL, TEXT("TextDraw: pThisSurf fail !!") );
+	
+	
+	return bRet;
+}
+
+
+BOOL spLibDDraw::TextDraw( DWORD dwX, DWORD dwY, IDirectDrawSurface *pThisSurf, TCHAR *szString )
+{
+	BOOL bRet = FALSE;
+
+    HDC hdc;
+    RECT rc;
+    SIZE size;
+    int nMsg;
+///    DDBLTFX ddbltfx;
+
+	if( NULL != pThisSurf )
+	{
+		if( pThisSurf->GetDC( &hdc ) == DD_OK )
+		{
+			SetBkColor(hdc, RGB(0, 0, 255));
+			SetTextColor(hdc, RGB(255, 255, 0));
+			GetClientRect( m_hWnd, &rc );
+
+	        nMsg = lstrlen( szString );
+            GetTextExtentPoint(hdc, szString, nMsg, &size);
+            ExtTextOut(hdc, 
+		       dwX, 
+		       dwY,
 		       0,                        // fuOptions
 		       NULL,                     // lprc
                szString, 
