@@ -539,7 +539,7 @@ DWORD spLibDDraw::PrimaryBlt( RECT *prt, DWORD dwRGB )
 		
         // Blit 1x1 rectangle using solid color op
         ///hr = m_pDDSPrimary->Blt( prt, NULL, NULL, DDBLT_WAIT | DDBLT_COLORFILL, &ddbfx );
-		hr = m_pDDSPrimary->Blt( prt, NULL, NULL, DDBLT_COLORFILL, &ddbfx );	///CE not support DDBLT_WAIT flag
+		hr = m_pDDSPrimary->Blt( prt, NULL, NULL, DDBLT_COLORFILL|DDBLT_WAITNOTBUSY, &ddbfx );	///CE not support DDBLT_WAIT flag
 		
 		if( hr != DD_OK )
 			spMessageBoxOut( dFAIL, TEXT("PrimaryBlt: Blt fail !!") );
@@ -553,25 +553,7 @@ DWORD spLibDDraw::PrimaryBlt( RECT *prt, DWORD dwRGB )
 
 BOOL spLibDDraw::PixelDraw( DWORD dwX, DWORD dwY )
 {
-#if 1
 	return PixelDraw( dwX, dwY, 0xFF, 0x0, 0x0 );
-#else
-	BOOL bRet = TRUE;
-	
-	HRESULT hr;
-	RECT *LockRect = NULL;
-
-	hr = m_pDDSPrimary->Lock( LockRect, &m_ddsd, DDLOCK_WAITNOTBUSY, NULL );
-	// Set pixel 57, 97 to Red (assuming RGB565 pixel fmt)
-	///int x = 20;
-	///int y = 20;
-	///BYTE * pPixelOffset = (BYTE*)m_ddsd.lpSurface + x * m_ddsd.lXPitch + y * m_ddsd.lPitch;
-	BYTE * pPixelOffset = (BYTE*)m_ddsd.lpSurface + dwX * m_ddsd.lXPitch + dwY * m_ddsd.lPitch;
-	*(WORD*)pPixelOffset = 0xf800;
-	hr = m_pDDSPrimary->Unlock( LockRect );
-
-	return bRet;
-#endif	
 }
 
 BOOL spLibDDraw::PixelDraw( DWORD dwX, DWORD dwY, DWORD dwR, DWORD dwG, DWORD dwB )
@@ -581,11 +563,16 @@ BOOL spLibDDraw::PixelDraw( DWORD dwX, DWORD dwY, DWORD dwR, DWORD dwG, DWORD dw
 	HRESULT hr;
 	RECT *LockRect = NULL;
 
-	hr = m_pDDSPrimary->Lock( LockRect, &m_ddsd, DDLOCK_WAITNOTBUSY, NULL );
+	if( NULL != m_pDDSPrimary )
+	{
+		hr = m_pDDSPrimary->Lock( LockRect, &m_ddsd, DDLOCK_WAITNOTBUSY, NULL );
 
-	BYTE * pPixelOffset = (BYTE*)m_ddsd.lpSurface + dwX * m_ddsd.lXPitch + dwY * m_ddsd.lPitch;
-	*(WORD*)pPixelOffset = (WORD)CreateRGB( dwR, dwG, dwB );
-	hr = m_pDDSPrimary->Unlock( LockRect );
+		BYTE * pPixelOffset = (BYTE*)m_ddsd.lpSurface + dwX * m_ddsd.lXPitch + dwY * m_ddsd.lPitch;
+		*(WORD*)pPixelOffset = (WORD)CreateRGB( dwR, dwG, dwB );
+		hr = m_pDDSPrimary->Unlock( LockRect );
+	}
+	else
+		;///spMessageBoxOut( dFAIL, TEXT("PixelDraw: m_pDDSPrimary fail !!") );
 
 	return bRet;
 }
