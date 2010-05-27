@@ -3,3 +3,4 @@ DIRS= \
     spExeSysInfoIdle \
 	spExeSysInfoIdleExit \
 	spExeTest \
+	spExeSysHALReboot \
