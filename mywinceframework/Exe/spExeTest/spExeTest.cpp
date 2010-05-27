@@ -147,7 +147,7 @@ InitFail(HWND hWnd, HRESULT hRet, LPCTSTR szError,...)
     return hRet;
 }
 
-
+#if 0
 void spMessageBoxOut( LPCTSTR szError,... )
 {
     TCHAR                       szBuff[128] = PREFIX;
@@ -161,6 +161,24 @@ void spMessageBoxOut( LPCTSTR szError,... )
 	
     va_end(vl);
 }
+#else
+void spMessageBoxOut( DWORD dwFlag, LPCTSTR szError,... )
+{
+    TCHAR                       szBuff[128];
+    va_list                     vl;
+
+	if( dwFlag&DBGMSG_LEVEL )
+	{
+		va_start(vl, szError);
+
+		StringCchVPrintf(szBuff + PREFIX_LEN, (128-PREFIX_LEN), szError, vl);
+
+		MessageBox( NULL, szBuff, TEXT("Debug Msg !!"), MB_OK|MB_SETFOREGROUND );
+	
+		va_end(vl);
+	}	
+}
+#endif
 
 
 #undef PREFIX_LEN
@@ -338,7 +356,7 @@ EnumFunction(LPDIRECTDRAWSURFACE pSurface,
     }
     else {
 
-		spMessageBoxOut( TEXT("DDEX1: Enumerated more than surface?") );
+		spMessageBoxOut( dWARN, TEXT("DDEX1: Enumerated more than surface?") );
         pSurface->Release();
         return DDENUMRET_CANCEL;
     }
@@ -372,26 +390,26 @@ static void DrawPixel( void )
 		dwTimes++;
 	}
 	
-	///spMessageBoxOut( TEXT("Start draw pixel---") );	
+	spMessageBoxOut( dINIT, TEXT("Start draw pixel---") );	
 }
 
 static HRESULT InitDDraw( HWND hWnd )
 {
     HRESULT	hRet;
 	
-	spMessageBoxOut( TEXT("Create spLibDDRaw object !") );
+	spMessageBoxOut( dINIT, TEXT("Create spLibDDRaw object !") );
 	pmyDD = new spLibDDraw( hWnd );
 	///pmyDD = new spLibDDraw();
 	
 	if( pmyDD == NULL )
 	{
-		spMessageBoxOut( TEXT("Create spLibDDRaw object fail !") );	
+		spMessageBoxOut( dFAIL,  TEXT("Create spLibDDRaw object fail !") );	
 	}
 	else
 	{
 		DWORD dwRet = 0;
 		
-		spMessageBoxOut( TEXT("Start Init DDraw ") );	
+		spMessageBoxOut( dINFO, TEXT("Start Init DDraw ") );	
 		///init primary with 1 back
 		///pmyDD->spLibInitDDrawBack( 0 );
 		///pmyDD->spLibInitDDrawBack( 0,  EnumFunction );
@@ -409,7 +427,7 @@ static HRESULT InitDDraw( HWND hWnd )
 		}
 	}		
 	
-	spMessageBoxOut( TEXT("spLibDDRaw done !!") );
+	spMessageBoxOut( dINIT, TEXT("spLibDDRaw done !!") );
 	
 	return hRet;
 }
@@ -513,7 +531,7 @@ InitApp(HINSTANCE hInstance, int nCmdShow)
 	
     // Create a timer to flip the pages
     if (TIMER_ID != SetTimer(hWnd, TIMER_ID, TIMER_RATE, NULL))
-		spMessageBoxOut( TEXT("SetTimer FAILED !") );
+		spMessageBoxOut( dFAIL,  TEXT("SetTimer FAILED !") );
         ///return InitFail(hWnd, hRet, TEXT("SetTimer FAILED"));
 
 		
@@ -534,7 +552,7 @@ int WINAPI WinMain (
 
     MSG                         msg;
 
-	spMessageBoxOut( TEXT("InitApp+++ !") );
+	spMessageBoxOut( dINIT, TEXT("InitApp+++ !") );
     if (InitApp(hInstance, nCmdShow) != DD_OK)
         return FALSE;
 
