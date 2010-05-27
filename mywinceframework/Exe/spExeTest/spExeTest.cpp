@@ -358,7 +358,7 @@ static void DrawPixel( void )
 		for( ; dwLoop < 1000; dwLoop++ )
 		{	
 			///pmyDD->spLibDrawPixel( 2+(dwLoop%100), 2+(dwLoop%100) );
-			pmyDD->spLibDrawPixel( 2+(dwLoop%100)+dwTimes, 2+(dwLoop%100) );
+			pmyDD->spLibPixelDraw( 2+(dwLoop%100)+dwTimes, 2+(dwLoop%100) );
 	#if 0
 			if( 0 == dwLoop%10 )
 				pmyDD->spLibFlipDDraw();
