@@ -22,6 +22,7 @@ public:
 	BOOL spLibPixelDraw( DWORD dwX, DWORD dwY ) { return PixelDraw( dwX, dwY ); }
 	BOOL spLibPixelDraw( DWORD dwX, DWORD dwY, DWORD dwR, DWORD dwG, DWORD dwB ) { return PixelDraw( dwX, dwY, dwR, dwG, dwB ); }
 	BOOL spLibTextDraw( LPCTSTR szError,... );
+	BOOL spLibTextDraw( DWORD dwX, DWORD dwY, LPCTSTR szError,... );
 	
 protected:
 
@@ -44,6 +45,7 @@ protected:
 	BOOL PixelDraw( DWORD dwX, DWORD dwY );
 	BOOL PixelDraw( DWORD dwX, DWORD dwY, DWORD dwR, DWORD dwG, DWORD dwB );
 	BOOL TextDraw( IDirectDrawSurface *pThisSurf, TCHAR *szString );
+	BOOL TextDraw( DWORD dwX, DWORD dwY, IDirectDrawSurface *pThisSurf, TCHAR *szString );
 	DWORD CreateRGB( DWORD dwR, DWORD dwG, DWORD dwB );
 	DWORD GetBitDepth( IDirectDrawSurface *pThisSurf );
 	void TakeCS(){ EnterCriticalSection( &m_csDDaccess ); }

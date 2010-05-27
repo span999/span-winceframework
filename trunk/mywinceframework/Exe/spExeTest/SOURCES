@@ -26,6 +26,7 @@ PREPROCESSDEFFILE=1
 TARGETLIBS=	\
     $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
 	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDDrawClass.lib \
+	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibSysInfoIdle.lib \
 
 SOURCELIBS= \
 

@@ -16,6 +16,7 @@
 
 #include "..\..\Inc\spLibErrCodeDef.h"
 #include "..\..\Inc\spLibDDrawClass.h"
+#include "..\..\Inc\spLibSysInfoIdle.h"
 #include "SPDebugDef.h"
 
 #include "resource.h"
@@ -40,7 +41,8 @@
 // Default settings
 //-----------------------------------------------------------------------------
 #define TIMER_ID            1
-#define TIMER_RATE          2000
+///#define TIMER_RATE          2000
+#define TIMER_RATE          1000
 
 
 //-----------------------------------------------------------------------------
@@ -67,7 +69,7 @@ HINSTANCE g_hInstance;
 
 
 static void DrawPixel( void );
-
+static void DrawCPULoading( DWORD dwValue );
 
 
 /// *****************************************
@@ -98,6 +100,8 @@ static void
 ReleaseAllObjects(void)
 {
 
+	spLibSysInfoIdle_Deinit( 0 );
+	
 	delete pmyDD;
 /*
     if (g_pDDSBack != NULL)
@@ -316,8 +320,11 @@ WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             ///if (g_bActive && TIMER_ID == wParam)
 			if( TIMER_ID == wParam )
             {
-				if( dwCount < 8 )
-					DrawPixel();
+				if( dwCount < 20 )
+				{
+					///DrawPixel();
+					DrawCPULoading( 100 - spLibSysInfoIdle_Get() );
+				}	
 				else
 				{
 					// Clean up and close the app
@@ -381,6 +388,90 @@ EnumFunction(LPDIRECTDRAWSURFACE pSurface,
 }
 
 
+#define CPULOADDRAW_X_START		50
+#define CPULOADDRAW_Y_START		0
+
+#define CPULOADDRAW_X_SCALE		5
+#define CPULOADDRAW_Y_SCALE		3
+
+#define CPULOADDRAW_WIDTH		100
+#define CPULOADDRAW_HIGHT		4
+
+#define CPULOADDRAW_X_END		(CPULOADDRAW_X_START+(CPULOADDRAW_WIDTH*CPULOADDRAW_X_SCALE))
+#define CPULOADDRAW_Y_END		(CPULOADDRAW_Y_START+(CPULOADDRAW_HIGHT*CPULOADDRAW_Y_SCALE))
+
+
+static void DrawCPULoading( DWORD dwValue )
+{
+	DWORD dwLoop = 0;
+	static DWORD dwTimes = 0;
+	RECT rcDest;
+	DWORD dwNum = 0;
+
+	spMessageBoxOut( dINIT, TEXT("DrawCPULoading+++") );	
+
+	if( NULL != pmyDD )
+	{
+	
+		///draw backgound
+		SetRect( &rcDest, CPULOADDRAW_X_START, CPULOADDRAW_Y_START, CPULOADDRAW_X_END, CPULOADDRAW_Y_END );
+		pmyDD->spLibBltDDraw( &rcDest, 0, 0xFF, 0x0 );		///green as Backgoung
+
+		///draw percentage
+		if( dwValue > 0 )
+		{
+		SetRect( &rcDest, CPULOADDRAW_X_START, CPULOADDRAW_Y_START, (CPULOADDRAW_X_START+(dwValue*CPULOADDRAW_X_SCALE)), CPULOADDRAW_Y_END );
+		pmyDD->spLibBltDDraw( &rcDest, 0xFF, 0x0, 0x0 );		///red as Backgoung
+		}
+
+		for( dwLoop = 1; dwLoop <= 20; dwLoop++ )
+		{
+			///draw bloack dot every 10 
+			pmyDD->spLibPixelDraw( (CPULOADDRAW_X_START+(dwLoop*5*CPULOADDRAW_X_SCALE)), CPULOADDRAW_Y_START, 0x0, 0x0, 0x0 );
+			if( 0 == dwLoop % 2 ) 
+				pmyDD->spLibPixelDraw( (CPULOADDRAW_X_START+(dwLoop*5*CPULOADDRAW_X_SCALE))+1, CPULOADDRAW_Y_START, 0x0, 0x0, 0x0 );
+			
+			if( CPULOADDRAW_Y_SCALE > 0 )
+			{
+				pmyDD->spLibPixelDraw( (CPULOADDRAW_X_START+(dwLoop*5*CPULOADDRAW_X_SCALE)), CPULOADDRAW_Y_START+1, 0x0, 0x0, 0x0 );
+				if( 0 == dwLoop % 2 ) 
+					pmyDD->spLibPixelDraw( (CPULOADDRAW_X_START+(dwLoop*5*CPULOADDRAW_X_SCALE))+1, CPULOADDRAW_Y_START+1, 0x0, 0x0, 0x0 );
+			}	
+			if( CPULOADDRAW_Y_SCALE > 1 )
+			{
+				pmyDD->spLibPixelDraw( (CPULOADDRAW_X_START+(dwLoop*5*CPULOADDRAW_X_SCALE)), CPULOADDRAW_Y_START+2, 0x0, 0x0, 0x0 );
+				if( 0 == dwLoop % 2 ) 
+					pmyDD->spLibPixelDraw( (CPULOADDRAW_X_START+(dwLoop*5*CPULOADDRAW_X_SCALE))+1, CPULOADDRAW_Y_START+2, 0x0, 0x0, 0x0 );
+			}
+		}
+		
+		
+		pmyDD->spLibTextDraw( CPULOADDRAW_X_START, CPULOADDRAW_Y_END+CPULOADDRAW_HIGHT, TEXT("CPU utilization => %4d%% !!!"), dwValue );
+
+#if 0		
+		for( ; dwLoop < 1000; dwLoop++ )
+		{	
+			dwNum = (dwLoop%100) + 2;
+			
+			//clean it, fill with color
+			SetRect( &rcDest, 0, 0, 800, 400 );
+			pmyDD->spLibBltDDraw( &rcDest, 0, 0, 0xFF );
+			
+			///pmyDD->spLibDrawPixel( 2+(dwLoop%100), 2+(dwLoop%100) );
+			pmyDD->spLibPixelDraw( dwNum+dwTimes, dwNum );
+			SetRect( &rcDest, dwNum+dwTimes+10, dwNum+10, dwNum+dwTimes+10+5, dwNum+10+5 );
+			pmyDD->spLibBltDDraw( &rcDest, 0, 0xFF, 0 );
+			
+			pmyDD->spLibTextDraw( TEXT("TEST string out to DD surface !!!") );
+			
+		}
+		dwTimes++;
+#endif	
+	}
+
+	spMessageBoxOut( dINIT, TEXT("DrawCPULoading---") );	
+}
+
 static void DrawPixel( void )
 {
 	DWORD dwLoop = 0;
@@ -425,6 +516,7 @@ static void DrawPixel( void )
 	spMessageBoxOut( dINIT, TEXT("Start draw pixel---") );	
 }
 
+
 static HRESULT InitDDraw( HWND hWnd )
 {
     HRESULT	hRet;
@@ -463,6 +555,7 @@ static HRESULT InitDDraw( HWND hWnd )
 	
 	return hRet;
 }
+
 
 
 BOOL InitCheckRotation( void )
@@ -565,6 +658,9 @@ InitApp(HINSTANCE hInstance, int nCmdShow)
 
 	
 	hRet = InitDDraw( hWnd );
+	
+	///init
+	spLibSysInfoIdle_Init( 0 );
 	
     // Create a timer to flip the pages
     if (TIMER_ID != SetTimer(hWnd, TIMER_ID, TIMER_RATE, NULL))
