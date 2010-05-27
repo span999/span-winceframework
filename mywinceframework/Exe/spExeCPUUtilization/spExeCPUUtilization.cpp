@@ -283,7 +283,7 @@ static void DrawCPULoading( DWORD dwValue )
 			pmyDD->spLibBltDDraw( &rcDest, CPULOADDRAW_R_SCALEDOT, CPULOADDRAW_G_SCALEDOT, CPULOADDRAW_B_SCALEDOT );		///black as dot
 		}
 		
-		pmyDD->spLibTextDraw( pDrawArea->dwStartX, pDrawArea->dwEndY+pDrawArea->dwYbase, TEXT("CPU utilization => %4d%% !!!"), dwValue );		
+		pmyDD->spLibTextDraw( pDrawArea->dwStartX, pDrawArea->dwEndY+pDrawArea->dwYbase, TEXT("CPU utilization => %4d%%, Avg=> %4d%%!!!"), dwValue, spLibSysInfoIdle_GetAvg() );		
 	}
 
 	///spMessageBoxOut( dINIT, TEXT("DrawCPULoading---") );	
