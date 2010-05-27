@@ -287,6 +287,7 @@ WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             return 0L;
 
         case WM_KEYDOWN:
+		case WM_KEYUP:
             // Handle any non-accelerated key commands
             switch (wParam)
             {
@@ -297,8 +298,11 @@ WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
 			
 			///any key!!
+			// Clean up and close the app
+			ReleaseAllObjects();
 			PostMessage(hWnd, WM_CLOSE, 0, 0);
-			
+			PostQuitMessage(0);
+			return 0L;	
             break;
 
         case WM_SETCURSOR:
@@ -381,6 +385,7 @@ static void DrawPixel( void )
 {
 	DWORD dwLoop = 0;
 	static DWORD dwTimes = 0;
+	RECT rcDest;
 
 
 	///spMessageBoxOut( TEXT("Start draw pixel+++") );	
@@ -389,6 +394,10 @@ static void DrawPixel( void )
 	{
 		for( ; dwLoop < 1000; dwLoop++ )
 		{	
+			//clean it, fill with color
+			///SetRect( &rcDest, 0, 0, 640, 480 );
+			///pmyDD->spLibBltDDraw( &rcDest, 0, 0, 0xFF );
+
 			///pmyDD->spLibDrawPixel( 2+(dwLoop%100), 2+(dwLoop%100) );
 			pmyDD->spLibPixelDraw( 2+(dwLoop%100)+dwTimes, 2+(dwLoop%100) );
 	#if 0
