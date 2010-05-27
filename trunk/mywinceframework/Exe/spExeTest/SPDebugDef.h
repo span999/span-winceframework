@@ -16,8 +16,9 @@
 
 ///#define		DBGMSG_LEVEL	(dWARN|dINFO|dDBUG|dFAIL|dCLAS)
 ///#define		DBGMSG_LEVEL	(dINFO|dWARN|dFAIL)
+#define		DBGMSG_LEVEL	(dWARN|dFAIL)
 ///#define		DBGMSG_LEVEL	(0)
-#define		DBGMSG_LEVEL	( 0xFFFFFFFF )
+///#define		DBGMSG_LEVEL	( 0xFFFFFFFF )
 
 #define     SPDMSG(level, Message)	((level&DBGMSG_LEVEL)?(NKDbgPrintfW Message):0)
 
