@@ -109,7 +109,7 @@ DWORD spLibSysInfoIdle_GetAvg( void )
 	
 	SPDMSG( dINFO, (L"$$$spLibSysInfoIdle_GetAvg: %d \r\n", 1) );
 	
-	dwRet = spLibCalcIdlePercent( pThisContent );
+	///dwRet = spLibCalcIdlePercent( pThisContent );
 	dwRet = spLibCalcIdleAvgPercent( pThisContent );
 	
 	SPDMSG( dINFO, (L"$$$spLibSysInfoIdle_GetAvg: %d \r\n", 0) );
@@ -221,10 +221,25 @@ static DWORD spLibCalcIdleAvgPercent( LibSysInfoIdleContent* pThis )
 {
 	DWORD dwRet = 0;
 	
-	dwRet = 100 - (pThis->totalPercentIdle/pThis->totalCount);
-	if( (dwRet > 100) || (dwRet < 0) )
-		dwRet = 0;
-       				
+	if( pThis->totalCount > 0 )
+	{
+		dwRet = 100 - (pThis->totalPercentIdle/pThis->totalCount);
+		if( (dwRet > 100) || (dwRet < 0) )
+			dwRet = 0;
+
+	}
+	/// clear all
+	///pThis->totalPercentIdle = 0;
+	///pThis->totalCount = 0;
+	
+	return dwRet;
+}
+
+
+static DWORD spLibResetIdleAvg( LibSysInfoIdleContent* pThis )
+{
+	DWORD dwRet = 0;
+	
 	/// clear all
 	pThis->totalPercentIdle = 0;
 	pThis->totalCount = 0;
