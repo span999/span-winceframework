@@ -1,0 +1,1294 @@
+# Microsoft eMbedded Visual Tools Project File - Name="dvoraksip" - Package Owner=<4>
+# Microsoft eMbedded Visual Tools Generated Build File, Format Version 6.02
+# ** DO NOT EDIT **
+
+# TARGTYPE "Win32 (WCE ARMV4T) Dynamic-Link Library" 0xa402
+# TARGTYPE "Win32 (WCE emulator) Dynamic-Link Library" 0xa602
+# TARGTYPE "Win32 (WCE ARMV4) Dynamic-Link Library" 0xa302
+# TARGTYPE "Win32 (WCE ARMV4I) Dynamic-Link Library" 0xa502
+
+CFG=dvoraksip - Win32 (WCE ARMV4I) Debug
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
+!MESSAGE 
+!MESSAGE NMAKE /f "dvoraksip.vcn".
+!MESSAGE 
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE 
+!MESSAGE NMAKE /f "dvoraksip.vcn" CFG="dvoraksip - Win32 (WCE ARMV4I) Debug"
+!MESSAGE 
+!MESSAGE Possible choices for configuration are:
+!MESSAGE 
+!MESSAGE "dvoraksip - Win32 (WCE emulator) Debug" (based on "Win32 (WCE emulator) Dynamic-Link Library")
+!MESSAGE "dvoraksip - Win32 (WCE ARMV4I) Debug" (based on "Win32 (WCE ARMV4I) Dynamic-Link Library")
+!MESSAGE "dvoraksip - Win32 (WCE ARMV4) Debug" (based on "Win32 (WCE ARMV4) Dynamic-Link Library")
+!MESSAGE "dvoraksip - Win32 (WCE ARMV4T) Debug" (based on "Win32 (WCE ARMV4T) Dynamic-Link Library")
+!MESSAGE "dvoraksip - Win32 (WCE ARMV4) Release MinSize" (based on "Win32 (WCE ARMV4) Dynamic-Link Library")
+!MESSAGE "dvoraksip - Win32 (WCE ARMV4) Release MinDependency" (based on "Win32 (WCE ARMV4) Dynamic-Link Library")
+!MESSAGE "dvoraksip - Win32 (WCE ARMV4I) Release MinSize" (based on "Win32 (WCE ARMV4I) Dynamic-Link Library")
+!MESSAGE "dvoraksip - Win32 (WCE ARMV4I) Release MinDependency" (based on "Win32 (WCE ARMV4I) Dynamic-Link Library")
+!MESSAGE "dvoraksip - Win32 (WCE ARMV4T) Release MinSize" (based on "Win32 (WCE ARMV4T) Dynamic-Link Library")
+!MESSAGE "dvoraksip - Win32 (WCE ARMV4T) Release MinDependency" (based on "Win32 (WCE ARMV4T) Dynamic-Link Library")
+!MESSAGE "dvoraksip - Win32 (WCE emulator) Release MinSize" (based on "Win32 (WCE emulator) Dynamic-Link Library")
+!MESSAGE "dvoraksip - Win32 (WCE emulator) Release MinDependency" (based on "Win32 (WCE emulator) Dynamic-Link Library")
+!MESSAGE 
+
+# Begin Project
+# PROP AllowPerConfigDependencies 0
+# PROP Scc_ProjName ""
+# PROP Scc_LocalPath ""
+# PROP ATL_Project 1
+
+!IF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "emulatorDbg"
+# PROP BASE Intermediate_Dir "emulatorDbg"
+# PROP BASE CPU_ID "{32E52003-403E-442D-BE48-DE10F8C6131D}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "emulatorDbg"
+# PROP Intermediate_Dir "emulatorDbg"
+# PROP CPU_ID "{32E52003-403E-442D-BE48-DE10F8C6131D}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
+CPP=cl.exe
+# ADD BASE CPP /nologo /W3 /GX- /Zi /Od /D "DEBUG" /D "_i386_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "_USRDLL" /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "_WIN32_WCE_CEPC" /Yu"stdafx.h" /Gs8192 /GF  /c
+# ADD CPP /nologo /W3 /GX- /Zi /Od /D "DEBUG" /D "_i386_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "_USRDLL" /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "_WIN32_WCE_CEPC" /Yu"stdafx.h" /Gs8192 /GF  /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /debug /subsystem:$(CESubsystem) /MACHINE:IX86
+# ADD LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /debug /subsystem:$(CESubsystem) /MACHINE:IX86
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "ARMV4IDbg"
+# PROP BASE Intermediate_Dir "ARMV4IDbg"
+# PROP BASE CPU_ID "{DC70F430-E78B-494F-A9D5-62ADC56443B8}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "ARMV4IDbg"
+# PROP Intermediate_Dir "ARMV4IDbg"
+# PROP CPU_ID "{DC70F430-E78B-494F-A9D5-62ADC56443B8}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "THUMB" /d "_THUMB_" /d "ARM" /d "_ARM_" /d "ARMV4I" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "THUMB" /d "_THUMB_" /d "ARM" /d "_ARM_" /d "ARMV4I" /r
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /GX- /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D "ARMV4I" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "_USRDLL" /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /QRarch4T /QRinterwork-return /M$(CECrtMTDebug)  /c
+# ADD CPP /nologo /W3 /GX- /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D "ARMV4I" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "_USRDLL" /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /QRarch4T /QRinterwork-return /M$(CECrtMTDebug)  /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /debug /subsystem:$(CESubsystem) /MACHINE:THUMB
+# ADD LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /debug /subsystem:$(CESubsystem) /MACHINE:THUMB
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "ARMV4Dbg"
+# PROP BASE Intermediate_Dir "ARMV4Dbg"
+# PROP BASE CPU_ID "{ECBEA43D-CD7B-4852-AD55-D4227B5D624B}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "ARMV4Dbg"
+# PROP Intermediate_Dir "ARMV4Dbg"
+# PROP CPU_ID "{ECBEA43D-CD7B-4852-AD55-D4227B5D624B}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "DEBUG" /d "UNICODE" /d "_UNICODE" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /d "ARMV4" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "DEBUG" /d "UNICODE" /d "_UNICODE" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /d "ARMV4" /r
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /GX- /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D "ARMV4" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "_USRDLL" /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /M$(CECrtMTDebug)  /c
+# ADD CPP /nologo /W3 /GX- /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D "ARMV4" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "_USRDLL" /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /M$(CECrtMTDebug)  /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /debug /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+# ADD LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /debug /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "ARMV4TDbg"
+# PROP BASE Intermediate_Dir "ARMV4TDbg"
+# PROP BASE CPU_ID "{F52316A9-3B7C-4FE7-A67F-68350B41240D}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "ARMV4TDbg"
+# PROP Intermediate_Dir "ARMV4TDbg"
+# PROP CPU_ID "{F52316A9-3B7C-4FE7-A67F-68350B41240D}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "THUMB" /d "_THUMB_" /d "ARM" /d "_ARM_" /d "ARMV4T" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "THUMB" /d "_THUMB_" /d "ARM" /d "_ARM_" /d "ARMV4T" /r
+CPP=clthumb.exe
+# ADD BASE CPP /nologo /W3 /GX- /Zi /Od /D "DEBUG" /D "THUMB" /D "_THUMB_" /D "ARMV4T" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "_USRDLL" /D "ARM" /D "_ARM_" /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /QRarch4T /QRinterwork-return /M$(CECrtMTDebug)  /c
+# ADD CPP /nologo /W3 /GX- /Zi /Od /D "DEBUG" /D "THUMB" /D "_THUMB_" /D "ARMV4T" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "_USRDLL" /D "ARM" /D "_ARM_" /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /QRarch4T /QRinterwork-return /M$(CECrtMTDebug)  /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /debug /subsystem:$(CESubsystem) /MACHINE:THUMB
+# ADD LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /debug /subsystem:$(CESubsystem) /MACHINE:THUMB
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Release MinSize"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "ARMV4RelMinSize"
+# PROP BASE Intermediate_Dir "ARMV4RelMinSize"
+# PROP BASE CPU_ID "{ECBEA43D-CD7B-4852-AD55-D4227B5D624B}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "ARMV4RelMinSize"
+# PROP Intermediate_Dir "ARMV4RelMinSize"
+# PROP CPU_ID "{ECBEA43D-CD7B-4852-AD55-D4227B5D624B}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "NDEBUG" /d "UNICODE" /d "_UNICODE" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /d "ARMV4" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "NDEBUG" /d "UNICODE" /d "_UNICODE" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /d "ARMV4" /r
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /GX- /D "_USRDLL" /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D "ARMV4" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_ATL_MIN_CRT" /D "_ATL_DLL" /Yu"stdafx.h" /O2 /M$(CECrtMT)    /c
+# ADD CPP /nologo /W3 /GX- /D "_USRDLL" /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D "ARMV4" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_ATL_MIN_CRT" /D "_ATL_DLL" /Yu"stdafx.h" /O2 /M$(CECrtMT)    /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+# ADD LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Release MinDependency"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "ARMV4RelMinDependency"
+# PROP BASE Intermediate_Dir "ARMV4RelMinDependency"
+# PROP BASE CPU_ID "{ECBEA43D-CD7B-4852-AD55-D4227B5D624B}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "ARMV4RelMinDependency"
+# PROP Intermediate_Dir "ARMV4RelMinDependency"
+# PROP CPU_ID "{ECBEA43D-CD7B-4852-AD55-D4227B5D624B}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "NDEBUG" /d "UNICODE" /d "_UNICODE" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /d "ARMV4" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "NDEBUG" /d "UNICODE" /d "_UNICODE" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /d "ARMV4" /r
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /GX- /D "_USRDLL" /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D "ARMV4" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_ATL_MIN_CRT" /D "_ATL_STATIC_REGISTRY" /Yu"stdafx.h" /O2 /M$(CECrtMT)  /c
+# ADD CPP /nologo /W3 /GX- /D "_USRDLL" /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D "ARMV4" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_ATL_MIN_CRT" /D "_ATL_STATIC_REGISTRY" /Yu"stdafx.h" /O2 /M$(CECrtMT)  /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+# ADD LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Release MinSize"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "ARMV4IRelMinSize"
+# PROP BASE Intermediate_Dir "ARMV4IRelMinSize"
+# PROP BASE CPU_ID "{DC70F430-E78B-494F-A9D5-62ADC56443B8}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "ARMV4IRelMinSize"
+# PROP Intermediate_Dir "ARMV4IRelMinSize"
+# PROP CPU_ID "{DC70F430-E78B-494F-A9D5-62ADC56443B8}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "THUMB" /d "_THUMB_" /d "ARM" /d "_ARM_" /d "ARMV4I" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "THUMB" /d "_THUMB_" /d "ARM" /d "_ARM_" /d "ARMV4I" /r
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /GX- /D "_USRDLL" /D "ARM" /D "_ARM_" /D "$(CePlatform)" /D "ARMV4I" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_ATL_MIN_CRT" /D "_ATL_DLL" /Yu"stdafx.h" /QRarch4T /QRinterwork-return /O2 /M$(CECrtMT)    /c
+# ADD CPP /nologo /W3 /GX- /D "_USRDLL" /D "ARM" /D "_ARM_" /D "$(CePlatform)" /D "ARMV4I" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_ATL_MIN_CRT" /D "_ATL_DLL" /Yu"stdafx.h" /QRarch4T /QRinterwork-return /O2 /M$(CECrtMT)    /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /MACHINE:THUMB
+# ADD LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /MACHINE:THUMB
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Release MinDependency"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "ARMV4IRelMinDependency"
+# PROP BASE Intermediate_Dir "ARMV4IRelMinDependency"
+# PROP BASE CPU_ID "{DC70F430-E78B-494F-A9D5-62ADC56443B8}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "ARMV4IRelMinDependency"
+# PROP Intermediate_Dir "ARMV4IRelMinDependency"
+# PROP CPU_ID "{DC70F430-E78B-494F-A9D5-62ADC56443B8}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "THUMB" /d "_THUMB_" /d "ARM" /d "_ARM_" /d "ARMV4I" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "THUMB" /d "_THUMB_" /d "ARM" /d "_ARM_" /d "ARMV4I" /r
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /GX- /D "_USRDLL" /D "ARM" /D "_ARM_" /D "$(CePlatform)" /D "ARMV4I" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_ATL_MIN_CRT" /D "_ATL_STATIC_REGISTRY" /Yu"stdafx.h" /QRarch4T /QRinterwork-return /O2 /M$(CECrtMT)  /c
+# ADD CPP /nologo /W3 /GX- /D "_USRDLL" /D "ARM" /D "_ARM_" /D "$(CePlatform)" /D "ARMV4I" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_ATL_MIN_CRT" /D "_ATL_STATIC_REGISTRY" /Yu"stdafx.h" /QRarch4T /QRinterwork-return /O2 /M$(CECrtMT)  /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /MACHINE:THUMB
+# ADD LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /MACHINE:THUMB
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Release MinSize"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "ARMV4TRelMinSize"
+# PROP BASE Intermediate_Dir "ARMV4TRelMinSize"
+# PROP BASE CPU_ID "{F52316A9-3B7C-4FE7-A67F-68350B41240D}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "ARMV4TRelMinSize"
+# PROP Intermediate_Dir "ARMV4TRelMinSize"
+# PROP CPU_ID "{F52316A9-3B7C-4FE7-A67F-68350B41240D}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "THUMB" /d "_THUMB_" /d "ARM" /d "_ARM_" /d "ARMV4T" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "THUMB" /d "_THUMB_" /d "ARM" /d "_ARM_" /d "ARMV4T" /r
+CPP=clthumb.exe
+# ADD BASE CPP /nologo /W3 /GX- /D "_USRDLL" /D "ARM" /D "_ARM_" /D "$(CePlatform)" /D "THUMB" /D "_THUMB_" /D "ARMV4T" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_ATL_MIN_CRT" /D "_ATL_DLL" /Yu"stdafx.h" /QRarch4T /QRinterwork-return /O2 /M$(CECrtMT)    /c
+# ADD CPP /nologo /W3 /GX- /D "_USRDLL" /D "ARM" /D "_ARM_" /D "$(CePlatform)" /D "THUMB" /D "_THUMB_" /D "ARMV4T" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_ATL_MIN_CRT" /D "_ATL_DLL" /Yu"stdafx.h" /QRarch4T /QRinterwork-return /O2 /M$(CECrtMT)    /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /MACHINE:THUMB
+# ADD LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /MACHINE:THUMB
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Release MinDependency"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "ARMV4TRelMinDependency"
+# PROP BASE Intermediate_Dir "ARMV4TRelMinDependency"
+# PROP BASE CPU_ID "{F52316A9-3B7C-4FE7-A67F-68350B41240D}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "ARMV4TRelMinDependency"
+# PROP Intermediate_Dir "ARMV4TRelMinDependency"
+# PROP CPU_ID "{F52316A9-3B7C-4FE7-A67F-68350B41240D}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "THUMB" /d "_THUMB_" /d "ARM" /d "_ARM_" /d "ARMV4T" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "THUMB" /d "_THUMB_" /d "ARM" /d "_ARM_" /d "ARMV4T" /r
+CPP=clthumb.exe
+# ADD BASE CPP /nologo /W3 /GX- /D "_USRDLL" /D "ARM" /D "_ARM_" /D "$(CePlatform)" /D "THUMB" /D "_THUMB_" /D "ARMV4T" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_ATL_MIN_CRT" /D "_ATL_STATIC_REGISTRY" /Yu"stdafx.h" /QRarch4T /QRinterwork-return /O2 /M$(CECrtMT)  /c
+# ADD CPP /nologo /W3 /GX- /D "_USRDLL" /D "ARM" /D "_ARM_" /D "$(CePlatform)" /D "THUMB" /D "_THUMB_" /D "ARMV4T" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_ATL_MIN_CRT" /D "_ATL_STATIC_REGISTRY" /Yu"stdafx.h" /QRarch4T /QRinterwork-return /O2 /M$(CECrtMT)  /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /MACHINE:THUMB
+# ADD LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /MACHINE:THUMB
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Release MinSize"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "emulatorRelMinSize"
+# PROP BASE Intermediate_Dir "emulatorRelMinSize"
+# PROP BASE CPU_ID "{32E52003-403E-442D-BE48-DE10F8C6131D}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "emulatorRelMinSize"
+# PROP Intermediate_Dir "emulatorRelMinSize"
+# PROP CPU_ID "{32E52003-403E-442D-BE48-DE10F8C6131D}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
+CPP=cl.exe
+# ADD BASE CPP /nologo /W3 /GX- /D "_USRDLL" /D "$(CePlatform)" /D "_i386_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "NDEBUG" /D "_WIN32_WCE_CEPC" /D "_ATL_MIN_CRT" /D "_ATL_DLL" /Yu"stdafx.h" /Gs8192 /GF /O2    /c
+# ADD CPP /nologo /W3 /GX- /D "_USRDLL" /D "$(CePlatform)" /D "_i386_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "NDEBUG" /D "_WIN32_WCE_CEPC" /D "_ATL_MIN_CRT" /D "_ATL_DLL" /Yu"stdafx.h" /Gs8192 /GF /O2    /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /MACHINE:IX86
+# ADD LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /MACHINE:IX86
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Release MinDependency"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "emulatorRelMinDependency"
+# PROP BASE Intermediate_Dir "emulatorRelMinDependency"
+# PROP BASE CPU_ID "{32E52003-403E-442D-BE48-DE10F8C6131D}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "emulatorRelMinDependency"
+# PROP Intermediate_Dir "emulatorRelMinDependency"
+# PROP CPU_ID "{32E52003-403E-442D-BE48-DE10F8C6131D}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
+CPP=cl.exe
+# ADD BASE CPP /nologo /W3 /GX- /D "_USRDLL" /D "$(CePlatform)" /D "_i386_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "NDEBUG" /D "_WIN32_WCE_CEPC" /D "_ATL_MIN_CRT" /D "_ATL_STATIC_REGISTRY" /Yu"stdafx.h" /Gs8192 /GF /O2  /c
+# ADD CPP /nologo /W3 /GX- /D "_USRDLL" /D "$(CePlatform)" /D "_i386_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "NDEBUG" /D "_WIN32_WCE_CEPC" /D "_ATL_MIN_CRT" /D "_ATL_STATIC_REGISTRY" /Yu"stdafx.h" /Gs8192 /GF /O2  /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /MACHINE:IX86
+# ADD LINK32 /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /subsystem:$(CESubsystem) /MACHINE:IX86
+
+!ENDIF 
+
+# Begin Target
+
+# Name "dvoraksip - Win32 (WCE emulator) Debug"
+# Name "dvoraksip - Win32 (WCE ARMV4I) Debug"
+# Name "dvoraksip - Win32 (WCE ARMV4) Debug"
+# Name "dvoraksip - Win32 (WCE ARMV4T) Debug"
+# Name "dvoraksip - Win32 (WCE ARMV4) Release MinSize"
+# Name "dvoraksip - Win32 (WCE ARMV4) Release MinDependency"
+# Name "dvoraksip - Win32 (WCE ARMV4I) Release MinSize"
+# Name "dvoraksip - Win32 (WCE ARMV4I) Release MinDependency"
+# Name "dvoraksip - Win32 (WCE ARMV4T) Release MinSize"
+# Name "dvoraksip - Win32 (WCE ARMV4T) Release MinDependency"
+# Name "dvoraksip - Win32 (WCE emulator) Release MinSize"
+# Name "dvoraksip - Win32 (WCE emulator) Release MinDependency"
+# Begin Group "Source Files"
+
+# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Source File
+
+SOURCE=.\dvorak_classfactory.cpp
+
+!IF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Debug"
+
+DEP_CPP_DVORA=\
+	".\dllmain.h"\
+	".\dvorak_classfactory.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\StdAfx.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_DVORA=\
+	".\dllmain.h"\
+	".\dvorak_classfactory.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\StdAfx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_DVORA=\
+	".\dllmain.h"\
+	".\dvorak_classfactory.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\StdAfx.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Debug"
+
+DEP_CPP_DVORA=\
+	".\dllmain.h"\
+	".\dvorak_classfactory.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\StdAfx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Release MinSize"
+
+DEP_CPP_DVORA=\
+	".\dllmain.h"\
+	".\dvorak_classfactory.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\StdAfx.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Release MinDependency"
+
+DEP_CPP_DVORA=\
+	".\dllmain.h"\
+	".\dvorak_classfactory.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\StdAfx.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Release MinSize"
+
+DEP_CPP_DVORA=\
+	".\dllmain.h"\
+	".\dvorak_classfactory.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\StdAfx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Release MinDependency"
+
+DEP_CPP_DVORA=\
+	".\dllmain.h"\
+	".\dvorak_classfactory.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\StdAfx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Release MinSize"
+
+DEP_CPP_DVORA=\
+	".\dllmain.h"\
+	".\dvorak_classfactory.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\StdAfx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Release MinDependency"
+
+DEP_CPP_DVORA=\
+	".\dllmain.h"\
+	".\dvorak_classfactory.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\StdAfx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Release MinSize"
+
+DEP_CPP_DVORA=\
+	".\dllmain.h"\
+	".\dvorak_classfactory.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\StdAfx.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Release MinDependency"
+
+DEP_CPP_DVORA=\
+	".\dllmain.h"\
+	".\dvorak_classfactory.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\StdAfx.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"vibrate.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dvorak_implementation.cpp
+
+!IF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Debug"
+
+DEP_CPP_DVORAK=\
+	".\dllmain.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\Resource.h"\
+	".\StdAfx.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"keybd.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_DVORAK=\
+	".\dllmain.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\Resource.h"\
+	".\StdAfx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_DVORAK=\
+	".\dllmain.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\Resource.h"\
+	".\StdAfx.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"keybd.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Debug"
+
+DEP_CPP_DVORAK=\
+	".\dllmain.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\Resource.h"\
+	".\StdAfx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Release MinSize"
+
+DEP_CPP_DVORAK=\
+	".\dllmain.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\Resource.h"\
+	".\StdAfx.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"keybd.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Release MinDependency"
+
+DEP_CPP_DVORAK=\
+	".\dllmain.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\Resource.h"\
+	".\StdAfx.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"keybd.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Release MinSize"
+
+DEP_CPP_DVORAK=\
+	".\dllmain.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\Resource.h"\
+	".\StdAfx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Release MinDependency"
+
+DEP_CPP_DVORAK=\
+	".\dllmain.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\Resource.h"\
+	".\StdAfx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Release MinSize"
+
+DEP_CPP_DVORAK=\
+	".\dllmain.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\Resource.h"\
+	".\StdAfx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Release MinDependency"
+
+DEP_CPP_DVORAK=\
+	".\dllmain.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\Resource.h"\
+	".\StdAfx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Release MinSize"
+
+DEP_CPP_DVORAK=\
+	".\dllmain.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\Resource.h"\
+	".\StdAfx.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"keybd.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Release MinDependency"
+
+DEP_CPP_DVORAK=\
+	".\dllmain.h"\
+	".\dvorak_implementation.h"\
+	".\dvoraksip.h"\
+	".\macros.h"\
+	".\Resource.h"\
+	".\StdAfx.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"keybd.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"vibrate.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dvoraksip.cpp
+
+!IF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Debug"
+
+DEP_CPP_DVORAKS=\
+	".\dllmain.h"\
+	".\dvorak_classfactory.h"\
+	".\dvoraksip.h"\
+	".\dvoraksip_i.c"\
+	".\macros.h"\
+	".\Resource.h"\
+	".\StdAfx.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"guiddef.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_DVORAKS=\
+	".\dvoraksip.h"\
+	".\StdAfx.h"\
+	
+NODEP_CPP_DVORAKS=\
+	".\dvoraksip_i.c"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_DVORAKS=\
+	".\dvoraksip.h"\
+	".\StdAfx.h"\
+	
+NODEP_CPP_DVORAKS=\
+	".\dvoraksip_i.c"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Debug"
+
+DEP_CPP_DVORAKS=\
+	".\dvoraksip.h"\
+	".\StdAfx.h"\
+	
+NODEP_CPP_DVORAKS=\
+	".\dvoraksip_i.c"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Release MinSize"
+
+DEP_CPP_DVORAKS=\
+	".\dvoraksip.h"\
+	".\StdAfx.h"\
+	
+NODEP_CPP_DVORAKS=\
+	".\dvoraksip_i.c"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Release MinDependency"
+
+DEP_CPP_DVORAKS=\
+	".\dvoraksip.h"\
+	".\StdAfx.h"\
+	
+NODEP_CPP_DVORAKS=\
+	".\dvoraksip_i.c"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Release MinSize"
+
+DEP_CPP_DVORAKS=\
+	".\dvoraksip.h"\
+	".\StdAfx.h"\
+	
+NODEP_CPP_DVORAKS=\
+	".\dvoraksip_i.c"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Release MinDependency"
+
+DEP_CPP_DVORAKS=\
+	".\dvoraksip.h"\
+	".\StdAfx.h"\
+	
+NODEP_CPP_DVORAKS=\
+	".\dvoraksip_i.c"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Release MinSize"
+
+DEP_CPP_DVORAKS=\
+	".\dvoraksip.h"\
+	".\StdAfx.h"\
+	
+NODEP_CPP_DVORAKS=\
+	".\dvoraksip_i.c"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Release MinDependency"
+
+DEP_CPP_DVORAKS=\
+	".\dvoraksip.h"\
+	".\StdAfx.h"\
+	
+NODEP_CPP_DVORAKS=\
+	".\dvoraksip_i.c"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Release MinSize"
+
+DEP_CPP_DVORAKS=\
+	".\dvoraksip.h"\
+	".\StdAfx.h"\
+	
+NODEP_CPP_DVORAKS=\
+	".\dvoraksip_i.c"\
+	
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Release MinDependency"
+
+DEP_CPP_DVORAKS=\
+	".\dvoraksip.h"\
+	".\StdAfx.h"\
+	
+NODEP_CPP_DVORAKS=\
+	".\dvoraksip_i.c"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dvoraksip.def
+# End Source File
+# Begin Source File
+
+SOURCE=.\dvoraksip.idl
+
+!IF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Debug"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build - Performing MIDL step
+InputPath=.\dvoraksip.idl
+
+BuildCmds= \
+	midl /nologo /Oicf /h "dvoraksip.h" /iid "dvoraksip_i.c" "dvoraksip.idl"
+
+".\dvoraksip.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip_i.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Debug"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build - Performing MIDL step
+InputPath=.\dvoraksip.idl
+
+BuildCmds= \
+	midl /nologo /Oicf /h "dvoraksip.h" /iid "dvoraksip_i.c" "dvoraksip.idl"
+
+".\dvoraksip.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip_i.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Debug"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build - Performing MIDL step
+InputPath=.\dvoraksip.idl
+
+BuildCmds= \
+	midl /nologo /Oicf /h "dvoraksip.h" /iid "dvoraksip_i.c" "dvoraksip.idl"
+
+".\dvoraksip.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip_i.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Debug"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build - Performing MIDL step
+InputPath=.\dvoraksip.idl
+
+BuildCmds= \
+	midl /nologo /Oicf /h "dvoraksip.h" /iid "dvoraksip_i.c" "dvoraksip.idl"
+
+".\dvoraksip.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip_i.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Release MinSize"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build - Performing MIDL step
+InputPath=.\dvoraksip.idl
+
+BuildCmds= \
+	midl /nologo /Oicf /h "dvoraksip.h" /iid "dvoraksip_i.c" "dvoraksip.idl"
+
+".\dvoraksip.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip_i.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Release MinDependency"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build - Performing MIDL step
+InputPath=.\dvoraksip.idl
+
+BuildCmds= \
+	midl /nologo /Oicf /h "dvoraksip.h" /iid "dvoraksip_i.c" "dvoraksip.idl"
+
+".\dvoraksip.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip_i.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Release MinSize"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build - Performing MIDL step
+InputPath=.\dvoraksip.idl
+
+BuildCmds= \
+	midl /nologo /Oicf /h "dvoraksip.h" /iid "dvoraksip_i.c" "dvoraksip.idl"
+
+".\dvoraksip.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip_i.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Release MinDependency"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build - Performing MIDL step
+InputPath=.\dvoraksip.idl
+
+BuildCmds= \
+	midl /nologo /Oicf /h "dvoraksip.h" /iid "dvoraksip_i.c" "dvoraksip.idl"
+
+".\dvoraksip.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip_i.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Release MinSize"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build - Performing MIDL step
+InputPath=.\dvoraksip.idl
+
+BuildCmds= \
+	midl /nologo /Oicf /h "dvoraksip.h" /iid "dvoraksip_i.c" "dvoraksip.idl"
+
+".\dvoraksip.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip_i.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Release MinDependency"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build - Performing MIDL step
+InputPath=.\dvoraksip.idl
+
+BuildCmds= \
+	midl /nologo /Oicf /h "dvoraksip.h" /iid "dvoraksip_i.c" "dvoraksip.idl"
+
+".\dvoraksip.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip_i.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Release MinSize"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build - Performing MIDL step
+InputPath=.\dvoraksip.idl
+
+BuildCmds= \
+	midl /nologo /Oicf /h "dvoraksip.h" /iid "dvoraksip_i.c" "dvoraksip.idl"
+
+".\dvoraksip.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip_i.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Release MinDependency"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build - Performing MIDL step
+InputPath=.\dvoraksip.idl
+
+BuildCmds= \
+	midl /nologo /Oicf /h "dvoraksip.h" /iid "dvoraksip_i.c" "dvoraksip.idl"
+
+".\dvoraksip.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+".\dvoraksip_i.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dvoraksip.rc
+
+!IF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Debug"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Debug"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Debug"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Debug"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Release MinSize"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Release MinDependency"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Release MinSize"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Release MinDependency"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Release MinSize"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Release MinDependency"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Release MinSize"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Release MinDependency"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\StdAfx.cpp
+
+!IF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Debug"
+
+DEP_CPP_STDAF=\
+	".\StdAfx.h"\
+	
+# ADD CPP /Yc"stdafx.h"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_STDAF=\
+	".\StdAfx.h"\
+	
+# ADD CPP /Yc"stdafx.h"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_STDAF=\
+	".\StdAfx.h"\
+	
+# ADD CPP /Yc"stdafx.h"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Debug"
+
+DEP_CPP_STDAF=\
+	".\StdAfx.h"\
+	
+# ADD CPP /Yc"stdafx.h"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Release MinSize"
+
+DEP_CPP_STDAF=\
+	".\StdAfx.h"\
+	
+# ADD BASE CPP /Yc"stdafx.h"
+# ADD CPP /Yc"stdafx.h"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4) Release MinDependency"
+
+DEP_CPP_STDAF=\
+	".\StdAfx.h"\
+	
+# ADD BASE CPP /Yc"stdafx.h"
+# ADD CPP /Yc"stdafx.h"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Release MinSize"
+
+DEP_CPP_STDAF=\
+	".\StdAfx.h"\
+	
+# ADD BASE CPP /Yc"stdafx.h"
+# ADD CPP /Yc"stdafx.h"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4I) Release MinDependency"
+
+DEP_CPP_STDAF=\
+	".\StdAfx.h"\
+	
+# ADD BASE CPP /Yc"stdafx.h"
+# ADD CPP /Yc"stdafx.h"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Release MinSize"
+
+DEP_CPP_STDAF=\
+	".\StdAfx.h"\
+	
+# ADD BASE CPP /Yc"stdafx.h"
+# ADD CPP /Yc"stdafx.h"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE ARMV4T) Release MinDependency"
+
+DEP_CPP_STDAF=\
+	".\StdAfx.h"\
+	
+# ADD BASE CPP /Yc"stdafx.h"
+# ADD CPP /Yc"stdafx.h"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Release MinSize"
+
+DEP_CPP_STDAF=\
+	".\StdAfx.h"\
+	
+# ADD BASE CPP /Yc"stdafx.h"
+# ADD CPP /Yc"stdafx.h"
+
+!ELSEIF  "$(CFG)" == "dvoraksip - Win32 (WCE emulator) Release MinDependency"
+
+DEP_CPP_STDAF=\
+	".\StdAfx.h"\
+	
+# ADD BASE CPP /Yc"stdafx.h"
+# ADD CPP /Yc"stdafx.h"
+
+!ENDIF 
+
+# End Source File
+# End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\dvorak_classfactory.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\dvorak_implementation.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\StdAfx.h
+# End Source File
+# End Group
+# Begin Group "Resource Files"
+
+# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# End Group
+# End Target
+# End Project

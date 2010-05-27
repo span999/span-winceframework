@@ -1,0 +1,41 @@
+!if 0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+!endif
+!if 0
+Use of this source code is subject to the terms of the Microsoft end-user
+license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+If you did not accept the terms of the EULA, you are not authorized to use
+this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+install media.
+!endif
+#
+#
+#	THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+#	ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+#	THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
+#	PARTICULAR PURPOSE.
+#
+#	Module Name:  SipSelect
+#
+#	sources
+#
+
+WINCEOEM=1
+
+TARGETNAME=SipSelect
+TARGETTYPE=LIBRARY
+COPYRES=1
+
+RESFILE=$(TARGETNAME).res
+WINCETARGETFILES=$(_RELEASELIBDIR)\$(TARGETNAME).res
+
+INCLUDES=
+
+SOURCES= \
+	sipselect.cpp \
+	sip2.cpp \
+	sipselect.rc
+
+
+#xref VIGUID {085ad4aa-ea83-4a95-9b2f-dc27158eb7f6}
+#xref VSGUID {d5f2ceb1-e980-4ecd-a689-63853a527623}
