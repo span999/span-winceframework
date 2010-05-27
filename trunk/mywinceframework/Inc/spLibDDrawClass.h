@@ -21,6 +21,7 @@ public:
 	DWORD spLibBltDDraw( RECT *prt, DWORD dwR, DWORD dwG, DWORD dwB ) { return PrimaryBlt( prt, CreateRGB( dwR, dwG, dwB ) ); }
 	BOOL spLibPixelDraw( DWORD dwX, DWORD dwY ) { return PixelDraw( dwX, dwY ); }
 	BOOL spLibPixelDraw( DWORD dwX, DWORD dwY, DWORD dwR, DWORD dwG, DWORD dwB ) { return PixelDraw( dwX, dwY, dwR, dwG, dwB ); }
+	BOOL spLibTextDraw( LPCTSTR szError,... );
 	
 protected:
 
@@ -42,6 +43,7 @@ protected:
 	HRESULT SurfaceEnumFunction( LPDIRECTDRAWSURFACE pSurface, LPDDSURFACEDESC lpSurfaceDesc, LPVOID  lpContext );
 	BOOL PixelDraw( DWORD dwX, DWORD dwY );
 	BOOL PixelDraw( DWORD dwX, DWORD dwY, DWORD dwR, DWORD dwG, DWORD dwB );
+	BOOL TextDraw( IDirectDrawSurface *pThisSurf, TCHAR *szString );
 	DWORD CreateRGB( DWORD dwR, DWORD dwG, DWORD dwB );
 	DWORD GetBitDepth( IDirectDrawSurface *pThisSurf );
 	void TakeCS(){ EnterCriticalSection( &m_csDDaccess ); }
