@@ -1,0 +1,34 @@
+!if 0
+WARNING:
+This Software contains SiRF Technology, Inc.¡¯s confidential and
+proprietary information. UNAUTHORIZED COPYING, USE, DISTRIBUTION,
+PUBLICATION, TRANSFER, SALE, RENTAL OR DISCLOSURE IS PROHIBITED
+AND MAY RESULT IN SERIOUS LEGAL CONSEQUENCES.  Do not copy this
+Software without SiRF Technology, Inc.¡¯s  express written
+permission.   Use of any portion of the contents of this Software
+is subject to and restricted by your written agreement with
+SiRF Technology, Inc.
+!endif
+
+TARGETNAME=spExeTest
+TARGETTYPE=PROGRAM
+RELEASETYPE=PLATFORM
+
+EXEENTRY=WinMain
+
+!if 0
+WINCECOD=1
+!endif
+WINCEOEM=1
+WINCEREL=1
+PREPROCESSDEFFILE=1
+
+TARGETLIBS=	\
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDDrawClass.lib \
+
+SOURCELIBS= \
+
+SOURCES= \
+		spExeTest.cpp \
+		ddex1.rc

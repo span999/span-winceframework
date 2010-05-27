@@ -2,3 +2,4 @@
 DIRS= \
     spExeSysInfoIdle \
 	spExeSysInfoIdleExit \
+	spExeTest \
