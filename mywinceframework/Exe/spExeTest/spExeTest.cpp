@@ -397,8 +397,8 @@ static void DrawPixel( void )
 			dwNum = (dwLoop%100) + 2;
 			
 			//clean it, fill with color
-			///SetRect( &rcDest, 0, 0, 640, 480 );
-			///pmyDD->spLibBltDDraw( &rcDest, 0, 0, 0xFF );
+			SetRect( &rcDest, 0, 0, 800, 400 );
+			pmyDD->spLibBltDDraw( &rcDest, 0, 0, 0xFF );
 			
 			///pmyDD->spLibDrawPixel( 2+(dwLoop%100), 2+(dwLoop%100) );
 			pmyDD->spLibPixelDraw( dwNum+dwTimes, dwNum );
@@ -544,8 +544,13 @@ InitApp(HINSTANCE hInstance, int nCmdShow)
                           WS_POPUP,
                           0,
                           0,
+#if 0						  
                           GetSystemMetrics(SM_CXSCREEN),
                           GetSystemMetrics(SM_CYSCREEN),
+#else
+						  100,
+						  50,
+#endif
                           NULL,
                           NULL,
                           hInstance,

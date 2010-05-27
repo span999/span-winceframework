@@ -184,7 +184,8 @@ DWORD spLibDDraw::InitDDraw( void )
 		{
 			// Get Fullscreen mode.
 			///dwFlagset = DDSCL_FULLSCREEN|DDSCL_EXCLUSIVE;
-			dwFlagset = DDSCL_FULLSCREEN;	///CE not support DDSCL_EXCLUSIVE flag
+			///dwFlagset = DDSCL_FULLSCREEN;	///CE not support DDSCL_EXCLUSIVE flag
+			dwFlagset = DDSCL_NORMAL;
 		}
 		
 		hr = m_pDD->SetCooperativeLevel( m_hWnd, dwFlagset );
