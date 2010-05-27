@@ -27,6 +27,7 @@ protected:
 	virtual BOOL Init( void );
 	virtual BOOL DeInit( void );
 	void spMessageBoxOut( LPCTSTR szError,... );
+	void spMessageBoxOut( DWORD dwFlag, LPCTSTR szError,... );
 	DWORD InitDDraw( void );
 	BOOL GetDDCaps( void );
 	BOOL IsOverlaySupport( void );

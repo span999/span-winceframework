@@ -73,16 +73,35 @@ DWORD spLibDDraw::spLibInitDDrawBack( DWORD dwBackSurfNum, PVOID pfn )
 
 void spLibDDraw::spMessageBoxOut( LPCTSTR szError,... )
 {
-    TCHAR                       szBuff[128];
+    ///TCHAR                       szBuff[128];
     va_list                     vl;
 
     va_start(vl, szError);
 
-    StringCchVPrintf(szBuff, (128), szError, vl);
-
-	MessageBox( NULL, szBuff, TEXT("spLibDDraw Msg:"), MB_OK|MB_SETFOREGROUND );
+    ///StringCchVPrintf(szBuff, (128), szError, vl);
+	StringCchVPrintf(m_szTempString, (256), szError, vl);
+	
+	MessageBox( NULL, m_szTempString, TEXT("spLibDDraw Msg:"), MB_OK|MB_SETFOREGROUND );
 	
     va_end(vl);
+}
+
+void spLibDDraw::spMessageBoxOut( DWORD dwFlag, LPCTSTR szError,... )
+{
+    ///TCHAR                       szBuff[128];
+    va_list                     vl;
+
+	if( dwFlag&DBGMSG_LEVEL )
+	{
+		va_start(vl, szError);
+
+		///StringCchVPrintf(szBuff, (128), szError, vl);
+		StringCchVPrintf(m_szTempString, (256), szError, vl);
+	
+		MessageBox( NULL, m_szTempString, TEXT("spLibDDraw Msg:"), MB_OK|MB_SETFOREGROUND );
+	
+		va_end(vl);
+	}	
 }
 
 
@@ -127,13 +146,13 @@ DWORD spLibDDraw::InitDDraw( void )
 	DWORD dwRet = (-1);
 	HRESULT hr;
 	
-	spMessageBoxOut( TEXT("InitDDraw+++") );
+	spMessageBoxOut( dINIT, TEXT("InitDDraw+++") );
 	
 	// Create the main DirectDraw object
 	hr = DirectDrawCreate( NULL, &m_pDD, NULL );
 	
 	if( DD_OK != hr )
-		spMessageBoxOut( TEXT("DirectDrawCreate fail") );
+		spMessageBoxOut( dFAIL, TEXT("DirectDrawCreate fail") );
 	else
 	{
 		DWORD dwFlagset = 0;
@@ -154,13 +173,13 @@ DWORD spLibDDraw::InitDDraw( void )
 		
 		if( DD_OK != hr )
 		{
-			spMessageBoxOut( TEXT("SetCooperativeLevel fail") );	
+			spMessageBoxOut( dFAIL, TEXT("SetCooperativeLevel fail") );	
 		}
 		else
 			dwRet = 0;
 	}
 
-	spMessageBoxOut( TEXT("InitDDraw---") );
+	spMessageBoxOut( dINIT, TEXT("InitDDraw---") );
 	
 	return dwRet;
 }
@@ -169,7 +188,7 @@ BOOL spLibDDraw::GetDDCaps( void )
 {
 	BOOL bRet = FALSE;
 	
-	spMessageBoxOut( TEXT("GetDDCaps+++") );
+	spMessageBoxOut( dINIT, TEXT("GetDDCaps+++") );
 	
 	if( NULL != m_pDD )
 	{
@@ -180,14 +199,14 @@ BOOL spLibDDraw::GetDDCaps( void )
 		hRet = m_pDD->GetCaps( &m_ddcaps, NULL );
 		
 		if (hRet != DD_OK)
-			spMessageBoxOut( TEXT("GetDDCaps:GetCaps fail !!!") );
+			spMessageBoxOut( dFAIL, TEXT("GetDDCaps:GetCaps fail !!!") );
 		else
 			bRet = TRUE;
 	}
 	else
-		spMessageBoxOut( TEXT("GetDDCaps: m_pDD fail !!!") );
+		spMessageBoxOut( dFAIL, TEXT("GetDDCaps: m_pDD fail !!!") );
 	
-	spMessageBoxOut( TEXT("GetDDCaps---") );
+	spMessageBoxOut( dINIT, TEXT("GetDDCaps---") );
 	
 	return bRet;
 }
@@ -198,7 +217,7 @@ DWORD spLibDDraw::GetBitDepth( IDirectDrawSurface *pThisSurf )
 	DWORD dwRet = 0;
 	HRESULT hr;
 	
-	spMessageBoxOut( TEXT("GetBitDepth+++") );
+	spMessageBoxOut( dINIT, TEXT("GetBitDepth+++") );
 	
     if( NULL != pThisSurf )
     {
@@ -206,7 +225,7 @@ DWORD spLibDDraw::GetBitDepth( IDirectDrawSurface *pThisSurf )
 		hr = pThisSurf->Lock( NULL, &m_ddsd, DDLOCK_WAITNOTBUSY, NULL );	///CE not support DDLOCK_WAIT flag
 		
 		if( hr != DD_OK )
-			spMessageBoxOut( TEXT("GetBitDepth:Lock fail !!") );
+			spMessageBoxOut( dFAIL, TEXT("GetBitDepth:Lock fail !!") );
 		else
 		{
             // Store bit depth of surface
@@ -215,11 +234,11 @@ DWORD spLibDDraw::GetBitDepth( IDirectDrawSurface *pThisSurf )
 			// Unlock surface
             hr = pThisSurf->Unlock( NULL );
 			if( hr != DD_OK )
-				spMessageBoxOut( TEXT("GetBitDepth:Unlock fail !!") );
+				spMessageBoxOut( dFAIL, TEXT("GetBitDepth:Unlock fail !!") );
 		}
 	}
 	
-	spMessageBoxOut( TEXT("GetBitDepth---") );
+	spMessageBoxOut( dINIT, TEXT("GetBitDepth---") );
 	
 	return dwRet;
 }
@@ -229,26 +248,26 @@ BOOL spLibDDraw::IsOverlaySupport( void )
 {
 	BOOL bRet = FALSE;
 	
-	spMessageBoxOut( TEXT("IsOverlaySupport+++") );
+	spMessageBoxOut( dINIT, TEXT("IsOverlaySupport+++") );
 	
 	if( GetDDCaps() )
 	{
 		if (m_ddcaps.dwOverlayCaps == 0) 
 		{
-			spMessageBoxOut( TEXT("IsOverlaySupport:Overlays are not supported in hardware!") );
+			spMessageBoxOut( dWARN, TEXT("IsOverlaySupport:Overlays are not supported in hardware!") );
 			bRet = FALSE;
 		}
 		else
 		{
-			spMessageBoxOut( TEXT("IsOverlaySupport:Overlays are supported in hardware!") );
+			spMessageBoxOut( dINFO, TEXT("IsOverlaySupport:Overlays are supported in hardware!") );
 			bRet = TRUE;
 		}
 	}
 	else
-		spMessageBoxOut( TEXT("IsOverlaySupport: GetDDCaps fail !!!") );
+		spMessageBoxOut( dFAIL, TEXT("IsOverlaySupport: GetDDCaps fail !!!") );
 	
 	
-	spMessageBoxOut( TEXT("IsOverlaySupport---") );
+	spMessageBoxOut( dINIT, TEXT("IsOverlaySupport---") );
 	
 	return bRet;
 }
@@ -259,7 +278,7 @@ DWORD spLibDDraw::InitDDSurface( void )
 	DWORD dwRet = 0;
 	HRESULT hr;
 	
-	spMessageBoxOut( TEXT("InitDDSurface+++") );
+	spMessageBoxOut( dINIT, TEXT("InitDDSurface+++") );
 	
 
 #if 1
@@ -276,7 +295,7 @@ DWORD spLibDDraw::InitDDSurface( void )
 		if( DD_OK != hr )
 		{
 			dwRet = 3;
-			spMessageBoxOut( TEXT("CreateSurface fail") );	
+			spMessageBoxOut( dFAIL, TEXT("CreateSurface fail") );	
 		}
 
 	}
@@ -300,13 +319,13 @@ DWORD spLibDDraw::InitDDSurface( void )
 		if( DD_OK != hr )
 		{
 			dwRet = 3;
-			spMessageBoxOut( TEXT("CreateSurface fail") );
+			spMessageBoxOut( dFAIL, TEXT("CreateSurface fail") );
 			if (hr == DDERR_NOFLIPHW)
-				spMessageBoxOut( TEXT("******** Display driver doesn't support flipping surfaces. ********"));
+				spMessageBoxOut( dWARN, TEXT("******** Display driver doesn't support flipping surfaces. ********"));
 		}
 	}
 #endif
-	spMessageBoxOut( TEXT("InitDDSurface---") );
+	spMessageBoxOut( dINIT, TEXT("InitDDSurface---") );
 	
 	return dwRet;
 }
@@ -316,7 +335,7 @@ DWORD spLibDDraw::InitDDPrimarySurface( void )
 	DWORD dwRet = (-1);
 	HRESULT hr;
 	
-	spMessageBoxOut( TEXT("InitDDPrimarySurface+++") );
+	spMessageBoxOut( dINIT, TEXT("InitDDPrimarySurface+++") );
 	
 	if( NULL != m_pDD )
 	{
@@ -328,7 +347,7 @@ DWORD spLibDDraw::InitDDPrimarySurface( void )
 		m_ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
 		hr = m_pDD->CreateSurface( &m_ddsd, &m_pDDSPrimary, NULL );
 		if( DD_OK != hr )
-			spMessageBoxOut( TEXT("InitDDPrimarySurface:CreateSurface fail") );	
+			spMessageBoxOut( dFAIL, TEXT("InitDDPrimarySurface:CreateSurface fail") );	
 		else
 		{
 			dwRet = 0;
@@ -336,9 +355,9 @@ DWORD spLibDDraw::InitDDPrimarySurface( void )
 		}
 	}
 	else
-		spMessageBoxOut( TEXT("InitDDPrimarySurface: m_pDD fail") );	
+		spMessageBoxOut( dFAIL, TEXT("InitDDPrimarySurface: m_pDD fail") );	
 	
-	spMessageBoxOut( TEXT("InitDDPrimarySurface---") );
+	spMessageBoxOut( dINIT, TEXT("InitDDPrimarySurface---") );
 	
 	return dwRet;
 }
@@ -348,7 +367,7 @@ DWORD spLibDDraw::InitDDPrimarySurfaceBack( DWORD dwBackBufNum )
 	DWORD dwRet = (-1);
 	HRESULT hr;
 	
-	spMessageBoxOut( TEXT("InitDDPrimarySurfaceBack+++") );
+	spMessageBoxOut( dINIT, TEXT("InitDDPrimarySurfaceBack+++") );
 	
 	if( 0 == dwBackBufNum )
 		dwBackBufNum = 1;		///set as default
@@ -364,12 +383,12 @@ DWORD spLibDDraw::InitDDPrimarySurfaceBack( DWORD dwBackBufNum )
 	    m_ddsd.dwBackBufferCount = dwBackBufNum;
 		hr = m_pDD->CreateSurface( &m_ddsd, &m_pDDSPrimary, NULL );
 		if( DD_OK != hr )
-			spMessageBoxOut( TEXT("InitDDPrimarySurfaceBack: Not support flipping surfaces!!") );
+			spMessageBoxOut( dFAIL, TEXT("InitDDPrimarySurfaceBack: Not support flipping surfaces!!") );
 		else
 			dwRet = 0;
 	}
 	else
-		spMessageBoxOut( TEXT("InitDDPrimarySurfaceBack: m_pDD fail") );
+		spMessageBoxOut( dFAIL, TEXT("InitDDPrimarySurfaceBack: m_pDD fail") );
 		
 	if( 0 == dwRet )
 	{
@@ -378,12 +397,12 @@ DWORD spLibDDraw::InitDDPrimarySurfaceBack( DWORD dwBackBufNum )
 		if( hr != DD_OK )
 		{
 			dwRet = (-1);
-			spMessageBoxOut( TEXT("InitDDPrimarySurfaceBack: EnumAttachedSurfaces fail!!") );	
+			spMessageBoxOut( dFAIL, TEXT("InitDDPrimarySurfaceBack: EnumAttachedSurfaces fail!!") );	
 		}
 		
 	}
 	
-	spMessageBoxOut( TEXT("InitDDPrimarySurfaceBack---") );
+	spMessageBoxOut( dINIT, TEXT("InitDDPrimarySurfaceBack---") );
 	
 	return dwRet;
 }
@@ -393,7 +412,7 @@ DWORD spLibDDraw::InitDDPrimarySurfaceBack( DWORD dwBackBufNum, PVOID pfn )
 	DWORD dwRet = (-1);
 	HRESULT hr;
 	
-	spMessageBoxOut( TEXT("InitDDPrimarySurfaceBack+++") );
+	spMessageBoxOut( dINIT, TEXT("InitDDPrimarySurfaceBack+++") );
 	
 	if( 0 == dwBackBufNum )
 		dwBackBufNum = 1;		///set as default
@@ -409,12 +428,12 @@ DWORD spLibDDraw::InitDDPrimarySurfaceBack( DWORD dwBackBufNum, PVOID pfn )
 	    m_ddsd.dwBackBufferCount = dwBackBufNum;
 		hr = m_pDD->CreateSurface( &m_ddsd, &m_pDDSPrimary, NULL );
 		if( DD_OK != hr )
-			spMessageBoxOut( TEXT("InitDDPrimarySurfaceBack: Not support flipping surfaces!!") );
+			spMessageBoxOut( dWARN, TEXT("InitDDPrimarySurfaceBack: Not support flipping surfaces!!") );
 		else
 			dwRet = 0;
 	}
 	else
-		spMessageBoxOut( TEXT("InitDDPrimarySurfaceBack: m_pDD fail") );
+		spMessageBoxOut( dFAIL, TEXT("InitDDPrimarySurfaceBack: m_pDD fail") );
 		
 	if( 0 == dwRet )
 	{
@@ -423,12 +442,12 @@ DWORD spLibDDraw::InitDDPrimarySurfaceBack( DWORD dwBackBufNum, PVOID pfn )
 		if( hr != DD_OK )
 		{
 			dwRet = (-1);
-			spMessageBoxOut( TEXT("InitDDPrimarySurfaceBack: EnumAttachedSurfaces fail!!") );	
+			spMessageBoxOut( dFAIL, TEXT("InitDDPrimarySurfaceBack: EnumAttachedSurfaces fail!!") );	
 		}
 		
 	}
 	
-	spMessageBoxOut( TEXT("InitDDPrimarySurfaceBack---") );
+	spMessageBoxOut( dINIT, TEXT("InitDDPrimarySurfaceBack---") );
 	
 	return dwRet;
 }
@@ -448,7 +467,7 @@ HRESULT spLibDDraw::SurfaceEnumFunction(
         LPVOID  lpContext)
 {
 
-	spMessageBoxOut( TEXT("SurfaceEnumFunction+++") );
+	spMessageBoxOut( dINIT, TEXT("SurfaceEnumFunction+++") );
 	
     if (!m_bSurfaceEnumFunctionCalled) {
 
@@ -458,12 +477,12 @@ HRESULT spLibDDraw::SurfaceEnumFunction(
     }
     else
 	{
-        spMessageBoxOut( TEXT("SurfaceEnumFunction: Enumerated more than surface?") );
+        spMessageBoxOut( dWARN, TEXT("SurfaceEnumFunction: Enumerated more than surface?") );
         pSurface->Release();
         return DDENUMRET_CANCEL;
     }
 	
-	spMessageBoxOut( TEXT("SurfaceEnumFunction---") );
+	spMessageBoxOut( dINIT, TEXT("SurfaceEnumFunction---") );
 }
 
 DWORD spLibDDraw::PrimaryFlip( void )
@@ -523,10 +542,10 @@ DWORD spLibDDraw::PrimaryBlt( RECT *prt, DWORD dwRGB )
 		hr = m_pDDSPrimary->Blt( prt, NULL, NULL, DDBLT_COLORFILL, &ddbfx );	///CE not support DDBLT_WAIT flag
 		
 		if( hr != DD_OK )
-			spMessageBoxOut( TEXT("PrimaryBlt: Blt fail !!") );
+			spMessageBoxOut( dFAIL, TEXT("PrimaryBlt: Blt fail !!") );
 	}
 	else
-		spMessageBoxOut( TEXT("PrimaryBlt: m_pDDSPrimary fail !!") );
+		spMessageBoxOut( dINIT, TEXT("PrimaryBlt: m_pDDSPrimary fail !!") );
 
 	
 	return dwRet;
