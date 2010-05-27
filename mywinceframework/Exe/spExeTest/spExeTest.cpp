@@ -404,6 +404,11 @@ static void DrawPixel( void )
 			pmyDD->spLibPixelDraw( dwNum+dwTimes, dwNum );
 			SetRect( &rcDest, dwNum+dwTimes+10, dwNum+10, dwNum+dwTimes+10+5, dwNum+10+5 );
 			pmyDD->spLibBltDDraw( &rcDest, 0, 0xFF, 0 );
+			
+			pmyDD->spLibTextDraw( TEXT("TEST string out to DD surface !!!") );
+			
+			
+			
 	#if 0
 			if( 0 == dwLoop%10 )
 				pmyDD->spLibFlipDDraw();

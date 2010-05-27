@@ -71,6 +71,24 @@ DWORD spLibDDraw::spLibInitDDrawBack( DWORD dwBackSurfNum, PVOID pfn )
 }
 
 
+BOOL spLibDDraw::spLibTextDraw( LPCTSTR szError,... )
+{
+	BOOL bRet = TRUE;
+	
+    va_list                     vl;
+
+    va_start(vl, szError);
+
+	StringCchVPrintf(m_szTempString, (256), szError, vl);
+	
+	///MessageBox( NULL, m_szTempString, TEXT("spLibDDraw Msg:"), MB_OK|MB_SETFOREGROUND );
+	bRet = TextDraw( m_pDDSPrimary, m_szTempString );
+	
+    va_end(vl);
+	
+	return bRet;
+}
+
 void spLibDDraw::spMessageBoxOut( LPCTSTR szError,... )
 {
     ///TCHAR                       szBuff[128];
@@ -576,6 +594,49 @@ BOOL spLibDDraw::PixelDraw( DWORD dwX, DWORD dwY, DWORD dwR, DWORD dwG, DWORD dw
 
 	return bRet;
 }
+
+BOOL spLibDDraw::TextDraw( IDirectDrawSurface *pThisSurf, TCHAR *szString )
+{
+	BOOL bRet = FALSE;
+
+    HDC hdc;
+    RECT rc;
+    SIZE size;
+    int nMsg;
+///    DDBLTFX ddbltfx;
+
+	if( NULL != pThisSurf )
+	{
+		if( pThisSurf->GetDC( &hdc ) == DD_OK )
+		{
+			SetBkColor(hdc, RGB(0, 0, 255));
+			SetTextColor(hdc, RGB(255, 255, 0));
+			GetClientRect( m_hWnd, &rc );
+
+	        nMsg = lstrlen( szString );
+            GetTextExtentPoint(hdc, szString, nMsg, &size);
+            ExtTextOut(hdc, 
+		       50, 
+		       50,
+		       0,                        // fuOptions
+		       NULL,                     // lprc
+               szString, 
+		       nMsg,
+		       NULL);                    // lpDx
+			
+			pThisSurf->ReleaseDC(hdc);
+			bRet = TRUE;
+        }
+        else
+			spMessageBoxOut( dFAIL, TEXT("TextDraw: GetDC fail !!") );
+    }
+	else
+		spMessageBoxOut( dFAIL, TEXT("TextDraw: pThisSurf fail !!") );
+	
+	
+	return bRet;
+}
+
 
 DWORD spLibDDraw::CreateRGB( DWORD dwR, DWORD dwG, DWORD dwB )
 {
