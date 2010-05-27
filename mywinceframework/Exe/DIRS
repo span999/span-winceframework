@@ -7,3 +7,4 @@ DIRS= \
 	spExeCPUUtilization \
 	spExeIllegalMemoryAccess \
 	spExeKeepCPUBusy \
+	spExeAutoRunner \
