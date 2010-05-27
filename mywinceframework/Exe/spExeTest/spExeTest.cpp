@@ -386,20 +386,24 @@ static void DrawPixel( void )
 	DWORD dwLoop = 0;
 	static DWORD dwTimes = 0;
 	RECT rcDest;
+	DWORD dwNum = 0;
 
-
-	///spMessageBoxOut( TEXT("Start draw pixel+++") );	
+	spMessageBoxOut( dINIT, TEXT("Start draw pixel+++") );	
 
 	if( NULL != pmyDD )
 	{
 		for( ; dwLoop < 1000; dwLoop++ )
 		{	
+			dwNum = (dwLoop%100) + 2;
+			
 			//clean it, fill with color
 			///SetRect( &rcDest, 0, 0, 640, 480 );
 			///pmyDD->spLibBltDDraw( &rcDest, 0, 0, 0xFF );
-
+			
 			///pmyDD->spLibDrawPixel( 2+(dwLoop%100), 2+(dwLoop%100) );
-			pmyDD->spLibPixelDraw( 2+(dwLoop%100)+dwTimes, 2+(dwLoop%100) );
+			pmyDD->spLibPixelDraw( dwNum+dwTimes, dwNum );
+			SetRect( &rcDest, dwNum+dwTimes+10, dwNum+10, dwNum+dwTimes+10+5, dwNum+10+5 );
+			pmyDD->spLibBltDDraw( &rcDest, 0, 0xFF, 0 );
 	#if 0
 			if( 0 == dwLoop%10 )
 				pmyDD->spLibFlipDDraw();
