@@ -22,22 +22,6 @@
 
 
 
-BOOL spLibDDraw::Init( void )
-{
-	BOOL bRet = FALSE;
-	
-	///bRet = PriInit();
-	
-	InitializeCriticalSection( &m_csDDaccess );
-	
-	m_pDD = NULL;
-	m_pDDSPrimary = NULL;
-	m_hWnd = NULL;
-	m_bSurfaceEnumFunctionCalled = FALSE;
-
-	///m_dwLogStatus |= SPLOG_STATUS_FLAG_INITED;
-	return bRet;
-}
 
 spLibDDraw::spLibDDraw( HWND hWnd )
 {
@@ -50,19 +34,6 @@ spLibDDraw::spLibDDraw( HWND hWnd )
 }
 
 
-BOOL spLibDDraw::DeInit( void )
-{
-	BOOL bRet = FALSE;
-
-	m_pDDSPrimary->Release();
-	m_pDDSPrimary = NULL;
-	m_pDD->Release();
-	m_pDD = NULL;
-	m_hWnd = NULL;	
-	DeleteCriticalSection( &m_csDDaccess );
-
-	return bRet;
-}
 
 
 DWORD spLibDDraw::spLibInitDDraw( void )
@@ -116,6 +87,40 @@ void spLibDDraw::spMessageBoxOut( LPCTSTR szError,... )
 
 
 
+BOOL spLibDDraw::Init( void )
+{
+	BOOL bRet = FALSE;
+	
+	///bRet = PriInit();
+	
+	InitializeCriticalSection( &m_csDDaccess );
+	
+	m_pDD = NULL;
+	m_pDDSPrimary = NULL;
+	m_hWnd = NULL;
+	m_bSurfaceEnumFunctionCalled = FALSE;
+	m_iBpp = 0;
+
+	///m_dwLogStatus |= SPLOG_STATUS_FLAG_INITED;
+	return bRet;
+}
+
+
+BOOL spLibDDraw::DeInit( void )
+{
+	BOOL bRet = FALSE;
+
+	m_pDDSPrimary->Release();
+	m_pDDSPrimary = NULL;
+	m_pDD->Release();
+	m_pDD = NULL;
+	m_hWnd = NULL;	
+	DeleteCriticalSection( &m_csDDaccess );
+
+	return bRet;
+}
+
+
 
 DWORD spLibDDraw::InitDDraw( void )
 {
@@ -126,20 +131,25 @@ DWORD spLibDDraw::InitDDraw( void )
 	
 	// Create the main DirectDraw object
 	hr = DirectDrawCreate( NULL, &m_pDD, NULL );
+	
 	if( DD_OK != hr )
 		spMessageBoxOut( TEXT("DirectDrawCreate fail") );
 	else
 	{
+		DWORD dwFlagset = 0;
+	
 		if( NULL == m_hWnd )
 		{
 			// Get normal mode.
-			hr = m_pDD->SetCooperativeLevel( m_hWnd, DDSCL_NORMAL );
+			dwFlagset = DDSCL_NORMAL;
 		}
 		else
 		{
 			// Get Fullscreen mode.
-			hr = m_pDD->SetCooperativeLevel( m_hWnd, DDSCL_FULLSCREEN );
+			dwFlagset = DDSCL_FULLSCREEN|DDSCL_EXCLUSIVE;
 		}
+		
+		hr = m_pDD->SetCooperativeLevel( m_hWnd, dwFlagset );
 		
 		if( DD_OK != hr )
 		{
@@ -179,6 +189,37 @@ BOOL spLibDDraw::GetDDCaps( void )
 	spMessageBoxOut( TEXT("GetDDCaps---") );
 	
 	return bRet;
+}
+
+
+DWORD spLibDDraw::GetBitDepth( IDirectDrawSurface *pThisSurf )
+{
+	DWORD dwRet = 0;
+	HRESULT hr;
+	
+	spMessageBoxOut( TEXT("GetBitDepth+++") );
+	
+    if( NULL != pThisSurf )
+    {
+        hr = pThisSurf->Lock( NULL, &m_ddsd, DDLOCK_WAIT, NULL );
+		
+		if( hr != DD_OK )
+			spMessageBoxOut( TEXT("GetBitDepth:Lock fail !!") );
+		else
+		{
+            // Store bit depth of surface
+            dwRet = m_ddsd.ddpfPixelFormat.dwRGBBitCount;
+
+			// Unlock surface
+            hr = g_pDDSBack->Unlock( NULL );
+			if( hr != DD_OK )
+				spMessageBoxOut( TEXT("GetBitDepth:Unlock fail !!") );
+		}
+	}
+	
+	spMessageBoxOut( TEXT("GetBitDepth---") );
+	
+	return dwRet;
 }
 
 
@@ -287,7 +328,10 @@ DWORD spLibDDraw::InitDDPrimarySurface( void )
 		if( DD_OK != hr )
 			spMessageBoxOut( TEXT("InitDDPrimarySurface:CreateSurface fail") );	
 		else
+		{
 			dwRet = 0;
+			m_iBpp = GetBitDepth( m_pDDSPrimary );
+		}
 	}
 	else
 		spMessageBoxOut( TEXT("InitDDPrimarySurface: m_pDD fail") );	
@@ -449,8 +493,47 @@ DWORD spLibDDraw::PrimaryRestore( void )
 }
 
 
-BOOL spLibDDraw::DrawPixel( DWORD dwX, DWORD dwY )
+DWORD spLibDDraw::PrimaryBlt( RECT *prt, DWORD dwRGB )
 {
+	DWORD dwRet = 0;
+    HRESULT hr;
+	DDBLTFX ddbfx;
+	RECT rcDest;
+
+    // Safety net
+    if ( NULL != m_pDDSPrimary )
+    {
+		// Initialize the DDBLTFX structure with the pixel color
+        ddbfx.dwSize = sizeof( ddbfx );
+        ddbfx.dwFillColor = dwRGB;
+
+        // Prepare the destination rectangle as a 1x1 (1 pixel) rectangle
+        ///SetRect( &rcDest, x, y, x+1, y+1 );
+		
+		if( NULL == prt )
+		{
+			SetRect( &rcDest, 0, 0, 0+1, 0+1 );
+			prt = &rcDest;
+		}
+		
+        // Blit 1x1 rectangle using solid color op
+        hr = m_pDDSPrimary->Blt( prt, NULL, NULL, DDBLT_WAIT | DDBLT_COLORFILL, &ddbfx );
+		
+		if( hr != DD_OK )
+			spMessageBoxOut( TEXT("PrimaryBlt: Blt fail !!") );
+	}
+	else
+		spMessageBoxOut( TEXT("PrimaryBlt: m_pDDSPrimary fail !!") );
+
+	
+	return dwRet;
+}
+
+BOOL spLibDDraw::PixelDraw( DWORD dwX, DWORD dwY )
+{
+#if 1
+	return PixelDraw( dwX, dwY, 0xFF, 0x0, 0x0 );
+#else
 	BOOL bRet = TRUE;
 	
 	HRESULT hr;
@@ -466,4 +549,48 @@ BOOL spLibDDraw::DrawPixel( DWORD dwX, DWORD dwY )
 	hr = m_pDDSPrimary->Unlock( LockRect );
 
 	return bRet;
+#endif	
+}
+
+BOOL spLibDDraw::PixelDraw( DWORD dwX, DWORD dwY, DWORD dwR, DWORD dwG, DWORD dwB )
+{
+	BOOL bRet = TRUE;
+	
+	HRESULT hr;
+	RECT *LockRect = NULL;
+
+	hr = m_pDDSPrimary->Lock( LockRect, &m_ddsd, DDLOCK_WAITNOTBUSY, NULL );
+
+	BYTE * pPixelOffset = (BYTE*)m_ddsd.lpSurface + dwX * m_ddsd.lXPitch + dwY * m_ddsd.lPitch;
+	*(WORD*)pPixelOffset = CreateRGB( dwR, dwG, dwB );
+	hr = m_pDDSPrimary->Unlock( LockRect );
+
+	return bRet;
+}
+
+DWORD spLibDDraw::CreateRGB( DWORD dwR, DWORD dwG, DWORD dwB )
+{
+	DWORD dwRet = 0x0000f800;
+	
+    switch( m_iBpp )
+    {
+        case 8:
+                // Here you should do a palette lookup to find the closes match.
+                // I'm not going to bother with that. Many modern games no
+                // longer support 256-color modes, and neither should you :)
+                dwRet = 0;
+			break;
+        case 16:
+                // Break down r,g,b into 5-6-5 format.
+                dwRet = ((dwR/8)<<11) | ((dwG/4)<<5) | (dwB/8);
+			break;
+        case 24:
+        case 32:
+                dwRet = (dwR<<16) | (dwG<<8) | (dwB);
+			break;
+		default:
+			break;
+    }
+	
+	return dwRet;
 }
