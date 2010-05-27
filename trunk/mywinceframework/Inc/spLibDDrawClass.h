@@ -18,7 +18,9 @@ public:
 	DWORD spLibInitDDrawBack( DWORD dwBackSurfNum, PVOID pfn );
 	DWORD spLibFlipDDraw( void ) { return PrimaryFlip(); }
 	DWORD spLibRestoreDDraw( void ) { return PrimaryRestore(); }
-	BOOL spLibDrawPixel( DWORD dwX, DWORD dwY ) { return DrawPixel( dwX, dwY ); }
+	DWORD spLibBltDDraw( RECT *prt, DWORD dwR, DWORD dwG, DWORD dwB ) { return PrimaryBlt( prt, CreateRGB( dwR, dwG, dwB ) ); }
+	BOOL spLibPixelDraw( DWORD dwX, DWORD dwY ) { return PixelDraw( dwX, dwY ); }
+	BOOL spLibPixelDraw( DWORD dwX, DWORD dwY, DWORD dwR, DWORD dwG, DWORD dwB ) { return PixelDraw( dwX, dwY, dwR, dwG, dwB ); }
 	
 protected:
 
@@ -34,9 +36,13 @@ protected:
 	DWORD InitDDPrimarySurfaceBack( DWORD dwBackSurfNum, PVOID pfn );
 	DWORD PrimaryFlip( void );
 	DWORD PrimaryRestore( void );
+	DWORD PrimaryBlt( RECT *prt, DWORD dwRGB );
 	HRESULT SurfaceEnumFunctionStub( LPDIRECTDRAWSURFACE pSurface, LPDDSURFACEDESC lpSurfaceDesc, LPVOID  lpContext );
 	HRESULT SurfaceEnumFunction( LPDIRECTDRAWSURFACE pSurface, LPDDSURFACEDESC lpSurfaceDesc, LPVOID  lpContext );
-	BOOL DrawPixel( DWORD dwX, DWORD dwY );
+	BOOL PixelDraw( DWORD dwX, DWORD dwY );
+	BOOL PixelDraw( DWORD dwX, DWORD dwY, DWORD dwR, DWORD dwG, DWORD dwB );
+	DWORD CreateRGB( DWORD dwR, DWORD dwG, DWORD dwB );
+	DWORD GetBitDepth( IDirectDrawSurface *pThisSurf );
 	void TakeCS(){ EnterCriticalSection( &m_csDDaccess ); }
 	void ReleaseCS(){ LeaveCriticalSection( &m_csDDaccess ); }
 
@@ -53,6 +59,7 @@ protected:
 	BOOL					m_bSurfaceEnumFunctionCalled;
 	DDSURFACEDESC 			m_ddsd;
 	DDCAPS					m_ddcaps;
+	DWORD					m_iBpp;
 	DWORD 					m_dwDDobjStatus;
 	CRITICAL_SECTION  		m_csDDaccess;	///
 
