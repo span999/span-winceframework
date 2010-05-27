@@ -1,0 +1,9 @@
+V|601
+D|C:\WINCE600\PLATFORM\Hammer\SRC\DRIVERS\_MyFolder\Lib\spLibSysInfoIdle\|3005|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+ F|Build.err|80000|0|1CACCA46C38EA99
+ F|Build.log|80000|0|1CACCA46C38EA99
+ F|Build.wrn|80000|0|1CACCA46C38EA99
+ F|splibSysInfoIdle.cpp|0|0|1CACCA2AC541A2F
+  I|windows.h|0
+  I|drvlib.h|0
+
