@@ -1,5 +1,6 @@
 
 DIRS= \
+	spLibSysHALIoctl \
 	spLibDDrawClass \
 	spLibProgAliveInfo \
     spLibSysInfoIdle \
