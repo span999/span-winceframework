@@ -1,0 +1,280 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resourceppc.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "resdefce.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (Taiwan) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
+#pragma code_page(950)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resourceppc.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""resdefce.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)\r\n"
+    "LANGUAGE 4, 1\r\n"
+    "#pragma code_page(950)\r\n"
+    "#include ""Cwin32testppc.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Chinese (Taiwan) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral (Sys. Default) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUSD)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_SYS_DEFAULT
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_CWIN32TEST          ICON                    "Cwin32test.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU MENU 
+BEGIN
+    POPUP "Select"
+    BEGIN
+        MENUITEM "About",                       IDM_HELP_ABOUT
+        MENUITEM SEPARATOR
+        POPUP "Option"
+        BEGIN
+            MENUITEM "Option1",                     ID_OPTION_OPTION1
+            MENUITEM "Dump",                        ID_OPTION_OPTION2
+        END
+        MENUITEM SEPARATOR
+        POPUP "Log"
+        BEGIN
+            MENUITEM "Enable",                      ID_LOG_ENABLE
+            MENUITEM SEPARATOR
+            MENUITEM "Path@root",                   ID_LOG_ROOT
+            MENUITEM "Path@iPaq",                   ID_LOG_IPAQ, CHECKED
+            MENUITEM SEPARATOR
+            MENUITEM "MemoRx",                      ID_LOG_MEMORX, CHECKED
+            MENUITEM "DevHealth",                   ID_LOG_DEVHEALTH
+            MENUITEM "ToolHelp",                    ID_LOG_TOOLHELP
+            MENUITEM SEPARATOR
+            MENUITEM "Setting",                     ID_LOG_SETTING
+        END
+        MENUITEM SEPARATOR
+        POPUP "Timer"
+        BEGIN
+            MENUITEM "Enable",                      ID_TIMER_ENABLE
+            MENUITEM SEPARATOR
+            MENUITEM "300 sec",                     ID_TIMER_300SEC
+            MENUITEM "900 sec",                     ID_TIMER_900SEC
+            MENUITEM "1800 sec",                    ID_TIMER_1800SEC
+            MENUITEM "3600 sec",                    ID_TIMER_3600SEC, CHECKED
+            MENUITEM "Settting",                    ID_TIMER_SETTING
+        END
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDC_CWIN32TEST ACCELERATORS 
+BEGIN
+    "A",            IDM_HELP_ABOUT,         VIRTKEY, CONTROL, NOINVERT
+    "Q",            IDM_OK,                 VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG  0, 0, 156, 129
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+EXSTYLE 0x80000000L
+CAPTION "About Cwin32test"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    ICON            IDI_CWIN32TEST,IDC_STATIC_1,12,12,21,20,SS_REALSIZEIMAGE
+    LTEXT           "Cwin32test Version 1.0",IDC_STATIC_2,12,36,70,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2007",IDC_STATIC_3,12,48,66,8
+END
+
+IDD_ABOUTBOX_WIDE DIALOG  0, 0, 210, 129
+STYLE DS_SETFONT | WS_POPUP | WS_CAPTION
+EXSTYLE 0x80000000L
+CAPTION "About Cwin32test"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    ICON            IDI_CWIN32TEST,IDC_STATIC_1,12,12,21,20,SS_REALSIZEIMAGE
+    LTEXT           "Cwin32test Version 1.0",IDC_STATIC_2,48,12,66,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2007",IDC_STATIC_3,48,24,66,8
+END
+
+IDD_OPTION1BOX DIALOG  0, 0, 156, 167
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+EXSTYLE 0x80000000L
+CAPTION "About Cwin32test"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LISTBOX         IDC_OPTION1_LIST1,6,20,143,52,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Shot",IDC_OPTION1_BUTTON1,123,146,26,14
+    LISTBOX         IDC_OPTION1_LIST2,6,85,143,59,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
+    PUSHBUTTON      "CLS",IDC_OPTION1_BUTTON2,6,146,25,14
+    COMBOBOX        IDC_OPTION1_COMBO1,6,7,71,65,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_OPTION1_COMBO2,78,7,71,64,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_OPTION1_COMBO3,6,72,71,70,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_OPTION1_COMBO4,78,72,71,68,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Malloc",IDC_OPTION1_BUTTON3,51,146,25,14
+    PUSHBUTTON      "Free",IDC_OPTION1_BUTTON4,83,146,25,14
+END
+
+IDD_OPTION1BOX_WIDE DIALOG  0, 0, 218, 119
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+EXSTYLE 0x80000000L
+CAPTION "About Cwin32test"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LISTBOX         IDC_OPTION1_LIST1,6,20,103,78,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Shot",IDC_OPTION1_BUTTON1,151,7,29,14
+    LISTBOX         IDC_OPTION1_LIST2,110,20,101,79,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "CLS",IDC_OPTION1_BUTTON2,185,7,25,14
+    COMBOBOX        IDC_OPTION1_COMBO1,6,7,71,65,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_OPTION1_COMBO2,78,7,71,64,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_OPTION1_COMBO3,6,100,71,70,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_OPTION1_COMBO4,77,100,71,68,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Malloc",IDC_OPTION1_BUTTON3,153,99,25,14
+    PUSHBUTTON      "Free",IDC_OPTION1_BUTTON4,186,98,25,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 149
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 122
+    END
+
+    IDD_ABOUTBOX_WIDE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 203
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 122
+    END
+
+    IDD_OPTION1BOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 6
+        RIGHTMARGIN, 149
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 160
+    END
+
+    IDD_OPTION1BOX_WIDE, DIALOG
+    BEGIN
+        LEFTMARGIN, 6
+        RIGHTMARGIN, 211
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 112
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_APP_TITLE           "Cwin32test"
+    IDC_CWIN32TEST          "CWIN32TEST"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_OK                  "OK"
+    IDS_HELP                "HELP"
+END
+
+#endif    // Neutral (Sys. Default) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)
+LANGUAGE 4, 1
+#pragma code_page(950)
+#include "Cwin32testppc.rc2"  // non-Microsoft Visual C++ edited resources
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

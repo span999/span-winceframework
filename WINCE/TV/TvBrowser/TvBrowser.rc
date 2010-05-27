@@ -1,0 +1,275 @@
+//Microsoft eMbedded Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "newres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (Taiwan) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
+#pragma code_page(950)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_TVMain DIALOGEX 0, 0, 269, 136
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CLIENTEDGE
+CAPTION "Span 70612_1"
+FONT 10, "System"
+BEGIN
+    PUSHBUTTON      "Ch Up",ID_Chup,230,2,32,14
+    PUSHBUTTON      "Ch Dn",ID_Chdown,230,16,32,14
+    PUSHBUTTON      "Vol Up",ID_VolUp,230,30,32,14
+    PUSHBUTTON      "Vol Dn",ID_Voldown,230,44,32,14
+    PUSHBUTTON      "Vdo On",ID_VideoOn,197,117,32,14
+    PUSHBUTTON      "SetCh",ID_CHANNELSET,230,102,32,14
+    LTEXT           "Channel status",IDC_channel,2,2,138,8
+    LTEXT           "Signal Status",IDC_STRENGTH,2,13,142,8
+    PUSHBUTTON      "Scan",IDC_SCAN,230,88,32,14
+    PUSHBUTTON      "Pwr On",IDC_MODULEPOWER,230,117,32,14
+    LTEXT           "F/W Info:",IDC_FWINFO,2,24,142,8
+    PUSHBUTTON      " f/w ID",IDC_GETFWID,230,74,32,14
+    COMBOBOX        IDC_CHLIST,35,37,49,90,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Ch/SerV:",IDC_STATIC,2,40,31,10
+    PUSHBUTTON      "Play",IDC_PLAY,197,30,32,14
+    PUSHBUTTON      "Rec",IDC_RECORD,197,2,32,14
+    LTEXT           "V-In",IDC_STATIC,2,51,18,8
+    LTEXT           "V-Out",IDC_STATIC,2,64,22,8
+    COMBOBOX        IDC_VIN_SIZE_X,20,50,30,90,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_VIN_SIZE_Y,50,50,30,90,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_VOUT_SIZE_X,83,50,30,90,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_VOUT_SIZE_Y,113,50,30,90,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Pause",IDC_PAUSE,197,44,32,14
+    PUSHBUTTON      "SShot",IDC_STILLSHOT,197,16,32,14
+    PUSHBUTTON      "S/DLS",IDC_DATASERVICE,230,58,32,14
+    PUSHBUTTON      "OSD1",IDC_OSD1,146,60,24,14
+    PUSHBUTTON      "OSD2",IDC_OSD2,146,74,24,14
+    PUSHBUTTON      "OSD3",IDC_OSD3,146,88,24,14
+    PUSHBUTTON      "CON",IDC_CONTRAST,171,103,24,14
+    PUSHBUTTON      "SAT",IDC_SATURATION,146,117,24,14
+    PUSHBUTTON      "BRI",IDC_BRIGHTNESS,171,117,24,14
+    PUSHBUTTON      "Batt",IDC_BATTERY,146,103,24,14
+    PUSHBUTTON      ".",IDC_VIDEOPOSRIGHT,161,2,9,11
+    PUSHBUTTON      ".",IDC_VIDEOPOSDOWN,147,13,23,10
+    PUSHBUTTON      "@",IDC_VIDEOPOSCENTER,147,2,12,10
+    PUSHBUTTON      "OSDs",IDC_OSD3SET,171,74,24,14
+    PUSHBUTTON      "OSDg",IDC_OSD3GET,171,88,24,14
+    PUSHBUTTON      "chk.BB",IDC_CHECKMODULE,146,23,24,14
+    PUSHBUTTON      "Xx.",IDC_SCREEN,2,111,20,20
+    PUSHBUTTON      "LB",IDC_LOOPBACK,171,2,24,11
+    PUSHBUTTON      "ZT",IDC_ZOOMTEST,171,12,24,11
+    LISTBOX         IDC_MSG_LIST,24,64,119,67,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "RFreg",IDC_RF_REGDUMP,171,23,24,14
+    PUSHBUTTON      "CLS",IDC_CLS_LIST,2,91,20,20
+    PUSHBUTTON      "900p",IDC_POWERON_TEST,197,88,32,14
+    PUSHBUTTON      "900",IDC_POWERON_TEST2,197,74,32,14
+    PUSHBUTTON      "30px30",IDC_POWERON_TEST3,197,60,32,14
+    PUSHBUTTON      "OSD4",IDC_OSD4,171,60,24,14
+    COMBOBOX        IDC_SERVLIST,85,37,38,90,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "AVs",IDC_AV_PARAM,146,37,24,14
+    PUSHBUTTON      "AVsw",IDC_AV_CHANGE,171,37,24,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_TVMain, DIALOG
+    BEGIN
+        LEFTMARGIN, 2
+        RIGHTMARGIN, 262
+        TOPMARGIN, 2
+        BOTTOMMARGIN, 131
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Chinese (Taiwan) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 167, 85
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE 0x80000000L
+CAPTION "About TvBrowser"
+FONT 8, "System"
+BEGIN
+    ICON            IDI_TVBROWSER,IDC_STATIC,11,17,20,20
+    LTEXT           "TvBrowser Version 1.12 (2006/11/29)",IDC_STATIC,14,45,
+                    129,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2006 (span)",IDC_STATIC,14,61,134,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 160
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 78
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_TVBROWSER           ICON    DISCARDABLE     "TvBrowser.ICO"
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""newres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDM_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "E&xit",                       IDM_FILE_EXIT
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About",                      IDM_HELP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDC_TVBROWSER ACCELERATORS DISCARDABLE 
+BEGIN
+    "/",            IDM_HELP_ABOUT,         ASCII,  ALT, NOINVERT
+    VK_F4,          IDM_FILE_EXIT,          VIRTKEY, ALT, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BUGIMAGE1           BITMAP  DISCARDABLE     "mosquit1.bmp"
+IDB_BUGIMAGE2           BITMAP  DISCARDABLE     "mosquit2.bmp"
+IDB_BUGIMAGE3           BITMAP  DISCARDABLE     "mosquit3.bmp"
+IDB_BATT3               BITMAP  DISCARDABLE     "battery_3.bmp"
+IDB_BATT0               BITMAP  DISCARDABLE     "battery_0.bmp"
+IDB_BATT1               BITMAP  DISCARDABLE     "battery_1.bmp"
+IDB_BATT2               BITMAP  DISCARDABLE     "battery_2.bmp"
+IDB_BATT4               BITMAP  DISCARDABLE     "battery_4.bmp"
+IDB_BATTAC              BITMAP  DISCARDABLE     "battery_AC.bmp"
+IDB_SIG0                BITMAP  DISCARDABLE     "signal_0.bmp"
+IDB_SIG1                BITMAP  DISCARDABLE     "signal_1.bmp"
+IDB_SIG2                BITMAP  DISCARDABLE     "signal_2.bmp"
+IDB_SIG3                BITMAP  DISCARDABLE     "signal_3.bmp"
+IDB_SIG4                BITMAP  DISCARDABLE     "signal_4.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_APP_TITLE           "TvBrowser"
+    IDS_HELLO               "Hello World!"
+    IDC_TVBROWSER           "TVBROWSER"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,123 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "newres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""newres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""menu.rc""\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_MAIN_MENUITEM1      "Refresh"
+    IDS_MAIN_MENUITEM2      "Quit"
+    IDS_CAPTION_ERROR       "Error"
+    IDS_ERROR_WINDOW_FAILED "Failed to create the window or menu bar"
+    IDS_UNKNOWN             "unknown"
+    IDS_TITLE_SYSTEMINFO    "System Info"
+    IDS_PAGE_SIZE           "Specifies the page size and the granularity of page protection and commitment. This is the page size used by the VirtualAlloc function.\r\n\r\n"
+    IDS_MINIMUM_ADDRESS     "Pointer to the lowest memory address accessible to applications and dynamic-link libraries (DLLs).\r\n\r\n"
+    IDS_MAXIMUM_ADDRESS     "Pointer to the highest memory address accessible to applications and DLLs.\r\n\r\n"
+    IDS_ACTIVE_PROCESSOR_MASK 
+                            "Specifies a mask representing the set of processors configured into the system. Bit 0 is processor 0; bit 31 is processor 31.\r\n\r\n"
+    IDS_NUMBER_OF_PROCESSORS 
+                            "Specifies the number of processors in the system.\r\n\r\n"
+    IDS_PROCESSOR_ARCHITECTURE 
+                            "\r\nSpecifies the system's processor architecture\r\n\r\n"
+    IDS_PROCESSOR_LEVEL     "\r\nSpecifies the system's architecture-dependent processor level.\r\n\r\n"
+    IDS_PROCESSOR_REVISION  "\r\nSpecifies an architecture-dependent processor revision.\r\n\r\n"
+    IDS_PROCESSOR_TYPE      "Specifies the type of processor in the system.\r\n\r\n"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_ALLOCATION_GRANULARITY 
+                            "Specifies the granularity with which virtual memory is allocated.\r\n\r\n"
+    IDS_TITLE_STOREINFO     "Store Info"
+    IDS_STORE_SIZE          "Specifies the size, in bytes, of the object store.\r\n\r\n"
+    IDS_FREE_SIZE           "Specifies the amount of free space, in bytes, in the object store.\r\n\r\n"
+    IDS_TITLE_GLOBALMEMORYSTATUS "Global Memory Status"
+    IDS_MEMORY_LOAD         "Specifies a number between 0 and 100 that gives a general idea of current memory utilization, in which 0 indicates no memory use and 100 indicates full memory use.\r\n\r\n"
+    IDS_TOTAL_PHYSICAL      "Indicates the total number of bytes of physical memory.\r\n\r\n"
+    IDS_TOTAL_PAGEFILE      "Indicates the number of bytes of physical memory available.\r\n\r\n"
+    IDS_AVAIL_PAGEFILE      "Indicates the total number of bytes that can be stored in the paging file.\r\n\r\n"
+    IDS_TOTAL_VIRTUAL       "Indicates the total number of bytes that can be described in the user mode portion of the virtual address space of the calling process.\r\n\r\n"
+    IDS_AVAIL_VIRTUAL       "Indicates the number of bytes of unreserved and uncommitted memory in the user mode portion of the virtual address space of the calling process\r\n\r\n"
+    IDS_TITLE_SYSTEMVERSION "System Version Info"
+    IDS_MAJOR_VERSION       "Identifies the major version number of the operating system.\r\n\r\n"
+    IDS_MINOR_VERSION       "Identifies the minor version number of the operating system.\r\n\r\n"
+    IDS_BUILD_NUMBER        "Identifies the build number of the operating system.\r\n\r\n"
+    IDS_PLATFORM_ID         "Identifies the platformID.\r\n\r\n"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SERVICE_PACK        "Indicates the latest Service Pack installed on the system.\r\n\r\n\r\n"
+    IDS_TITLE_SYSTEMMETRICS "System Metrics"
+    IDS_TITLE_POWERSTATUS   "Power Status"
+    IDS_REFERENCE_LIFETIME  "ReferenceLifeTime: 4294967295\r\n"
+    IDS_RETURN_VALUE        "Return Value: %1!d!\r\n"
+    IDS_TITLE_GETLOCALTIME  "GetLocalTime"
+    IDS_TITLE_GETSYSTEMTIME "GetSystemTime"
+    IDS_TITLE_SYSCOLORS     "System Colors"
+    IDS_FAILED              "Failed"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#include "menu.rc"
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

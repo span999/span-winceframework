@@ -1,0 +1,30 @@
+!IF 0
+
+ Copyright © 2001 Intel Corp. 
+
+!ENDIF
+
+
+TARGETNAME=HDtools
+
+RELEASETYPE=PLATFORM
+TARGETTYPE=PROGRAM
+
+DEFFILE=
+
+INCLUDES=
+
+TARGETLIBS= \
+	$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\commctrl.lib \
+	$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+	$(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\storeapi.lib \
+	$(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\fatutil.lib
+
+SOURCELIBS= \
+
+
+SOURCES= \
+StdAfx.cpp \
+HDtest.cpp \
+HDtest.rc
+
