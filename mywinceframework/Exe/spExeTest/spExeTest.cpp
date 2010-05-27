@@ -266,7 +266,9 @@ long FAR PASCAL
 WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HRESULT                     hRet;
-
+	static DWORD 	dwCount = 0;
+	
+	
     switch (message)
     {
 #ifdef UNDER_CE
@@ -310,8 +312,20 @@ WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             ///if (g_bActive && TIMER_ID == wParam)
 			if( TIMER_ID == wParam )
             {
-				DrawPixel();
+				if( dwCount < 8 )
+					DrawPixel();
+				else
+				{
+					// Clean up and close the app
+					ReleaseAllObjects();
+					PostMessage(hWnd, WM_CLOSE, 0, 0);
+					PostQuitMessage(0);
+					return 0L;					
+				}
+				
+				dwCount++;
 	#if 0			
+	
                 ///UpdateFrame(hWnd);
                 while (TRUE)
                 {
