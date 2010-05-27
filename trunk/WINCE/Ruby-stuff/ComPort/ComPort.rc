@@ -1,0 +1,207 @@
+//Microsoft eMbedded Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "newres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_COMPORT             ICON    DISCARDABLE     "ComPort.ICO"
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""newres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDM_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "E&xit",                       IDM_FILE_EXIT
+        MENUITEM "&List",                       IDM_FILE_LIST
+    END
+    POPUP "&Port"
+    BEGIN
+        MENUITEM "Com&1",                       IDM_PORT_COM1
+        MENUITEM "Com&2",                       IDM_PORT_COM2
+        MENUITEM "Com3",                        IDM_PORT_COM3
+        MENUITEM "Com&4",                       IDM_PORT_COM4
+        MENUITEM "Com&5",                       IDM_PORT_COM5
+        MENUITEM "Com&6",                       IDM_PORT_COM6
+        MENUITEM "Com&7",                       IDM_PORT_COM7
+    END
+    POPUP "&BaudRate"
+    BEGIN
+        MENUITEM "1200",                        IDM_BAUDRATE_1200
+        MENUITEM "2400",                        IDM_BAUDRATE_2400
+        MENUITEM "4800",                        IDM_BAUDRATE_4800
+        MENUITEM "9600",                        IDM_BAUDRATE_9600
+        MENUITEM "19200",                       IDM_BAUDRATE_19200
+        MENUITEM "38400",                       IDM_BAUDRATE_38400
+        MENUITEM "57600",                       IDM_BAUDRATE_57600
+        MENUITEM "115200",                      IDM_BAUDRATE_115200
+        MENUITEM "921600",                      IDM_BAUDRATE_921600
+    END
+    POPUP "&Operation"
+    BEGIN
+        MENUITEM "&Start",                      IDM_OPERATION_START
+        MENUITEM "S&top",                       IDM_OPERATION_STOP
+        MENUITEM "&Clear",                      IDM_OPERATION_CLEAR
+        MENUITEM "Pa&use",                      IDM_OPERATION_PAUSE
+        MENUITEM SEPARATOR
+        MENUITEM "TMC &Version",                IDM_OPERATION_TMC_VERSION
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About",                      IDM_HELP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 125, 55
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE 0x80000000L
+CAPTION "About ComPort"
+FONT 8, "System"
+BEGIN
+    ICON            IDI_COMPORT,IDC_STATIC,11,17,20,20
+    LTEXT           "ComPort Version 1.0",IDC_STATIC,38,10,70,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2005",IDC_STATIC,38,25,70,8
+END
+
+IDD_FILELISTBOX1 DIALOG DISCARDABLE  0, 0, 175, 100
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "File list Dialog"
+FONT 10, "System"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,114,85,25,10
+    PUSHBUTTON      "Cancel",IDCANCEL,146,85,25,10
+    CONTROL         "Tree1",IDC_FILETREE1,"SysTreeView32",WS_BORDER | 
+                    WS_TABSTOP,3,2,83,80
+    CONTROL         "Tree2",IDC_FILETREE2,"SysTreeView32",WS_BORDER | 
+                    WS_TABSTOP,88,2,83,80
+    CONTROL         "Tree3",IDC_TREE3,"SysTreeView32",WS_BORDER | WS_TABSTOP,
+                    13,25,60,50
+    DEFPUSHBUTTON   "Flash",IDFLASH,3,85,25,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 118
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_FILELISTBOX1, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 171
+        TOPMARGIN, 2
+        BOTTOMMARGIN, 95
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDC_COMPORT ACCELERATORS DISCARDABLE 
+BEGIN
+    "/",            IDM_HELP_ABOUT,         ASCII,  ALT, NOINVERT
+    VK_F4,          IDM_FILE_EXIT,          VIRTKEY, ALT, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_APP_TITLE           "ComPort"
+    IDS_HELLO               "Hello World!"
+    IDC_COMPORT             "COMPORT"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

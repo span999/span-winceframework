@@ -1,0 +1,446 @@
+//Microsoft eMbedded Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "newres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (Taiwan) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
+#pragma code_page(950)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON_UNKNOW         ICON    DISCARDABLE     "res\\iconqq.ico"
+IDI_ICON00              ICON    DISCARDABLE     "res\\icon00.ico"
+IDI_ICON05              ICON    DISCARDABLE     "res\\icon05.ico"
+IDI_ICON06              ICON    DISCARDABLE     "res\\icon06.ico"
+IDI_ICON07              ICON    DISCARDABLE     "res\\icon07.ico"
+IDI_ICON08              ICON    DISCARDABLE     "res\\icon08.ico"
+IDI_ICON09              ICON    DISCARDABLE     "res\\icon09.ico"
+IDI_ICON10              ICON    DISCARDABLE     "res\\icon10.ico"
+IDI_ICON11              ICON    DISCARDABLE     "res\\icon11.ico"
+IDI_ICON12              ICON    DISCARDABLE     "res\\icon12.ico"
+IDI_ICON13              ICON    DISCARDABLE     "res\\icon13.ico"
+IDI_ICON14              ICON    DISCARDABLE     "res\\icon14.ico"
+IDI_ICON15              ICON    DISCARDABLE     "res\\icon15.ico"
+IDI_ICON20              ICON    DISCARDABLE     "res\\icon20.ico"
+IDI_ICON25              ICON    DISCARDABLE     "res\\icon25.ico"
+IDI_ICON30              ICON    DISCARDABLE     "res\\icon30.ico"
+IDI_ICON35              ICON    DISCARDABLE     "res\\icon35.ico"
+IDI_ICON40              ICON    DISCARDABLE     "res\\icon40.ico"
+IDI_ICON45              ICON    DISCARDABLE     "res\\icon45.ico"
+IDI_ICON55              ICON    DISCARDABLE     "res\\icon55.ico"
+IDI_ICON60              ICON    DISCARDABLE     "res\\icon60.ico"
+IDI_ICON65              ICON    DISCARDABLE     "res\\icon65.ico"
+IDI_ICON70              ICON    DISCARDABLE     "res\\icon70.ico"
+IDI_ICON75              ICON    DISCARDABLE     "res\\icon75.ico"
+IDI_ICON80              ICON    DISCARDABLE     "res\\icon80.ico"
+IDI_ICON85              ICON    DISCARDABLE     "res\\icon85.ico"
+IDI_ICON90              ICON    DISCARDABLE     "res\\icon90.ico"
+IDI_ICON91              ICON    DISCARDABLE     "res\\icon91.ico"
+IDI_ICON92              ICON    DISCARDABLE     "res\\icon92.ico"
+IDI_ICON93              ICON    DISCARDABLE     "res\\icon93.ico"
+IDI_ICON94              ICON    DISCARDABLE     "res\\icon94.ico"
+IDI_ICON95              ICON    DISCARDABLE     "res\\icon95.ico"
+IDI_ICON96              ICON    DISCARDABLE     "res\\icon96.ico"
+IDI_ICON97              ICON    DISCARDABLE     "res\\icon97.ico"
+IDI_ICON98              ICON    DISCARDABLE     "res\\icon98.ico"
+IDI_ICON99              ICON    DISCARDABLE     "res\\icon99.ico"
+IDI_ICON100             ICON    DISCARDABLE     "res\\icon100.ico"
+IDI_ICON_SYSTEMTRAY     ICON    DISCARDABLE     "res\\icon_systray.ico"
+#endif    // Chinese (Taiwan) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_SYSTEMTOOL          ICON    DISCARDABLE     "res\\systemtool3.ICO"
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""newres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDM_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "E&xit",                       IDM_FILE_EXIT
+    END
+    POPUP "&Option"
+    BEGIN
+        MENUITEM "&Exit 2 Tray",                IDM_OPTION_MINIMIZE
+        MENUITEM SEPARATOR
+    END
+    POPUP "&OSBench"
+    BEGIN
+        MENUITEM "&All test",                   IDM_OSBENCH_ALL
+        MENUITEM SEPARATOR
+        MENUITEM "&GDI test",                   IDM_GDI_TEST
+        MENUITEM "&CUnit test",                 IDM_CUNIT_TEST
+        MENUITEM "&System Power test",          IDM_SYSPOWER_TEST
+        MENUITEM "&WinOverlay",                 IDM_WINOVERLAY_TEST
+        MENUITEM "&IPC test",                   IDM_IPC_TEST
+    END
+    POPUP "&Items"
+    BEGIN
+        MENUITEM "&Cpu/Mem Useage",             IDM_ITEMS_CPU_USEAGE
+        MENUITEM SEPARATOR
+        MENUITEM "&ToolHelp",                   IDM_ITEMS_TOOLHELP
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About",                      IDM_HELP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 153, 81
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE 0x80000000L
+CAPTION "About SystemTool"
+FONT 8, "System"
+BEGIN
+    ICON            IDI_SYSTEMTOOL,IDC_STATIC,7,7,20,20
+    LTEXT           "SystemTool Version 1.3 (Span)",IDC_STATIC,7,31,139,8,
+                    SS_NOPREFIX
+    LTEXT           "Mitac Co, Copyright (C) 2006",IDC_STATIC,7,50,139,8
+END
+
+IDD_CPUBOX DIALOG DISCARDABLE  0, 0, 175, 93
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE 0x80000000L
+CAPTION "SystemTool - CPU/Memory"
+FONT 8, "System"
+BEGIN
+    CONTROL         "exit 2 tray ",IDC_CPU_CHECK_EXIT2TAY,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,120,7,48,10
+    CONTROL         "Progress1",IDC_CPU_PROGRESS1,"msctls_progress32",
+                    PBS_SMOOTH | WS_BORDER,7,19,135,12
+    LTEXT           "Static",IDC_CPU_STATIC2,146,19,22,12
+    PUSHBUTTON      "CLS",IDC_CPU_CLS,144,73,24,13
+    LISTBOX         IDC_CPU_LIST1,7,48,135,38,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Progress1",IDC_CPU_PROGRESS2,"msctls_progress32",
+                    PBS_SMOOTH | WS_BORDER,7,33,135,12
+    LTEXT           "Static",IDC_CPU_STATIC3,146,33,22,12
+END
+
+IDD_TOOLHELPBOX DIALOG DISCARDABLE  0, 0, 179, 98
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE 0x80000000L
+CAPTION "SystemTool - ToolHelp"
+FONT 8, "System"
+BEGIN
+    CTEXT           "Process",IDC_TOOLHELP_STATIC1,126,7,46,9
+    PUSHBUTTON      "CLS",IDC_TOOLHELP_CLS,126,78,46,13
+    LISTBOX         IDC_TOOLHELP_LIST1,7,7,117,84,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CTEXT           "Module",IDC_TOOLHELP_STATIC2,126,28,46,9
+    PUSHBUTTON      "Shot!",IDC_TOOLHELP_SNAPSHOT,126,16,46,13
+    PUSHBUTTON      "Shot!",IDC_TOOLHELP_SNAPSHOT2,126,39,46,13
+    PUSHBUTTON      "Shot!",IDC_TOOLHELP_SNAPSHOT3,126,63,46,13
+    CTEXT           "Thread",IDC_TOOLHELP_STATIC3,126,52,46,9
+END
+
+IDD_OSBENCHBOX DIALOG DISCARDABLE  0, 0, 175, 93
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE 0x80000000L
+CAPTION "OSBench/ILtiming"
+FONT 8, "System"
+BEGIN
+    CTEXT           "1",IDC_OSBENCH_STATIC2,7,74,18,12
+    PUSHBUTTON      "&CLS",IDC_OSBENCH_CLS,144,73,24,13
+    LISTBOX         IDC_OSBENCH_LIST1,7,7,161,63,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "&OSBench",IDC_OSBENCH_OSBENCH,27,73,35,13
+    PUSHBUTTON      "&ILTiming",IDC_OSBENCH_ILTIMING,63,73,35,13
+    PUSHBUTTON      "&DispPerf",IDC_OSBENCH_DISPPERF,99,73,35,13
+END
+
+IDD_SYSPOWERBOX DIALOG DISCARDABLE  0, 0, 179, 98
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE 0x80000000L
+CAPTION "SystemTool - system power"
+FONT 8, "System"
+BEGIN
+    PUSHBUTTON      "CLS",IDC_SYSPOWER_CLS,142,78,30,13
+    LISTBOX         IDC_SYSPOWER_LIST1,7,7,165,69,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "SetReq!",IDC_SYSPOWER_SET,7,78,40,13
+    PUSHBUTTON      "Release!",IDC_SYSPOWER_RELEASE,57,78,40,13
+    PUSHBUTTON      "none!",IDC_SYSPOWER_NONE,105,78,30,13
+END
+
+IDD_CUNITBOX DIALOG DISCARDABLE  0, 0, 179, 98
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE 0x80000000L
+CAPTION "SystemTool - CUnit"
+FONT 8, "System"
+BEGIN
+    PUSHBUTTON      "CLS",IDC_CUNIT_CLS,140,78,32,13
+    LISTBOX         IDC_CUNIT_LIST1,7,7,126,66,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "MPMRun!",IDC_CUNIT_RUN,138,7,34,13
+    PUSHBUTTON      "LGTRun!",IDC_CUNIT_RUN2,138,24,34,13
+    CONTROL         "Progress1",IDC_CUNIT_PROGRESS1,"msctls_progress32",
+                    WS_BORDER,7,79,130,12
+    PUSHBUTTON      "TVBRun!",IDC_CUNIT_RUN3,138,41,34,13
+    PUSHBUTTON      "BATRun!",IDC_CUNIT_RUN4,138,57,34,13
+END
+
+IDD_IPCBOX DIALOG DISCARDABLE  0, 0, 179, 98
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE 0x80000000L
+CAPTION "SystemTool - IPC test"
+FONT 8, "System"
+BEGIN
+    CTEXT           "Host",IDC_IPC_STATIC1,126,7,46,9
+    PUSHBUTTON      "CLS",IDC_IPC_CLS,126,78,46,13
+    LISTBOX         IDC_IPC_LIST1,7,7,117,42,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CTEXT           "Client",IDC_IPC_STATIC2,126,50,46,9
+    PUSHBUTTON      "Host init",IDC_IPC_INITHOST,126,16,46,13
+    PUSHBUTTON      "Client init",IDC_IPC_CLIENTINIT,126,61,46,13
+    LISTBOX         IDC_IPC_LIST2,7,49,117,42,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_WINOVERLAYBOX DIALOGEX 0, 0, 179, 98
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE 0x80000000L
+CAPTION "WinOverlay test"
+FONT 8, "System"
+BEGIN
+    PUSHBUTTON      "CLS",IDC_WINOVERLAY_CLS,142,78,30,13
+    LISTBOX         IDC_WINOVERLAY_LIST1,7,7,165,69,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Alpha!",IDC_WINOVERLAY_ALPHA,7,78,40,13
+    PUSHBUTTON      "Key!",IDC_WINOVERLAY_KEY,57,78,40,13
+    PUSHBUTTON      "Run!",IDC_WINOVERLAY_RUN,105,78,30,13
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 146
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 74
+    END
+
+    IDD_CPUBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 168
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 86
+    END
+
+    IDD_TOOLHELPBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 172
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 91
+    END
+
+    IDD_OSBENCHBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 168
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 86
+    END
+
+    IDD_SYSPOWERBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 172
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 91
+    END
+
+    IDD_CUNITBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 172
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 91
+    END
+
+    IDD_IPCBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 172
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 91
+    END
+
+    IDD_WINOVERLAYBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 172
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 91
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDC_SYSTEMTOOL ACCELERATORS DISCARDABLE 
+BEGIN
+    "/",            IDM_HELP_ABOUT,         ASCII,  ALT, NOINVERT
+    VK_F4,          IDM_FILE_EXIT,          VIRTKEY, ALT, NOINVERT
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,2,0,0
+ PRODUCTVERSION 1,2,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040404b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "MiTAC\0"
+            VALUE "FileDescription", "SystemTool\0"
+            VALUE "FileVersion", "1, 2, 0, 0\0"
+            VALUE "InternalName", "SystemTool\0"
+            VALUE "LegalCopyright", "Copyright c 2006\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "SystemTool.exe\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "MiTAC SystemTool\0"
+            VALUE "ProductVersion", "1, 2, 0, 0\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x404, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_APP_TITLE           "SystemTool"
+    IDS_HELLO               "Hello! this is a system test tool!"
+    IDC_SYSTEMTOOL          "SYSTEMTOOL"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

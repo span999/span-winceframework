@@ -1,0 +1,53 @@
+; CLW file contains information for the MFC ClassWizard
+
+[General Info]
+Version=1
+LastClass=CHdtestDlg
+LastTemplate=CDialog
+NewFileInclude1=#include "stdafx.h"
+NewFileInclude2=#include "hdtest.h"
+
+ClassCount=2
+Class1=CHdtestApp
+Class2=CHdtestDlg
+
+ResourceCount=4
+Resource2=IDR_MAINFRAME
+Resource3=IDD_HDTEST_DIALOG
+Resource4=IDD_HDTEST_DIALOG (English (U.S.))
+
+[CLS:CHdtestApp]
+Type=0
+HeaderFile=hdtest.h
+ImplementationFile=hdtest.cpp
+Filter=N
+
+[CLS:CHdtestDlg]
+Type=0
+HeaderFile=hdtestDlg.h
+ImplementationFile=hdtestDlg.cpp
+Filter=D
+LastObject=IDC_EDIT1
+BaseClass=CDialog
+VirtualFilter=dWC
+
+
+[DLG:IDD_HDTEST_DIALOG]
+Type=1
+ControlCount=3
+Control1=IDOK,button,1342242817
+Control2=IDCANCEL,button,1342242816
+Control3=IDC_STATIC,static,1342308352
+Class=CHdtestDlg
+
+[DLG:IDD_HDTEST_DIALOG (English (U.S.))]
+Type=1
+Class=CHdtestDlg
+ControlCount=6
+Control1=IDC_BUTTON1,button,1342242816
+Control2=IDC_BUTTON2,button,1342242816
+Control3=IDC_BUTTON5,button,1342242816
+Control4=IDC_BUTTON6,button,1342242816
+Control5=IDC_BUTTON7,button,1342242816
+Control6=IDC_EDIT1,edit,1350631428
+
