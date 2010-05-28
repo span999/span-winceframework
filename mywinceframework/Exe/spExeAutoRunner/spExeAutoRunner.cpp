@@ -76,6 +76,8 @@ static DWORD MainRoutine( DWORD dwPararm )
 		spLibDbgMsg_Dlg( TEXT("%s gpfFirstModuleStart fail !!!"), SPPREFIX );
 	}
 
+	WaitSystemReady( SH_WMGR, 60000 );
+	
 	spExeLoadMyModule2();
 	
 	if( gpfSecondModuleStart )
@@ -91,6 +93,30 @@ static DWORD MainRoutine( DWORD dwPararm )
 	
 	return dwRet;
 }
+
+static BOOL WaitSystemReady( DWORD dwFlag, DWORD dwTimeout )
+{
+	BOOL bRet = FALSE;
+	DWORD dwCount = 0;
+	
+	if( (0 == dwTimeout) || (dwTimeout > (5*60*1000)) )	///default 5000ms
+		dwTimeout = 5000;
+	
+	/// Flag : SH_SHELL, SH_GDI, SH_WMGR
+	
+	while( 1 )
+	{
+		Sleep( 100 );
+		bRet = IsAPIReady( dwFlag );
+		dwCount = dwCount + 100;
+		
+		if( bRet || (dwCount >= dwTimeout) )
+			break;
+	}	
+
+	return bRet;
+}
+
 
 static BOOL spExeLoadMyModule1( void )
 {
