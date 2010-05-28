@@ -14,6 +14,7 @@
 #include "spPlatform.h"
 #include "spCommon.h"
 #include "SPDebugDef.h"
+#include "spLibTouchHook.h"
 
 #include <Tchddi.h>
 
@@ -49,9 +50,15 @@ static PFN_TOUCH_IO_CONTROL 					pfnTouchIOControl = NULL;
 
 static PFN_TOUCH_PANEL_CALLBACK					pfnOrgTouchPanelCallback = NULL;
 
-BOOL spLoadHook( HMODULE hTouchDll );
+static BOOL spLoadHook( HMODULE hTouchDll );
+static BOOL spCreateHookEvent( void );
+static BOOL spCloseHookEvent( void );
+static void spSendEventOut( HANDLE hEvent, DWORD dwData );
+
+
 
 static HMODULE hTouchDll = 0;
+static HANDLE hTouchHookEvents[3];
 static INT xSaved = 0;
 static INT ySaved = 0;
 static int iMinX = 4;
@@ -74,6 +81,12 @@ BOOL TouchIOControl(
 	return bRet;
 }
 
+/*
+LPARAM MAKELPARAM(
+    WORD wLow,
+    WORD wHigh
+);
+*/
 
 BOOL myTouchPanelCallback( TOUCH_PANEL_SAMPLE_FLAGS Flags, INT X, INT Y )
 {
@@ -82,21 +95,32 @@ BOOL myTouchPanelCallback( TOUCH_PANEL_SAMPLE_FLAGS Flags, INT X, INT Y )
 	if( Flags == (TouchSampleDownFlag | TouchSampleIsCalibratedFlag | TouchSampleValidFlag) )
 	{	///down
 		///SendMessage(g_hwWnd, WM_LBUTTONDOWN, 0, MAKELPARAM(X,Y));
+		spSendEventOut( hTouchHookEvents[0], MAKELPARAM(X,Y) );
 	}
 	else
 	if( Flags == (TouchSampleDownFlag | TouchSamplePreviousDownFlag | TouchSampleIsCalibratedFlag | TouchSampleValidFlag) &&
-		xSaved - X > iMinX || X - xSaved > iMinX &&
-		ySaved - Y > iMinY || Y - ySaved > iMinY
+		((xSaved - X > iMinX) || (X - xSaved > iMinX)) &&
+		((ySaved - Y > iMinY) || (Y - ySaved > iMinY))
 	)
 	{	///move
 		///SendMessage(g_hwWnd, WM_MOUSEMOVE, 0, MAKELPARAM(X,Y));
+		spSendEventOut( hTouchHookEvents[1], MAKELPARAM(X,Y) );
 	}
 	else
 	if( Flags ==(TouchSampleIsCalibratedFlag | TouchSampleValidFlag | TouchSamplePreviousDownFlag) )
 	{	///up
 		///SendMessage(g_hwWnd, WM_LBUTTONUP, 0, MAKELPARAM(X,Y));
+		spSendEventOut( hTouchHookEvents[2], MAKELPARAM(X,Y) );
 	}
 
+	///update stored
+	xSaved = X;
+	ySaved = Y;
+	
+	///original callback
+	if( pfnOrgTouchPanelCallback )
+		bRet = pfnOrgTouchPanelCallback( Flags, X, Y );
+	
 	return bRet;
 }
 
@@ -108,6 +132,7 @@ BOOL TouchPanelEnable( PFN_TOUCH_PANEL_CALLBACK pfnCallback )
 	///store callback
 	pfnOrgTouchPanelCallback = pfnCallback;
 	
+	///replace with my callback function
 	bRet = pfnTouchPanelEnable( myTouchPanelCallback );
 	
 	return bRet;
@@ -209,10 +234,12 @@ BOOL APIENTRY TouchPanelDllEntry( HANDLE hModule,
 			hTouchDll = LoadLibrary( TOUCHDLLNAME );
 			if( NULL != hTouchDll )
 				spLoadHook( hTouchDll );
+			spCreateHookEvent();
 			break;
 		case DLL_PROCESS_DETACH:
 			if( NULL != hTouchDll )
 				FreeLibrary( hTouchDll );
+			spCloseHookEvent();	
 			break;
 	}
     return TRUE;
@@ -220,7 +247,7 @@ BOOL APIENTRY TouchPanelDllEntry( HANDLE hModule,
 }
 
 
-BOOL spLoadHook( HMODULE hTouchDll )
+static BOOL spLoadHook( HMODULE hTouchDll )
 {
 	BOOL bRet = FALSE;
 
@@ -270,4 +297,53 @@ BOOL spLoadHook( HMODULE hTouchDll )
 	}
 	
 	return bRet;
+}
+
+
+static BOOL spCreateHookEvent( void )
+{
+	static bInited = FALSE;
+	BOOL bRet = FALSE;
+	
+	if( !bInited )
+	{
+		hTouchHookEvents[0] = NULL;
+		hTouchHookEvents[1] = NULL;
+		hTouchHookEvents[2] = NULL;
+		
+		///down
+		hTouchHookEvents[0] = CreateEvent( NULL, FALSE, FALSE, SPLIB_TOUCHHOOK_DOWN_EVENT_NAME );
+		///move
+		hTouchHookEvents[1] = CreateEvent( NULL, FALSE, FALSE, SPLIB_TOUCHHOOK_MOVE_EVENT_NAME );
+		///up
+		hTouchHookEvents[2] = CreateEvent( NULL, FALSE, FALSE, SPLIB_TOUCHHOOK_UP_EVENT_NAME );
+	
+		if( NULL != hTouchHookEvents[0] && NULL != hTouchHookEvents[1] && NULL != hTouchHookEvents[2] )
+			bInited = TRUE;
+		else
+			bInited = FALSE;
+			
+		bRet = bInited;
+	}
+	
+	return bRet;
+}
+
+
+static BOOL spCloseHookEvent( void )
+{
+	BOOL bRet = TRUE;
+	
+	CloseHandle( hTouchHookEvents[0] );
+	CloseHandle( hTouchHookEvents[1] );
+	CloseHandle( hTouchHookEvents[2] );
+		
+	return bRet;
+}
+
+
+static void spSendEventOut( HANDLE hEvent, DWORD dwData )
+{
+	SetEventData( hEvent, dwData );
+	SetEvent( hEvent );
 }
