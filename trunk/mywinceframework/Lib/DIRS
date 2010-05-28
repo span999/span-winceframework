@@ -9,3 +9,4 @@ DIRS= \
 	spLibSysTouchTwo \
 	spLibTouchHook \
 	spLibDataXferEvent \
+	spLibNumPadParser \

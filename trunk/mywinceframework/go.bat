@@ -45,18 +45,29 @@ cd Lib\spLibTouchHook
 build -c
 cd ..\..
 
-cd Dll\spDllTouchHook
-build -c
-cd ..\..
-
 cd Exe\spExeTouchHook
 build -c
 cd ..\..
 
+cd Lib\spLibDataXferEvent
+build -c
+cd ..\..
 
 :_EXIT
 
-cd Lib\spLibDataXferEvent
+cd Lib\spLibNumPadParser
+build -c
+cd ..\..
+
+cd Dll\spDllTouchHook
+build -c
+cd ..\..
+
+cd Dll\spDllTouchHookExt
+build -c
+cd ..\..
+
+cd Exe\spExeTouchHook
 build -c
 cd ..\..
 
