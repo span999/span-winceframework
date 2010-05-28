@@ -10,6 +10,8 @@
 #define		SPLIB_DATATRANSFER_PACK_SIGN			0x00FF0FFF
 #define		SPLIB_DATATRANSFER_PACKSTART_SIGN		0x00FF0F0F
 #define		SPLIB_DATATRANSFER_PACKEND_SIGN			0x00FF0FF0
+#define		SPLIB_DATATRANSFER_EVENTDATA_CLEAR		0xFFFFFFFF
+
 
 /*
 +-----------+-----------+------------+---------+---------+----------+-----------+
