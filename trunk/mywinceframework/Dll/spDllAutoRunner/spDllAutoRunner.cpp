@@ -10,17 +10,17 @@
 // see the LICENSE.RTF on your install media or the root of your tools installation.
 // THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES.
 //
-#include <windows.h>
-#include <drvlib.h>
+#include "spOS.h"
+#include "spPlatform.h"
+#include "spCommon.h"
 #include <pnp.h>
 #include <storemgr.h>
-
-
-#include "spLibErrCodeDef.h"
 #include "SPDebugDef.h"
-#include "spLibDbgMsg.h"
 
 
+#define		LIBMSGFLAG			(dDOUT|0x0FFFFFFF)		///diag msg only
+///#define		LIBMSGFLAG			(dNOUT|0x0FFFFFFF)		///nk msg only
+#define		SPPREFIX			TEXT("ARDll:")
 
 #define MIC_AUTORUNNER_REG_KEY					(TEXT("\\Software\\Mitac\\micAutoRunner"))
 
@@ -30,7 +30,7 @@ static DWORD WINAPI StoreageMsgWaitThread( LPVOID  pContext );
 static DWORD ParseCmdFile( DWORD dwParam );
 static BOOL LoadRegSetting( void );
 static BOOL IsAllThreadStop( void );
-
+static BOOL spCopyFile( LPCWSTR szwSourceFile, LPCWSTR szwTargetFile, BOOL bFlag );
 
 static TCHAR szCmdFilePath[32];
 static TCHAR szCmdFileName[32];
@@ -57,42 +57,12 @@ static TCHAR szCmdKeepCmd[32];
 static BOOL	bKeepCmdFile = FALSE;
 static bStoreageMsgWaitThreadStop = FALSE;
 
-///static TCHAR szString[128];         // Temperary string
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /// *****************************************
 /// routine
 /// *****************************************
 
-
-
-#if 0
-int WINAPI WinMain (
-              HINSTANCE hInstance,    // Handle to the current instance
-              HINSTANCE hPrevInstance,// Handle to the previous instance
-              LPTSTR lpCmdLine,       // Pointer to the command line
-              int nCmdShow)           // Show state of the window
-{
-
-
-	MainRoutine( 0 );
-
-
-	return 0;
-}
-#endif
 
 BOOL WINAPI  DllEntry(HINSTANCE hinstDll, DWORD dwReason, LPVOID lpReserved)
 {
@@ -112,7 +82,7 @@ BOOL WINAPI  DllEntry(HINSTANCE hinstDll, DWORD dwReason, LPVOID lpReserved)
 }
 
 
-DWORD spDllAutoRunner_Start( DWORD dwParam )
+DWORD spDllHook_Start( DWORD dwParam )
 {
 	DWORD dwRet;
 	
@@ -145,7 +115,9 @@ static DWORD MainRoutine( DWORD dwPararm )
 	///hStoreageMsgWaitThread = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)StoreageMsgWaitThread, NULL, 0, NULL );
 	
 	if( NULL == hStoreageMsgWaitThread )
-		spLibDbgMsg_Dlg( TEXT("CreateThread fail %d !!!"), GetLastError() );
+	{
+		spLibDbgMsg( LIBMSGFLAG, TEXT("CreateThread fail %d !!!"), GetLastError() );
+	}	
 	else
 		bStoreageMsgWaitThreadStop = FALSE;
 	
@@ -198,7 +170,7 @@ static DWORD WINAPI StoreageMsgWaitThread( LPVOID  pContext )
 				bReadQueueDone = FALSE;
 
 				///bReadQueueDone = ReadMsgQueue( hDevNotificationQueue, lpDevDetail, dwBytesRead, &dwCount, INFINITE, &dwFlags );
-				bReadQueueDone = ReadMsgQueue( hDevNotificationQueue, lpDevDetail, dwBytesRead, &dwCount, 60000, &dwFlags );
+				bReadQueueDone = ReadMsgQueue( hDevNotificationQueue, lpDevDetail, dwBytesRead, &dwCount, 40000, &dwFlags );
 			
 				if( FALSE == bReadQueueDone )
 				{
@@ -222,7 +194,8 @@ static DWORD WINAPI StoreageMsgWaitThread( LPVOID  pContext )
 			if( bReadQueueDone )
 			{
 				spLibDbgMsg_Dlg( TEXT("Got storeage mount event2 %d(%s)"), lpDevDetail->cbName, lpDevDetail->szName );
-				ParseCmdFile( 0 );
+				if( 1 == ParseCmdFile( 0 ) )
+					break;
 			}	
 			else
 			{
@@ -237,6 +210,7 @@ static DWORD WINAPI StoreageMsgWaitThread( LPVOID  pContext )
 	
 	
 	bStoreageMsgWaitThreadStop = TRUE;
+	spLibDbgMsg( LIBMSGFLAG, TEXT("End Auto Runnner !!!") );
 	return dwRet;
 }
 
@@ -254,6 +228,7 @@ static BOOL IsAllThreadStop( void )
 static DWORD ParseCmdFile( DWORD dwParam )
 {
 	DWORD dwRet = 0;
+	BOOL bRet = 0;
 	
 	/// load setting first
 	LoadRegSetting();
@@ -267,26 +242,47 @@ static DWORD ParseCmdFile( DWORD dwParam )
 			UINT uiReTry = 5;
 			
 			wcscpy( (PWSTR)pPathFileData, (PWSTR)szCmdFilePath );
-			pTemp = pTemp + (wcslen((PWSTR)pPathFileData));
+			pTemp = pTemp + (wcslen((PWSTR)pPathFileData));	///move to end
 			wcscpy( (PWSTR)pTemp, (PWSTR)szCmdFileName );
 			
 			///spLibDbgMsg_Dlg( TEXT("Try reach cmd file %s"), pPathFileData );
 
-#if 0
-			Sleep(2000);	///??? wait for ready?
-#else
 			for( uiReTry = 4; uiReTry > 0; uiReTry-- ) 
 			{
 				Sleep(500);
+				///try three path
+				///first
 				fp = _wfopen( (PWSTR)pPathFileData , _T("rt") );	///read,text mode
-				///fp = fopen( "\\SDMMC Card\\micAR.cmd" , "rt" );	///read,text mode
+				
+				if( fp == NULL )	///no, try second
+				{
+					memset( pPathFileData, 0, 256 );	///clear
+					wcscpy( (PWSTR)pPathFileData, TEXT("\\SDMMC\\") );
+					pTemp = (PWSTR)pPathFileData;
+					pTemp = pTemp + (wcslen((PWSTR)pPathFileData));	///move to end
+					wcscpy( (PWSTR)pTemp, (PWSTR)szCmdFileName );
+					
+					fp = _wfopen( (PWSTR)pPathFileData , _T("rt") );	///read,text mode
+				}	
+
+				if( fp == NULL )	///no, try third
+				{
+					memset( pPathFileData, 0, 256 );	///clear
+					wcscpy( (PWSTR)pPathFileData, TEXT("\\Storage Card\\") );
+					pTemp = (PWSTR)pPathFileData;
+					pTemp = pTemp + (wcslen((PWSTR)pPathFileData));	///move to end
+					wcscpy( (PWSTR)pTemp, (PWSTR)szCmdFileName );
+					
+					fp = _wfopen( (PWSTR)pPathFileData , _T("rt") );	///read,text mode
+				}
+					
 				if( fp != NULL )
 					break; 
 			}	
-#endif
+
 			if( fp == NULL ) 
 			{
-				spLibDbgMsg_Dlg( TEXT("No such file %s"), pPathFileData );
+				spLibDbgMsg( LIBMSGFLAG, TEXT("No such file %s"), pPathFileData );
 			}
 			else
 			{
@@ -294,7 +290,7 @@ static DWORD ParseCmdFile( DWORD dwParam )
 				CHAR ucTempA[MAX_LINE_LENGTH];
 				UINT uiIndex = 0;
 				
-				spLibDbgMsg_Dlg( TEXT("%s file found"), pPathFileData );
+				spLibDbgMsg( LIBMSGFLAG, TEXT("%s file found"), pPathFileData );
 
 				///Parsing file
 			    while(1)
@@ -369,65 +365,77 @@ static DWORD ParseCmdFile( DWORD dwParam )
 						///now, compare with cmd list
 						if( 0 == wcscmp( szCmdSource, pTempStrPointer ) )
 						{
-							spLibDbgMsg_Dlg( TEXT("Cmd->%s"), pTempStrPointer );
+							///spLibDbgMsg( LIBMSGFLAG, TEXT("Cmd->%s"), pTempStrPointer );
 							wcscpy( szSourceFile, szTempStr1 );
-							spLibDbgMsg_Dlg( TEXT("Copy SRC->%s") , szSourceFile );
+							spLibDbgMsg( LIBMSGFLAG, TEXT("Cmd->%s:%s"), pTempStrPointer, szSourceFile );
 
 						}
 						else
 						if( 0 == wcscmp( szCmdTarget, pTempStrPointer ) )
 						{
-							spLibDbgMsg_Dlg( TEXT("Cmd->%s"), pTempStrPointer );
+							///spLibDbgMsg_Dlg( TEXT("Cmd->%s"), pTempStrPointer );
 							wcscpy( szTargetFile, szTempStr1 );
-							spLibDbgMsg_Dlg( TEXT("Copy TARG->%s") , szTargetFile );
+							spLibDbgMsg( LIBMSGFLAG, TEXT("Cmd->%s:%s"), pTempStrPointer, szTargetFile );
 						}
 						else
 						if( 0 == wcscmp( szCmdLine, pTempStrPointer ) )
 						{
-							spLibDbgMsg_Dlg( TEXT("Cmd->%s"), pTempStrPointer );
+							///spLibDbgMsg_Dlg( TEXT("Cmd->%s"), pTempStrPointer );
 							wcscpy( szRunCmdLine, szTempStr1 );
-							spLibDbgMsg_Dlg( TEXT("Copy CMDL->%s") , szRunCmdLine );
+							spLibDbgMsg( LIBMSGFLAG, TEXT("Cmd->%s:%s"), pTempStrPointer, szRunCmdLine );
 						}
 						else
 						if( 0 == wcscmp( szCmdRun, pTempStrPointer ) )
 						{
-							spLibDbgMsg_Dlg( TEXT("Cmd->%s"), pTempStrPointer );
-
-							spLibDbgMsg_Dlg( TEXT("Run ->%s"), szSourceFile );
+							///spLibDbgMsg_Dlg( TEXT("Cmd->%s"), pTempStrPointer );
+							///spLibDbgMsg_Dlg( TEXT("Run->%s"), szSourceFile );
+							spLibDbgMsg( LIBMSGFLAG, TEXT("Cmd->%s:%s"), pTempStrPointer, szSourceFile );
 
 							///CreateProcess( szSourceFile, NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, NULL);
-							CreateProcess( szSourceFile, szRunCmdLine, NULL, NULL, FALSE, 0, NULL, NULL, NULL, NULL);
+							CreateProcess( szSourceFile, szRunCmdLine, NULL, NULL, FALSE, 0, NULL, NULL, NULL, NULL);							
 						}
 						else
 						if( 0 == wcscmp( szCmdCopy, pTempStrPointer ) )
 						{
-							spLibDbgMsg_Dlg( TEXT("Cmd->%s"), pTempStrPointer );
-							spLibDbgMsg_Dlg( TEXT("Copy %s->%s"), szSourceFile, szTargetFile );
+							///spLibDbgMsg_Dlg( TEXT("Cmd->%s"), pTempStrPointer );
+							///spLibDbgMsg_Dlg( TEXT("Copy %s->%s"), szSourceFile, szTargetFile );
+							spLibDbgMsg( LIBMSGFLAG, TEXT("Cmd->%s:%s->%s"), pTempStrPointer, szSourceFile, szTargetFile );
 
-							CopyFile( szSourceFile, szTargetFile, TRUE);
+							bRet = spCopyFile( szSourceFile, szTargetFile, TRUE );
+							///bRet = CopyFile( szSourceFile, szTargetFile, TRUE );
+							if( 0 == bRet )
+								spLibDbgMsg( LIBMSGFLAG, TEXT("Copy fail %d"), GetLastError() );
 						}
 						else
 						if( 0 == wcscmp( szCmdMove, pTempStrPointer ) )
 						{
-							spLibDbgMsg_Dlg( TEXT("Cmd->%s"), pTempStrPointer );
-							spLibDbgMsg_Dlg( TEXT("Move %s->%s"), szSourceFile, szTargetFile );
+							///spLibDbgMsg_Dlg( TEXT("Cmd->%s"), pTempStrPointer );
+							///spLibDbgMsg_Dlg( TEXT("Move %s->%s"), szSourceFile, szTargetFile );
+							spLibDbgMsg( LIBMSGFLAG, TEXT("Cmd->%s:%s->%s"), pTempStrPointer, szSourceFile, szTargetFile );
 
-							MoveFile( szSourceFile, szTargetFile );
-								
+							bRet = MoveFile( szSourceFile, szTargetFile );
+							if( 0 == bRet )
+								spLibDbgMsg( LIBMSGFLAG, TEXT("Move fail %d"), GetLastError() );				
 						}
 						else
 						if( 0 == wcscmp( szCmdDelete, pTempStrPointer ) )
 						{
-							spLibDbgMsg_Dlg( TEXT("Cmd->%s"), pTempStrPointer );
-							spLibDbgMsg_Dlg( TEXT("delete %s"), szSourceFile );
+							///spLibDbgMsg_Dlg( TEXT("Cmd->%s"), pTempStrPointer );
+							///spLibDbgMsg_Dlg( TEXT("delete %s"), szSourceFile );
+							spLibDbgMsg_Dlg( TEXT("Cmd->%s:%s"), pTempStrPointer, szSourceFile );
 							
-							DeleteFile( szSourceFile );
+							bRet = DeleteFile( szSourceFile );
+							if( 0 == bRet )
+								spLibDbgMsg( LIBMSGFLAG, TEXT("delete fail %d"), GetLastError() );
 						}
 						else
 						if( 0 == wcscmp( szCmdEnd, pTempStrPointer ) )
 						{
 							spLibDbgMsg_Dlg( TEXT("Cmd->%s"), pTempStrPointer );
-
+							
+							///to end the parser !!!
+							dwRet = 1;
+							
 							///move the screen to the last message		
 							///DWORD dwIndex = SendDlgItemMessage(hDlg, IDC_AUTORUNNER_LIST1, LB_GETCOUNT, 0, 0);							
 							///SendDlgItemMessage(hDlg, IDC_AUTORUNNER_LIST1, LB_SETTOPINDEX, (dwIndex-1), 0);
@@ -493,7 +501,7 @@ static DWORD ParseCmdFile( DWORD dwParam )
 		}
 		else
 		{
-			spLibDbgMsg_Dlg( TEXT("wait unknow !!"));
+			spLibDbgMsg( LIBMSGFLAG, TEXT("wait unknow !!"));
 		}
 
 	
@@ -807,7 +815,7 @@ static BOOL LoadRegSetting()
 		///spLibDbgMsg_Dlg( TEXT("Set CmdSource=%s"), szCmdSource );
 
     	wcscpy( (PWSTR)szCmdTarget, (PWSTR)L"TARG:" );
-		spLibDbgMsg_Dlg( TEXT("Set CmdTarget=%s"), szCmdTarget );
+		///spLibDbgMsg_Dlg( TEXT("Set CmdTarget=%s"), szCmdTarget );
 
     	wcscpy( (PWSTR)szCmdRun, (PWSTR)L"RUN:" );
 		///spLibDbgMsg_Dlg( TEXT("Set CmdRun=%s"), szCmdRun );
@@ -818,10 +826,10 @@ static BOOL LoadRegSetting()
     	wcscpy( (PWSTR)szCmdMove, (PWSTR)L"MOVE:" );
 		///spLibDbgMsg_Dlg( TEXT("Set CmdMove=%s"), szCmdMove );
 
-    	wcscpy( (PWSTR)szCmdDelete, (PWSTR)"DEL:" );
+    	wcscpy( (PWSTR)szCmdDelete, (PWSTR)L"DEL:" );
 		///spLibDbgMsg_Dlg( TEXT("Set CmdDelete=%s"), szCmdDelete );
 
-    	wcscpy( (PWSTR)szCmdEnd, (PWSTR)"END:" );
+    	wcscpy( (PWSTR)szCmdEnd, (PWSTR)L"END:" );
 		///spLibDbgMsg_Dlg( TEXT("Set CmdEnd=%s"), szCmdEnd );
 
 
@@ -841,3 +849,77 @@ static BOOL LoadRegSetting()
 	
 	return bRet;
 }
+
+
+BOOL spWstr2Tstr( LPCWSTR szwStr, LPCTSTR sztStr )
+{
+	BOOL bRet = FALSE;
+	
+	if( szwStr && sztStr )
+	{
+		WCHAR *pW = NULL;
+		TCHAR *pT = NULL;
+		DWORD dwLen = 0;
+		DWORD dwLoop = 0;
+
+		dwLen = wcslen((PWSTR)szwStr);
+		pW = (WCHAR *)szwStr;
+		pT = (TCHAR *)sztStr;
+		
+		while( dwLoop < dwLen )
+		{
+			*pT = (TCHAR)*pW;
+			dwLoop++;
+			pW++;
+			pT++;
+		}
+		
+		
+		bRet = TRUE;
+	}
+	
+	return bRet;
+}
+
+
+BOOL spCopyFile( LPCWSTR szwSourceFile, LPCWSTR szwTargetFile, BOOL bFlag )
+{
+	BOOL bRet = FALSE;
+	
+	spLibDbgMsg( LIBMSGFLAG, TEXT("%s TCHAR size=%d"), SPPREFIX, sizeof(TCHAR) );
+	spLibDbgMsg( LIBMSGFLAG, TEXT("%s WCHAR size=%d"), SPPREFIX, sizeof(WCHAR) );
+	
+	///if( 1 == sizeof(TCHAR) )
+	if( 1 )
+	{
+		TCHAR sztSourceFile[128];
+		TCHAR sztTargetFile[128];
+		
+		spWstr2Tstr( szwSourceFile, sztSourceFile );
+		spWstr2Tstr( szwTargetFile, sztTargetFile );
+
+		bRet = CopyFile( sztSourceFile, sztTargetFile, bFlag );
+	}
+	else
+	{
+		bRet = CopyFile( szwSourceFile, szwTargetFile, bFlag );
+	}
+	
+	return bRet;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
