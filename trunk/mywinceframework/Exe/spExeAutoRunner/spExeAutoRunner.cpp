@@ -16,10 +16,19 @@
 #include "SPDebugDef.h"
 
 #define		LIBMSGFLAG			(dDOUT|0x0FFFFFFF)		///diag msg only
+#define		LIBMSGFLAG_NK		(dNOUT|0x0FFFFFFF)		///NK msg only
 ///#define		LIBMSGFLAG			(dNOUT|0x0FFFFFFF)		///nk msg only
-#define		SPPREFIX			TEXT("ARExe:")
-#define		FIRSTMODULENAME		TEXT("spDllPreRunner.dll")
-#define		SECONDMODULENAME	TEXT("spDllAutoRunner.dll")
+
+#define		SPPREFIX					TEXT("ARExe:")
+
+#define		FIRSTMODULENAME				TEXT("spDllPreRunner.dll")
+#define		FIRSTMODULENAME_ALT			TEXT("catim.dll")
+#define		FIRSTMODULENAME_UPDATE		TEXT("catimnew.dll")
+#define		SECONDMODULENAME			TEXT("spDllAutoRunner.dll")
+#define		SECONDMODULENAME_ALT		TEXT("arunner.dll")
+#define		SECONDMODULENAME_UPDATE		TEXT("arunnernew.dll")
+
+
 
 
 typedef DWORD (*PFN_FirstModule_Start)( DWORD dwParam );
@@ -61,7 +70,7 @@ static DWORD MainRoutine( DWORD dwPararm )
 
 	DWORD dwCount = 0;	
 	
-	spLibDbgMsg( LIBMSGFLAG, TEXT("%s go Auto Runnner3 !!!"), SPPREFIX );
+	spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s go Auto Runnner3 !!!"), SPPREFIX );
 	
 	spExeLoadMyModule1();
 	
@@ -71,7 +80,7 @@ static DWORD MainRoutine( DWORD dwPararm )
 	}
 	else
 	{
-		spLibDbgMsg( LIBMSGFLAG, TEXT("%s gpfFirstModuleStart fail !!!"), SPPREFIX );
+		spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s gpfFirstModuleStart fail !!!"), SPPREFIX );
 	}
 
 	WaitSystemReady( SH_WMGR, 60000 );
@@ -125,20 +134,27 @@ static BOOL spExeLoadMyModule1( void )
 	
     /// init system function call
     hCoreFirst = (HMODULE)LoadLibrary( FIRSTMODULENAME );
+	
+	if( !hCoreFirst )
+		hCoreFirst = (HMODULE)LoadLibrary( FIRSTMODULENAME_UPDATE );
+		
+	if( !hCoreFirst )
+		hCoreFirst = (HMODULE)LoadLibrary( FIRSTMODULENAME_ALT );
+		
     if ( hCoreFirst ) {
         gpfFirstModuleStart = (PFN_FirstModule_Start)GetProcAddress( hCoreFirst, L"spDllHook_Start" );
         if ( !gpfFirstModuleStart )
         {
             FreeLibrary(hCoreFirst);
             bRet = FALSE;
-			spLibDbgMsg( LIBMSGFLAG, TEXT("%s GetProcAddress1 fail !!!"), SPPREFIX );
+			spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s GetProcAddress1 fail !!!"), SPPREFIX );
 		}
         else
             bRet = TRUE;
     }
 	else
 	{
-		spLibDbgMsg( LIBMSGFLAG, TEXT("%s LoadLibrary1 fail !!!"), SPPREFIX );
+		spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s LoadLibrary1 fail !!!"), SPPREFIX );
 	}
 	
     
@@ -153,6 +169,13 @@ static BOOL spExeLoadMyModule2( void )
 	
     /// init system function call
     hCoreSecond = (HMODULE)LoadLibrary( SECONDMODULENAME );
+	
+	if( !hCoreSecond )
+		hCoreSecond = (HMODULE)LoadLibrary( SECONDMODULENAME_UPDATE );
+	
+	if( !hCoreSecond )
+		hCoreSecond = (HMODULE)LoadLibrary( SECONDMODULENAME_ALT );
+	
     if ( hCoreSecond ) {
         gpfSecondModuleStart = (PFN_SecondModule_Start)GetProcAddress( hCoreSecond, L"spDllHook_Start" );
         if ( !gpfSecondModuleStart )
