@@ -13,12 +13,11 @@
 #include "spOS.h"
 #include "spPlatform.h"
 #include "spCommon.h"
-///#include <pnp.h>
-///#include <storemgr.h>
 #include "SPDebugDef.h"
 
 
 #define		LIBMSGFLAG			(dDOUT|0x0FFFFFFF)		///diag msg only
+#define		LIBMSGFLAG_NK		(dNOUT|0x0FFFFFFF)		///NK msg only
 ///#define		LIBMSGFLAG			(dNOUT|0x0FFFFFFF)		///nk msg only
 
 
@@ -59,9 +58,9 @@ DWORD spDllHook_Start( DWORD dwParam )
 {
 	DWORD dwRet;
 	
-	spLibDbgMsg( LIBMSGFLAG, TEXT("spDllPreRunner_Start 1!!!") );
+	spLibDbgMsg( LIBMSGFLAG_NK, TEXT("spDllPreRunner_Start 1!!!") );
 	dwRet = MainRoutine( dwParam );
-	spLibDbgMsg( LIBMSGFLAG, TEXT("spDllPreRunner_Start 2!!!") );
+	spLibDbgMsg( LIBMSGFLAG_NK, TEXT("spDllPreRunner_Start 2!!!") );
 	
 	return dwRet;
 }

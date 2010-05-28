@@ -29,18 +29,6 @@ cd Exe\spExeCPUUtilization
 build -c
 cd ..\..
 
-cd Exe\spExeAutoRunner
-build -c
-cd ..\..
-
-cd Dll\spDllPreRunner
-build -c
-cd ..\..
-
-cd Dll\spDllAutoRunner
-build -c
-cd ..\..
-
 cd Lib\spLibTouchHook
 build -c
 cd ..\..
@@ -52,8 +40,6 @@ cd ..\..
 cd Lib\spLibDataXferEvent
 build -c
 cd ..\..
-
-:_EXIT
 
 cd Lib\spLibNumPadParser
 build -c
@@ -71,3 +57,16 @@ cd Exe\spExeTouchHook
 build -c
 cd ..\..
 
+:_EXIT
+
+cd Exe\spExeAutoRunner
+build -c
+cd ..\..
+
+cd Dll\spDllPreRunner
+build -c
+cd ..\..
+
+cd Dll\spDllAutoRunner
+build -c
+cd ..\..
