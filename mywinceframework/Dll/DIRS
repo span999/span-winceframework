@@ -2,3 +2,4 @@
 DIRS= \
 	spDllPreRunner \
     spDllAutoRunner \
+	spDllTouchHook \
