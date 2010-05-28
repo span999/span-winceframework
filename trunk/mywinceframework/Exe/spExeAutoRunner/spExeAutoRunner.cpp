@@ -10,19 +10,17 @@
 // see the LICENSE.RTF on your install media or the root of your tools installation.
 // THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES.
 //
-#include <windows.h>
-#include <drvlib.h>
-#include <pnp.h>
-#include <storemgr.h>
-
-
-#include "spLibErrCodeDef.h"
+#include "spOS.h"
+#include "spPlatform.h"
+#include "spCommon.h"
 #include "SPDebugDef.h"
-#include "spLibDbgMsg.h"
 
+#define		LIBMSGFLAG			(dDOUT|0x0FFFFFFF)		///diag msg only
+///#define		LIBMSGFLAG			(dNOUT|0x0FFFFFFF)		///nk msg only
 #define		SPPREFIX			TEXT("ARExe:")
-#define		FIRSTMODULENAME		TEXT("spDllxxxxx.dll")
+#define		FIRSTMODULENAME		TEXT("spDllPreRunner.dll")
 #define		SECONDMODULENAME	TEXT("spDllAutoRunner.dll")
+
 
 typedef DWORD (*PFN_FirstModule_Start)( DWORD dwParam );
 typedef DWORD (*PFN_SecondModule_Start)( DWORD dwParam );
@@ -32,19 +30,19 @@ static DWORD MainRoutine( DWORD dwPararm );
 static BOOL spExeLoadMyModule1( void );
 static BOOL spExeLoadMyModule2( void );
 static BOOL WaitSystemReady( DWORD dwFlag, DWORD dwTimeout );
+static void spExeReleaseAll( void );
+
 
 static PFN_FirstModule_Start gpfFirstModuleStart = NULL;
 static PFN_SecondModule_Start gpfSecondModuleStart = NULL;
+static HMODULE hCoreFirst = 0;
+static HMODULE hCoreSecond = 0;	
 
-///static TCHAR szString[128];         // Temperary string
 
 
 /// *****************************************
 /// routine
 /// *****************************************
-
-
-
 
 int WINAPI WinMain (
               HINSTANCE hInstance,    // Handle to the current instance
@@ -63,7 +61,7 @@ static DWORD MainRoutine( DWORD dwPararm )
 
 	DWORD dwCount = 0;	
 	
-	spLibDbgMsg_Dlg( TEXT("%s go Auto Runnner3 !!!"), SPPREFIX );
+	spLibDbgMsg( LIBMSGFLAG, TEXT("%s go Auto Runnner3 !!!"), SPPREFIX );
 	
 	spExeLoadMyModule1();
 	
@@ -73,7 +71,7 @@ static DWORD MainRoutine( DWORD dwPararm )
 	}
 	else
 	{
-		spLibDbgMsg_Dlg( TEXT("%s gpfFirstModuleStart fail !!!"), SPPREFIX );
+		spLibDbgMsg( LIBMSGFLAG, TEXT("%s gpfFirstModuleStart fail !!!"), SPPREFIX );
 	}
 
 	WaitSystemReady( SH_WMGR, 60000 );
@@ -86,13 +84,13 @@ static DWORD MainRoutine( DWORD dwPararm )
 	}
 	else
 	{
-		spLibDbgMsg_Dlg( TEXT("%s gpfSecondModuleStart fail !!!"), SPPREFIX );
+		spLibDbgMsg( LIBMSGFLAG, TEXT("%s gpfSecondModuleStart fail !!!"), SPPREFIX );
 	}
-
-
 	
+	spExeReleaseAll();
 	return dwRet;
 }
+
 
 static BOOL WaitSystemReady( DWORD dwFlag, DWORD dwTimeout )
 {
@@ -103,7 +101,7 @@ static BOOL WaitSystemReady( DWORD dwFlag, DWORD dwTimeout )
 		dwTimeout = 5000;
 	
 	/// Flag : SH_SHELL, SH_GDI, SH_WMGR
-	spLibDbgMsg_Dlg( TEXT("%s WaitSystemReady wait %d !!!"), SPPREFIX, dwTimeout );
+	///spLibDbgMsg( LIBMSGFLAG, TEXT("%s WaitSystemReady wait %d !!!"), SPPREFIX, dwTimeout );
 	
 	while( 1 )
 	{
@@ -115,32 +113,32 @@ static BOOL WaitSystemReady( DWORD dwFlag, DWORD dwTimeout )
 			break;
 	}	
 
-	spLibDbgMsg_Dlg( TEXT("%s WaitSystemReady exit %d !!!"), SPPREFIX, dwTimeout );
+	///spLibDbgMsg( LIBMSGFLAG, TEXT("%s WaitSystemReady exit %d !!!"), SPPREFIX, dwTimeout );
 	return bRet;
 }
 
 
 static BOOL spExeLoadMyModule1( void )
 {
-    HMODULE hCore = 0;	
+    ///HMODULE hCore = 0;	
     BOOL bRet = FALSE;
 	
     /// init system function call
-    hCore = (HMODULE)LoadLibrary( FIRSTMODULENAME );
-    if ( hCore ) {
-        gpfFirstModuleStart = (PFN_FirstModule_Start)GetProcAddress( hCore, L"spDllxxxxx_Start" );
+    hCoreFirst = (HMODULE)LoadLibrary( FIRSTMODULENAME );
+    if ( hCoreFirst ) {
+        gpfFirstModuleStart = (PFN_FirstModule_Start)GetProcAddress( hCoreFirst, L"spDllHook_Start" );
         if ( !gpfFirstModuleStart )
         {
-            FreeLibrary(hCore);
+            FreeLibrary(hCoreFirst);
             bRet = FALSE;
-			spLibDbgMsg_Dlg( TEXT("%s GetProcAddress fail !!!"), SPPREFIX );
+			spLibDbgMsg( LIBMSGFLAG, TEXT("%s GetProcAddress1 fail !!!"), SPPREFIX );
 		}
         else
             bRet = TRUE;
     }
 	else
 	{
-		spLibDbgMsg_Dlg( TEXT("%s LoadLibrary fail !!!"), SPPREFIX );
+		spLibDbgMsg( LIBMSGFLAG, TEXT("%s LoadLibrary1 fail !!!"), SPPREFIX );
 	}
 	
     
@@ -150,27 +148,37 @@ static BOOL spExeLoadMyModule1( void )
 
 static BOOL spExeLoadMyModule2( void )
 {
-    HMODULE hCore = 0;	
+    ///HMODULE hCore = 0;	
     BOOL bRet = FALSE;
 	
     /// init system function call
-    hCore = (HMODULE)LoadLibrary( SECONDMODULENAME );
-    if ( hCore ) {
-        gpfSecondModuleStart = (PFN_SecondModule_Start)GetProcAddress( hCore, L"spDllAutoRunner_Start" );
+    hCoreSecond = (HMODULE)LoadLibrary( SECONDMODULENAME );
+    if ( hCoreSecond ) {
+        gpfSecondModuleStart = (PFN_SecondModule_Start)GetProcAddress( hCoreSecond, L"spDllHook_Start" );
         if ( !gpfSecondModuleStart )
         {
-            FreeLibrary(hCore);
+            FreeLibrary(hCoreSecond);
             bRet = FALSE;
-			spLibDbgMsg_Dlg( TEXT("%s GetProcAddress fail !!!"), SPPREFIX );
+			spLibDbgMsg( LIBMSGFLAG, TEXT("%s GetProcAddress1 fail2 !!!"), SPPREFIX );
 		}
         else
             bRet = TRUE;
     }
 	else
 	{
-		spLibDbgMsg_Dlg( TEXT("%s LoadLibrary fail !!!"), SPPREFIX );
+		spLibDbgMsg( LIBMSGFLAG, TEXT("%s LoadLibrary1 fail2 !!!"), SPPREFIX );
 	}
 	
     
     return bRet;	
+}
+
+
+static void spExeReleaseAll( void )
+{
+	if( NULL != hCoreFirst )
+		FreeLibrary(hCoreFirst);
+
+	if( NULL != hCoreSecond )
+		FreeLibrary(hCoreSecond);
 }
