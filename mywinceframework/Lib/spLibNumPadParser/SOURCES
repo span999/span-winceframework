@@ -10,16 +10,14 @@ is subject to and restricted by your written agreement with
 SiRF Technology, Inc.
 !endif
 
-TARGETNAME=spExeTouchHook
-TARGETTYPE=PROGRAM
+TARGETNAME=spLibNumPadParser
+TARGETTYPE=LIBRARY
 RELEASETYPE=PLATFORM
 
-EXEENTRY=WinMain
 
 !if 0
 WINCECOD=1
 !endif
-
 WINCEOEM=1
 WINCEREL=1
 PREPROCESSDEFFILE=1
@@ -28,13 +26,9 @@ INCLUDES=..\..\Inc;$(INCLUDES)
 
 TARGETLIBS=	\
     $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
-	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDbgMsg.lib \
-	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibTouchHook.lib \
-	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDDrawClass.lib \
-	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibNumPadParser.lib \
 
 SOURCELIBS= \
+	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDDrawClass.lib \
 
 SOURCES= \
-		spVersion.rc \
-		spExeTouchHook.cpp \
+		spLibNumPadParser.cpp \

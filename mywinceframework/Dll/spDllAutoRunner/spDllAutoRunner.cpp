@@ -68,7 +68,9 @@ BOOL WINAPI  DllEntry(HINSTANCE hinstDll, DWORD dwReason, LPVOID lpReserved)
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
-        DEBUGREGISTER(hinstDll);
+        ///DEBUGREGISTER(hinstDll);
+		///DisableThreadLibraryCalls((HMODULE) hModule);
+		DisableThreadLibraryCalls((HMODULE) hinstDll);
         SPDMSG(dINIT, (_T("SPD@%s() : Process Attach\r\n"), _T(__FUNCTION__)));
 		///spLibDbgMsg_Dlg( TEXT("spDllAutoRunner DLL_PROCESS_ATTACH!!!") );
     }

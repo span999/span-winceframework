@@ -16,6 +16,7 @@
 #include "SPDebugDef.h"
 #include "spLibDDrawClass.h"
 #include "spLibTouchHook.h"
+#include "spLibNumPadParser.h"
 
 
 
@@ -54,6 +55,9 @@ BOOL TouchHookExeCallback( TOUCH_EVENT_DATA ThisTouchData )
 	
 	pmyDD->spLibTextDraw( 100, 100, TEXT("Type=>%2d, X =>%4d, Y=>%4d!!"), ThisTouchData.teType, ThisTouchData.tiX, ThisTouchData.tiY );
 	
+	if( TOUCH_UP_EVENT == ThisTouchData.teType )
+		spLibParseSequenceCondition( spLibParseAreaCondition( ThisTouchData.tiX, ThisTouchData.tiY ) );
+	
 	return bRet;
 }
 
@@ -65,15 +69,21 @@ static DWORD MainRoutine( DWORD dwPararm )
 	
 	spLibDbgMsg( LIBMSGFLAG, TEXT("%s go TouchHook.exe!!!"), SPPREFIX );
 	
+	///init ddraw
 	pmyDD = new spLibDDraw();
 	pmyDD->spLibInitDDraw();
 	
+	///init touch hook
 	spLibTouchHook_Init( 0 );
+	///init number pad parser
+	spLibParseAreaInit();
 
+	/// hook callback
 	spLibTouchHook_SetCallback( TouchHookExeCallback );
 	
-	Sleep( 30000 );
+	Sleep( 60000 );
 	
+	spLibParseAreaDeInit();
 	spLibTouchHook_Deinit( 0 );
 	
 	spExeReleaseAll();

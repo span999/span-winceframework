@@ -1,6 +1,6 @@
 
 DIRS= \
-    spExeSysInfoIdle \
+	spExeSysInfoIdle \
 	spExeSysInfoIdleExit \
 	spExeTest \
 	spExeSysHALReboot \
