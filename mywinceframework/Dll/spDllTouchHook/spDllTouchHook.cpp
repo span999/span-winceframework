@@ -25,16 +25,38 @@
 
 
 typedef BOOL (*PFN_TOUCH_PANEL_ENABLE)( PFN_TOUCH_PANEL_CALLBACK pfnCallback );
+typedef VOID (*PFN_TOUCH_PANEL_DISABLE)( VOID );
+typedef BOOL (*PFN_TOUCH_PANEL_GET_DEVICE_CAPS)( INT iIndex, LPVOID lpOutput );
+typedef void (*PFN_TOUCH_PANEL_POWER_HANDLER)( BOOL bOff );
+typedef BOOL (*PFN_TOUCH_PANEL_READ_CALIBRATION_POINT)( INT *pRawX, INT *pRawY );
+typedef VOID (*PFN_TOUCH_PANEL_READ_CALIBRATION_ABORT)( VOID );
+typedef BOOL (*PFN_TOUCH_PANEL_SET_MODE)( INT iIndex, LPVOID lpInput );
+typedef BOOL (*PFN_TOUCH_PANEL_SET_CALIBRATION)( INT32 cCalibrationPoints, INT32* pScreenXBuffer, INT32* pScreenYBuffer, INT32* pUncalXBuffer, INT32* pUncalYBuffer );
+typedef VOID (*PFN_TOUCH_PANEL_CALIBRATEA_POINT)( INT32 UncalX, INT32 UncalY, INT32* pCalX, INT32* pCalY );
+typedef BOOL (*PFN_TOUCH_IO_CONTROL)( DWORD dwIoControlCode, LPVOID lpInBuffer, DWORD nInBufferSize, LPVOID lpOutBuffer, DWORD nOutBufferSize, LPDWORD lpBytesReturned );
 
 
+static PFN_TOUCH_PANEL_ENABLE 					pfnTouchPanelEnable = NULL;
+static PFN_TOUCH_PANEL_DISABLE 					pfnTouchPanelDisable = NULL;
+static PFN_TOUCH_PANEL_GET_DEVICE_CAPS 			pfnTouchPanelGetDeviceCaps = NULL;
+static PFN_TOUCH_PANEL_POWER_HANDLER 			pfnTouchPanelPowerHandler = NULL;
+static PFN_TOUCH_PANEL_READ_CALIBRATION_POINT 	pfnTouchPanelReadCalibrationPoint = NULL;
+static PFN_TOUCH_PANEL_READ_CALIBRATION_ABORT 	pfnTouchPanelReadCalibrationAbort = NULL;
+static PFN_TOUCH_PANEL_SET_MODE 				pfnTouchPanelSetMode = NULL;
+static PFN_TOUCH_PANEL_SET_CALIBRATION 			pfnTouchPanelSetCalibration = NULL;
+static PFN_TOUCH_PANEL_CALIBRATEA_POINT 		pfnTouchPanelCalibrateAPoint = NULL;
+static PFN_TOUCH_IO_CONTROL 					pfnTouchIOControl = NULL;
 
-static PFN_TOUCH_PANEL_ENABLE pfnTouchPanelEnable = NULL;
-
-
+static PFN_TOUCH_PANEL_CALLBACK					pfnOrgTouchPanelCallback = NULL;
 
 BOOL spLoadHook( HMODULE hTouchDll );
 
 static HMODULE hTouchDll = 0;
+static INT xSaved = 0;
+static INT ySaved = 0;
+static int iMinX = 4;
+static int iMinY = 4;
+
 
 BOOL TouchIOControl(	
 					DWORD dwIoControlCode, 
@@ -47,13 +69,46 @@ BOOL TouchIOControl(
 {
 	BOOL bRet = FALSE;
 	
+	bRet = pfnTouchIOControl( dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize, lpBytesReturned );
+	
 	return bRet;
 }
 
 
-BOOL TouchPanelEnable( PFN_TOUCH_PANEL_CALLBACK    pfnCallback )
+BOOL myTouchPanelCallback( TOUCH_PANEL_SAMPLE_FLAGS Flags, INT X, INT Y )
 {
 	BOOL bRet = FALSE;
+	
+	if( Flags == (TouchSampleDownFlag | TouchSampleIsCalibratedFlag | TouchSampleValidFlag) )
+	{	///down
+		///SendMessage(g_hwWnd, WM_LBUTTONDOWN, 0, MAKELPARAM(X,Y));
+	}
+	else
+	if( Flags == (TouchSampleDownFlag | TouchSamplePreviousDownFlag | TouchSampleIsCalibratedFlag | TouchSampleValidFlag) &&
+		xSaved - X > iMinX || X - xSaved > iMinX &&
+		ySaved - Y > iMinY || Y - ySaved > iMinY
+	)
+	{	///move
+		///SendMessage(g_hwWnd, WM_MOUSEMOVE, 0, MAKELPARAM(X,Y));
+	}
+	else
+	if( Flags ==(TouchSampleIsCalibratedFlag | TouchSampleValidFlag | TouchSamplePreviousDownFlag) )
+	{	///up
+		///SendMessage(g_hwWnd, WM_LBUTTONUP, 0, MAKELPARAM(X,Y));
+	}
+
+	return bRet;
+}
+
+
+BOOL TouchPanelEnable( PFN_TOUCH_PANEL_CALLBACK pfnCallback )
+{
+	BOOL bRet = FALSE;
+	
+	///store callback
+	pfnOrgTouchPanelCallback = pfnCallback;
+	
+	bRet = pfnTouchPanelEnable( myTouchPanelCallback );
 	
 	return bRet;
 }
@@ -61,6 +116,7 @@ BOOL TouchPanelEnable( PFN_TOUCH_PANEL_CALLBACK    pfnCallback )
 
 VOID TouchPanelDisable( VOID )
 {
+	pfnTouchPanelDisable();
 	return;
 }
 
@@ -69,12 +125,15 @@ BOOL TouchPanelGetDeviceCaps( INT iIndex, LPVOID lpOutput )
 {
 	BOOL bRet = FALSE;
 	
+	bRet = pfnTouchPanelGetDeviceCaps( iIndex, lpOutput );
+	
 	return bRet;
 }
 
 
 void TouchPanelPowerHandler( BOOL bOff )
 {
+	pfnTouchPanelPowerHandler( bOff );
     return;
 }
 
@@ -83,12 +142,15 @@ BOOL TouchPanelReadCalibrationPoint( INT *pRawX, INT *pRawY )
 {
 	BOOL bRet = FALSE;
 	
+	bRet = pfnTouchPanelReadCalibrationPoint( pRawX, pRawY );
+	
 	return bRet;
 }
 
 
 VOID TouchPanelReadCalibrationAbort( VOID )
 {
+	pfnTouchPanelReadCalibrationAbort();
 	return;
 }
 
@@ -96,6 +158,8 @@ VOID TouchPanelReadCalibrationAbort( VOID )
 BOOL TouchPanelSetMode( INT iIndex, LPVOID lpInput )
 {
 	BOOL bRet = FALSE;
+	
+	bRet = pfnTouchPanelSetMode( iIndex, lpInput );
 	
 	return bRet;
 }
@@ -111,6 +175,8 @@ BOOL TouchPanelSetCalibration(
 {
 	BOOL bRet = FALSE;
 	
+	bRet = pfnTouchPanelSetCalibration( cCalibrationPoints, pScreenXBuffer, pScreenYBuffer, pUncalXBuffer, pUncalYBuffer );
+	
 	return bRet;
 }
 
@@ -122,6 +188,7 @@ VOID TouchPanelCalibrateAPoint(
 								INT32* pCalY 
 )
 {
+	pfnTouchPanelCalibrateAPoint( UncalX, UncalY, pCalX, pCalY );
 	return;
 }
 
@@ -159,9 +226,45 @@ BOOL spLoadHook( HMODULE hTouchDll )
 
 	if( hTouchDll )
 	{
-		if (NULL == pfnTouchPanelEnable)
+		if( NULL == pfnTouchPanelEnable )
 		{
 			pfnTouchPanelEnable = (PFN_TOUCH_PANEL_ENABLE)GetProcAddress(hTouchDll, TEXT("TouchPanelEnable"));
+		}
+		if( NULL == pfnTouchPanelDisable )
+		{
+			pfnTouchPanelDisable = (PFN_TOUCH_PANEL_DISABLE)GetProcAddress(hTouchDll, TEXT("TouchPanelDisable"));
+		}
+		if( NULL == pfnTouchPanelGetDeviceCaps )
+		{
+			pfnTouchPanelGetDeviceCaps = (PFN_TOUCH_PANEL_GET_DEVICE_CAPS)GetProcAddress(hTouchDll, TEXT("TouchPanelGetDeviceCaps"));
+		}
+		if( NULL == pfnTouchPanelPowerHandler )
+		{
+			pfnTouchPanelPowerHandler = (PFN_TOUCH_PANEL_POWER_HANDLER)GetProcAddress(hTouchDll, TEXT("TouchPanelPowerHandler"));
+		}
+		if( NULL == pfnTouchPanelReadCalibrationPoint )
+		{
+			pfnTouchPanelReadCalibrationPoint = (PFN_TOUCH_PANEL_READ_CALIBRATION_POINT)GetProcAddress(hTouchDll, TEXT("TouchPanelReadCalibrationPoint"));
+		}
+		if( NULL == pfnTouchPanelReadCalibrationAbort )
+		{
+			pfnTouchPanelReadCalibrationAbort = (PFN_TOUCH_PANEL_READ_CALIBRATION_ABORT)GetProcAddress(hTouchDll, TEXT("TouchPanelReadCalibrationAbort"));
+		}
+		if( NULL == pfnTouchPanelSetMode )
+		{
+			pfnTouchPanelSetMode = (PFN_TOUCH_PANEL_SET_MODE)GetProcAddress(hTouchDll, TEXT("TouchPanelSetMode"));
+		}
+		if( NULL == pfnTouchPanelSetCalibration )
+		{
+			pfnTouchPanelSetCalibration = (PFN_TOUCH_PANEL_SET_CALIBRATION)GetProcAddress(hTouchDll, TEXT("TouchPanelSetCalibration"));
+		}
+		if( NULL == pfnTouchPanelCalibrateAPoint )
+		{
+			pfnTouchPanelCalibrateAPoint = (PFN_TOUCH_PANEL_CALIBRATEA_POINT)GetProcAddress(hTouchDll, TEXT("TouchPanelCalibrateAPoint"));
+		}
+		if( NULL == pfnTouchIOControl )
+		{
+			pfnTouchIOControl = (PFN_TOUCH_IO_CONTROL)GetProcAddress(hTouchDll, TEXT("TouchIOControl"));
 		}
 
 	}
