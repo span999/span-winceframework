@@ -56,102 +56,6 @@ int WINAPI WinMain (
 }
 
 
-
-///BLOCK_DRIVER_GUID
-///DEVCLASS_CARDSERV_GUID
-///FATFS_MOUNT_GUID
-///STORE_MOUNT_GUID
-///STOREMGR_DRIVER_GUID
-///CE_DRIVER_SD_BUS_GUID
-
-#if 0
-static DWORD MainRoutine( DWORD dwPararm )
-{
-	DWORD dwRet = 0;
-
-	DWORD dwCount = 0;	
-    MSGQUEUEOPTIONS msgQueueOptions;
-    HANDLE hDevNotificationQueue = NULL;
-    HANDLE hDevNotifications = NULL;
-    WCHAR buf[MAX_PATH + sizeof(DEVDETAIL)];
-    DWORD dwFlags     = 0;
-    DEVDETAIL *lpDevDetail = (DEVDETAIL *) buf;
-    DWORD dwBytesRead = sizeof(buf);
-
-	
-	///MessageBox( NULL, TEXT("go Auto Runnner !!!"), TEXT("MainRoutine"), MB_ICONQUESTION|MB_OK );
-	spLibDbgMsg_Dlg( TEXT("go Auto Runnner !!!") );
-
-    // register for filesystem mount/unmount notifications
-    memset(&msgQueueOptions, 0, sizeof(msgQueueOptions));
-    msgQueueOptions.dwSize        = sizeof( msgQueueOptions );
-    msgQueueOptions.dwFlags       = 0;
-    msgQueueOptions.dwMaxMessages = 0;
-    msgQueueOptions.cbMaxMessage  = 4096;
-    msgQueueOptions.bReadAccess   = TRUE;	
-	
-    hDevNotificationQueue = CreateMsgQueue( NULL, &msgQueueOptions );
-    ///ASSERT(hDevNotificationQueue);
-    if( hDevNotificationQueue )
-    {
-		BOOL bReadQueueDone = FALSE;
-		BOOL bFoundStr = FALSE;
-        GUID fatfs = FATFS_MOUNT_GUID;
-		
-        hDevNotifications = RequestDeviceNotifications( &fatfs, hDevNotificationQueue, TRUE );
-        ///ASSERT(hDevNotifications);
-		
-		while( TRUE )
-		{
-			do{
-				bReadQueueDone = FALSE;
-
-				///bReadQueueDone = ReadMsgQueue( hDevNotificationQueue, lpDevDetail, dwBytesRead, &dwCount, INFINITE, &dwFlags );
-				bReadQueueDone = ReadMsgQueue( hDevNotificationQueue, lpDevDetail, dwBytesRead, &dwCount, 7000, &dwFlags );
-			
-				if( FALSE == bReadQueueDone )
-				{
-					if( ERROR_TIMEOUT == GetLastError() )
-						break;
-				}		
-				else
-				{
-					if( 0 == wcscmp( TEXT("SDMMC"), lpDevDetail->szName ) )
-						bFoundStr = TRUE;
-					else	
-					if( 0 == wcscmp( TEXT("Storage Card"), lpDevDetail->szName ) )
-						bFoundStr = TRUE;
-					else
-						bFoundStr = FALSE;
-				}
-
-			}while( !(bReadQueueDone && lpDevDetail->fAttached && bFoundStr ) );
-		
-
-			if( bReadQueueDone )
-			{
-				///MessageBox( NULL, TEXT("Got storeage mount event !!!"), TEXT("MainRoutine"), MB_ICONQUESTION|MB_OK );
-				
-				///wsprintf( szString, TEXT("Got storeage mount event %d(%s)"), lpDevDetail->cbName, lpDevDetail->szName );
-				///MessageBox( NULL, szString, TEXT("MainRoutine"), MB_ICONQUESTION|MB_OK );
-				spLibDbgMsg_Dlg( TEXT("Got storeage mount event2 %d(%s)"), lpDevDetail->cbName, lpDevDetail->szName );
-			}	
-			else
-			{
-				///MessageBox( NULL, TEXT("Timeout !!!"), TEXT("MainRoutine"), MB_ICONQUESTION|MB_OK );
-				spLibDbgMsg_Dlg( TEXT("Timeout2 !!!") );
-				break;
-			}	
-		
-		}///while()		
-	
-		CloseMsgQueue( hDevNotificationQueue );
-    }
-	
-	return dwRet;
-}
-
-#else
 static DWORD MainRoutine( DWORD dwPararm )
 {
 	DWORD dwRet = 0;
@@ -173,7 +77,6 @@ static DWORD MainRoutine( DWORD dwPararm )
 	
 	return dwRet;
 }
-#endif
 
 static BOOL spExeLoadMyModule( void )
 {
