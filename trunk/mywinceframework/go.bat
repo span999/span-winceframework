@@ -24,14 +24,6 @@ cd Exe\spExeAutoRunner
 build -c
 cd ..\..
 
-
-:_EXIT
-
-cd Dll\spDllAutoRunner
-build -c
-cd ..\..
-
-
 cd Lib\spLibSysInfoMemory
 build -c
 cd ..\..
@@ -40,3 +32,17 @@ cd ..\..
 cd Exe\spExeCPUUtilization
 build -c
 cd ..\..
+
+
+:_EXIT
+
+cd Exe\spExeAutoRunner
+build -c
+cd ..\..
+
+
+cd Dll\spDllAutoRunner
+build -c
+cd ..\..
+
+

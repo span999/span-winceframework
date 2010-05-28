@@ -103,6 +103,7 @@ static BOOL WaitSystemReady( DWORD dwFlag, DWORD dwTimeout )
 		dwTimeout = 5000;
 	
 	/// Flag : SH_SHELL, SH_GDI, SH_WMGR
+	spLibDbgMsg_Dlg( TEXT("%s WaitSystemReady wait %d !!!"), SPPREFIX, dwTimeout );
 	
 	while( 1 )
 	{
@@ -114,6 +115,7 @@ static BOOL WaitSystemReady( DWORD dwFlag, DWORD dwTimeout )
 			break;
 	}	
 
+	spLibDbgMsg_Dlg( TEXT("%s WaitSystemReady exit %d !!!"), SPPREFIX, dwTimeout );
 	return bRet;
 }
 
