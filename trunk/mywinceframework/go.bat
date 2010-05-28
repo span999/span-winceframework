@@ -41,9 +41,6 @@ cd Dll\spDllAutoRunner
 build -c
 cd ..\..
 
-
-:_EXIT
-
 cd Lib\spLibTouchHook
 build -c
 cd ..\..
@@ -55,3 +52,11 @@ cd ..\..
 cd Exe\spExeTouchHook
 build -c
 cd ..\..
+
+
+:_EXIT
+
+cd Lib\spLibDataXferEvent
+build -c
+cd ..\..
+
