@@ -33,4 +33,5 @@ TARGETLIBS=	\
 SOURCELIBS= \
 
 SOURCES= \
+		spVersion.rc \
 		spExeAutoRunner.cpp \
