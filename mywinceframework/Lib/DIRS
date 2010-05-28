@@ -5,3 +5,4 @@ DIRS= \
 	spLibDDrawClass \
 	spLibProgAliveInfo \
     spLibSysInfoIdle \
+	spLibSysTouchTwo \
