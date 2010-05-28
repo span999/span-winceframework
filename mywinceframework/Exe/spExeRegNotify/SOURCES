@@ -30,6 +30,7 @@ TARGETLIBS=	\
     $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
 	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDbgMsg.lib \
 	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDDrawClass.lib \
+	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibSysHALIoctl.lib \
 	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibRegNotify.lib \
 
 
