@@ -15,6 +15,8 @@
 
 #include "..\..\Inc\spLibErrCodeDef.h"
 #include "SPDebugDef.h"
+#include "mio_ioctl.h"
+#include "odm_ioctl.h"
 
 
 
@@ -25,7 +27,8 @@ static BOOL spLibInitContent( DWORD dwParam );
 static BOOL spLibLoadMyModule( void );
 static BOOL spLibFirstLoad( void );
 static DWORD spLibHalReboot( void );
-
+static DWORD spLibHalBLGet( void );
+static DWORD spLibHalBLSet( DWORD dwValue );
 
 static PFN_GetIdleTime gpfGetIdleTime;
 
@@ -78,7 +81,26 @@ DWORD spLibSysHALIoctl_Reboot( void )
 }
 
 
+DWORD spLibSysHALIoctl_BacklightGet( void )
+{
+	return spLibHalBLGet();
+}
 
+
+DWORD spLibSysHALIoctl_BacklightSet( DWORD dwValue )
+{
+	return spLibHalBLSet( dwValue );
+}
+
+DWORD spLibSysHALIoctl_BacklightUp( void )
+{
+	return spLibHalBLSet( spLibHalBLGet()+1 );
+}
+
+DWORD spLibSysHALIoctl_BacklightDown( void )
+{
+	return spLibHalBLSet( spLibHalBLGet()-1 );
+}
 
 
 /// *****************************************
@@ -144,3 +166,43 @@ static DWORD spLibHalReboot( void )
 		
 	return dwRet;
 }
+
+
+
+static DWORD spLibHalBLGet( void )
+{
+	DWORD dwRet;
+	DWORD dwOutBuf;
+	
+	if( !KernelIoControl( IOCTL_MIO_BKL_GET_BRIGHTNESS, NULL, 0, (DWORD *)&dwOutBuf, sizeof(DWORD), NULL ) )
+		if( !KernelIoControl( IOCTL_ODM_BKL_GET_BRIGHTNESS, NULL, 0, (DWORD *)&dwOutBuf, sizeof(DWORD), NULL ) )
+		{
+			SPDMSG( dFAIL, (L"$$$spLibHalBLGet: fail !!! %d \r\n", 0) );
+			return 0;
+		}	
+	
+	dwRet = dwOutBuf;
+	
+	return dwRet;
+}
+
+
+static DWORD spLibHalBLSet( DWORD dwValue )
+{
+	DWORD dwRet;
+	DWORD dwInBuf;
+	
+	dwInBuf = dwValue;
+	
+	if( !KernelIoControl(IOCTL_MIO_BKL_SET_BRIGHTNESS,(DWORD *)&dwInBuf, sizeof(DWORD), NULL, 0, NULL ) )
+		if( !KernelIoControl(IOCTL_ODM_BKL_SET_BRIGHTNESS,(DWORD *)&dwInBuf, sizeof(DWORD), NULL, 0, NULL ) )
+		{
+			SPDMSG( dFAIL, (L"$$$spLibHalBLSet: fail !!! %d \r\n", 0) );
+			return 0;
+		}	
+	
+	dwRet = spLibHalBLGet();
+	
+	return dwRet;
+}
+
