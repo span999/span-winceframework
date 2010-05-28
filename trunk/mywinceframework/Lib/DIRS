@@ -4,6 +4,7 @@ DIRS= \
 	spLibSysHALIoctl \
 	spLibDDrawClass \
 	spLibProgAliveInfo \
-    spLibSysInfoIdle \
+	spLibSysInfoIdle \
 	spLibSysInfoMemory \
 	spLibSysTouchTwo \
+	spLibTouchHook \

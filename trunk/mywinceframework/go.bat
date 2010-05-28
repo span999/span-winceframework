@@ -44,7 +44,14 @@ cd ..\..
 
 :_EXIT
 
+cd Lib\spLibTouchHook
+build -c
+cd ..\..
+
 cd Dll\spDllTouchHook
 build -c
 cd ..\..
 
+cd Exe\spExeTouchHook
+build -c
+cd ..\..
