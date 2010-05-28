@@ -12,19 +12,26 @@
 //
 #include <windows.h>
 #include <drvlib.h>
-
-#include "..\..\Inc\spLibErrCodeDef.h"
-
 #include <pnp.h>
 #include <storemgr.h>
 
+
+#include "spLibErrCodeDef.h"
 #include "SPDebugDef.h"
+#include "spLibDbgMsg.h"
+
+#define		SPPREFIX			TEXT("ARExe:")
+#define		FIRSTMODULENAME		TEXT("spDllAutoRunner.dll")
+
+typedef DWORD (*PFN_FirstModule_Start)( DWORD dwParam );
 
 
 static DWORD MainRoutine( DWORD dwPararm );
+static BOOL spExeLoadMyModule( void );
 
+static PFN_FirstModule_Start gpfFirstModuleStart = NULL;
 
-static TCHAR szString[128];         // Temperary string
+///static TCHAR szString[128];         // Temperary string
 
 
 /// *****************************************
@@ -57,7 +64,7 @@ int WINAPI WinMain (
 ///STOREMGR_DRIVER_GUID
 ///CE_DRIVER_SD_BUS_GUID
 
-
+#if 0
 static DWORD MainRoutine( DWORD dwPararm )
 {
 	DWORD dwRet = 0;
@@ -72,7 +79,8 @@ static DWORD MainRoutine( DWORD dwPararm )
     DWORD dwBytesRead = sizeof(buf);
 
 	
-	MessageBox( NULL, TEXT("go Auto Runnner !!!"), TEXT("MainRoutine"), MB_ICONQUESTION|MB_OK );
+	///MessageBox( NULL, TEXT("go Auto Runnner !!!"), TEXT("MainRoutine"), MB_ICONQUESTION|MB_OK );
+	spLibDbgMsg_Dlg( TEXT("go Auto Runnner !!!") );
 
     // register for filesystem mount/unmount notifications
     memset(&msgQueueOptions, 0, sizeof(msgQueueOptions));
@@ -124,12 +132,14 @@ static DWORD MainRoutine( DWORD dwPararm )
 			{
 				///MessageBox( NULL, TEXT("Got storeage mount event !!!"), TEXT("MainRoutine"), MB_ICONQUESTION|MB_OK );
 				
-				wsprintf( szString, TEXT("Got storeage mount event %d(%s)"), lpDevDetail->cbName, lpDevDetail->szName );
-				MessageBox( NULL, szString, TEXT("MainRoutine"), MB_ICONQUESTION|MB_OK );
+				///wsprintf( szString, TEXT("Got storeage mount event %d(%s)"), lpDevDetail->cbName, lpDevDetail->szName );
+				///MessageBox( NULL, szString, TEXT("MainRoutine"), MB_ICONQUESTION|MB_OK );
+				spLibDbgMsg_Dlg( TEXT("Got storeage mount event2 %d(%s)"), lpDevDetail->cbName, lpDevDetail->szName );
 			}	
 			else
 			{
-				MessageBox( NULL, TEXT("Timeout !!!"), TEXT("MainRoutine"), MB_ICONQUESTION|MB_OK );
+				///MessageBox( NULL, TEXT("Timeout !!!"), TEXT("MainRoutine"), MB_ICONQUESTION|MB_OK );
+				spLibDbgMsg_Dlg( TEXT("Timeout2 !!!") );
 				break;
 			}	
 		
@@ -141,4 +151,54 @@ static DWORD MainRoutine( DWORD dwPararm )
 	return dwRet;
 }
 
+#else
+static DWORD MainRoutine( DWORD dwPararm )
+{
+	DWORD dwRet = 0;
+
+	DWORD dwCount = 0;	
+	
+	spLibDbgMsg_Dlg( TEXT("%s go Auto Runnner3 !!!"), SPPREFIX );
+	
+	spExeLoadMyModule();
+	
+	if( gpfFirstModuleStart )
+	{
+		gpfFirstModuleStart( 0 );
+	}
+	else
+	{
+		spLibDbgMsg_Dlg( TEXT("%s gpfFirstModuleStart fail !!!"), SPPREFIX );
+	}
+	
+	return dwRet;
+}
+#endif
+
+static BOOL spExeLoadMyModule( void )
+{
+    HMODULE hCore = 0;	
+    BOOL bRet = FALSE;
+	
+    /// init system function call
+    hCore = (HMODULE)LoadLibrary( FIRSTMODULENAME );
+    if ( hCore ) {
+        gpfFirstModuleStart = (PFN_FirstModule_Start)GetProcAddress( hCore, L"spDllAutoRunner_Start" );
+        if ( !gpfFirstModuleStart )
+        {
+            FreeLibrary(hCore);
+            bRet = FALSE;
+			spLibDbgMsg_Dlg( TEXT("%s GetProcAddress fail !!!"), SPPREFIX );
+		}
+        else
+            bRet = TRUE;
+    }
+	else
+	{
+		spLibDbgMsg_Dlg( TEXT("%s LoadLibrary fail !!!"), SPPREFIX );
+	}
+	
+    
+    return bRet;	
+}
 
