@@ -11,4 +11,4 @@
 LIBRARY    spDllAutoRunner
 
 EXPORTS
-    spDllAutoRunner_Start
+    spDllHook_Start

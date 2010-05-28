@@ -40,6 +40,9 @@ cd Exe\spExeAutoRunner
 build -c
 cd ..\..
 
+cd Dll\spDllPreRunner
+build -c
+cd ..\..
 
 cd Dll\spDllAutoRunner
 build -c
