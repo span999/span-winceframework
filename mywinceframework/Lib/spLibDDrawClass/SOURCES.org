@@ -26,9 +26,9 @@ TARGETLIBS=	\
     $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
 
 SOURCELIBS= \
-    ..\..\Bin\DDwork\ddraw.lib \
-    ..\..\Bin\DDwork\uuid.lib \
-    ..\..\Bin\DDwork\\dxguid.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\ddraw.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\uuid.lib \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\dxguid.lib \
 
 	
 SOURCES= \
