@@ -59,6 +59,10 @@ cd ..\..
 
 :_EXIT
 
+cd Lib\spLibARFileParser
+build -c
+cd ..\..
+
 cd Exe\spExeAutoRunner
 build -c
 cd ..\..

@@ -10,33 +10,24 @@ is subject to and restricted by your written agreement with
 SiRF Technology, Inc.
 !endif
 
-TARGETNAME=spDllAutoRunner
-TARGETTYPE=DYNLINK
+TARGETNAME=spLibARFileParser
+TARGETTYPE=LIBRARY
 RELEASETYPE=PLATFORM
-
-
-DLLENTRY=DllEntry
-DEFFILE=spDllAutoRunner.def
 
 
 !if 0
 WINCECOD=1
 !endif
-
 WINCEOEM=1
 WINCEREL=1
 PREPROCESSDEFFILE=1
-
 
 INCLUDES=..\..\Inc;$(INCLUDES)
 
 TARGETLIBS=	\
     $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
-	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDbgMsg.lib \
-	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibARFileParser.lib \
 
 SOURCELIBS= \
 
 SOURCES= \
-		spVersion.rc \
-		spDllAutoRunner.cpp \
+		spLibARFileParser.cpp \
