@@ -17,7 +17,7 @@
 #include "SPDebugDef.h"
 #include "mio_ioctl.h"
 #include "odm_ioctl.h"
-
+#include "spLibDbgMsgBuf.h"
 
 
 typedef DWORD (*PFN_GetIdleTime)(void);
@@ -29,6 +29,7 @@ static BOOL spLibFirstLoad( void );
 static DWORD spLibHalReboot( void );
 static DWORD spLibHalBLGet( void );
 static DWORD spLibHalBLSet( DWORD dwValue );
+static DWORD spLibHalGetDbgMsgBuf( SPDBG_MSG_INFO *pDbgMsgInfo );
 
 static PFN_GetIdleTime gpfGetIdleTime;
 
@@ -100,6 +101,34 @@ DWORD spLibSysHALIoctl_BacklightUp( void )
 DWORD spLibSysHALIoctl_BacklightDown( void )
 {
 	return spLibHalBLSet( spLibHalBLGet()-1 );
+}
+
+DWORD spLibSysHALIoctl_GetDbgMsgBuf( PVOID pBuf )
+{
+	DWORD dwRet = 0;
+	SPDBG_MSG_INFO spTmpBuf;
+	
+	if( pBuf )
+	{
+		memset( &spTmpBuf, 0, sizeof(SPDBG_MSG_INFO) );
+		dwRet = spLibHalGetDbgMsgBuf( &spTmpBuf );
+		if( (-1) != dwRet )
+		{
+			memset( pBuf, 0, sizeof(SPDBG_MSG_INFO) );
+			memcpy( pBuf, &spTmpBuf, dwRet );
+		}
+		else
+		{
+			dwRet = 0;
+		}
+		
+	}
+	else
+	{	///query buffer size
+		dwRet = spLibHalGetDbgMsgBuf( NULL );
+	}
+	
+	return dwRet;
 }
 
 
@@ -206,3 +235,27 @@ static DWORD spLibHalBLSet( DWORD dwValue )
 	return dwRet;
 }
 
+
+static DWORD spLibHalGetDbgMsgBuf( SPDBG_MSG_INFO *pDbgMsgInfo )
+{
+	DWORD dwRet = 0;
+	
+	if( pDbgMsgInfo )
+	{
+		if( !KernelIoControl( IOCTL_HAL_GET_DBG_MSG_BUF,  NULL, 0, pDbgMsgInfo,  sizeof(SPDBG_MSG_INFO), NULL ) )
+		{
+			SPDMSG( dFAIL, (L"$$$spLibHalGetDbgMsgBuf: fail !!! %d \r\n", 0) );
+			dwRet = (-1);
+		}
+		else
+		{
+			dwRet = sizeof(SPDBG_MSG_INFO);
+		}
+	}
+	else
+	{	///query for buffer size
+		dwRet = sizeof(SPDBG_MSG_INFO);
+	}
+	
+	return dwRet;
+}

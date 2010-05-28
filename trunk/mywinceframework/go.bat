@@ -79,6 +79,10 @@ cd ..\..
 
 :_EXIT
 
+cd Lib\spLibSysHALIoctl
+build
+cd ..\..
+
 
 cd Lib\spLibRegNotify
 build
