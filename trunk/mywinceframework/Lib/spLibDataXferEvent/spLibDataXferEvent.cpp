@@ -94,15 +94,12 @@ DWORD spLibDataTransferEvent_Init( DWORD dwParam )
 	
 	if( (1 != pThisContent->dwInitStep) && (2 != pThisContent->dwInitStep) && (3 != pThisContent->dwInitStep) )
 	{
+		///init variable and event.
 		if( spLibInitContent( pThisContent ) && spLibInitEvent( pThisContent ) )
 		{
 			///create thread
-			if( spLibInitCreateThread( pThisContent ) )
-				dwRet = 0;
-			else
+			if( !spLibInitCreateThread( pThisContent ) )
 				dwRet = (-1);
-
-			dwRet = 0;
 		}
 		else
 			dwRet = (-1);
@@ -133,6 +130,8 @@ BOOL spLibDataTransferEvent_IsHost( void )
 {
 	BOOL bRet = FALSE;
 	SPDMSG( dINFO, (L"$$$spLibDataTransferEvent_IsHost: %d \r\n", 1) );
+	
+	bRet = pThisContent->bIsHost;
 	
 	SPDMSG( dINFO, (L"$$$spLibDataTransferEvent_IsHost: %d \r\n", 0) );
 	return bRet;
@@ -191,10 +190,6 @@ static BOOL spLibInitContent( LibDataTransferEventContent* pThis )
 	pThis->pRevData = NULL;
 	pThis->pRevDataCurr = NULL;
 	pThis->bIsHost = FALSE;
-	
-///	pteData->teType = TOUCH_NONE_EVENT;
-///	pteData->tiX = 0;
-///	pteData->tiY = 0;
 
 	pThis->dwInitStep = 1;
 	
@@ -230,7 +225,7 @@ static BOOL spLibDeInitContent( LibDataTransferEventContent* pThis )
 	pThis->dwPacketChksum = 0;
 	pThis->dwPacketChksumCount = 0;
 	pThis->pRevData = NULL;
-	free( pThis->pRevDataCurr );
+	free( (void *)pThis->pRevDataCurr );
 	pThis->pRevDataCurr = NULL;
 
 	
@@ -265,7 +260,7 @@ static BOOL spLibInitEvent( LibDataTransferEventContent* pThis )
 
 			pThis->hDataTransMutex = CreateMutex( NULL, FALSE, SPLIB_DATATRANSFER_MUTEX_NAME );
 
-			pThis->dwInitStep = 2;
+			pThis->dwInitStep++;
 		}
 		else
 		{
@@ -298,7 +293,7 @@ static BOOL spLibInitCreateThread( LibDataTransferEventContent* pThis )
 		pThis->dwInitStep = 0;
 	}
 	else	
-		pThis->dwInitStep = 3;
+		pThis->dwInitStep++;
 	
 	return bRet;
 }
@@ -389,7 +384,7 @@ static void spGetEventDataIn( HANDLE hEvent, LibDataTransferEventContent* pThis 
 				free( pThis->pRevData );
 			
 			pThis->pRevData = NULL;
-			pThis->pDataCurr = NULL;
+			pThis->pRevDataCurr = NULL;
 			pThis->dwPacketChksumCount = 0;
 			
 			spLibDbgMsg( LIBMSGFLAG, TEXT("%s spGetEventDataIn -data-0x%08x !!!"), SPPREFIX, dwData );
@@ -398,14 +393,14 @@ static void spGetEventDataIn( HANDLE hEvent, LibDataTransferEventContent* pThis 
 			{	///create containter
 				///pThis->pRevData = malloc( pThis->dwPacketSize );
 				pThis->pRevData = malloc( pThis->dwPacketSize + ( sizeof(DWORD) - (pThis->dwPacketSize % sizeof(DWORD))) );
-				pThis->pDataCurr = (DWORD *)pThis->pRevData;
+				pThis->pRevDataCurr = (DWORD *)pThis->pRevData;
 			}
 			
-			if( NULL != pThis->pDataCurr )
+			if( NULL != pThis->pRevDataCurr )
 			{
-				*(pThis->pDataCurr) = dwData;
-				(pThis->pDataCurr)++;
-				dwPacketChksumCount = dwPacketChksumCount + *(pThis->pDataCurr);
+				*(pThis->pRevDataCurr) = dwData;
+				(pThis->pRevDataCurr)++;
+				pThis->dwPacketChksumCount = pThis->dwPacketChksumCount + *(pThis->pRevDataCurr);
 			}
 			else
 				spLibDbgMsg( LIBMSGFLAG, TEXT("%s spGetEventDataIn allocate memory fail !!"), SPPREFIX );
@@ -424,11 +419,11 @@ static void spGetEventDataIn( HANDLE hEvent, LibDataTransferEventContent* pThis 
 			pThis->pState = PACK_END_STATE;
 		else
 		{
-			if( NULL != pThis->pDataCurr )
+			if( NULL != pThis->pRevDataCurr )
 			{
-				*(pThis->pDataCurr) = dwData;
-				(pThis->pDataCurr)++;
-				dwPacketChksumCount = dwPacketChksumCount + *(pThis->pDataCurr);
+				*(pThis->pRevDataCurr) = dwData;
+				(pThis->pRevDataCurr)++;
+				pThis->dwPacketChksumCount = pThis->dwPacketChksumCount + *(pThis->pRevDataCurr);
 			}
 		}
 	}
@@ -471,8 +466,10 @@ static DWORD spLibSendData( PVOID pData, DWORD dwByteSize, LibDataTransferEventC
 	
 	if( pThis && pData && 0 != dwByteSize )
 	{
+		DWORD dwData = 0;
 		PDWORD pdwData = NULL;
 		DWORD dwDWSize = dwByteSize;
+		DWORD dwChksum = 0;
 		
 		///try to get ownership of mutex
         dwWaitResult = WaitForSingleObject( 
@@ -490,16 +487,20 @@ static DWORD spLibSendData( PVOID pData, DWORD dwByteSize, LibDataTransferEventC
 					spSendDataOut( NULL, dwByteSize );
 					spSendDataOut( NULL, SPLIB_DATATRANSFER_PACKSTART_SIGN );
 					
-					pdwData = (DWORD *)pData;
+					pdwData = (DWORD *)pData;	///pointer to first
+					///dwData = *pdwData;	///copy first DWORD
 					do
 					{
-						spSendDataOut( NULL, *pdwData );
-						dwDWSize = dwDWSize - 4;
-						pdwData++;
+						dwData = *pdwData;	///copy first DWORD
+						dwChksum = dwChksum + dwData;	///caluate check sum
+						///spSendDataOut( NULL, *pdwData );	///sent it out
+						spSendDataOut( NULL, dwData );	///sent it out
+						dwDWSize = dwDWSize - 4;			///size count down
+						pdwData++;							///pointer next
 					}while( dwDWSize > 0 );
 					
-					spSendDataOut( NULL, dwByteSize );
 					spSendDataOut( NULL, SPLIB_DATATRANSFER_PACKEND_SIGN );
+					spSendDataOut( NULL, dwChksum );
                 } 
 
                 __finally { 
