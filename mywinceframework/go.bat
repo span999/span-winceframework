@@ -12,6 +12,11 @@ cd ..\..
 
 :_EXIT
 
+cd Dll\spDllAutoRunner
+build -c
+cd ..\..
+
+
 cd Exe\spExeAutoRunner
 build -c
 cd ..\..
