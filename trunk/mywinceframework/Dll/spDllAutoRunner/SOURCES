@@ -14,7 +14,10 @@ TARGETNAME=spDllAutoRunner
 TARGETTYPE=DYNLINK
 RELEASETYPE=PLATFORM
 
-EXEENTRY=WinMain
+
+DLLENTRY=DllEntry
+DEFFILE=spDllAutoRunner.def
+
 
 !if 0
 WINCECOD=1
@@ -24,8 +27,6 @@ WINCEOEM=1
 WINCEREL=1
 PREPROCESSDEFFILE=1
 
-DLLENTRY=DllEntry
-DEFFILE=spDllAutoRunner.def
 
 INCLUDES=..\..\Inc;$(INCLUDES)
 
@@ -36,4 +37,5 @@ TARGETLIBS=	\
 SOURCELIBS= \
 
 SOURCES= \
+		spVersion.rc \
 		spDllAutoRunner.cpp \

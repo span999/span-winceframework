@@ -1,4 +1,8 @@
-@echo on
+@echo off
+
+call makeVersion.bat
+
+
 
 goto _EXIT
 
@@ -22,6 +26,11 @@ cd ..\..
 
 
 :_EXIT
+
+cd Dll\spDllAutoRunner
+build -c
+cd ..\..
+
 
 cd Lib\spLibSysInfoMemory
 build -c
