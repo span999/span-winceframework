@@ -16,6 +16,9 @@
 #include "..\..\Inc\spLibErrCodeDef.h"
 #include "..\..\Inc\spLibDDrawClass.h"
 #include "..\..\Inc\spLibSysInfoIdle.h"
+#ifndef SHOW_CPU_ONLY
+#include "..\..\Inc\spLibSysInfoMemory.h"
+#endif
 
 #include "SPDebugDef.h"
 
@@ -70,7 +73,11 @@ typedef struct _CPUUtilizationDrawArea
 
 static DWORD MainRoutine( DWORD dwPararm );
 static void ReleaseAlls( void );
+#ifdef SHOW_CPU_ONLY
 static void DrawCPULoading( DWORD dwValue );
+#else
+static void DrawCPUMemLoading( DWORD dwValue );
+#endif	///#ifdef SHOW_CPU_ONLY
 static HRESULT InitDDraw( HWND hWnd );
 static void InitDrawArea( void );
 
@@ -154,6 +161,9 @@ int WINAPI WinMain (
 
 			///init
 			spLibSysInfoIdle_Init( 0 );
+	#ifndef SHOW_CPU_ONLY
+			spLibSysInfoMemory_Init( 0 );
+	#endif
 			
 			///init 
 			InitDDraw( NULL );
@@ -235,7 +245,11 @@ static DWORD MainRoutine( DWORD dwPararm )
 				/// got reset event
 				break;
 			case WAIT_TIMEOUT:
+	#ifdef SHOW_CPU_ONLY
 				DrawCPULoading( 100 - spLibSysInfoIdle_Get() );
+	#else
+				DrawCPUMemLoading( 100 - spLibSysInfoIdle_Get() );
+	#endif
 				break;
 			default:
 				break;
@@ -248,6 +262,7 @@ static DWORD MainRoutine( DWORD dwPararm )
 	return dwRet;
 }
 
+#ifdef SHOW_CPU_ONLY
 
 static void DrawCPULoading( DWORD dwValue )
 {
@@ -290,7 +305,63 @@ static void DrawCPULoading( DWORD dwValue )
 	SPDMSG( dINIT, (TEXT("DrawCPULoading---")) );	
 }
 
+#else	///#ifdef SHOW_CPU_ONLY
 
+static void DrawCPUMemLoading( DWORD dwValue )
+{
+	DWORD dwLoop = 0;
+	static DWORD dwTimes = 0;
+	RECT rcDest;
+	DWORD dwNum = 0;
+
+	///spMessageBoxOut( dINIT, TEXT("DrawCPULoading+++") );	
+	SPDMSG( dINIT, (TEXT("DrawCPUMemLoading+++")) );	
+	
+	if( NULL != pmyDD && NULL != pDrawArea )
+	{
+		LibSysInfoMemoryContent mmi;
+		DWORD dwRet;
+		
+		memset( &mmi, 0, sizeof(LibSysInfoMemoryContent) );
+		dwRet = spLibSysInfoMemory_Get( &mmi );
+		
+		///draw backgound
+		SetRect( &rcDest, pDrawArea->dwStartX, pDrawArea->dwStartY, pDrawArea->dwEndX, pDrawArea->dwEndY );
+		pmyDD->spLibBltDDraw( &rcDest, CPULOADDRAW_R_BACKGROUND, CPULOADDRAW_G_BACKGROUND, CPULOADDRAW_B_BACKGROUND );		///green as Backgound
+
+		///draw percentage
+		if( dwValue > 0 )	///only draw when we have!!
+		{
+			SetRect( &rcDest, pDrawArea->dwStartX, pDrawArea->dwStartY, (pDrawArea->dwStartX+(dwValue*pDrawArea->dwXscale)), pDrawArea->dwEndY );
+			pmyDD->spLibBltDDraw( &rcDest, CPULOADDRAW_R_FOREGROUND, CPULOADDRAW_G_FOREGROUND, CPULOADDRAW_B_FOREGROUND );		///red as Backgound
+		}
+
+		for( dwLoop = 1; dwLoop < 20; dwLoop++ )
+		{
+			if( 0 == dwLoop % 2 ) 
+				SetRect( &rcDest, pDrawArea->dwStartX+(dwLoop*5*pDrawArea->dwXscale), pDrawArea->dwStartY, pDrawArea->dwStartX+(dwLoop*5*pDrawArea->dwXscale)+2, pDrawArea->dwStartY+(1*pDrawArea->dwYscale) );
+			else
+				SetRect( &rcDest, pDrawArea->dwStartX+(dwLoop*5*pDrawArea->dwXscale), pDrawArea->dwStartY, pDrawArea->dwStartX+(dwLoop*5*pDrawArea->dwXscale)+1, pDrawArea->dwStartY+(1*pDrawArea->dwYscale) );
+	
+			pmyDD->spLibBltDDraw( &rcDest, CPULOADDRAW_R_SCALEDOT, CPULOADDRAW_G_SCALEDOT, CPULOADDRAW_B_SCALEDOT );		///black as dot
+		}
+		
+	#if 0	///two lines, put memory info in second line
+		pmyDD->spLibTextDraw( pDrawArea->dwStartX, pDrawArea->dwEndY+pDrawArea->dwYbase, TEXT("CPU utilization => %4d%%, Avg=> %4d%%!!!"), dwValue, spLibSysInfoIdle_GetAvg() );
+		if( (-1) == dwRet )
+			pmyDD->spLibTextDraw( pDrawArea->dwStartX, pDrawArea->dwEndY+(pDrawArea->dwYbase*5), TEXT("Memory get fail !!!") );		
+		else	
+			pmyDD->spLibTextDraw( pDrawArea->dwStartX, pDrawArea->dwEndY+(pDrawArea->dwYbase*5), TEXT("Memory %d%%=> P[%d/%d]k, V[%d/%d]k, F[%d/%d]k"), mmi.dwMemoryLoad, mmi.dwAvailPhys/1024, mmi.dwTotalPhys/1024, mmi.dwAvailVirtual/1024, mmi.dwTotalVirtual/1024, mmi.dwAvailPageFile/1024, mmi.dwTotalPageFile/1024 );
+	#else	///one line for both CPU & memory
+		pmyDD->spLibTextDraw( pDrawArea->dwStartX, pDrawArea->dwEndY+pDrawArea->dwYbase, TEXT("CPU =>%4d%%, Avg=>%4d%%!! Phy Memory =>%4d%% [%d/%d/%d]k!!"), dwValue, spLibSysInfoIdle_GetAvg(), mmi.dwMemoryLoad, mmi.dwAvailPhys/1024, mmi.dwTotalPhys/1024, mmi.iDiffPhys/1024 );
+	#endif
+	}
+
+	///spMessageBoxOut( dINIT, TEXT("DrawCPULoading---") );	
+	SPDMSG( dINIT, (TEXT("DrawCPUMemLoading---")) );	
+}
+
+#endif	///#ifdef SHOW_CPU_ONLY
 
 static HRESULT InitDDraw( HWND hWnd )
 {
