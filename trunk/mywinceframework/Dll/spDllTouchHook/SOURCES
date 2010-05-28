@@ -17,6 +17,7 @@ INCLUDES=..\..\Inc;$(INCLUDES)
 
 TARGETLIBS= \
     $(_COMMONSDKROOT)\LIB\$(_CPUINDPATH)\coredll.lib \
+	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDbgMsg.lib \
 
 
 SOURCES= \

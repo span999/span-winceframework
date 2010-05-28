@@ -1,5 +1,6 @@
 
 DIRS= \
 	spDllPreRunner \
-    spDllAutoRunner \
+	spDllAutoRunner \
 	spDllTouchHook \
+	spDllTouchHookExt \

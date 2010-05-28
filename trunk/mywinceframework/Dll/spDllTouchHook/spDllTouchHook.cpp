@@ -14,16 +14,22 @@
 #include "spPlatform.h"
 #include "spCommon.h"
 #include "SPDebugDef.h"
-#include "spLibTouchHook.h"
+///#include "spLibTouchHook.h"
+#include "spDllTouchHook.h"
+#include "spDllTouchHookExt.h"
 
 #include <Tchddi.h>
 
+///#define 	DLLHOOKEXT
 
 #define		LIBMSGFLAG			(dDOUT|0x0FFFFFFF)		///diag msg only
 ///#define		LIBMSGFLAG			(dNOUT|0x0FFFFFFF)		///nk msg only
-#define		SPPREFIX			TEXT("TCHHDll:")
-#define		TOUCHDLLNAME		TEXT("touch.dll")
+#define		SPPREFIX					TEXT("TCHHDll:")
+#define		TOUCHDLLNAME				TEXT("touch.dll")
 
+#ifdef	DLLHOOKEXT
+#define		TOUCHHOOKEXTDLLNAME			TEXT("miotouchext.dll")
+#endif
 
 typedef BOOL (*PFN_TOUCH_PANEL_ENABLE)( PFN_TOUCH_PANEL_CALLBACK pfnCallback );
 typedef VOID (*PFN_TOUCH_PANEL_DISABLE)( VOID );
@@ -50,7 +56,17 @@ static PFN_TOUCH_IO_CONTROL 					pfnTouchIOControl = NULL;
 
 static PFN_TOUCH_PANEL_CALLBACK					pfnOrgTouchPanelCallback = NULL;
 
+///function pointer for hook ext
+static PFN_TOUCHHOOKEXT_DOWN					pfn_TouchHookExt_Down = NULL;
+static PFN_TOUCHHOOKEXT_MOVE					pfn_TouchHookExt_Move = NULL;
+static PFN_TOUCHHOOKEXT_UP						pfn_TouchHookExt_Up = NULL;
+static PFN_TOUCHHOOKEXT_POINT					pfn_TouchHookExt_Point = NULL;
+
+#ifdef	DLLHOOKEXT
+static void spTryInitHookExt( void );
+#endif
 static BOOL spLoadHook( HMODULE hTouchDll );
+static BOOL spLoadHookExt( HMODULE hTouchHookExt );
 static BOOL spCreateHookEvent( void );
 static BOOL spCloseHookEvent( void );
 static void spSendEventOut( HANDLE hEvent, DWORD dwData );
@@ -58,11 +74,29 @@ static void spSendEventOut( HANDLE hEvent, DWORD dwData );
 
 
 static HMODULE hTouchDll = 0;
+static HMODULE hTouchHookExt = 0;
 static HANDLE hTouchHookEvents[3];
 static INT xSaved = 0;
 static INT ySaved = 0;
 static int iMinX = 4;
 static int iMinY = 4;
+
+
+#ifdef	DLLHOOKEXT
+static void spTryInitHookExt( void )
+{
+	///load hook ext
+	if( NULL == hTouchHookExt )
+	{
+		hTouchHookExt = LoadLibrary( TOUCHHOOKEXTDLLNAME );
+		if( hTouchHookExt )
+			spLoadHookExt( hTouchHookExt );
+		else
+			spLibDbgMsg( LIBMSGFLAG, TEXT("%s LoadLibrary %s fail %d!!!"), SPPREFIX, TOUCHHOOKEXTDLLNAME, GetLastError() );
+	}
+
+}
+#endif
 
 
 BOOL TouchIOControl(	
@@ -91,11 +125,13 @@ LPARAM MAKELPARAM(
 BOOL myTouchPanelCallback( TOUCH_PANEL_SAMPLE_FLAGS Flags, INT X, INT Y )
 {
 	BOOL bRet = FALSE;
-	
+		
 	if( Flags == (TouchSampleDownFlag | TouchSampleIsCalibratedFlag | TouchSampleValidFlag) )
 	{	///down
 		///SendMessage(g_hwWnd, WM_LBUTTONDOWN, 0, MAKELPARAM(X,Y));
 		spSendEventOut( hTouchHookEvents[0], MAKELPARAM(X,Y) );
+		if( NULL != pfn_TouchHookExt_Down )
+			pfn_TouchHookExt_Down( TYPE_DOWN, Flags, X, Y );
 	}
 	else
 	if( Flags == (TouchSampleDownFlag | TouchSamplePreviousDownFlag | TouchSampleIsCalibratedFlag | TouchSampleValidFlag) &&
@@ -105,12 +141,16 @@ BOOL myTouchPanelCallback( TOUCH_PANEL_SAMPLE_FLAGS Flags, INT X, INT Y )
 	{	///move
 		///SendMessage(g_hwWnd, WM_MOUSEMOVE, 0, MAKELPARAM(X,Y));
 		spSendEventOut( hTouchHookEvents[1], MAKELPARAM(X,Y) );
+		if( NULL != pfn_TouchHookExt_Move )
+			pfn_TouchHookExt_Move( TYPE_MOVE, Flags, X, Y );
 	}
 	else
 	if( Flags ==(TouchSampleIsCalibratedFlag | TouchSampleValidFlag | TouchSamplePreviousDownFlag) )
 	{	///up
 		///SendMessage(g_hwWnd, WM_LBUTTONUP, 0, MAKELPARAM(X,Y));
 		spSendEventOut( hTouchHookEvents[2], MAKELPARAM(X,Y) );
+		if( pfn_TouchHookExt_Up )
+			pfn_TouchHookExt_Up( TYPE_UP, Flags, X, Y );
 	}
 
 	///update stored
@@ -120,7 +160,10 @@ BOOL myTouchPanelCallback( TOUCH_PANEL_SAMPLE_FLAGS Flags, INT X, INT Y )
 	///original callback
 	if( pfnOrgTouchPanelCallback )
 		bRet = pfnOrgTouchPanelCallback( Flags, X, Y );
-	
+
+	if( NULL != pfn_TouchHookExt_Point )
+		pfn_TouchHookExt_Point( TYPE_ALL, Flags, X, Y );
+		
 	return bRet;
 }
 
@@ -131,6 +174,11 @@ BOOL TouchPanelEnable( PFN_TOUCH_PANEL_CALLBACK pfnCallback )
 	
 	///store callback
 	pfnOrgTouchPanelCallback = pfnCallback;
+
+#ifdef	DLLHOOKEXT
+	///try load hook ext
+	spTryInitHookExt();
+#endif
 	
 	///replace with my callback function
 	bRet = pfnTouchPanelEnable( myTouchPanelCallback );
@@ -231,15 +279,29 @@ BOOL APIENTRY TouchPanelDllEntry( HANDLE hModule,
 
 		case DLL_PROCESS_ATTACH:
 			DisableThreadLibraryCalls((HMODULE) hModule);
+			
+			///load touch hook
 			hTouchDll = LoadLibrary( TOUCHDLLNAME );
-			if( NULL != hTouchDll )
+			if( hTouchDll )
 				spLoadHook( hTouchDll );
+				
 			spCreateHookEvent();
+			
+		#if 0	///load later when access...
+			///load hook ext
+			hTouchHookExt = LoadLibrary( TOUCHHOOKEXTDLLNAME );
+			if( hTouchHookExt )
+				spLoadHookExt( hTouchHookExt );
+		#endif
 			break;
 		case DLL_PROCESS_DETACH:
+			///release touch hook
 			if( NULL != hTouchDll )
 				FreeLibrary( hTouchDll );
-			spCloseHookEvent();	
+			spCloseHookEvent();
+			///release hook ext
+			if( NULL != hTouchHookExt )
+				FreeLibrary( hTouchHookExt );
 			break;
 	}
     return TRUE;
@@ -298,6 +360,52 @@ static BOOL spLoadHook( HMODULE hTouchDll )
 	
 	return bRet;
 }
+
+
+static BOOL spLoadHookExt( HMODULE hTouchHookExt )
+{
+	BOOL bRet = FALSE;
+
+	if( hTouchHookExt )
+	{
+		if( NULL == pfn_TouchHookExt_Down )
+		{
+			pfn_TouchHookExt_Down = (PFN_TOUCHHOOKEXT_DOWN)GetProcAddress(hTouchHookExt, TEXT("TouchHookExt_Down"));
+			if( NULL == pfn_TouchHookExt_Down )
+			{
+				spLibDbgMsg( LIBMSGFLAG, TEXT("%s GetProcAddress fail %d!!!"), SPPREFIX, GetLastError() );
+			}
+		}
+		if( NULL == pfn_TouchHookExt_Move )
+		{
+			pfn_TouchHookExt_Move = (PFN_TOUCHHOOKEXT_MOVE)GetProcAddress(hTouchHookExt, TEXT("TouchHookExt_Move"));
+			if( NULL == pfn_TouchHookExt_Move )
+			{
+				spLibDbgMsg( LIBMSGFLAG, TEXT("%s GetProcAddress fail %d!!!"), SPPREFIX, GetLastError() );
+			}
+
+		}
+		if( NULL == pfn_TouchHookExt_Up )
+		{
+			pfn_TouchHookExt_Up = (PFN_TOUCHHOOKEXT_UP)GetProcAddress(hTouchHookExt, TEXT("TouchHookExt_Up"));
+			if( NULL == pfn_TouchHookExt_Up )
+			{
+				spLibDbgMsg( LIBMSGFLAG, TEXT("%s GetProcAddress fail %d!!!"), SPPREFIX, GetLastError() );
+			}
+		}
+		if( NULL == pfn_TouchHookExt_Point )
+		{
+			pfn_TouchHookExt_Point = (PFN_TOUCHHOOKEXT_POINT)GetProcAddress(hTouchHookExt, TEXT("TouchHookExt_Point"));
+			if( NULL == pfn_TouchHookExt_Point )
+			{
+				spLibDbgMsg( LIBMSGFLAG, TEXT("%s GetProcAddress fail %d!!!"), SPPREFIX, GetLastError() );
+			}		
+		}
+	}
+	
+	return bRet;
+}
+
 
 
 static BOOL spCreateHookEvent( void )

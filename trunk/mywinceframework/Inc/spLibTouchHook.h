@@ -2,10 +2,12 @@
 #define __SPLIBTOUCHHOOK_H__
 
 
-#define 	SPLIB_TOUCHHOOK_DOWN_EVENT_NAME 	TEXT("named touch hook DOWN event")
-#define 	SPLIB_TOUCHHOOK_MOVE_EVENT_NAME 	TEXT("named touch hook MOVE event")
-#define 	SPLIB_TOUCHHOOK_UP_EVENT_NAME 		TEXT("named touch hook UP event")
-#define 	SPLIB_TOUCHHOOK_CONTROL_EVENT_NAME 	TEXT("named touch hook Control event")
+/*
+with this header, you can get information(structured) of touch screen activty.
+It's easy, set the callback function after init function.
+you will get the touch information(structured) in callback function you just set.
+After all, be sure to run deinit function after done.
+*/
 
 
 typedef enum _TOUCH_EVENT_TYPE
@@ -25,8 +27,6 @@ typedef struct TOUCH_EVENT_STRUC{
 
 
 typedef BOOL (*PFN_TOUCH_HOOK_LIB_CALLBACK)(TOUCH_EVENT_DATA ThisTouchData );
-
-
 
 DWORD spLibTouchHook_Init( DWORD dwParam );
 DWORD spLibTouchHook_Deinit( DWORD dwParam );
