@@ -14,6 +14,7 @@
 #include "spPlatform.h"
 #include "spCommon.h"
 #include "SPDebugDef.h"
+#include "spDllTouchHook.h"
 #include "spLibTouchHook.h"
 
 
