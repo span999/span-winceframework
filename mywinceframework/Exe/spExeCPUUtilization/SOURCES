@@ -27,7 +27,7 @@ TARGETLIBS=	\
     $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
 	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDDrawClass.lib \
 	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibSysInfoIdle.lib \
-
+	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibSysInfoMemory.lib \
 	
 SOURCELIBS= \
 
