@@ -78,7 +78,7 @@ static DWORD MainRoutine( DWORD dwPararm )
 	spLibRegNotify_Init( 0 );
 	spLibRegNotify_SetCallback( RegNotifyExeCallback );
 	
-	Sleep( 60000 );
+	Sleep( 120000 );
 	
 	spLibRegNotify_Deinit( 0 );
 	spExeReleaseAll();

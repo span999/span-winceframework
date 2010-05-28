@@ -35,6 +35,7 @@ typedef struct _LibRegNotifyContent
 #define		SPPREFIX			TEXT("RNLib:")
 #define		LIBMSGFLAG			(dDOUT|0x0FFFFFFF)		///diag msg only
 #define		LIBMSGFLAG_NK			(dNOUT|0x0FFFFFFF)		///nk msg only
+#define		LIBMSGFLAG_NULL			(0x0|0x0)			///null msg only
 ///#define		LIBMSGFLAG			(dNOUT|0x0FFFFFFF)		///nk msg only
 
 
@@ -48,7 +49,7 @@ static BOOL spLibDeInitContent( LibRegNotifyContent* pThis );
 static BOOL spLibInitEvent( LibRegNotifyContent* pThis );
 static BOOL spLibInitCreateThread( LibRegNotifyContent* pThis );
 static DWORD WINAPI MonitorEventThread( LPVOID  pContext );
-
+static DWORD spLibGetRegDWORD( LibRegNotifyContent* pThis );
 
 
 static LibRegNotifyContent ThisContent;
@@ -301,9 +302,13 @@ static DWORD WINAPI MonitorEventThread( LPVOID pContext )
 			{
 				case WAIT_OBJECT_0 + 0:
 					/// got notify
-					spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s MonitorEventThread 1 !!!"), SPPREFIX );
+					///no message here, or you will get a endless message loop...
+					///spLibDbgMsg( LIBMSGFLAG_NULL, TEXT("%s MonitorEventThread 1 !!!"), SPPREFIX );
 					if( pThis->pfnRegNotifyLibCB )
-						pThis->pfnRegNotifyLibCB( 0 );
+					{
+						///pThis->pfnRegNotifyLibCB( 0 );
+						pThis->pfnRegNotifyLibCB( spLibGetRegDWORD( pThis ) );
+					}	
 					CeFindNextRegChange( hWaitEvents[0] );
 					break;
 				case WAIT_OBJECT_0 + 1:
@@ -328,6 +333,45 @@ static DWORD WINAPI MonitorEventThread( LPVOID pContext )
 	return dwRet;
 }
 
+
+static DWORD spLibGetRegDWORD( LibRegNotifyContent* pThis )
+{
+	BOOL bRet = FALSE;
+	DWORD dwTol = 0;
+	DWORD dwRet = 0;
+	DWORD dwType = REG_DWORD;
+	DWORD dwLen = sizeof(DWORD);
+	HKEY hKey = 0;
+	
+	if( pThis )
+	{
+		if( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE, (LPCWSTR)pThis->KeyPathName , 0, 0, &hKey ) )
+		{
+			if( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("Total"), 0, &dwType, (LPBYTE)&dwTol, &dwLen ) )
+			{
+				dwRet = dwTol;
+				bRet = TRUE;
+			}
+			else
+			{
+				spLibDbgMsg( LIBMSGFLAG, TEXT("%s spLibInitEvent RegQueryValueEx fail %d !!!"), SPPREFIX, GetLastError() );
+				bRet = FALSE;
+			}
+
+			RegCloseKey( hKey );
+		}
+		else
+		{
+			spLibDbgMsg( LIBMSGFLAG, TEXT("%s spLibInitEvent RegOpenKeyEx fail %d !!!!"), SPPREFIX, GetLastError() );
+			bRet = FALSE;
+		}
+	}	
+	
+	if( FALSE == bRet )
+		dwRet = (-1);
+	
+	return dwRet;
+}
 
 
 
