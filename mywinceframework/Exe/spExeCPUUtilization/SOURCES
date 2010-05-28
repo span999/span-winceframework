@@ -23,6 +23,12 @@ WINCEOEM=1
 WINCEREL=1
 PREPROCESSDEFFILE=1
 
+
+INCLUDES=..\..\Inc;$(INCLUDES)
+
+WINCEOEM=1
+
+
 TARGETLIBS=	\
     $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
 	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDDrawClass.lib \
@@ -32,4 +38,5 @@ TARGETLIBS=	\
 SOURCELIBS= \
 
 SOURCES= \
+		spVersion.rc \
 		spExeCPUUtilization.cpp \

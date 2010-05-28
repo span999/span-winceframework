@@ -1,0 +1,6 @@
+#ifndef __SPVERSION_H__
+#define __SPVERSION_H__ 
+
+#define FILEVER        1,0,0,1
+#define PRODUCTVER     1,0,0,1
+
