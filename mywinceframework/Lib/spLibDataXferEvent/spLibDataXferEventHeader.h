@@ -57,7 +57,7 @@ typedef struct _LibDataTransferEventContent
 	DWORD										dwPacketChksum;
 	DWORD										dwPacketChksumCount;
 	PVOID										pRevData;
-	DWORD										pRevDataCurr;
+	DWORD										*pRevDataCurr;
 	BOOL										bIsHost;
 } LibDataTransferEventContent;
 
