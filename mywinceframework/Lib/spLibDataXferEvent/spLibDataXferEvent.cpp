@@ -511,7 +511,6 @@ static DWORD spLibSendData( PVOID pData, DWORD dwByteSize, LibDataTransferEventC
 							dwData = *pdwData;	///copy DWORD
 							for( dwLoop = 0; dwLoop < (4-dwDWSize); dwLoop++ )
 							{
-								///dwData = dwData & ~(0x000000FF << dwLoop);
 								dwData = dwData & ~(0xFF000000 >> dwLoop);
 							}
 							dwChksum = dwChksum + dwData;	///caluate check sum
@@ -562,6 +561,7 @@ static void spSendDataOut( HANDLE hEvent, DWORD dwData )
 	else
 		hSend = hEvent;
 	
+	///wait for client data ready
 	do
 	{
 		Sleep( 2 );

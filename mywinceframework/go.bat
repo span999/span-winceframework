@@ -69,12 +69,21 @@ cd Dll\spDllAutoRunner
 build -c
 cd ..\..
 
-:_EXIT
-
 cd Lib\spLibDataXferEvent
 build
 cd ..\..
 
 cd Exe\spExeDataXferEvent
+build
+cd ..\..
+
+:_EXIT
+
+
+cd Lib\spLibRegNotify
+build
+cd ..\..
+
+cd Exe\spExeRegNotify
 build
 cd ..\..

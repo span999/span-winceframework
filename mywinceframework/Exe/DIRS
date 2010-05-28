@@ -10,3 +10,4 @@ DIRS= \
 	spExeAutoRunner \
 	spExeTouchHook \
 	spExeDataXferEvent \
+	spExeRegNotify \

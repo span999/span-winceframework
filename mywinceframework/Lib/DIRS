@@ -11,3 +11,4 @@ DIRS= \
 	spLibDataXferEvent \
 	spLibNumPadParser \
 	spLibARFileParser \
+	spLibRegNotify \
