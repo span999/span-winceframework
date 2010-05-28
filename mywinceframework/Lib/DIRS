@@ -10,3 +10,4 @@ DIRS= \
 	spLibTouchHook \
 	spLibDataXferEvent \
 	spLibNumPadParser \
+	spLibARFileParser \
