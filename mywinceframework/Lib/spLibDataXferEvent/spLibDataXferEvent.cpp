@@ -85,7 +85,7 @@ BOOL WriteToDatabase (HANDLE hMutex)
 /// interface functions
 /// *****************************************
 
-DWORD spLibDataTransferEvent_Init( DWORD dwParam )
+DWORD spLibDataXferEvent_Init( DWORD dwParam )
 {
 	DWORD dwRet = 0;
 	///DWSPERRCODE	dwRet = 0;
@@ -113,7 +113,7 @@ DWORD spLibDataTransferEvent_Init( DWORD dwParam )
 }
 
 
-DWORD spLibDataTransferEvent_Deinit( DWORD dwParam )
+DWORD spLibDataXferEvent_Deinit( DWORD dwParam )
 {
 	DWORD dwRet = 0;
 	///DWSPERRCODE	dwRet = 0;
@@ -126,7 +126,7 @@ DWORD spLibDataTransferEvent_Deinit( DWORD dwParam )
 	return dwRet;
 }
 
-BOOL spLibDataTransferEvent_IsHost( void )
+BOOL spLibDataXferEvent_IsHost( void )
 {
 	BOOL bRet = FALSE;
 	SPDMSG( dINFO, (L"$$$spLibDataTransferEvent_IsHost: %d \r\n", 1) );
@@ -138,7 +138,7 @@ BOOL spLibDataTransferEvent_IsHost( void )
 }
 
 
-BOOL spLibDataTransferEvent_SetReceiverCallback( PFN_DATATRANSFEREVENT_RECEIVER_CALLBACK pfnDataTransferReceiverCAllback )
+BOOL spLibDataXferEvent_SetReceiverCallback( PFN_DATATRANSFEREVENT_RECEIVER_CALLBACK pfnDataTransferReceiverCAllback )
 {
 	BOOL bRet = FALSE;
 	///DWSPERRCODE	dwRet = 0;
@@ -156,7 +156,7 @@ BOOL spLibDataTransferEvent_SetReceiverCallback( PFN_DATATRANSFEREVENT_RECEIVER_
 }
 
 
-DWORD spLibDataTransferEvent_SendData( PVOID pData, DWORD dwByteSize )
+DWORD spLibDataXferEvent_SendData( PVOID pData, DWORD dwByteSize )
 {
 	DWORD dwRet = 0;
 	
@@ -202,8 +202,8 @@ static BOOL spLibDeInitContent( LibDataTransferEventContent* pThis )
 {
 	BOOL bRet = TRUE;
 
-	///SetEvent( pThis->hTouchEventControl );
-	///Sleep( 500 );
+	SetEvent( pThis->hDataTransEventControl );
+	Sleep( 500 );
 	
 	CloseHandle( pThis->hDataTransEvent1 );
 	CloseHandle( pThis->hDataTransEvent2 );
@@ -318,6 +318,8 @@ static DWORD WINAPI DataTransferEventThread( LPVOID pContext )
 	
 	spLibDbgMsg( LIBMSGFLAG, TEXT("%s DataTransferEventThread start !!!"), SPPREFIX );
 	
+	SetEventData( hWaitEvents[0], SPLIB_DATATRANSFER_EVENTDATA_CLEAR );	///eventdata clear!!
+	
 	while( !bExitMonitor )
 	{
 		dwReturns = WaitForMultipleObjects( WAITEVENT_NUM, hWaitEvents, FALSE, dwWaitMS );
@@ -327,6 +329,7 @@ static DWORD WINAPI DataTransferEventThread( LPVOID pContext )
 			case WAIT_OBJECT_0 + 0:
 				/// got data in event
 				spGetEventDataIn( hWaitEvents[0], pThisContent );
+				SetEventData( hWaitEvents[0], SPLIB_DATATRANSFER_EVENTDATA_CLEAR );	///eventdata process ok!!
 				break;
 			case WAIT_OBJECT_0 + 1:
 				/// got control event
@@ -359,7 +362,7 @@ static void spGetEventDataIn( HANDLE hEvent, LibDataTransferEventContent* pThis 
 		if( dwData == SPLIB_DATATRANSFER_PACK_SIGN )	///got packet head sign
 			pThis->pState = PACK_SIGN_STATE;
 		else
-			spLibDbgMsg( LIBMSGFLAG, TEXT("%s spGetEventDataIn error pack sign !!!"), SPPREFIX );
+			spLibDbgMsg( LIBMSGFLAG, TEXT("%s spGetEventDataIn error pack sign 0x%08x!!!"), SPPREFIX, dwData );
 	}
 	else
 	if( PACK_SIGN_STATE == pThis->pState )	/// wait for size data coming
@@ -373,13 +376,14 @@ static void spGetEventDataIn( HANDLE hEvent, LibDataTransferEventContent* pThis 
 		if( dwData == SPLIB_DATATRANSFER_PACKSTART_SIGN )	///got packet start sign
 			pThis->pState = PACK_START_STATE;
 		else
-			spLibDbgMsg( LIBMSGFLAG, TEXT("%s spGetEventDataIn error pack start !!!"), SPPREFIX );
+			spLibDbgMsg( LIBMSGFLAG, TEXT("%s spGetEventDataIn error pack start 0x%08x!!!"), SPPREFIX, dwData );
 	}
 	else
 	if( PACK_START_STATE == pThis->pState )	/// wait for data coming
 	{
 		if( dwData != SPLIB_DATATRANSFER_PACKEND_SIGN )	///first data in
 		{
+			///prepare for receive data
 			if( NULL != pThis->pRevData )
 				free( pThis->pRevData );
 			
@@ -389,6 +393,7 @@ static void spGetEventDataIn( HANDLE hEvent, LibDataTransferEventContent* pThis 
 			
 			spLibDbgMsg( LIBMSGFLAG, TEXT("%s spGetEventDataIn -data-0x%08x !!!"), SPPREFIX, dwData );
 			
+			///preapre for receive data
 			if( NULL == pThis->pRevData )
 			{	///create containter
 				///pThis->pRevData = malloc( pThis->dwPacketSize );
@@ -396,11 +401,12 @@ static void spGetEventDataIn( HANDLE hEvent, LibDataTransferEventContent* pThis 
 				pThis->pRevDataCurr = (DWORD *)pThis->pRevData;
 			}
 			
+			/// copy data to buffer
 			if( NULL != pThis->pRevDataCurr )
 			{
 				*(pThis->pRevDataCurr) = dwData;
-				(pThis->pRevDataCurr)++;
 				pThis->dwPacketChksumCount = pThis->dwPacketChksumCount + *(pThis->pRevDataCurr);
+				(pThis->pRevDataCurr)++;
 			}
 			else
 				spLibDbgMsg( LIBMSGFLAG, TEXT("%s spGetEventDataIn allocate memory fail !!"), SPPREFIX );
@@ -410,6 +416,8 @@ static void spGetEventDataIn( HANDLE hEvent, LibDataTransferEventContent* pThis 
 		else
 		{
 			spLibDbgMsg( LIBMSGFLAG, TEXT("%s spGetEventDataIn -no data- !!!"), SPPREFIX );
+			if( 0 != pThis->dwPacketSize )
+				spLibDbgMsg( LIBMSGFLAG, TEXT("%s spGetEventDataIn %d Error !!!"), SPPREFIX, pThis->dwPacketSize );
 		}
 	}
 	else
@@ -422,8 +430,8 @@ static void spGetEventDataIn( HANDLE hEvent, LibDataTransferEventContent* pThis 
 			if( NULL != pThis->pRevDataCurr )
 			{
 				*(pThis->pRevDataCurr) = dwData;
-				(pThis->pRevDataCurr)++;
 				pThis->dwPacketChksumCount = pThis->dwPacketChksumCount + *(pThis->pRevDataCurr);
+				(pThis->pRevDataCurr)++;
 			}
 		}
 	}
@@ -431,13 +439,14 @@ static void spGetEventDataIn( HANDLE hEvent, LibDataTransferEventContent* pThis 
 	if( PACK_END_STATE == pThis->pState )
 	{
 		pThis->pState = NONE_DATA_STATE;
-		pThis->dwPacketChksum = dwData;
+		pThis->dwPacketChksum = dwData;	///the last DWORD is checksum 
 		
 		if( spLibValidChksum( pThis ) )
-			pThis->pfnDataTransferReceiverCallback( pThis->pRevData, pThis->dwPacketSize );
+			if( pThis->pfnDataTransferReceiverCallback )
+				pThis->pfnDataTransferReceiverCallback( pThis->pRevData, pThis->dwPacketSize );
 	}
 
-
+	///SetEventData( hEvent, SPLIB_DATATRANSFER_EVENTDATA_CLEAR );
 	
 }
 
@@ -488,15 +497,27 @@ static DWORD spLibSendData( PVOID pData, DWORD dwByteSize, LibDataTransferEventC
 					spSendDataOut( NULL, SPLIB_DATATRANSFER_PACKSTART_SIGN );
 					
 					pdwData = (DWORD *)pData;	///pointer to first
-					///dwData = *pdwData;	///copy first DWORD
+
 					do
 					{
-						dwData = *pdwData;	///copy first DWORD
+						dwData = *pdwData;	///copy DWORD
 						dwChksum = dwChksum + dwData;	///caluate check sum
-						///spSendDataOut( NULL, *pdwData );	///sent it out
 						spSendDataOut( NULL, dwData );	///sent it out
 						dwDWSize = dwDWSize - 4;			///size count down
 						pdwData++;							///pointer next
+						if( dwDWSize < 4 && dwDWSize > 0 )
+						{	///tail handling, dwDWSize = 3,2,1
+							DWORD dwLoop;
+							dwData = *pdwData;	///copy DWORD
+							for( dwLoop = 0; dwLoop < (4-dwDWSize); dwLoop++ )
+							{
+								///dwData = dwData & ~(0x000000FF << dwLoop);
+								dwData = dwData & ~(0xFF000000 >> dwLoop);
+							}
+							dwChksum = dwChksum + dwData;	///caluate check sum
+							spSendDataOut( NULL, dwData );	///sent it out
+							dwDWSize = 0;	///data end
+						}
 					}while( dwDWSize > 0 );
 					
 					spSendDataOut( NULL, SPLIB_DATATRANSFER_PACKEND_SIGN );
@@ -540,7 +561,13 @@ static void spSendDataOut( HANDLE hEvent, DWORD dwData )
 	}
 	else
 		hSend = hEvent;
-		
+	
+	do
+	{
+		Sleep( 2 );
+	}
+	while( SPLIB_DATATRANSFER_EVENTDATA_CLEAR != GetEventData( hSend ) );
+	
 	SetEventData( hSend, dwData );
 	SetEvent( hSend );
 }
