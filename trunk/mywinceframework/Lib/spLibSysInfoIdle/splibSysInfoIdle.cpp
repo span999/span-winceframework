@@ -210,8 +210,16 @@ static DWORD spLibCalcIdlePercentEx( LibSysInfoIdleContent* pThis )
 	
 	dwRet = pThis->PercentIdle;
 
+#if 0
 	pThis->totalPercentIdle = pThis->totalPercentIdle + pThis->PercentIdle;
 	pThis->totalCount++;
+#else
+	if( 0 == pThis->totalPercentIdle )
+		pThis->totalPercentIdle = pThis->PercentIdle;
+	else
+		pThis->totalPercentIdle = (pThis->totalPercentIdle + pThis->PercentIdle)/2;
+	pThis->totalCount = 1;
+#endif
 	
 	return dwRet;
 }
