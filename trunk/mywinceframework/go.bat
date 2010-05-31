@@ -77,17 +77,26 @@ cd Exe\spExeDataXferEvent
 build
 cd ..\..
 
-:_EXIT
-
 cd Lib\spLibSysHALIoctl
 build
 cd ..\..
-
 
 cd Lib\spLibRegNotify
 build
 cd ..\..
 
 cd Exe\spExeRegNotify
+build
+cd ..\..
+
+
+:_EXIT
+
+
+cd Lib\spLibIniUtil
+build
+cd ..\..
+
+cd Exe\OScapture
 build
 cd ..\..
