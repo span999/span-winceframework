@@ -24,7 +24,7 @@ typedef enum _TOUCHHOOKEXT_AREA_SET
 BOOL spLibParseAreaInit( void );
 BOOL spLibParseAreaDeInit( void );
 TOUCHHOOKEXT_AREA_SET spLibParseAreaCondition( INT X, INT Y );
-BOOL spLibParseSequenceCondition( TOUCHHOOKEXT_AREA_SET ThisHit );
+DWORD spLibParseSequenceCondition( TOUCHHOOKEXT_AREA_SET ThisHit );
 
 
 

@@ -37,9 +37,6 @@ cd Exe\spExeTouchHook
 build -c
 cd ..\..
 
-cd Lib\spLibNumPadParser
-build -c
-cd ..\..
 
 cd Dll\spDllTouchHook
 build -c
@@ -61,14 +58,6 @@ cd Exe\spExeAutoRunner
 build -c
 cd ..\..
 
-cd Dll\spDllPreRunner
-build -c
-cd ..\..
-
-cd Dll\spDllAutoRunner
-build -c
-cd ..\..
-
 cd Lib\spLibDataXferEvent
 build
 cd ..\..
@@ -81,17 +70,9 @@ cd Lib\spLibSysHALIoctl
 build
 cd ..\..
 
-cd Lib\spLibRegNotify
-build
-cd ..\..
-
 cd Exe\spExeRegNotify
 build
 cd ..\..
-
-
-:_EXIT
-
 
 cd Lib\spLibIniUtil
 build
@@ -100,3 +81,22 @@ cd ..\..
 cd Exe\OScapture
 build
 cd ..\..
+
+:_EXIT
+
+cd Lib\spLibNumPadParser
+build -c
+cd ..\..
+
+cd Lib\spLibRegNotify
+build
+cd ..\..
+
+cd Dll\spDllAutoRunner
+build -c
+cd ..\..
+
+cd Dll\spDllPreRunner
+build -c
+cd ..\..
+

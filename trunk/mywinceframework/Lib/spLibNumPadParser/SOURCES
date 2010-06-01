@@ -26,9 +26,10 @@ INCLUDES=..\..\Inc;$(INCLUDES)
 
 TARGETLIBS=	\
     $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDDrawClass.lib \
 
 SOURCELIBS= \
-	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDDrawClass.lib \
+
 
 SOURCES= \
 		spLibNumPadParser.cpp \

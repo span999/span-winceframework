@@ -33,9 +33,17 @@ INCLUDES=..\..\Inc;$(INCLUDES)
 TARGETLIBS=	\
     $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
 	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDbgMsg.lib \
-
+	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibTouchHook.lib \
+	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibDDrawClass.lib \
+	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibNumPadParser.lib \
+	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibSysHALIoctl.lib \
+	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibRegNotify.lib \
+	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibSysInfoIdle.lib \
+	$(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spLibSysInfoMemory.lib \
+	
 SOURCELIBS= \
 
 SOURCES= \
 		spVersion.rc \
+		spDllPreRunSysInfo.cpp \
 		spDllPreRunner.cpp \

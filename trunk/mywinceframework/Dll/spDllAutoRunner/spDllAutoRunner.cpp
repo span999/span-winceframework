@@ -35,7 +35,7 @@ static DWORD ParseCmdFile( DWORD dwParam );
 static BOOL IsAllThreadStop( void );
 static BOOL spCopyFile( LPCWSTR szwSourceFile, LPCWSTR szwTargetFile, BOOL bFlag );
 
-static bStoreageMsgWaitThreadStop = FALSE;
+static BOOL bStoreageMsgWaitThreadStop = FALSE;
 
 
 
