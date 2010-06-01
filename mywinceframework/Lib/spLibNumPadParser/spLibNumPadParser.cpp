@@ -14,8 +14,13 @@
 #include "spPlatform.h"
 #include "spCommon.h"
 #include "SPDebugDef.h"
-#include "spLibDDrawClass.h"
 #include "spLibNumPadParser.h"
+
+///#define		DD_DEBUG_SHOW
+#ifdef DD_DEBUG_SHOW
+#include "spLibDDrawClass.h"
+#endif
+
 
 
 
@@ -24,18 +29,23 @@
 #define		LIBMSGFLAG			(dDOUT|0x0FFFFFFF)		///diag msg only
 ///#define		LIBMSGFLAG			(dNOUT|0x0FFFFFFF)		///nk msg only
 
+
 #define		SEQSTRING_LEN		5
 
 ///phototype
 
+///                                                           2, 3, 5, 7, 0
+///static TOUCHHOOKEXT_AREA_SET	SeqString[SEQSTRING_LEN] = {AREA_TWO, AREA_THREE, AREA_FIVE, AREA_SEVEN, AREA_ZERO};
+///                                                           *, #, 0, 6, #
+static TOUCHHOOKEXT_AREA_SET	SeqString[SEQSTRING_LEN] = {AREA_STAR, AREA_POUND, AREA_ZERO, AREA_SIX, AREA_POUND};
 
-static TOUCHHOOKEXT_AREA_SET	SeqString[SEQSTRING_LEN] = {AREA_TWO, AREA_THREE, AREA_FIVE, AREA_SEVEN, AREA_ZERO};
 
 static int 			iScreenX = 0;
 static int 			iScreenY = 0;
 static DWORD 		dwPreTickCount = 0;
+#ifdef DD_DEBUG_SHOW
 static spLibDDraw	*pmyDD = NULL;
-
+#endif
 
 
 
@@ -56,9 +66,11 @@ BOOL spLibParseAreaInit( void )
 	iScreenY = iScreenY/4;
 	dwPreTickCount = GetTickCount();
 	
+#ifdef DD_DEBUG_SHOW	
 	pmyDD = new spLibDDraw();
 	pmyDD->spLibInitDDraw();
-
+#endif
+	
 	return bRet;
 }
 
@@ -66,8 +78,10 @@ BOOL spLibParseAreaInit( void )
 BOOL spLibParseAreaDeInit( void )
 {
 	BOOL bRet = TRUE;
-	
+
+#ifdef DD_DEBUG_SHOW	
 	delete pmyDD;
+#endif
 	
 	return bRet;
 }
@@ -141,37 +155,92 @@ TOUCHHOOKEXT_AREA_SET spLibParseAreaCondition( INT X, INT Y )
 			tasRet = AREA_POUND;
 		}
 	}
-	
+
+#ifdef DD_DEBUG_SHOW	
 	pmyDD->spLibTextDraw( 200, 170, TEXT("HIT =>%4d, [%d,%d]"), tasRet, iScreenX, iScreenY );
+#endif
 	
 	return tasRet;
 }
 
 
 
-BOOL spLibParseSequenceCondition( TOUCHHOOKEXT_AREA_SET ThisHit )
+DWORD spLibParseSequenceCondition( TOUCHHOOKEXT_AREA_SET ThisHit )
 {
-	BOOL bRet = FALSE;
+	DWORD dwRet = (-1);
 	
 	static DWORD dwCount = 0;
+	static BOOL bHitAll = FALSE;
 	
-	if( ThisHit == SeqString[dwCount] )
+	if( !bHitAll )
 	{
-		dwCount++;
-		pmyDD->spLibTextDraw( 200, 200, TEXT("HIT %d!!!"), ThisHit );
+		if( ThisHit == SeqString[dwCount] )
+		{
+			dwCount++;
+#ifdef DD_DEBUG_SHOW
+			pmyDD->spLibTextDraw( 200, 200, TEXT("HIT %d!!!"), ThisHit );
+#endif
+		}
+		else
+		{
+			dwCount = 0;
+#ifdef DD_DEBUG_SHOW
+			pmyDD->spLibTextDraw( 200, 200, TEXT("Clear!!!") );
+#endif
+		}
+	
+		if( dwCount == SEQSTRING_LEN )
+		{
+			dwRet = 99;
+			bHitAll = TRUE;
+			dwCount = 0;
+#ifdef DD_DEBUG_SHOW
+			pmyDD->spLibTextDraw( 200, 200, TEXT("All HIT!!!") );
+#endif
+		}
 	}
 	else
 	{
+		bHitAll = FALSE;
 		dwCount = 0;
-		pmyDD->spLibTextDraw( 200, 200, TEXT("Clear!!!") );
+		
+		if( ThisHit == AREA_ZERO )
+			dwRet = 0;
+		else
+		if( ThisHit == AREA_ONE )
+			dwRet = 1;
+		else
+		if( ThisHit == AREA_TWO )
+			dwRet = 2;
+		else
+		if( ThisHit == AREA_THREE )
+			dwRet = 3;
+		else
+		if( ThisHit == AREA_FOUR )
+			dwRet = 4;
+		else
+		if( ThisHit == AREA_FIVE )
+			dwRet = 5;
+		else
+		if( ThisHit == AREA_SIX )
+			dwRet = 6;
+		else
+		if( ThisHit == AREA_SEVEN )
+			dwRet = 7;
+		else
+		if( ThisHit == AREA_EIGHT )
+			dwRet = 8;
+		else
+		if( ThisHit == AREA_NINE )
+			dwRet = 9;
+		else
+		if( ThisHit == AREA_STAR )
+			dwRet = 10;
+		else
+		if( ThisHit == AREA_POUND )
+			dwRet = 11;
+			
 	}
 	
-	if( dwCount == SEQSTRING_LEN )
-	{
-		bRet = TRUE;
-		dwCount = 0;
-		pmyDD->spLibTextDraw( 200, 200, TEXT("All HIT!!!") );
-	}
-	
-	return bRet;
+	return dwRet;
 }

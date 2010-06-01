@@ -292,7 +292,7 @@ static DWORD WINAPI MonitorEventThread( LPVOID pContext )
 		hWaitEvents[0] = pThis->hNotifyHandle;
 		hWaitEvents[1] = pThis->hNotifyControl;
 	
-		spLibDbgMsg( LIBMSGFLAG, TEXT("%s MonitorEventThread start !!!"), SPPREFIX );
+		spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s MonitorEventThread start !!!"), SPPREFIX );
 	
 		while( !bExitMonitor )
 		{
