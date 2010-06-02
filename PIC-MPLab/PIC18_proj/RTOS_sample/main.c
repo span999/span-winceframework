@@ -21,8 +21,13 @@
 ///#pragma config LVP = OFF
 #pragma config XINST = ON		//extended mode enabled
 
+
+
+
 long int i, j = 0;
 xSemaphoreHandle xSem = NULL;
+
+/*
 
 void Task1(void *params) {
 	__reclaim_stack();
@@ -78,5 +83,23 @@ void main(void) {
 
 	while(1) {
 		ClrWdt();
+	}
+}
+
+*/
+
+void vSerialTxISR()	{
+}
+
+void vSerialRxISR() {
+}
+
+void main( void )
+{
+	heapinit();
+	
+	while(1)
+	{
+		///clrWdt();
 	}
 }
