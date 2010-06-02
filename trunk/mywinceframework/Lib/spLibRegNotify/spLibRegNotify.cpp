@@ -120,7 +120,7 @@ BOOL spLibRegNotify_SetCallback( PFN_REG_NOTIFY_LIB_CALLBACK pfnRegNotifyLibCB )
 	if( pfnRegNotifyLibCB )
 	{
 		pThisContent->pfnRegNotifyLibCB = pfnRegNotifyLibCB;
-		spLibSetupContent( pThisContent );
+		bRet = spLibSetupContent( pThisContent );
 	}	
 	else
 		bRet = FALSE;
@@ -174,7 +174,6 @@ static BOOL spLibSetupContent( LibRegNotifyContent* pThis )
 
 	if( pThis )
 	{
-		
 		bRet = spLibInitEvent( pThis );
 		
 		///create thread only with callback function set
@@ -233,11 +232,10 @@ static BOOL spLibInitEvent( LibRegNotifyContent* pThis )
 		
 		if( bRet )
 		{
-			///pThis->hNotifyHandle = CreateEvent( NULL, FALSE, FALSE, NULL );
 			pThis->hNotifyControl = CreateEvent( NULL, FALSE, FALSE, NULL );
 		}
 		
-		if( !pThis->hNotifyControl || !pThis->hNotifyHandle )
+		if( !bRet || !pThis->hNotifyControl || !pThis->hNotifyHandle )
 		{
 			spLibDbgMsg( LIBMSGFLAG, TEXT("%s spLibInitEvent fail !!!"), SPPREFIX );
 			bRet = FALSE;
@@ -292,10 +290,11 @@ static DWORD WINAPI MonitorEventThread( LPVOID pContext )
 		hWaitEvents[0] = pThis->hNotifyHandle;
 		hWaitEvents[1] = pThis->hNotifyControl;
 	
-		spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s MonitorEventThread start !!!"), SPPREFIX );
+		spLibDbgMsg( LIBMSGFLAG, TEXT("%s RegMonitorEventThread start !!!"), SPPREFIX );
 	
 		while( !bExitMonitor )
 		{
+			///CeFindNextRegChange( hWaitEvents[0] );
 			dwReturns = WaitForMultipleObjects( WAITEVENT_NUM, hWaitEvents, FALSE, dwWaitMS );
 		
 			switch( dwReturns )
@@ -313,7 +312,7 @@ static DWORD WINAPI MonitorEventThread( LPVOID pContext )
 					break;
 				case WAIT_OBJECT_0 + 1:
 					/// got control event
-					spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s MonitorEventThread 2 !!!"), SPPREFIX );
+					spLibDbgMsg( LIBMSGFLAG, TEXT("%s RegMonitorEventThread 2 !!!"), SPPREFIX );
 					bExitMonitor = TRUE;
 					
 					break;
@@ -325,6 +324,7 @@ static DWORD WINAPI MonitorEventThread( LPVOID pContext )
 			}	///switch
 		
 		}	///while
+		
 	}while(0);
 	
 	

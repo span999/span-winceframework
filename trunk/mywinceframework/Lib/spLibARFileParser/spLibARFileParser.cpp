@@ -259,13 +259,13 @@ static ARLIBCMDPAR_RSP spLibCmdParser( TCHAR *ptcCmd, TCHAR *ptcParam )
 		if( 0 == wcscmp( szCmdSource, ptcCmd ) )
 		{	///SRC:
 			wcscpy( szSourceFile, ptcParam );
-			spLibDbgMsg( LIBMSGFLAG, TEXT("Cmd->%s:%s"), ptcCmd, szSourceFile );
+			spLibDbgMsg( LIBMSGFLAG_NK, TEXT("Cmd->%s:%s"), ptcCmd, szSourceFile );
 		}
 		else
 		if( 0 == wcscmp( szCmdTarget, ptcCmd ) )
 		{	///TARG:
 			wcscpy( szTargetFile, ptcParam );
-			spLibDbgMsg( LIBMSGFLAG, TEXT("Cmd->%s:%s"), ptcCmd, szTargetFile );
+			spLibDbgMsg( LIBMSGFLAG_NK, TEXT("Cmd->%s:%s"), ptcCmd, szTargetFile );
 		}
 		else
 		if( 0 == wcscmp( szCmdLine, ptcCmd ) )

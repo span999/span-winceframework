@@ -27,6 +27,7 @@
 
 #define		SPPREFIX			TEXT("NPPLib:")
 #define		LIBMSGFLAG			(dDOUT|0x0FFFFFFF)		///diag msg only
+#define		LIBMSGFLAG_NK			(dNOUT|0x0FFFFFFF)		///nk msg only
 ///#define		LIBMSGFLAG			(dNOUT|0x0FFFFFFF)		///nk msg only
 
 

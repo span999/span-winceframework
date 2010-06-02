@@ -32,10 +32,10 @@
 
 extern void DrawCPUMem( BOOL bDraw );
 extern void InitSysInfoDrawArea( spLibDDraw *pDD );
+extern void DeInitSysInfoDrawArea( void );
 
 
 static DWORD MainRoutine( DWORD dwPararm );
-///static DWORD WINAPI StoreageMsgWaitThread( LPVOID  pContext );
 static DWORD WINAPI PreRunnerThread( LPVOID  pContext );
 
 static BOOL IsAllThreadStop( void );
@@ -97,6 +97,7 @@ BOOL TouchHookExeCallback( TOUCH_EVENT_DATA ThisTouchData )
 		if( -1 != dwRet )
 		{
 			pmyDD->spLibTextDraw( 250, 240, TEXT("X =>%4d, Y=>%4d!!"), ThisTouchData.tiX, ThisTouchData.tiY );
+
 			if( 99 == dwRet )
 			{
 			}
@@ -130,7 +131,10 @@ BOOL RegNotifyExeCallback( DWORD dwByteSize )
 	static DWORD dwCallbackCount = 0;
 	
 	if( !bOALMsgShow )
+	{
+		///Sleep( 100 );
 		return FALSE;
+	}	
 	
 	dwCallbackCount++;
 	
@@ -169,11 +173,11 @@ BOOL RegNotifyExeCallback( DWORD dwByteSize )
 }
 
 
-BOOL TouchHookExeInit( void )
+BOOL DDrawShowInit( void )
 {
 	BOOL bRet = TRUE;
 	
-	spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s go TouchHookExeInit!!!"), SPPREFIX );
+	spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s go DDrawShowInit!!!"), SPPREFIX );
 	
 	///init ddraw
 	pmyDD = new spLibDDraw();
@@ -181,29 +185,55 @@ BOOL TouchHookExeInit( void )
 
 	InitSysInfoDrawArea( pmyDD );
 	
-/*	
-	///init reg notify
-	spLibRegNotify_Init( 0 );
-	spLibRegNotify_SetCallback( RegNotifyExeCallback );	
-*/
-	
-	///init number pad parser
-	spLibParseAreaInit();
-	///init touch hook
-	spLibTouchHook_Init( 0 );
-
-	/// hook callback
-	spLibTouchHook_SetCallback( TouchHookExeCallback );
-	
-	
 		
-	spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s exit TouchHookExeInit!!!"), SPPREFIX );
+	spLibDbgMsg( LIBMSGFLAG, TEXT("%s exit DDrawShowInit!!!"), SPPREFIX );
 	
 	return bRet;
 }
 
 
-BOOL TouchHookExeDeInit( void )
+BOOL DDrawShowDeInit( void )
+{
+	BOOL bRet = TRUE;
+	
+	spLibDbgMsg( LIBMSGFLAG, TEXT("%s go DDrawShowDeInit!!!"), SPPREFIX );
+	
+	DeInitSysInfoDrawArea();
+	
+	if( NULL != pmyDD )
+	{
+		delete pmyDD;
+		pmyDD = NULL;
+	}
+	
+	spLibDbgMsg( LIBMSGFLAG, TEXT("%s exit DDrawShowDeInit!!!"), SPPREFIX );
+	
+	return bRet;
+}
+
+BOOL TouchHookInit( void )
+{
+	BOOL bRet = TRUE;
+	
+	spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s go TouchHookExeInit!!!"), SPPREFIX );
+	
+	
+	///init number pad parser
+	spLibParseAreaInit();
+
+	///init touch hook
+	spLibTouchHook_Init( 0 );
+
+	/// hook callback
+	spLibTouchHook_SetCallback( TouchHookExeCallback );
+		
+	spLibDbgMsg( LIBMSGFLAG, TEXT("%s exit TouchHookExeInit!!!"), SPPREFIX );
+	
+	return bRet;
+}
+
+
+BOOL TouchHookDeInit( void )
 {
 	BOOL bRet = TRUE;
 	
@@ -213,19 +243,43 @@ BOOL TouchHookExeDeInit( void )
 	spLibTouchHook_Deinit( 0 );
 	spLibParseAreaDeInit();
 	
-	//de-init
-	spLibRegNotify_Deinit( 0 );
-	
-	if( NULL != pmyDD )
-	{
-		delete pmyDD;
-		pmyDD = NULL;
-	}
-	
 	spLibDbgMsg( LIBMSGFLAG, TEXT("%s exit TouchHookExeDeInit!!!"), SPPREFIX );
 	
 	return bRet;
 }
+
+BOOL RegNotifyInit( void )
+{
+	BOOL bRet = TRUE;
+	
+	spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s go RegNotifyInit!!!"), SPPREFIX );
+	
+	///init reg notify
+	spLibRegNotify_Init( 0 );
+	bRet = spLibRegNotify_SetCallback( RegNotifyExeCallback );
+	if( !bRet )
+		spLibDbgMsg( LIBMSGFLAG, TEXT("%s spLibRegNotify_SetCallback fail!!!"), SPPREFIX );
+		
+	spLibDbgMsg( LIBMSGFLAG, TEXT("%s exit RegNotifyInit!!!"), SPPREFIX );
+	
+	return bRet;
+}
+
+
+BOOL RegNotifyDeInit( void )
+{
+	BOOL bRet = TRUE;
+	
+	spLibDbgMsg( LIBMSGFLAG, TEXT("%s go RegNotifyDeInit!!!"), SPPREFIX );
+	
+	//de-init
+	spLibRegNotify_Deinit( 0 );
+	
+	spLibDbgMsg( LIBMSGFLAG, TEXT("%s exit RegNotifyDeInit!!!"), SPPREFIX );
+	
+	return bRet;
+}
+
 
 
 static DWORD MainRoutine( DWORD dwPararm )
@@ -234,6 +288,8 @@ static DWORD MainRoutine( DWORD dwPararm )
 	HANDLE hPreRunnerThread = NULL;
 	DWORD dwPreRunnerThreadId = 0;
 	DWORD dwThreadPararm = 0;
+
+	
 	
 	hPreRunnerThread = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)PreRunnerThread, (LPVOID)&dwThreadPararm, 0, (LPDWORD)&dwPreRunnerThreadId );
 
@@ -243,8 +299,28 @@ static DWORD MainRoutine( DWORD dwPararm )
 	}	
 	else
 		bPreRunnerThreadStop = FALSE;
-	
 
+	Sleep( 100 );
+	DDrawShowInit();
+	Sleep( 100 );
+	TouchHookInit();
+	Sleep( 100 );
+	///RegNotifyInit();
+	Sleep( 100 );	
+	
+	while( 1 )
+	{
+	
+		Sleep( 1000 );
+		DrawCPUMem( bCPUMsgShow );
+		///spLibDbgMsg( LIBMSGFLAG_NK, TEXT("Pre Runnner running!!!") );
+		
+	}
+
+	
+	///RegNotifyDeInit();
+	TouchHookDeInit();
+	DDrawShowDeInit();
 	
 	return dwRet;
 }
@@ -256,7 +332,7 @@ static DWORD WINAPI PreRunnerThread( LPVOID  pContext )
 	
 	spLibDbgMsg( LIBMSGFLAG, TEXT("Start Pre Runnner !!!") );
 	///init
-	TouchHookExeInit();
+	///TouchHookExeInit();
 	
 	while( 1 )
 	{
@@ -264,13 +340,13 @@ static DWORD WINAPI PreRunnerThread( LPVOID  pContext )
 			break;
 		
 		Sleep( 1000 );
-		DrawCPUMem( bCPUMsgShow );
-		///spLibDbgMsg( LIBMSGFLAG_NK, TEXT("Pre Runnner running!!!") );
+		///DrawCPUMem( bCPUMsgShow );
+		spLibDbgMsg( LIBMSGFLAG_NK, TEXT("Pre Runnner running!!!") );
 		
 	}
 	
 	///de-init
-	TouchHookExeDeInit();
+	///TouchHookExeDeInit();
 	
 	spLibDbgMsg( LIBMSGFLAG, TEXT("End Pre Runnner !!!") );
 	

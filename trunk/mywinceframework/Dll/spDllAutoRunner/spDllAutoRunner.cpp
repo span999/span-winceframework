@@ -174,7 +174,8 @@ static DWORD WINAPI StoreageMsgWaitThread( LPVOID  pContext )
 
 			if( bReadQueueDone )
 			{
-				spLibDbgMsg_Dlg( TEXT("Got storeage mount event2 %d(%s)"), lpDevDetail->cbName, lpDevDetail->szName );
+				///spLibDbgMsg_Dlg( TEXT("Got storeage mount event2 %d(%s)"), lpDevDetail->cbName, lpDevDetail->szName );
+				spLibDbgMsg( LIBMSGFLAG_NK, TEXT("Got storeage mount event2 %d(%s)"), lpDevDetail->cbName, lpDevDetail->szName );
 				if( 1 == ParseCmdFile( 0 ) )
 					break;
 			}	

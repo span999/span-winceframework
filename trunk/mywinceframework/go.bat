@@ -50,10 +50,6 @@ cd Exe\spExeTouchHook
 build -c
 cd ..\..
 
-cd Lib\spLibARFileParser
-build -c
-cd ..\..
-
 cd Exe\spExeAutoRunner
 build -c
 cd ..\..
@@ -82,14 +78,28 @@ cd Exe\OScapture
 build
 cd ..\..
 
+cd Lib\spLibDbgMsg
+build -p -c
+cd ..\..
+
+cd Lib\spLibTouchHook
+build -p -c
+cd ..\..
+
+
 :_EXIT
+
 
 cd Lib\spLibNumPadParser
 build -c
 cd ..\..
 
 cd Lib\spLibRegNotify
-build
+build -c
+cd ..\..
+
+cd Lib\spLibARFileParser
+build -c
 cd ..\..
 
 cd Dll\spDllAutoRunner
