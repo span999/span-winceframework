@@ -124,6 +124,20 @@ void InitSysInfoDrawArea( spLibDDraw *pDD )
 
 }
 
+void DeInitSysInfoDrawArea( void )
+{
+	pDrawArea = &DrawArea;
+
+	pmyDD = NULL;
+	
+	memset( pDrawArea, 0, sizeof(DrawArea) );
+	
+	spLibSysInfoIdle_Deinit( 0 );
+	spLibSysInfoMemory_Deinit( 0 );	
+
+}
+
+
 static void DrawCPUMemLoading( DWORD dwValue )
 {
 	DWORD dwLoop = 0;
