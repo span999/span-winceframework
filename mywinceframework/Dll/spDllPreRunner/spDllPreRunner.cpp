@@ -289,6 +289,13 @@ static DWORD MainRoutine( DWORD dwPararm )
 	DWORD dwPreRunnerThreadId = 0;
 	DWORD dwThreadPararm = 0;
 
+
+
+	DDrawShowInit();
+	Sleep( 100 );
+	TouchHookInit();
+	Sleep( 100 );
+	///RegNotifyInit();
 	
 	
 	hPreRunnerThread = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)PreRunnerThread, (LPVOID)&dwThreadPararm, 0, (LPDWORD)&dwPreRunnerThreadId );
@@ -300,13 +307,6 @@ static DWORD MainRoutine( DWORD dwPararm )
 	else
 		bPreRunnerThreadStop = FALSE;
 
-	Sleep( 100 );
-	DDrawShowInit();
-	Sleep( 100 );
-	TouchHookInit();
-	Sleep( 100 );
-	///RegNotifyInit();
-	Sleep( 100 );	
 	
 	while( 1 )
 	{
@@ -328,25 +328,53 @@ static DWORD MainRoutine( DWORD dwPararm )
 
 static DWORD WINAPI PreRunnerThread( LPVOID  pContext )
 {
+#define		WAITEVENT_NUM		2
 	DWORD dwRet = 0;
+	HANDLE hWaitEvents[WAITEVENT_NUM];
+	///DWORD dwWaitMS = INFINITE;
+	DWORD dwWaitMS = 2000;
+	DWORD dwReturns = 0;
 	
 	spLibDbgMsg( LIBMSGFLAG, TEXT("Start Pre Runnner !!!") );
-	///init
-	///TouchHookExeInit();
+
+	hWaitEvents[0] = spLibRegNotify_GetNotifyHandle();
+	hWaitEvents[1] = CreateEvent( NULL, FALSE, FALSE, NULL );
+
 	
 	while( 1 )
 	{
 		if( bPreRunnerThreadStop )
 			break;
 		
-		Sleep( 1000 );
-		///DrawCPUMem( bCPUMsgShow );
-		spLibDbgMsg( LIBMSGFLAG_NK, TEXT("Pre Runnner running!!!") );
+		dwReturns = WaitForMultipleObjects( WAITEVENT_NUM, hWaitEvents, FALSE, dwWaitMS );
+
+		switch( dwReturns )
+		{
+			case WAIT_OBJECT_0 + 0:
+				/// got notify
+				///no message here, or you will get a endless message loop...
+				///spLibDbgMsg( LIBMSGFLAG_NULL, TEXT("%s MonitorEventThread 1 !!!"), SPPREFIX );
+				RegNotifyExeCallback( 0 );
+				CeFindNextRegChange( hWaitEvents[0] );
+				break;
+			case WAIT_OBJECT_0 + 1:
+				/// got control event
+				spLibDbgMsg( LIBMSGFLAG, TEXT("%s PreRunnerThread 2 !!!"), SPPREFIX );
+					
+				break;
+			case WAIT_TIMEOUT:
+				///Sleep( 1000 );
+				///DrawCPUMem( bCPUMsgShow );
+				spLibDbgMsg( LIBMSGFLAG_NK, TEXT("Pre Runnner running!!!") );
+			break;
+	
+			default:
+				break;
+				
+			}	///switch		
 		
 	}
 	
-	///de-init
-	///TouchHookExeDeInit();
 	
 	spLibDbgMsg( LIBMSGFLAG, TEXT("End Pre Runnner !!!") );
 	

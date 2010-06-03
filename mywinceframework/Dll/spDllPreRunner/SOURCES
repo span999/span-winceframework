@@ -46,4 +46,5 @@ SOURCELIBS= \
 SOURCES= \
 		spVersion.rc \
 		spDllPreRunSysInfo.cpp \
+		spDllPreRunRegOALDbg.cpp \
 		spDllPreRunner.cpp \
