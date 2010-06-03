@@ -1,0 +1,35 @@
+# Copyright (c) 2007-2008, Qualcomm, Incorporated.
+# All Rights Reserved.
+# Qualcomm Confidential and Proprietary
+
+!if "$(_TGTPROJ)" == "uldr"
+SKIPBUILD=1
+!endif
+
+RELEASETYPE=PLATFORM
+TARGETNAME=siousb
+TARGETTYPE=LIBRARY
+
+INCLUDES= \
+  $(INCLUDES); \
+  $(_AMSSROOT)\services\diag; \
+  $(_TARGETPLATROOT)\src\Drivers\windiag\core; \
+
+SOURCELIBS = \
+    $(_TARGETPLATROOT)\lib\$(_CPUINDPATH)\spCElog_lib.lib \
+
+SOURCES= \
+  siousb.c \
+  siousb_rndis.c \
+  siousb_composite.c \
+  siousb_util.c \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+  siousb.h \
+  siousb_rndis.h \
+  siousb_composite.h \
+  
+# Uncomment as needed for debugging
+#CDEFINES = $(CDEFINES) -DDEBUG /Od /Z7
+#CDEFINES = $(CDEFINES) -DDEBUG -DSIOUSB_COMPILE_TIME_STATS_FLAG=STATS_SHOW_ALL
+

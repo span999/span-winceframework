@@ -1,0 +1,11 @@
+; Copyright (c) 2005, 2006 by QUALCOMM, Incorporated.  All Rights Reserved.
+;
+
+LIBRARY         SPCELOG_DLL
+
+EXPORTS __log_inp
+        __log_inp1
+        __log_inp2
+        __log_inp3
+        __log_init
+        __log_close
