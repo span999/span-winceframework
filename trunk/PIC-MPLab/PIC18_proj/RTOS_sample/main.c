@@ -27,7 +27,7 @@
 long int i, j = 0;
 xSemaphoreHandle xSem = NULL;
 
-/*
+
 
 void Task1(void *params) {
 	__reclaim_stack();
@@ -61,6 +61,8 @@ void Task2(void *params) {
 		j++;
 	}
 }
+
+/*
 
 void vSerialTxISR()	{
 }
@@ -98,8 +100,15 @@ void main( void )
 {
 	heapinit();
 	
+	printf("Main start !!!\r\n");
+	
+	xTaskCreate(Task1, (const portCHAR * const) "Ts1", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
+	xTaskCreate(Task2, (const portCHAR * const) "Ts2", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
+	vTaskStartScheduler();
+	
 	while(1)
 	{
 		///clrWdt();
+		printf("Main lopping~~~\r\n");
 	}
 }
