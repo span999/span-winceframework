@@ -52,13 +52,13 @@
 #include "croutine.h"
 
 // local includes
-#include "LEDUtils.h"
+///#include "LEDUtils.h"
 #include "taskUART.h"
-#include "taskMIWI.h"
-#include "taskTouchScreen.h"
-#include "taskGraphics.h"
-#include "taskTCPIP.h"
-#include "homeMeter.h"
+///#include "taskMIWI.h"
+///#include "taskTouchScreen.h"
+///#include "taskGraphics.h"
+///#include "taskTCPIP.h"
+///#include "homeMeter.h"
 
 // set the configuration fuses for the processor
 #if defined(__PIC24F__)
@@ -72,19 +72,19 @@
 ///////////////////////////////////////////////////////////////////
 // Semaphores used to guard access to the various hardware resources
 // they are controlled because multiple tasks may access them
-xSemaphoreHandle SPI2Semaphore;
-xSemaphoreHandle FLASHSemaphore;
-xSemaphoreHandle QVGASemaphore;
-xSemaphoreHandle METERSemaphore;
+///xSemaphoreHandle SPI2Semaphore;
+///xSemaphoreHandle FLASHSemaphore;
+///xSemaphoreHandle QVGASemaphore;
+///xSemaphoreHandle METERSemaphore;
 
-xTaskHandle hMETERTask;///
-xTaskHandle hMIWITask;///
-xTaskHandle hTCPIPTask;///
+///xTaskHandle hMETERTask;///
+///xTaskHandle hMIWITask;///
+///xTaskHandle hTCPIPTask;///
 
-xQueueHandle hMETERQueue;
+///xQueueHandle hMETERQueue;
 
 // global meter object
-structMeter gMeter;
+///structMeter gMeter;
 
 ///////////////////////////////////////////////////////////////////
 // Forward references in this module
@@ -113,25 +113,25 @@ int main(void)
 {
 	// create a semaphore to control access to SPI2 since it used
 	// by both the TCPIP and FLASH devices
-	SPI2Semaphore = xSemaphoreCreateMutex();
+///	SPI2Semaphore = xSemaphoreCreateMutex();
 	// The FLASH semaphore guards access to the FLASH itself. Since
 	// we use the FLASH to store web pages AND touchscreen configuration
 	// and the FLASH code uses caching we must prevent conflicts. In
 	// this case we will allow the touchscreen to access the FLASH
 	// first and then allow TCPIP unrestricted access afterwards
-	FLASHSemaphore = xSemaphoreCreateMutex();
+///	FLASHSemaphore = xSemaphoreCreateMutex();
 	// the QVGA Semaphore is normally controlled by the graphics
 	// task however if calibration is required then it must take
 	// control until the user has completed the calibration steps
 	// we also use this on GFX2 boards to control access to the 
 	// parallel FLASH device which is shared by graphics and tcpip
-	QVGASemaphore = xSemaphoreCreateMutex();
+///	QVGASemaphore = xSemaphoreCreateMutex();
 	
 	// semaphore to control access to the meter object
-	vSemaphoreCreateBinary(METERSemaphore);
+///	vSemaphoreCreateBinary(METERSemaphore);
 	
 	// messages to update the display are sent via the QVGAQueue
-	hQVGAQueue = xQueueCreate(QVGA_QUEUE_SIZE, sizeof(GRAPHICS_MSG));
+///	hQVGAQueue = xQueueCreate(QVGA_QUEUE_SIZE, sizeof(GRAPHICS_MSG));
 	
 	///show message
 	printf("about to run InitializeBoard\r\n");
@@ -159,8 +159,8 @@ int main(void)
 ///		NULL, tskIDLE_PRIORITY + 4, &hTOUCHTask);
 
 	// QVGA Graphics display task
-	xTaskCreate(taskGraphics, (signed char*) "GRAPH", STACK_SIZE_GRAPHICS,
-		NULL, tskIDLE_PRIORITY + 3, &hGRAPHICSTask);
+///	xTaskCreate(taskGraphics, (signed char*) "GRAPH", STACK_SIZE_GRAPHICS,
+///		NULL, tskIDLE_PRIORITY + 3, &hGRAPHICSTask);
 		
 	// create the task to handle all TCPIP functions (namely HTTP Server)
 ///	xTaskCreate(taskTCPIP, (signed char*) "TCPIP", STACK_SIZE_TCPIP,
@@ -204,9 +204,10 @@ void InitializeBoard(void)
 	INTEnableSystemMultiVectoredInt();
 #endif	
 
- 	LEDInit();		
+/// 	LEDInit();		
 	TickInit();
-	
+
+/*	
 	// MIWI PICTail+ initialization 
 	PHY_RESETn = 0;
     PHY_RESETn_TRIS = 0;
@@ -228,12 +229,14 @@ void InitializeBoard(void)
 	#else
 		#error "Define either ENC_CS_TRIS or ENC100_INTERFACE_MODE in HardwareProfile.h"
 	#endif
+*/
 	
 	/************************************************************************
 	* For Explorer 16 RD12 is connected to EEPROM chip select.
 	* To prevent a conflict between this EEPROM and SST25 flash
 	* RD12 should be pulled up.
 	************************************************************************/
+/*
 	LATDbits.LATD12 = 1;
     TRISDbits.TRISD12 = 0;	
 
@@ -275,7 +278,9 @@ void InitializeBoard(void)
     SPI2CON1bits.CKE = 1;
     SPI2STAT = 0x8000;
 #endif
-    
+*/
+
+/*    
     // the touchscreen routine needs access to the FLASH memory
     // so call the initialization routine here
     #if (GRAPHICS_PICTAIL_VERSION == 3)
@@ -289,6 +294,7 @@ void InitializeBoard(void)
     #else
     	SST39Init();
     #endif	
+*/
 }
 
 /*********************************************************************
@@ -333,15 +339,15 @@ void vApplicationStackOverflowHook( void )
 void vApplicationTickHook(void)
 {
 	static unsigned int tickCount = 0;
-	static METER_MSG mMsg;
-	static GRAPHICS_MSG gMsg;
+///	static METER_MSG mMsg;
+///	static GRAPHICS_MSG gMsg;
 	portBASE_TYPE xTaskWoken;
 	
 	// send a temperature update to the graphics task every 2 seconds
 	tickCount++;
 	if (tickCount >= (2 * configTICK_RATE_HZ)) {
 		tickCount = 0;
-		
+/*		
 		// update the meters temperature reading
 		mMsg.cmd = MSG_METER_UPDATE_TEMPERATURE;
 		mMsg.data.wVal[0] = adcTemp;
@@ -351,6 +357,7 @@ void vApplicationTickHook(void)
 		// with periodic data updates if required
 		gMsg.cmd = MSG_UPDATE_DISPLAY;
 		xQueueSendToBackFromISR(hQVGAQueue, &gMsg, &xTaskWoken);
+*/
 	}	
 	
 }
