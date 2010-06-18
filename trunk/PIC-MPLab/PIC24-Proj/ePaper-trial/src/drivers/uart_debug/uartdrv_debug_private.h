@@ -3,14 +3,14 @@
 
 
 
-#define UART_QUEUE_SIZE	4	// number of messages queue can contain
-#define UART_ENTRY_SIZE 60	// size of each message
+///#define UART_QUEUE_SIZE	4	// number of messages queue can contain
+///#define UART_ENTRY_SIZE 60	// size of each message
 
 // structure used to output messages via the uart
 // the application must ensure that messages are less than 60 characters
-typedef struct {
-	char	buff[UART_ENTRY_SIZE];	
-} UARTMsg;
+///typedef struct {
+///	char	buff[UART_ENTRY_SIZE];	
+///} UARTMsg;
 
 // size of the stack for this task
 #define STACK_SIZE_UART		(configMINIMAL_STACK_SIZE * 1)
@@ -22,12 +22,12 @@ typedef struct {
 #define UARTTX_IO			(PORTFbits.RF5)
 #define UARTRX_TRIS			(TRISFbits.TRISF4)
 #define UARTRX_IO			(PORTFbits.RF4)
-#define UBRG				U2BRG
-#define UMODE				U2MODE
-#define USTA				U2STA
-#define USTAbits			U2STAbits
-#define UTXREG				U2TXREG
-#define URXREG				U2RXREG
+#define UBRG				U1BRG
+#define UMODE				U1MODE
+#define USTA				U1STA
+#define USTAbits			U1STAbits
+#define UTXREG				U1TXREG
+#define URXREG				U1RXREG
 
 #if defined(__C30__) 	// PIC24F
 	#define UART_CONFIG1 (UART_EN)
@@ -43,16 +43,16 @@ typedef struct {
 	#define UART_INT_CONFIG ((configKERNEL_INTERRUPT_PRIORITY + 1) | UART_RX_INT_EN)
 #endif
 
-#define OpenUART(a,b,c)			OpenUART2(a,b,c)
-#define ConfigIntUART(a)		ConfigIntUART2(a)
+#define OpenUART(a,b,c)			OpenUART1(a,b,c)
+#define ConfigIntUART(a)		ConfigIntUART1(a)
 
 /// The UART interrupt routine define
 #if defined(__C30__)
 #define		_ThisUARTINTtype_			__attribute__((__interrupt__, auto_psv))
-#define		_ThisUARTInterrupt_			_U2RXInterrupt
+#define		_ThisUARTInterrupt_			_U1RXInterrupt
 #else // PIC32
 #define		_ThisUARTINTtype_			__attribute__( (interrupt(ipl2), vector(_UART2_VECTOR)))
-#define		_ThisUARTInterrupt_			vU2InterruptHandler
+#define		_ThisUARTInterrupt_			vU1InterruptHandler
 #endif
 
 

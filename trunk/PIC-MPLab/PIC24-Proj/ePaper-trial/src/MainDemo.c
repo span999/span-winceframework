@@ -53,12 +53,20 @@
 
 // local includes
 ///#include "LEDUtils.h"
-#include "taskUART.h"
+///#include "taskUART.h"
+
 ///#include "taskMIWI.h"
 ///#include "taskTouchScreen.h"
 ///#include "taskGraphics.h"
 ///#include "taskTCPIP.h"
 ///#include "homeMeter.h"
+
+
+#include "mFreeRTOSDef.h"
+#include "mTypeDef.h"
+#include "mDrvIncludes.h"
+
+
 
 // set the configuration fuses for the processor
 #if defined(__PIC24F__)
@@ -140,9 +148,13 @@ int main(void)
 	InitializeBoard();	
 	
 	// create the UART task
-	xStartUARTTask();
+	///xStartUARTTask();
+	pvUARTDRV_DEBUG_drvInit( NULL );
+	
+	
 	// tell the world we have started
-	xQueueSendToBack(hUARTTxQueue, &msgAppStart, 0);
+///	xQueueSendToBack(hUARTTxQueue, &msgAppStart, 0);
+	xQueueSendToBack(hUARTDRV_DEBUG_drvTxQueue, &msgAppStart, 0);
 	
 	// create the meter task
 ///	xTaskCreate(taskMeter, (signed char*) "METER", STACK_SIZE_METER,

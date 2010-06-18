@@ -52,7 +52,13 @@
 #include "SystemProfile.h"
 #include "Compiler.h"
 #include "GenericTypeDefs.h"
-#include "taskUART.h"
+///#include "taskUART.h"
+#include "mFreeRTOSDef.h"
+#include "mTypeDef.h"
+#include "mDrvIncludes.h"
+
+
+
 
 #if defined(ENABLE_CONSOLE)
 #if defined(__dsPIC33F__) || defined(__PIC24F__) || defined(__PIC24H__) || defined(__PIC32MX__)
@@ -396,3 +402,5 @@ void PrintDec(BYTE toPrint)
 #endif
 
 #endif  //ENABLE_CONSOLE
+
+
