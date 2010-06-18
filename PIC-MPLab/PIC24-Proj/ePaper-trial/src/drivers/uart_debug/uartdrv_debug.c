@@ -13,6 +13,7 @@
 ///#include "taskUART.h"
 #include "mFreeRTOSDef.h"
 #include "mTypeDef.h"
+#include "uartdrv_debug.h"
 #include "uartdrv_debug_private.h"
 
 
@@ -140,5 +141,40 @@ void _ThisUARTINTtype_ _ThisUARTInterrupt_(void)
 }
 #endif
 
+
+void UARTprintf(char* msg)
+{
+	UARTMsg sMsg;
+	
+	// copy the message and ensure it is NULL terminated
+	strncpy(sMsg.buff, msg, UART_ENTRY_SIZE);
+	sMsg.buff[UART_ENTRY_SIZE - 1] = '\0';
+	
+	// send the message to the UART task
+	// we use a zero wait time so as not to block any high priority tasks
+	// if the low priority UART task is currently printing and the queue
+	// is full then we just fail to print the message.
+	// This is okay since it is only used for diagnostic messages
+	xQueueSendToBack(hUARTDRV_DEBUG_drvTxQueue, &sMsg, 0);	
+}
+
+
+const unsigned char HexCharArray[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+
+void UARTPrintChar(BYTE c)
+{
+	UARTMsg sMsg;
+	BYTE toPrint;
+	
+	// convert the character and print it
+	toPrint = (c >> 4) & 0x0F;
+	sMsg.buff[0] = HexCharArray[toPrint];
+	toPrint = c & 0x0F;
+	sMsg.buff[1] = HexCharArray[toPrint];
+	sMsg.buff[2] = '\0';
+	
+	// send the message to the UART task
+	xQueueSendToBack(hUARTDRV_DEBUG_drvTxQueue, &sMsg, portMAX_DELAY);	
+}
 
 

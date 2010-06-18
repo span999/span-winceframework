@@ -216,6 +216,8 @@
 	#define BUTTON3_TRIS		(TRISDbits.TRISD6)	// Ref S3
 	#define	BUTTON3_IO			(PORTDbits.RD6)
 
+	
+#ifndef MPLAB_PIC24_PORT	
 	// The UART
 	#define UART_BAUD_RATE		19200
 	#define UARTTX_TRIS			(TRISFbits.TRISF5)
@@ -245,7 +247,9 @@
 
 	#define OpenUART(a,b,c)			OpenUART2(a,b,c)
 	#define ConfigIntUART(a)		ConfigIntUART2(a)
-
+#endif	///#ifndef MPLAB_PIC24_PORT
+	
+	
 	// enc in lower slot
 	#if defined(ENC28J60)
 		// ENC28J60 I/O pins, comment this line to enable ENC624J600 support
