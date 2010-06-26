@@ -52,6 +52,7 @@ void* pvUARTDRV_DEBUG_drvInit(void* pvParameter)
 }
 
 
+
 bRET bUARTDRV_DEBUG_drvBoardInit( void )
 {
 	bRET bRet = bRET_FALSE;
@@ -68,7 +69,8 @@ bRET bUARTDRV_DEBUG_drvBoardInit( void )
 }
 
 
-
+///////////////////////////////////////////////////////////////////
+// take care Tx data here
 void vUARTDRV_DEBUG_taskMain(void* pvParameter)
 {
 	UARTMsg msg;
@@ -92,6 +94,8 @@ void vUARTDRV_DEBUG_taskMain(void* pvParameter)
 }
 
 
+///////////////////////////////////////////////////////////////////
+// take care Rx data here (interrrupt)
 #if defined(__C30__)
 ///void __attribute__((__interrupt__, auto_psv)) _U2RXInterrupt(void)
 void _ThisUARTINTtype_ _ThisUARTInterrupt_(void)
@@ -140,6 +144,7 @@ void _ThisUARTINTtype_ _ThisUARTInterrupt_(void)
 		taskYIELD();	
 }
 #endif
+
 
 
 void UARTprintf(char* msg)
