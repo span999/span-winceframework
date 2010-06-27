@@ -203,26 +203,36 @@ static bRET Clean_sentence_field_list( NMEA_sentence_field_list* pList )
 }
 
 
-static unsigned Copy_sentence_field( char* pSentenceNow, NMEA_sentence_field_list* psentenceList )
+static unsigned Copy_sentence_field( char* pSentenceNow, unsigned uiSentenceLen, NMEA_sentence_field_list* psentenceList )
 {
 	unsigned uRet = 0;
 	unsigned uiLoopB = 0;
 	char commassign = ',';
+	///unsigned uiTemp = 0;
+
+	///reset field index
+	psentenceList->vaildfields = 0;
 	
+	///copy first field
 	psentenceList->Field[psentenceList->vaildfields].pField = pSentenceNow;
-	psentenceList->Field[psentenceList->vaildfields].FieldLen = 1;
-	for( uiLoopB = 0; uiLoopB < NMEA_SENTENCE_MAX; uiLoopB++ )
+	psentenceList->Field[psentenceList->vaildfields].FieldLen = 0;
+	uRet++;
+	
+	for( uiLoopB = 0; uiLoopB < uiSentenceLen; uiLoopB++ )
 	{
-		pSentenceNow++;
+		pSentenceNow = pSentenceNow + uiLoopB;
 		if( commassign != *pSentenceNow )
+		{
 			psentenceList->Field[psentenceList->vaildfields].FieldLen++;
+		}
 		else	///','
 		{
-			uRet = 	uiLoopB + 1;
-			break;
+			psentenceList->vaildfields++;	///next field
+			psentenceList->Field[psentenceList->vaildfields].pField = pSentenceNow + 1;
+			psentenceList->Field[psentenceList->vaildfields].FieldLen = 0;
+			uRet++;
 		}
-	}
-	psentenceList->vaildfields++;
+	}	
 	
 	return uRet;
 }
@@ -297,18 +307,10 @@ nmeaParseRET NMEAparser(char *pcNMEAsentence, gps_NMEA_session* ptNMEAsession)
 		if( *pSentenceNow == startsign )	///'$'
 		{
 			pSentenceNow++;	///move to next
-			///reset field index
-			sentenceList.vaildfields = 0;
 			if( *pSentenceNow == firstfieldsign )	///'G'
 			{
-				///start to find all field
-				unsigned uiTemp = 0;
-				for( uiLoopB = 0; uiLoopB < uiSentenceLen; uiLoopB++ )
-				{
-					pSentenceNow = pSentenceNow + uiTemp;
-					uiTemp = Copy_sentence_field( pSentenceNow, &sentenceList );
-					uiLoopB = uiLoopB + uiTemp;
-				}
+				///start to find and copy all field
+				Copy_sentence_field( pSentenceNow, uiSentenceLen, &sentenceList );
 				break;
 			}
 		}
