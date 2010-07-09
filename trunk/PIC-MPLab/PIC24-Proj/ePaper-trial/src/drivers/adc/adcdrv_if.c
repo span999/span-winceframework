@@ -10,6 +10,7 @@ Initialor		:	span.liu
 
 #include "adcdrv_if.h"
 #include "mFreeRTOSDef.h"
+#include "adcdrv_core.h"
 
 
 
@@ -18,6 +19,7 @@ bRET xMicModInit_ADC()
 {
 	bRET bRet = bRET_TRUE;
 	
+	bRet = MicModInit();
 	
 	return bRet;
 }
@@ -27,6 +29,7 @@ bRET xMicModDeInit_ADC()
 {
 	bRET bRet = bRET_TRUE;
 	
+	bRet = MicModDeInit();
 	
 	return bRet;
 }
@@ -36,6 +39,7 @@ bRET xMicModPwrDwn_ADC()
 {
 	bRET bRet = bRET_TRUE;
 	
+	bRet = MicModPwrDwn();
 	
 	return bRet;
 }
@@ -43,8 +47,11 @@ bRET xMicModPwrDwn_ADC()
 
 xPMMODSTAT xMicModInPwrSt_ADC()
 {
-	xPMMODSTAT pmStat = PMMODSTAT_IDLE;
-	
+	xPMMODSTAT pmStat;
+	if( MicIsModIdle() )
+		pmStat = PMMODSTAT_IDLE;
+	else
+		pmStat = PMMODSTAT_ACTIVE;
 	
 	return pmStat;
 }
@@ -53,9 +60,12 @@ xPMMODSTAT xMicModInPwrSt_ADC()
 xADCval xMicModGetADCValue()
 {
 	xADCval value = 0;
+	
+	value = MicModGetADC();
 
 	return value;
 }
 
 
-
+/// here we have static function below
+#include "adcdrv_core.c"

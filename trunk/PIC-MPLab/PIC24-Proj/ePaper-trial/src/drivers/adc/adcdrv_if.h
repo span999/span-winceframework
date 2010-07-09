@@ -1,7 +1,7 @@
 /*
 
 File			:	adcdrv_if.h				
-Description		:	driver interface include file. include this if want to access ADC driver.
+Description		:	driver interface include file. include this if you want to access ADC driver.
 Initialor		:	span.liu
 
 
@@ -11,6 +11,7 @@ Initialor		:	span.liu
 #ifndef __ADCDRV_IF__
 #define __ADCDRV_IF__
 
+///#include "GenericTypeDefs.h"
 #include "mTypeDef.h"
 
 
