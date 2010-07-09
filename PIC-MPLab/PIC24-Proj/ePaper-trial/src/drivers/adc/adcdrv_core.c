@@ -9,6 +9,7 @@ Initialor		:	span.liu
 
 #include "adcdrv_core.h"
 #include "mFreeRTOSDef.h"
+#define USE_AND_OR /* To enable AND_OR mask setting */
 #include <adc.h>
 
 
@@ -31,42 +32,48 @@ static BOOL MicModHWdeInit()
 }
 
 
-static INT32 MicModHWreadADCport()
+static UINT MicModHWreadADCport()
 {
-	INT32 i32Ret = 0;
+	UINT uiRet = 0;
 	///TODO: read ADC hardware port
 
 	unsigned char i=0;
 	unsigned int channel,config1,config2,config3,configport,configscan;
 	unsigned int ADCResult[16];
+	unsigned int ADCResultAvg;
 
 	CloseADC10();
 
 	/*set adc channel*/
-	channel= ADC_CH0_POS_SAMPLEA_AN5;
+	///channel= ADC_CH0_POS_SAMPLEA_AN5;
+	channel= ADC_CH0_POS_SAMPLEB_AN2;
 	SetChanADC10(channel);
 
 	/*Configure adc*/
 	config1 = ADC_MODULE_OFF | ADC_CLK_AUTO |ADC_AUTO_SAMPLING_ON ;
 	config2 = ADC_SCAN_ON | ADC_INTR_16_CONV ;
 	config3 = ADC_SAMPLE_TIME_17 | ADC_CONV_CLK_254Tcy;
-	configport = 0x0000;
-	configscan = ADC_SCAN_AN5 ;
+	///configport = 0x0000;
+	configport = ~ENABLE_AN2_DIG;	///only AN2 analog 
+	///configscan = ADC_SCAN_AN5 ;
+	configscan = ADC_SCAN_AN2 ;
 	OpenADC10(config1,config2,config3,0,configport,0,configscan);
 	
 	EnableADC1;
-	while(i <16 )
+	ADCResultAvg = 0;
+	while( i < 16 )
     {
 		ConvertADC10();
-		while(BusySampADC1); /*wait till conversion complete*/
+		while( BusySampADC1 ); /*wait till conversion complete*/
 		ADCResult[i] = ReadADC10(i);
+		ADCResultAvg = ADCResultAvg + ADCResult[i];
 		i++;
 	}
 	
 	CloseADC10();
 
-	
-	return i32Ret;
+	uiRet = ADCResultAvg / 16;
+	return uiRet;
 }
 
 
@@ -114,11 +121,11 @@ static BOOL MicIsModIdle()
 }
 
 
-static INT32 MicModGetADC()
+static UINT MicModGetADC()
 {
-	INT32 i32Ret = 0;
+	UINT uiRet = 0;
 	
-	i32Ret = MicModHWreadADCport();
+	uiRet = MicModHWreadADCport();
 	
-	return i32Ret;
+	return uiRet;
 }

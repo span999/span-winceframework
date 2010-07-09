@@ -21,7 +21,7 @@ static BOOL MicModDeInit();
 static BOOL MicModPwrDwn();
 static BOOL MicIsModIdle();
 
-static INT32 MicModGetADC();
+static UINT MicModGetADC();
 
 
 #endif	///#ifndef __ADCDRV_CORE__
