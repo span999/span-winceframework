@@ -38,5 +38,11 @@ typedef    unsigned int			xPMSYSSTATTO;
 
 
 
+///On,OFF define
+typedef enum {
+    xON = 1,		/*  */
+    xOFF,			/*  */
+} xOnOff;
+
 
 #endif	///#ifndef __MTYPEDEF_H__

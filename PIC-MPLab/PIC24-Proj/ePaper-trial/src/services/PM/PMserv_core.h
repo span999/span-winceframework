@@ -1,6 +1,6 @@
 /*
 
-File			:	batteryserv_core.h				
+File			:	PMserv_core.h				
 Description		:	service main body include file. include for function core.
 Initialor		:	span.liu
 
