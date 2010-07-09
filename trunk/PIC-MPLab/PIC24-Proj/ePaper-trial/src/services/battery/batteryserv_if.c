@@ -7,13 +7,13 @@ Initialor		:	span.liu
 
 */
 
-
+#include <stdio.h>
 #include "batteryserv_if.h"
 #include "mFreeRTOSDef.h"
 #include "batteryserv_core.h"
 
 
-
+static xOnOff DebugModeCtrl = xOFF;
 
 bRET xMicServInit_BAT()
 {
@@ -61,9 +61,29 @@ xBATTLEVEL xMicServGetBatteryLevel()
 {
 	xBATTLEVEL value = 0;
 	
-	value = MicServGetBattLv();
-
+	if( xOFF == DebugModeCtrl )
+		value = MicServGetBattLv();
+	else
+		value = 88;
+	
+	printf("xMicServGetBatteryLevel~~\r\n");
+	
 	return value;
+}
+
+
+xOnOff xMicServSetDebug_BAT( xOnOff do_sets )
+{
+	xOnOff xOnOffStat = xON;
+
+	DebugModeCtrl = do_sets;
+	xOnOffStat = DebugModeCtrl;
+	if( xON == DebugModeCtrl )
+		printf("xMicServSetDebug_BAT set as ON~~\r\n");
+	else
+		printf("xMicServSetDebug_BAT set as OFF~~\r\n");
+	
+	return xOnOffStat;
 }
 
 

@@ -20,6 +20,7 @@ typedef    unsigned int            xBATTLEVEL;
 
 
 xBATTLEVEL xMicServGetBatteryLevel();
+xOnOff xMicServSetDebug_BAT( xOnOff do_sets );
 
 
 #endif	///#ifndef __BATTERYSERV_IF__

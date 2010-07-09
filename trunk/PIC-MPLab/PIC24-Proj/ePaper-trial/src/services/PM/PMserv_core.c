@@ -1,6 +1,6 @@
 /*
 
-File			:	batteryserv_core.c		
+File			:	PMserv_core.c		
 Description		:	service main body file. battery service core body.
 Initialor		:	span.liu
 

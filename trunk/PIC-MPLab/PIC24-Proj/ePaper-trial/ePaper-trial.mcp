@@ -19,7 +19,7 @@ filter_lib=*.a
 filter_lkr=*.gld
 [CAT_SUBFOLDERS]
 subfolder_src=Drivers;FreeRTOS;Graphic;Services
-subfolder_inc=Drivers;FreeRTOS
+subfolder_inc=Drivers;FreeRTOS;Services
 subfolder_obj=
 subfolder_lib=
 subfolder_lkr=
@@ -53,6 +53,7 @@ file_025=FreeRTOS
 file_026=FreeRTOS
 file_027=FreeRTOS
 file_028=Drivers
+file_029=Services
 [GENERATED_FILES]
 file_000=no
 file_001=no
@@ -83,6 +84,7 @@ file_025=no
 file_026=no
 file_027=no
 file_028=no
+file_029=no
 [OTHER_FILES]
 file_000=no
 file_001=no
@@ -113,6 +115,7 @@ file_025=no
 file_026=no
 file_027=no
 file_028=no
+file_029=no
 [FILE_INFO]
 file_000=FreeRTOS\Source\list.c
 file_001=FreeRTOS\Source\portable\MPLAB\PIC24_dsPIC\portasm_PIC24.S
@@ -143,6 +146,7 @@ file_025=FreeRTOS\Source\include\semphr.h
 file_026=FreeRTOS\Source\include\task.h
 file_027=FreeRTOS\Source\include\projdefs.h
 file_028=src\drivers\uart_debug\uartdrv_debug.h
+file_029=src\services\PM\PMserv_if.h
 [SUITE_INFO]
 suite_guid={479DDE59-4D56-455E-855E-FFF59A3DB57E}
 suite_state=
