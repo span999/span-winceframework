@@ -8,14 +8,14 @@ Initialor		:	span.liu
 */
 
 
-#include "batteryserv_if.h"
+#include "PMserv_if.h"
 #include "mFreeRTOSDef.h"
-#include "batteryserv_core.h"
+#include "PMserv_core.h"
 
 
 
 
-bRET xMicServInit_BAT()
+bRET xMicServInit_PM()
 {
 	bRET bRet = bRET_TRUE;
 	
@@ -25,7 +25,7 @@ bRET xMicServInit_BAT()
 }
 
 
-bRET xMicServDeInit_BAT()
+bRET xMicServDeInit_PM()
 {
 	bRET bRet = bRET_TRUE;
 	
@@ -35,7 +35,7 @@ bRET xMicServDeInit_BAT()
 }
 
 
-bRET xMicServPwrDwn_BAT()
+bRET xMicServPwrDwn_PM()
 {
 	bRET bRet = bRET_TRUE;
 	
@@ -45,7 +45,7 @@ bRET xMicServPwrDwn_BAT()
 }
 
 
-xPMMODSTAT xMicServInPwrSt_BAT()
+xPMMODSTAT xMicServInPwrSt_PM()
 {
 	xPMMODSTAT pmStat;
 	if( MicIsServIdle() )
@@ -57,15 +57,15 @@ xPMMODSTAT xMicServInPwrSt_BAT()
 }
 
 
-xBATTLEVEL xMicServGetBatteryLevel()
+xBATTLEVEL xMicPMGetBattLevel()
 {
 	xBATTLEVEL value = 0;
 	
-	value = MicServGetBattLv();
+	value = xMicServGetBatteryLevel();
 
 	return value;
 }
 
 
 /// here we have static function below
-#include "batteryserv_core.c"
+#include "PMserv_core.c"
