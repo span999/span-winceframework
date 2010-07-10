@@ -157,7 +157,7 @@ int main(void)
 	xQueueSendToBack(hUARTDRV_DEBUG_drvTxQueue, &msgAppStart, 0);
 
 
-	// create the PM task
+	/// create the PM task
 	pvPMSERV_ServInit( NULL );
 	
 	
