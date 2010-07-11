@@ -8,18 +8,51 @@ Initialor		:	span.liu
 */
 
 #include <stdio.h>
-#include "batteryserv_if.h"
 #include "mFreeRTOSDef.h"
+#include "batteryserv_if.h"
 #include "batteryserv_core.h"
+#include "..\..\drivers\adc\adcdrv_if.h"
 
 
+
+
+
+
+/* flag for debug mode */
 static xOnOff DebugModeCtrl = xOFF;
 
+
+///internal functions
+static INT32 MicModServCalcBatteryLevel()
+{
+	INT32 i32Ret = 0;
+	///TODO: read ADC, and to a battery mapping
+
+	i32Ret = xMicModGetADCValue();
+	
+	///mapping table??
+	
+	return i32Ret;
+}
+
+
+static INT32 MicServGetBattLv()
+{
+	INT32 i32Ret = 0;
+	
+	i32Ret = MicModServCalcBatteryLevel();
+	
+	return i32Ret;
+}
+
+
+
+///public functions
 bRET xMicServInit_BAT()
 {
 	bRET bRet = bRET_TRUE;
 	
-	bRet = MicServInit();
+	bRet = ServInit_BAT();
 	
 	return bRet;
 }
@@ -29,7 +62,7 @@ bRET xMicServDeInit_BAT()
 {
 	bRET bRet = bRET_TRUE;
 	
-	bRet = MicServDeInit();
+	bRet = ServDeInit_BAT();
 	
 	return bRet;
 }
@@ -40,6 +73,7 @@ bRET xMicServPwrDwn_BAT()
 	bRET bRet = bRET_TRUE;
 	
 	///need no power down function for servies
+	bRet = ServPwrDwn_BAT();
 	
 	return bRet;
 }
@@ -48,7 +82,7 @@ bRET xMicServPwrDwn_BAT()
 xPMMODSTAT xMicServInPwrSt_BAT()
 {
 	xPMMODSTAT pmStat;
-	if( MicIsServIdle() )
+	if( IsServIdle_BAT() )
 		pmStat = PMMODSTAT_IDLE;
 	else
 		pmStat = PMMODSTAT_ACTIVE;
@@ -64,7 +98,7 @@ xBATTLEVEL xMicServGetBatteryLevel()
 	if( xOFF == DebugModeCtrl )
 		value = MicServGetBattLv();
 	else
-		value = 88;
+		value = ServGetBattLvDBG_BAT();
 	
 	printf("xMicServGetBatteryLevel~~\r\n");
 	
@@ -87,5 +121,3 @@ xOnOff xMicServSetDebug_BAT( xOnOff do_sets )
 }
 
 
-/// here we have static function below
-#include "batteryserv_core.c"

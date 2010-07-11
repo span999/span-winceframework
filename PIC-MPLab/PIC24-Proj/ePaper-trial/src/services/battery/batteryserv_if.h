@@ -8,8 +8,8 @@ Initialor		:	span.liu
 */
 
 
-#ifndef __BATTERYSERV_IF__
-#define __BATTERYSERV_IF__
+#ifndef __BATTERYSERV_IF_H__
+#define __BATTERYSERV_IF_H__
 
 
 #include "mTypeDef.h"
@@ -23,6 +23,6 @@ xBATTLEVEL xMicServGetBatteryLevel();
 xOnOff xMicServSetDebug_BAT( xOnOff do_sets );
 
 
-#endif	///#ifndef __BATTERYSERV_IF__
+#endif	///#ifndef __BATTERYSERV_IF_H__
 
 

@@ -8,20 +8,23 @@ Initialor		:	span.liu
 */
 
 
-#ifndef __BATTERYSERV_CORE__
-#define __BATTERYSERV_CORE__
+#ifndef __BATTERYSERV_CORE_H__
+#define __BATTERYSERV_CORE_H__
 
-///#include "GenericTypeDefs.h"
+
 #include "mTypeDef.h"
 
 
 
-static BOOL MicServInit();
-static BOOL MicServDeInit();
-///static BOOL MicServPwrDwn();
-static BOOL MicIsServIdle();
+BOOL ServInit_BAT();
+BOOL ServDeInit_BAT();
+BOOL ServPwrDwn_BAT();
+BOOL IsServIdle_BAT();
+UINT ServGetBattLvDBG_BAT();
+void ServIsIdle_BAT();
+void ServIsActive_BAT();
 
-static INT32 MicServGetBattLv();
 
 
-#endif	///#ifndef __BATTERYSERV_CORE__
+
+#endif	///#ifndef __BATTERYSERV_CORE_H__

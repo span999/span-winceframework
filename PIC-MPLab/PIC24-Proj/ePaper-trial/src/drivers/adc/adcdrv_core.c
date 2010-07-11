@@ -8,13 +8,15 @@ Initialor		:	span.liu
 */
 
 #include "adcdrv_core.h"
-#include "mFreeRTOSDef.h"
+
 #define USE_AND_OR /* To enable AND_OR mask setting */
 #include <adc.h>
 
 
+static BOOL IsIdle = FALSE;
+
 ///internal functions
-static BOOL MicModHWInit()
+static BOOL ModHWInit()
 {
 	BOOL bRet = FALSE;
 	///TODO: hardware initial
@@ -23,7 +25,7 @@ static BOOL MicModHWInit()
 }
 
 
-static BOOL MicModHWdeInit()
+static BOOL ModHWdeInit()
 {
 	BOOL bRet = FALSE;
 	///TODO: hardware de-initial
@@ -32,7 +34,7 @@ static BOOL MicModHWdeInit()
 }
 
 
-static UINT MicModHWreadADCport()
+static UINT ModHWreadADCport()
 {
 	UINT uiRet = 0;
 	///TODO: read ADC hardware port
@@ -79,53 +81,66 @@ static UINT MicModHWreadADCport()
 
 
 ///common functions
-static BOOL MicModInit()
+BOOL ModInit_ADC()
 {
 	BOOL bRet = FALSE;
 	
-	bRet = MicModHWInit();
+	bRet = ModHWInit();
 	
 	return bRet;
 }
 
 
-static BOOL MicModDeInit()
+BOOL ModDeInit_ADC()
 {
 	BOOL bRet = FALSE;
 	
-	bRet = MicModHWdeInit();
+	bRet = ModHWdeInit();
 	
 	return bRet;
 }
 
 
 
-static BOOL MicModPwrDwn()
+BOOL ModPwrDwn_ADC()
 {
 	BOOL bRet = FALSE;
 	
-	bRet = MicModHWdeInit();
+	bRet = ModHWdeInit();
 	
 	return bRet;
 }
 
 
-static BOOL MicIsModIdle()
+BOOL IsModIdle_ADC()
 {
 	BOOL bRet = FALSE;
 	
 	///ADC port is always in idle since it's a polling / passive driver
 	bRet = TRUE;
+	bRet = IsIdle;
 	
 	return bRet;
 }
 
 
-static UINT MicModGetADC()
+UINT ModGetADC_ADC()
 {
 	UINT uiRet = 0;
 	
-	uiRet = MicModHWreadADCport();
+	uiRet = ModHWreadADCport();
 	
 	return uiRet;
+}
+
+
+void ModIsIdle_ADC()
+{
+	IsIdle = TRUE;
+}
+
+
+void ModIsActive_ADC()
+{
+	IsIdle = FALSE;
 }

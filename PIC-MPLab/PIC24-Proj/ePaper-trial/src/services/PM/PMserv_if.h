@@ -8,8 +8,8 @@ Initialor		:	span.liu
 */
 
 
-#ifndef __PMSERV_IF__
-#define __PMSERV_IF__
+#ifndef __PMSERV_IF_H__
+#define __PMSERV_IF_H__
 
 
 #include "mFreeRTOSDef.h"
@@ -33,6 +33,6 @@ bRET xMicPMSetPwrSt();
 xBATTLEVEL xMicPMGetBattLevel();
 
 
-#endif	///#ifndef __PMSERV_IF__
+#endif	///#ifndef __PMSERV_IF_H__
 
 

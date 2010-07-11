@@ -8,20 +8,22 @@ Initialor		:	span.liu
 */
 
 
-#ifndef __ADCDRV_CORE__
-#define __ADCDRV_CORE__
+#ifndef __ADCDRV_CORE_H__
+#define __ADCDRV_CORE_H__
 
-///#include "GenericTypeDefs.h"
+
 #include "mTypeDef.h"
 
 
 
-static BOOL MicModInit();
-static BOOL MicModDeInit();
-static BOOL MicModPwrDwn();
-static BOOL MicIsModIdle();
+BOOL ModInit_ADC();
+BOOL ModDeInit_ADC();
+BOOL ModPwrDwn_ADC();
+BOOL IsModIdle_ADC();
 
-static UINT MicModGetADC();
+UINT ModGetADC_ADC();
+void ServIsIdle_BAT();
+void ServIsActive_BAT();
 
 
-#endif	///#ifndef __ADCDRV_CORE__
+#endif	///#ifndef __ADCDRV_CORE_H__

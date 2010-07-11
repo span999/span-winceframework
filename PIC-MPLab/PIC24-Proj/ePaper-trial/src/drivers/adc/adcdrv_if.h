@@ -8,10 +8,10 @@ Initialor		:	span.liu
 */
 
 
-#ifndef __ADCDRV_IF__
-#define __ADCDRV_IF__
+#ifndef __ADCDRV_IF_H__
+#define __ADCDRV_IF_H__
 
-///#include "GenericTypeDefs.h"
+
 #include "mTypeDef.h"
 
 
@@ -26,6 +26,6 @@ xPMMODSTAT xMicModInPwrSt_ADC();
 xADCval xMicModGetADCValue();
 
 
-#endif	///#ifndef __ADCDRV_IF__
+#endif	///#ifndef __ADCDRV_IF_H__
 
 
