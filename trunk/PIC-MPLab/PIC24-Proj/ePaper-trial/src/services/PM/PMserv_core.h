@@ -8,20 +8,23 @@ Initialor		:	span.liu
 */
 
 
-#ifndef __PMSERV_CORE__
-#define __PMSERV_CORE__
+#ifndef __PMSERV_CORE_H__
+#define __PMSERV_CORE_H__
 
-///#include "GenericTypeDefs.h"
 #include "mTypeDef.h"
 
 
 
-static BOOL MicServInit();
-static BOOL MicServDeInit();
-///static BOOL MicServPwrDwn();
-static BOOL MicIsServIdle();
+BOOL ServInit_PM();
+BOOL ServDeInit_PM();
+BOOL ServPwrDwn_PM();
+BOOL IsServIdle_PM();
+///UINT ServGetBattLvDBG_BAT();
+void ServIsIdle_PM();
+void ServIsActive_PM();
 
 ///static INT32 MicServGetBattLv();
 
 
-#endif	///#ifndef __PMSERV_CORE__
+
+#endif	///#ifndef __PMSERV_CORE_H__

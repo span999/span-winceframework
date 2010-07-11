@@ -1,16 +1,18 @@
 /*
 
 File			:	PMserv_core.c		
-Description		:	service main body file. battery service core body.
+Description		:	service main body file. PM service core body.
 Initialor		:	span.liu
 
 
 */
 
 #include "PMserv_core.h"
-#include "mFreeRTOSDef.h"
 
 
+
+
+static BOOL IsIdle = FALSE;
 
 ///internal functions
 /*
@@ -29,7 +31,7 @@ static INT32 MicModServCalcBatteryLevel()
 
 
 ///common functions
-static BOOL MicServInit()
+BOOL ServInit_PM()
 {
 	BOOL bRet = FALSE;
 	
@@ -40,7 +42,7 @@ static BOOL MicServInit()
 }
 
 
-static BOOL MicServDeInit()
+BOOL ServDeInit_PM()
 {
 	BOOL bRet = FALSE;
 	
@@ -51,8 +53,8 @@ static BOOL MicServDeInit()
 }
 
 
-/*
-static BOOL MicServPwrDwn()
+
+BOOL ServPwrDwn_PM()
 {
 	BOOL bRet = FALSE;
 
@@ -61,18 +63,36 @@ static BOOL MicServPwrDwn()
 	
 	return bRet;
 }
-*/
 
 
-static BOOL MicIsServIdle()
+
+BOOL IsServIdle_PM()
 {
 	BOOL bRet = FALSE;
 	
-	///battrey is always in idle since it's a polling / passive driver
-	bRet = TRUE;
+	///PM is always in idle since it's a polling / passive driver
+	///bRet = TRUE;
+	bRet = IsIdle;
 	
 	return bRet;
 }
 
+
+///UINT ServGetBattLvDBG_BAT()
+///{
+///	return 88;
+///}
+
+
+void ServIsIdle_PM()
+{
+	IsIdle = TRUE;
+}
+
+
+void ServIsActive_PM()
+{
+	IsIdle = FALSE;
+}
 
 

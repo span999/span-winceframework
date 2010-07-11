@@ -19,7 +19,7 @@ bRET xMicModInit_ADC()
 {
 	bRET bRet = bRET_TRUE;
 	
-	bRet = MicModInit();
+	bRet = ModInit_ADC();
 	
 	return bRet;
 }
@@ -29,7 +29,7 @@ bRET xMicModDeInit_ADC()
 {
 	bRET bRet = bRET_TRUE;
 	
-	bRet = MicModDeInit();
+	bRet = ModDeInit_ADC();
 	
 	return bRet;
 }
@@ -39,7 +39,7 @@ bRET xMicModPwrDwn_ADC()
 {
 	bRET bRet = bRET_TRUE;
 	
-	bRet = MicModPwrDwn();
+	bRet = ModPwrDwn_ADC();
 	
 	return bRet;
 }
@@ -48,7 +48,7 @@ bRET xMicModPwrDwn_ADC()
 xPMMODSTAT xMicModInPwrSt_ADC()
 {
 	xPMMODSTAT pmStat;
-	if( MicIsModIdle() )
+	if( IsModIdle_ADC() )
 		pmStat = PMMODSTAT_IDLE;
 	else
 		pmStat = PMMODSTAT_ACTIVE;
@@ -61,11 +61,11 @@ xADCval xMicModGetADCValue()
 {
 	xADCval value = 0;
 	
-	value = MicModGetADC();
+	value = ModGetADC_ADC();
 
 	return value;
 }
 
 
 /// here we have static function below
-#include "adcdrv_core.c"
+///#include "adcdrv_core.c"

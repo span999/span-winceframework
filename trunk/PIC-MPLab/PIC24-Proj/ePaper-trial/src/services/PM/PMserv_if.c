@@ -39,33 +39,35 @@ static PMCMD	CmdLoopCurrStat = PMCmd_ENABLE;
 
 
 
-
-bRET xMicServInit_PM()
+///internal functions
+static bRET xMicServInit_PM()
 {
 	bRET bRet = bRET_TRUE;
 	
-	bRet = MicServInit();
+	bRet = ServInit_PM();
 	CmdLoopCurrStat = PMCmd_ENABLE;
 	
 	return bRet;
 }
 
 
-bRET xMicServDeInit_PM()
+static bRET xMicServDeInit_PM()
 {
 	bRET bRet = bRET_TRUE;
 	
-	bRet = MicServDeInit();
+	bRet = ServDeInit_PM();
 	
 	return bRet;
 }
 
 
+///public functions
 bRET xMicServPwrDwn_PM()
 {
 	bRET bRet = bRET_TRUE;
 	
 	///need no power down function for servies
+	bRet = ServPwrDwn_PM();
 	
 	return bRet;
 }
@@ -74,7 +76,7 @@ bRET xMicServPwrDwn_PM()
 xPMMODSTAT xMicServInPwrSt_PM()
 {
 	xPMMODSTAT pmStat;
-	if( MicIsServIdle() )
+	if( IsServIdle_PM() )
 		pmStat = PMMODSTAT_IDLE;
 	else
 		pmStat = PMMODSTAT_ACTIVE;
@@ -133,6 +135,7 @@ static void vPMSERV_taskMain(void* pvParameter)
 			///check battery
 			xMicServSetDebug_BAT( xON );	///set battery in debug mode
 			value = xMicServGetBatteryLevel();	///access battery service
+			xMicServSetDebug_BAT( xOFF );	///set battery in debug mode
 			///vPrintString( "PMGetCmdQueue get battery level=%d\r\n", value );
 			printf("PMGetCmdQueue get battery level=%d \r\n", value);
 		}
@@ -160,4 +163,4 @@ void* pvPMSERV_ServInit( void* pvParameter )
 }
 
 /// here we have static function below
-#include "PMserv_core.c"
+///#include "PMserv_core.c"

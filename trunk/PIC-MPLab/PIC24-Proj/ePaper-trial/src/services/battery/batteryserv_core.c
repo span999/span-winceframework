@@ -8,27 +8,18 @@ Initialor		:	span.liu
 */
 
 #include "batteryserv_core.h"
-#include "mFreeRTOSDef.h"
-#include "..\..\drivers\adc\adcdrv_if.h"
 
+
+
+static BOOL IsIdle = FALSE;
 
 ///internal functions
-static INT32 MicModServCalcBatteryLevel()
-{
-	INT32 i32Ret = 0;
-	///TODO: read ADC, and to a battery mapping
 
-	i32Ret = xMicModGetADCValue();
-	
-	///mapping table??
-	
-	return i32Ret;
-}
 
 
 
 ///common functions
-static BOOL MicServInit()
+BOOL ServInit_BAT()
 {
 	BOOL bRet = FALSE;
 	
@@ -39,7 +30,7 @@ static BOOL MicServInit()
 }
 
 
-static BOOL MicServDeInit()
+BOOL ServDeInit_BAT()
 {
 	BOOL bRet = FALSE;
 	
@@ -50,8 +41,8 @@ static BOOL MicServDeInit()
 }
 
 
-/*
-static BOOL MicServPwrDwn()
+
+BOOL ServPwrDwn_BAT()
 {
 	BOOL bRet = FALSE;
 
@@ -60,25 +51,35 @@ static BOOL MicServPwrDwn()
 	
 	return bRet;
 }
-*/
 
 
-static BOOL MicIsServIdle()
+BOOL IsServIdle_BAT()
 {
 	BOOL bRet = FALSE;
 	
 	///battrey is always in idle since it's a polling / passive driver
-	bRet = TRUE;
+	///bRet = TRUE;
+	bRet = IsIdle;
 	
 	return bRet;
 }
 
 
-static INT32 MicServGetBattLv()
+UINT ServGetBattLvDBG_BAT()
 {
-	INT32 i32Ret = 0;
-	
-	i32Ret = MicModServCalcBatteryLevel();
-	
-	return i32Ret;
+	return 88;
 }
+
+
+void ServIsIdle_BAT()
+{
+	IsIdle = TRUE;
+}
+
+
+void ServIsActive_BAT()
+{
+	IsIdle = FALSE;
+}
+
+
