@@ -134,6 +134,19 @@ UINT ModGetADC_ADC()
 }
 
 
+UINT ModGetADCDBG_ADC()
+{
+	UINT uiRet = 0;
+	static prevValue = 0;
+	
+	srand( prevValue ); 
+	uiRet = abs( rand() );
+	prevValue = uiRet;
+	
+	return uiRet;
+}
+
+
 void ModIsIdle_ADC()
 {
 	IsIdle = TRUE;
