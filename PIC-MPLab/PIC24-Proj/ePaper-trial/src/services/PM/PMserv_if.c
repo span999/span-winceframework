@@ -133,9 +133,9 @@ static void vPMSERV_taskMain(void* pvParameter)
 			printf("PMGetCmdQueue timeout!!!\r\n");
 			
 			///check battery
-			xMicServSetDebug_BAT( xON );	///set battery in debug mode
+			///xMicServSetDebug_BAT( xON );	///set battery in debug mode
 			value = xMicServGetBatteryLevel();	///access battery service
-			xMicServSetDebug_BAT( xOFF );	///set battery in debug mode
+			///xMicServSetDebug_BAT( xOFF );	///set battery off debug mode
 			///vPrintString( "PMGetCmdQueue get battery level=%d\r\n", value );
 			printf("PMGetCmdQueue get battery level=%d \r\n", value);
 		}

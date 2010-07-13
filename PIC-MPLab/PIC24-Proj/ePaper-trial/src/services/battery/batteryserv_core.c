@@ -65,6 +65,16 @@ BOOL IsServIdle_BAT()
 }
 
 
+INT32 ServMappingADC2BATT_BAT( UINT uiADC )
+{
+	INT32 i32Ret = 0;
+	
+	i32Ret = (uiADC & 0x7);
+	
+	return i32Ret;
+}
+
+
 UINT ServGetBattLvDBG_BAT()
 {
 	return 88;

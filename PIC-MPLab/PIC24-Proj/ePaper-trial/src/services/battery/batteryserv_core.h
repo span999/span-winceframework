@@ -24,7 +24,7 @@ UINT ServGetBattLvDBG_BAT();
 void ServIsIdle_BAT();
 void ServIsActive_BAT();
 
-
+INT32 ServMappingADC2BATT_BAT( UINT uiADC );
 
 
 #endif	///#ifndef __BATTERYSERV_CORE_H__

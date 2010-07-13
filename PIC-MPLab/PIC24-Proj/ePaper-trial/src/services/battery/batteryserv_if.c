@@ -23,15 +23,19 @@ static xOnOff DebugModeCtrl = xOFF;
 
 
 ///internal functions
-static INT32 MicModServCalcBatteryLevel()
+static INT32 MicServCalcBatteryLevel()
 {
 	INT32 i32Ret = 0;
+	UINT uiRet = 0;
 	///TODO: read ADC, and to a battery mapping
-
-	i32Ret = xMicModGetADCValue();
+	
+	xMicModSetDebug_ADC( xON );		///set battery in debug mode
+	uiRet = xMicModGetADCValue();
+	xMicModSetDebug_ADC( xOFF );	///set battery off debug mode
 	
 	///mapping table??
-	
+	i32Ret = ServMappingADC2BATT_BAT( uiRet );
+
 	return i32Ret;
 }
 
@@ -40,7 +44,7 @@ static INT32 MicServGetBattLv()
 {
 	INT32 i32Ret = 0;
 	
-	i32Ret = MicModServCalcBatteryLevel();
+	i32Ret = MicServCalcBatteryLevel();
 	
 	return i32Ret;
 }
