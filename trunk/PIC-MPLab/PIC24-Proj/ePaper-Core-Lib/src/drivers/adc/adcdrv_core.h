@@ -21,6 +21,7 @@ BOOL ModDeInit_ADC();
 BOOL ModPwrDwn_ADC();
 BOOL IsModIdle_ADC();
 
+UINT ModGetADCDBG_ADC();
 UINT ModGetADC_ADC();
 void ServIsIdle_BAT();
 void ServIsActive_BAT();

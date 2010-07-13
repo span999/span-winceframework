@@ -7,6 +7,7 @@ Initialor		:	span.liu
 
 */
 
+#include <stdlib.h>
 #include "adcdrv_core.h"
 
 #define USE_AND_OR /* To enable AND_OR mask setting */
@@ -129,6 +130,19 @@ UINT ModGetADC_ADC()
 	UINT uiRet = 0;
 	
 	uiRet = ModHWreadADCport();
+	
+	return uiRet;
+}
+
+
+UINT ModGetADCDBG_ADC()
+{
+	UINT uiRet = 0;
+	static UINT prevValue = 0;
+	
+	srand( prevValue ); 
+	uiRet = abs( rand() );
+	prevValue = uiRet;
 	
 	return uiRet;
 }
