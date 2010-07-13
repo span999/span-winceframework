@@ -25,6 +25,10 @@
 /* type def for PM system state value */
 typedef    unsigned int			xPMSYSSTAT;
 
+#define    PMSYSSTAT_ON             (0x0001)
+#define    PMSYSSTAT_SAVE          	(0x0002)
+#define    PMSYSSTAT_OFF            (0x0004)
+
 
 /* type def for PM module state value */
 typedef    unsigned int			xPMMODSTAT;
@@ -36,6 +40,13 @@ typedef    unsigned int			xPMMODSTAT;
 /* type def for PM timeout value */
 typedef    unsigned int			xPMSYSSTATTO;
 
+/* System State Timeout table */
+typedef struct PMStTOTBL
+{
+    xPMSYSSTATTO xtoSysStat_ON;                /*< Timeour value of system power state 'POWER ON'. */
+    xPMSYSSTATTO xtoSysStat_SAVE;             /*< Timeour value of system power state 'POWER SAVE'. */
+    xPMSYSSTATTO xtoSysStat_OFF;               /*< Timeour value of system power state 'OFF'. */
+} xPMSTATTOTBLE;
 
 
 ///On,OFF define
