@@ -24,6 +24,7 @@ bRET xMicModPwrDwn_ADC();
 xPMMODSTAT xMicModInPwrSt_ADC();
 
 xADCval xMicModGetADCValue();
+xOnOff xMicModSetDebug_ADC( xOnOff do_sets );
 
 
 #endif	///#ifndef __ADCDRV_IF_H__
