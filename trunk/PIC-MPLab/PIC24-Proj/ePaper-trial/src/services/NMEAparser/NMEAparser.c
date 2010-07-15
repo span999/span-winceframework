@@ -6,8 +6,9 @@
 */
 
 
-#include "NMEAparser.h"
 #include <string.h>
+#include <stdio.h>
+#include "NMEAparser.h"
 #include "mTypeDef.h"
 
 
@@ -121,9 +122,46 @@ static unsigned Copy_sentence_field( char* pSentenceNow, unsigned uiSentenceLen,
 	return uRet;
 }
 
+
+static unsigned Dump_sentence_field( NMEA_sentence_field_list* psentenceList )
+{
+	unsigned uRet = 0;
+	unsigned uiLoopA = 0;
+	unsigned uiLoopB = 0;
+
+	///reset field index
+	psentenceList->vaildfields = 0;
+
+	for( uiLoopA = 0; uiLoopA < psentenceList->vaildfields; uiLoopA++ )
+	{
+		for( uiLoopB = 0; uiLoopB < psentenceList->Field[uiLoopA].FieldLen; uiLoopB++ )
+			printf( "%c", *(psentenceList->Field[uiLoopA].pField + uiLoopB) );
+	}
+	
+	return uRet;
+}
+
+
+
 static bRET parseGPGGA( unsigned count, NMEA_sentence_field_list* psentenceList, gps_NMEA_session* pSession )
 {
 	bRET bRet = bRET_TRUE;
+	unsigned uiLoopA = 0;
+	
+	for( uiLoopA = 0; uiLoopA < count; uiLoopA )
+	{
+		if( psentenceList->vaildfields > uiLoopA )
+		{
+			if( 0 == uiLoopA )
+			{	///ID, ignored
+			}
+			else
+			if( 1 == uiLoopA )
+			{	///Time,
+			}
+			
+		}
+	}
 	
 	return bRet;
 }
@@ -194,18 +232,22 @@ nmeaParseRET NMEAparser(char *pcNMEAsentence, gps_NMEA_session* ptNMEAsession)
 			if( *pSentenceNow == firstfieldsign )	///'G'
 			{
 				///start to find and copy all field
-				Copy_sentence_field( pSentenceNow, uiSentenceLen, &sentenceList );
+				Copy_sentence_field( pSentenceNow, (uiSentenceLen - uiLoopA - 1), &sentenceList );
 				break;
 			}
 		}
 		///try next char
 	}
 	
+	Dump_sentence_field( &sentenceList );
+	
 	
 	///parse NMEA sentense with proper decoder 
 	if( sentenceList.vaildfields > 0 )
 	{
 		uiLoopA = 0;
+		
+		///find if any on decoder list meets the ID in sentence!!
 		while( NULL != Decoder_list[uiLoopA].decoder )
 		{
 			if( strcmp( Decoder_list[uiLoopA].NMEAID, sentenceList.Field[0].pField ) == 0)
@@ -214,6 +256,13 @@ nmeaParseRET NMEAparser(char *pcNMEAsentence, gps_NMEA_session* ptNMEAsession)
 				Decoder_list[uiLoopA].decoder( Decoder_list[uiLoopA].fieldNum, &sentenceList, ptNMEAsession );
 				break;
 			}
+			else
+			if( strcmp( Decoder_list[uiLoopA].NMEAID, "ENDGP" ) == 0)
+			{
+				///at end of list
+				break;
+			}
+			
 			uiLoopA++;
 		}
 	}
