@@ -17,8 +17,7 @@ Initialor		:	span.liu
 #include "..\battery\batteryserv_if.h"
 
 
-
-///PM command list
+/* PM command list, all availalbe command for xMicPMGetCmdQueueHandle */	
 typedef enum {
     PMCmd_ENABLE = 1,		/* PM command, enable */
     PMCmd_DISABLE,			/* PM command, disable */
@@ -31,10 +30,19 @@ typedef enum {
 } PMCMD;
 
 
+/* System State Timeout table */
+typedef struct PMStstReport
+{
+	xPMSYSSTAT	PMsystemState;
+	xPMMODSTAT	PMpowerState;
+	xPMSTATTOTBLE PMtimeoutTable;
+} xPMSTATREPORT;
+
+
 ///get the queue handle for command in
-xQueueHandle xMicPMGetCmdQueueHandle();
+xQueueHandle xMicPMGetCmdQueueHandle( void );
 ///get the queue handle for status out
-xQueueHandle xMicPMGetStatQueueHandle();
+xQueueHandle xMicPMGetStatQueueHandle( void );
 
 
 ///main service initial routine
@@ -42,13 +50,15 @@ void* pvPMSERV_ServInit(void* pvParameter);
 
 
 ///power management
-xPMSYSSTAT xMicPMGetPwrSt();
-bRET xMicPMSetPwrSt( xPMSYSSTAT xSetPMState );
+xPMMODSTAT xMicPMGetModPwrSt( void );
+xPMSYSSTAT xMicPMGetSysPwrSt( void );
+bRET xMicPMSetsysPwrSt( xPMSYSSTAT xSetPMState );
+void xMicPMtouchit( void );
 
 
 ///battery function
-xBATTLEVEL xMicPMGetBattLevel();
-xBATTLEVEL xMicPMGetBattLevelForce();
+xBATTLEVEL xMicPMGetBattLevel( void );
+xBATTLEVEL xMicPMGetBattLevelForce( void );
 
 
 
