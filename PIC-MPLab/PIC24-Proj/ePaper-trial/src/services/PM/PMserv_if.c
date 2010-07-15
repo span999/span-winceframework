@@ -11,13 +11,15 @@ Initialor		:	span.liu
 #include "PMserv_if.h"
 #include "mFreeRTOSDef.h"
 #include "PMserv_core.h"
+#include "..\Toolbox\Toolbox.h"
 
 
-#define PM_CMD_QUEUE_SIZE		4	// number of messages queue can contain
-#define PM_QUEUE_CMD_SIZE		36	// size of each message
 
-#define PM_STAT_QUEUE_SIZE		2	// number of messages queue can contain
-#define PM_QUEUE_STAT_SIZE		sizeof(char)	// size of each message
+#define PM_CMD_QUEUE_SIZE		3	// number of messages queue can contain
+#define PM_QUEUE_CMD_SIZE		sizeof(PMCMD)	// size of each message
+
+#define PM_STAT_QUEUE_SIZE		3	// number of messages queue can contain
+#define PM_QUEUE_STAT_SIZE		sizeof(xPMSTATREPORT)	// size of each message
 
 #define STACK_SIZE_PMSERV		(configMINIMAL_STACK_SIZE * 5)
 #define TASK_PRIORITY_PMSERV	(tskIDLE_PRIORITY + 1)
@@ -27,25 +29,50 @@ Initialor		:	span.liu
 #define PM_CMD_QUEUE_WAITTICK		(1000 / portTICK_RATE_MS)	///1000 ms timeout
 
 
+typedef struct {
+	DWORD	dwTimeCount;
+	UINT	uiStatTOCount;
+} PM_TIMER_DATA;
+
 
 ///////////////////////////////////////////////////////////////////
 // Variables 
+
+static xPMSTATTOTBLE defaultPMstatTOtbl = {
+	TRUE,
+	8,	/// ON TO
+	20,	/// SAVE TO
+	3,	/// OFF TO
+};
+
+static xPMSTATTOTBLE newPMstatTOtbl = {
+	FALSE,
+	8,	/// ON TO
+	20,	/// SAVE TO
+	3,	/// OFF TO
+};
+
 ///queue for PM system to recieve command
 static xQueueHandle hPMSERV_ServCmdQueue;
 ///queue for PM system to export current status
 static xQueueHandle hPMSERV_ServStatQueue;
 ///task handle for this service
-static xTaskHandle hPMSERV_ServTask;
+static xTaskHandle hPMSERV_ServTaskCmd;
+static xTaskHandle hPMSERV_ServTaskState;
 
+///state control for PM cmd parser
 static PMCMD	CmdLoopCurrStat = PMCmd_ENABLE;
+///state control for PM system state
 static xPMSYSSTAT	PMCurrSysStat = PMSYSSTAT_ON;
+///latest battery level
 static xBATTLEVEL 	BattLevelValue = 0;
 
-static xPMSTATTOTBLE defaultPMstatTOtbl = {
-	5,	/// ON TO
-	4,	/// SAVE TO
-	3,	/// OFF TO
-};
+///timer data structure
+static PM_TIMER_DATA pmTimeData;
+///current TO table
+static xPMSTATTOTBLE* pThisPMstatTOtbl = &defaultPMstatTOtbl;
+
+
 
 
 ///internal functions
@@ -111,13 +138,32 @@ xBATTLEVEL xMicPMGetBattLevelForce()
 }
 
 
-xPMSYSSTAT xMicPMGetPwrSt()
+xPMMODSTAT xMicPMGetModPwrSt()
+{
+	return PMMODSTAT_IDLE;
+}
+
+
+xPMSYSSTAT xMicPMGetSysPwrSt()
 {
 	return PMCurrSysStat;
 }
 
 
-bRET xMicPMSetPwrSt( xPMSYSSTAT xSetPMState )
+static BOOL PMSendCmd( PMCMD SetCmd )
+{
+	BOOL bRet = TRUE;
+
+	printf("PMSendCmd send cmd =%d\r\n", SetCmd);
+	if( pdPASS != xQueueSend( xMicPMGetCmdQueueHandle(), &SetCmd, 0 ) )
+	///if( pdPASS != xQueueSendToBack( xMicPMGetCmdQueueHandle(), &SetCmd, 0 ) )
+		bRet = FALSE;
+	
+	return bRet;
+}
+
+
+bRET xMicPMSetsysPwrSt( xPMSYSSTAT xSetPMState )
 {
 	bRET bRet = TRUE;
 	PMCMD SetCmd = 0;
@@ -133,7 +179,8 @@ bRET xMicPMSetPwrSt( xPMSYSSTAT xSetPMState )
 	else
 		SetCmd = PMCmd_TOUCH;
 	
-	xQueueSend( xMicPMGetCmdQueueHandle(), &SetCmd, 0 );
+	///xQueueSend( xMicPMGetCmdQueueHandle(), &SetCmd, 0 );
+	PMSendCmd( SetCmd );
 	
 	return bRet;
 }
@@ -151,6 +198,68 @@ xQueueHandle xMicPMGetStatQueueHandle()
 }
 
 
+void xMicPMtouchit( void )
+{
+	PMSendCmd( PMCmd_TOUCH );
+}
+
+
+static void PMupdateReport()
+{
+	xPMSTATREPORT ThisReport;
+	
+	ThisReport.PMsystemState = xMicPMGetSysPwrSt();
+	ThisReport.PMpowerState = xMicPMGetModPwrSt();
+	ThisReport.PMtimeoutTable.bValid = pThisPMstatTOtbl->bValid;
+	ThisReport.PMtimeoutTable.xtoSysStat_ON = pThisPMstatTOtbl->xtoSysStat_ON;
+	ThisReport.PMtimeoutTable.xtoSysStat_SAVE = pThisPMstatTOtbl->xtoSysStat_SAVE;
+	ThisReport.PMtimeoutTable.xtoSysStat_OFF = pThisPMstatTOtbl->xtoSysStat_OFF;
+	
+	xMicSetProtectedData( xMicPMGetStatQueueHandle(), &ThisReport );
+	
+	printf("PMupdateReport\r\n");
+	
+}
+
+static BOOL PMsystemGoON()
+{
+	BOOL bRet = TRUE;
+
+	PMCurrSysStat = PMSYSSTAT_ON;
+	printf("PMSetCurrTOState set state =PMSYSSTAT_ON\r\n");
+	
+	return bRet;
+}
+
+
+static BOOL PMsystemGoSAVE()
+{
+	BOOL bRet = TRUE;
+
+	PMCurrSysStat = PMSYSSTAT_SAVE;
+	printf("PMSetCurrTOState set state =PMSYSSTAT_SAVE\r\n");
+
+	return bRet;
+}
+
+
+static BOOL PMsystemGoOFF()
+{
+	BOOL bRet = TRUE;
+
+	PMCurrSysStat = PMSYSSTAT_OFF;
+	printf("PMSetCurrTOState set state =PMSYSSTAT_OFF\r\n");
+
+	return bRet;
+}
+
+
+
+/*
+	PMcmdParser
+	check if we need to handle this command, or just do it right here!
+
+*/
 static BOOL PMcmdParser( PMCMD *pPMcmd )
 {
 	BOOL bRet = TRUE;
@@ -162,7 +271,7 @@ static BOOL PMcmdParser( PMCMD *pPMcmd )
 			case PMCmd_ENABLE:
 				if( PMCmd_ENABLE != CmdLoopCurrStat )
 					CmdLoopCurrStat = PMCmd_ENABLE;
-				bRet = TRUE;
+				bRet = FALSE;
 				break;
 		
 			case PMCmd_DISABLE:
@@ -176,7 +285,12 @@ static BOOL PMcmdParser( PMCMD *pPMcmd )
 					CmdLoopCurrStat = PMCmd_PAUSE;
 				bRet = FALSE;
 				break;
-			
+				
+			case PMCmd_TOUCH:
+			case PMCmd_EVENT:
+				bRet = FALSE;
+				break;
+				
 			default:
 				bRet = TRUE;
 				break;
@@ -187,12 +301,43 @@ static BOOL PMcmdParser( PMCMD *pPMcmd )
 }
 
 
-static BOOL PMeventHandler()
+static BOOL PMeventHandler( PMCMD *pPMcmd )
 {
 	BOOL bRet = TRUE;
 	
 	///check 
 	
+	if( NULL != pPMcmd )
+	{
+		switch( *pPMcmd )
+		{
+			case PMCmd_ENABLE:
+			case PMCmd_DISABLE:
+			case PMCmd_PAUSE:
+				bRet = FALSE;
+				break;
+				
+			case PMCmd_SETSYSSTAT_ON:
+				PMsystemGoON();
+				bRet = TRUE;
+				break;
+
+			case PMCmd_SETSYSSTAT_SAVE:
+				PMsystemGoSAVE();
+				bRet = TRUE;
+				break;
+
+			case PMCmd_SETSYSSTAT_OFF:
+				PMsystemGoOFF();
+				bRet = TRUE;
+				break;
+				
+			default:
+				bRet = TRUE;
+				break;
+		}///switch
+		PMupdateReport();
+	}
 	
 	return bRet;
 }
@@ -210,7 +355,7 @@ static BOOL PMcheckBattery()
 	///xMicServSetDebug_BAT( xOFF );	///set battery off debug mode
 
 	BattLevelValue = value;	///sync 
-	printf("PMGetCmdQueue get battery level=%d \r\n", value);	
+	printf("PMcheckBattery get battery level=%d \r\n", value);
 	
 	return bRet;
 }
@@ -221,13 +366,13 @@ UINT PMGetCurrStateTO()
 	UINT uiRet = 1;
 	
 	if( PMSYSSTAT_ON == PMCurrSysStat )
-		uiRet = defaultPMstatTOtbl.xtoSysStat_ON;
+		uiRet = pThisPMstatTOtbl->xtoSysStat_ON;
 	else	
 	if( PMSYSSTAT_SAVE == PMCurrSysStat )
-		uiRet = defaultPMstatTOtbl.xtoSysStat_SAVE;
+		uiRet = pThisPMstatTOtbl->xtoSysStat_SAVE;
 	else	
 	if( PMSYSSTAT_OFF == PMCurrSysStat )
-		uiRet = defaultPMstatTOtbl.xtoSysStat_OFF;
+		uiRet = pThisPMstatTOtbl->xtoSysStat_OFF;
 	else
 		uiRet = 9999;
 	
@@ -239,40 +384,33 @@ UINT PMGetCurrStateTO()
 BOOL PMSetCurrTOState()
 {
 	BOOL bRet = TRUE;
+	PMCMD SetCmd;
 	
 	if( PMSYSSTAT_ON == PMCurrSysStat )
-		PMCurrSysStat = PMSYSSTAT_SAVE;
+		SetCmd = PMCmd_SETSYSSTAT_SAVE;
 	else	
 	if( PMSYSSTAT_SAVE == PMCurrSysStat )
-		PMCurrSysStat = PMSYSSTAT_OFF;
+		SetCmd = PMCmd_SETSYSSTAT_OFF;
 	else	
 	if( PMSYSSTAT_OFF == PMCurrSysStat )
-		PMCurrSysStat = PMSYSSTAT_ON;
+		SetCmd = PMCmd_SETSYSSTAT_ON;
 	else
-		PMCurrSysStat = PMSYSSTAT_ON;
+		SetCmd = PMCmd_SETSYSSTAT_ON;
 	
-	printf("PMSetCurrTOState timeout !!!! set state to=0x%x \r\n", PMCurrSysStat);
-	if( PMSYSSTAT_ON == PMCurrSysStat )
-		printf("PMSetCurrTOState set state =PMSYSSTAT_ON\r\n");
-	else	
-	if( PMSYSSTAT_SAVE == PMCurrSysStat )
-		printf("PMSetCurrTOState set state =PMSYSSTAT_SAVE\r\n");
-	else	
-	if( PMSYSSTAT_OFF == PMCurrSysStat )
-		printf("PMSetCurrTOState set state =PMSYSSTAT_OFF\r\n");
-	else
-		printf("PMSetCurrTOState set state =PMSYSSTAT_ON\r\n");
+	PMSendCmd( SetCmd );
 
+	printf("PMSetCurrTOState timeout !!!! set state to=0x%x \r\n", PMCurrSysStat);
+	
 	return bRet;
 }
 
 
-static void vPMSERV_taskMain(void* pvParameter)
+static void vPMSERV_taskMainCmd(void* pvParameter)
 {
 	PMCMD cmd;
 	portBASE_TYPE	xQR;
-	static DWORD	dwTimeCount = 0;
-	static UINT		uiStatTOCount = 0;
+///	static DWORD	dwTimeCount = 0;
+///	static UINT		uiStatTOCount = 0;
 		
 	/// in this task we wait for a string to be received and then
 	while (1) {
@@ -281,36 +419,59 @@ static void vPMSERV_taskMain(void* pvParameter)
 
 		if( pdPASS == xQR )
 		{	/// here comes cmd...
-			uiStatTOCount = 0;	///reset timer, if any command
+			pmTimeData.uiStatTOCount = 0;	///reset timer, if any command
 		#if 0	
 			if( PMCmd_TOUCH == cmd )
-				uiStatTOCount = 0;	///reset timer
+				pmTimeData.uiStatTOCount = 0;	///reset timer
 			else
 		#endif	
 			if( PMcmdParser( &cmd ) )
-				PMeventHandler();
+				PMeventHandler( &cmd );
 		}
 		else
 		{	///it suppose to be time out.. 
 
+			///check for timeout...
+			printf("PMGetCmdQueue timeout!!!\r\n");				
+		}
+	}	
+}
+
+
+static void vPMSERV_taskMainState(void* pvParameter)
+{
+#define PM_TIMER_BASE			1000
+#define PM_BATTERY_POLL			5000
+#define PM_BATERRY_COUNT		(PM_BATTERY_POLL/PM_TIMER_BASE)
+	
+	/// in this task we wait for a string to be received and then
+	while (1) {
+		/// wait until specified timeout
+		vMicSLEEPuntil( PM_TIMER_BASE );
+		
+		///if( PMCurrSysStat == PMSYSSTAT_ON )
+		if( 1 )
+		{	///it suppose to be time out.. 
+
 			///check the timed functions...
-			printf("PMGetCmdQueue timeout!!!\r\n");
-			dwTimeCount++;
-			uiStatTOCount++;
+			printf("vPMSERV_taskMainState timeout!!!\r\n");
+			pmTimeData.dwTimeCount++;
+			pmTimeData.uiStatTOCount++;
 			
-			if( uiStatTOCount > PMGetCurrStateTO() )		///check system state timeout
+			if( pmTimeData.uiStatTOCount > PMGetCurrStateTO() )		///check system state timeout
 			{	///system state timeout! change state
 				PMSetCurrTOState();
-				uiStatTOCount = 0;
+				pmTimeData.uiStatTOCount = 0;
 			}
 			
-			if( 0 == dwTimeCount % 5 )		///every five seconds.
+			if( 0 == pmTimeData.dwTimeCount % PM_BATERRY_COUNT )		///every five seconds.
 				PMcheckBattery();
 				
 				
 		}
 	}	
 }
+
 
 
 void* pvPMSERV_ServInit( void* pvParameter )
@@ -326,8 +487,11 @@ void* pvPMSERV_ServInit( void* pvParameter )
 		return NULL;
 	
 	// create the PM system task
-	xTaskCreate( vPMSERV_taskMain, (signed char*)"PM_SYSTEM", STACK_SIZE_PMSERV, 
-		NULL, TASK_PRIORITY_PMSERV, &hPMSERV_ServTask );
+	xTaskCreate( vPMSERV_taskMainCmd, (signed char*)"PM_SYSTEM_CMD", STACK_SIZE_PMSERV, 
+		NULL, TASK_PRIORITY_PMSERV, &hPMSERV_ServTaskCmd );
+
+	xTaskCreate( vPMSERV_taskMainState, (signed char*)"PM_SYSTEM_STATE", STACK_SIZE_PMSERV, 
+		NULL, TASK_PRIORITY_PMSERV, &hPMSERV_ServTaskState );
 		
 	return xMicPMGetCmdQueueHandle();
 }
