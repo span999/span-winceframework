@@ -43,6 +43,7 @@ typedef    unsigned int			xPMSYSSTATTO;
 /* System State Timeout table */
 typedef struct PMStTOTBL
 {
+	BOOL bValid;
     xPMSYSSTATTO xtoSysStat_ON;                /*< Timeour value of system power state 'POWER ON'. */
     xPMSYSSTATTO xtoSysStat_SAVE;             /*< Timeour value of system power state 'POWER SAVE'. */
     xPMSYSSTATTO xtoSysStat_OFF;               /*< Timeour value of system power state 'OFF'. */
