@@ -7,8 +7,10 @@ Initialor		:	span.liu
 
 */
 
-#include <stdlib.h>
+
 #include "adcdrv_core.h"
+#include "..\..\services\Toolbox\Toolbox.h"
+
 
 #define USE_AND_OR /* To enable AND_OR mask setting */
 #include <adc.h>
@@ -137,15 +139,8 @@ UINT ModGetADC_ADC()
 
 UINT ModGetADCDBG_ADC()
 {
-	UINT uiRet = 0;
-	static UINT prevValue = 0;
-	
-	srand( prevValue ); 
-	uiRet = abs( rand() );
-	prevValue = uiRet;
-	
-	return uiRet;
-}
+	return uMicGetRAND();
+}	
 
 
 void ModIsIdle_ADC()
