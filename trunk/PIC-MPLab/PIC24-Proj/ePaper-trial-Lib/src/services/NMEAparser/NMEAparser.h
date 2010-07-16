@@ -120,7 +120,7 @@ typedef struct {
 } NMEA_sentence_decode_list;
 
 
-
+nmeaParseRET NMEAparser(char *pcNMEAsentence, gps_NMEA_session* ptNMEAsession);
 
 
 #endif	///#ifndef __NMEAPARSER_H__
