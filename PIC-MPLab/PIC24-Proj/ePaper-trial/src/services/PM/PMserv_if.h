@@ -50,10 +50,14 @@ void* pvPMSERV_ServInit(void* pvParameter);
 
 
 ///power management
-xPMMODSTAT xMicPMGetModPwrSt( void );
-xPMSYSSTAT xMicPMGetSysPwrSt( void );
-bRET xMicPMSetsysPwrSt( xPMSYSSTAT xSetPMState );
+xPMSYSSTAT xMicPMGetPwrSt( void );
+bRET xMicPMSetPwrSt( xPMSYSSTAT xSetPMState );
 void xMicPMtouchit( void );
+
+
+///service management
+bRET xMicServPwrDwn_PM( void );
+xPMMODSTAT xMicServInPwrSt_PM( void );
 
 
 ///battery function
