@@ -138,18 +138,6 @@ xBATTLEVEL xMicPMGetBattLevelForce()
 }
 
 
-xPMMODSTAT xMicPMGetModPwrSt()
-{
-	return PMMODSTAT_IDLE;
-}
-
-
-xPMSYSSTAT xMicPMGetSysPwrSt()
-{
-	return PMCurrSysStat;
-}
-
-
 static BOOL PMSendCmd( PMCMD SetCmd )
 {
 	BOOL bRet = TRUE;
@@ -163,7 +151,13 @@ static BOOL PMSendCmd( PMCMD SetCmd )
 }
 
 
-bRET xMicPMSetsysPwrSt( xPMSYSSTAT xSetPMState )
+xPMSYSSTAT xMicPMGetPwrSt()
+{
+	return PMCurrSysStat;
+}
+
+
+bRET xMicPMSetPwrSt( xPMSYSSTAT xSetPMState )
 {
 	bRET bRet = TRUE;
 	PMCMD SetCmd = 0;
@@ -208,8 +202,8 @@ static void PMupdateReport()
 {
 	xPMSTATREPORT ThisReport;
 	
-	ThisReport.PMsystemState = xMicPMGetSysPwrSt();
-	ThisReport.PMpowerState = xMicPMGetModPwrSt();
+	ThisReport.PMsystemState = xMicPMGetPwrSt();
+	ThisReport.PMpowerState = xMicServInPwrSt_PM();
 	ThisReport.PMtimeoutTable.bValid = pThisPMstatTOtbl->bValid;
 	ThisReport.PMtimeoutTable.xtoSysStat_ON = pThisPMstatTOtbl->xtoSysStat_ON;
 	ThisReport.PMtimeoutTable.xtoSysStat_SAVE = pThisPMstatTOtbl->xtoSysStat_SAVE;
