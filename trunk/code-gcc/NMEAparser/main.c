@@ -9,7 +9,6 @@
 
 
 #include <stdio.h>
-///#include <stdarg.h>
 #include "tools.h"
 #include "NMEAsentence.h"
 #include "NMEAparser.h"
@@ -72,7 +71,6 @@ void GPSlogfileParse( void )
 
 
 	phGPSlogfile = fopen( GPSLOG_FILENAME, "r" );
-
 
 	while( !feof(phGPSlogfile) )
 	{
