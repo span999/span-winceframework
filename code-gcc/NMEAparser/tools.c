@@ -9,6 +9,7 @@
 
 
 #include <stdio.h>
+#include <string.h>
 #include <stdarg.h>
 #include "tools.h"
 
@@ -48,3 +49,42 @@ void SPPRINTF( char* pString, ... )
 
 
 }
+
+
+#if 0
+static void psrprintf( char* msg )
+{
+	UARTprintf( msg );
+}
+#else
+///#define 	psrprintf		SPPRINTF
+#endif
+
+
+int pointerValid( void* pPointer, char* pcErrorMsg )
+{
+	int iRet = 0;
+
+	if( NULL == pPointer )
+	{
+		psrprintf( pcErrorMsg );
+		iRet = (-1);
+	}
+
+	return iRet;
+}
+
+
+int Clean_pointerlength( void* pPointer, unsigned uLen )
+{
+	int iRet = (-1);
+
+	if( NULL != pPointer )
+	{
+		memset( pPointer, 0, uLen );
+		iRet = 0;
+	}
+
+	return iRet;
+}
+

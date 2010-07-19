@@ -8,9 +8,8 @@
  */
 
 
-#include <stdio.h>
-///#include <stdarg.h>
-
+///#include <stdio.h>
+#include <string.h>
 
 
 
@@ -28,7 +27,6 @@ int IsNMEAsentenceTag( char* string, char* strTag, int nCount )
 
 int IsNMEAsentence( char* str )
 {
-	///return IsNMEAsentenceTag( str, "$", 1 );
 	return IsNMEAsentenceTag( str, "$GP", 3 );
 }
 
