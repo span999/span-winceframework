@@ -70,7 +70,7 @@ static unsigned Copy_sentence_field( char* pSentenceNow, unsigned uiSentenceLen,
 	if( 0 != psentenceList->Field[psentenceList->vaildfields].FieldLen )
 		psentenceList->vaildfields++;
 
-	psrprintf( "Copy_sentence_field end copied %d-%d field!!\r\n", uRet, psentenceList->vaildfields );
+///	psrprintf( "Copy_sentence_field end copied %d-%d field!!\r\n", uRet, psentenceList->vaildfields );
 	return uRet;
 }
 
@@ -86,12 +86,80 @@ static int Dump_gps_NMEA_session( gps_NMEA_session* pSession )
 		psrprintf( "============================================================\n" );
 		psrprintf( "uiIndex=0x%x\n", pSession->uiIndex );
 		psrprintf( "UTC=%d:%d:%d\n", pSession->utc.hour, pSession->utc.minute, pSession->utc.second );
-		psrprintf( "Latitude=%d-%f,%d\n", pSession->coordinate.Latitude.degree, pSession->coordinate.Latitude.minute, pSession->coordinate.Latitude.degree );
-		psrprintf( "Longitude=%d-%f,%d\n", pSession->coordinate.Longitude.degree, pSession->coordinate.Longitude.minute, pSession->coordinate.Longitude.degree );
-		psrprintf( "GPSdataStat=%d\n", pSession->GPSdataStat );
-		psrprintf( "fixQ=%d\n", pSession->fixQ );
-		psrprintf( "fixType=%d\n", pSession->fixType );
-		psrprintf( "MfixType=%d\n", pSession->MfixType );
+		psrprintf( "Latitude=%d-%f ", pSession->coordinate.Latitude.degree, pSession->coordinate.Latitude.minute );
+		if( N == pSession->coordinate.Latitude.direct )
+			psrprintf( "[N]\n" );
+		else
+		if( S == pSession->coordinate.Latitude.direct )
+			psrprintf( "[S]\n" );
+		else
+		if( E == pSession->coordinate.Latitude.direct )
+			psrprintf( "[E]\n" );
+		else
+		if( W == pSession->coordinate.Latitude.direct )
+			psrprintf( "[W]\n" );
+		else
+			psrprintf( "[???]\n" );
+
+		psrprintf( "Longitude=%d-%f ", pSession->coordinate.Longitude.degree, pSession->coordinate.Longitude.minute );
+		if( N == pSession->coordinate.Longitude.direct )
+			psrprintf( "[N]\n" );
+		else
+		if( S == pSession->coordinate.Longitude.direct )
+			psrprintf( "[S]\n" );
+		else
+		if( E == pSession->coordinate.Longitude.direct )
+			psrprintf( "[E]\n" );
+		else
+		if( W == pSession->coordinate.Longitude.direct )
+			psrprintf( "[W]\n" );
+		else
+			psrprintf( "[???]\n" );
+
+		psrprintf( "GPSdataStat=%d [%s]\n", pSession->GPSdataStat, (OK == pSession->GPSdataStat)?"OK":"WARNNING" );
+
+		psrprintf( "fixQ=%d ", pSession->fixQ );
+		if( Invalid == pSession->fixQ )
+			psrprintf( "[Invalid]\n" );
+		else
+		if( GPS == pSession->fixQ )
+			psrprintf( "[GPS]\n" );
+		else
+		if( DGPS == pSession->fixQ )
+			psrprintf( "[DGPS]\n" );
+		else
+		if( underCalc == pSession->fixQ )
+			psrprintf( "[underCalc]\n" );
+		else
+			psrprintf( "[???]\n" );
+
+		psrprintf( "fixType=%d ", pSession->fixType );
+		if( Fix_No == pSession->fixType )
+			psrprintf( "[Fix_No]\n" );
+		else
+		if( Fix_2D == pSession->fixType )
+			psrprintf( "[Fix_2D]\n" );
+		else
+		if( Fix_3D == pSession->fixType )
+			psrprintf( "[Fix_3D]\n" );
+		else
+			psrprintf( "[???]\n" );
+
+		psrprintf( "MfixType=%d ", pSession->MfixType );
+		if( Fix_Auto == pSession->MfixType )
+			psrprintf( "[Fix_Auto]\n" );
+		else
+		if( Fix_DGPS == pSession->MfixType )
+			psrprintf( "[Fix_DGPS]\n" );
+		else
+		if( Fix_Emulate == pSession->MfixType )
+			psrprintf( "[Fix_Emulate]\n" );
+		else
+		if( Fix_Invaild == pSession->MfixType )
+			psrprintf( "[Fix_Invaild]\n" );
+		else
+			psrprintf( "[???]\n" );
+
 		psrprintf( "SatelliteNum=%d\n", pSession->SatelliteNum );
 		psrprintf( "SatelliteID=" );
 		for( iLoop=0; iLoop<12; iLoop++ )
@@ -114,7 +182,7 @@ static unsigned Dump_sentence_field( NMEA_sentence_field_list* psentenceList )
 	unsigned uiLoopA = 0;
 	unsigned uiLoopB = 0;
 
-	///psrprintf( "Dump_sentence_field start parsing 0x%x!!\r\n", psentenceList );
+	psrprintf( "Dump_sentence_field start parsing 0x%x!!\r\n", psentenceList );
 
 	for( uiLoopA = 0; uiLoopA < psentenceList->vaildfields; uiLoopA++ )
 	{
@@ -133,7 +201,7 @@ static unsigned Dump_sentence_singlefield( NMEA_sentence_field* psentenceField )
 	unsigned uRet = 0;
 	unsigned uiLoopB = 0;
 
-	///psrprintf( "Dump_sentence_field start parsing 0x%x!!\r\n", psentenceList );
+	psrprintf( "Dump_sentence_singlefield start parsing 0x%x!!\r\n", psentenceField );
 	if( psentenceField )
 	{
 		for( uiLoopB = 0; uiLoopB < psentenceField->FieldLen; uiLoopB++ )
@@ -164,7 +232,7 @@ static int Handle_sentence_field_UTCtime( NMEA_sentence_field* psentenceField, g
 	else
 		iRet = (-1);
 
-	psrprintf( "Handle_sentence_field_UTCtime:UTC %d->%d:%d:%d\n", iRet, pSession->utc.hour, pSession->utc.minute, pSession->utc.second );
+///	psrprintf( "Handle_sentence_field_UTCtime:UTC %d->%d:%d:%d\n", iRet, pSession->utc.hour, pSession->utc.minute, pSession->utc.second );
 	return iRet;
 }
 
@@ -187,7 +255,7 @@ static int Handle_sentence_field_Latitude( NMEA_sentence_field* psentenceField, 
 	else
 		iRet = (-1);
 
-	psrprintf( "Handle_sentence_field_Latitude:%f->%d:%f\n", dRet, pSession->coordinate.Latitude.degree, pSession->coordinate.Latitude.minute );
+///	psrprintf( "Handle_sentence_field_Latitude:%f->%d:%f\n", dRet, pSession->coordinate.Latitude.degree, pSession->coordinate.Latitude.minute );
 	return iRet;
 }
 
@@ -210,7 +278,7 @@ static int Handle_sentence_field_Longitude( NMEA_sentence_field* psentenceField,
 	else
 		iRet = (-1);
 
-	psrprintf( "Handle_sentence_field_Longitude:%f->%d:%f\n", dRet, pSession->coordinate.Longitude.degree, pSession->coordinate.Longitude.minute );
+///	psrprintf( "Handle_sentence_field_Longitude:%f->%d:%f\n", dRet, pSession->coordinate.Longitude.degree, pSession->coordinate.Longitude.minute );
 	return iRet;
 }
 
@@ -240,7 +308,7 @@ static int Handle_sentence_field_Direct( NMEA_sentence_field* psentenceField, gp
 	else
 		iRet = (-1);
 
-	psrprintf( "Handle_sentence_field_Direct:%d \n", (0 == pSession->coordinate.Longitude.direct)?pSession->coordinate.Latitude.direct:pSession->coordinate.Longitude.direct );
+///	psrprintf( "Handle_sentence_field_Direct:%d \n", (0 == pSession->coordinate.Longitude.direct)?pSession->coordinate.Latitude.direct:pSession->coordinate.Longitude.direct );
 	return iRet;
 }
 
@@ -264,7 +332,7 @@ static int Handle_sentence_field_DataStatus( NMEA_sentence_field* psentenceField
 	else
 		iRet = (-1);
 
-	psrprintf( "Handle_sentence_field_DataStatus:%d \n", pSession->GPSdataStat );
+///	psrprintf( "Handle_sentence_field_DataStatus:%d \n", pSession->GPSdataStat );
 	return iRet;
 }
 
@@ -281,7 +349,7 @@ static int Handle_sentence_field_FixQuality( NMEA_sentence_field* psentenceField
 	else
 		iRet = (-1);
 
-	psrprintf( "Handle_sentence_field_FixQuality:%d \n", pSession->fixQ );
+///	psrprintf( "Handle_sentence_field_FixQuality:%d \n", pSession->fixQ );
 	return iRet;
 }
 
@@ -311,7 +379,7 @@ static int Handle_sentence_field_FixMitac( NMEA_sentence_field* psentenceField, 
 	else
 		iRet = (-1);
 
-	psrprintf( "Handle_sentence_field_FixMitac:%d \n", pSession->MfixType );
+///	psrprintf( "Handle_sentence_field_FixMitac:%d \n", pSession->MfixType );
 	return iRet;
 }
 
@@ -338,7 +406,7 @@ static int Handle_sentence_field_FixType( NMEA_sentence_field* psentenceField, g
 	else
 		iRet =(-1);
 
-	psrprintf( "Handle_sentence_field_FixType:%d \n", pSession->fixType );
+///	psrprintf( "Handle_sentence_field_FixType:%d \n", pSession->fixType );
 	return iRet;
 }
 
@@ -355,9 +423,10 @@ static int Handle_sentence_field_SatellitesNum( NMEA_sentence_field* psentenceFi
 	else
 		iRet = (-1);
 
-	psrprintf( "Handle_sentence_field_SatellitesNum:%d \n", pSession->SatelliteNum );
+///	psrprintf( "Handle_sentence_field_SatellitesNum:%d \n", pSession->SatelliteNum );
 	return iRet;
 }
+
 
 static int Handle_sentence_field_SatellitesID( int iID, NMEA_sentence_field* psentenceField, gps_NMEA_session* pSession )
 {
@@ -371,7 +440,7 @@ static int Handle_sentence_field_SatellitesID( int iID, NMEA_sentence_field* pse
 	else
 		iRet = (-1);
 
-	psrprintf( "Handle_sentence_field_SatellitesID:%d \n", pSession->SatelliteIDs[iID] );
+///	psrprintf( "Handle_sentence_field_SatellitesID:%d \n", pSession->SatelliteIDs[iID] );
 	return iRet;
 }
 
@@ -391,7 +460,7 @@ static int Handle_sentence_field_Altitude( NMEA_sentence_field* psentenceField, 
 	else
 		iRet = (-1);
 
-	psrprintf( "Handle_sentence_field_Altitude:%f->%f\n", dRet, pSession->Altitude );
+///	psrprintf( "Handle_sentence_field_Altitude:%f->%f\n", dRet, pSession->Altitude );
 	return iRet;
 }
 
@@ -411,7 +480,7 @@ static int Handle_sentence_field_GroundSpeed( NMEA_sentence_field* psentenceFiel
 	else
 		iRet = (-1);
 
-	psrprintf( "Handle_sentence_field_GroundSpeed:%f->%f\n", dRet, pSession->GroundSpeed );
+///	psrprintf( "Handle_sentence_field_GroundSpeed:%f->%f\n", dRet, pSession->GroundSpeed );
 	return iRet;
 }
 
@@ -431,7 +500,7 @@ static int Handle_sentence_field_DegreeInTrack( NMEA_sentence_field* psentenceFi
 	else
 		iRet = (-1);
 
-	psrprintf( "Handle_sentence_field_DegreeInTrack:%f->%f\n", dRet, pSession->TrackDegree );
+///	psrprintf( "Handle_sentence_field_DegreeInTrack:%f->%f\n", dRet, pSession->TrackDegree );
 	return iRet;
 }
 
@@ -441,7 +510,7 @@ static int parseGPGGA( unsigned count, NMEA_sentence_field_list* psentenceList, 
 	int iRet = 0;
 	unsigned uiLoopA = 0;
 
-	psrprintf( "parseGPGGA:start parsing %d 0x%x 0x%x!!\r\n", count, psentenceList, pSession );
+///	psrprintf( "parseGPGGA:start parsing %d 0x%x 0x%x!!\r\n", count, psentenceList, pSession );
 
 	if( !psentenceList || !pSession)
 		return (-1);
@@ -450,9 +519,9 @@ static int parseGPGGA( unsigned count, NMEA_sentence_field_list* psentenceList, 
 	{
 		if( psentenceList->vaildfields > uiLoopA )
 		{
-			psrprintf( "---%d/", uiLoopA );
-			Dump_sentence_singlefield( &(psentenceList->Field[uiLoopA]) );
-			psrprintf( "\n" );
+///			psrprintf( "---%d/", uiLoopA );
+///			Dump_sentence_singlefield( &(psentenceList->Field[uiLoopA]) );
+///			psrprintf( "\n" );
 
 			if( 0 == uiLoopA )
 			{	///ID, ignored
@@ -537,7 +606,7 @@ static int parseGPGGA( unsigned count, NMEA_sentence_field_list* psentenceList, 
 		}
 	}
 
-	psrprintf( "\r\n" );
+///	psrprintf( "\r\n" );
 
 	return iRet;
 }
@@ -548,7 +617,7 @@ static int parseGPGSA( unsigned count, NMEA_sentence_field_list* psentenceList, 
 	int iRet = 0;
 	unsigned uiLoopA = 0;
 
-	psrprintf( "parseGPGSA:start parsing %d 0x%x 0x%x!!\r\n", count, psentenceList, pSession );
+///	psrprintf( "parseGPGSA:start parsing %d 0x%x 0x%x!!\r\n", count, psentenceList, pSession );
 
 	if( !psentenceList || !pSession)
 		return (-1);
@@ -558,9 +627,9 @@ static int parseGPGSA( unsigned count, NMEA_sentence_field_list* psentenceList, 
 	{
 		if( psentenceList->vaildfields > uiLoopA )
 		{
-			psrprintf( "---%d/", uiLoopA );
-			Dump_sentence_singlefield( &(psentenceList->Field[uiLoopA]) );
-			psrprintf( "\n" );
+///			psrprintf( "---%d/", uiLoopA );
+///			Dump_sentence_singlefield( &(psentenceList->Field[uiLoopA]) );
+///			psrprintf( "\n" );
 
 			if( 0 == uiLoopA )
 			{	///ID, ignored
@@ -640,7 +709,7 @@ static int parseGPGSA( unsigned count, NMEA_sentence_field_list* psentenceList, 
 		}
 	}
 
-	psrprintf( "\r\n" );
+///	psrprintf( "\r\n" );
 
 	return iRet;
 }
@@ -651,7 +720,7 @@ static int parseGPRMC( unsigned count, NMEA_sentence_field_list* psentenceList, 
 	int iRet = 0;
 	unsigned uiLoopA = 0;
 
-	psrprintf( "parseGPRMC:start parsing %d 0x%x 0x%x!!\r\n", count, psentenceList, pSession );
+///	psrprintf( "parseGPRMC:start parsing %d 0x%x 0x%x!!\r\n", count, psentenceList, pSession );
 
 	if( !psentenceList || !pSession)
 		return (-1);
@@ -661,9 +730,9 @@ static int parseGPRMC( unsigned count, NMEA_sentence_field_list* psentenceList, 
 	{
 		if( psentenceList->vaildfields > uiLoopA )
 		{
-			psrprintf( "---%d/", uiLoopA );
-			Dump_sentence_singlefield( &(psentenceList->Field[uiLoopA]) );
-			psrprintf( "\n" );
+///			psrprintf( "---%d/", uiLoopA );
+///			Dump_sentence_singlefield( &(psentenceList->Field[uiLoopA]) );
+///			psrprintf( "\n" );
 
 			if( 0 == uiLoopA )
 			{	///ID, ignored
@@ -733,7 +802,7 @@ static int parseGPRMC( unsigned count, NMEA_sentence_field_list* psentenceList, 
 		}
 	}
 
-	psrprintf( "\r\n" );
+///	psrprintf( "\r\n" );
 
 
 	return iRet;
@@ -792,7 +861,7 @@ nmeaParseRET NMEAparser(char *pcNMEAsentence, gps_NMEA_session* ptNMEAsession)
 	Clean_gps_NMEA_session( ptNMEAsession );
 	Clean_sentence_field_list( &sentenceList );
 
-	psrprintf( ">>> %s>>>len=%d\r\n", pcNMEAsentence, uiSentenceLen );
+	psrprintf( ">>> %s>>>len=%d\n", pcNMEAsentence, uiSentenceLen );
 
 	///check '$' sign
 	for( uiLoopA = 0; uiLoopA < uiSentenceLen; uiLoopA++ )
@@ -822,7 +891,7 @@ nmeaParseRET NMEAparser(char *pcNMEAsentence, gps_NMEA_session* ptNMEAsession)
 		///try next char
 	}
 
-	Dump_sentence_field( &sentenceList );
+///	Dump_sentence_field( &sentenceList );
 
 
 	///parse NMEA sentense with proper decoder
@@ -852,7 +921,107 @@ nmeaParseRET NMEAparser(char *pcNMEAsentence, gps_NMEA_session* ptNMEAsession)
 		}
 	}
 
-	Dump_gps_NMEA_session( ptNMEAsession );
+///	Dump_gps_NMEA_session( ptNMEAsession );
 
 	return parserRet;
 }
+
+
+
+static int NMEA_session_Index_update( gps_NMEA_session *psession_new, gps_NMEA_session *psession_local )
+{
+	int iRet = (-1);
+	unsigned uTmp = 0;
+
+	if( psession_new && psession_local )
+	{
+
+		do
+		{
+			if( 0 < ((0x1 << uTmp) & psession_new->uiIndex) )
+			{
+				if( NMEA_SESSION_UTC_OFFSET == (0x1 << uTmp) )
+				{	///update UTC
+					psession_local->utc = psession_new->utc;
+				}
+				else
+				if( NMEA_SESSION_COORDINATE_OFFSET == (0x1 << uTmp) )
+				{	///update coordinate
+					psession_local->coordinate = psession_new->coordinate;
+				}
+				else
+				if( NMEA_SESSION_GPSSTAT_OFFSET == (0x1 << uTmp) )
+				{	///update GPS data state
+					psession_local->GPSdataStat = psession_new->GPSdataStat;
+				}
+				else
+				if( NMEA_SESSION_FIXQOUAL_OFFSET == (0x1 << uTmp) )
+				{	///update GPS fix quality
+					psession_local->fixQ = psession_new->fixQ;
+				}
+				else
+				if( NMEA_SESSION_FIXTYPE_OFFSET == (0x1 << uTmp) )
+				{	///update GPS fix type
+					psession_local->fixType = psession_new->fixType;
+				}
+				else
+				if( NMEA_SESSION_MFIXTYPE_OFFSET == (0x1 << uTmp) )
+				{	///update mitac fix type
+					psession_local->MfixType = psession_new->MfixType;
+				}
+				else
+				if( NMEA_SESSION_SALLITENUM_OFFSET == (0x1 << uTmp) )
+				{	///update fixed satellite number
+					psession_local->SatelliteNum = psession_new->SatelliteNum;
+				}
+				else
+				if( NMEA_SESSION_SALLITEID_OFFSET == (0x1 << uTmp) )
+				{	///update fixed satellite ID list
+					unsigned uA;
+					for( uA = 0; uA < 12; uA++ )
+						psession_local->SatelliteIDs[uA] = psession_new->SatelliteIDs[uA];
+				}
+				else
+				if( NMEA_SESSION_ALTITUDE_OFFSET == (0x1 << uTmp) )
+				{	///update altitude
+					psession_local->Altitude = psession_new->Altitude;
+				}
+				else
+				if( NMEA_SESSION_GROUNDSPEED_OFFSET == (0x1 << uTmp) )
+				{	///update speed over ground
+					psession_local->GroundSpeed = psession_new->GroundSpeed;
+				}
+				else
+				if( NMEA_SESSION_TRACKDEGREE_OFFSET == (0x1 << uTmp) )
+				{	///update degree in track
+					psession_local->TrackDegree = psession_new->TrackDegree;
+				}
+
+			}
+			uTmp++;
+		}
+		while( (NMEA_SESSION_MAX_OFFSET > (0x1 << uTmp)) );
+
+
+		iRet = 0;
+	}
+
+	return iRet;
+}
+
+
+
+int Handle_NMEA_session( gps_NMEA_session *psession_new )
+{
+	int iRet = (-1);
+
+	static gps_NMEA_session Last_session;
+
+	iRet = NMEA_session_Index_update( psession_new, &Last_session );
+
+	Dump_gps_NMEA_session( &Last_session );
+
+	return iRet;
+}
+
+
