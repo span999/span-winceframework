@@ -12,7 +12,7 @@ Initialor		:	span.liu
 #include "adcdrv_if.h"
 #include "mFreeRTOSDef.h"
 #include "adcdrv_core.h"
-
+#include "..\..\services\Toolbox\Toolbox.h"
 
 
 /* flag for debug mode */
@@ -69,7 +69,7 @@ xADCval xMicModGetADCValue()
 	else	
 		value = ModGetADCDBG_ADC();
 	
-	printf("xMicModGetADCValue = %d\r\n", value);	
+	SPPRINTF("xMicModGetADCValue = %d\r\n", value);	
 	return value;
 }
 
@@ -81,9 +81,9 @@ xOnOff xMicModSetDebug_ADC( xOnOff do_sets )
 	DebugModeCtrl = do_sets;
 	xOnOffStat = DebugModeCtrl;
 	if( xON == DebugModeCtrl )
-		printf("xMicModSetDebug_ADC set as ON~~\r\n");
+		SPPRINTF("xMicModSetDebug_ADC set as ON~~\r\n");
 	else
-		printf("xMicModSetDebug_ADC set as OFF~~\r\n");
+		SPPRINTF("xMicModSetDebug_ADC set as OFF~~\r\n");
 	
 	return xOnOffStat;
 }

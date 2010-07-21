@@ -13,6 +13,13 @@ Initialor		:	span.liu
 #include "PMserv_core.h"
 #include "..\Toolbox\Toolbox.h"
 
+#ifdef EPAPER_PIC24_PORT
+	///private port
+#else
+	///release port
+	#include "MainHandleTask.h"
+	extern xQueueHandle ghQueueMainHandleTask;
+#endif
 
 
 #define PM_CMD_QUEUE_SIZE		3	// number of messages queue can contain
@@ -142,7 +149,7 @@ static BOOL PMSendCmd( PMCMD SetCmd )
 {
 	BOOL bRet = TRUE;
 
-	printf("PMSendCmd send cmd =%d\r\n", SetCmd);
+	SPPRINTF("PMSendCmd send cmd =%d\r\n", SetCmd);
 	if( pdPASS != xQueueSend( xMicPMGetCmdQueueHandle(), &SetCmd, 0 ) )
 	///if( pdPASS != xQueueSendToBack( xMicPMGetCmdQueueHandle(), &SetCmd, 0 ) )
 		bRet = FALSE;
@@ -211,7 +218,7 @@ static void PMupdateReport()
 	
 	xMicSetProtectedData( xMicPMGetStatQueueHandle(), &ThisReport );
 	
-	printf("PMupdateReport\r\n");
+	SPPRINTF("PMupdateReport\r\n");
 	
 }
 
@@ -220,7 +227,7 @@ static BOOL PMsystemGoON()
 	BOOL bRet = TRUE;
 
 	PMCurrSysStat = PMSYSSTAT_ON;
-	printf("PMSetCurrTOState set state =PMSYSSTAT_ON\r\n");
+	SPPRINTF("PMSetCurrTOState set state =PMSYSSTAT_ON\r\n");
 	
 	return bRet;
 }
@@ -231,7 +238,7 @@ static BOOL PMsystemGoSAVE()
 	BOOL bRet = TRUE;
 
 	PMCurrSysStat = PMSYSSTAT_SAVE;
-	printf("PMSetCurrTOState set state =PMSYSSTAT_SAVE\r\n");
+	SPPRINTF("PMSetCurrTOState set state =PMSYSSTAT_SAVE\r\n");
 
 	return bRet;
 }
@@ -242,7 +249,7 @@ static BOOL PMsystemGoOFF()
 	BOOL bRet = TRUE;
 
 	PMCurrSysStat = PMSYSSTAT_OFF;
-	printf("PMSetCurrTOState set state =PMSYSSTAT_OFF\r\n");
+	SPPRINTF("PMSetCurrTOState set state =PMSYSSTAT_OFF\r\n");
 
 	return bRet;
 }
@@ -348,14 +355,64 @@ static BOOL PMcheckBattery()
 	value = xMicServGetBatteryLevel();	///access battery service
 	///xMicServSetDebug_BAT( xOFF );	///set battery off debug mode
 
-	BattLevelValue = value;	///sync 
-	printf("PMcheckBattery get battery level=%d \r\n", value);
+	if( value != BattLevelValue )
+	{
+		BattLevelValue = value;	///sync 
+		bRet = TRUE;
+	}	
+	else
+		bRet = FALSE;
+	
+	SPPRINTF("PMcheckBattery get %s battery level=%d \r\n", bRet?"changed":"same", value);
 	
 	return bRet;
 }
 
 
-UINT PMGetCurrStateTO()
+
+#ifdef EPAPER_PIC24_PORT
+	///private port
+#else
+	///release port
+static int customBattLvSend( xBATTLEVEL value )
+{
+	int iRet = 0;
+	MainTaskData SetData;
+	
+	SetData.bSenderDevID = BatteryDrvID;
+	SetData.ucBatteryLife = value;
+	
+	if( ghQueueMainHandleTask )
+		if( pdPASS != xQueueSend( ghQueueMainHandleTask, &SetData, 0 ) )
+		{
+			SPPRINTF("customBattLvSend %d fail\r\n", value);
+			iRet = (-1);
+		}
+	else	
+		iRet = (-2);
+
+	return iRet;
+}	
+#endif
+
+
+static int PMupdateBattLv2User( void )
+{
+	int iRet = 0;
+
+#ifdef EPAPER_PIC24_PORT
+	///private port
+#else
+	///release port
+	customBattLvSend( BattLevelValue );	
+#endif
+
+	SPPRINTF("PMupdateBattLv2User level=%d \r\n", BattLevelValue);
+	return iRet;
+}
+
+
+static UINT PMGetCurrStateTO()
 {
 	UINT uiRet = 1;
 	
@@ -370,12 +427,12 @@ UINT PMGetCurrStateTO()
 	else
 		uiRet = 9999;
 	
-	printf("PMGetCurrStateTO get TO=%d \r\n", uiRet);		
+	SPPRINTF("PMGetCurrStateTO get TO=%d \r\n", uiRet);		
 	return uiRet;
 }
 
 
-BOOL PMSetCurrTOState()
+static BOOL PMSetCurrTOState()
 {
 	BOOL bRet = TRUE;
 	PMCMD SetCmd;
@@ -393,7 +450,7 @@ BOOL PMSetCurrTOState()
 	
 	PMSendCmd( SetCmd );
 
-	printf("PMSetCurrTOState timeout !!!! set state to=0x%x \r\n", PMCurrSysStat);
+	SPPRINTF("PMSetCurrTOState timeout !!!! set state to=0x%x \r\n", PMCurrSysStat);
 	
 	return bRet;
 }
@@ -426,7 +483,7 @@ static void vPMSERV_taskMainCmd(void* pvParameter)
 		{	///it suppose to be time out.. 
 
 			///check for timeout...
-			printf("PMGetCmdQueue timeout!!!\r\n");				
+			SPPRINTF("PMGetCmdQueue timeout!!!\r\n");				
 		}
 	}	
 }
@@ -448,7 +505,7 @@ static void vPMSERV_taskMainState(void* pvParameter)
 		{	///it suppose to be time out.. 
 
 			///check the timed functions...
-			printf("vPMSERV_taskMainState timeout!!!\r\n");
+			SPPRINTF("vPMSERV_taskMainState timeout!!!\r\n");
 			pmTimeData.dwTimeCount++;
 			pmTimeData.uiStatTOCount++;
 			
@@ -459,7 +516,8 @@ static void vPMSERV_taskMainState(void* pvParameter)
 			}
 			
 			if( 0 == pmTimeData.dwTimeCount % PM_BATERRY_COUNT )		///every five seconds.
-				PMcheckBattery();
+				if( PMcheckBattery() )
+					PMupdateBattLv2User();
 				
 				
 		}
@@ -470,7 +528,7 @@ static void vPMSERV_taskMainState(void* pvParameter)
 
 void* pvPMSERV_ServInit( void* pvParameter )
 {
-	printf("about to launch pvPMSERV_ServInit service routine !!!\r\n");
+	SPPRINTF("about to launch pvPMSERV_ServInit service routine !!!\r\n");
 	
 	// create the queue for PM system to recieve command
 	hPMSERV_ServCmdQueue = xQueueCreate(PM_CMD_QUEUE_SIZE, PM_QUEUE_CMD_SIZE);

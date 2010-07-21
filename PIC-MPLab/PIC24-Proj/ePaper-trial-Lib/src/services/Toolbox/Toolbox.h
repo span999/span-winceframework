@@ -14,6 +14,7 @@
 typedef    xQueueHandle            hProtectedData;
 
 
+void SPPRINTF( char* pString, ... );
 
 UINT uMicGetRAND( void );
 void vMicSLEEP( UINT uiMs );
