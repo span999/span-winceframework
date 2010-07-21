@@ -6,9 +6,29 @@
 */
 
 
+#include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include "mTypeDef.h"
 #include "Toolbox.h"
+
+
+
+
+
+void SPPRINTF( char* pString, ... )
+{
+	va_list ap;
+	char szbuf[128];
+
+	va_start( ap, pString );
+	vsprintf( szbuf, pString, ap );
+	va_end( ap );
+
+	printf( szbuf );
+	///DBGPRINTF( szbuf );
+	
+}
 
 
 

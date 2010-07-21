@@ -12,6 +12,7 @@ Initialor		:	span.liu
 #include "batteryserv_if.h"
 #include "batteryserv_core.h"
 #include "..\..\drivers\adc\adcdrv_if.h"
+#include "..\Toolbox\Toolbox.h"
 
 
 
@@ -104,7 +105,7 @@ xBATTLEVEL xMicServGetBatteryLevel()
 	else
 		value = ServGetBattLvDBG_BAT();
 	
-	printf("xMicServGetBatteryLevel~~\r\n");
+	SPPRINTF("xMicServGetBatteryLevel~~\r\n");
 	
 	return value;
 }
@@ -117,9 +118,9 @@ xOnOff xMicServSetDebug_BAT( xOnOff do_sets )
 	DebugModeCtrl = do_sets;
 	xOnOffStat = DebugModeCtrl;
 	if( xON == DebugModeCtrl )
-		printf("xMicServSetDebug_BAT set as ON~~\r\n");
+		SPPRINTF("xMicServSetDebug_BAT set as ON~~\r\n");
 	else
-		printf("xMicServSetDebug_BAT set as OFF~~\r\n");
+		SPPRINTF("xMicServSetDebug_BAT set as OFF~~\r\n");
 	
 	return xOnOffStat;
 }
