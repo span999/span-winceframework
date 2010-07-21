@@ -65,7 +65,7 @@ void GPSlogfileDump( void )
 
 void GPSlogfileParse( void )
 {
-	char buf[512];
+	char buf[256];
 	char* pbuf = NULL;
 	gps_NMEA_session session_get;
 
@@ -78,6 +78,9 @@ void GPSlogfileParse( void )
 
 		if( pbuf )
 			NMEAparser( pbuf, &session_get );
+
+		if( pbuf )
+			Handle_NMEA_session( &session_get );
 	}
 
 	fclose( phGPSlogfile );
