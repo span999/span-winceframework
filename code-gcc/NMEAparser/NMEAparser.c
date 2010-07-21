@@ -37,6 +37,7 @@ static unsigned Copy_sentence_field( char* pSentenceNow, unsigned uiSentenceLen,
 	unsigned uRet = 0;
 	unsigned uiLoopB = 0;
 	char commassign = ',';
+	char chksumsign = '*';
 	char *pSentenceTmp;
 
 
@@ -53,11 +54,11 @@ static unsigned Copy_sentence_field( char* pSentenceNow, unsigned uiSentenceLen,
 	for( uiLoopB = 0; uiLoopB < uiSentenceLen; uiLoopB++ )
 	{
 		pSentenceTmp = pSentenceNow + uiLoopB;
-		if( commassign != *pSentenceTmp )
+		if( commassign != *pSentenceTmp && chksumsign != *pSentenceTmp )
 		{
 			psentenceList->Field[psentenceList->vaildfields].FieldLen++;
 		}
-		else	///','
+		else	///',' or '*'
 		{
 			psentenceList->vaildfields++;	///next field
 			psentenceList->Field[psentenceList->vaildfields].pField = pSentenceTmp + 1;
@@ -66,8 +67,11 @@ static unsigned Copy_sentence_field( char* pSentenceNow, unsigned uiSentenceLen,
 		}
 	}
 
-	psrprintf( "Copy_sentence_field end copied %d-%d field!!\r\n", uRet-1, psentenceList->vaildfields );
-	return uRet-1;
+	if( 0 != psentenceList->Field[psentenceList->vaildfields].FieldLen )
+		psentenceList->vaildfields++;
+
+	psrprintf( "Copy_sentence_field end copied %d-%d field!!\r\n", uRet, psentenceList->vaildfields );
+	return uRet;
 }
 
 
@@ -524,6 +528,11 @@ static int parseGPGGA( unsigned count, NMEA_sentence_field_list* psentenceList, 
 			{	//
 
 			}
+			else
+			if( 15 == uiLoopA )
+			{	//
+
+			}
 
 		}
 	}
@@ -733,30 +742,33 @@ static int parseGPRMC( unsigned count, NMEA_sentence_field_list* psentenceList, 
 #if 0
 static NMEA_sentence_decode_list Decoder_list[] = {
 	{ "GPGGA", 16, parseGPGGA },
-	{ "GPGSA", 18, parseGPGSA },
+	{ "GPGSA", 19, parseGPGSA },
 	{ "GPRMC", 13, parseGPRMC },
 	{ "ENDGP",  0, NULL },
 };
 #else
 static NMEA_sentence_decode_list Decoder_list[] = {
-	{ "GPGGA", 14, parseGPGGA },
-	{ "GPGSA", 17, parseGPGSA },
-	{ "GPRMC", 12, parseGPRMC },
+	{ "GPGGA", 16, parseGPGGA },
+	{ "GPGSA", 19, parseGPGSA },
+	{ "GPRMC", 13, parseGPRMC },
 	{ "ENDGP",  0, NULL },
 };
 #endif
 
+
+
+#define CHECK_GP_SIGN
 
 /* parse an NMEA sentence, unpack it into a session structure */
 nmeaParseRET NMEAparser(char *pcNMEAsentence, gps_NMEA_session* ptNMEAsession)
 {
 	nmeaParseRET parserRet = NMEAPARSER_ERR_OK;
 	unsigned uiSentenceLen = 0;
+#ifndef CHECK_GP_SIGN
 	char startsign = '$';
-///	char commassign = ',';
 	char firstfieldsign = 'G';
+#endif
 	unsigned uiLoopA = 0;
-///	unsigned uiLoopB = 0;
 	char *pSentenceNow = NULL;
 	NMEA_sentence_field_list sentenceList;
 
@@ -787,6 +799,7 @@ nmeaParseRET NMEAparser(char *pcNMEAsentence, gps_NMEA_session* ptNMEAsession)
 	{
 		pSentenceNow = pcNMEAsentence + uiLoopA;
 		///psrprintf( "%c-%d", pSentenceNow, uiLoopA );
+#ifndef CHECK_GP_SIGN
 		if( *pSentenceNow == startsign )	///'$'
 		{
 			///psrprintf( "got $ sign!!!\r\n" );
@@ -798,6 +811,14 @@ nmeaParseRET NMEAparser(char *pcNMEAsentence, gps_NMEA_session* ptNMEAsession)
 				break;
 			}
 		}
+#else
+		if( 0 == IsNMEAsentence( pSentenceNow ) )
+		{
+			///start to find and copy all field
+			Copy_sentence_field( pSentenceNow+1, (uiSentenceLen - uiLoopA - 1), &sentenceList );
+			break;
+		}
+#endif
 		///try next char
 	}
 
