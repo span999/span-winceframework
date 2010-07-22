@@ -54,7 +54,7 @@ void GPSlogfileDump( void )
 				0 == IsNMEAsentenceGSA( buf )
 			)
 			{
-				SPPRINTF( pbuf );
+				psrprintf( pbuf );
 			}
 		}
 	}
@@ -67,6 +67,7 @@ void GPSlogfileParse( void )
 {
 	char buf[256];
 	char* pbuf = NULL;
+	int iRet = (-1);
 	gps_NMEA_session session_get;
 
 
@@ -77,10 +78,23 @@ void GPSlogfileParse( void )
 		pbuf = fgets( buf, 256, phGPSlogfile );
 
 		if( pbuf )
-			NMEAparser( pbuf, &session_get );
+		{
+			if( 0 == NMEAparser( pbuf, &session_get ) )
+			{
+				iRet = Handle_NMEA_session( &session_get );
+			}
+			else
+			{
+				psrprintf( "NMEAparser fail!!\n" );
+			}
+		}
+		else
+		{
+			psrprintf( "fgets fail!!\n" );
+		}
 
-		if( pbuf )
-			Handle_NMEA_session( &session_get );
+		if( 0 == iRet )
+			;
 	}
 
 	fclose( phGPSlogfile );
