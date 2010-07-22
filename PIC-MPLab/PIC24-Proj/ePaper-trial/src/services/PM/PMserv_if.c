@@ -12,6 +12,7 @@ Initialor		:	span.liu
 #include "mFreeRTOSDef.h"
 #include "PMserv_core.h"
 #include "..\Toolbox\Toolbox.h"
+#include "..\NMEAparser\NMEAparser.h"	///for NMEA test
 
 #ifdef EPAPER_PIC24_PORT
 	///private port
@@ -28,7 +29,9 @@ Initialor		:	span.liu
 #define PM_STAT_QUEUE_SIZE		3	// number of messages queue can contain
 #define PM_QUEUE_STAT_SIZE		sizeof(xPMSTATREPORT)	// size of each message
 
-#define STACK_SIZE_PMSERV		(configMINIMAL_STACK_SIZE * 5)
+///#define STACK_SIZE_PMSERV		(configMINIMAL_STACK_SIZE * 5)
+#define STACK_SIZE_PMSERV_CMD		(configMINIMAL_STACK_SIZE * 2)
+#define STACK_SIZE_PMSERV_STAT		(configMINIMAL_STACK_SIZE * 10)
 #define TASK_PRIORITY_PMSERV	(tskIDLE_PRIORITY + 1)
 
 ///#define OM_CMD_QUEUE_WAITTICK	portMAX_DELAY
@@ -519,7 +522,27 @@ static void vPMSERV_taskMainState(void* pvParameter)
 				if( PMcheckBattery() )
 					PMupdateBattLv2User();
 				
+			if(1)	///for NMEA test 
+			{
+				gps_NMEA_session	nmeaSession;
 				
+				char buf0[] = "$GPRMC,180946,A,3926.0580,N,11946.0001,W,0.0,153.8,070106,15.2,E,D*3E\n\0";
+				char buf1[] = "$GPGGA,180946,3926.0580,N,11946.0001,W,2,10,1.1,1378.4,M,-22.1,M,,*4C\0";
+				char buf2[] = "$GPGSA,A,3,02,04,05,07,09,17,24,26,28,29,,,2.1,1.1,1.8*30\0";
+				char buf3[] = "$GPRMC,180948,A,3926.0579,N,11946.0001,W,0.0,153.8,070106,15.2,E,D*36\0";
+				char buf4[] = "$GPGGA,180948,3926.0579,N,11946.0001,W,2,10,1.1,1378.4,M,-22.1,M,,*44\0";
+				char buf5[] = "$GPGSA,A,3,02,04,05,07,09,17,24,26,28,29,,,2.1,1.1,1.8*30\0";
+				char buf6[] = "$GPRMC,180950,A,3926.0579,N,11946.0001,W,0.0,153.8,070106,15.2,E,D*3F\0";
+				char buf7[] = "$GPGGA,180950,3926.0579,N,11946.0001,W,2,10,1.1,1378.3,M,-22.1,M,,*4A\0";
+				char buf8[] = "$GPGSA,A,3,02,04,05,07,09,17,24,26,28,29,,,2.1,1.1,1.8*30\0";
+				char buf9[] = "$GPRMC,180952,A,3926.0579,N,11946.0001,W,0.0,153.8,070106,15.2,E,D*3D\0";
+				
+				char *pbuf[10] = { buf0, buf1, buf2, buf3, buf4, buf5, buf6, buf7, buf8, buf9 };
+				
+				SPPRINTF("NMEA test>>>0x%x %s 0x%x \r\n", pbuf[(pmTimeData.dwTimeCount%10)], pbuf[(pmTimeData.dwTimeCount%10)], &nmeaSession );
+				NMEAparser( pbuf[(pmTimeData.dwTimeCount%10)], &nmeaSession );
+				Handle_NMEA_session( &nmeaSession );
+			}			
 		}
 	}	
 }
@@ -539,10 +562,10 @@ void* pvPMSERV_ServInit( void* pvParameter )
 		return NULL;
 	
 	// create the PM system task
-	xTaskCreate( vPMSERV_taskMainCmd, (signed char*)"PM_SYSTEM_CMD", STACK_SIZE_PMSERV, 
+	xTaskCreate( vPMSERV_taskMainCmd, (signed char*)"PM_SYSTEM_CMD", STACK_SIZE_PMSERV_CMD, 
 		NULL, TASK_PRIORITY_PMSERV, &hPMSERV_ServTaskCmd );
 
-	xTaskCreate( vPMSERV_taskMainState, (signed char*)"PM_SYSTEM_STATE", STACK_SIZE_PMSERV, 
+	xTaskCreate( vPMSERV_taskMainState, (signed char*)"PM_SYSTEM_STATE", STACK_SIZE_PMSERV_STAT, 
 		NULL, TASK_PRIORITY_PMSERV, &hPMSERV_ServTaskState );
 		
 	return xMicPMGetCmdQueueHandle();
