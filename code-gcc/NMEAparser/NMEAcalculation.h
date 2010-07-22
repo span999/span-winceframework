@@ -22,7 +22,8 @@ typedef    	float		nmeaCalcRET;
 
 
 nmeaCalcRET nmeaCalcDistanceIn2Point( NMEA_GPS *pPoint1, NMEA_GPS *pPoint2 );
-
+nmeaCalcRET Knot2Ms( nmeaCalcRET knot );
+nmeaCalcRET Knot2kMh( nmeaCalcRET knot );
 
 
 #endif	///#ifndef __NMEACALCULATION_H__
