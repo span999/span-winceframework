@@ -14,7 +14,7 @@
 #include "tools.h"
 #include "NMEAparser-def.h"
 #include "NMEAsentence.h"
-
+#include "NMEAcalculation.h"
 
 
 
@@ -947,6 +947,8 @@ static int NMEA_session_Index_update( gps_NMEA_session *psession_new, gps_NMEA_s
 				else
 				if( NMEA_SESSION_COORDINATE_OFFSET == (0x1 << uTmp) )
 				{	///update coordinate
+					float fDist = 0;
+					fDist = nmeaCalcDistanceIn2Point( &(psession_local->coordinate), &(psession_new->coordinate) );
 					psession_local->coordinate = psession_new->coordinate;
 				}
 				else
