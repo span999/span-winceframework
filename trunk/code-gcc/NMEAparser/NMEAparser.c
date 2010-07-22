@@ -85,7 +85,8 @@ static int Dump_gps_NMEA_session( gps_NMEA_session* pSession )
 
 		psrprintf( "============================================================\n" );
 		psrprintf( "uiIndex=0x%x\n", pSession->uiIndex );
-		psrprintf( "UTC=%d:%d:%d\n", pSession->utc.hour, pSession->utc.minute, pSession->utc.second );
+		psrprintf( "UTCdate=%02d:%02d:%02d [y/m/d]\n", pSession->utc.year, pSession->utc.month, pSession->utc.day );
+		psrprintf( "UTCtime=%02d:%02d:%02d [h/m/s]\n", pSession->utc.hour, pSession->utc.minute, pSession->utc.second );
 		psrprintf( "Latitude=%d-%f ", pSession->coordinate.Latitude.degree, pSession->coordinate.Latitude.minute );
 		if( N == pSession->coordinate.Latitude.direct )
 			psrprintf( "[N]\n" );
@@ -166,7 +167,7 @@ static int Dump_gps_NMEA_session( gps_NMEA_session* pSession )
 			psrprintf( " %d", pSession->SatelliteIDs[iLoop] );
 		psrprintf( "\n" );
 		psrprintf( "Altitude=%f\n", pSession->Altitude );
-		psrprintf( "GroundSpeed=%f\n", pSession->GroundSpeed );
+		psrprintf( "GroundSpeed=%f[knot] %f[km/h] %f[m/s]\n", pSession->GroundSpeed, Knot2kMh(pSession->GroundSpeed), Knot2Ms(pSession->GroundSpeed) );
 		psrprintf( "TrackDegree=%f\n", pSession->TrackDegree );
 
 		psrprintf( "============================================================\n" );
@@ -233,6 +234,26 @@ static int Handle_sentence_field_UTCtime( NMEA_sentence_field* psentenceField, g
 		iRet = (-1);
 
 ///	psrprintf( "Handle_sentence_field_UTCtime:UTC %d->%d:%d:%d\n", iRet, pSession->utc.hour, pSession->utc.minute, pSession->utc.second );
+	return iRet;
+}
+
+
+static int Handle_sentence_field_UTCdate( NMEA_sentence_field* psentenceField, gps_NMEA_session* pSession )
+{
+	int iRet = 0;
+
+	if( psentenceField && pSession )
+	{
+		iRet = atoi( psentenceField->pField );
+		pSession->utc.year = iRet%100;	///0~99
+		pSession->utc.month = (iRet%10000)/100;	///0~99
+		pSession->utc.day = iRet/10000;	///0~99
+		pSession->uiIndex = pSession->uiIndex | NMEA_SESSION_UTC_DATE_OFFSET;
+	}
+	else
+		iRet = (-1);
+
+///	psrprintf( "Handle_sentence_field_UTCdate:UTC %d->%d:%d:%d\n", iRet, pSession->utc.year, pSession->utc.month, pSession->utc.day );
 	return iRet;
 }
 
@@ -740,7 +761,7 @@ static int parseGPRMC( unsigned count, NMEA_sentence_field_list* psentenceList, 
 			}
 			else
 			if( 1 == uiLoopA )
-			{	///Time,
+			{	///UTC Time,
 				Handle_sentence_field_UTCtime( &(psentenceList->Field[uiLoopA]), pSession );
 			}
 			else
@@ -780,8 +801,8 @@ static int parseGPRMC( unsigned count, NMEA_sentence_field_list* psentenceList, 
 			}
 			else
 			if( 9 == uiLoopA )
-			{	//UT update
-
+			{	//UT data update
+				Handle_sentence_field_UTCdate( &(psentenceList->Field[uiLoopA]), pSession );
 			}
 			else
 			if( 10 == uiLoopA )
@@ -927,6 +948,24 @@ nmeaParseRET NMEAparser(char *pcNMEAsentence, gps_NMEA_session* ptNMEAsession)
 }
 
 
+static int IsSameCoordinate( NMEA_GPS *pLocal, NMEA_GPS *pNew )
+{
+	int iRet = (-1);
+
+	if(
+		( pLocal && pNew ) &&
+		(pLocal->Latitude.degree == pNew->Latitude.degree) &&
+		(pLocal->Latitude.minute == pNew->Latitude.minute) &&
+		(pLocal->Longitude.degree == pNew->Longitude.degree) &&
+		(pLocal->Longitude.minute == pNew->Longitude.minute)
+	)
+	{
+		iRet = 0;
+	}
+
+	return iRet;
+}
+
 
 static int NMEA_session_Index_update( gps_NMEA_session *psession_new, gps_NMEA_session *psession_local )
 {
@@ -942,14 +981,20 @@ static int NMEA_session_Index_update( gps_NMEA_session *psession_new, gps_NMEA_s
 			{
 				if( NMEA_SESSION_UTC_OFFSET == (0x1 << uTmp) )
 				{	///update UTC
-					psession_local->utc = psession_new->utc;
+					///psession_local->utc = psession_new->utc;
+					psession_local->utc.hour = psession_new->utc.hour;
+					psession_local->utc.minute = psession_new->utc.minute;
+					psession_local->utc.second = psession_new->utc.second;
 				}
 				else
 				if( NMEA_SESSION_COORDINATE_OFFSET == (0x1 << uTmp) )
 				{	///update coordinate
-					float fDist = 0;
-					fDist = nmeaCalcDistanceIn2Point( &(psession_local->coordinate), &(psession_new->coordinate) );
-					psession_local->coordinate = psession_new->coordinate;
+					if( 0 != IsSameCoordinate( &(psession_local->coordinate), &(psession_new->coordinate) ) )
+					{
+						float fDist = 0;
+						fDist = nmeaCalcDistanceIn2Point( &(psession_local->coordinate), &(psession_new->coordinate) );
+						psession_local->coordinate = psession_new->coordinate;
+					}
 				}
 				else
 				if( NMEA_SESSION_GPSSTAT_OFFSET == (0x1 << uTmp) )
@@ -997,6 +1042,14 @@ static int NMEA_session_Index_update( gps_NMEA_session *psession_new, gps_NMEA_s
 				if( NMEA_SESSION_TRACKDEGREE_OFFSET == (0x1 << uTmp) )
 				{	///update degree in track
 					psession_local->TrackDegree = psession_new->TrackDegree;
+				}
+				else
+				if( NMEA_SESSION_UTC_DATE_OFFSET == (0x1 << uTmp) )
+				{	///update UTC
+					///psession_local->utc = psession_new->utc;
+					psession_local->utc.year = psession_new->utc.year;
+					psession_local->utc.month = psession_new->utc.month;
+					psession_local->utc.day = psession_new->utc.day;
 				}
 
 			}

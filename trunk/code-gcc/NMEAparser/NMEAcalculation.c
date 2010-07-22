@@ -43,9 +43,9 @@ static int nmeaCalcDiffIn2Point( NMEA_GPS *pPoint1, NMEA_GPS *pPoint2, NMEA_GPS 
 			pPointDiff->Longitude.minute = (pPoint2->Longitude.minute - pPoint1->Longitude.minute);
 
 		iRet = 0;
-		psrprintf( "Latitude=%d-%f ", pPointDiff->Latitude.degree, pPointDiff->Latitude.minute );
-		psrprintf( "Longitude=%d-%f ", pPointDiff->Longitude.degree, pPointDiff->Longitude.minute );
-		psrprintf( "\n" );
+///		psrprintf( "Latitude=%d-%f ", pPointDiff->Latitude.degree, pPointDiff->Latitude.minute );
+///		psrprintf( "Longitude=%d-%f ", pPointDiff->Longitude.degree, pPointDiff->Longitude.minute );
+///		psrprintf( "\n" );
 	}
 
 	return iRet;
@@ -60,7 +60,7 @@ static nmeaCalcRET nmeaCalcGetLatDecimalDegree( NMEA_GPS *pPoint )
 	xRet = ((pPoint->Latitude.minute)*100)/60;
 	xRet = xRet + pPoint->Latitude.degree;
 
-	psrprintf( "nmeaCalcGetLatDecimalDegree=%f\n", xRet );
+///	psrprintf( "nmeaCalcGetLatDecimalDegree=%f\n", xRet );
 	return xRet;
 }
 
@@ -72,7 +72,7 @@ static nmeaCalcRET nmeaCalcGetLonDecimalDegree( NMEA_GPS *pPoint )
 	xRet = ((pPoint->Longitude.minute)*100)/60;
 	xRet = xRet + pPoint->Longitude.degree;
 
-	psrprintf( "nmeaCalcGetLonDecimalDegree=%f\n", xRet );
+///	psrprintf( "nmeaCalcGetLonDecimalDegree=%f\n", xRet );
 	return xRet;
 }
 
@@ -85,7 +85,7 @@ static nmeaCalcRET nmeaCalcDegree2Radian( nmeaCalcRET xIn )
 	nmeaCalcRET xRet = 0;
 
 	xRet = xIn * xPI / 180;
-	psrprintf( "nmeaCalcDegree2Radian=%f\n", xRet );
+///	psrprintf( "nmeaCalcDegree2Radian=%f\n", xRet );
 	return xRet;
 }
 
@@ -128,3 +128,25 @@ nmeaCalcRET nmeaCalcDistanceIn2Point( NMEA_GPS *pPoint1, NMEA_GPS *pPoint2 )
 
 	return xRet;
 }
+
+
+nmeaCalcRET Knot2Ms( nmeaCalcRET knot )
+{
+	nmeaCalcRET xRet = 0;
+
+	xRet = knot * (0.514444);
+
+	return xRet;
+}
+
+
+nmeaCalcRET Knot2kMh( nmeaCalcRET knot )
+{
+	nmeaCalcRET xRet = 0;
+
+	xRet = knot * (1.852);
+
+	return xRet;
+}
+
+
