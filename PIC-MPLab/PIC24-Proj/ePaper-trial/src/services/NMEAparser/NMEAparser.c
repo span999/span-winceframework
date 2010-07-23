@@ -962,7 +962,10 @@ static int IsSameCoordinate( NMEA_GPS *pLocal, NMEA_GPS *pNew )
 	{
 		iRet = 0;
 	}
-
+	
+///	psrprintf( "IsSameCoordinate 0x%x 0x%x \n", pLocal, pNew );
+///	psrprintf( "IsSameCoordinate %d-%f %d-%f \n", pLocal->Latitude.degree, pLocal->Latitude.minute, pLocal->Longitude.degree, pLocal->Longitude.minute );
+///	psrprintf( "IsSameCoordinate %d-%f %d-%f \n", pNew->Latitude.degree, pNew->Latitude.minute, pNew->Longitude.degree, pNew->Longitude.minute );
 	return iRet;
 }
 
