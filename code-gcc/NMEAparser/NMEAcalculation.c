@@ -132,21 +132,13 @@ nmeaCalcRET nmeaCalcDistanceIn2Point( NMEA_GPS *pPoint1, NMEA_GPS *pPoint2 )
 
 nmeaCalcRET Knot2Ms( nmeaCalcRET knot )
 {
-	nmeaCalcRET xRet = 0;
-
-	xRet = knot * (0.514444);
-
-	return xRet;
+	return (knot * (0.514444));
 }
 
 
 nmeaCalcRET Knot2kMh( nmeaCalcRET knot )
 {
-	nmeaCalcRET xRet = 0;
-
-	xRet = knot * (1.852);
-
-	return xRet;
+	return (knot * (1.852));
 }
 
 
