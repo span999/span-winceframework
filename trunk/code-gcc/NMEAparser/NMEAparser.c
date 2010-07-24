@@ -613,7 +613,7 @@ nmeaParseRET NMEAparser(char *pcNMEAsentence, gps_NMEA_session* ptNMEAsession)
 ///	Dump_sentence_field( &sentenceList );
 
 
-	///parse NMEA sentense with proper decoder
+	///parse NMEA sentence with proper decoder
 	if( sentenceList.vaildfields > 0 )
 	{
 		uiLoopA = 0;
