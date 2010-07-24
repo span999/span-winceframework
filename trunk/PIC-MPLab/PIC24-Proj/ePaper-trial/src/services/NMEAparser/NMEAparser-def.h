@@ -52,7 +52,8 @@ typedef struct {
 	BYTE day;
 	BYTE hour;
 	BYTE minute;
-	BYTE second;
+	///BYTE second;
+	float second;
 } NMEA_UTC;
 
 
@@ -95,7 +96,7 @@ typedef enum {
 
 typedef struct {
 	unsigned degree;
-	float minute;
+	double minute;
 	NMEA_GPS_direct direct;
 } NMEA_GPS_itude;
 
@@ -142,12 +143,12 @@ typedef struct {
 
 typedef struct {
 	char* pField;
-	unsigned FieldLen;
+	BYTE FieldLen;
 } NMEA_sentence_field;
 
 
 typedef struct {
-	unsigned vaildfields;
+	BYTE vaildfields;
 	NMEA_sentence_field Field[SENTENCE_FIELD_MAX];
 } NMEA_sentence_field_list;
 
@@ -156,10 +157,17 @@ typedef int (*nmea_decoder) ( unsigned count, NMEA_sentence_field_list* psentenc
 
 typedef struct {
 	char *NMEAID;
-	unsigned fieldNum;			/* minimum number of fields required to parse */
+	BYTE fieldNum;			/* minimum number of fields required to parse */
 	nmea_decoder decoder;
 } NMEA_sentence_decode_list;
 
+typedef int (*Handle_sentence_fields) ( NMEA_sentence_field* psentenceField, gps_NMEA_session* pSession );
+
+typedef struct {
+	BYTE num;
+	BYTE valid;			/* field handle assigned */
+	Handle_sentence_fields fields_handle;
+} NMEA_sentence_handle_list;
 
 
 #endif	///#ifndef __NMEAPARSER_DEF_H__
