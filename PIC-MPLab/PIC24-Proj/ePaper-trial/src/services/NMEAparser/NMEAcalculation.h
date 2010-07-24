@@ -17,8 +17,8 @@
 
 
 
-typedef    	float		nmeaCalcRET;
-///typedef     double		nmeaCalcRET;
+///typedef    	float		nmeaCalcRET;
+typedef     double		nmeaCalcRET;
 
 
 nmeaCalcRET nmeaCalcDistanceIn2Point( NMEA_GPS *pPoint1, NMEA_GPS *pPoint2 );
