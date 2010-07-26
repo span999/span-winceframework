@@ -40,7 +40,7 @@ Initialor		:	span.liu
 
 #ifdef NMEA_TEST
 #define STACK_SIZE_PMSERV_CMD		(configMINIMAL_STACK_SIZE * 3 + INCREASE_MINIMAL_STACK_SIZE * 0)
-#define STACK_SIZE_PMSERV_STAT		(configMINIMAL_STACK_SIZE * 4 + INCREASE_MINIMAL_STACK_SIZE * 0)
+#define STACK_SIZE_PMSERV_STAT		(configMINIMAL_STACK_SIZE * 5 + INCREASE_MINIMAL_STACK_SIZE * 0)
 #else
 #define STACK_SIZE_PMSERV_CMD		(configMINIMAL_STACK_SIZE * 2 + INCREASE_MINIMAL_STACK_SIZE * 0)
 #define STACK_SIZE_PMSERV_STAT		(configMINIMAL_STACK_SIZE * 3 + INCREASE_MINIMAL_STACK_SIZE * 0)
@@ -267,6 +267,11 @@ static BOOL PMsystemGoOFF()
 
 	PMCurrSysStat = PMSYSSTAT_OFF;
 	SPPRINTF("PMSetCurrTOState set state =PMSYSSTAT_OFF\r\n");
+/*
+#define Sleep()  {__asm__ volatile ("pwrsav #0");}
+#define Idle()   {__asm__ volatile ("pwrsav #1");}	
+*/
+	Sleep();
 
 	return bRet;
 }
