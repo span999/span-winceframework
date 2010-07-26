@@ -43,26 +43,34 @@ static UINT ModHWreadADCport()
 	///TODO: read ADC hardware port
 
 	unsigned char i=0;
-	unsigned int channel,config1,config2,config3,configport,configscan;
+	unsigned int channel,config1,config2,config3,configportL,configportH,configscanL,configscanH;
 	unsigned int ADCResult[16];
 	unsigned int ADCResultAvg;
 
 	CloseADC10();
 
 	/*set adc channel*/
+	///AD1CHS:
 	///channel= ADC_CH0_POS_SAMPLEA_AN5;
-	channel= ADC_CH0_POS_SAMPLEB_AN2;
+	channel= ADC_CH0_POS_SAMPLEB_AN2 | ADC_CH0_POS_SAMPLEA_AN2;
 	SetChanADC10(channel);
 
 	/*Configure adc*/
-	config1 = ADC_MODULE_OFF | ADC_CLK_AUTO |ADC_AUTO_SAMPLING_ON ;
-	config2 = ADC_SCAN_ON | ADC_INTR_16_CONV ;
-	config3 = ADC_SAMPLE_TIME_17 | ADC_CONV_CLK_254Tcy;
-	///configport = 0x0000;
-	configport = ~ENABLE_AN2_DIG;	///only AN2 analog 
+	///AD1CON1:
+	config1 = ADC_MODULE_OFF | ADC_IDLE_CONTINUE | ADC_FORMAT_INTG | ADC_CLK_AUTO |ADC_AUTO_SAMPLING_ON ;
+	///AD1CON2:
+	config2 = ADC_SCAN_ON | ADC_INTR_16_CONV | ADC_ALT_BUF_OFF | ADC_ALT_INPUT_OFF;
+	///AD1CON3:
+	config3 = ADC_CONV_CLK_SYSTEM | ADC_SAMPLE_TIME_17 | ADC_CONV_CLK_254Tcy;
+	///ADPCFGL:
+	configportL = ~ENABLE_AN2_DIG;	///only AN2 analog 
+	///ADPCFGH:
+	configportH = 0;	///
+	///AD1CSSL:
 	///configscan = ADC_SCAN_AN5 ;
-	configscan = ADC_SCAN_AN2 ;
-	OpenADC10(config1,config2,config3,0,configport,0,configscan);
+	configscanL = ADC_SCAN_AN2;
+	configscanH = 0;
+	OpenADC10(config1,config2,config3,configportL,configportH,configscanL,configscanH);
 	
 	EnableADC1;
 	ADCResultAvg = 0;
