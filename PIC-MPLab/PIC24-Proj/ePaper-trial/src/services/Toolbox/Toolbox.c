@@ -8,12 +8,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdarg.h>
 #include "mTypeDef.h"
 #include "Toolbox.h"
 
 
-
+static pfnDBGMSGEXT dbgmsgExt = NULL;
 
 
 void SPPRINTF( char* pString, ... )
@@ -25,12 +26,20 @@ void SPPRINTF( char* pString, ... )
 	vsprintf( szbuf, pString, ap );
 	va_end( ap );
 
-	printf( szbuf );
-	///DBGPRINTF( szbuf );
-	
+	if( NULL == dbgmsgExt )
+		printf( szbuf );
+	else
+	{
+		strcat( szbuf , "\r" );
+		dbgmsgExt( szbuf );
+	}	
 }
 
-
+void SetExtDbgMsg( pfnDBGMSGEXT pfnDBG )
+{
+	if( NULL != pfnDBG )
+		dbgmsgExt = pfnDBG;
+}
 
 /*
 	uMicGetRAND

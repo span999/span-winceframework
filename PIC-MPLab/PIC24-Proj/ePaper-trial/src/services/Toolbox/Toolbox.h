@@ -12,9 +12,10 @@
 #include "mFreeRTOSDef.h"
 
 typedef    xQueueHandle            hProtectedData;
-
+typedef 	void (*pfnDBGMSGEXT)( char* pString, ... );
 
 void SPPRINTF( char* pString, ... );
+void SetExtDbgMsg( pfnDBGMSGEXT pfnDBG );
 
 UINT uMicGetRAND( void );
 void vMicSLEEP( UINT uiMs );

@@ -40,7 +40,7 @@ Initialor		:	span.liu
 
 #ifdef NMEA_TEST
 #define STACK_SIZE_PMSERV_CMD		(configMINIMAL_STACK_SIZE * 3 + INCREASE_MINIMAL_STACK_SIZE * 0)
-#define STACK_SIZE_PMSERV_STAT		(configMINIMAL_STACK_SIZE * 4 + INCREASE_MINIMAL_STACK_SIZE * 0)
+#define STACK_SIZE_PMSERV_STAT		(configMINIMAL_STACK_SIZE * 5 + INCREASE_MINIMAL_STACK_SIZE * 0)
 #else
 #define STACK_SIZE_PMSERV_CMD		(configMINIMAL_STACK_SIZE * 2 + INCREASE_MINIMAL_STACK_SIZE * 0)
 #define STACK_SIZE_PMSERV_STAT		(configMINIMAL_STACK_SIZE * 3 + INCREASE_MINIMAL_STACK_SIZE * 0)
@@ -267,6 +267,11 @@ static BOOL PMsystemGoOFF()
 
 	PMCurrSysStat = PMSYSSTAT_OFF;
 	SPPRINTF("PMSetCurrTOState set state =PMSYSSTAT_OFF\r\n");
+/*
+#define Sleep()  {__asm__ volatile ("pwrsav #0");}
+#define Idle()   {__asm__ volatile ("pwrsav #1");}	
+*/
+	Sleep();
 
 	return bRet;
 }
@@ -282,6 +287,7 @@ static BOOL PMcmdParser( PMCMD *pPMcmd )
 {
 	BOOL bRet = TRUE;
 	
+	SPPRINTF("PMcmdParser %d\r\n", *pPMcmd );
 	if( NULL != pPMcmd )
 	{
 		switch( *pPMcmd )
@@ -324,7 +330,7 @@ static BOOL PMeventHandler( PMCMD *pPMcmd )
 	BOOL bRet = TRUE;
 	
 	///check 
-	
+	SPPRINTF("PMeventHandler %d\r\n", *pPMcmd );
 	if( NULL != pPMcmd )
 	{
 		switch( *pPMcmd )
@@ -400,14 +406,23 @@ static int customBattLvSend( xBATTLEVEL value )
 	SetData.ucBatteryLife = value;
 	
 	if( ghQueueMainHandleTask )
+	{
 		if( pdPASS != xQueueSend( ghQueueMainHandleTask, &SetData, 0 ) )
 		{
 			SPPRINTF("customBattLvSend %d fail\r\n", value);
 			iRet = (-1);
 		}
-	else	
+		else
+		{
+			SPPRINTF("customBattLvSend %d ok\r\n", value);
+		}	
+	}
+	else
+	{
+		SPPRINTF("customBattLvSend %d ghQueueMainHandleTask fail\r\n", value);
 		iRet = (-2);
-
+	}
+		
 	return iRet;
 }	
 #endif
@@ -479,7 +494,8 @@ static void vPMSERV_taskMainCmd(void* pvParameter)
 	portBASE_TYPE	xQR;
 ///	static DWORD	dwTimeCount = 0;
 ///	static UINT		uiStatTOCount = 0;
-		
+	
+	SPPRINTF("Launch vPMSERV_taskMainCmd service routine !!!\r\n");	
 	/// in this task we wait for a string to be received and then
 	while (1) {
 		/// wait until a command message is received
@@ -500,7 +516,7 @@ static void vPMSERV_taskMainCmd(void* pvParameter)
 		{	///it suppose to be time out.. 
 
 			///check for timeout...
-			SPPRINTF("PMGetCmdQueue timeout!!!\r\n");				
+			SPPRINTF("PMGetCmdQueue timeout!!!\r\n");
 		}
 	}	
 }
@@ -508,24 +524,27 @@ static void vPMSERV_taskMainCmd(void* pvParameter)
 
 
 #ifdef NMEA_TEST
-				const char buf0[] = "$GPRMC,180946.369,A,3926.0580,N,11946.0001,W,1.234,153.8,070106,15.2,E,A*3E\n\0";
-				const char buf1[] = "$GPGGA,180946.123,3926.0581,N,11946.0002,W,2,10,1.1,1378.4,M,-22.1,M,,*4C\0";
-				const char buf2[] = "$GPGSA,A,3,02,04,05,07,09,17,24,26,28,29,,,2.1,1.1,1.8*30\0";
-				const char buf3[] = "$GPRMC,180948.456,A,3926.0582,N,11946.0003,W,34.5678,153.8,070106,15.2,E,A*36\0";
-				const char buf4[] = "$GPGGA,180948.789,3926.0583,N,11946.0004,W,2,10,1.1,1378.4,M,-22.1,M,,*44\0";
-				const char buf5[] = "$GPGSA,A,3,02,04,05,07,09,17,24,26,28,29,,,2.1,1.1,1.8*30\0";
-				const char buf6[] = "$GPRMC,180950.234,A,3926.0584,N,11946.0005,W,3456.3435,153.8,070106,15.2,E,A*3F\0";
-				const char buf7[] = "$GPGGA,180950.567,3926.0585,N,11946.0006,W,2,10,1.1,1378.3,M,-22.1,M,,*4A\0";
-				const char buf8[] = "$GPGSA,A,3,02,04,05,07,09,17,24,26,28,29,,,2.1,1.1,1.8*30\0";
-				const char buf9[] = "$GPRMC,180952.789,A,3926.0586,N,11946.0007,W,4444.4444,153.8,070106,15.2,E,A*3D\0";
+const char buf0[] = "$GPRMC,180946.369,A,3926.0580,N,11946.0001,W,1.24,153.8,070106,15.2,E,A*3E\n\0";
+const char buf1[] = "$GPGGA,180946.123,3926.0581,N,11946.0002,W,2,10,1.1,178.4,M,-22.1,M,,*4C\0";
+const char buf2[] = "$GPGSA,A,3,02,04,05,07,09,17,24,26,28,29,,,2.1,1.1,1.8*30\0";
+const char buf3[] = "$GPRMC,180948.456,A,3926.0582,N,11946.0003,W,34.58,153.8,070106,15.2,E,A*36\0";
+const char buf4[] = "$GPGGA,180948.789,3926.0583,N,11946.0004,W,2,10,1.1,138.4,M,-22.1,M,,*44\0";
+const char buf5[] = "$GPGSA,A,3,02,04,05,07,09,17,24,26,28,29,,,2.1,1.1,1.8*30\0";
+const char buf6[] = "$GPRMC,180950.234,A,3926.0584,N,11946.0005,W,56.35,153.8,070106,15.2,E,A*3F\0";
+const char buf7[] = "$GPGGA,180950.567,3926.0585,N,11946.0006,W,2,10,1.1,137.3,M,-22.1,M,,*4A\0";
+const char buf8[] = "$GPGSA,A,3,02,04,05,07,09,17,24,26,28,29,,,2.1,1.1,1.8*30\0";
+const char buf9[] = "$GPRMC,180952.789,A,3926.0586,N,11946.0007,W,44.44,153.8,070106,15.2,E,A*3D\0";
 #endif
 
 static void vPMSERV_taskMainState(void* pvParameter)
 {
 #define PM_TIMER_BASE			1000
-#define PM_BATTERY_POLL			5000
+///#define PM_BATTERY_POLL			5000
+#define PM_BATTERY_POLL			2000
 #define PM_BATERRY_COUNT		(PM_BATTERY_POLL/PM_TIMER_BASE)
 	
+	
+	SPPRINTF("Launch vPMSERV_taskMainState service routine !!!\r\n");
 	/// in this task we wait for a string to be received and then
 	while (1) {
 		/// wait until specified timeout
@@ -570,8 +589,14 @@ static void vPMSERV_taskMainState(void* pvParameter)
 
 void* pvPMSERV_ServInit( void* pvParameter )
 {
-	SPPRINTF("about to launch pvPMSERV_ServInit service routine !!!\r\n");
-	
+	SPPRINTF("about to launch pvPMSERV_ServInit service routine1 !!!\r\n");
+#ifdef EPAPER_PIC24_PORT	
+	SetExtDbgMsg( NULL );
+#else
+	SetExtDbgMsg( (pfnDBGMSGEXT)DBGPRINTF );
+#endif	
+	SPPRINTF("about to launch pvPMSERV_ServInit service routine2 !!!\r\n");	
+
 	// create the queue for PM system to recieve command
 	hPMSERV_ServCmdQueue = xQueueCreate(PM_CMD_QUEUE_SIZE, PM_QUEUE_CMD_SIZE);
 	// and the queue for PM system to export current status

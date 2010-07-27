@@ -30,9 +30,9 @@ static INT32 MicServCalcBatteryLevel()
 	UINT uiRet = 0;
 	///TODO: read ADC, and to a battery mapping
 	
-	xMicModSetDebug_ADC( xON );		///set battery in debug mode
+///	xMicModSetDebug_ADC( xON );		///set battery in debug mode
 	uiRet = xMicModGetADCValue();
-	xMicModSetDebug_ADC( xOFF );	///set battery off debug mode
+///	xMicModSetDebug_ADC( xOFF );	///set battery off debug mode
 	
 	///mapping table??
 	i32Ret = ServMappingADC2BATT_BAT( uiRet );
