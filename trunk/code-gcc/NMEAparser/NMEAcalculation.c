@@ -22,27 +22,95 @@ static int nmeaCalcDiffIn2Point( NMEA_GPS *pPoint1, NMEA_GPS *pPoint2, NMEA_GPS 
 
 	if( pPoint1 && pPoint2 && pPointDiff )
 	{
-		if( pPoint1->Latitude.degree > pPoint2->Latitude.degree )
-			pPointDiff->Latitude.degree = (pPoint1->Latitude.degree - pPoint2->Latitude.degree);
-		else
-			pPointDiff->Latitude.degree = (pPoint2->Latitude.degree - pPoint1->Latitude.degree);
-
-		if( pPoint1->Latitude.minute > pPoint2->Latitude.minute )
-			pPointDiff->Latitude.minute = (pPoint1->Latitude.minute - pPoint2->Latitude.minute);
-		else
-			pPointDiff->Latitude.minute = (pPoint2->Latitude.minute - pPoint1->Latitude.minute);
-
-		if(pPoint1->Longitude.degree > pPoint2->Longitude.degree)
-			pPointDiff->Longitude.degree = (pPoint1->Longitude.degree - pPoint2->Longitude.degree);
-		else
-			pPointDiff->Longitude.degree = (pPoint2->Longitude.degree - pPoint1->Longitude.degree);
-
-		if(pPoint1->Longitude.minute - pPoint2->Longitude.minute)
-			pPointDiff->Longitude.minute = (pPoint1->Longitude.minute - pPoint2->Longitude.minute);
-		else
-			pPointDiff->Longitude.minute = (pPoint2->Longitude.minute - pPoint1->Longitude.minute);
-
 		iRet = 0;
+		if( pPoint1->Latitude.degree > pPoint2->Latitude.degree )
+		{
+			pPointDiff->Latitude.degree = (pPoint1->Latitude.degree - pPoint2->Latitude.degree);
+			if( pPoint1->Latitude.minute > pPoint2->Latitude.minute )
+				pPointDiff->Latitude.minute = (pPoint1->Latitude.minute - pPoint2->Latitude.minute);
+			else
+			{
+				pPointDiff->Latitude.degree--;
+				pPointDiff->Latitude.minute = ((pPoint1->Latitude.minute+60) - pPoint2->Latitude.minute);
+			}
+			iRet = 0x1;
+		}
+		else if( pPoint1->Latitude.degree < pPoint2->Latitude.degree )
+		{
+			pPointDiff->Latitude.degree = (pPoint2->Latitude.degree - pPoint1->Latitude.degree);
+			if( pPoint1->Latitude.minute < pPoint2->Latitude.minute )
+				pPointDiff->Latitude.minute = (pPoint2->Latitude.minute - pPoint1->Latitude.minute);
+			else
+			{
+				pPointDiff->Latitude.degree--;
+				pPointDiff->Latitude.minute = ((pPoint2->Latitude.minute+60) - pPoint1->Latitude.minute);
+			}
+			iRet = 0x2;
+		}
+		else	/// ==
+		{
+			pPointDiff->Latitude.degree = 0;
+			if( pPoint1->Latitude.minute > pPoint2->Latitude.minute )
+				pPointDiff->Latitude.minute = (pPoint1->Latitude.minute - pPoint2->Latitude.minute);
+			else
+				pPointDiff->Latitude.minute = (pPoint2->Latitude.minute - pPoint1->Latitude.minute);
+			iRet = 0x4;
+		}
+
+		if( pPoint1->Longitude.degree > pPoint2->Longitude.degree )
+		{
+			pPointDiff->Longitude.degree = (pPoint1->Longitude.degree - pPoint2->Longitude.degree);
+			if( pPoint1->Longitude.minute > pPoint2->Longitude.minute )
+				pPointDiff->Longitude.minute = (pPoint1->Longitude.minute - pPoint2->Longitude.minute);
+			else
+			{
+				pPointDiff->Longitude.degree--;
+				pPointDiff->Longitude.minute = ((pPoint1->Longitude.minute+60) - pPoint2->Longitude.minute);
+			}
+			iRet = 0x8;
+		}
+		else if( pPoint1->Longitude.degree < pPoint2->Longitude.degree )
+		{
+			pPointDiff->Longitude.degree = (pPoint2->Longitude.degree - pPoint1->Longitude.degree);
+			if( pPoint1->Longitude.minute < pPoint2->Longitude.minute )
+				pPointDiff->Longitude.minute = (pPoint2->Longitude.minute - pPoint1->Longitude.minute);
+			else
+			{
+				pPointDiff->Longitude.degree--;
+				pPointDiff->Longitude.minute = ((pPoint2->Longitude.minute+60) - pPoint1->Longitude.minute);
+			}
+			iRet = 0x10;
+		}
+		else	/// ==
+		{
+			pPointDiff->Longitude.degree = 0;
+			if( pPoint1->Longitude.minute > pPoint2->Longitude.minute )
+				pPointDiff->Longitude.minute = (pPoint1->Longitude.minute - pPoint2->Longitude.minute);
+			else
+				pPointDiff->Longitude.minute = (pPoint2->Longitude.minute - pPoint1->Longitude.minute);
+			iRet = 0x20;
+		}
+
+		///iRet = 0;
+
+		if( 0x12 == (iRet&0x12) )
+			iRet = 1;
+		else
+		if( 0x11 == (iRet&0x11) )
+			iRet = 2;
+		else
+		if( 0x09 == (iRet&0x09) )
+			iRet = 3;
+		else
+		if( 0x0A == (iRet&0x0A) )
+			iRet = 4;
+
+/*
+  4 | 1
+ -------
+  3 | 2
+*/
+
 ///		psrprintf( "Latitude=%d-%f ", pPointDiff->Latitude.degree, pPointDiff->Latitude.minute );
 ///		psrprintf( "Longitude=%d-%f ", pPointDiff->Longitude.degree, pPointDiff->Longitude.minute );
 ///		psrprintf( "\n" );
@@ -113,7 +181,7 @@ nmeaCalcRET nmeaCalcDistanceIn2Point( NMEA_GPS *pPoint1, NMEA_GPS *pPoint2 )
 		NMEA_GPS *pT = &nmeaTmp;
 
 		psrprintf( ">>> P1.lat=%f P1.lon=%f P2.lat=%f P2.lon=%f <<<\n", LatD(pPoint1), LonD(pPoint1), LatD(pPoint2), LonD(pPoint2) );
-		if( 0 == nmeaCalcDiffIn2Point( pPoint1, pPoint2, pT ) )
+		if( -1 != nmeaCalcDiffIn2Point( pPoint1, pPoint2, pT ) )
 		{
 			xTmp = ( sin(LatDr(pT)/2)*sin(LatDr(pT)/2) ) + (cos(LatDr(pPoint1)) * cos(LatDr(pPoint2))) * ( sin(LonDr(pT)/2) * sin(LonDr(pT)/2) );
 			xAngle = 2 * atan2( sqrt(xTmp), sqrt(1-xTmp) );
@@ -125,6 +193,32 @@ nmeaCalcRET nmeaCalcDistanceIn2Point( NMEA_GPS *pPoint1, NMEA_GPS *pPoint2 )
 	}
 	else
 		psrprintf( "nmeaCalcDistanceIn2Point %f [null] !!!\n", xRet );
+
+	return xRet;
+}
+
+
+nmeaCalcRET nmeaCalcAngleInNorth2Point( NMEA_GPS *pPointOLD, NMEA_GPS *pPointNEW )
+{
+	nmeaCalcRET xRet = 0;
+	nmeaCalcRET xTmp = 0;
+	nmeaCalcRET xAngle = 0;
+
+	if( pPointOLD && pPointNEW )
+	{
+		NMEA_GPS nmeaTmp;
+		NMEA_GPS *pT = &nmeaTmp;
+
+		psrprintf( ">>> P1.lat=%f P1.lon=%f P2.lat=%f P2.lon=%f <<<\n", LatD(pPointOLD), LonD(pPointOLD), LatD(pPointNEW), LonD(pPointNEW) );
+		if( -1 != nmeaCalcDiffIn2Point( pPointOLD, pPointNEW, pT ) )
+		{
+			psrprintf( "nmeaCalcAngleInNorth2Point %f [%s] !!!\n", xRet, (0!=xRet)?"OK":"Fail" );
+		}
+		else
+			psrprintf( "nmeaCalcAngleInNorth2Point fail !!!\n" );
+	}
+	else
+		psrprintf( "nmeaCalcAngleInNorth2Point %f [null] !!!\n", xRet );
 
 	return xRet;
 }
