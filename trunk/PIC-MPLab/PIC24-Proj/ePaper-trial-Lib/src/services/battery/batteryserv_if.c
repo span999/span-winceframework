@@ -15,7 +15,21 @@ Initialor		:	span.liu
 #include "..\Toolbox\Toolbox.h"
 
 
-
+static ADC_BATT_MAPS	adcBattTbl[12] =
+{
+	{  0,  734,  0 },
+	{  1,  760,  1 },
+	{  2,  786,  2 },
+	{  3,  812,  3 },
+	{  4,  838,  4 },
+	{  5,  864,  5 },
+	{  6,  890,  6 },
+	{  7,  916,  7 },
+	{  8,  942,  8 },
+	{  9,  968,  9 },
+	{ 10, 9999, 10 },
+	{ -1,    0, 10 }
+};
 
 
 
@@ -30,12 +44,39 @@ static INT32 MicServCalcBatteryLevel()
 	UINT uiRet = 0;
 	///TODO: read ADC, and to a battery mapping
 	
-///	xMicModSetDebug_ADC( xON );		///set battery in debug mode
+#ifdef EPAPER_PIC24_PORT
+	///private port
+	xMicModSetDebug_ADC( xON );		///set battery in debug mode
 	uiRet = xMicModGetADCValue();
-///	xMicModSetDebug_ADC( xOFF );	///set battery off debug mode
+	xMicModSetDebug_ADC( xOFF );	///set battery off debug mode
+#else
+	///release port
+	uiRet = xMicModGetADCValue();
+#endif
+
 	
 	///mapping table??
+#if 0	
 	i32Ret = ServMappingADC2BATT_BAT( uiRet );
+#else
+	if( uiRet > 0 )
+	{
+		int iLoop = 0;
+		for( iLoop = 0; iLoop < 15; iLoop++ )
+		{
+			if( 0 == adcBattTbl[iLoop].adcMAX )	///end of list
+				break;
+				
+			if( uiRet < adcBattTbl[iLoop].adcMAX )
+			{
+				i32Ret = adcBattTbl[iLoop].level;
+				break;
+			}
+			
+			///try next
+		}
+	}
+#endif
 
 	return i32Ret;
 }
