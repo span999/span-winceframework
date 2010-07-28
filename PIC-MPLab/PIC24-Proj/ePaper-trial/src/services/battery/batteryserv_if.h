@@ -19,6 +19,14 @@ Initialor		:	span.liu
 typedef    unsigned int            xBATTLEVEL;
 
 
+typedef struct {
+	BYTE numID;
+	unsigned int adcMAX;
+	BYTE level;
+} ADC_BATT_MAPS;
+
+
+
 xBATTLEVEL xMicServGetBatteryLevel();
 xOnOff xMicServSetDebug_BAT( xOnOff do_sets );
 

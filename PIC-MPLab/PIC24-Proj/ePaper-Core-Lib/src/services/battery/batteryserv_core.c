@@ -8,7 +8,7 @@ Initialor		:	span.liu
 */
 
 #include "batteryserv_core.h"
-
+#include "batteryserv_adcmap.h"
 
 
 static BOOL IsIdle = FALSE;
@@ -65,6 +65,7 @@ BOOL IsServIdle_BAT()
 }
 
 
+#if 0
 INT32 ServMappingADC2BATT_BAT( UINT uiADC )
 {
 	INT32 i32Ret = 0;
@@ -73,6 +74,32 @@ INT32 ServMappingADC2BATT_BAT( UINT uiADC )
 	
 	return i32Ret;
 }
+#else
+INT32 ServMappingADC2BATT_BAT( UINT uiADC )
+{
+	INT32 i32Ret = 0;
+	
+	if( uiADC > 0 )
+	{
+		int iLoop = 0;
+		for( iLoop = 0; iLoop < 15; iLoop++ )
+		{
+			if( 0 == adcBattTbl[iLoop].adcMAX )	///end of list
+				break;
+				
+			if( uiADC < adcBattTbl[iLoop].adcMAX )
+			{
+				i32Ret = adcBattTbl[iLoop].level;
+				break;
+			}
+			
+			///try next
+		}
+	}
+	
+	return i32Ret;
+}
+#endif
 
 
 UINT ServGetBattLvDBG_BAT()
