@@ -1,12 +1,12 @@
 ﻿<Window x:Class="WpfApplication1.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="420" Width="633">
+        Title="MainWindow" Height="400" Width="633">
     <Grid>
-        <Button Content="Sent" Height="50" HorizontalAlignment="Left" Margin="494,319,0,0" Name="button1" VerticalAlignment="Top" Width="94" MouseLeftButtonUp="button1_MouseLeftButtonUp" MouseUp="button1_MouseUp" MouseDown="button1_MouseDown" MouseRightButtonUp="button1_MouseRightButtonUp" Click="button1_Click" />
-        <ListBox Height="277" HorizontalAlignment="Left" Margin="26,24,0,0" Name="listBox1" VerticalAlignment="Top" Width="562" MouseDoubleClick="listBox1_MouseDoubleClick" />
-        <Button Content="eXclude" Height="23" HorizontalAlignment="Left" Margin="379,319,0,0" Name="button2" VerticalAlignment="Top" Width="75" />
-        <Button Content="Include" Height="23" HorizontalAlignment="Left" Margin="379,346,0,0" Name="button3" VerticalAlignment="Top" Width="75" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="26,319,0,0" Name="textBox1" VerticalAlignment="Top" Width="243" TextChanged="textBox1_TextChanged" KeyUp="textBox1_KeyUp" />
+        <Button Content="Sent" Height="50" HorizontalAlignment="Left" Margin="494,298,0,0" Name="button1" VerticalAlignment="Top" Width="94" MouseLeftButtonUp="button1_MouseLeftButtonUp" MouseUp="button1_MouseUp" MouseDown="button1_MouseDown" MouseRightButtonUp="button1_MouseRightButtonUp" Click="button1_Click" />
+        <ListBox Height="262" HorizontalAlignment="Left" Margin="26,24,0,0" Name="listBox1" VerticalAlignment="Top" Width="562" MouseDoubleClick="listBox1_MouseDoubleClick" />
+        <Button Content="eXclude" Height="23" HorizontalAlignment="Left" Margin="379,300,0,0" Name="button2" VerticalAlignment="Top" Width="75" />
+        <Button Content="Include" Height="23" HorizontalAlignment="Left" Margin="379,327,0,0" Name="button3" VerticalAlignment="Top" Width="75" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="26,300,0,0" Name="textBox1" VerticalAlignment="Top" Width="243" TextChanged="textBox1_TextChanged" KeyUp="textBox1_KeyUp" />
     </Grid>
 </Window>
