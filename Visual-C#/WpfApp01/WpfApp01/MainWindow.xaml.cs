@@ -14,6 +14,10 @@ using System.Windows.Shapes;
 using System.Net.Mail;  ///for mail
 using System.Net.Security;
 
+
+using System.IO;
+///using System.Text;
+
 namespace WpfApplication1
 {
     /// <summary>
@@ -56,9 +60,13 @@ namespace WpfApplication1
         private void button1_Click(object sender, RoutedEventArgs e)
         {
             listBox1.Items.Add("Click");
+            DateTime currdt = DateTime.Now;
+            listBox1.Items.Add("#$" + currdt.Ticks + "#In: " + ReadTextLine());
+            ///listBox1.Items.Add( ReadText() );
+            ///listBox1.Items.Add(ReadTextLine());
         }
 
-        public void mailSent()
+        private void mailSent()
         {
             MailMessage mail = new MailMessage();
             ///NetworkCredential cred = new NetworkCredential("spanliu@gmail.com", "gmail999", "gmail");
@@ -89,8 +97,45 @@ namespace WpfApplication1
         {
             if (e.Key == Key.Return )
             {
-                listBox1.Items.Add(textBox1.Text);
+                DateTime currdt = DateTime.Now;
+                listBox1.Items.Add( currdt.Ticks + "-In: " + textBox1.Text );
+                WriteTextLine(currdt.Ticks + "-In: " + textBox1.Text);
             }
         }
+
+        private string ReadText()
+        {
+            //FileStream fs = File.OpenRead("C:\Documents and Settings\richard.conway\My Documents\Visual Studio Projects\TextReader\bin\Debug\readtext.rtf")
+            FileStream f = File.OpenRead(System.Environment.CurrentDirectory + "\\mcelog.mlg");
+            StreamReader s = new StreamReader(f);
+            ///int ch = f.ReadByte();
+            return s.ReadToEnd();
+        }
+
+        private string ReadTextLine()
+        {
+            //FileStream fs = File.OpenRead("C:\Documents and Settings\richard.conway\My Documents\Visual Studio Projects\TextReader\bin\Debug\readtext.rtf")
+            FileStream f = File.OpenRead(System.Environment.CurrentDirectory + "\\mcelog.mlg");
+            StreamReader s = new StreamReader(f);
+            string r = s.ReadLine();
+            f.Close();
+            return r;
+        }
+
+        private void WriteTextLine( string wIn )
+        {
+            //FileStream fs = File.OpenRead("C:\Documents and Settings\richard.conway\My Documents\Visual Studio Projects\TextReader\bin\Debug\readtext.rtf")
+            FileStream f = File.OpenWrite(System.Environment.CurrentDirectory + "\\mcelog.mlg");
+            f.Position = f.Length;
+            StreamWriter w = new StreamWriter(f);
+            w.WriteLine("");
+            w.Flush();
+            w.Write(wIn);
+            w.Flush();
+            f.Close();
+        }
+
+
+
     }
 }
