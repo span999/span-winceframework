@@ -96,12 +96,31 @@ namespace WpfApplication1
         private void textBox1_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return )
-            {
-                DateTime currdt = DateTime.Now;
-                listBox1.Items.Add( currdt.Ticks + "-In: " + textBox1.Text );
-                WriteTextLine(currdt.Ticks + "-In: " + textBox1.Text);
+            {   ///we got return, check the commend
+                ///DateTime currdt = DateTime.Now;
+                ///listBox1.Items.Add( currdt.Ticks + "-In: " + textBox1.Text );
+                ///WriteTextLine(currdt.Ticks + "-In: " + textBox1.Text);
+
+                listBox1.Items.Add("cmd: " + textBox1.Text);
+                listBox1.Items.Add("cmd: " + CmdParser(textBox1.Text));
+                textBox1.Clear();
             }
         }
+
+        private string CmdParser(string Cmds)
+        {
+            ///string Ret = "Parse Done!";
+            string Ret = "unknown cmd!!";
+
+            if (Cmds == "filter")
+            {
+                string[] tmp = Cmds.Split(new char[] { ' ', '-' });
+                listBox1.Items.Add(tmp[0]);
+                Ret = "Filter Done!";
+            }
+            return Ret;
+        }
+
 
         private string ReadText()
         {
