@@ -1,0 +1,11 @@
+﻿<Window x:Class="WpfApp02.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <ListBox Height="222" HorizontalAlignment="Left" Margin="12,12,0,0" Name="listBox1" VerticalAlignment="Top" Width="479" />
+        <Button Content="Tcp Host" Height="49" HorizontalAlignment="Left" Margin="12,250,0,0" Name="button1" VerticalAlignment="Top" Width="93" Click="button1_Click" />
+        <Button Content="Tcp Client" Height="49" HorizontalAlignment="Left" Margin="154,250,0,0" Name="button2" VerticalAlignment="Top" Width="93" Click="button2_Click" />
+        <Button Content="DisConnect" Height="49" HorizontalAlignment="Left" Margin="398,250,0,0" Name="button3" VerticalAlignment="Top" Width="93" Click="button3_Click" />
+    </Grid>
+</Window>
