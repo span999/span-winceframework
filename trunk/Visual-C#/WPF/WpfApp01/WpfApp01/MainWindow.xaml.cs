@@ -70,16 +70,60 @@ namespace WpfApplication1
 
         private void button2_Click(object sender, RoutedEventArgs e)
         {
-            listBox2.Items.Add(textBox1.Text);
+            ListBoxShow("button2 Click");
+
+            if (null == myInC.Find(textBox1.Text.ToString()))
+                myExC.AddLast(textBox1.Text);
+            else
+                myExC.Remove(myExC.Find(textBox1.Text.ToString()));
+
+
+            listBox2.Items.Clear();
+            int iLoop = 0;
+
+            while (iLoop < myInC.Count)
+            {
+                listBox2.Items.Add("INC:" + myInC.ElementAt<string>(iLoop));
+                iLoop++;
+            }
+            iLoop = 0;
+            while (iLoop < myExC.Count)
+            {
+                listBox2.Items.Add("EXC:" + myExC.ElementAt<string>(iLoop));
+                iLoop++;
+            }
+
             textBox1.Clear();
         }
 
 
         private void button3_Click(object sender, RoutedEventArgs e)
         {
+            ///ThreadedTcpSrvr server = new ThreadedTcpSrvr();
+            ListBoxShow("button3 Click");
 
-            ThreadedTcpSrvr server = new ThreadedTcpSrvr();
-            listBox1.Items.Add("button3 Click");
+            if (null == myInC.Find(textBox1.Text.ToString()))
+                myInC.AddLast(textBox1.Text);
+            else
+                myInC.Remove(myInC.Find(textBox1.Text.ToString()));
+
+
+            listBox2.Items.Clear();
+            int iLoop = 0;
+
+            while(iLoop<myInC.Count)
+            {
+                listBox2.Items.Add("INC:" + myInC.ElementAt<string>(iLoop) );
+                iLoop++;
+            }
+            iLoop = 0;
+            while (iLoop < myExC.Count)
+            {
+                listBox2.Items.Add("EXC:" + myExC.ElementAt<string>(iLoop));
+                iLoop++;
+            }
+
+            textBox1.Clear();
         }
 
 
@@ -96,7 +140,7 @@ namespace WpfApplication1
             {
                 sTmp = rawFile.ReadNextLine();
                 ///ListBoxShow(ReadTextLine("\\mcelog.raw"));
-                if( 0 == sTmp.IndexOf(textBox1.Text.ToString()) );
+                if( 0 > sTmp.IndexOf(textBox1.Text.ToString()) )
                     ListBoxShow(sTmp);
             }
 
@@ -214,6 +258,9 @@ namespace WpfApplication1
 
 ///-------------------------------------------------------------------------------------------------------------------------------------------------
 ///
+        private LinkedList<string> myInC = new LinkedList<string>();
+        private LinkedList<string> myExC = new LinkedList<string>();
+
         private class myFile
         {
             private FileStream thisFile;
