@@ -68,26 +68,39 @@ namespace WpfApplication1
             ///listBox1.Items.Add(ReadTextLine());
         }
 
-        private void mailSent()
+        private void button2_Click(object sender, RoutedEventArgs e)
         {
-            MailMessage mail = new MailMessage();
-            ///NetworkCredential cred = new NetworkCredential("spanliu@gmail.com", "gmail999", "gmail");
-            //收件者
-            mail.To.Add("spanliu@hotmail.com");
-            mail.Subject = "subject";
-            //寄件者
-            mail.From = new System.Net.Mail.MailAddress("spanliu@gmail.com");
-            mail.IsBodyHtml = true;
-            mail.Body = "message";
-            //設定SMTP
-            SmtpClient smtp = new SmtpClient("smtp.gmail.com");
-            smtp.UseDefaultCredentials = false;
-            smtp.EnableSsl = true;
-            ///smtp.Credentials = cred;
-            smtp.Port = 587;
-            //送出Mail
-            smtp.Send(mail);
+            listBox2.Items.Add(textBox1.Text);
+            textBox1.Clear();
+        }
 
+
+        private void button3_Click(object sender, RoutedEventArgs e)
+        {
+
+            ThreadedTcpSrvr server = new ThreadedTcpSrvr();
+            listBox1.Items.Add("button3 Click");
+        }
+
+
+        private void button4_Click(object sender, RoutedEventArgs e)
+        {
+            myFile rawFile;
+            string sTmp;
+            
+            ListBoxShow("Load!!");
+
+            rawFile = new myFile("\\mcelog.raw");
+
+            while (!rawFile.IsEOF())
+            {
+                sTmp = rawFile.ReadNextLine();
+                ///ListBoxShow(ReadTextLine("\\mcelog.raw"));
+                if( 0 == sTmp.IndexOf(textBox1.Text.ToString()) );
+                    ListBoxShow(sTmp);
+            }
+
+            rawFile.myDestroy();
         }
 
         private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
@@ -107,6 +120,16 @@ namespace WpfApplication1
                 listBox1.Items.Add("cmd: " + CmdParser(textBox1.Text));
                 textBox1.Clear();
             }
+        }
+
+
+///-------------------------------------------------------------------------------------------------------------------------------------------------
+///
+        private void ListBoxShow(string Msg)
+        {
+            listBox1.Items.Add(Msg);
+            listBox1.Items.MoveCurrentToLast();
+            Console.WriteLine(Msg);
         }
 
         private string CmdParser(string Cmds)
@@ -143,6 +166,17 @@ namespace WpfApplication1
             return r;
         }
 
+        private string ReadTextLine(string filepath)
+        {
+            FileStream f = File.OpenRead(System.Environment.CurrentDirectory + filepath);
+            StreamReader s = new StreamReader(f);
+            string r = s.ReadLine();
+            r = s.ReadLine();
+            r = s.ReadLine();
+            f.Close();
+            return r;
+        }
+
         private void WriteTextLine( string wIn )
         {
             //FileStream fs = File.OpenRead("C:\Documents and Settings\richard.conway\My Documents\Visual Studio Projects\TextReader\bin\Debug\readtext.rtf")
@@ -156,14 +190,93 @@ namespace WpfApplication1
             f.Close();
         }
 
-        private void button3_Click(object sender, RoutedEventArgs e)
+        private void mailSent()
         {
+            MailMessage mail = new MailMessage();
+            ///NetworkCredential cred = new NetworkCredential("spanliu@gmail.com", "gmail999", "gmail");
+            //收件者
+            mail.To.Add("spanliu@hotmail.com");
+            mail.Subject = "subject";
+            //寄件者
+            mail.From = new System.Net.Mail.MailAddress("spanliu@gmail.com");
+            mail.IsBodyHtml = true;
+            mail.Body = "message";
+            //設定SMTP
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com");
+            smtp.UseDefaultCredentials = false;
+            smtp.EnableSsl = true;
+            ///smtp.Credentials = cred;
+            smtp.Port = 587;
+            //送出Mail
+            smtp.Send(mail);
 
-            ThreadedTcpSrvr server = new ThreadedTcpSrvr();
-            listBox1.Items.Add("button3 Click");
         }
-        
 
+///-------------------------------------------------------------------------------------------------------------------------------------------------
+///
+        private class myFile
+        {
+            private FileStream thisFile;
+            private StreamReader thisStream;
+            private bool bFileInited;
+
+            public myFile(string filepath)
+            { 
+                thisFile = File.OpenRead(System.Environment.CurrentDirectory + filepath);
+                thisStream = new StreamReader(thisFile);
+                bFileInited = true;
+            }
+/*
+            public ~myFile()
+            {
+                if (bFileInited)
+                {
+                    thisStream.Close();
+                    thisFile.Close();
+                    bFileInited = false;
+                }
+            }
+*/
+            public bool myDestroy()
+            {
+                if (bFileInited)
+                {
+                    thisStream.Close();
+                    thisFile.Close();
+                    bFileInited = false;
+                }
+
+                return true;
+            }
+
+            public bool IsInited()
+            {
+                bool bRet = false;
+
+                if (bFileInited)
+                    bRet = true;
+
+                return bRet;
+            }
+
+            public bool IsEOF()
+            {
+                return thisStream.EndOfStream;
+            }
+
+            public string ReadNextLine()
+            {
+                string sRet = "";
+
+                if (bFileInited)
+                {
+                    sRet = thisStream.ReadLine();
+                }
+
+                return sRet;
+            }
+
+        }
 
         public class ThreadedTcpSrvr
         {
@@ -227,6 +340,7 @@ namespace WpfApplication1
                 ///Console.WriteLine("Client disconnected: {0} active connections", connections);
             }
         }
+
 
 
     }///public partial class MainWindow : Window

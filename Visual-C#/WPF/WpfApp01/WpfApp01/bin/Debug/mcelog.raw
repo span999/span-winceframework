@@ -1,0 +1,250 @@
+Microsoft Windows CE Bootloader Common Library Version 1.4 Built Dec 17 2007 20:18:15
+Microsoft Windows CE Bootloader for the Samsung SMDK6410 Version 2.4 Built Dec 21 2007
+
++OALArgsInit()
+SocID:0x36410101
+Arguments area is initialized
+-OALArgsInit()
+INFO: (unsigned)C_IsrHandler : 0x8003FDA8
+INFO: (unsigned)ASM_IsrHandler : 0x800421D4
+INFO: (unsigned)pISR : 0xEA01086D
+BP_Init
+[FMD] ++FMD_Init() ****
+[FMD:INF] FMD_Init() : Read ID = 0x0000ecd3
+[FMD] FMD_Init() : NUM_OF_BLOCKS = 8192
+[FMD] FMD_Init() : PAGES_PER_BLOCK = 64
+[FMD] FMD_Init() : SECTORS_PER_PAGE = 4
+[FMD] --FMD_Init()
+[FMD] FMD_GetInfo() : NUMBLOCKS = 8192(0x2000), SECTORSPERBLOCK = 64(0x40), BYTESPERSECTOR = 2048(0x800)
+[FMD] FMD_GetInfo() : NUMBLOCKS = 8192(0x2000), SECTORSPERBLOCK = 64(0x40), BYTESPERSECTOR = 2048(0x800)
+wNUM_BLOCKS : 8192(0x2000)
+[Eboot] ++InitializeDisplay()
+[LDI:ERR] g_ModuleType = 0
+
+[Eboot] --InitializeDisplay()
+Press [ENTER] to download image stored on boot media, or [SPACE] to enter boot monitor.
+
+Initiating image download in 0 seconds.
+
+Starting auto-download ...
+DM9000 ID is 0x90000a46
+INFO: Probe: DM9000 is detected.
+DM9000: MAC Address: 0:0:0:0:0:0
+ERROR: InitEthDevice: Invalid MAC address.
+ERROR: OEMPlatformInit: Failed to initialize Ethernet controller.
+
+
+[NBL2] main() Starts !
+[NBL2] Serial Initialized...
+[FIL] ################
+[FIL] MID = 0xec
+[FIL] DID = 0xd5
+[FIL] HID[0] = 0x14
+[FIL] HID[1] = 0xb6
+[FIL] HID[2] = 0x74
+[FIL] ################
+[FIL] ##############################
+[FIL] FIL Global Information
+[FIL] BANKS_TOTAL = 1
+[FIL] BLOCKS_PER_BANK = 2048
+[FIL] TWO_PLANE_PROGRAM = 1
+[FIL] SUPPORT_INTERLEAVING = 0
+[FIL] SUBLKS_TOTAL = 2048
+[FIL] PAGES_PER_SUBLK = 128
+[FIL] PAGES_PER_BANK = 262144
+[FIL] SECTORS_PER_PAGE = 8
+[FIL] SECTORS_PER_SUPAGE = 16
+[FIL] SECTORS_PER_SUBLK = 2048
+[FIL] USER_SECTORS_TOTAL = 3696640
+[FIL] ADDRESS_CYCLE = 5
+[FIL] ##############################
+
+[INFO] WMR_AREA_SIZE = 10
+[INFO] SPECIAL_AREA_START = 10
+[INFO] SPECIAL_AREA_SIZE = 100
+[INFO] VFL_AREA_START = 110
+[INFO] VFL_AREA_SIZE = 106
+[INFO] VFL_INFO_SECTION_START = 110
+[INFO] VFL_INFO_SECTION_SIZE = 4
+[INFO] RESERVED_SECTION_START = 114
+[INFO] RESERVED_SECTION_SIZE = 102
+[INFO] FTL_INFO_SECTION_START = 216
+[INFO] FTL_INFO_SECTION_SIZE = 10
+[INFO] LOG_SECTION_SIZE = 7
+[INFO] FREE_SECTION_START = 226
+[INFO] FREE_SECTION_SIZE = 17
+[INFO] FREE_LIST_SIZE = 3
+[INFO] DATA_SECTION_START = 243
+[INFO] DATA_SECTION_SIZE = 1805
+[INFO] FTL_AREA_START = 216
+[INFO] FTL_AREA_SIZE = 1832
+[NBL2] FIL_Init() : Passed
+[NBL2] ++ShadowEboot()
+[NBL2] --ShadowEboot()
+[NBL2] Launch Eboot...
+LaunchAddr=0x80038000 PhysicalJump=0x30038000
+
+Microsoft Windows CE Bootloader Common Library Version 1.4 Built Jan 3 2009
+13:34:37
+Microsoft Windows CE Bootloader for the Samsung SMDK2443 Version 2.4 Built
+Jan 3 2009
+
+InitDisplay
++OALArgsInit()
+Arguments area is initialized
+-OALArgsInit()
+BP_Init
+[FIL] ################
+[FIL] MID = 0xec
+[FIL] DID = 0xd5
+[FIL] HID[0] = 0x14
+[FIL] HID[1] = 0xb6
+[FIL] HID[2] = 0x74
+[FIL] ################
+[FIL] ##############################
+[FIL] FIL Global Information
+[FIL] BANKS_TOTAL = 1
+[FIL] BLOCKS_PER_BANK = 2048
+[FIL] TWO_PLANE_PROGRAM = 1
+[FIL] SUPPORT_INTERLEAVING = 0
+[FIL] SUBLKS_TOTAL = 2048
+[FIL] PAGES_PER_SUBLK = 128
+[FIL] PAGES_PER_BANK = 262144
+[FIL] SECTORS_PER_PAGE = 8
+[FIL] SECTORS_PER_SUPAGE = 16
+[FIL] SECTORS_PER_SUBLK = 2048
+[FIL] USER_SECTORS_TOTAL = 3696640
+[FIL] ADDRESS_CYCLE = 5
+[FIL] ##############################
+
+[INFO] WMR_AREA_SIZE = 10
+[INFO] SPECIAL_AREA_START = 10
+[INFO] SPECIAL_AREA_SIZE = 100
+[INFO] VFL_AREA_START = 110
+[INFO] VFL_AREA_SIZE = 106
+[INFO] VFL_INFO_SECTION_START = 110
+[INFO] VFL_INFO_SECTION_SIZE = 4
+[INFO] RESERVED_SECTION_START = 114
+[INFO] RESERVED_SECTION_SIZE = 102
+[INFO] FTL_INFO_SECTION_START = 216
+[INFO] FTL_INFO_SECTION_SIZE = 10
+[INFO] LOG_SECTION_SIZE = 7
+[INFO] FREE_SECTION_START = 226
+[INFO] FREE_SECTION_SIZE = 17
+[INFO] FREE_LIST_SIZE = 3
+[INFO] DATA_SECTION_START = 243
+[INFO] DATA_SECTION_SIZE = 1805
+[INFO] FTL_AREA_START = 216
+[INFO] FTL_AREA_SIZE = 1832
+[FTL:MSG] FIL_Init [OK]
+[FTL:MSG] BUF_Init [OK]
+[FTL:MSG] VFL_Init [OK]
+[FTL:MSG] VFL_Open [OK]
+TOC_Read
+-TOC_Read
+Press [ENTER] to launch image stored on boot media, or [SPACE] to enter boot
+monitor.
+
+Initiating image launch in 3 seconds.
+
+Launching image from boot media ...
+OEMPlatformInit: IMAGE_TYPE_RAMIMAGE
+RAM image
+RAM image
+Read OS image to BootMedia
+ImageLength = 28744192 Byte
+Start Page = 1408, End Page = 4916, Page Count = 3509
+...........................
+Read OS image to BootMedia Success
+System ready!
+Preparing for download...
+INFO: *** Device Name 'SMDK24430' ***
+INFO: Using static IP address 0000.
+INFO: Using subnet mask 2525250.
+waitforconnect
+INFO: using TOC[1] dwJumpAddress: 0x8022fac0
+INFO: OEMLaunch: Jumping to Physical Address 0x3022FAC0h (Virtual Address
+0x8022FAC0h)...
+
+
+Windows CE Kernel for ARM (Thumb Enabled) Built on Sep 6 2006 at 19:14:27
+INFO:OALLogSetZones: dpCurSettings.ulZoneMask: 0xb
+I GPFDAT: 70, GPFCON: 5500, GPFUDP: aaaa, GPGDAT: 948, GPGCON: 401400, GPGUDP:
+aaea0000, GPBDAT: 1e1, GPBCON: 104, GPBUDP: 2aaaae
+E GPFDAT: d0, GPFCON: 5540, GPFUDP: aaaa, GPGDAT: 9c8, GPGCON: 405400, GPGUDP:
+aaea0000, GPBDAT: 1e5, GPBCON: 114, GPBUDP: 2aaaae
+DCache: 8 sets, 64 ways, 32 line size, 16384 size
+ICache: 8 sets, 64 ways, 32 line size, 16384 size
+FCLK:534000000, HCLK:133500000, PCLK:66750000
++OALArgsInit()
+Arguments area has some values
+-OALArgsInit()
+-OEMInit
+[OEMIO:INF] + IOCTL_HAL_POSTINIT
+[OEMIO:INF] - IOCTL_HAL_POSTINIT
++OEMSetRealTime(2005/5/27 12:0:0.000)
+-OEMSetRealTime(rc=1)
+-OEMSetRealTime(rc = 1)
+[HALWP:INF] nCtrlCode = PM_HAL_FIL_INIT
+[FIL] ################
+[FIL] MID = 0xec
+[FIL] DID = 0xd5
+[FIL] HID[0] = 0x14
+[FIL] HID[1] = 0xb6
+[FIL] HID[2] = 0x74
+[FIL] ################
+[FIL] ##############################
+[FIL] FIL Global Information
+[FIL] BANKS_TOTAL = 1
+[FIL] BLOCKS_PER_BANK = 2048
+[FIL] TWO_PLANE_PROGRAM = 1
+[FIL] SUPPORT_INTERLEAVING = 0
+[FIL] SUBLKS_TOTAL = 2048
+[FIL] PAGES_PER_SUBLK = 128
+[FIL] PAGES_PER_BANK = 262144
+[FIL] SECTORS_PER_PAGE = 8
+[FIL] SECTORS_PER_SUPAGE = 16
+[FIL] SECTORS_PER_SUBLK = 2048
+[FIL] USER_SECTORS_TOTAL = 3696640
+[FIL] ADDRESS_CYCLE = 5
+[FIL] ##############################
+
+[INFO] WMR_AREA_SIZE = 10
+[INFO] SPECIAL_AREA_START = 10
+[INFO] SPECIAL_AREA_SIZE = 100
+[INFO] VFL_AREA_START = 110
+[INFO] VFL_AREA_SIZE = 106
+[INFO] VFL_INFO_SECTION_START = 110
+[INFO] VFL_INFO_SECTION_SIZE = 4
+[INFO] RESERVED_SECTION_START = 114
+[INFO] RESERVED_SECTION_SIZE = 102
+[INFO] FTL_INFO_SECTION_START = 216
+[INFO] FTL_INFO_SECTION_SIZE = 10
+[INFO] LOG_SECTION_SIZE = 7
+[INFO] FREE_SECTION_START = 226
+[INFO] FREE_SECTION_SIZE = 17
+[INFO] FREE_LIST_SIZE = 3
+[INFO] DATA_SECTION_START = 243
+[INFO] DATA_SECTION_SIZE = 1805
+[INFO] FTL_AREA_START = 216
+[INFO] FTL_AREA_SIZE = 1832
+[HALWP:INF] nCtrlCode = PM_HAL_VFL_INIT
+[HALWP:INF] nCtrlCode = PM_HAL_VFL_OPEN
+[BIBDRV:INF] stNandInfo.dwPagesPerSuBlk = 0x80
+[BIBDRV:INF] stNandInfo.dwSectorsPerSuPage = 0x10
+[BIBDRV:INF] stNandInfo.dwSpecialAreaSize = 0x64
+[BIBDRV:INF] stNandInfo.dwSpecialAreaStart = 0xA
+[BIBDRV:INF] MBR MAGIC CODE (First): 0xe9,0xfd,0xff
+[BIBDRV:INF] MBR MAGIC CODE (Last) : 0x55,0xaa
+[BIBDRV:INF] Part_BootInd = 0x0
+[BIBDRV:INF] Part_FirstHead = 0x1
+[BIBDRV:INF] Part_FirstSector = 0x1
+[BIBDRV:INF] Part_FirstTrack = 0x0
+[BIBDRV:INF] Part_FileSystem = 0x21
+[BIBDRV:INF] Part_LastHead = 0x27
+[BIBDRV:INF] Part_LastSector = 0x0
+[BIBDRV:INF] Part_LastTrack = 0x0
+[BIBDRV:INF] Part_StartSector = 2048
+[BIBDRV:INF] Part_TotalSectors = 79872
+BIBDRV_PS:GetProfileName - Profile = SMFlash, length = 16
+[BIBDRV:MSG] DSK_IOControl unkonwn code(71c24)
