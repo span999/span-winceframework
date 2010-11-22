@@ -4,8 +4,8 @@
 #define FILEVER        1,0,0,1
 #define PRODUCTVER     1,0,0,1
 
-#define STRFILEVER "1, 0, 20100603, 1303\0" 
-#define STRPRODUCTVER  "1, 0, Hammer500C, Hammer500C\0" 
+#define STRFILEVER "1, 0, 20101122, 1356\0" 
+#define STRPRODUCTVER  "1, 0, STA2064, STA2064CE\0" 
 
 
 

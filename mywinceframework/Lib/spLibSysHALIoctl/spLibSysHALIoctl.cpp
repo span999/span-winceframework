@@ -10,13 +10,16 @@
 // see the LICENSE.RTF on your install media or the root of your tools installation.
 // THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES.
 //
-#include <windows.h>
-#include <drvlib.h>
+
+///#include <windows.h>
+///#include <drvlib.h>
+#include "spOS.h"
+#include "spPlatform.h"
 
 #include "..\..\Inc\spLibErrCodeDef.h"
 #include "SPDebugDef.h"
-#include "mio_ioctl.h"
-#include "odm_ioctl.h"
+///#include "mio_ioctl.h"
+///#include "odm_ioctl.h"
 #include "spLibDbgMsgBuf.h"
 
 
@@ -30,6 +33,7 @@ static DWORD spLibHalReboot( void );
 static DWORD spLibHalBLGet( void );
 static DWORD spLibHalBLSet( DWORD dwValue );
 static DWORD spLibHalGetDbgMsgBuf( SPDBG_MSG_INFO *pDbgMsgInfo );
+
 
 static PFN_GetIdleTime gpfGetIdleTime;
 
@@ -103,6 +107,7 @@ DWORD spLibSysHALIoctl_BacklightDown( void )
 	return spLibHalBLSet( spLibHalBLGet()-1 );
 }
 
+///#ifdef IOCTL_HAL_GET_DBG_MSG_BUF
 DWORD spLibSysHALIoctl_GetDbgMsgBuf( PVOID pBuf )
 {
 	DWORD dwRet = 0;
@@ -130,6 +135,7 @@ DWORD spLibSysHALIoctl_GetDbgMsgBuf( PVOID pBuf )
 	
 	return dwRet;
 }
+///#endif
 
 
 /// *****************************************
@@ -242,6 +248,7 @@ static DWORD spLibHalGetDbgMsgBuf( SPDBG_MSG_INFO *pDbgMsgInfo )
 	
 	if( pDbgMsgInfo )
 	{
+#ifdef IOCTL_HAL_GET_DBG_MSG_BUF
 		if( !KernelIoControl( IOCTL_HAL_GET_DBG_MSG_BUF,  NULL, 0, pDbgMsgInfo,  sizeof(SPDBG_MSG_INFO), NULL ) )
 		{
 			SPDMSG( dFAIL, (L"$$$spLibHalGetDbgMsgBuf: fail !!! %d \r\n", 0) );
@@ -251,6 +258,9 @@ static DWORD spLibHalGetDbgMsgBuf( SPDBG_MSG_INFO *pDbgMsgInfo )
 		{
 			dwRet = sizeof(SPDBG_MSG_INFO);
 		}
+#else
+		dwRet = sizeof(SPDBG_MSG_INFO);
+#endif		
 	}
 	else
 	{	///query for buffer size
@@ -259,3 +269,5 @@ static DWORD spLibHalGetDbgMsgBuf( SPDBG_MSG_INFO *pDbgMsgInfo )
 	
 	return dwRet;
 }
+
+
