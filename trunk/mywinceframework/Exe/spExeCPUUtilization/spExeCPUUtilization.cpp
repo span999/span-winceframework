@@ -10,8 +10,10 @@
 // see the LICENSE.RTF on your install media or the root of your tools installation.
 // THE SAMPLE SOURCE CODE IS PROVIDED "AS IS", WITH NO WARRANTIES.
 //
-#include <windows.h>
-#include <drvlib.h>
+///#include <windows.h>
+///#include <drvlib.h>
+#include "spOS.h"
+#include "spPlatform.h"
 
 #include "..\..\Inc\spLibErrCodeDef.h"
 #include "..\..\Inc\spLibDDrawClass.h"
