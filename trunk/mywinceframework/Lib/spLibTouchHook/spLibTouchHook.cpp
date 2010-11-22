@@ -33,6 +33,7 @@ typedef struct _LibTouchHookContent
 
 #define		SPPREFIX			TEXT("THLib:")
 #define		LIBMSGFLAG			(dDOUT|0x0FFFFFFF)		///diag msg only
+#define		LIBMSGFLAG_NK		(dNOUT|0x0FFFFFFF)		///nk msg only
 ///#define		LIBMSGFLAG			(dNOUT|0x0FFFFFFF)		///nk msg only
 
 
@@ -246,7 +247,7 @@ static DWORD WINAPI TouchEventThread( LPVOID pContext )
 	hWaitEvents[2] = pThisContent->hTouchEventUp;
 	hWaitEvents[3] = pThisContent->hTouchEventControl;
 	
-	spLibDbgMsg( LIBMSGFLAG, TEXT("%s TouchEventThread start !!!"), SPPREFIX );
+	spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s TouchEventThread start !!!"), SPPREFIX );
 	
 	while( !bExitMonitor )
 	{
@@ -284,7 +285,7 @@ static DWORD WINAPI TouchEventThread( LPVOID pContext )
 		
 	}	///while
 	
-	spLibDbgMsg( LIBMSGFLAG, TEXT("%s TouchEventThread exit !!!"), SPPREFIX );
+	spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s TouchEventThread exit !!!"), SPPREFIX );
 	
 	return dwRet;
 }

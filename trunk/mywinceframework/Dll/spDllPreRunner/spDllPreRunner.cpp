@@ -186,7 +186,7 @@ BOOL DDrawShowInit( void )
 	InitSysInfoDrawArea( pmyDD );
 	
 		
-	spLibDbgMsg( LIBMSGFLAG, TEXT("%s exit DDrawShowInit!!!"), SPPREFIX );
+	spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s exit DDrawShowInit!!!"), SPPREFIX );
 	
 	return bRet;
 }
@@ -227,7 +227,7 @@ BOOL TouchHookInit( void )
 	/// hook callback
 	spLibTouchHook_SetCallback( TouchHookExeCallback );
 		
-	spLibDbgMsg( LIBMSGFLAG, TEXT("%s exit TouchHookExeInit!!!"), SPPREFIX );
+	spLibDbgMsg( LIBMSGFLAG_NK, TEXT("%s exit TouchHookExeInit!!!"), SPPREFIX );
 	
 	return bRet;
 }
@@ -335,7 +335,7 @@ static DWORD WINAPI PreRunnerThread( LPVOID  pContext )
 	DWORD dwWaitMS = 2000;
 	DWORD dwReturns = 0;
 	
-	spLibDbgMsg( LIBMSGFLAG, TEXT("Start Pre Runnner !!!") );
+	spLibDbgMsg( LIBMSGFLAG_NK, TEXT("Start Pre Runnner !!!") );
 
 	hWaitEvents[0] = spLibRegNotify_GetNotifyHandle();
 	hWaitEvents[1] = CreateEvent( NULL, FALSE, FALSE, NULL );
