@@ -50,10 +50,6 @@ cd Exe\spExeTouchHook
 build -c
 cd ..\..
 
-cd Exe\spExeAutoRunner
-build -c
-cd ..\..
-
 cd Lib\spLibDataXferEvent
 build
 cd ..\..
@@ -86,10 +82,6 @@ cd Lib\spLibTouchHook
 build -p -c
 cd ..\..
 
-
-:_EXIT
-
-
 cd Lib\spLibNumPadParser
 build -c
 cd ..\..
@@ -102,6 +94,9 @@ cd Lib\spLibARFileParser
 build -c
 cd ..\..
 
+:_EXIT
+
+
 cd Dll\spDllAutoRunner
 build -c
 cd ..\..
@@ -110,3 +105,6 @@ cd Dll\spDllPreRunner
 build -c
 cd ..\..
 
+cd Exe\spExeAutoRunner
+build -c
+cd ..\..
