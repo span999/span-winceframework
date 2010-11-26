@@ -97,20 +97,23 @@ DWORD spLibSysHALIoctl_BacklightSet( DWORD dwValue )
 	return spLibHalBLSet( dwValue );
 }
 
+
 DWORD spLibSysHALIoctl_BacklightUp( void )
 {
 	return spLibHalBLSet( spLibHalBLGet()+1 );
 }
+
 
 DWORD spLibSysHALIoctl_BacklightDown( void )
 {
 	return spLibHalBLSet( spLibHalBLGet()-1 );
 }
 
-///#ifdef IOCTL_HAL_GET_DBG_MSG_BUF
+
 DWORD spLibSysHALIoctl_GetDbgMsgBuf( PVOID pBuf )
 {
 	DWORD dwRet = 0;
+#ifdef IOCTL_HAL_GET_DBG_MSG_BUF
 	SPDBG_MSG_INFO spTmpBuf;
 	
 	if( pBuf )
@@ -125,17 +128,16 @@ DWORD spLibSysHALIoctl_GetDbgMsgBuf( PVOID pBuf )
 		else
 		{
 			dwRet = 0;
-		}
-		
+		}		
 	}
 	else
 	{	///query buffer size
 		dwRet = spLibHalGetDbgMsgBuf( NULL );
 	}
+#endif
 	
 	return dwRet;
 }
-///#endif
 
 
 /// *****************************************
@@ -203,19 +205,20 @@ static DWORD spLibHalReboot( void )
 }
 
 
-
 static DWORD spLibHalBLGet( void )
 {
-	DWORD dwRet;
-	DWORD dwOutBuf;
-	
+	DWORD dwRet = (-1);
+	DWORD dwOutBuf = (-1);
+
+#if defined(IOCTL_MIO_BKL_GET_BRIGHTNESS) && defined(IOCTL_ODM_BKL_GET_BRIGHTNESS)
 	if( !KernelIoControl( IOCTL_MIO_BKL_GET_BRIGHTNESS, NULL, 0, (DWORD *)&dwOutBuf, sizeof(DWORD), NULL ) )
 		if( !KernelIoControl( IOCTL_ODM_BKL_GET_BRIGHTNESS, NULL, 0, (DWORD *)&dwOutBuf, sizeof(DWORD), NULL ) )
 		{
 			SPDMSG( dFAIL, (L"$$$spLibHalBLGet: fail !!! %d \r\n", 0) );
 			return 0;
 		}	
-	
+#endif
+		
 	dwRet = dwOutBuf;
 	
 	return dwRet;
@@ -224,17 +227,19 @@ static DWORD spLibHalBLGet( void )
 
 static DWORD spLibHalBLSet( DWORD dwValue )
 {
-	DWORD dwRet;
+	DWORD dwRet = (-1);
 	DWORD dwInBuf;
 	
 	dwInBuf = dwValue;
-	
+
+#if defined(IOCTL_MIO_BKL_SET_BRIGHTNESS) && defined(IOCTL_ODM_BKL_SET_BRIGHTNESS)
 	if( !KernelIoControl(IOCTL_MIO_BKL_SET_BRIGHTNESS,(DWORD *)&dwInBuf, sizeof(DWORD), NULL, 0, NULL ) )
 		if( !KernelIoControl(IOCTL_ODM_BKL_SET_BRIGHTNESS,(DWORD *)&dwInBuf, sizeof(DWORD), NULL, 0, NULL ) )
 		{
 			SPDMSG( dFAIL, (L"$$$spLibHalBLSet: fail !!! %d \r\n", 0) );
 			return 0;
 		}	
+#endif
 	
 	dwRet = spLibHalBLGet();
 	
@@ -259,7 +264,7 @@ static DWORD spLibHalGetDbgMsgBuf( SPDBG_MSG_INFO *pDbgMsgInfo )
 			dwRet = sizeof(SPDBG_MSG_INFO);
 		}
 #else
-		dwRet = sizeof(SPDBG_MSG_INFO);
+		dwRet = (-1);
 #endif		
 	}
 	else
