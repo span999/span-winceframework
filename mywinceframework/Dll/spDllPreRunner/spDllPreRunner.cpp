@@ -296,7 +296,7 @@ static DWORD MainRoutine( DWORD dwPararm )
 	TouchHookInit();
 	Sleep( 100 );
 	///RegNotifyInit();
-	
+
 	
 	hPreRunnerThread = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)PreRunnerThread, (LPVOID)&dwThreadPararm, 0, (LPDWORD)&dwPreRunnerThreadId );
 
@@ -365,7 +365,7 @@ static DWORD WINAPI PreRunnerThread( LPVOID  pContext )
 			case WAIT_TIMEOUT:
 				///Sleep( 1000 );
 				///DrawCPUMem( bCPUMsgShow );
-				spLibDbgMsg( LIBMSGFLAG_NK, TEXT("Pre Runnner running!!!") );
+				///spLibDbgMsg( LIBMSGFLAG_NK, TEXT("Pre Runnner running!!!") );
 			break;
 	
 			default:
