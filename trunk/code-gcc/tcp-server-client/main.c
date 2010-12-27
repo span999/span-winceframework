@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "tcp-server.h"
+
 
 void banner( void );
 void millisleep( int milliseconds );
@@ -24,9 +26,11 @@ int main( int argc, char *argv[] )
 /*
 #define COUNTTOP 100
 */
-#define COUNTTOP 5
+#define COUNTTOP 0
 
 	banner();
+
+	tcpServer( 0 );
 
 	while( iCount < COUNTTOP )
 	{
