@@ -10,27 +10,13 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
+#include "toolhelps.h"
 
 /*
 int ServSock = 0;
 */
 
 #define SERVERPORTNO 77777
-
-#define SPMSG(X) printf("->X\r\n"); fflush(stdout);
-
-
-void myerr( char *msg );
-
-
-
-
-void myerr( char *msg )
-{
-	perror( msg );
-	SPMSG(123)
-	exit( 1 );
-}
 
 
 int tcpServer( int iPara )
@@ -52,7 +38,7 @@ int tcpServer( int iPara )
 	
 	portno = SERVERPORTNO;
 
-	bzero((char *) &serv_addr, sizeof(serv_addr));
+	SETZERO( &serv_addr, sizeof(serv_addr) );
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
 	serv_addr.sin_port = htons(portno);
@@ -66,21 +52,15 @@ int tcpServer( int iPara )
 	clilen = sizeof( cli_addr );
 
 waitLoop:
-	/*
-	SPMSG(wait client data~)
-	*/
 	printf( "[wait client data~]\r\n" ); fflush( stdout );
 	newSock = accept( ServSock, (struct sockaddr *)&cli_addr, &clilen );
 
 	if( newSock < 0 )
 		myerr( "\r\naccept fail return !!" );
 
-	printf( "" );
-	/*
-	SPMSG(got client data~)
-	*/
+	printf( "\r\n" );
 	printf( "[got client data~]\r\n" ); fflush( stdout );
-	bzero( buffer, 256 );
+	SETZERO( buffer, 256 );
 
 	ndo = read( newSock, buffer, 255 );
 	if( ndo < 0 )
