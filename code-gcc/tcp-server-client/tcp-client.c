@@ -60,8 +60,13 @@ repeatLoop:
 	ndo = sizeof( serv_addr );
 	if( connect( clntSock, (struct sockaddr *)&serv_addr, ndo ) < 0 ) 
 		myerr("ERROR connecting");
-
+/*
 	printf( "Please enter the message: " );
+*/
+	spQMSG( "Please enter the message: " );
+/*
+	spQMSG( "Please enter the message %d : ", 123 );
+*/
 	SETZERO( buffer, 256 );
 
 	fgets( buffer, 255, stdin );
