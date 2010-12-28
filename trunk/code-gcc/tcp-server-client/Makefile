@@ -4,7 +4,7 @@ CC := gcc
 CCFLAG := -Wall -ansi
 
 AR := ar
-ARFLAG : = rcs
+ARFLAG := rcs
 
 all: toolhelps.a toolhelps.o testrun.o tcp-client.o tcp-server.o main.o
 	$(CC) $(CCGLAG) -o test testrun.o tcp-server.o main.o toolhelps.o

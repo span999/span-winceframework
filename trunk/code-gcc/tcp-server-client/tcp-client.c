@@ -32,15 +32,10 @@ int main( int argc, char *argv[] )
 		exit(0);
     }
 
-	portno = atoi( argv[2] );
-
-repeatLoop:
-	clntSock = socket( AF_INET, SOCK_STREAM, 0 );
-
-	if( clntSock < 0 ) 
-		myerr( "ERROR opening socket" );
-
-	server = gethostbyname( argv[1], strlen(argv[1]) );
+	/*
+	server = gethostbyname( (char *)argv[1], (int)strlen(argv[1]) );
+	*/
+	server = gethostbyname( argv[1] );
     	
 	if( server == NULL )
 	{
@@ -48,38 +43,54 @@ repeatLoop:
 		exit( 0 );
 	}
 
+	portno = atoi( argv[2] );
+
+
+	/*
+	 * prepare socket address data
+	 * 
+	 * reference link, 
+	 * http://www.umiacs.com/sockaddr_inman.html
+	 */
 	SETZERO( &serv_addr, sizeof(serv_addr) );
 	serv_addr.sin_family = AF_INET;
 /*
 	bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
 */
+#if 0
 	serv_addr.sin_addr.s_addr = inet_addr( "127.0.0.1" );
+#else	
+	inet_aton("127.0.0.1", &serv_addr.sin_addr.s_addr);
+#endif
 	serv_addr.sin_port = htons( portno );
 
 
+
+repeatLoop:
+	spQMSG( "Please enter the message: " );	
+	SETZERO( buffer, 256 );
+	fgets( buffer, 255, stdin );
+
+	clntSock = socket( AF_INET, SOCK_STREAM, 0 );
+
+	if( clntSock < 0 ) 
+		spERR( "ERROR opening socket" );
+
 	ndo = sizeof( serv_addr );
 	if( connect( clntSock, (struct sockaddr *)&serv_addr, ndo ) < 0 ) 
-		myerr("ERROR connecting");
-/*
-	printf( "Please enter the message: " );
-*/
-	spQMSG( "Please enter the message: " );
-/*
-	spQMSG( "Please enter the message %d : ", 123 );
-*/
-	SETZERO( buffer, 256 );
+		spERR("ERROR connecting");
 
-	fgets( buffer, 255, stdin );
 	ndo = write( clntSock, buffer, strlen(buffer) );
 	if( ndo < 0 ) 
-		myerr( "ERROR writing to socket" );
+		spERR( "ERROR writing to socket" );
 
 	SETZERO( buffer, 256 );
 	ndo = read( clntSock, buffer, 255 );
 
 	if( ndo < 0 ) 
- 		myerr( "ERROR reading from socket" );
-	printf("SERV: %s\n",buffer);
+ 		spERR( "ERROR reading from socket" );
+ 	else
+		spQMSG("SERV: %s\n",buffer);
 	
 	close( clntSock );
 

@@ -49,11 +49,11 @@ void spQMSG( char *msgout, ... )
 	char *p;
 	va_list ap;
 
-	if ((p = malloc (size)) == NULL)
-		return NULL;
+	if((p = malloc(size)) == NULL)
+		return;
 
 	va_start(ap, msgout);
-	n = vsnprintf (p, size, msgout, ap);
+	n = vsnprintf(p, size, msgout, ap);
 	va_end(ap);
 
 	fprintf( stderr, "%s", p );
@@ -61,7 +61,15 @@ void spQMSG( char *msgout, ... )
 	free(p);
 }
 
+
 void myerr( char *msg )
+{
+	perror( msg );
+	exit( 1 );
+}
+
+
+void spERR( char *msg )
 {
 	perror( msg );
 	exit( 1 );
@@ -73,3 +81,4 @@ void millisleep( int milliseconds )
 	int iRet = 0;
 	iRet = usleep( (unsigned int)(milliseconds * 1000) );
 }
+
