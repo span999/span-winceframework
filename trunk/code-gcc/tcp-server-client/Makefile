@@ -1,27 +1,34 @@
 
 
 CC := gcc
-FLAG := -Wall -ansi
+CCFLAG := -Wall -ansi
 
-all: toolhelps.o testrun.o tcp-client.o tcp-server.o main.o
-	$(CC) $(GLAG) -o test testrun.o tcp-server.o main.o toolhelps.o
+AR := ar
+ARFLAG : = rcs
+
+all: toolhelps.a toolhelps.o testrun.o tcp-client.o tcp-server.o main.o
+	$(CC) $(CCGLAG) -o test testrun.o tcp-server.o main.o toolhelps.o
 
 toolhelps.o: toolhelps.c
-	$(CC) $(FLAG) -c toolhelps.c
+	$(CC) $(CCFLAG) -c toolhelps.c
 
 tcp-server.o: tcp-server.c
-	$(CC) $(FLAG) -c tcp-server.c
+	$(CC) $(CCFLAG) -c tcp-server.c
 
 testrun.o: testrun.c
-	$(CC) $(FLAG) -c testrun.c
+	$(CC) $(CCFLAG) -c testrun.c
 
 main.o: main.c
-	$(CC) $(FLAG) -c main.c
+	$(CC) $(CCFLAG) -c main.c
 
 tcp-client.o: tcp-client.c
-	$(CC) $(FLAG) -o client tcp-client.c toolhelps.o
+	$(CC) $(CCFLAG) -o client tcp-client.c toolhelps.o
+
+toolhelps.a: toolhelps.c
+	$(AR) $(ARFLAG) toolhelps.a toolhelps.c
 
 clean:
-	rm test
-	rm client
-	rm *.o
+	rm -f test
+	rm -f client
+	rm -f *.o
+	rm -f *.a
