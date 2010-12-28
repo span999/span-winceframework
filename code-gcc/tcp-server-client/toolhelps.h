@@ -11,6 +11,7 @@
 
 extern void spQMSG( char *msgout, ... );
 extern void myerr( char *msg );
+extern void spERR( char *msg );
 extern void millisleep( int milliseconds );
 
 
