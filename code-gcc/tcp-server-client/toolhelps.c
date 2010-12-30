@@ -72,7 +72,7 @@ void myerr( char *msg )
 void spERR( char *msg )
 {
 	perror( msg );
-	exit( 1 );
+	exit( 0 );
 }
 
 
