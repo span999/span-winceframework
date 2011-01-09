@@ -1,6 +1,0 @@
-
-DIRS= \
-	spDllPreRunner \
-	spDllAutoRunner \
-	spDllTouchHook \
-	spDllTouchHookExt \
