@@ -326,6 +326,9 @@ GOL_SCHEME*    navScheme;		 			 // style scheme for the navigation
 GOL_SCHEME*    redScheme;                    // alternative red style scheme
 GOL_SCHEME*    greenScheme;                  // alternative green style scheme
 GOL_SCHEME*    yellowScheme;                 // alternative yellow style scheme
+//span110109, add my test code for Scheme 
+GOL_SCHEME*    myScheme;                 	 // alternative style scheme of my
+//span110109,
 
 OBJ_HEADER*	   pNavList;					 // pointer to navigation list
 
@@ -545,6 +548,9 @@ int init_mainDemo( void )
     redScheme = GOLCreateScheme();   	// create red style scheme
     greenScheme = GOLCreateScheme(); 	// create green style scheme
     yellowScheme = GOLCreateScheme(); 	// create yellow style scheme
+//span110109, add my test code for Scheme 
+    myScheme = GOLCreateScheme(); 		// create my style scheme
+//span110109,
 
     alt2Scheme->TextColor1 = BRIGHTRED;
     alt2Scheme->TextColor0 = BRIGHTBLUE;
@@ -576,6 +582,15 @@ int init_mainDemo( void )
     yellowScheme->EmbossLtColor = RGB565CONVERT(0xFD, 0xFF, 0xB2);
     yellowScheme->TextColor0 = RGB565CONVERT(0xAF, 0x34, 0xF3);
     yellowScheme->TextColor1 = RED;
+
+//span110109, add my test code for Scheme 
+    myScheme->Color0 = BRIGHTCYAN; 
+    myScheme->Color1 = CYAN;
+    myScheme->EmbossDkColor = RGB565CONVERT(0xFF, 0x94, 0x4C);
+    myScheme->EmbossLtColor = RGB565CONVERT(0xFD, 0xFF, 0xB2);
+    myScheme->TextColor0 = RGB565CONVERT(0xAF, 0x34, 0xF3);
+    myScheme->TextColor1 = BLACK;
+//span110109,
 
     meterScheme->Color0 = BLACK; 		
     meterScheme->Color1 = WHITE;
@@ -1460,7 +1475,13 @@ void CreateButtons()
               						   	// that has a toggle behavior
               NULL,                    	// no bitmap
               "LO", 		           	// text
+//span110109, add my test code for Scheme
+#if 0               
               yellowScheme);           	// use alternate scheme
+#else
+              myScheme);           	// use my alternate scheme
+#endif
+//span110109, 
 
     BtnCreate(ID_BUTTON4,             	// button ID 
               225,43,285,103,          	// dimension
