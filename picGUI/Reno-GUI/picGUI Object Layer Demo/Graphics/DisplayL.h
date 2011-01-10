@@ -111,15 +111,31 @@
 #define WHITE              	RGBA(0,255,255,255)
 
 #define YELLOW             	RGBA(0,255,255,255)
+///span110110, modify to hex code
+#if 0
 #define CYAN               	(WORD)0b0000010000010000
 #define MAGENTA            	(WORD)0b1000000000010000
 #define BROWN              	(WORD)0b1111110000000000
+#else
+#define CYAN               	(WORD)0x0410
+#define MAGENTA            	(WORD)0x8010
+#define BROWN              	(WORD)0xFC00
+#endif
+///span110110,
 
 #define BRIGHTBLUE         (WORD)0x001F
 #define BRIGHTGREEN        (WORD)0x07E0 //0b0000 0111 1110 0000
+///span110110, modify to hex code
+#if 0
 #define BRIGHTCYAN         (WORD)0b0000011111111111
 #define BRIGHTRED          0xF800 //(WORD)0b1111100000000000
 #define BRIGHTMAGENTA      (WORD)0b1111100000011111
+#else
+#define BRIGHTCYAN         (WORD)0x07FF
+#define BRIGHTRED          0xF800 //(WORD)0b1111100000000000
+#define BRIGHTMAGENTA      (WORD)0xF81F
+#endif
+///span110110,
 #define BRIGHTYELLOW       0xFFE0 //(WORD)0b1111111111100000
 
 #define LIGHTBLUE          0x821F//(WORD)0b1000010000011111
