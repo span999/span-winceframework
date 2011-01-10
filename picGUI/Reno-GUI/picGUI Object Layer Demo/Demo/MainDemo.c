@@ -252,7 +252,7 @@ extern BITMAP_FLASH gradientButton;
 
 ///span110110, add magellan logo
 extern BITMAP_FLASH Reno_magellan_logo_G8;
-///extern BITMAP_FLASH Reno_magellan_logo_C16;
+extern BITMAP_FLASH Reno_magellan_logo_C16;
 ///span110110,
 
 /////////////////////////////////////////////////////////////////////////////
