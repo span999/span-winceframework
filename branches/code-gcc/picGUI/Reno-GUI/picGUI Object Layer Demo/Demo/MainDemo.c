@@ -140,8 +140,17 @@
 void StartScreen();								// draws intro screen
 void CreatePage(char *pText); 					// creates the navigation buttons and window for each screen
 
+///span110110, add status bar component
+void CreateStatusBar(char *pText); 				// creates the navigation buttons and window for each screen
+///span110110,
+
 void CreateButtons();                           // creates buttons demo screen
 WORD MsgButtons(WORD objMsg, OBJ_HEADER* pObj); // processes messages for buttons demo screen
+
+///span110110, add screen for Reno demo
+void CreateRenoHome();                           // creates Reno demo screen
+WORD MsgRenoHome(WORD objMsg, OBJ_HEADER* pObj); // processes messages for Reno demo screen
+///span110110, 
 
 void CreateRoundButtons();                      // creates rounded buttons demo screen
 WORD MsgRoundButtons(WORD objMsg, OBJ_HEADER* pObj); // processes messages for rounded buttons demo screen
@@ -305,7 +314,10 @@ typedef enum {
     BOX_DRAW_ECG,
     CREATE_PULLDOWN,
     DISPLAY_PULLDOWN,
-    
+///span110110, add screen for Reno demo
+	CREATE_RENO_HOME,
+	DISPLAY_RENO_HOME,
+///span110110,    
     CREATE_DATETIME = 0xF300,		// these states are for time and date settings
     DISPLAY_DATETIME = 0xF301,		// 0xF3xx is used here as a state ID to check when 
     DISPLAY_SETDATE = 0xF302,		// date and time are to be updated or not.
@@ -316,7 +328,13 @@ typedef enum {
 /////////////////////////////////////////////////////////////////////////////
 //                       GLOBAL VARIABLES FOR DEMO
 /////////////////////////////////////////////////////////////////////////////
+
+///span110110, set Reno as first demo page.
+#if 0
 SCREEN_STATES  screenState = CREATE_BUTTONS; // current state of main demo state mashine 
+#else
+SCREEN_STATES  screenState = CREATE_RENO_HOME;
+#endif
 
 GOL_SCHEME*    altScheme;					 // alternative style scheme
 GOL_SCHEME*    alt2Scheme;					 // alternative 2 style scheme
@@ -326,9 +344,9 @@ GOL_SCHEME*    navScheme;		 			 // style scheme for the navigation
 GOL_SCHEME*    redScheme;                    // alternative red style scheme
 GOL_SCHEME*    greenScheme;                  // alternative green style scheme
 GOL_SCHEME*    yellowScheme;                 // alternative yellow style scheme
-//span110109, add my test code for Scheme 
+///span110109, add my test code for Scheme 
 GOL_SCHEME*    myScheme;                 	 // alternative style scheme of my
-//span110109,
+///span110109,
 
 OBJ_HEADER*	   pNavList;					 // pointer to navigation list
 
@@ -548,9 +566,9 @@ int init_mainDemo( void )
     redScheme = GOLCreateScheme();   	// create red style scheme
     greenScheme = GOLCreateScheme(); 	// create green style scheme
     yellowScheme = GOLCreateScheme(); 	// create yellow style scheme
-//span110109, add my test code for Scheme 
+///span110109, add my test code for Scheme 
     myScheme = GOLCreateScheme(); 		// create my style scheme
-//span110109,
+///span110109,
 
     alt2Scheme->TextColor1 = BRIGHTRED;
     alt2Scheme->TextColor0 = BRIGHTBLUE;
@@ -583,14 +601,14 @@ int init_mainDemo( void )
     yellowScheme->TextColor0 = RGB565CONVERT(0xAF, 0x34, 0xF3);
     yellowScheme->TextColor1 = RED;
 
-//span110109, add my test code for Scheme 
+///span110109, add my test code for Scheme 
     myScheme->Color0 = BRIGHTCYAN; 
     myScheme->Color1 = CYAN;
     myScheme->EmbossDkColor = RGB565CONVERT(0xFF, 0x94, 0x4C);
     myScheme->EmbossLtColor = RGB565CONVERT(0xFD, 0xFF, 0xB2);
     myScheme->TextColor0 = RGB565CONVERT(0xAF, 0x34, 0xF3);
     myScheme->TextColor1 = BLACK;
-//span110109,
+///span110109,
 
     meterScheme->Color0 = BLACK; 		
     meterScheme->Color1 = WHITE;
@@ -717,6 +735,10 @@ WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG* pMsg)
    
     // process messages for demo screens
     switch(screenState){
+///span110110, add screen for Reno demo
+        case DISPLAY_RENO_HOME:
+            return MsgRenoHome(objMsg, pObj);
+///span110110,
         case DISPLAY_BUTTONS:
             return MsgButtons(objMsg, pObj);
         case DISPLAY_CHECKBOXES:
@@ -818,6 +840,17 @@ WORD GOLDrawCallback()
 	
     switch(screenState)
     {
+		
+///span110110, add screen for Reno demo
+        case CREATE_RENO_HOME:
+            CreateRenoHome(); 							// create window and buttons
+            screenState = DISPLAY_RENO_HOME; 			// switch to next state
+            return 1; 									// draw objects created
+            
+        case DISPLAY_RENO_HOME:
+            return 1; 									// redraw objects if needed
+            
+///span110110,
         case CREATE_BUTTONS:
             CreateButtons(); 							// create window and buttons
             screenState = DISPLAY_BUTTONS; 				// switch to next state
@@ -1197,7 +1230,8 @@ void StartScreen(void)
     for(counter=0;counter<320-32;counter++)
     {  // move Microchip icon
         PutImage(counter,205,&mchpIcon0,IMAGE_NORMAL);
-        usleep(100);
+        ///span110110, put more delay so we can see the logo.
+        usleep(5000); ///usleep(100);
     }
     SetColor(BRIGHTRED);
     SetFont(&FONTDEFAULT);
@@ -1284,6 +1318,64 @@ void CreatePage(char *pText)
 	GOLSetFocus(obj); 					// set focus for the button              
               
 }
+
+///span110110, add status bar component
+void CreateStatusBar(char *pText) 
+{
+	OBJ_HEADER* obj;
+	static char  dateTimeStr[26] = "";		// string variable for date and time display
+	SHORT i;
+
+    WndCreate(ID_WINDOW1,       		// ID
+              0,0,GetMaxX(),GetMaxY(), 	// dimension
+              WND_DRAW,                	// will be dislayed after creation
+              &mchpIcon,               	// icon
+              pText,	   				// set text 
+              NULL);                   	// default GOL scheme 
+       
+    BtnCreate(ID_BUTTON_BACK,         	// button ID 
+              0,40,					   	// left, top corner	
+              25,GetMaxY(),0, 		   	// right, bottom corner (with radius = 0)
+              BTN_DRAW,               	// will be dislayed after creation
+              NULL,					   	// no bitmap	
+              "\x1c",                  	// BACK arrow as text
+              navScheme);          	   	// use navigation scheme
+
+    obj = (OBJ_HEADER*)BtnCreate(
+    		  ID_BUTTON_NEXT,   	    // button ID 
+              GetMaxX()-25,40,
+              GetMaxX(),GetMaxY(),0,   	// dimension (with radius = 0)
+              BTN_DRAW,               	// will be dislayed and disabled after creation
+              NULL,					   	// no bitmap
+              "\x1d",                  	// FORWARD arrow as text
+              navScheme);          	   	// use navigation scheme
+
+              
+	RTCCProcessEvents();				// update the date and time strings
+	i = 0;						
+	while (i < 12) 
+	{
+		dateTimeStr[i] = _time_str[i];
+		dateTimeStr[i+13] = _date_str[i];
+		i++;
+	}
+	dateTimeStr[12] = '\n';
+	dateTimeStr[25] = '\0';
+	
+    StCreate(ID_STATICTEXT1,           	// ID 
+             GetMaxX()-(GetTextWidth(_time_str,&GOLSmallFont)+15),
+             3,							// dimensions
+             GetMaxX()-5,
+             3+(GetTextHeight(&GOLSmallFont)<<1),	
+             ST_DRAW|ST_FRAME|
+             ST_CENTER_ALIGN,     		// will be dislayed, has frame and center aligned
+             dateTimeStr, 				// text is from time value
+             meterScheme);             	// alternate scheme   
+                      
+	GOLSetFocus(obj); 					// set focus for the button              
+              
+}
+///span110110,
 
 /* definitions for the pull down menu demo */
 #define BOTTOM_NORMAL   40
@@ -1474,14 +1566,8 @@ void CreateButtons()
               BTN_DRAW|BTN_TOGGLE,   	// draw a vertical capsule button 
               						   	// that has a toggle behavior
               NULL,                    	// no bitmap
-              "LO", 		           	// text
-//span110109, add my test code for Scheme
-#if 0               
+              "LO", 		           	// text              
               yellowScheme);           	// use alternate scheme
-#else
-              myScheme);           	// use my alternate scheme
-#endif
-//span110109, 
 
     BtnCreate(ID_BUTTON4,             	// button ID 
               225,43,285,103,          	// dimension
@@ -1519,6 +1605,162 @@ void CreateButtons()
 
 }
 
+
+///span110110, add screen for Reno demo
+void CreateRenoHome()
+{
+
+    GOLFree();   // free memory for the objects in the previous linked list and start new list
+
+	///CreatePage("Reno");
+	CreateStatusBar("Reno");
+
+    BtnCreate(ID_BUTTON1, 				// button ID 
+              30,50,156,100,           	// dimension
+              10,					   	// set radius 
+              BTN_DRAW,  			   	// draw a beveled button
+              NULL,                    	// no bitmap
+              "Button",               	// text
+              altScheme);              	// use alternate scheme
+
+    BtnCreate(ID_BUTTON2, 				// button ID 
+              30,110,156,160,         	// dimension
+              0,
+              BTN_DRAW, 				// will be dislayed after creation 
+              &gradientButton,          // use bitmap
+              "HOME", 	            	// text
+              altScheme);	            // alternative GOL scheme 
+              
+    BtnCreate(ID_BUTTON3,             	// button ID 
+              165,50,215,160,          	// dimension
+              25,					   	// set radius 
+              BTN_DRAW|BTN_TOGGLE,   	// draw a vertical capsule button 
+              						   	// that has a toggle behavior
+              NULL,                    	// no bitmap
+              "LO", 		           	// text
+///span110109, add my test code for Scheme
+#if 0               
+              yellowScheme);           	// use alternate scheme
+#else
+              myScheme);           	// use my alternate scheme
+#endif
+///span110109, 
+
+    BtnCreate(ID_BUTTON4,             	// button ID 
+              225,43,285,103,          	// dimension
+              30,					   	// set radius 
+              BTN_DRAW, 			   	// draw a vertical capsule button
+              NULL,                    	// no bitmap
+              "ON",		               	// text
+              greenScheme);             // use alternate scheme 
+/*
+    BtnCreate(ID_BUTTON5,             	// button ID 
+              225,107,285,167,         	// dimension
+              30,					   	// set radius 
+              BTN_DRAW|BTN_PRESSED,  	// draw a vertical capsule button
+              							// that is initially pressed
+              NULL,                    	// no bitmap
+              "OFF",		           	// text
+              redScheme);            	// use alternate scheme 	
+
+    BtnCreate(ID_BUTTON6, 				// button ID 
+              30,170,156,220,         	// dimension
+              0,
+              BTN_DRAW|BTN_TEXTLEFT 	// will be dislayed after creation with text
+              |BTN_TEXTTOP, 			// left top position
+              &duckReleased,            // use bitmap
+              "TWEET!",             	// text
+              alt2Scheme);	            // alternative GOL scheme 
+
+    BtnCreate(ID_BUTTON7,          		// button ID 
+              162,170,288,220,         	// dimension
+              0,
+              BTN_DRAW|BTN_DISABLED, 	// will be dislayed and disabled after creation
+              NULL,                    	// no bitmap
+              "Disabled",               // text
+              altScheme);              	// use alternate scheme
+*/
+}
+
+
+WORD MsgRenoHome(WORD objMsg, OBJ_HEADER* pObj)
+{
+	OBJ_HEADER* pOtherRbtn;
+
+    switch(GetObjID(pObj))
+    {
+        case ID_BUTTON_NEXT:
+            if(objMsg == BTN_MSG_RELEASED)
+            {
+               screenState = CREATE_BUTTONS;// goto check box demo screen
+            }
+            return 1; 							// process by default
+
+        case ID_BUTTON_BACK:
+            if(objMsg == BTN_MSG_RELEASED){
+                screenState = CREATE_ECG; 		// goto ECG demo screen
+            }
+            return 1; 							// process by default
+            
+        case ID_BUTTON3:
+        	if(objMsg == BTN_MSG_PRESSED){ 		// change text and scheme
+                BtnSetText((BUTTON*)pObj, "HI");
+            }
+            else {
+                BtnSetText((BUTTON*)pObj, "LO");
+            }
+            return 1;  							// process by default
+
+        case ID_BUTTON4:
+
+			if(objMsg == BTN_MSG_PRESSED) {
+				if (!GetState(pObj,BTN_PRESSED)) { 	
+	            	pOtherRbtn = GOLFindObject(ID_BUTTON5);
+	            	ClrState(pOtherRbtn, BTN_PRESSED);
+		        	SetState(pOtherRbtn, BTN_DRAW);  
+	            	SetState(pObj, BTN_PRESSED|BTN_DRAW);	
+	            	GOLSetFocus(pObj); 			// set focus for the button
+	            }
+	        }
+		    return 0; 							// Do not process by default
+
+        case ID_BUTTON5:
+        
+			if(objMsg == BTN_MSG_PRESSED) {
+				if (!GetState(pObj,BTN_PRESSED)) { 
+	        		pOtherRbtn = GOLFindObject(ID_BUTTON4);
+	            	ClrState(pOtherRbtn, BTN_PRESSED);
+		        	SetState(pOtherRbtn, BTN_DRAW);  
+	            	SetState(pObj, BTN_PRESSED|BTN_DRAW);	
+	            	GOLSetFocus(pObj); 			// set focus for the button
+	            }
+	        }
+		    return 0; 							// Do not process by default
+
+        case ID_BUTTON6:
+            if(objMsg == BTN_MSG_PRESSED){ 		// change face picture
+                BtnSetBitmap(pObj,&duckPressed);
+                BtnSetText((BUTTON*)pObj, "OUCH!");
+	        	//ClrState(pObj, 0x00F0);  
+	        	//SetState(pObj, BTN_TEXTBOTTOM|BTN_TEXTRIGHT);  
+
+            }
+            if(objMsg == BTN_MSG_RELEASED){
+                BtnSetBitmap(pObj,&duckReleased);
+                BtnSetText((BUTTON*)pObj, "TWEET!");
+	        	ClrState(pObj, 0x00F0);  
+	        	SetState(pObj, BTN_TEXTTOP|BTN_TEXTLEFT);  
+            }
+            return 1; 							// process by default
+
+        default:
+            return 1; 							// process by default
+    }
+}
+
+///span110110,
+
+
 WORD MsgButtons(WORD objMsg, OBJ_HEADER* pObj)
 {
 	OBJ_HEADER* pOtherRbtn;
@@ -1534,7 +1776,12 @@ WORD MsgButtons(WORD objMsg, OBJ_HEADER* pObj)
 
         case ID_BUTTON_BACK:
             if(objMsg == BTN_MSG_RELEASED){
+///span110110, 
+#if 0
                 screenState = CREATE_ECG; 		// goto ECG demo screen
+#else
+                screenState = CREATE_RENO_HOME; 		// goto ECG demo screen
+#endif                
             }
             return 1; 							// process by default
             
