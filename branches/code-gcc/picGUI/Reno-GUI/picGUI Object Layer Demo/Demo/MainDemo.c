@@ -250,6 +250,11 @@ extern BITMAP_FLASH redphone;
 extern BITMAP_FLASH greenphone;
 extern BITMAP_FLASH gradientButton;
 
+///span110110, add magellan logo
+extern BITMAP_FLASH Reno_magellan_logo_G8;
+///extern BITMAP_FLASH Reno_magellan_logo_C16;
+///span110110,
+
 /////////////////////////////////////////////////////////////////////////////
 //                             FONTS USED
 /////////////////////////////////////////////////////////////////////////////
@@ -1329,7 +1334,8 @@ void CreateStatusBar(char *pText)
     WndCreate(ID_WINDOW1,       		// ID
               0,0,GetMaxX(),GetMaxY(), 	// dimension
               WND_DRAW,                	// will be dislayed after creation
-              &mchpIcon,               	// icon
+///              &Reno_magellan_logo_C16,      // icon
+              &Reno_magellan_logo_G8,      // icon
               pText,	   				// set text 
               NULL);                   	// default GOL scheme 
        
