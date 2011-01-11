@@ -152,6 +152,9 @@ void CreatePage(char *pText); 					// creates the navigation buttons and window 
 ///span110110, add status bar component
 void CreateStatusBar(char *pText); 				// creates the navigation buttons and window for each screen
 ///span110110,
+///span110111, add data set
+void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText, char *pFunc, char *pData, char *pUnit);
+///span110111,
 
 void CreateButtons();                           // creates buttons demo screen
 WORD MsgButtons(WORD objMsg, OBJ_HEADER* pObj); // processes messages for buttons demo screen
@@ -1426,6 +1429,20 @@ void CreateStatusBar(char *pText)
               "\x1d",                  	// FORWARD arrow as text
               navScheme);          	   	// use navigation scheme
 
+	PictCreate( ID_RENO_PICT_02,
+              150,5,(150+48),(5+24),          	// dimension
+              PICT_DRAW,    	// will be dislayed, has frame
+              1,                       	// scale factor is x1
+              &Reno_04_batteryhalf_icon_C8,               	// bitmap
+              altScheme);               // default GOL scheme 
+
+	PictCreate( ID_RENO_PICT_03,
+              200,5,(200+48),(5+48),          	// dimension
+              PICT_DRAW,    	// will be dislayed, has frame
+              1,                       	// scale factor is x1
+              &Reno_07_heart_icon,               	// bitmap
+              altScheme);               // default GOL scheme 
+
               
 	RTCCProcessEvents();				// update the date and time strings
 	i = 0;						
@@ -1452,6 +1469,40 @@ void CreateStatusBar(char *pText)
               
 }
 ///span110110,
+///span110111, add data set component
+void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText, char *pFunc, char *pData, char *pUnit)
+{
+
+    GbCreate(ID_GROUPBOX1,             	// ID 
+              left,top,right,bottom,           	// dimension
+              GB_DRAW|GB_RIGHT_ALIGN,                 	// will be dislayed after creation
+              pText,             	// text
+              meterScheme);                   	// default GOL scheme 
+
+    StCreate(ID_STATICTEXT1,           	// ID 
+              left+5,top+15,(left+5+50),(top+15+15),           	// dimension
+              ST_DRAW,        	// will be dislayed, has frame
+              pFunc, // multi-line text
+              meterScheme);                   	// default GOL scheme 
+
+    StCreate(ID_STATICTEXT2,           	// ID 
+///             200+20,150+35,(200+20+45),(150+35+25),           	// dimension
+			  left+((right-left)/3),top+((bottom-top)/2),left+((right-left)/3)+45,top+((bottom-top)/2)+25,
+              ST_DRAW|ST_FRAME|ST_RIGHT_ALIGN,        	// will be dislayed, has frame
+              pData, // multi-line text
+              NULL);                   	// default GOL scheme 
+
+    StCreate(ID_STATICTEXT3,           	// ID 
+              right-5-30,bottom-5-15,(right-5),(bottom-5),           	// dimension
+              ST_DRAW|ST_RIGHT_ALIGN,        	// will be dislayed, has frame
+              pUnit, // multi-line text
+              meterScheme);                   	// default GOL scheme 
+
+}
+///span110111, 
+
+
+
 
 /* definitions for the pull down menu demo */
 #define BOTTOM_NORMAL   40
@@ -1692,7 +1743,7 @@ void CreateRenoHome()
 	CreateStatusBar("Reno");
 
     BtnCreate(ID_BUTTON1, 				// button ID 
-              30,50,156,100,           	// dimension
+              30,40,(30+80),(40+40),           	// dimension
               10,					   	// set radius 
               BTN_DRAW,  			   	// draw a beveled button
               NULL,                    	// no bitmap
@@ -1700,7 +1751,7 @@ void CreateRenoHome()
               altScheme);              	// use alternate scheme
 
     BtnCreate(ID_BUTTON2, 				// button ID 
-              30,110,156,160,         	// dimension
+              30,90,(30+126),(90+50),         	// dimension
               0,
               BTN_DRAW, 				// will be dislayed after creation 
               &gradientButton,          // use bitmap
@@ -1708,8 +1759,8 @@ void CreateRenoHome()
               altScheme);	            // alternative GOL scheme 
               
     BtnCreate(ID_BUTTON3,             	// button ID 
-              165,50,215,160,          	// dimension
-              25,					   	// set radius 
+              160,50,(160+40),(50+80),          	// dimension
+              20,					   	// set radius 
               BTN_DRAW|BTN_TOGGLE,   	// draw a vertical capsule button 
               						   	// that has a toggle behavior
               NULL,                    	// no bitmap
@@ -1723,8 +1774,8 @@ void CreateRenoHome()
 ///span110109, 
 
     BtnCreate(ID_BUTTON4,             	// button ID 
-              225,43,285,103,          	// dimension
-              30,					   	// set radius 
+              110,40,(110+40),(40+40),          	// dimension
+              40/2,					   	// set radius 
               BTN_DRAW, 			   	// draw a vertical capsule button
               NULL,                    	// no bitmap
               "ON",		               	// text
@@ -1802,6 +1853,12 @@ void CreateRenoHome()
               &Reno_10_arrow_icon,               	// bitmap
               altScheme);               // default GOL scheme 
 ///span110111,
+
+///span110111, add data set test
+	CreateDataSet(200,150,(200+90),(150+80),"DataSet", "Distance", "3.12", "mi");
+	CreateDataSet(205,40,(205+85),(40+110),"DataSet", "Avg HR", "56", "bpm");
+///span110111,
+
 #endif
 
 }
