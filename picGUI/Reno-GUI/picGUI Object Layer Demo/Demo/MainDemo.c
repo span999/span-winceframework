@@ -133,6 +133,15 @@
 #define ID_EB_MINUTE    206
 #define ID_EB_SECOND    207
 
+///span110111, add Reno picture ID
+#define ID_RENO_PICT_00	500
+#define ID_RENO_PICT_01	501
+#define ID_RENO_PICT_02	502
+#define ID_RENO_PICT_03	503
+#define ID_RENO_PICT_04	504
+#define ID_RENO_PICT_05	505
+
+///span110111,
 
 /////////////////////////////////////////////////////////////////////////////
 //                            LOCAL PROTOTYPES
@@ -254,6 +263,12 @@ extern BITMAP_FLASH gradientButton;
 extern BITMAP_FLASH Reno_magellan_logo_G8;
 extern BITMAP_FLASH Reno_magellan_logo_C16;
 ///span110110,
+///span110111, add battery icon
+extern BITMAP_FLASH Reno_06_batteryempty_icon_C8;
+extern BITMAP_FLASH Reno_05_batterylow_icon_C8;
+extern BITMAP_FLASH Reno_04_batteryhalf_icon_C8;
+extern BITMAP_FLASH Reno_03_batteryfull_icon_C8;
+///span110111,
 
 /////////////////////////////////////////////////////////////////////////////
 //                             FONTS USED
@@ -361,6 +376,9 @@ char           animate;                      // switch to control animation for 
 OBJ_HEADER*	   pGenObj;						 // pointer to a general purpose object
 PICTURE*       pPicture;                     // pointer to picture object for picture demo  
 
+///span110111, add for battery icon
+PICTURE* 		pBattPict;
+///span110111,
 PROGRESSBAR*   pProgressBar;                 // pointer to progress bar object for progress bar demo
 
 SLIDER*		   pSlider;						 // pointer to the slider controlling the animation speed 
@@ -853,6 +871,40 @@ WORD GOLDrawCallback()
             return 1; 									// draw objects created
             
         case DISPLAY_RENO_HOME:
+///span110111, add battery icon
+            if(1)
+            {                  				// if animation is on change picture
+	            if((tick-prevTick)>(200+40))
+	            {
+				    switch(animate)
+				    {
+                        case 1:
+                            PictSetBitmap(pBattPict,&Reno_06_batteryempty_icon_C8);
+                            animate++;
+                            break;
+                        case 2:
+                            PictSetBitmap(pBattPict,&Reno_05_batterylow_icon_C8);
+                            animate++;
+                            break;
+                        case 3:
+                            PictSetBitmap(pBattPict,&Reno_04_batteryhalf_icon_C8);
+                            animate++;
+                            break;
+                        case 4:
+                            PictSetBitmap(pBattPict,&Reno_03_batteryfull_icon_C8);
+                            animate = 1;
+                            break;
+                        default:
+                            PictSetBitmap(pBattPict,&Reno_03_batteryfull_icon_C8);
+                            animate = 1;
+                            break;
+                        
+                    }
+                    SetState(pBattPict,PICT_DRAW); 		// must be redrawn
+                    prevTick = tick;
+                }
+            }
+///span110111,
             return 1; 									// redraw objects if needed
             
 ///span110110,
@@ -1659,7 +1711,7 @@ void CreateRenoHome()
               NULL,                    	// no bitmap
               "ON",		               	// text
               greenScheme);             // use alternate scheme 
-/*
+#if 0
     BtnCreate(ID_BUTTON5,             	// button ID 
               225,107,285,167,         	// dimension
               30,					   	// set radius 
@@ -1685,7 +1737,48 @@ void CreateRenoHome()
               NULL,                    	// no bitmap
               "Disabled",               // text
               altScheme);              	// use alternate scheme
-*/
+#else
+
+#define PICT_LEFT	30
+
+	PictCreate( ID_RENO_PICT_00,
+              PICT_LEFT,160,(PICT_LEFT+45),(160+25),          	// dimension
+              PICT_DRAW|PICT_FRAME,    	// will be dislayed, has frame
+              1,                       	// scale factor is x1
+              &Reno_06_batteryempty_icon_C8,               	// bitmap
+              altScheme);               // default GOL scheme 
+
+	PictCreate( ID_RENO_PICT_01,
+              PICT_LEFT,(160+25),(PICT_LEFT+45),((160+25)+25),          	// dimension
+              PICT_DRAW|PICT_FRAME,    	// will be dislayed, has frame
+              1,                       	// scale factor is x1
+              &Reno_05_batterylow_icon_C8,               	// bitmap
+              altScheme);               // default GOL scheme 
+
+	PictCreate( ID_RENO_PICT_02,
+              (PICT_LEFT+45),160,((PICT_LEFT+45)+45),(160+25),          	// dimension
+              PICT_DRAW|PICT_FRAME,    	// will be dislayed, has frame
+              1,                       	// scale factor is x1
+              &Reno_04_batteryhalf_icon_C8,               	// bitmap
+              altScheme);               // default GOL scheme 
+
+	PictCreate( ID_RENO_PICT_03,
+              (PICT_LEFT+45),(160+25),((PICT_LEFT+45)+45),((160+25)+25),          	// dimension
+              PICT_DRAW|PICT_FRAME,    	// will be dislayed, has frame
+              1,                       	// scale factor is x1
+              &Reno_03_batteryfull_icon_C8,               	// bitmap
+              altScheme);               // default GOL scheme 
+
+
+	pBattPict = PictCreate( ID_RENO_PICT_04,
+              (PICT_LEFT+45-20),(160+25+25),((PICT_LEFT+45)+45-20),((160+25)+25+25),          	// dimension
+              PICT_DRAW|PICT_FRAME,    	// will be dislayed, has frame
+              1,                       	// scale factor is x1
+              &Reno_03_batteryfull_icon_C8,               	// bitmap
+              altScheme);               // default GOL scheme 
+
+#endif
+
 }
 
 
@@ -4331,7 +4424,12 @@ WORD MsgECG(WORD objMsg, OBJ_HEADER* pObj)
         case ID_BUTTON_NEXT:
             if(objMsg == BTN_MSG_RELEASED)
             {
+///span110111, add Reno home screen
+#if 0				
                 screenState = CREATE_BUTTONS; 	// goto buttons screen
+#else
+                screenState = CREATE_RENO_HOME; 	// goto buttons screen
+#endif
             }
             return 1; 							// process by default
 
