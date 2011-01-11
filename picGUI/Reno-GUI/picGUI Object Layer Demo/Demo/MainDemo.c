@@ -269,6 +269,14 @@ extern BITMAP_FLASH Reno_05_batterylow_icon_C8;
 extern BITMAP_FLASH Reno_04_batteryhalf_icon_C8;
 extern BITMAP_FLASH Reno_03_batteryfull_icon_C8;
 ///span110111,
+///span110111, add other misc icon
+extern BITMAP_FLASH Reno_11_key_icon;
+extern BITMAP_FLASH Reno_10_arrow_icon;
+extern BITMAP_FLASH Reno_09_star_icon;
+extern BITMAP_FLASH Reno_08_home_icon;
+extern BITMAP_FLASH Reno_07_heart_icon;
+///span110111,
+
 
 /////////////////////////////////////////////////////////////////////////////
 //                             FONTS USED
@@ -379,6 +387,10 @@ PICTURE*       pPicture;                     // pointer to picture object for pi
 ///span110111, add for battery icon
 PICTURE* 		pBattPict;
 ///span110111,
+///span110111, add for other misc icon
+PICTURE* 		pMiscPict;
+///span110111,
+
 PROGRESSBAR*   pProgressBar;                 // pointer to progress bar object for progress bar demo
 
 SLIDER*		   pSlider;						 // pointer to the slider controlling the animation speed 
@@ -880,27 +892,33 @@ WORD GOLDrawCallback()
 				    {
                         case 1:
                             PictSetBitmap(pBattPict,&Reno_06_batteryempty_icon_C8);
+                            PictSetBitmap(pMiscPict,&Reno_07_heart_icon);///span110111, add other misc icon
                             animate++;
                             break;
                         case 2:
                             PictSetBitmap(pBattPict,&Reno_05_batterylow_icon_C8);
+                            PictSetBitmap(pMiscPict,&Reno_08_home_icon);///span110111, add other misc icon
                             animate++;
                             break;
                         case 3:
                             PictSetBitmap(pBattPict,&Reno_04_batteryhalf_icon_C8);
+                            PictSetBitmap(pMiscPict,&Reno_09_star_icon);///span110111, add other misc icon
                             animate++;
                             break;
                         case 4:
                             PictSetBitmap(pBattPict,&Reno_03_batteryfull_icon_C8);
+                            PictSetBitmap(pMiscPict,&Reno_10_arrow_icon);///span110111, add other misc icon
                             animate = 1;
                             break;
                         default:
                             PictSetBitmap(pBattPict,&Reno_03_batteryfull_icon_C8);
+                            PictSetBitmap(pMiscPict,&Reno_11_key_icon);///span110111, add other misc icon
                             animate = 1;
                             break;
                         
                     }
                     SetState(pBattPict,PICT_DRAW); 		// must be redrawn
+                    SetState(pMiscPict,PICT_DRAW); 		// must be redrawn///span110111, add other misc icon
                     prevTick = tick;
                 }
             }
@@ -1776,7 +1794,14 @@ void CreateRenoHome()
               1,                       	// scale factor is x1
               &Reno_03_batteryfull_icon_C8,               	// bitmap
               altScheme);               // default GOL scheme 
-
+///span110111, add other misc icon
+	pMiscPict = PictCreate( ID_RENO_PICT_05,
+              (PICT_LEFT+45+60),(170),((PICT_LEFT+45+60)+60),(170+60),          	// dimension
+              PICT_DRAW|PICT_FRAME,    	// will be dislayed, has frame
+              1,                       	// scale factor is x1
+              &Reno_10_arrow_icon,               	// bitmap
+              altScheme);               // default GOL scheme 
+///span110111,
 #endif
 
 }
