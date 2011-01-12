@@ -164,6 +164,11 @@ void CreateRenoHome();                           // creates Reno demo screen
 WORD MsgRenoHome(WORD objMsg, OBJ_HEADER* pObj); // processes messages for Reno demo screen
 ///span110110, 
 
+///span110112, add screen for DataSet demo
+void CreateRenoDataSet();                           // creates Reno demo screen
+WORD MsgRenoDataSet(WORD objMsg, OBJ_HEADER* pObj); // processes messages for Reno demo screen
+///span110112,
+
 void CreateRoundButtons();                      // creates rounded buttons demo screen
 WORD MsgRoundButtons(WORD objMsg, OBJ_HEADER* pObj); // processes messages for rounded buttons demo screen
 
@@ -348,7 +353,11 @@ typedef enum {
 ///span110110, add screen for Reno demo
 	CREATE_RENO_HOME,
 	DISPLAY_RENO_HOME,
-///span110110,    
+///span110110,
+///span110112, add screen for DataSet demo
+	CREATE_RENO_DATASET,
+	DISPLAY_RENO_DATASET,
+///span110112,
     CREATE_DATETIME = 0xF300,		// these states are for time and date settings
     DISPLAY_DATETIME = 0xF301,		// 0xF3xx is used here as a state ID to check when 
     DISPLAY_SETDATE = 0xF302,		// date and time are to be updated or not.
@@ -777,6 +786,10 @@ WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG* pMsg)
         case DISPLAY_RENO_HOME:
             return MsgRenoHome(objMsg, pObj);
 ///span110110,
+///span110112, add screen for DataSet demo
+        case DISPLAY_RENO_DATASET:
+            return MsgRenoDataSet(objMsg, pObj);
+///span110112,
         case DISPLAY_BUTTONS:
             return MsgButtons(objMsg, pObj);
         case DISPLAY_CHECKBOXES:
@@ -929,6 +942,16 @@ WORD GOLDrawCallback()
             return 1; 									// redraw objects if needed
             
 ///span110110,
+
+///span110112, add screen for DataSet demo
+        case CREATE_RENO_DATASET:
+            CreateRenoDataSet(); 							// create window and buttons
+            screenState = DISPLAY_RENO_DATASET; 			// switch to next state
+            return 1; 									// draw objects created
+            
+        case DISPLAY_RENO_DATASET:
+            return 1; 									// redraw objects if needed
+///span110112, 
         case CREATE_BUTTONS:
             CreateButtons(); 							// create window and buttons
             screenState = DISPLAY_BUTTONS; 				// switch to next state
@@ -1480,14 +1503,14 @@ void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText
               meterScheme);                   	// default GOL scheme 
 
     StCreate(ID_STATICTEXT1,           	// ID 
-              left+5,top+15,(left+5+50),(top+15+15),           	// dimension
+              left+5,top+15,(left+5+70),(top+15+15),           	// dimension
               ST_DRAW,        	// will be dislayed, has frame
               pFunc, // multi-line text
               meterScheme);                   	// default GOL scheme 
 
     StCreate(ID_STATICTEXT2,           	// ID 
 ///             200+20,150+35,(200+20+45),(150+35+25),           	// dimension
-			  left+((right-left)/3),top+((bottom-top)/2),left+((right-left)/3)+45,top+((bottom-top)/2)+25,
+			  left+((right-left)/3),top+((bottom-top)/2),left+((right-left)/3)+55,top+((bottom-top)/2)+25,
               ST_DRAW|ST_FRAME|ST_RIGHT_ALIGN,        	// will be dislayed, has frame
               pData, // multi-line text
               NULL);                   	// default GOL scheme 
@@ -1847,7 +1870,7 @@ void CreateRenoHome()
               altScheme);               // default GOL scheme 
 ///span110111, add other misc icon
 	pMiscPict = PictCreate( ID_RENO_PICT_05,
-              (PICT_LEFT+45+60),(170),((PICT_LEFT+45+60)+60),(170+60),          	// dimension
+              (PICT_LEFT+45+50),(170),((PICT_LEFT+45+50)+55),(170+55),          	// dimension
               PICT_DRAW|PICT_FRAME,    	// will be dislayed, has frame
               1,                       	// scale factor is x1
               &Reno_10_arrow_icon,               	// bitmap
@@ -1855,8 +1878,8 @@ void CreateRenoHome()
 ///span110111,
 
 ///span110111, add data set test
-	CreateDataSet(200,150,(200+90),(150+80),"DataSet", "Distance", "3.12", "mi");
-	CreateDataSet(205,40,(205+85),(40+110),"DataSet", "Avg HR", "56", "bpm");
+	CreateDataSet(185,150,(185+105),(150+80),"DataSet1", "Distance", "3.12", "mi");
+	CreateDataSet(205,40,(205+85),(40+110),"DataSet2", "Avg HR", "56", "bpm");
 ///span110111,
 
 #endif
@@ -1873,7 +1896,12 @@ WORD MsgRenoHome(WORD objMsg, OBJ_HEADER* pObj)
         case ID_BUTTON_NEXT:
             if(objMsg == BTN_MSG_RELEASED)
             {
+///span110112, add screen for DataSet demo
+#if 0
                screenState = CREATE_BUTTONS;// goto check box demo screen
+#else
+               screenState = CREATE_RENO_DATASET;// goto check box demo screen
+#endif
             }
             return 1; 							// process by default
 
@@ -1940,6 +1968,50 @@ WORD MsgRenoHome(WORD objMsg, OBJ_HEADER* pObj)
 }
 
 ///span110110,
+
+
+///span110112, add screen for DataSet demo
+void CreateRenoDataSet()
+{
+
+    GOLFree();   // free memory for the objects in the previous linked list and start new list
+
+	CreateStatusBar("Reno");
+	
+	CreateDataSet( 30, 40,( 30+260),( 40+65),"DataSet1", "Time", "23:23", "24h");
+	CreateDataSet( 30,105+2,( 30+130-2),(105+65),"DataSet2", "Elevation", "155", "ft");
+	CreateDataSet(160,105+2,(160+130),(105+65),"DataSet3", "Lap Avg HR", "128", "bpm");
+	CreateDataSet( 30,170+2,( 30+130-2),(170+65),"DataSet4", "Distance", "3.12", "mi");
+	CreateDataSet(160,170+2,(160+130),(170+65),"DataSet5", "Avg HR", "88", "bpm");
+
+}
+
+WORD MsgRenoDataSet(WORD objMsg, OBJ_HEADER* pObj)
+{
+	OBJ_HEADER* pOtherRbtn;
+
+    switch(GetObjID(pObj))
+    {
+        case ID_BUTTON_NEXT:
+            if(objMsg == BTN_MSG_RELEASED)
+            {
+               screenState = CREATE_BUTTONS;// goto check box demo screen
+            }
+            return 1; 							// process by default
+
+        case ID_BUTTON_BACK:
+            if(objMsg == BTN_MSG_RELEASED){
+                screenState = CREATE_RENO_HOME; 		// goto ECG demo screen
+            }
+            return 1; 							// process by default
+
+        default:
+            return 1; 							// process by default
+    }
+}
+///span110112,
+
+
 
 
 WORD MsgButtons(WORD objMsg, OBJ_HEADER* pObj)
