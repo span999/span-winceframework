@@ -1467,18 +1467,39 @@ void CreateStatusBar(char *pText)
               "\x1d",                  	// FORWARD arrow as text
               navScheme);          	   	// use navigation scheme
 
+	PictCreate( ID_RENO_PICT_01,
+              210,8,(210+24),(8+24),          	// dimension
+              PICT_DRAW,    	// will be dislayed, has frame
+              1,                       	// scale factor is x1
+              &Reno_12_heart_icon,               	// bitmap
+              altScheme);               // default GOL scheme 
+
 	PictCreate( ID_RENO_PICT_02,
-              150,5,(150+22),(5+22),          	// dimension
+              183,8,(183+24),(8+24),          	// dimension
               PICT_DRAW,    	// will be dislayed, has frame
               1,                       	// scale factor is x1
               &Reno_13_star_icon,               	// bitmap
               altScheme);               // default GOL scheme 
 
 	PictCreate( ID_RENO_PICT_03,
-              200,5,(200+22),(5+22),          	// dimension
+              156,8,(156+24),(8+24),          	// dimension
               PICT_DRAW,    	// will be dislayed, has frame
               1,                       	// scale factor is x1
-              &Reno_12_heart_icon,               	// bitmap
+              &Reno_15_runner_icon,               	// bitmap
+              altScheme);               // default GOL scheme 
+
+	PictCreate( ID_RENO_PICT_04,
+              129,8,(129+24),(8+24),          	// dimension
+              PICT_DRAW,    	// will be dislayed, has frame
+              1,                       	// scale factor is x1
+              &Reno_17_warning_icon,               	// bitmap
+              altScheme);               // default GOL scheme 
+
+	PictCreate( ID_RENO_PICT_05,
+              102,8,(102+24),(8+24),          	// dimension
+              PICT_DRAW,    	// will be dislayed, has frame
+              1,                       	// scale factor is x1
+              &Reno_19_restore_icon,               	// bitmap
               altScheme);               // default GOL scheme 
 
               
