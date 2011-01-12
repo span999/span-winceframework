@@ -140,6 +140,10 @@
 #define ID_RENO_PICT_03	503
 #define ID_RENO_PICT_04	504
 #define ID_RENO_PICT_05	505
+#define ID_RENO_PICT_06	506
+#define ID_RENO_PICT_07	507
+#define ID_RENO_PICT_08	508
+#define ID_RENO_PICT_09	509
 
 ///span110111,
 
@@ -278,6 +282,8 @@ extern BITMAP_FLASH Reno_04_batteryhalf_icon_C8;
 extern BITMAP_FLASH Reno_03_batteryfull_icon_C8;
 ///span110111,
 ///span110111, add other misc icon
+extern BITMAP_FLASH Reno_13_star_icon;
+extern BITMAP_FLASH Reno_12_heart_icon;
 extern BITMAP_FLASH Reno_11_key_icon;
 extern BITMAP_FLASH Reno_10_arrow_icon;
 extern BITMAP_FLASH Reno_09_star_icon;
@@ -1431,7 +1437,8 @@ void CreateStatusBar(char *pText)
               0,0,GetMaxX(),GetMaxY(), 	// dimension
               WND_DRAW,                	// will be dislayed after creation
 ///              &Reno_magellan_logo_C16,      // icon
-              &Reno_magellan_logo_G8,      // icon
+///              &Reno_magellan_logo_G8,      // icon
+              &Reno_04_batteryhalf_icon_C8,
               pText,	   				// set text 
               NULL);                   	// default GOL scheme 
        
@@ -1453,17 +1460,17 @@ void CreateStatusBar(char *pText)
               navScheme);          	   	// use navigation scheme
 
 	PictCreate( ID_RENO_PICT_02,
-              150,5,(150+48),(5+24),          	// dimension
+              150,5,(150+22),(5+22),          	// dimension
               PICT_DRAW,    	// will be dislayed, has frame
               1,                       	// scale factor is x1
-              &Reno_04_batteryhalf_icon_C8,               	// bitmap
+              &Reno_13_star_icon,               	// bitmap
               altScheme);               // default GOL scheme 
 
 	PictCreate( ID_RENO_PICT_03,
-              200,5,(200+48),(5+48),          	// dimension
+              200,5,(200+22),(5+22),          	// dimension
               PICT_DRAW,    	// will be dislayed, has frame
               1,                       	// scale factor is x1
-              &Reno_07_heart_icon,               	// bitmap
+              &Reno_12_heart_icon,               	// bitmap
               altScheme);               // default GOL scheme 
 
               
@@ -1870,7 +1877,7 @@ void CreateRenoHome()
               altScheme);               // default GOL scheme 
 ///span110111, add other misc icon
 	pMiscPict = PictCreate( ID_RENO_PICT_05,
-              (PICT_LEFT+45+50),(170),((PICT_LEFT+45+50)+55),(170+55),          	// dimension
+              (210),(60),(210+55),(60+55),          	// dimension
               PICT_DRAW|PICT_FRAME,    	// will be dislayed, has frame
               1,                       	// scale factor is x1
               &Reno_10_arrow_icon,               	// bitmap
@@ -1878,8 +1885,25 @@ void CreateRenoHome()
 ///span110111,
 
 ///span110111, add data set test
+#if 0
 	CreateDataSet(185,150,(185+105),(150+80),"DataSet1", "Distance", "3.12", "mi");
 	CreateDataSet(205,40,(205+85),(40+110),"DataSet2", "Avg HR", "56", "bpm");
+#else
+	PictCreate( ID_RENO_PICT_06,
+              170,140,(170+100),(140+26),          	// dimension
+              PICT_DRAW|PICT_FRAME,    	// will be dislayed, has frame
+              1,                       	// scale factor is x1
+              &Reno_magellan_logo_G8,               	// bitmap
+              altScheme);               // default GOL scheme 
+
+	PictCreate( ID_RENO_PICT_07,
+              120,180,(120+200),(180+52),          	// dimension
+              PICT_DRAW|PICT_FRAME,    	// will be dislayed, has frame
+              2,                       	// scale factor is x1
+              &Reno_magellan_logo_G8,               	// bitmap
+              altScheme);               // default GOL scheme 
+
+#endif
 ///span110111,
 
 #endif
