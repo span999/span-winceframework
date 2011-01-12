@@ -290,6 +290,14 @@ extern BITMAP_FLASH Reno_09_star_icon;
 extern BITMAP_FLASH Reno_08_home_icon;
 extern BITMAP_FLASH Reno_07_heart_icon;
 ///span110111,
+///span110112, add other misc icon
+extern BITMAP_FLASH Reno_19_restore_icon;
+extern BITMAP_FLASH Reno_18_question_icon;
+extern BITMAP_FLASH Reno_17_warning_icon;
+extern BITMAP_FLASH Reno_16_question_icon;
+extern BITMAP_FLASH Reno_15_runner_icon;
+extern BITMAP_FLASH Reno_14_runner_icon;
+///span110112,
 
 
 /////////////////////////////////////////////////////////////////////////////
