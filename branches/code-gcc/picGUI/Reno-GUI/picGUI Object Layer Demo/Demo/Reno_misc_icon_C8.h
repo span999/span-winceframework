@@ -1,6 +1,10 @@
 #ifndef RENO_MISC_ICON_C8_H
 #define  RENO_MISC_ICON_C8_H
 
+#define Reno_21_Sunny_icon_SIZE     326
+extern BITMAP_FLASH Reno_21_Sunny_icon;
+#define Reno_20_lightning_icon_SIZE     326
+extern BITMAP_FLASH Reno_20_lightning_icon;
 #define Reno_19_restore_icon_SIZE     326
 extern BITMAP_FLASH Reno_19_restore_icon;
 #define Reno_18_question_icon_SIZE     326
