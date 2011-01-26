@@ -1,6 +1,0 @@
-LIBRARY	"WMPlayerPlugin"
-
-EXPORTS
-	DllGetClassObject	PRIVATE
-	DllCanUnloadNow		PRIVATE
-	DllRegisterServer	PRIVATE
