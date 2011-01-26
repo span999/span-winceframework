@@ -1,36 +1,54 @@
 /*
-	FreeRTOS.org V4.2.1 - Copyright (C) 2003-2007 Richard Barry.
+    FreeRTOS V6.1.0 - Copyright (C) 2010 Real Time Engineers Ltd.
 
-	This file is part of the FreeRTOS.org distribution.
+    ***************************************************************************
+    *                                                                         *
+    * If you are:                                                             *
+    *                                                                         *
+    *    + New to FreeRTOS,                                                   *
+    *    + Wanting to learn FreeRTOS or multitasking in general quickly       *
+    *    + Looking for basic training,                                        *
+    *    + Wanting to improve your FreeRTOS skills and productivity           *
+    *                                                                         *
+    * then take a look at the FreeRTOS books - available as PDF or paperback  *
+    *                                                                         *
+    *        "Using the FreeRTOS Real Time Kernel - a Practical Guide"        *
+    *                  http://www.FreeRTOS.org/Documentation                  *
+    *                                                                         *
+    * A pdf reference manual is also available.  Both are usually delivered   *
+    * to your inbox within 20 minutes to two hours when purchased between 8am *
+    * and 8pm GMT (although please allow up to 24 hours in case of            *
+    * exceptional circumstances).  Thank you for your support!                *
+    *                                                                         *
+    ***************************************************************************
 
-	FreeRTOS.org is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
+    This file is part of the FreeRTOS distribution.
 
-	FreeRTOS.org is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    FreeRTOS is free software; you can redistribute it and/or modify it under
+    the terms of the GNU General Public License (version 2) as published by the
+    Free Software Foundation AND MODIFIED BY the FreeRTOS exception.
+    ***NOTE*** The exception to the GPL is included to allow you to distribute
+    a combined work that includes FreeRTOS without being obliged to provide the
+    source code for proprietary components outside of the FreeRTOS kernel.
+    FreeRTOS is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+    more details. You should have received a copy of the GNU General Public 
+    License and the FreeRTOS license exception along with FreeRTOS; if not it 
+    can be viewed here: http://www.freertos.org/a00114.html and also obtained 
+    by writing to Richard Barry, contact details for whom are available on the
+    FreeRTOS WEB site.
 
-	You should have received a copy of the GNU General Public License
-	along with FreeRTOS.org; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+    1 tab == 4 spaces!
 
-	A special exception to the GPL can be applied should you wish to distribute
-	a combined work that includes FreeRTOS.org, without being obliged to provide
-	the source code for any proprietary components.  See the licensing section
-	of http:www.FreeRTOS.org for full details of how and when the exception
-	can be applied.
+    http://www.FreeRTOS.org - Documentation, latest information, license and
+    contact details.
 
-	***************************************************************************
-	See http:www.FreeRTOS.org for documentation, latest information, license
-	and contact details.  Please ensure to read the configuration and relevant
-	port sections of the online documentation.
+    http://www.SafeRTOS.com - A version that is certified for use in safety
+    critical systems.
 
-	Also see http://www.SafeRTOS.com for an IEC 61508 compliant version along
-	with commercial development and support options.
-	***************************************************************************
+    http://www.OpenRTOS.com - Commercial support, development, porting,
+    licensing and training services.
 */
 
 /*-----------------------------------------------------------
@@ -43,12 +61,12 @@
 /* Include the macro file relevant to the port being used. */
 
 #ifdef OPEN_WATCOM_INDUSTRIAL_PC_PORT
-	#include "..\..\source\portable\owatcom\16bitdos\pc\portmacro.h"
+	#include "..\..\Source\portable\owatcom\16bitdos\pc\portmacro.h"
 	typedef void ( __interrupt __far *pxISR )();
 #endif
 
 #ifdef OPEN_WATCOM_FLASH_LITE_186_PORT
-	#include "..\..\source\portable\owatcom\16bitdos\flsh186\portmacro.h"
+	#include "..\..\Source\portable\owatcom\16bitdos\flsh186\portmacro.h"
 	typedef void ( __interrupt __far *pxISR )();
 #endif
 
@@ -69,7 +87,11 @@
 #endif
 
 #ifdef MPLAB_PIC18F_PORT
-	#include "..\..\source\portable\MPLAB\PIC18F\portmacro.h"
+	#include "..\..\Source\portable\MPLAB\PIC18F\portmacro.h"
+#endif
+
+#ifdef MPLAB_PIC32MX_PORT
+	#include "..\..\Source\portable\MPLAB\PIC32MX\portmacro.h"
 #endif
 
 #ifdef _FEDPICC
@@ -84,10 +106,18 @@
 	#include "../../Source/portable/GCC/ARM7_LPC2000/portmacro.h"
 #endif
 
+#ifdef GCC_ARM7_ECLIPSE
+	#include "portmacro.h"
+#endif
+
 #ifdef ROWLEY_LPC23xx
 	#include "../../Source/portable/GCC/ARM7_LPC23xx/portmacro.h"
 #endif
 
+#ifdef IAR_MSP430
+	#include "..\..\Source\portable\IAR\MSP430\portmacro.h"	
+#endif
+	
 #ifdef GCC_MSP430
 	#include "../../Source/portable/GCC/MSP430F449/portmacro.h"
 #endif
@@ -96,8 +126,8 @@
 	#include "../../Source/portable/Rowley/MSP430F449/portmacro.h"
 #endif
 
-#ifdef KEIL_ARM7
-	#include "..\..\Source\portable\Keil\ARM7\portmacro.h"
+#ifdef ARM7_LPC21xx_KEIL_RVDS
+	#include "..\..\Source\portable\RVDS\ARM7_LPC21xx\portmacro.h"
 #endif
 
 #ifdef SAM7_GCC
@@ -106,6 +136,10 @@
 
 #ifdef SAM7_IAR
 	#include "..\..\Source\portable\IAR\AtmelSAM7S64\portmacro.h"
+#endif
+
+#ifdef SAM9XE_IAR
+	#include "..\..\Source\portable\IAR\AtmelSAM9XE\portmacro.h"
 #endif
 
 #ifdef LPC2000_IAR
@@ -144,6 +178,14 @@
 	#include "../../Source/portable/GCC/ARM_CM3/portmacro.h"
 #endif
 
+#ifdef GCC_ARMCM3
+	#include "../../Source/portable/GCC/ARM_CM3/portmacro.h"
+#endif
+
+#ifdef IAR_ARM_CM3
+	#include "../../Source/portable/IAR/ARM_CM3/portmacro.h"
+#endif
+
 #ifdef IAR_ARMCM3_LM
 	#include "../../Source/portable/IAR/ARM_CM3/portmacro.h"
 #endif
@@ -168,8 +210,24 @@
     #include "../../Source/portable/GCC/MCF5235/portmacro.h"
 #endif
 
-#ifdef WIN32
-	#include "WIN32\portmacro.h"
+#ifdef COLDFIRE_V2_GCC
+	#include "../../../Source/portable/GCC/ColdFire_V2/portmacro.h"
+#endif
+
+#ifdef COLDFIRE_V2_CODEWARRIOR
+	#include "../../Source/portable/CodeWarrior/ColdFire_V2/portmacro.h"
+#endif
+
+#ifdef GCC_PPC405
+	#include "../../Source/portable/GCC/PPC405_Xilinx/portmacro.h"
+#endif
+
+#ifdef GCC_PPC440
+	#include "../../Source/portable/GCC/PPC440_Xilinx/portmacro.h"
+#endif
+
+#ifdef _16FX_SOFTUNE
+	#include "..\..\Source\portable\Softune\MB96340\portmacro.h"
 #endif
 
 #ifdef BCC_INDUSTRIAL_PC_PORT
@@ -188,49 +246,145 @@
     typedef void ( __interrupt __far *pxISR )();
 #endif
 
-#if __GNUC__ && (__AVR32_UC3A0256__ || \
-                 __AVR32_UC3A0512__ || \
-                 __AVR32_UC3A1128__ || \
-                 __AVR32_UC3A1256__ || \
-                 __AVR32_UC3A1512__)
+#ifdef __GNUC__
+   #ifdef __AVR32_AVR32A__
+	   #include "portmacro.h"
+   #endif
+#endif
+
+#ifdef __ICCAVR32__
+   #ifdef __CORE__
+      #if __CORE__ == __AVR32A__
+	      #include "portmacro.h"
+      #endif
+   #endif
+#endif
+
+#ifdef __91467D
 	#include "portmacro.h"
 #endif
 
-#if __ICCAVR32__ && (__AT32UC3A0256__ || \
-                     __AT32UC3A0512__ || \
-                     __AT32UC3A1128__ || \
-                     __AT32UC3A1256__ || \
-                     __AT32UC3A1512__)
+#ifdef __96340
 	#include "portmacro.h"
 #endif
+
+
+#ifdef __IAR_V850ES_Fx3__
+	#include "../../Source/portable/IAR/V850ES/portmacro.h"
+#endif
+
+#ifdef __IAR_V850ES_Jx3__
+	#include "../../Source/portable/IAR/V850ES/portmacro.h"
+#endif
+
+#ifdef __IAR_V850ES_Jx3_L__
+	#include "../../Source/portable/IAR/V850ES/portmacro.h"
+#endif
+
+#ifdef __IAR_V850ES_Jx2__
+	#include "../../Source/portable/IAR/V850ES/portmacro.h"
+#endif
+
+#ifdef __IAR_V850ES_Hx2__
+	#include "../../Source/portable/IAR/V850ES/portmacro.h"
+#endif
+
+#ifdef __IAR_78K0R_Kx3__
+	#include "../../Source/portable/IAR/78K0R/portmacro.h"
+#endif
+	
+#ifdef __IAR_78K0R_Kx3L__
+	#include "../../Source/portable/IAR/78K0R/portmacro.h"
+#endif
+	
+/* Catch all to ensure portmacro.h is included in the build.  Newer demos
+have the path as part of the project options, rather than as relative from
+the project location.  If portENTER_CRITICAL() has not been defined then
+portmacro.h has not yet been included - as every portmacro.h provides a
+portENTER_CRITICAL() definition.  Check the demo application for your demo
+to find the path to the correct portmacro.h file. */
+#ifndef portENTER_CRITICAL
+	#include "portmacro.h"	
+#endif
+	
+#if portBYTE_ALIGNMENT == 8
+	#define portBYTE_ALIGNMENT_MASK ( 0x0007 )
+#endif
+
+#if portBYTE_ALIGNMENT == 4
+	#define portBYTE_ALIGNMENT_MASK	( 0x0003 )
+#endif
+
+#if portBYTE_ALIGNMENT == 2
+	#define portBYTE_ALIGNMENT_MASK	( 0x0001 )
+#endif
+
+#if portBYTE_ALIGNMENT == 1
+	#define portBYTE_ALIGNMENT_MASK	( 0x0000 )
+#endif
+
+#ifndef portBYTE_ALIGNMENT_MASK
+	#error "Invalid portBYTE_ALIGNMENT definition"
+#endif
+
+#ifndef portNUM_CONFIGURABLE_REGIONS
+	#define portNUM_CONFIGURABLE_REGIONS 1
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "mpu_wrappers.h"
 
 /*
  * Setup the stack of a new task so it is ready to be placed under the
  * scheduler control.  The registers have to be placed on the stack in
  * the order that the port expects to find them.
+ *
  */
-portSTACK_TYPE *pxPortInitialiseStack( portSTACK_TYPE *pxTopOfStack, pdTASK_CODE pxCode, void *pvParameters );
+#if( portUSING_MPU_WRAPPERS == 1 )
+	portSTACK_TYPE *pxPortInitialiseStack( portSTACK_TYPE *pxTopOfStack, pdTASK_CODE pxCode, void *pvParameters, portBASE_TYPE xRunPrivileged ) PRIVILEGED_FUNCTION;
+#else
+	portSTACK_TYPE *pxPortInitialiseStack( portSTACK_TYPE *pxTopOfStack, pdTASK_CODE pxCode, void *pvParameters );
+#endif
 
 /*
  * Map to the memory management routines required for the port.
  */
-void *pvPortMalloc( size_t xSize );
-void vPortFree( void *pv );
-void vPortInitialiseBlocks( void );
+void *pvPortMalloc( size_t xSize ) PRIVILEGED_FUNCTION;
+void vPortFree( void *pv ) PRIVILEGED_FUNCTION;
+void vPortInitialiseBlocks( void ) PRIVILEGED_FUNCTION;
+size_t xPortGetFreeHeapSize( void ) PRIVILEGED_FUNCTION;
 
 /*
  * Setup the hardware ready for the scheduler to take control.  This generally
  * sets up a tick interrupt and sets timers for the correct tick frequency.
  */
-portBASE_TYPE xPortStartScheduler( void );
+portBASE_TYPE xPortStartScheduler( void ) PRIVILEGED_FUNCTION;
 
 /*
  * Undo any hardware/ISR setup that was performed by xPortStartScheduler() so
  * the hardware is left in its original condition after the scheduler stops
  * executing.
  */
-void vPortEndScheduler( void );
+void vPortEndScheduler( void ) PRIVILEGED_FUNCTION;
 
+/*
+ * The structures and methods of manipulating the MPU are contained within the
+ * port layer.
+ *
+ * Fills the xMPUSettings structure with the memory region information
+ * contained in xRegions.
+ */
+#if( portUSING_MPU_WRAPPERS == 1 ) 
+	struct xMEMORY_REGION;
+	void vPortStoreTaskMPUSettings( xMPU_SETTINGS *xMPUSettings, const struct xMEMORY_REGION * const xRegions, portSTACK_TYPE *pxBottomOfStack, unsigned short usStackDepth ) PRIVILEGED_FUNCTION;
+#endif
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* PORTABLE_H */
 

@@ -1,52 +1,54 @@
 /*
-	FreeRTOS.org V5.2.0 - Copyright (C) 2003-2009 Richard Barry.
+    FreeRTOS V6.1.0 - Copyright (C) 2010 Real Time Engineers Ltd.
 
-	This file is part of the FreeRTOS.org distribution.
+    ***************************************************************************
+    *                                                                         *
+    * If you are:                                                             *
+    *                                                                         *
+    *    + New to FreeRTOS,                                                   *
+    *    + Wanting to learn FreeRTOS or multitasking in general quickly       *
+    *    + Looking for basic training,                                        *
+    *    + Wanting to improve your FreeRTOS skills and productivity           *
+    *                                                                         *
+    * then take a look at the FreeRTOS books - available as PDF or paperback  *
+    *                                                                         *
+    *        "Using the FreeRTOS Real Time Kernel - a Practical Guide"        *
+    *                  http://www.FreeRTOS.org/Documentation                  *
+    *                                                                         *
+    * A pdf reference manual is also available.  Both are usually delivered   *
+    * to your inbox within 20 minutes to two hours when purchased between 8am *
+    * and 8pm GMT (although please allow up to 24 hours in case of            *
+    * exceptional circumstances).  Thank you for your support!                *
+    *                                                                         *
+    ***************************************************************************
 
-	FreeRTOS.org is free software; you can redistribute it and/or modify it 
-	under the terms of the GNU General Public License (version 2) as published
-	by the Free Software Foundation and modified by the FreeRTOS exception.
+    This file is part of the FreeRTOS distribution.
 
-	FreeRTOS.org is distributed in the hope that it will be useful,	but WITHOUT
-	ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
-	FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for 
-	more details.
+    FreeRTOS is free software; you can redistribute it and/or modify it under
+    the terms of the GNU General Public License (version 2) as published by the
+    Free Software Foundation AND MODIFIED BY the FreeRTOS exception.
+    ***NOTE*** The exception to the GPL is included to allow you to distribute
+    a combined work that includes FreeRTOS without being obliged to provide the
+    source code for proprietary components outside of the FreeRTOS kernel.
+    FreeRTOS is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+    more details. You should have received a copy of the GNU General Public 
+    License and the FreeRTOS license exception along with FreeRTOS; if not it 
+    can be viewed here: http://www.freertos.org/a00114.html and also obtained 
+    by writing to Richard Barry, contact details for whom are available on the
+    FreeRTOS WEB site.
 
-	You should have received a copy of the GNU General Public License along 
-	with FreeRTOS.org; if not, write to the Free Software Foundation, Inc., 59 
-	Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+    1 tab == 4 spaces!
 
-	A special exception to the GPL is included to allow you to distribute a 
-	combined work that includes FreeRTOS.org without being obliged to provide
-	the source code for any proprietary components.  See the licensing section
-	of http://www.FreeRTOS.org for full details.
+    http://www.FreeRTOS.org - Documentation, latest information, license and
+    contact details.
 
+    http://www.SafeRTOS.com - A version that is certified for use in safety
+    critical systems.
 
-	***************************************************************************
-	*                                                                         *
-	* Get the FreeRTOS eBook!  See http://www.FreeRTOS.org/Documentation      *
-	*                                                                         *
-	* This is a concise, step by step, 'hands on' guide that describes both   *
-	* general multitasking concepts and FreeRTOS specifics. It presents and   *
-	* explains numerous examples that are written using the FreeRTOS API.     *
-	* Full source code for all the examples is provided in an accompanying    *
-	* .zip file.                                                              *
-	*                                                                         *
-	***************************************************************************
-
-	1 tab == 4 spaces!
-
-	Please ensure to read the configuration and relevant port sections of the
-	online documentation.
-
-	http://www.FreeRTOS.org - Documentation, latest information, license and
-	contact details.
-
-	http://www.SafeRTOS.com - A version that is certified for use in safety
-	critical systems.
-
-	http://www.OpenRTOS.com - Commercial support, development, porting,
-	licensing and training services.
+    http://www.OpenRTOS.com - Commercial support, development, porting,
+    licensing and training services.
 */
 
 #ifndef INC_FREERTOS_H
@@ -286,6 +288,10 @@ typedef portBASE_TYPE (*pdTASK_HOOK_CODE)( void * );
 	#define traceTAKE_MUTEX_RECURSIVE( pxMutex )
 #endif
 
+#ifndef traceTAKE_MUTEX_RECURSIVE_FAILED
+	#define traceTAKE_MUTEX_RECURSIVE_FAILED( pxMutex )
+#endif
+
 #ifndef traceCREATE_COUNTING_SEMAPHORE
 	#define traceCREATE_COUNTING_SEMAPHORE()
 #endif
@@ -339,7 +345,7 @@ typedef portBASE_TYPE (*pdTASK_HOOK_CODE)( void * );
 #endif
 
 #ifndef traceTASK_CREATE_FAILED
-	#define traceTASK_CREATE_FAILED( pxNewTCB )
+	#define traceTASK_CREATE_FAILED()
 #endif
 
 #ifndef traceTASK_DELETE
@@ -372,6 +378,46 @@ typedef portBASE_TYPE (*pdTASK_HOOK_CODE)( void * );
 
 #ifndef traceTASK_INCREMENT_TICK
 	#define traceTASK_INCREMENT_TICK( xTickCount )
+#endif
+
+#ifndef configGENERATE_RUN_TIME_STATS
+	#define configGENERATE_RUN_TIME_STATS 0
+#endif
+
+#if ( configGENERATE_RUN_TIME_STATS == 1 )
+
+	#ifndef portCONFIGURE_TIMER_FOR_RUN_TIME_STATS
+		#error If configGENERATE_RUN_TIME_STATS is defined then portCONFIGURE_TIMER_FOR_RUN_TIME_STATS must also be defined.  portCONFIGURE_TIMER_FOR_RUN_TIME_STATS should call a port layer function to setup a peripheral timer/counter that can then be used as the run time counter time base.
+	#endif /* portCONFIGURE_TIMER_FOR_RUN_TIME_STATS */
+
+	#ifndef portGET_RUN_TIME_COUNTER_VALUE
+		#error If configGENERATE_RUN_TIME_STATS is defined then portGET_RUN_TIME_COUNTER_VALUE must also be defined.  portGET_RUN_TIME_COUNTER_VALUE should evaluate to the counter value of the timer/counter peripheral used as the run time counter time base.
+	#endif /* portGET_RUN_TIME_COUNTER_VALUE */
+
+#endif /* configGENERATE_RUN_TIME_STATS */
+
+#ifndef portCONFIGURE_TIMER_FOR_RUN_TIME_STATS
+	#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()
+#endif
+
+#ifndef configUSE_MALLOC_FAILED_HOOK
+	#define configUSE_MALLOC_FAILED_HOOK 0
+#endif
+
+#ifndef portPRIVILEGE_BIT
+	#define portPRIVILEGE_BIT ( ( unsigned portBASE_TYPE ) 0x00 )
+#endif
+
+#ifndef portYIELD_WITHIN_API
+	#define portYIELD_WITHIN_API portYIELD
+#endif
+
+#ifndef pvPortMallocAligned
+	#define pvPortMallocAligned( x, puxStackBuffer ) ( ( puxStackBuffer == NULL ) ? ( pvPortMalloc( x ) ) : ( puxStackBuffer ) )
+#endif
+
+#ifndef vPortFreeAligned
+	#define vPortFreeAligned( pvBlockToFree ) vPortFree( pvBlockToFree )
 #endif
 
 #endif /* INC_FREERTOS_H */
