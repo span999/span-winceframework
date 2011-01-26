@@ -92,10 +92,11 @@ void vUserTask1(void *pvParameters)
 
 int main()
 {						
-	xTaskCreate( graphicsDriver, "gd", 100, NULL, configMAX_PRIORITIES, NULL );
-
+	///xTaskCreate( graphicsDriver, "gd", 100, NULL, configMAX_PRIORITIES, NULL );
+	xTaskCreate( graphicsDriver, ( signed char * )"gd", 100, NULL, configMAX_PRIORITIES, NULL );
 	
-	xTaskCreate( vUserTask1, "Task2",100, NULL, 1, NULL );
+	///xTaskCreate( vUserTask1, "Task2",100, NULL, 1, NULL );
+	xTaskCreate( vUserTask1, ( signed char * )"Task2",100, NULL, 1, NULL );
 
 	/* Start the scheduler, this function should not return as it causes the execution
 	context to change from main() to one of the created tasks. */

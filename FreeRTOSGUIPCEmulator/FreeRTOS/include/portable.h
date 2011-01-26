@@ -230,6 +230,10 @@
 	#include "..\..\Source\portable\Softune\MB96340\portmacro.h"
 #endif
 
+#ifdef WIN32
+	#include "WIN32\portmacro.h"
+#endif
+
 #ifdef BCC_INDUSTRIAL_PC_PORT
 	/* A short file name has to be used in place of the normal
 	FreeRTOSConfig.h when using the Borland compiler. */
