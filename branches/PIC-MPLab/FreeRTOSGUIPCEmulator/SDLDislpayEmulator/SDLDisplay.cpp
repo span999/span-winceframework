@@ -44,37 +44,37 @@ static void (*g_pfnTSHandler)(unsigned long ulMessage, long lX, long lY) = NULL;
 //*****************************************************************************
 void SDLInit(void)
 {
-  
-	  if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
-	  {
+	  
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
+	{
 		printf("Unable to initialize SDL: %s\n", SDL_GetError());
 		SDL_Quit();
 		exit(1);
-	  }
+	}
 
-	  screen = SDL_SetVideoMode(320, 240, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);  
-	  if(screen == NULL)
-	  {
+	screen = SDL_SetVideoMode(320, 240, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);  
+	if(screen == NULL)
+	{
 		printf(" Unable to set %dx%d video: %s\n", 320, 240, SDL_GetError());
 		SDL_Quit();
 		exit(1);
-	  }
+	}
 
-	  timerID = SDL_AddTimer(BUTTON_REPEAT_PERIOD_MS, my_callbackfunc, 0);		 
-		if (NULL == timerID)
-		{
-			printf(" Unable to create timer\n");
-			SDL_Quit();
-			exit(1);
-		}
-		else
-		{
-			printf(" Timer created\n");
-		}
+	timerID = SDL_AddTimer(BUTTON_REPEAT_PERIOD_MS, my_callbackfunc, 0);		 
+	if (NULL == timerID)
+	{
+		printf(" Unable to create timer\n");
+		SDL_Quit();
+		exit(1);
+	}
+	else
+	{
+		printf(" Timer created\n");
+	}
 	
-
-	  SDL_WM_SetCaption("Luminary Grlib emulator", NULL);
-
+	///SDL_WM_SetCaption("Luminary Grlib emulator", NULL);
+	SDL_WM_SetCaption("Mitac professional GUI emulator", NULL);
+	
 	return;
 }
 
@@ -96,7 +96,6 @@ void SDLInit(void)
 //*****************************************************************************
 void SDLScreenCallbackSet(void (*pfnCallback)(unsigned long ulMessage, long lX, long lY))
 {
-
 	g_pfnTSHandler = pfnCallback;
 }
 
@@ -112,13 +111,13 @@ void SDLScreenCallbackSet(void (*pfnCallback)(unsigned long ulMessage, long lX, 
 //*****************************************************************************
 void Lock(SDL_Surface *screen)
 {
-  if ( SDL_MUSTLOCK(screen) )
-  {
-    if ( SDL_LockSurface(screen) < 0 )
+	if ( SDL_MUSTLOCK(screen) )
 	{
-      //exit(1);
-    }
-  }
+		if ( SDL_LockSurface(screen) < 0 )
+		{
+			//exit(1);
+		}
+	}
 }
 
 //*****************************************************************************
@@ -132,10 +131,10 @@ void Lock(SDL_Surface *screen)
 //*****************************************************************************
 void Unlock(SDL_Surface *screen)
 {
-  if ( SDL_MUSTLOCK(screen) )
-  {
-    SDL_UnlockSurface(screen);
-  }
+	if ( SDL_MUSTLOCK(screen) )
+	{
+		SDL_UnlockSurface(screen);
+	}
 }
 
 //*****************************************************************************
@@ -162,49 +161,49 @@ void DrawPixel(SDL_Surface *screen, int x, int y, unsigned long val)
 	G = (Uint8) (val >> 8 ) & 0xFF;
 	B = (Uint8) (val >> 0 ) & 0xFF;
 
-  Uint32 color = SDL_MapRGB(screen->format, R, G, B);
+	Uint32 color = SDL_MapRGB(screen->format, R, G, B);
   
  
-  switch (screen->format->BytesPerPixel)
-  {
-    case 1:
-      {
-        Uint8 *bufp;
-        bufp = (Uint8 *)screen->pixels + y*screen->pitch + x;
-        *bufp = color;
-      }
-      break;
-    case 2:
-      {
-        Uint16 *bufp;
-        bufp = (Uint16 *)screen->pixels + y*screen->pitch/2 + x;
-        *bufp = color;
-      }
-      break;
-    case 3:
-      {
-        Uint8 *bufp;
-        bufp = (Uint8 *)screen->pixels + y*screen->pitch + x * 3;
-        if(SDL_BYTEORDER == SDL_LIL_ENDIAN)
-        {
-          bufp[0] = color;
-          bufp[1] = color >> 8;
-          bufp[2] = color >> 16;
-        } else {
-          bufp[2] = color;
-          bufp[1] = color >> 8;
-          bufp[0] = color >> 16;
-        }
-      }
-      break;
-    case 4:
-      {
-        Uint32 *bufp;
-        bufp = (Uint32 *)screen->pixels + y*screen->pitch/4 + x;
-        *bufp = color;
-      }
-      break;
-  }
+	switch (screen->format->BytesPerPixel)
+	{
+		case 1:
+		{
+			Uint8 *bufp;
+			bufp = (Uint8 *)screen->pixels + y*screen->pitch + x;
+			*bufp = color;
+		}
+		break;
+		case 2:
+		{
+			Uint16 *bufp;
+			bufp = (Uint16 *)screen->pixels + y*screen->pitch/2 + x;
+			*bufp = color;
+		}
+		break;
+		case 3:
+		{
+			Uint8 *bufp;
+			bufp = (Uint8 *)screen->pixels + y*screen->pitch + x * 3;
+			if(SDL_BYTEORDER == SDL_LIL_ENDIAN)
+			{
+				bufp[0] = color;
+				bufp[1] = color >> 8;
+				bufp[2] = color >> 16;
+			} else {
+				bufp[2] = color;
+				bufp[1] = color >> 8;
+				bufp[0] = color >> 16;
+			}
+		}
+		break;
+		case 4:
+		{
+			Uint32 *bufp;
+			bufp = (Uint32 *)screen->pixels + y*screen->pitch/4 + x;
+			*bufp = color;
+		}
+		break;
+	}
   
 }
 
@@ -593,19 +592,18 @@ Uint32 my_callbackfunc(Uint32 interval, void *param)
 		if(g_pfnTSHandler && buttons)
 		{
 			
-		// Send the pen up message to the touch screen event handler.
+			// Send the pen up message to the touch screen event handler.
 		   g_pfnTSHandler(WIDGET_MSG_PTR_MOVE, x, y);
 	
-		// simply said, this does not work
-		if (0 == SDL_PeepEvents(&events, 1, SDL_PEEKEVENT, SDL_ALLEVENTS))
-		{
-		   SDL_PushEvent(&user_event);
-		}
+			// simply said, this does not work
+			if (0 == SDL_PeepEvents(&events, 1, SDL_PEEKEVENT, SDL_ALLEVENTS))
+			{
+				SDL_PushEvent(&user_event);
+			}
 			/*
-	
 			WidgetMessageQueueProcess();
 			displayFlush(NULL);
-	*/
+			*/
 		}			
 	}
 	return(interval);

@@ -6,25 +6,8 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-#include "grlib/grlib.h"
-#include "grlib/widget.h"
-#include "grlib/canvas.h"
-#include "grlib/checkbox.h"
-#include "grlib/container.h"
-#include "grlib/pushbutton.h"
-#include "grlib/radiobutton.h"
-#include "grlib/slider.h"
-#include "grlib/grlib.h"
-#include "grlib/widget.h"
-#include "grlib/canvas.h"
-#include "grlib/checkbox.h"
-#include "grlib/container.h"
-#include "grlib/pushbutton.h"
-#include "grlib/radiobutton.h"
-#include "grlib/slider.h"
-#include "grlib/pushbutton.h"
-#include "grlib/imgbutton.h"
-#include "grlib/listbox.h"
+///include this for grlib
+#include "grlib/grlib_set.h"
 
 #include "SDLDislpayEmulator/SDLDisplay.h"
 
@@ -94,10 +77,12 @@ int main()
 {						
 	///xTaskCreate( graphicsDriver, "gd", 100, NULL, configMAX_PRIORITIES, NULL );
 	xTaskCreate( graphicsDriver, ( signed char * )"gd", 100, NULL, configMAX_PRIORITIES, NULL );
+	printf(" graphicsDriver created\n");
 	
 	///xTaskCreate( vUserTask1, "Task2",100, NULL, 1, NULL );
 	xTaskCreate( vUserTask1, ( signed char * )"Task2",100, NULL, 1, NULL );
-
+	printf(" vUserTask1 created\n");
+	
 	/* Start the scheduler, this function should not return as it causes the execution
 	context to change from main() to one of the created tasks. */
 	vTaskStartScheduler();
