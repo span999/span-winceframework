@@ -37,9 +37,13 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *
  *****************************************************************************/
-#ifndef _CUSTOM_DISPLAY_DRIVER_H
-    #define _CUSTOM_DISPLAY_DRIVER_H
+#ifndef _EMULATOR_DISPLAY_DRIVER_H
+    #define _EMULATOR_DISPLAY_DRIVER_H
 
+#ifndef _WINGDI_
+	#define _WINGDI_
+#endif	
+	
     #ifdef __PIC32MX
         #include <plib.h>
         #define PMDIN1  PMDIN
@@ -461,4 +465,4 @@ WORD    GetPixel(SHORT x, SHORT y);
 *
 ********************************************************************/
 void    DelayMs(WORD time);
-#endif // _CUSTOM_DISPLAY_DRIVER_H
+#endif // _EMULATOR_DISPLAY_DRIVER_H

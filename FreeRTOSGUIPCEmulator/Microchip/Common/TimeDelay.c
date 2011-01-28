@@ -149,6 +149,8 @@ void Delay10us( UINT32 tenMicroSecondCounter )
                 }
             }
         }
+	#elif defined(WIN32)
+		usleep( 10 * tenMicroSecondCounter );
     #endif
 }
 
@@ -209,6 +211,9 @@ void DelayMs( UINT16 ms )
                 Delay10us( 25 );
             }
         }
+		
+	#elif defined(WIN32)
+		usleep( 1000 * ms );
     #endif
 }
 

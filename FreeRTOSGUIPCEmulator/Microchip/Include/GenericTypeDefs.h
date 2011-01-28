@@ -61,8 +61,17 @@
 /* get compiler defined type definitions (NULL, size_t, etc) */
 #include <stddef.h> 
 
+#include <stdio.h>
+#include <stdlib.h>
+
+#if defined(WIN32)
+typedef int                 BOOL;
+#define FALSE	0
+#define TRUE	1
+#else
 typedef enum _BOOL { FALSE = 0, TRUE } BOOL;    /* Undefined size */
 typedef enum _BIT { CLEAR = 0, SET } BIT;
+#endif
 
 #define PUBLIC                                  /* Function attributes */
 #define PROTECTED
@@ -72,7 +81,10 @@ typedef enum _BIT { CLEAR = 0, SET } BIT;
 typedef signed int          INT;
 typedef signed char         INT8;
 typedef signed short int    INT16;
+#if defined(WIN32)
+#else
 typedef signed long int     INT32;
+#endif
 
 /* MPLAB C Compiler for PIC18 does not support 64-bit integers */
 #if !defined(__18CXX)
@@ -87,7 +99,13 @@ typedef unsigned short int  UINT16;
 #if defined(__18CXX)
 typedef unsigned short long UINT24;
 #endif
+
+#if defined(WIN32)
+typedef unsigned int        UINT32;
+#else
 typedef unsigned long int   UINT32;     /* other name for 32-bit integer */
+#endif
+
 /* MPLAB C Compiler for PIC18 does not support 64-bit integers */
 #if !defined(__18CXX)
 __EXTENSION typedef unsigned long long  UINT64;
@@ -181,6 +199,8 @@ typedef union
 } UINT24_VAL, UINT24_BITS;
 #endif
 
+#if defined(WIN32)
+#else
 typedef union
 {
     UINT32 Val;
@@ -239,9 +259,12 @@ typedef union
         __EXTENSION UINT8 b31:1;
     } bits;
 } UINT32_VAL;
+#endif
 
 /* MPLAB C Compiler for PIC18 does not support 64-bit integers */
 #if !defined(__18CXX)
+#if defined(WIN32)
+#else
 typedef union
 {
     UINT64 Val;
@@ -328,12 +351,16 @@ typedef union
         __EXTENSION UINT8 b63:1;
     } bits;
 } UINT64_VAL;
+#endif
 #endif /* __18CXX */
 
 /***********************************************************************************/
 
 /* Alternate definitions */
+#if defined(WIN32)
+#else
 typedef void                    VOID;
+#endif
 
 typedef char                    CHAR8;
 typedef unsigned char           UCHAR8;
@@ -344,7 +371,10 @@ typedef unsigned long           DWORD;                          /* 32-bit unsign
 /* MPLAB C Compiler for PIC18 does not support 64-bit integers */
 __EXTENSION
 typedef unsigned long long      QWORD;                          /* 64-bit unsigned */
+#if defined(WIN32)
+#else
 typedef signed char             CHAR;                           /* 8-bit signed    */
+#endif
 typedef signed short int        SHORT;                          /* 16-bit signed   */
 typedef signed long             LONG;                           /* 32-bit signed   */
 /* MPLAB C Compiler for PIC18 does not support 64-bit integers */
