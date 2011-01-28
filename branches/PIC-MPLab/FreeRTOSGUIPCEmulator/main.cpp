@@ -1,4 +1,8 @@
 
+#ifndef _WINGDI_
+	#define _WINGDI_
+#endif	
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -9,21 +13,14 @@
 ///include this for grlib
 #include "grlib/grlib_set.h"
 
+/// include this for PIC graphic lib
+#include "PICgraphic_set.h"
+
 #include "SDLDislpayEmulator/SDLDisplay.h"
 
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-	void vApplicationIdleHook()
-	{
-		Sleep(INFINITE);	// to reduce processor usage
 
-	}
-#ifdef __cplusplus
-} /* closing brace for extern "C" */
-#endif
 void graphicsDriver( void * pvParameters )
 {
 	SDLInit();	
@@ -64,7 +61,21 @@ void vUserTask1(void *pvParameters)
 
 	WidgetAdd(WIDGET_ROOT, (tWidget *)&sld);
 	WidgetPaint(WIDGET_ROOT);
+	
+	// Suspend ourselves.
+	vTaskSuspend( NULL );
 
+	while (1)
+	{;}
+}
+
+
+void vUserTask2(void *pvParameters)
+{
+	OutTextXY( 10, 10, (unsigned short *)"123456" );
+	Line( 20, 20, 40, 40 );
+	Bar( 20, 20, 40, 40 );
+	
 	// Suspend ourselves.
 	vTaskSuspend( NULL );
 
@@ -80,8 +91,12 @@ int main()
 	printf(" graphicsDriver created\n");
 	
 	///xTaskCreate( vUserTask1, "Task2",100, NULL, 1, NULL );
-	xTaskCreate( vUserTask1, ( signed char * )"Task2",100, NULL, 1, NULL );
+	xTaskCreate( vUserTask1, ( signed char * )"Task1", 100, NULL, 1, NULL );
 	printf(" vUserTask1 created\n");
+
+	xTaskCreate( vUserTask2, ( signed char * )"Task2", 100, NULL, 1, NULL );
+	printf(" vUserTask2 created\n");
+
 	
 	/* Start the scheduler, this function should not return as it causes the execution
 	context to change from main() to one of the created tasks. */

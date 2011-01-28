@@ -1,0 +1,327 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C686325E-3261-42F7-AEB1-DDE5280E1CEB}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Release\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <TypeLibraryName>.\Debug/WIN32.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>SDL\include;FreeRTOS\include;FreeRTOS\portable;StellarisWare;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_WIN32_WINNT=0x0400;WINVER=0x400;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeaderOutputFile>.\Debug/WIN32.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalOptions>/I "Microchip\include" %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c09</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>SDL.lib;SDLmain.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>.\Debug/WIN32.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>SDL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Debug/WIN32.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+      <ShowProgress>NotSet</ShowProgress>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/WIN32.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <TypeLibraryName>.\Release/WIN32.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeaderOutputFile>.\Release/WIN32.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0c09</Culture>
+    </ResourceCompile>
+    <Link>
+      <OutputFile>.\Release/WIN32.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <ProgramDatabaseFile>.\Release/WIN32.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/WIN32.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="defaults.c" />
+    <ClCompile Include="FreeRTOS\portable\MemMang\heap_3.c" />
+    <ClCompile Include="FreeRTOS\list.c" />
+    <ClCompile Include="FreeRTOS\portable\WIN32\port.c" />
+    <ClCompile Include="FreeRTOS\queue.c" />
+    <ClCompile Include="FreeRTOS\tasks.c" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Microchip\Graphics\DisplayDriver.c" />
+    <ClCompile Include="Microchip\Graphics\GOL.c" />
+    <ClCompile Include="Microchip\Graphics\GroupBox.c" />
+    <ClCompile Include="Microchip\Graphics\Primitive.c" />
+    <ClCompile Include="SDLDislpayEmulator\SDLDisplay.cpp" />
+    <ClCompile Include="StellarisWare\grlib\canvas.c" />
+    <ClCompile Include="StellarisWare\grlib\checkbox.c" />
+    <ClCompile Include="StellarisWare\grlib\circle.c" />
+    <ClCompile Include="StellarisWare\grlib\container.c" />
+    <ClCompile Include="StellarisWare\grlib\context.c" />
+    <ClCompile Include="StellarisWare\grlib\image.c" />
+    <ClCompile Include="StellarisWare\grlib\imgbutton.c" />
+    <ClCompile Include="StellarisWare\grlib\line.c" />
+    <ClCompile Include="StellarisWare\grlib\listbox.c" />
+    <ClCompile Include="StellarisWare\grlib\offscr1bpp.c" />
+    <ClCompile Include="StellarisWare\grlib\offscr4bpp.c" />
+    <ClCompile Include="StellarisWare\grlib\offscr8bpp.c" />
+    <ClCompile Include="StellarisWare\grlib\pushbutton.c" />
+    <ClCompile Include="StellarisWare\grlib\radiobutton.c" />
+    <ClCompile Include="StellarisWare\grlib\rectangle.c" />
+    <ClCompile Include="StellarisWare\grlib\slider.c" />
+    <ClCompile Include="StellarisWare\grlib\string.c" />
+    <ClCompile Include="StellarisWare\grlib\widget.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm12.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm12b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm12i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm14.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm14b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm14i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm16.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm16b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm16i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm18.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm18b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm18i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm20.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm20b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm20i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm22.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm22b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm22i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm24.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm24b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm24i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm26.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm26b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm26i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm28.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm28b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm28i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm30.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm30b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm30i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm32.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm32b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm32i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm34.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm34b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm34i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm36.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm36b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm36i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm38.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm38b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm38i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm40.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm40b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm40i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm42.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm42b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm42i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm44.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm44b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm44i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm46.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm46b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm46i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm48.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm48b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcm48i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc12.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc14.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc16.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc18.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc20.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc22.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc24.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc26.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc28.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc30.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc32.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc34.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc36.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc38.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc40.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc42.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc44.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc46.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmsc48.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss12.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss12b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss12i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss14.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss14b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss14i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss16.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss16b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss16i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss18.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss18b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss18i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss20.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss20b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss20i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss22.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss22b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss22i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss24.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss24b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss24i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss26.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss26b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss26i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss28.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss28b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss28i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss30.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss30b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss30i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss32.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss32b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss32i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss34.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss34b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss34i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss36.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss36b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss36i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss38.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss38b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss38i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss40.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss40b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss40i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss42.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss42b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss42i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss44.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss44b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss44i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss46.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss46b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss46i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss48.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss48b.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontcmss48i.c" />
+    <ClCompile Include="StellarisWare\grlib\fonts\fontfixed6x8.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Board.h" />
+    <ClInclude Include="FreeRTOSConfig.h" />
+    <ClInclude Include="FreeRTOS\portable\WIN32\cpuemu.h" />
+    <ClInclude Include="FreeRTOS\include\croutine.h" />
+    <ClInclude Include="FreeRTOS\include\FreeRTOS.h" />
+    <ClInclude Include="FreeRTOS\include\list.h" />
+    <ClInclude Include="FreeRTOS\include\portable.h" />
+    <ClInclude Include="FreeRTOS\portable\WIN32\portmacro.h" />
+    <ClInclude Include="FreeRTOS\include\projdefs.h" />
+    <ClInclude Include="FreeRTOS\include\queue.h" />
+    <ClInclude Include="FreeRTOS\include\semphr.h" />
+    <ClInclude Include="FreeRTOS\include\StackMacros.h" />
+    <ClInclude Include="FreeRTOS\include\task.h" />
+    <ClInclude Include="SDLDislpayEmulator\SDLDisplay.h" />
+    <ClInclude Include="StellarisWare\grlib\canvas.h" />
+    <ClInclude Include="StellarisWare\grlib\checkbox.h" />
+    <ClInclude Include="StellarisWare\grlib\container.h" />
+    <ClInclude Include="StellarisWare\grlib\grlib.h" />
+    <ClInclude Include="StellarisWare\grlib\imgbutton.h" />
+    <ClInclude Include="StellarisWare\grlib\listbox.h" />
+    <ClInclude Include="StellarisWare\grlib\pushbutton.h" />
+    <ClInclude Include="StellarisWare\grlib\radiobutton.h" />
+    <ClInclude Include="StellarisWare\grlib\slider.h" />
+    <ClInclude Include="StellarisWare\grlib\widget.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
