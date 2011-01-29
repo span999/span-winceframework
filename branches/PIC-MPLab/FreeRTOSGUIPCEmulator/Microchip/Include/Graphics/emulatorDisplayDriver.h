@@ -65,7 +65,7 @@
 *           in the driver. These definitions exclude the PutPixel()-based
 *           functions in the primitives layer (Primitive.c file) from compilation.
 *********************************************************************/
-
+#define USE_DRV_OUTCHAR
 // Define this to implement Font related functions in the driver.
 //#define USE_DRV_FONT
 // Define this to implement Line function in the driver.
@@ -75,9 +75,9 @@
 // Define this to implement FillCircle function in the driver.
 //#define USE_DRV_FILLCIRCLE
 // Define this to implement Bar function in the driver.
-//#define USE_DRV_BAR
+#define USE_DRV_BAR
 // Define this to implement ClearDevice function in the driver.
-//#define USE_DRV_CLEARDEVICE
+#define USE_DRV_CLEARDEVICE
 // Define this to implement PutImage function in the driver.
 //#define USE_DRV_PUTIMAGE
     #ifndef DISP_HOR_RESOLUTION
@@ -308,7 +308,8 @@ void    PutPixel(SHORT x, SHORT y);
 * Side Effects: none
 *
 ********************************************************************/
-WORD    GetPixel(SHORT x, SHORT y);
+///WORD    GetPixel(SHORT x, SHORT y);
+WORD    _GetPixel_(SHORT x, SHORT y);
 
 /*********************************************************************
 * Macros: SetClipRgn(left, top, right, bottom)

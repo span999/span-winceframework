@@ -138,8 +138,6 @@
     <ClCompile Include="FreeRTOS\tasks.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Microchip\Graphics\DisplayDriver.c" />
-    <ClCompile Include="Microchip\Graphics\GOL.c" />
-    <ClCompile Include="Microchip\Graphics\GroupBox.c" />
     <ClCompile Include="Microchip\Graphics\Primitive.c" />
     <ClCompile Include="SDLDislpayEmulator\SDLDisplay.cpp" />
     <ClCompile Include="StellarisWare\grlib\canvas.c" />
@@ -309,6 +307,8 @@
     <ClInclude Include="FreeRTOS\include\semphr.h" />
     <ClInclude Include="FreeRTOS\include\StackMacros.h" />
     <ClInclude Include="FreeRTOS\include\task.h" />
+    <ClInclude Include="Microchip\Include\Graphics\Graphics.h" />
+    <ClInclude Include="Microchip\Include\Graphics\Primitive.h" />
     <ClInclude Include="SDLDislpayEmulator\SDLDisplay.h" />
     <ClInclude Include="StellarisWare\grlib\canvas.h" />
     <ClInclude Include="StellarisWare\grlib\checkbox.h" />

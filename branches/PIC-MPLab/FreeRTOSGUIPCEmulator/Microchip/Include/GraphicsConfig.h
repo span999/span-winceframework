@@ -101,22 +101,22 @@
 *********************************************************************/
     #define USE_GOL             // Enable Graphics Object Layer.
 //#define USE_BUTTON          	// Enable Button Object.
-#define USE_BUTTON_MULTI_LINE   // Enable Multi-Line Button Object
-#define USE_WINDOW				// Enable Window Object.
+///#define USE_BUTTON_MULTI_LINE   // Enable Multi-Line Button Object
+///#define USE_WINDOW				// Enable Window Object.
 ///#define USE_CHECKBOX			// Enable Checkbox Object.
 ///#define USE_RADIOBUTTON			// Enable Radio Button Object.
 ///#define USE_EDITBOX				// Enable Edit Box Object.
 ///#define USE_LISTBOX				// Enable List Box Object.
 ///#define USE_SLIDER          	// Enable Slider or Scroll Bar Object.
 ///#define USE_PROGRESSBAR			// Enable Progress Bar Object.
-#define USE_STATICTEXT			// Enable Static Text Object.
+///#define USE_STATICTEXT			// Enable Static Text Object.
 ///#define USE_PICTURE				// Enable Picture Object.
-#define USE_GROUPBOX			// Enable Group Box Object.
+///#define USE_GROUPBOX			// Enable Group Box Object.
 ///#define USE_ROUNDDIAL			// Enable Dial Object.
 ///#define USE_METER				// Enable Meter Object.
 ///#define USE_DIGITALMETER        // Enable DigitalMeter Object.
 //#define USE_TEXTENTRY			// Enable TextEntry Object.
-#define USE_CUSTOM				// Enable Custom Control Object (an example to create customized Object).
+///#define USE_CUSTOM				// Enable Custom Control Object (an example to create customized Object).
 
 /*********************************************************************
 * Overview: To enable support for unicode fonts, USE_MULTIBYTECHAR  
