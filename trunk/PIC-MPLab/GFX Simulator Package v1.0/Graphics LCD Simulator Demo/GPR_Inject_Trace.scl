@@ -1,0 +1,48 @@
+-- GPR inject and trace
+-- Alfonso Baz 10/08/2010
+-- Convoluted but gets the job done
+
+configuration for "pic32mx360f512l" is
+    shared label TrigRegInjection;
+    shared label TrigRegTrace;
+    shared variable DotData;
+    shared variable RegInjectVal;
+end configuration;
+
+
+testbench for "pic32mx360f512l" is
+begin
+    process is
+    begin
+        wait;
+    end process;
+    
+    -- GPR Injection process
+    GPR_Injection : process(RB0) is
+    file data_file : text;
+    variable status : file_open_status;
+    variable data_line : line;
+    variable s : string;
+    begin
+    	if RB0 == '1' then
+    		file_open(status, data_file, "index.txt", read_mode);
+    		if status == open_ok then
+    			if endfile(data_file) != true then
+    				readline(data_file, data_line);
+    				read(data_line, s);
+    				triggerin_gpr(s, hex_mode, RegInjectVal, TrigRegInjection, true, 8);
+    			end if;
+    		end if;
+    		file_close(data_file);
+    	end if;
+    end process GPR_Injection;
+
+    -- GPR Trace process
+    GPR_Trace : process is
+    begin
+        triggerout_gpr("out.txt", hex_mode, DotData, TrigRegTrace, 8);
+        wait;
+    end process GPR_Trace;
+
+end testbench;
+

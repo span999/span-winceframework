@@ -1,0 +1,31 @@
+I have decided too make this version 1.0
+
+Fixed in this version
+* Graphics drawn in the programs client area now don't get erased
+* Attempting to close a file didn't work if you attempted to open twice
+* A few other minor problems
+
+New Features
+* MPLAB has been releaved of rectangle drawing and filling duties resulting
+  in much faster operation
+* GFXDisplaySimulator changes its size and orientation automatically, depending on
+  the defined values of DISP_HOR_RESOLUTION and DISP_VER_RESOLUTION in
+  HardwareProfile.h These values are sent to GFXDisplaySimulator when DeviceReset()
+  is called in the PIC program
+* Program now has close and minimise buttons
+* Inlcuded a modified version of slider.c with nop's inserted between math operations
+  to mitigate a bug with PIC32 MPSIM as an example
+
+Isues
+* Bitmaps are still outputed from MPLAB using the PutPixel fucntion which makes them
+  very slow. Cant figure out a way for MPLAB to dump large amounts of data quickly
+* When GFXDisplaySimulator is monitoring out.txt it is constantly reading the EOF
+  of this file so that it can tell when new data has been written to it.
+  I have tried windows FindFirstChangeNotification() function but it misses data writes
+  resulting in incomplete rendering of objects.
+  A consequence of this is increased CPU load and file access which causes MPLAB to be
+  even slower in writing data to out.txt (about 50% slower)
+* Haven't included accelerated line, arc, circle etc yet. Its on the todo list but
+  I'd like to sort out the above 2 issues first
+  
+  
