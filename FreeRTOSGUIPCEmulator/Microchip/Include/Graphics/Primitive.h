@@ -53,6 +53,11 @@
 #ifndef _PRIMITIVE_H
     #define _PRIMITIVE_H
 
+	
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*********************************************************************
 * Overview: Primitive lines are drawn using line type and line thickness.
 *			There are 3 line styles and 2 types of line thickness.
@@ -407,7 +412,10 @@ extern SHORT    _fontHeight;
 * Side Effects: none
 *
 ********************************************************************/
-WORD            Arc(SHORT xL, SHORT yT, SHORT xR, SHORT yB, SHORT r1, SHORT r2, BYTE octant);
+void ArcTest( void );
+
+///WORD            Arc(SHORT xL, SHORT yT, SHORT xR, SHORT yB, SHORT r1, SHORT r2, BYTE octant);
+WORD            _Arc_(SHORT xL, SHORT yT, SHORT xR, SHORT yB, SHORT r1, SHORT r2, BYTE octant);
 
 /*********************************************************************
 * Function:  void InitGraph(void)
@@ -751,7 +759,6 @@ void    SetFont(void *font);
 *
 ********************************************************************/
 WORD    Line(SHORT x1, SHORT y1, SHORT x2, SHORT y2);
-
 /*********************************************************************
 * Macros: LineRel(dX, dY)
 *
@@ -1176,5 +1183,9 @@ WORD    ExternalMemoryCallback(GFX_EXTDATA *memory, LONG offset, WORD nCount, vo
 *
 ********************************************************************/
 WORD DrawArc(SHORT cx, SHORT cy, SHORT r1, SHORT r2, SHORT startAngle, SHORT endAngle);
+
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
+#endif
 
 #endif // _PRIMITIVE_H

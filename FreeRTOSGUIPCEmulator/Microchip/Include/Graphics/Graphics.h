@@ -89,10 +89,10 @@
     #include "GraphicsConfig.h"
     #include "HardwareProfile.h"
 	#include "TimeDelay.h"
-	#include "DisplayDriverInterface.h"
+///	#include "DisplayDriverInterface.h"
     #include "DisplayDriver.h"  // Display driver layer
     #include "Primitive.h"      // Graphic primitives layer
-    #include "ScanCodes.h"      // Scan codes for AT keyboard
+///    #include "ScanCodes.h"      // Scan codes for AT keyboard
     #include "GOL.h"            // GOL layer
     #if defined(USE_BUTTON) || defined(USE_BUTTON_MULTI_LINE)
         #include "Button.h"

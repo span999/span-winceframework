@@ -12,7 +12,8 @@
 extern Uint32 my_callbackfunc(Uint32 interval, void *param);
 
 // global surface - screen
-SDL_Surface *screen;
+///SDL_Surface *screen;
+SDL_Surface *screen = NULL;
 
 // global timer
 SDL_TimerID timerID = NULL;
@@ -44,7 +45,13 @@ static void (*g_pfnTSHandler)(unsigned long ulMessage, long lX, long lY) = NULL;
 //*****************************************************************************
 void SDLInit(void)
 {
-	  
+	 
+	if( NULL != screen )
+	{
+		printf("Already initialized SDL: %x\n", screen);
+		return;
+	}
+	
 	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
 	{
 		printf("Unable to initialize SDL: %s\n", SDL_GetError());
@@ -77,6 +84,7 @@ void SDLInit(void)
 	
 	return;
 }
+
 
 //*****************************************************************************
 //
@@ -226,7 +234,7 @@ void DrawPixel(SDL_Surface *screen, int x, int y, unsigned long val)
 //*****************************************************************************
 static void displayPixelDraw(void *pvDisplayData, long lX, long lY, unsigned long ulValue)
 {
-//	printf("%u-%u-%u ",lX, lY, ulValue);
+	printf("%u-%u-%u ",lX, lY, ulValue);
 	Lock(screen);
 	DrawPixel(screen, lX, lY, ulValue);
 	Unlock(screen);

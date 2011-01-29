@@ -59,10 +59,14 @@
 #endif
 
 /* get compiler defined type definitions (NULL, size_t, etc) */
+#if defined(WIN32)
+#else
 #include <stddef.h> 
 
 #include <stdio.h>
 #include <stdlib.h>
+#endif
+
 
 #if defined(WIN32)
 typedef int                 BOOL;

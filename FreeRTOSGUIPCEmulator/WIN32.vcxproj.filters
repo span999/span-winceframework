@@ -510,9 +510,6 @@
     <ClCompile Include="StellarisWare\grlib\fonts\fontfixed6x8.c">
       <Filter>Grlib\Fonts</Filter>
     </ClCompile>
-    <ClCompile Include="Microchip\Graphics\DisplayDriver.c">
-      <Filter>PIC-GraphicLib</Filter>
-    </ClCompile>
     <ClCompile Include="Microchip\Graphics\Primitive.c">
       <Filter>PIC-GraphicLib</Filter>
     </ClCompile>
@@ -525,10 +522,7 @@
     <ClCompile Include="defaults.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Microchip\Graphics\GroupBox.c">
-      <Filter>PIC-GraphicLib</Filter>
-    </ClCompile>
-    <ClCompile Include="Microchip\Graphics\GOL.c">
+    <ClCompile Include="Microchip\Graphics\DisplayDriver.c">
       <Filter>PIC-GraphicLib</Filter>
     </ClCompile>
   </ItemGroup>
@@ -604,6 +598,12 @@
     </ClInclude>
     <ClInclude Include="StellarisWare\grlib\widget.h">
       <Filter>Grlib\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Microchip\Include\Graphics\Primitive.h">
+      <Filter>PIC-GraphicLib\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Microchip\Include\Graphics\Graphics.h">
+      <Filter>PIC-GraphicLib\Include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

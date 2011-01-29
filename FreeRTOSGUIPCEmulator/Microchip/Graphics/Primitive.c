@@ -199,7 +199,10 @@ void InitGraph(void)
 * Note: none
 *
 ********************************************************************/
-WORD Arc(SHORT xL, SHORT yT, SHORT xR, SHORT yB, SHORT r1, SHORT r2, BYTE octant)
+
+
+///WORD Arc(SHORT xL, SHORT yT, SHORT xR, SHORT yB, SHORT r1, SHORT r2, BYTE octant)
+WORD _Arc_(SHORT xL, SHORT yT, SHORT xR, SHORT yB, SHORT r1, SHORT r2, BYTE octant)
 {
 
     // this is using a variant of the Midpoint (Bresenham's) Algorithm
