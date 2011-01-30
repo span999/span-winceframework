@@ -525,6 +525,9 @@
     <ClCompile Include="Microchip\Graphics\DisplayDriver.c">
       <Filter>PIC-GraphicLib</Filter>
     </ClCompile>
+    <ClCompile Include="Font25PixelsHeight.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">

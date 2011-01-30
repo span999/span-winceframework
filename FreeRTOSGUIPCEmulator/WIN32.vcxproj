@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="defaults.c" />
+    <ClCompile Include="Font25PixelsHeight.c" />
     <ClCompile Include="FreeRTOS\portable\MemMang\heap_3.c" />
     <ClCompile Include="FreeRTOS\list.c" />
     <ClCompile Include="FreeRTOS\portable\WIN32\port.c" />

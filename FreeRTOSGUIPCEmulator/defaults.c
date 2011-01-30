@@ -49,7 +49,7 @@ WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG* pMsg)
 #define MIN(x,y)                ((x > y)? y: x)
 #define WAIT_UNTIL_FINISH(x)    while(!x)	
 #define DEMODELAY				1000
-
+extern const char Font25[];
 
 void ArcTest( void )
 {
@@ -287,12 +287,12 @@ void ArcTest( void )
         ClearDevice();
 
 		// draw fonts in the screen
-///        SetFont((void *) &Font25);
+        SetFont((void *) &Font25);
         SetColor(BRIGHTGREEN);
-///        width = GetTextWidth("Microchip Technology Inc.", (void *) &Font25);
-///        height = GetTextHeight((void *) &Font25);
+        width = GetTextWidth("Microchip Technology Inc.", (void *) &Font25);
+        height = GetTextHeight((void *) &Font25);
 
-///        OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Technology Inc.");
+        OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Technology Inc.");
 
         DelayMs(DEMODELAY);
         SetColor(BLACK);
