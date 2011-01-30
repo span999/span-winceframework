@@ -96,6 +96,31 @@ void DelayMs(WORD time)
     #define DELAY_1MS   16000 / 5               // for 16MIPS
 
 #if defined(WIN32)
+
+
+void WIN32_ms_sleep( UINT16 mswait )
+{
+	UINT uiLoop = 0;
+	UINT16 uiWait = mswait;
+	for( uiLoop = 0; uiLoop < 10000; uiLoop++ )
+	{
+		uiWait = mswait;
+		while( uiWait > 0 )
+		{
+			uiWait--;
+		}
+	}	
+}
+
+
+void DelayMs(WORD time)
+{
+///    unsigned    delay;
+///    while(time--)
+///        for(delay = 0; delay < DELAY_1MS; delay++);
+///		Sleep( time );
+	WIN32_ms_sleep( 1000 * time );
+}
 #else
 /* */
 void DelayMs(WORD time)

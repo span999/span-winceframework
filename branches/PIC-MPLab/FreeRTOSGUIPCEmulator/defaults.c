@@ -48,6 +48,8 @@ WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG* pMsg)
 
 #define MIN(x,y)                ((x > y)? y: x)
 #define WAIT_UNTIL_FINISH(x)    while(!x)	
+#define DEMODELAY				1000
+
 
 void ArcTest( void )
 {
@@ -67,36 +69,36 @@ void ArcTest( void )
 	    // left, right, top and bottom pixels of the screen
 	    // draw the top most horizontal line
         SetColor(BRIGHTRED);
-        Line(0,0,GetMaxX(),0);
+        WAIT_UNTIL_FINISH(Line(0,0,GetMaxX(),0));
         // draw the right most vertical line
         SetColor(BRIGHTYELLOW);
-        Line(GetMaxX(),0,GetMaxX(),GetMaxY());
+        WAIT_UNTIL_FINISH(Line(GetMaxX(),0,GetMaxX(),GetMaxY()));
 	    // draw the bottom most horizontal line
         SetColor(BRIGHTGREEN);
-        Line(0,GetMaxY(),GetMaxX(),GetMaxY());
+        WAIT_UNTIL_FINISH(Line(0,GetMaxY(),GetMaxX(),GetMaxY()));
         // draw the left most vertical line
         SetColor(BRIGHTBLUE);
-        Line(0,0,0,GetMaxY());
+        WAIT_UNTIL_FINISH(Line(0,0,0,GetMaxY()));
 
-        ///DelayMs(1000);
+        DelayMs(DEMODELAY);
 		
 		// draw WHITE lines intersecting in the middle of the screen
         SetColor(WHITE);
         for(counter = 0; counter < GetMaxX(); counter += 20)
         {
-            Line(counter, 0, GetMaxX() - 1 - counter, GetMaxY() - 1);
+            WAIT_UNTIL_FINISH(Line(counter, 0, GetMaxX() - 1 - counter, GetMaxY() - 1));
         }
 
-        ///DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
 		
 		// draw concentric RED circles in the middle of the screen
         SetColor(BRIGHTRED);
         for(counter = 10; counter < MIN(GetMaxX(), GetMaxY()) >> 1; counter += 10)
         {
-            Circle(GetMaxX() >> 1, GetMaxY() >> 1, counter);
+            WAIT_UNTIL_FINISH(Circle(GetMaxX() >> 1, GetMaxY() >> 1, counter));
         }
 
-        ///DelayMs(DEMODELAY);	
+        DelayMs(DEMODELAY);	
 		
 		// draw concentric filled circles in the middle of the screen
         SetColor(BRIGHTBLUE);
@@ -119,7 +121,7 @@ void ArcTest( void )
         SetColor(BRIGHTRED);
         WAIT_UNTIL_FINISH(Bevel((GetMaxX() >> 1) - 20, (GetMaxY() >> 1) - 20, (GetMaxX() >> 1) + 20, (GetMaxY() >> 1) + 20, 30));
 
-///        DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
 
         SetColor(BLACK);
         ClearDevice();
@@ -168,7 +170,7 @@ void ArcTest( void )
                 )
         );
 
-///        DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
 
 		// draw concentric filled beveled objects in the middle of the screen
         SetColor(BRIGHTBLUE);
@@ -208,7 +210,7 @@ void ArcTest( void )
                 )
         );
 
-///        DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
 
         SetColor(BLACK);
         ClearDevice();
@@ -241,7 +243,7 @@ void ArcTest( void )
         SetColor(BRIGHTYELLOW);
         WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1), (GetMaxX() >> 1), (GetMaxY() >> 1), 20, 30, 0x88));
 
-///        DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
 
         SetColor(BLACK);
         ClearDevice();
@@ -263,7 +265,7 @@ void ArcTest( void )
             );
         }
 
-///        DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
 
         SetColor(BRIGHTBLUE);
         WAIT_UNTIL_FINISH(Bar(GetMaxX() / 2 - 80, GetMaxY() / 2 - 80, GetMaxX() / 2 + 80, GetMaxY() / 2 + 80));
@@ -272,7 +274,7 @@ void ArcTest( void )
         SetColor(BRIGHTRED);
         WAIT_UNTIL_FINISH(Bar(GetMaxX() / 2 - 40, GetMaxY() / 2 - 40, GetMaxX() / 2 + 40, GetMaxY() / 2 + 40));
 
-///        DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
@@ -280,7 +282,7 @@ void ArcTest( void )
         SetColor(WHITE);
         WAIT_UNTIL_FINISH(DrawPoly(5, (SHORT *)polyPoints));
 
-///        DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
@@ -292,7 +294,7 @@ void ArcTest( void )
 
 ///        OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Technology Inc.");
 
-///        DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
@@ -303,7 +305,7 @@ void ArcTest( void )
 
 ///        OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Tech.");
 
-///        DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
@@ -311,28 +313,28 @@ void ArcTest( void )
 ///        WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower1bit, 2));
         SetColor(WHITE);
 ///        OutTextXY(200, 0, "1BPP");
-///        DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
 ///        WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower4bit, 2));
         SetColor(WHITE);
 ///        OutTextXY(200, 0, "4BPP");
-///        DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
 ///        WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower8bit, 2));
         SetColor(WHITE);
 ///       OutTextXY(200, 0, "8BPP");
-///        DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
 ///        WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower16bit, 2));
         SetColor(WHITE);
 ///        OutTextXY(200, 0, "16BPP");
-///        DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
@@ -343,7 +345,7 @@ void ArcTest( void )
 ///        WAIT_UNTIL_FINISH(PutImage((GetMaxX() + 1) / 2          , (GetMaxY() + 1) / 2 - height  , (void *) &flower4bit,  1));
 ///        WAIT_UNTIL_FINISH(PutImage((GetMaxX() + 1) / 2 - width  , (GetMaxY() + 1) / 2           , (void *) &flower8bit,  1));
 ///        WAIT_UNTIL_FINISH(PutImage((GetMaxX() + 1) / 2          , (GetMaxY() + 1) / 2           , (void *) &flower16bit, 1));
-///        DelayMs(DEMODELAY*2);
+        DelayMs(DEMODELAY*2);
         SetColor(BLACK);
         ClearDevice();
 
