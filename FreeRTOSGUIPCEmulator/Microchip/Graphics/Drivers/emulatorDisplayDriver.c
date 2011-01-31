@@ -144,12 +144,15 @@ BOOL IsScreenValid( void )
 		bRet = TRUE;
 	else
 	{
-		screen = SDL_SetVideoMode(320, 240, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+		///screen = SDL_SetVideoMode(320, 240, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+		screen = SDL_SetVideoMode(GetMaxX()+1, GetMaxY()+1, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
 		if( NULL == screen )
 		{
-			printf(" Unable to set %dx%d video: %s\n", 320, 240, SDL_GetError());
+			printf(" Unable to set %dx%d video: %s\n", GetMaxX()+1, GetMaxY()+1, SDL_GetError());
 			bRet = FALSE;
 		}
+		else
+			printf(" Create to set %dx%d video: %s\n", GetMaxX()+1, GetMaxY()+1, SDL_GetError());
 	}
 	
 	return bRet;
@@ -328,7 +331,7 @@ void PutPixel(SHORT x, SHORT y)
 {
 	if( IsScreenValid() )
 	{
-		printf(">>>emulatorDisplayDriver: PutPixel x=%d,y=%d\n", x, y);
+		///printf(">>>emulatorDisplayDriver: PutPixel x=%d,y=%d\n", x, y);
 		///displayPixelDraw( NULL, x, y, _color.Val );
 		displayPixelDraw( NULL, x, y, GetColors() );
 	}

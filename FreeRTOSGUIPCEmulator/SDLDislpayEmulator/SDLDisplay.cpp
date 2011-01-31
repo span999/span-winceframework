@@ -747,8 +747,8 @@ const tDisplay SDLDisplay =
 {
     sizeof(tDisplay),
     0,
-    320,
-    240,
+    160,///320,
+    100,///240,
     displayPixelDraw,
     displayDrawMultiple,
     displayLineDrawH,
