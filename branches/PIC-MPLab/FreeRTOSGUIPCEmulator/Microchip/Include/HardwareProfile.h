@@ -163,11 +163,18 @@
 
 #elif defined (WIN32) 
 
-	#define DISP_ORIENTATION    90
-	#define DISP_HOR_RESOLUTION 240
-	#define DISP_VER_RESOLUTION 320
+	#if 0	///320x240
+	#define DISP_ORIENTATION    00
+	#define DISP_HOR_RESOLUTION 320
+	#define DISP_VER_RESOLUTION 240
 	#define COLOR_DEPTH 16
-
+	#else	///160x100
+	#define DISP_ORIENTATION    00
+	#define DISP_HOR_RESOLUTION 160
+	#define DISP_VER_RESOLUTION 100
+	#define COLOR_DEPTH 16
+	#endif
+	
 #endif
 
     

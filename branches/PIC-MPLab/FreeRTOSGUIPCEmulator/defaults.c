@@ -90,7 +90,7 @@ void ArcTest( void )
         }
 
         DelayMs(DEMODELAY);
-		
+///return;		
 		// draw concentric RED circles in the middle of the screen
         SetColor(BRIGHTRED);
         for(counter = 10; counter < MIN(GetMaxX(), GetMaxY()) >> 1; counter += 10)
@@ -99,7 +99,7 @@ void ArcTest( void )
         }
 
         DelayMs(DEMODELAY);	
-		
+///return;			
 		// draw concentric filled circles in the middle of the screen
         SetColor(BRIGHTBLUE);
         WAIT_UNTIL_FINISH(FillCircle(GetMaxX() >> 1, GetMaxY() >> 1, 60));
@@ -108,36 +108,49 @@ void ArcTest( void )
         SetColor(BRIGHTRED);
         WAIT_UNTIL_FINISH(FillCircle(GetMaxX() >> 1, GetMaxY() >> 1, 20));
 
-        ///DelayMs(DEMODELAY);
-
+        DelayMs(DEMODELAY);
+///return;	
         SetColor(BLACK);
         ClearDevice();
 
 		// draw concentric beveled objects in the middle of the screen
+///#define BEVEL_STEP	10
+#define BEVEL_STEP	5
+		if( ((MIN( GetMaxX(), GetMaxY() ) >> 1) - BEVEL_STEP*6) > 0 )
+		{
         SetColor(BRIGHTBLUE);
-        WAIT_UNTIL_FINISH(Bevel((GetMaxX() >> 1) - 60, (GetMaxY() >> 1) - 60, (GetMaxX() >> 1) + 60, (GetMaxY() >> 1) + 60, 30));
-        SetColor(BRIGHTGREEN);
-        WAIT_UNTIL_FINISH(Bevel((GetMaxX() >> 1) - 40, (GetMaxY() >> 1) - 40, (GetMaxX() >> 1) + 40, (GetMaxY() >> 1) + 40, 30));
+        WAIT_UNTIL_FINISH(Bevel((GetMaxX() >> 1) - BEVEL_STEP*6, (GetMaxY() >> 1) - BEVEL_STEP*6, (GetMaxX() >> 1) + BEVEL_STEP*6, (GetMaxY() >> 1) + BEVEL_STEP*6, BEVEL_STEP*3));
+        }
+		if( ((MIN( GetMaxX(), GetMaxY() ) >> 1) - BEVEL_STEP*4) > 0 )
+		{
+		SetColor(BRIGHTGREEN);
+        WAIT_UNTIL_FINISH(Bevel((GetMaxX() >> 1) - BEVEL_STEP*4, (GetMaxY() >> 1) - BEVEL_STEP*4, (GetMaxX() >> 1) + BEVEL_STEP*4, (GetMaxY() >> 1) + BEVEL_STEP*4, BEVEL_STEP*3));
+		}
+		if( ((MIN( GetMaxX(), GetMaxY() ) >> 1) - BEVEL_STEP*2) > 0 )
+		{
         SetColor(BRIGHTRED);
-        WAIT_UNTIL_FINISH(Bevel((GetMaxX() >> 1) - 20, (GetMaxY() >> 1) - 20, (GetMaxX() >> 1) + 20, (GetMaxY() >> 1) + 20, 30));
-
+        WAIT_UNTIL_FINISH(Bevel((GetMaxX() >> 1) - BEVEL_STEP*2, (GetMaxY() >> 1) - BEVEL_STEP*2, (GetMaxX() >> 1) + BEVEL_STEP*2, (GetMaxY() >> 1) + BEVEL_STEP*2, BEVEL_STEP*3));
+		}
+		
         DelayMs(DEMODELAY);
-
+///return;	
         SetColor(BLACK);
         ClearDevice();
 
+///#define ARC_STEP 10
+#define ARC_STEP 5
 		// draw concentric thick beveled objects in the middle of the screen
         SetColor(BRIGHTBLUE);
         WAIT_UNTIL_FINISH
         (
             _Arc_
                 (
-                    (GetMaxX() >> 1) - 60,
-                    (GetMaxY() >> 1) - 60,
-                    (GetMaxX() >> 1) + 60,
-                    (GetMaxY() >> 1) + 60,
-                    20,
-                    30,
+                    (GetMaxX() >> 1) - ARC_STEP*6,
+                    (GetMaxY() >> 1) - ARC_STEP*6,
+                    (GetMaxX() >> 1) + ARC_STEP*6,
+                    (GetMaxY() >> 1) + ARC_STEP*6,
+                    ARC_STEP*2,
+                    ARC_STEP*3,
                     0xFF
                 )
         );
@@ -146,12 +159,12 @@ void ArcTest( void )
         (
             _Arc_
                 (
-                    (GetMaxX() >> 1) - 40,
-                    (GetMaxY() >> 1) - 40,
-                    (GetMaxX() >> 1) + 40,
-                    (GetMaxY() >> 1) + 40,
-                    20,
-                    30,
+                    (GetMaxX() >> 1) - ARC_STEP*4,
+                    (GetMaxY() >> 1) - ARC_STEP*4,
+                    (GetMaxX() >> 1) + ARC_STEP*4,
+                    (GetMaxY() >> 1) + ARC_STEP*4,
+                    ARC_STEP*2,
+                    ARC_STEP*3,
                     0xFF
                 )
         );
@@ -160,12 +173,12 @@ void ArcTest( void )
         (
             _Arc_
                 (
-                    (GetMaxX() >> 1) - 20,
-                    (GetMaxY() >> 1) - 20,
-                    (GetMaxX() >> 1) + 20,
-                    (GetMaxY() >> 1) + 20,
-                    20,
-                    30,
+                    (GetMaxX() >> 1) - ARC_STEP*2,
+                    (GetMaxY() >> 1) - ARC_STEP*2,
+                    (GetMaxX() >> 1) + ARC_STEP*2,
+                    (GetMaxY() >> 1) + ARC_STEP*2,
+                    ARC_STEP*2,
+                    ARC_STEP*3,
                     0xFF
                 )
         );
@@ -178,11 +191,11 @@ void ArcTest( void )
         (
             FillBevel
                 (
-                    (GetMaxX() >> 1) - 60,
-                    (GetMaxY() >> 1) - 60,
-                    (GetMaxX() >> 1) + 60,
-                    (GetMaxY() >> 1) + 60,
-                    30
+                    (GetMaxX() >> 1) - BEVEL_STEP*6,
+                    (GetMaxY() >> 1) - BEVEL_STEP*6,
+                    (GetMaxX() >> 1) + BEVEL_STEP*6,
+                    (GetMaxY() >> 1) + BEVEL_STEP*6,
+                    BEVEL_STEP*3
                 )
         );
         SetColor(BRIGHTGREEN);
@@ -190,11 +203,11 @@ void ArcTest( void )
         (
             FillBevel
                 (
-                    (GetMaxX() >> 1) - 40,
-                    (GetMaxY() >> 1) - 40,
-                    (GetMaxX() >> 1) + 40,
-                    (GetMaxY() >> 1) + 40,
-                    30
+                    (GetMaxX() >> 1) - BEVEL_STEP*4,
+                    (GetMaxY() >> 1) - BEVEL_STEP*4,
+                    (GetMaxX() >> 1) + BEVEL_STEP*4,
+                    (GetMaxY() >> 1) + BEVEL_STEP*4,
+                    BEVEL_STEP*3
                 )
         );
         SetColor(BRIGHTRED);
@@ -202,11 +215,11 @@ void ArcTest( void )
         (
             FillBevel
                 (
-                    (GetMaxX() >> 1) - 20,
-                    (GetMaxY() >> 1) - 20,
-                    (GetMaxX() >> 1) + 20,
-                    (GetMaxY() >> 1) + 20,
-                    30
+                    (GetMaxX() >> 1) - BEVEL_STEP*2,
+                    (GetMaxY() >> 1) - BEVEL_STEP*2,
+                    (GetMaxX() >> 1) + BEVEL_STEP*2,
+                    (GetMaxY() >> 1) + BEVEL_STEP*2,
+                    BEVEL_STEP*3
                 )
         );
 
@@ -217,31 +230,35 @@ void ArcTest( void )
 
 		// draw concentric thick beveled objects in the middle of the screen
         SetColor(BRIGHTBLUE);
-        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - 50, (GetMaxX() >> 1), (GetMaxY() >> 1) + 50, 50, 60, 0x11));
+        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - ARC_STEP*5, (GetMaxX() >> 1), (GetMaxY() >> 1) + ARC_STEP*5, ARC_STEP*5, ARC_STEP*6, 0x11));
         SetColor(BRIGHTGREEN);
-        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - 50, (GetMaxX() >> 1), (GetMaxY() >> 1) + 50, 50, 60, 0x22));
+        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - ARC_STEP*5, (GetMaxX() >> 1), (GetMaxY() >> 1) + ARC_STEP*5, ARC_STEP*5, ARC_STEP*6, 0x22));
         SetColor(BRIGHTRED);
-        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - 50, (GetMaxX() >> 1), (GetMaxY() >> 1) + 50, 50, 60, 0x44));
+        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - ARC_STEP*5, (GetMaxX() >> 1), (GetMaxY() >> 1) + ARC_STEP*5, ARC_STEP*5, ARC_STEP*6, 0x44));
         SetColor(BRIGHTYELLOW);
-        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - 50, (GetMaxX() >> 1), (GetMaxY() >> 1) + 50, 50, 60, 0x88));
+        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - ARC_STEP*5, (GetMaxX() >> 1), (GetMaxY() >> 1) + ARC_STEP*5, ARC_STEP*5, ARC_STEP*6, 0x88));
 
+		DelayMs(DEMODELAY);
+		
         SetColor(BRIGHTBLUE);
-        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - 30, (GetMaxX() >> 1), (GetMaxY() >> 1) + 30, 35, 45, 0x11));
+        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - ARC_STEP*3, (GetMaxX() >> 1), (GetMaxY() >> 1) + ARC_STEP*3, ARC_STEP*3, ARC_STEP*4, 0x11));
         SetColor(BRIGHTGREEN);
-        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - 30, (GetMaxX() >> 1), (GetMaxY() >> 1) + 30, 35, 45, 0x22));
+        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - ARC_STEP*3, (GetMaxX() >> 1), (GetMaxY() >> 1) + ARC_STEP*3, ARC_STEP*3, ARC_STEP*4, 0x22));
         SetColor(BRIGHTRED);
-        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - 30, (GetMaxX() >> 1), (GetMaxY() >> 1) + 30, 35, 45, 0x44));
+        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - ARC_STEP*3, (GetMaxX() >> 1), (GetMaxY() >> 1) + ARC_STEP*3, ARC_STEP*3, ARC_STEP*4, 0x44));
         SetColor(BRIGHTYELLOW);
-        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - 30, (GetMaxX() >> 1), (GetMaxY() >> 1) + 30, 35, 45, 0x88));
+        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1) - ARC_STEP*3, (GetMaxX() >> 1), (GetMaxY() >> 1) + ARC_STEP*3, ARC_STEP*3, ARC_STEP*4, 0x88));
 
+		DelayMs(DEMODELAY);
+		
         SetColor(BRIGHTBLUE);
-        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1), (GetMaxX() >> 1), (GetMaxY() >> 1), 20, 30, 0x11));
+        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1), (GetMaxX() >> 1), (GetMaxY() >> 1), ARC_STEP*2, ARC_STEP*3, 0x11));
         SetColor(BRIGHTGREEN);
-        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1), (GetMaxX() >> 1), (GetMaxY() >> 1), 20, 30, 0x22));
+        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1), (GetMaxX() >> 1), (GetMaxY() >> 1), ARC_STEP*2, ARC_STEP*3, 0x22));
         SetColor(BRIGHTRED);
-        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1), (GetMaxX() >> 1), (GetMaxY() >> 1), 20, 30, 0x44));
+        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1), (GetMaxX() >> 1), (GetMaxY() >> 1), ARC_STEP*2, ARC_STEP*3, 0x44));
         SetColor(BRIGHTYELLOW);
-        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1), (GetMaxX() >> 1), (GetMaxY() >> 1), 20, 30, 0x88));
+        WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1), (GetMaxX() >> 1), (GetMaxY() >> 1), ARC_STEP*2, ARC_STEP*3, 0x88));
 
         DelayMs(DEMODELAY);
 
@@ -249,9 +266,11 @@ void ArcTest( void )
         ClearDevice();
 
 
+///#define  RECT_STEP	10
+#define  RECT_STEP	5
 		// draw rectangles in the middle of the screen
         SetColor(BRIGHTBLUE);
-        for(counter = 0; counter < MIN(GetMaxX(), GetMaxY()) >> 1; counter += 20)
+        for(counter = 0; counter < MIN(GetMaxX(), GetMaxY()) >> 1; counter += (RECT_STEP*2))
         {
             WAIT_UNTIL_FINISH
             (
@@ -268,11 +287,11 @@ void ArcTest( void )
         DelayMs(DEMODELAY);
 
         SetColor(BRIGHTBLUE);
-        WAIT_UNTIL_FINISH(Bar(GetMaxX() / 2 - 80, GetMaxY() / 2 - 80, GetMaxX() / 2 + 80, GetMaxY() / 2 + 80));
+        WAIT_UNTIL_FINISH(Bar(GetMaxX() / 2 - RECT_STEP*8, GetMaxY() / 2 - RECT_STEP*8, GetMaxX() / 2 + RECT_STEP*8, GetMaxY() / 2 + RECT_STEP*8));
         SetColor(BRIGHTGREEN);
-        WAIT_UNTIL_FINISH(Bar(GetMaxX() / 2 - 60, GetMaxY() / 2 - 60, GetMaxX() / 2 + 60, GetMaxY() / 2 + 60));
+        WAIT_UNTIL_FINISH(Bar(GetMaxX() / 2 - RECT_STEP*6, GetMaxY() / 2 - RECT_STEP*6, GetMaxX() / 2 + RECT_STEP*6, GetMaxY() / 2 + RECT_STEP*6));
         SetColor(BRIGHTRED);
-        WAIT_UNTIL_FINISH(Bar(GetMaxX() / 2 - 40, GetMaxY() / 2 - 40, GetMaxX() / 2 + 40, GetMaxY() / 2 + 40));
+        WAIT_UNTIL_FINISH(Bar(GetMaxX() / 2 - RECT_STEP*4, GetMaxY() / 2 - RECT_STEP*4, GetMaxX() / 2 + RECT_STEP*4, GetMaxY() / 2 + RECT_STEP*4));
 
         DelayMs(DEMODELAY);
         SetColor(BLACK);
@@ -283,16 +302,19 @@ void ArcTest( void )
         WAIT_UNTIL_FINISH(DrawPoly(5, (SHORT *)polyPoints));
 
         DelayMs(DEMODELAY);
+		
+		
+		
         SetColor(BLACK);
         ClearDevice();
 
 		// draw fonts in the screen
-        SetFont((void *) &Font25);
-        SetColor(BRIGHTGREEN);
-        width = GetTextWidth("Microchip Technology Inc.", (void *) &Font25);
-        height = GetTextHeight((void *) &Font25);
+///        SetFont((void *) &Font25);
+       SetColor(BRIGHTGREEN);
+///        width = GetTextWidth("Microchip Technology Inc.", (void *) &Font25);
+///        height = GetTextHeight((void *) &Font25);
 
-        OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Technology Inc.");
+///        OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Technology Inc.");
 
         DelayMs(DEMODELAY);
         SetColor(BLACK);
