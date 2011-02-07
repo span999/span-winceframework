@@ -65,6 +65,13 @@
 *           in the driver. These definitions exclude the PutPixel()-based
 *           functions in the primitives layer (Primitive.c file) from compilation.
 *********************************************************************/
+// Define this to implement SetFont function in the driver.
+#define USE_DRV_SETFONT
+// Define this to implement GetTextWidth function in the driver.
+#define USE_DRV_GETTEXTWIDTH
+// Define this to implement GetTextHeight function in the driver.
+#define USE_DRV_GETTEXTHEIGHT
+// Define this to implement OutChar function in the driver.
 #define USE_DRV_OUTCHAR
 // Define this to implement Font related functions in the driver.
 //#define USE_DRV_FONT

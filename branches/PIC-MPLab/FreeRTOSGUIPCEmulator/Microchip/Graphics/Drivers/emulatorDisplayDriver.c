@@ -398,6 +398,195 @@ void ClearDevice(void)
 
 #endif
 
+#ifdef USE_DRV_SETFONT
+void SetFont(void *font)
+{
+#if 0
+    FONT_HEADER *pHeader;
+
+        #ifdef USE_FONT_EXTERNAL
+    FONT_HEADER header;
+        #endif
+    _font = font;
+    switch(*((SHORT *)font))
+    {
+                #ifdef USE_FONT_FLASH
+
+        case FLASH:
+            pHeader = (FONT_HEADER *) ((FONT_FLASH *)font)->address;
+            break;
+
+				#endif // USE_FONT_FLASH
+                #ifdef USE_FONT_EXTERNAL
+				
+        case EXTERNAL:
+            pHeader = &header;
+            ExternalMemoryCallback(font, 0, sizeof(FONT_HEADER), pHeader);
+            break;
+
+				#endif // USE_FONT_EXTERNAL
+
+        default:
+            return;
+    }
+
+    _fontFirstChar = pHeader->firstChar;
+    _fontLastChar = pHeader->lastChar;
+    _fontHeight = pHeader->height;
+#endif
+}
+#endif //#ifndef USE_DRV_SETFONT
+
+#ifdef USE_DRV_GETTEXTWIDTH
+/*********************************************************************
+* Function: SHORT GetTextWidth(XCHAR* textString, void* font)
+*
+* PreCondition: none
+*
+* Input: textString - pointer to the text string,
+*        font - pointer to the font
+*
+* Output: text width in pixels
+*
+* Side Effects: none
+*
+* Overview: returns text width for the font
+*
+* Note: none
+*
+********************************************************************/
+SHORT GetTextWidth(XCHAR *textString, void *font)
+{
+		#if defined (USE_FONT_RAM) || defined (USE_FONT_FLASH) 
+    GLYPH_ENTRY *pChTable;
+    FONT_HEADER *pHeader;
+    	#endif
+        #ifdef USE_FONT_EXTERNAL
+    GLYPH_ENTRY chTable;
+    FONT_HEADER header;
+        #endif
+
+    	#if defined (USE_FONT_RAM) || defined (USE_FONT_FLASH) || defined (USE_FONT_EXTERNAL)
+    SHORT       textWidth;
+    XCHAR       ch;
+    XCHAR       fontFirstChar;
+    XCHAR       fontLastChar;
+    	#endif
+
+#if 0
+    switch(*((SHORT *)font))
+    {
+                #ifdef USE_FONT_RAM
+
+        case RAM:
+            pHeader = (FONT_HEADER *) ((FONT_RAM *)font)->address;
+            fontFirstChar = pHeader->firstChar;
+            fontLastChar = pHeader->lastChar;
+            pChTable = (GLYPH_ENTRY *) (pHeader + 1);
+            textWidth = 0;
+            while((unsigned XCHAR)15 < (unsigned XCHAR)(ch = *textString++))
+            {
+                if((unsigned XCHAR)ch < (unsigned XCHAR)fontFirstChar)
+                    continue;
+                if((unsigned XCHAR)ch > (unsigned XCHAR)fontLastChar)
+                    continue;
+                textWidth += (pChTable + ((unsigned XCHAR)ch - (unsigned XCHAR)fontFirstChar))->width;
+            }
+
+            return (textWidth);
+                #endif
+                	    
+                #ifdef USE_FONT_FLASH
+
+        case FLASH:
+            pHeader = (FONT_HEADER *) ((FONT_FLASH *)font)->address;
+            fontFirstChar = pHeader->firstChar;
+            fontLastChar = pHeader->lastChar;
+            pChTable = (GLYPH_ENTRY *) (pHeader + 1);
+            textWidth = 0;
+            while((XCHAR)15 < (XCHAR)(ch = *textString++))
+            {
+                if((XCHAR)ch < (XCHAR)fontFirstChar)
+                    continue;
+                if((XCHAR)ch > (XCHAR)fontLastChar)
+                    continue;
+                textWidth += (pChTable + ((XCHAR)ch - (XCHAR)fontFirstChar))->width;
+            }
+
+            return (textWidth);
+                #endif
+                #ifdef USE_FONT_EXTERNAL
+
+        case EXTERNAL:
+            ExternalMemoryCallback(font, 0, sizeof(FONT_HEADER), &header);
+            fontFirstChar = header.firstChar;
+            fontLastChar = header.lastChar;
+            textWidth = 0;
+            while((XCHAR)15 < (XCHAR)(ch = *textString++))
+            {
+                if((XCHAR)ch < (XCHAR)fontFirstChar)
+                    continue;
+                if((XCHAR)ch > (XCHAR)fontLastChar)
+                    continue;
+                ExternalMemoryCallback
+                (
+                    font,
+                    sizeof(FONT_HEADER) + sizeof(GLYPH_ENTRY) * ((XCHAR)ch - (XCHAR)fontFirstChar),
+                    sizeof(GLYPH_ENTRY),
+                    &chTable
+                );
+                textWidth += chTable.width;
+            }
+
+            return (textWidth);
+                #endif
+
+        default:
+            return (0);
+    }
+#else
+	return (textWidth);
+#endif
+}
+#endif //#ifdef USE_DRV_GETTEXTWIDTH
+
+#ifdef USE_DRV_GETTEXTHEIGHT
+SHORT GetTextHeight(void *font)
+{
+        #ifdef USE_FONT_EXTERNAL
+
+    char    height;
+        #endif
+#if 0		
+    switch(*((SHORT *)font))
+    {
+                #ifdef USE_FONT_RAM
+        case RAM:
+            return ((FONT_HEADER *) ((FONT_RAM *)font)->address)->height;
+                #endif
+                
+                #ifdef USE_FONT_FLASH
+        case FLASH:
+            return ((FONT_HEADER *) ((FONT_FLASH *)font)->address)->height;
+                #endif
+                
+                #ifdef USE_FONT_EXTERNAL
+        case EXTERNAL:
+            ExternalMemoryCallback(font, sizeof(FONT_HEADER) - 2, 1, &height);
+            return (height);
+                #endif
+
+        default:
+            return (0);
+    }
+#else
+	return (0);
+#endif	
+}
+#endif //#ifdef USE_DRV_GETTEXTHEIGHT
+
+
+
 #ifdef USE_DRV_OUTCHAR
 WORD OutChar(XCHAR ch)
 {
