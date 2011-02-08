@@ -132,6 +132,9 @@
   <ItemGroup>
     <ClCompile Include="defaults.c" />
     <ClCompile Include="Font25PixelsHeight.c" />
+    <ClCompile Include="Font35PixelsHeight.c" />
+    <ClCompile Include="FontBold25PixelsHeight.c" />
+    <ClCompile Include="FontBold35PixelsHeight.c" />
     <ClCompile Include="FreeRTOS\portable\MemMang\heap_3.c" />
     <ClCompile Include="FreeRTOS\list.c" />
     <ClCompile Include="FreeRTOS\portable\WIN32\port.c" />
@@ -140,6 +143,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Microchip\Graphics\DisplayDriver.c" />
     <ClCompile Include="Microchip\Graphics\Primitive.c" />
+    <ClCompile Include="Pictures C32.c" />
     <ClCompile Include="SDLDislpayEmulator\SDLDisplay.cpp" />
     <ClCompile Include="StellarisWare\grlib\canvas.c" />
     <ClCompile Include="StellarisWare\grlib\checkbox.c" />

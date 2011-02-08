@@ -412,7 +412,7 @@ extern SHORT    _fontHeight;
 * Side Effects: none
 *
 ********************************************************************/
-void ArcTest( void );
+void PrimitiveTest( void );
 
 ///WORD            Arc(SHORT xL, SHORT yT, SHORT xR, SHORT yB, SHORT r1, SHORT r2, BYTE octant);
 WORD            _Arc_(SHORT xL, SHORT yT, SHORT xR, SHORT yB, SHORT r1, SHORT r2, BYTE octant);

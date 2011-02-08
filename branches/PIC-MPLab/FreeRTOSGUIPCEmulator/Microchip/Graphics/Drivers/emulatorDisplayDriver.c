@@ -146,6 +146,7 @@ BOOL IsScreenValid( void )
 	{
 		///screen = SDL_SetVideoMode(320, 240, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
 		screen = SDL_SetVideoMode(GetMaxX()+1, GetMaxY()+1, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+		///screen = SDL_SetVideoMode(GetMaxX()+1, GetMaxY()+1, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
 		if( NULL == screen )
 		{
 			printf(" Unable to set %dx%d video: %s\n", GetMaxX()+1, GetMaxY()+1, SDL_GetError());
@@ -419,7 +420,7 @@ void ClearDevice(void)
 #ifdef USE_DRV_SETFONT
 void SetFont(void *font)
 {
-#if 0
+
     FONT_HEADER *pHeader;
 
         #ifdef USE_FONT_EXTERNAL
@@ -431,7 +432,11 @@ void SetFont(void *font)
                 #ifdef USE_FONT_FLASH
 
         case FLASH:
+		#if defined(WIN32)
+			pHeader = (FONT_HEADER *)font;
+		#else
             pHeader = (FONT_HEADER *) ((FONT_FLASH *)font)->address;
+		#endif	
             break;
 
 				#endif // USE_FONT_FLASH
@@ -451,7 +456,9 @@ void SetFont(void *font)
     _fontFirstChar = pHeader->firstChar;
     _fontLastChar = pHeader->lastChar;
     _fontHeight = pHeader->height;
-#endif
+	printf(" firstChar=%d[0x%x]\n", _fontFirstChar, _fontFirstChar);
+	printf(" lastChar=%d[0x%x]\n", _fontLastChar, _fontLastChar);
+	printf(" height=%d[0x%x]\n", _fontHeight, _fontHeight);
 }
 #endif //#ifndef USE_DRV_SETFONT
 
@@ -491,7 +498,7 @@ SHORT GetTextWidth(XCHAR *textString, void *font)
     XCHAR       fontLastChar;
     	#endif
 
-#if 0
+
     switch(*((SHORT *)font))
     {
                 #ifdef USE_FONT_RAM
@@ -517,20 +524,25 @@ SHORT GetTextWidth(XCHAR *textString, void *font)
                 #ifdef USE_FONT_FLASH
 
         case FLASH:
+		#if defined(WIN32)
+			pHeader = (FONT_HEADER *)font;
+		#else
             pHeader = (FONT_HEADER *) ((FONT_FLASH *)font)->address;
+		#endif	
             fontFirstChar = pHeader->firstChar;
             fontLastChar = pHeader->lastChar;
             pChTable = (GLYPH_ENTRY *) (pHeader + 1);
             textWidth = 0;
             while((XCHAR)15 < (XCHAR)(ch = *textString++))
             {
+				printf(" this char=%c[0x%x]\n", *(XCHAR *)textString, *(XCHAR *)textString );
                 if((XCHAR)ch < (XCHAR)fontFirstChar)
                     continue;
                 if((XCHAR)ch > (XCHAR)fontLastChar)
                     continue;
                 textWidth += (pChTable + ((XCHAR)ch - (XCHAR)fontFirstChar))->width;
             }
-
+			printf(" textWidth=%c[0x%x],%d[0x%x]\n", ch, ch, textWidth, textWidth);
             return (textWidth);
                 #endif
                 #ifdef USE_FONT_EXTERNAL
@@ -562,9 +574,6 @@ SHORT GetTextWidth(XCHAR *textString, void *font)
         default:
             return (0);
     }
-#else
-	return (textWidth);
-#endif
 }
 #endif //#ifdef USE_DRV_GETTEXTWIDTH
 
@@ -575,7 +584,7 @@ SHORT GetTextHeight(void *font)
 
     char    height;
         #endif
-#if 0		
+		
     switch(*((SHORT *)font))
     {
                 #ifdef USE_FONT_RAM
@@ -585,7 +594,12 @@ SHORT GetTextHeight(void *font)
                 
                 #ifdef USE_FONT_FLASH
         case FLASH:
+		#if defined(WIN32)
+			printf(" height=%d[0x%x]\n", ((FONT_HEADER *) ((FONT_HEADER *)font))->height, ((FONT_HEADER *) ((FONT_HEADER *)font))->height);
+			return ((FONT_HEADER *) ((FONT_HEADER *)font))->height;
+		#else
             return ((FONT_HEADER *) ((FONT_FLASH *)font)->address)->height;
+		#endif
                 #endif
                 
                 #ifdef USE_FONT_EXTERNAL
@@ -597,9 +611,6 @@ SHORT GetTextHeight(void *font)
         default:
             return (0);
     }
-#else
-	return (0);
-#endif	
 }
 #endif //#ifdef USE_DRV_GETTEXTHEIGHT
 
@@ -608,7 +619,152 @@ SHORT GetTextHeight(void *font)
 #ifdef USE_DRV_OUTCHAR
 WORD OutChar(XCHAR ch)
 {
-	return 1;
+   		#ifdef USE_FONT_FLASH	
+    GLYPH_ENTRY *pChTable = NULL;
+    	#endif
+    BYTE        *pChImage = NULL;
+
+        #ifdef USE_FONT_EXTERNAL
+    GLYPH_ENTRY chTable;
+    BYTE        chImage[EXTERNAL_FONT_BUFFER_SIZE];
+    WORD        imageSize;
+    DWORD_VAL   glyphOffset;
+        #endif
+    SHORT       chWidth = 0;
+    SHORT       xCnt, yCnt, x = 0, y;
+    BYTE        temp = 0, mask;
+
+        #ifndef USE_NONBLOCKING_CONFIG
+    while(IsDeviceBusy() != 0) Nop();
+
+    /* Ready */
+        #else
+    if(IsDeviceBusy() != 0)
+        return (0);
+        #endif
+    if((XCHAR)ch < (XCHAR)_fontFirstChar)
+        return (-1);
+    if((XCHAR)ch > (XCHAR)_fontLastChar)
+        return (-1);
+
+    switch(*((SHORT *)_font))
+    {
+                #ifdef USE_FONT_FLASH
+
+        case FLASH:
+		#if defined(WIN32)
+            pChTable = (GLYPH_ENTRY *) ((BYTE *)_font + sizeof(FONT_HEADER)) + ((XCHAR)ch - (XCHAR)_fontFirstChar);
+
+            pChImage = (BYTE *) ((BYTE *)_font + ((DWORD)(pChTable->offsetMSB) << 8) + pChTable->offsetLSB);
+		#else
+            pChTable = (GLYPH_ENTRY *) (((FONT_FLASH *)_font)->address + sizeof(FONT_HEADER)) + ((XCHAR)ch - (XCHAR)_fontFirstChar);
+
+            pChImage = (BYTE *) (((FONT_FLASH *)_font)->address + ((DWORD)(pChTable->offsetMSB) << 8) + pChTable->offsetLSB);
+		#endif
+            chWidth = pChTable->width;
+
+            break;
+                #endif
+                #ifdef USE_FONT_EXTERNAL
+			
+        case EXTERNAL:
+
+            // get glyph entry
+            ExternalMemoryCallback
+            (
+                _font,
+                sizeof(FONT_HEADER) + ((XCHAR)ch - (XCHAR)_fontFirstChar) * sizeof(GLYPH_ENTRY),
+                sizeof(GLYPH_ENTRY),
+                &chTable
+            );
+
+            chWidth = chTable.width;
+
+            // width of glyph in bytes
+            imageSize = 0;
+            if(chWidth & 0x0007)
+                imageSize = 1;
+            imageSize += (chWidth >> 3);
+
+            // glyph image size
+            imageSize *= _fontHeight;
+
+            // get glyph image
+            glyphOffset.w[1] = (chTable.offsetMSB >> 8);
+            glyphOffset.w[0] = (chTable.offsetMSB << 8) + (chTable.offsetLSB);
+
+            ExternalMemoryCallback(_font, glyphOffset.Val, imageSize, &chImage);
+            pChImage = (BYTE *) &chImage;
+
+            break;
+                #endif
+
+        default:
+            break;
+    }
+
+    if(_fontOrientation == ORIENT_HOR)
+    {
+        y = GetY();
+        for(yCnt = 0; yCnt < _fontHeight; yCnt++)
+        {
+            x = GetX();
+            mask = 0;
+            for(xCnt = 0; xCnt < chWidth; xCnt++)
+            {
+                if(mask == 0)
+                {
+                    temp = *pChImage++;
+                    mask = 0x01;
+                }
+
+                if(temp & mask)
+                {
+                    PutPixel(x, y);
+                }
+
+                x++;
+                mask <<= 1;
+            }
+
+            y++;
+        }
+
+        // move cursor
+        _cursorX = x;
+    }
+    else
+    {
+        y = GetX();
+        for(yCnt = 0; yCnt < _fontHeight; yCnt++)
+        {
+            x = GetY();
+            mask = 0; 
+            for(xCnt = 0; xCnt < chWidth; xCnt++)
+            {
+                if(mask == 0)
+                {
+                    temp = *pChImage++;
+                    mask = 0x01; 
+                }
+
+                if(temp & mask)
+                {
+                    PutPixel(y, x);
+                }
+
+                x--;
+                mask <<= 1;
+            }
+
+            y++;
+        }
+
+        // move cursor
+        _cursorY = x;
+    }
+
+	return (1);
 }
 
 #endif
