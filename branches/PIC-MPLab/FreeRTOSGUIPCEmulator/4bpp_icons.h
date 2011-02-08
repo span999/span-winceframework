@@ -1,0 +1,45 @@
+#ifndef 4BPP_ICONS_H
+#define  4BPP_ICONS_H
+#define weighingScale_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH weighingScale_4bpp_16x16;
+#define Volume4bar_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH Volume4bar_4bpp_16x16;
+#define Volume3bar_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH Volume3bar_4bpp_16x16;
+#define Volume2bar_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH Volume2bar_4bpp_16x16;
+#define Volume1bar_4bpp_16x1_SIZE     166
+extern BITMAP_FLASH Volume1bar_4bpp_16x1;
+#define Volume0bar_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH Volume0bar_4bpp_16x16;
+#define TrashFull_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH TrashFull_4bpp_16x16;
+#define TrashEmpty_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH TrashEmpty_4bpp_16x16;
+#define Sun_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH Sun_4bpp_16x16;
+#define Settings_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH Settings_4bpp_16x16;
+#define PCGaming2_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH PCGaming2_4bpp_16x16;
+#define PCGaming1_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH PCGaming1_4bpp_16x16;
+#define Language_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH Language_4bpp_16x16;
+#define HomeThermostat_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH HomeThermostat_4bpp_16x16;
+#define HomeSecurity_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH HomeSecurity_4bpp_16x16;
+#define FolderPhoto_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH FolderPhoto_4bpp_16x16;
+#define FolderMusic_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH FolderMusic_4bpp_16x16;
+#define FolderFile_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH FolderFile_4bpp_16x16;
+#define FolderEmpty_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH FolderEmpty_4bpp_16x16;
+#define ECG_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH ECG_4bpp_16x16;
+#define DateAndTime_4bpp_16x16_SIZE     166
+extern BITMAP_FLASH DateAndTime_4bpp_16x16;
+#endif
