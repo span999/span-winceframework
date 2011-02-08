@@ -25,6 +25,7 @@
 ///#include "Graphics\Primitive.h"
 ///#include "Graphics\Graphics.h"
 ///#include "Graphics\GOL.h"
+#include "FontGentium.h"
 
 
 void vApplicationIdleHook()
@@ -49,10 +50,6 @@ WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG* pMsg)
 #define MIN(x,y)                ((x > y)? y: x)
 #define WAIT_UNTIL_FINISH(x)    while(!x)	
 #define DEMODELAY				1000
-extern const char Font25[];
-extern const char Font35[];
-extern const char FontBold25[];
-extern const char FontBold35[];
 
 extern const IMAGE_FLASH flower1bit;
 extern const IMAGE_FLASH flower4bit;
@@ -317,11 +314,11 @@ void PrimitiveTest( void )
         ClearDevice();
 
 		// draw fonts in the screen
-        SetFont((void *) &Font25);
+        SetFont((void *) &Gentium_Normal25);
 		SetColor(BRIGHTGREEN);
         ///width = GetTextWidth("Microchip Technology Inc.", (void *) &Font25);
-		width = GetTextWidth(TEXT_STRING, (void *) &Font25);
-        height = GetTextHeight((void *) &Font25);
+		width = GetTextWidth(TEXT_STRING, (void *) &Gentium_Normal25);
+        height = GetTextHeight((void *) &Gentium_Normal25);
 
         ///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Technology Inc.");
 		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, TEXT_STRING);
@@ -331,11 +328,11 @@ void PrimitiveTest( void )
         SetColor(BLACK);
         ClearDevice();
 
-        SetFont((void *) &Font35);
+        SetFont((void *) &Gentium_Normal33);
         SetColor(WHITE);
         ///width = GetTextWidth("Microchip Tech.", (void *) &Font35);
-		width = GetTextWidth(TEXT_STRING, (void *) &Font35);
-        height = GetTextHeight((void *) &Font35);
+		width = GetTextWidth(TEXT_STRING, (void *) &Gentium_Normal33);
+        height = GetTextHeight((void *) &Gentium_Normal33);
 
         ///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Tech.");
 		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, TEXT_STRING);
@@ -347,11 +344,11 @@ void PrimitiveTest( void )
 
 
 		// draw fonts in the screen
-        SetFont((void *) &FontBold25);
+        SetFont((void *) &Gentium_Bold25);
 		SetColor(RED);
         ///width = GetTextWidth("Microchip Technology Inc.", (void *) &Font25);
-		width = GetTextWidth(TEXT_STRING, (void *) &FontBold25);
-        height = GetTextHeight((void *) &FontBold25);
+		width = GetTextWidth(TEXT_STRING, (void *) &Gentium_Bold25);
+        height = GetTextHeight((void *) &Gentium_Bold25);
 
         ///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Technology Inc.");
 		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, TEXT_STRING);
@@ -361,11 +358,11 @@ void PrimitiveTest( void )
         SetColor(BLACK);
         ClearDevice();
 
-        SetFont((void *) &FontBold35);
-        SetColor(BLUE);
+        SetFont((void *) &Gentium_Bold33);
+        SetColor(BRIGHTBLUE);
         ///width = GetTextWidth("Microchip Tech.", (void *) &Font35);
-		width = GetTextWidth(TEXT_STRING, (void *) &FontBold35);
-        height = GetTextHeight((void *) &FontBold35);
+		width = GetTextWidth(TEXT_STRING, (void *) &Gentium_Bold33);
+        height = GetTextHeight((void *) &Gentium_Bold33);
 
         ///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Tech.");
 		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, TEXT_STRING);
@@ -376,8 +373,38 @@ void PrimitiveTest( void )
         ClearDevice();
 
 
+		// draw fonts in the screen
+        SetFont((void *) &Gentium_Italic25);
+		SetColor(RED);
+        ///width = GetTextWidth("Microchip Technology Inc.", (void *) &Font25);
+		width = GetTextWidth(TEXT_STRING, (void *) &Gentium_Italic25);
+        height = GetTextHeight((void *) &Gentium_Italic25);
 
-        SetFont((void *) &Font35);
+        ///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Technology Inc.");
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, TEXT_STRING);
+
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);
+        SetColor(BLACK);
+        ClearDevice();
+
+        SetFont((void *) &Gentium_Italic33);
+        SetColor(BRIGHTBLUE);
+        ///width = GetTextWidth("Microchip Tech.", (void *) &Font35);
+		width = GetTextWidth(TEXT_STRING, (void *) &Gentium_Italic33);
+        height = GetTextHeight((void *) &Gentium_Italic33);
+
+        ///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Tech.");
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, TEXT_STRING);
+
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);
+        SetColor(BLACK);
+        ClearDevice();
+
+		
+
+        SetFont((void *) &Gentium_Normal33);
         SetColor(WHITE);		
 		// draw pictures in the screen with different bits per pixel
         ///WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower1bit, 2));
