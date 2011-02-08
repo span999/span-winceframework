@@ -26,7 +26,7 @@
 ///#include "Graphics\Graphics.h"
 ///#include "Graphics\GOL.h"
 #include "FontGentium.h"
-
+#include "1bpp_icons.h"
 
 void vApplicationIdleHook()
 {
@@ -405,11 +405,14 @@ void PrimitiveTest( void )
 		
 
         SetFont((void *) &Gentium_Normal33);
-        SetColor(WHITE);		
+        SetColor(WHITE);
+		width = GetTextWidth(TEXT_STRING, (void *) &Gentium_Normal33);
+        height = GetTextHeight((void *) &Gentium_Normal33);
+		
 		// draw pictures in the screen with different bits per pixel
         ///WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower1bit, 2));
 		WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower1bit, 1));
-        SetColor(WHITE);
+        SetColor(CYAN);
         ///OutTextXY(200, 0, "1BPP");
 		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "1BPP");
         DelayMs(DEMODELAY);
@@ -419,7 +422,7 @@ void PrimitiveTest( void )
 
         ///WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower4bit, 2));
 		WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower4bit, 1));
-        SetColor(WHITE);
+        SetColor(CYAN);
         ///OutTextXY(200, 0, "4BPP");
 		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "4BPP");
         DelayMs(DEMODELAY);
@@ -429,7 +432,7 @@ void PrimitiveTest( void )
 
         ///WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower8bit, 2));
 		WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower8bit, 1));
-        SetColor(WHITE);
+        SetColor(CYAN);
         ///OutTextXY(200, 0, "8BPP");
 		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "8BPP");
         DelayMs(DEMODELAY);
@@ -439,7 +442,7 @@ void PrimitiveTest( void )
 
         ///WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower16bit, 2));
 		WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower16bit, 1));
-        SetColor(WHITE);
+        SetColor(CYAN);
         ///OutTextXY(200, 0, "16BPP");
 		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "16BPP");
         DelayMs(DEMODELAY);
@@ -459,11 +462,35 @@ void PrimitiveTest( void )
         ClearDevice();
 
 		
+		WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &weighingScale_1bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(20, 0, (void *) &TrashFull_1bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(40, 0, (void *) &TrashEmpty_1bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(60, 0, (void *) &PCGaming2_1bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(80, 0, (void *) &PCGaming1_1bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(100, 0, (void *) &Language_1bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(120, 0, (void *) &FolderPhoto_1bpp_6x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(140, 0, (void *) &FolderMusic_1bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(160, 0, (void *) &FolderFile_1bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		
+		WAIT_UNTIL_FINISH(PutImage(0, 20, (void *) &FolderEmpty_1bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(20, 20, (void *) &ECG_1bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(40, 20, (void *) &DateAndTime_1bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
 		
 		
-		
-		
-		
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);
 		
 		
 }
