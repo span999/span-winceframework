@@ -5,27 +5,32 @@
 * Gentium font is licensed under the SIL Open Font License, Version 1.0.
 * http://scripts.sil.org/OFL
 *************************************************************************************/
+
+#if defined(WIN32)
+extern const char FontBold35[];
+//FONT NAME CAN BE CHANGED HERE.
+const char FontBold35[] = {
+#else
 const unsigned char Font[] __attribute__((aligned(2))) =
 {
+#endif
 
     //////////////////////////////////////////
     // FONT HEADER
     //////////////////////////////////////////
     0x00,   // Info
     0x00,   // FontID
-    0x20,
-    0x00,
-    0x7F,
-    0x00,
-    0x00,   // Reserved
+    0x20,0x00,
+    0x7F,0x00,
+///    0x00,   // Reserved
     0x23,   // Height
-    
+    0x00,   // Reserved
     
     //////////////////////////////////////////
 
     // CHARACTER TABLE
     //////////////////////////////////////////
-    0x00,
+///    0x00,
     0x07,
     0x88,
     0x01,

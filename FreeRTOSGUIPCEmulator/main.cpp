@@ -76,10 +76,11 @@ void vUserTask2(void *pvParameters)
 		// Clear screen
 		ClearDevice();
 		
-		ArcTest();
-		OutTextXY( 10, 10, (unsigned short *)"123456" );
-		Line( 20, 20, 40, 40 );
-		Bar( 60, 60, 80, 80 );
+		PrimitiveTest();
+		
+///		OutTextXY( 10, 10, (unsigned short *)"123456" );
+///		Line( 20, 20, 40, 40 );
+///		Bar( 60, 60, 80, 80 );
 		vTaskDelay(800);
 	}
 	

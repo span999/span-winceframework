@@ -50,8 +50,16 @@ WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG* pMsg)
 #define WAIT_UNTIL_FINISH(x)    while(!x)	
 #define DEMODELAY				1000
 extern const char Font25[];
+extern const char Font35[];
+extern const char FontBold25[];
+extern const char FontBold35[];
 
-void ArcTest( void )
+extern const IMAGE_FLASH flower1bit;
+extern const IMAGE_FLASH flower4bit;
+extern const IMAGE_FLASH flower8bit;
+extern const IMAGE_FLASH flower16bit;
+
+void PrimitiveTest( void )
 {
     SHORT       width, height;
     SHORT       counter;
@@ -304,69 +312,121 @@ void ArcTest( void )
         DelayMs(DEMODELAY);
 		
 		
-		
+#define	TEXT_STRING		"Mitac MBU."
         SetColor(BLACK);
         ClearDevice();
 
 		// draw fonts in the screen
         SetFont((void *) &Font25);
 		SetColor(BRIGHTGREEN);
-        width = GetTextWidth("Microchip Technology Inc.", (void *) &Font25);
+        ///width = GetTextWidth("Microchip Technology Inc.", (void *) &Font25);
+		width = GetTextWidth(TEXT_STRING, (void *) &Font25);
         height = GetTextHeight((void *) &Font25);
 
-        OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Technology Inc.");
+        ///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Technology Inc.");
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, TEXT_STRING);
 
         DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
-///        SetFont((void *) &Font35);
+        SetFont((void *) &Font35);
         SetColor(WHITE);
-///        width = GetTextWidth("Microchip Tech.", (void *) &Font35);
-///        height = GetTextHeight((void *) &Font35);
+        ///width = GetTextWidth("Microchip Tech.", (void *) &Font35);
+		width = GetTextWidth(TEXT_STRING, (void *) &Font35);
+        height = GetTextHeight((void *) &Font35);
 
-///        OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Tech.");
+        ///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Tech.");
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, TEXT_STRING);
 
         DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
+
+		// draw fonts in the screen
+        SetFont((void *) &FontBold25);
+		SetColor(RED);
+        ///width = GetTextWidth("Microchip Technology Inc.", (void *) &Font25);
+		width = GetTextWidth(TEXT_STRING, (void *) &FontBold25);
+        height = GetTextHeight((void *) &FontBold25);
+
+        ///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Technology Inc.");
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, TEXT_STRING);
+
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);
+        SetColor(BLACK);
+        ClearDevice();
+
+        SetFont((void *) &FontBold35);
+        SetColor(BLUE);
+        ///width = GetTextWidth("Microchip Tech.", (void *) &Font35);
+		width = GetTextWidth(TEXT_STRING, (void *) &FontBold35);
+        height = GetTextHeight((void *) &FontBold35);
+
+        ///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Tech.");
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, TEXT_STRING);
+
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);
+        SetColor(BLACK);
+        ClearDevice();
+
+
+
+        SetFont((void *) &Font35);
+        SetColor(WHITE);		
 		// draw pictures in the screen with different bits per pixel
-///        WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower1bit, 2));
+        ///WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower1bit, 2));
+		WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower1bit, 1));
         SetColor(WHITE);
-///        OutTextXY(200, 0, "1BPP");
+        ///OutTextXY(200, 0, "1BPP");
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "1BPP");
         DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
-///        WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower4bit, 2));
+        ///WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower4bit, 2));
+		WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower4bit, 1));
         SetColor(WHITE);
-///        OutTextXY(200, 0, "4BPP");
+        ///OutTextXY(200, 0, "4BPP");
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "4BPP");
         DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
-///        WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower8bit, 2));
+        ///WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower8bit, 2));
+		WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower8bit, 1));
         SetColor(WHITE);
-///       OutTextXY(200, 0, "8BPP");
+        ///OutTextXY(200, 0, "8BPP");
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "8BPP");
         DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
-///        WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower16bit, 2));
+        ///WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower16bit, 2));
+		WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower16bit, 1));
         SetColor(WHITE);
-///        OutTextXY(200, 0, "16BPP");
+        ///OutTextXY(200, 0, "16BPP");
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "16BPP");
         DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
-///        width = GetImageWidth((void *) &flower1bit);
-///        height = GetImageHeight((void *) &flower1bit);
+        width = GetImageWidth((void *) &flower1bit);
+        height = GetImageHeight((void *) &flower1bit);
 
-///        WAIT_UNTIL_FINISH(PutImage((GetMaxX() + 1) / 2 - width  , (GetMaxY() + 1) / 2 - height  , (void *) &flower1bit,  1));
-///        WAIT_UNTIL_FINISH(PutImage((GetMaxX() + 1) / 2          , (GetMaxY() + 1) / 2 - height  , (void *) &flower4bit,  1));
-///        WAIT_UNTIL_FINISH(PutImage((GetMaxX() + 1) / 2 - width  , (GetMaxY() + 1) / 2           , (void *) &flower8bit,  1));
-///        WAIT_UNTIL_FINISH(PutImage((GetMaxX() + 1) / 2          , (GetMaxY() + 1) / 2           , (void *) &flower16bit, 1));
+        WAIT_UNTIL_FINISH(PutImage((GetMaxX() + 1) / 2 - width  , (GetMaxY() + 1) / 2 - height  , (void *) &flower1bit,  1));
+        WAIT_UNTIL_FINISH(PutImage((GetMaxX() + 1) / 2          , (GetMaxY() + 1) / 2 - height  , (void *) &flower4bit,  1));
+        WAIT_UNTIL_FINISH(PutImage((GetMaxX() + 1) / 2 - width  , (GetMaxY() + 1) / 2           , (void *) &flower8bit,  1));
+        WAIT_UNTIL_FINISH(PutImage((GetMaxX() + 1) / 2          , (GetMaxY() + 1) / 2           , (void *) &flower16bit, 1));
         DelayMs(DEMODELAY*2);
         SetColor(BLACK);
         ClearDevice();
