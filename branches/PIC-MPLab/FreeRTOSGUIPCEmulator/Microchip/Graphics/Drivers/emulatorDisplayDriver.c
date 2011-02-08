@@ -347,11 +347,11 @@ void ResetDevice(void)
 ********************************************************************/
 void PutPixel(SHORT x, SHORT y)
 {
-	if( IsScreenValid() )
+	if( IsScreenValid() && IsXYValid( x, y ) )
 	{
 		///printf(">>>emulatorDisplayDriver: PutPixel x=%d,y=%d\n", x, y);
 		///displayPixelDraw( NULL, x, y, _color.Val );
-		displayPixelDraw( NULL, x, y, GetColors() );
+		displayPixelDraw( NULL, x, y, TransColors() );
 	}
 }
 
@@ -395,7 +395,7 @@ WORD Bar(SHORT left, SHORT top, SHORT right, SHORT bottom)
 	
 	if( IsScreenValid() )
 		///displayRectFill( NULL, left, top, right, bottom, _color.Val );
-		displayRectFill( NULL, left, top, right, bottom, GetColors() );
+		displayRectFill( NULL, left, top, right, bottom, TransColors() );
 	else
 		return (0);
 
