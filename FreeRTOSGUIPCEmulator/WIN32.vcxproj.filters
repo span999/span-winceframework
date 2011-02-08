@@ -525,19 +525,10 @@
     <ClCompile Include="Microchip\Graphics\DisplayDriver.c">
       <Filter>PIC-GraphicLib</Filter>
     </ClCompile>
-    <ClCompile Include="Font25PixelsHeight.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Font35PixelsHeight.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Pictures C32.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FontBold25PixelsHeight.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FontBold35PixelsHeight.c">
+    <ClCompile Include="FontGentium.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
