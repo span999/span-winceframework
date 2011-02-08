@@ -531,6 +531,9 @@
     <ClCompile Include="FontGentium.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="1bpp_icons.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">
