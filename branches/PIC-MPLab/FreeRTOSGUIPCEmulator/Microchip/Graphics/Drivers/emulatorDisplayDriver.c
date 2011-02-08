@@ -158,13 +158,31 @@ BOOL IsScreenValid( void )
 	return bRet;
 }
 
-Uint32 GetColors()
+BOOL IsXYValid(SHORT x, SHORT y)
+{
+	BOOL bRet = FALSE;
+
+	
+	if( x >= 0 && x <= GetMaxX()+1 )
+		if( y >= 0 && y <= GetMaxY()+1 )
+			bRet = TRUE;
+	
+	if( !bRet )
+		printf(" IsXYValid: out of XY=%d,%d\n", x, y);
+		
+	return bRet;
+}
+
+
+Uint32 TransColors()
 {
 	Uint32 cc = 0;
-	cc = cc | ((_color.Val & 0x0000001F) << (0+2)) ;
+
+	/// reverse the define of RGB565CONVERT
+	cc = cc | ((_color.Val & 0x0000001F) << (0+3)) ;
 	cc = cc | ((_color.Val & 0x000007E0) << (3+2)) ;
-	cc = cc | ((_color.Val & 0x0000F800) << (5+2)) ;
-	
+	cc = cc | ((_color.Val & 0x0000F800) << (5+3)) ;
+
 	return cc;
 }
 
