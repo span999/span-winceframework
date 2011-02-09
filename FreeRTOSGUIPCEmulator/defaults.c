@@ -27,6 +27,8 @@
 ///#include "Graphics\GOL.h"
 #include "FontGentium.h"
 #include "1bpp_icons.h"
+#include "4bpp_icons.h"
+
 
 void vApplicationIdleHook()
 {
@@ -68,8 +70,54 @@ void PrimitiveTest( void )
         (GetMaxX()+1)/2,    (GetMaxY()+1)/4,
     };
 
-	
-	
+/***********************************************************************************************************/
+        SetColor(BLACK);
+        ClearDevice();
+		// draw fonts in the screen
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(LIGHTRED);
+		width = GetTextWidth("This Demo bases on", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, "This Demo bases on");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);	
+
+		// draw fonts in the screen
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(LIGHTGREEN);
+		width = GetTextWidth("freeRTOS:v6.1.0", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "freeRTOS:v6.1.0");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);	
+
+		// draw fonts in the screen
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(LIGHTBLUE);
+		width = GetTextWidth("MicroChip AppLib:v2.11", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, "MicroChip AppLib:v2.11");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);	
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);	
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);	
+
+
+/***********************************************************************************************************/		
+        SetColor(BLACK);
+        ClearDevice();
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);
+		width = GetTextWidth("draw border lines...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "draw border lines...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);			
+        SetColor(BLACK);
+        ClearDevice();
+
 	    // draw border lines to show the limits of the 
 	    // left, right, top and bottom pixels of the screen
 	    // draw the top most horizontal line
@@ -86,6 +134,21 @@ void PrimitiveTest( void )
         WAIT_UNTIL_FINISH(Line(0,0,0,GetMaxY()));
 
         DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
+		
+		
+/***********************************************************************************************************/
+        SetColor(BLACK);
+        ClearDevice();
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);
+		width = GetTextWidth("draw lines intersecting...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "draw lines intersecting...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);			
+        SetColor(BLACK);
+        ClearDevice();
 		
 		// draw WHITE lines intersecting in the middle of the screen
         SetColor(WHITE);
@@ -95,7 +158,21 @@ void PrimitiveTest( void )
         }
 
         DelayMs(DEMODELAY);
-///return;		
+        DelayMs(DEMODELAY);
+
+/***********************************************************************************************************/
+        SetColor(BLACK);
+        ClearDevice();
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);
+		width = GetTextWidth("draw concentric circles...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "draw concentric circles...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);			
+        SetColor(BLACK);
+        ClearDevice();
+
 		// draw concentric RED circles in the middle of the screen
         SetColor(BRIGHTRED);
         for(counter = 10; counter < MIN(GetMaxX(), GetMaxY()) >> 1; counter += 10)
@@ -104,7 +181,21 @@ void PrimitiveTest( void )
         }
 
         DelayMs(DEMODELAY);	
-///return;			
+        DelayMs(DEMODELAY);	
+		
+/***********************************************************************************************************/
+        SetColor(BLACK);
+        ClearDevice();
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);
+		width = GetTextWidth("draw concentric filled circles...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "draw concentric filled circles...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);			
+        SetColor(BLACK);
+        ClearDevice();
+		
 		// draw concentric filled circles in the middle of the screen
         SetColor(BRIGHTBLUE);
         WAIT_UNTIL_FINISH(FillCircle(GetMaxX() >> 1, GetMaxY() >> 1, 60));
@@ -114,7 +205,19 @@ void PrimitiveTest( void )
         WAIT_UNTIL_FINISH(FillCircle(GetMaxX() >> 1, GetMaxY() >> 1, 20));
 
         DelayMs(DEMODELAY);
-///return;	
+        DelayMs(DEMODELAY);		
+		
+		
+/***********************************************************************************************************/
+        SetColor(BLACK);
+        ClearDevice();
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);
+		width = GetTextWidth("draw concentric beveled objects...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "draw concentric beveled objects...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);			
         SetColor(BLACK);
         ClearDevice();
 
@@ -138,7 +241,19 @@ void PrimitiveTest( void )
 		}
 		
         DelayMs(DEMODELAY);
-///return;	
+        DelayMs(DEMODELAY);
+		
+		
+/***********************************************************************************************************/
+        SetColor(BLACK);
+        ClearDevice();
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);
+		width = GetTextWidth("draw concentric thick beveled...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "draw concentric thick beveled...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);			
         SetColor(BLACK);
         ClearDevice();
 
@@ -189,7 +304,22 @@ void PrimitiveTest( void )
         );
 
         DelayMs(DEMODELAY);
-
+        DelayMs(DEMODELAY);
+		
+		
+/***********************************************************************************************************/
+        SetColor(BLACK);
+        ClearDevice();
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);
+		width = GetTextWidth("draw concentric filled beveled...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "draw concentric filled beveled...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);			
+        SetColor(BLACK);
+        ClearDevice();
+		
 		// draw concentric filled beveled objects in the middle of the screen
         SetColor(BRIGHTBLUE);
         WAIT_UNTIL_FINISH
@@ -230,8 +360,18 @@ void PrimitiveTest( void )
 
         DelayMs(DEMODELAY);
 
+/***********************************************************************************************************/
         SetColor(BLACK);
         ClearDevice();
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);
+		width = GetTextWidth("draw concentric thick beveled...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "draw concentric thick beveled...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);			
+        SetColor(BLACK);
+        ClearDevice();	
 
 		// draw concentric thick beveled objects in the middle of the screen
         SetColor(BRIGHTBLUE);
@@ -266,9 +406,20 @@ void PrimitiveTest( void )
         WAIT_UNTIL_FINISH(_Arc_((GetMaxX() >> 1), (GetMaxY() >> 1), (GetMaxX() >> 1), (GetMaxY() >> 1), ARC_STEP*2, ARC_STEP*3, 0x88));
 
         DelayMs(DEMODELAY);
-
+        DelayMs(DEMODELAY);
+		
+/***********************************************************************************************************/
         SetColor(BLACK);
         ClearDevice();
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);
+		width = GetTextWidth("draw rectangles...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "draw rectangles...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);			
+        SetColor(BLACK);
+        ClearDevice();	
 
 
 ///#define  RECT_STEP	10
@@ -290,6 +441,8 @@ void PrimitiveTest( void )
         }
 
         DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);
 
         SetColor(BRIGHTBLUE);
         WAIT_UNTIL_FINISH(Bar(GetMaxX() / 2 - RECT_STEP*8, GetMaxY() / 2 - RECT_STEP*8, GetMaxX() / 2 + RECT_STEP*8, GetMaxY() / 2 + RECT_STEP*8));
@@ -299,17 +452,70 @@ void PrimitiveTest( void )
         WAIT_UNTIL_FINISH(Bar(GetMaxX() / 2 - RECT_STEP*4, GetMaxY() / 2 - RECT_STEP*4, GetMaxX() / 2 + RECT_STEP*4, GetMaxY() / 2 + RECT_STEP*4));
 
         DelayMs(DEMODELAY);
+        DelayMs(DEMODELAY);
+
+/***********************************************************************************************************/
         SetColor(BLACK);
         ClearDevice();
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);
+		width = GetTextWidth("draw ploygon shape...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "draw ploygon shape...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);			
+        SetColor(BLACK);
+        ClearDevice();	
 
 		// draw ploygon shape in the middle of the screen
         SetColor(WHITE);
         WAIT_UNTIL_FINISH(DrawPoly(5, (SHORT *)polyPoints));
 
         DelayMs(DEMODELAY);
-		
-		
+        DelayMs(DEMODELAY);		
+
+/***********************************************************************************************************/
+        SetColor(BLACK);
+        ClearDevice();
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);
+		width = GetTextWidth("draw fonts...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "draw fonts...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);			
+        SetColor(BLACK);
+        ClearDevice();			
+
 #define	TEXT_STRING		"Mitac MBU."
+
+		// draw fonts in the screen
+        SetFont((void *) &Gentium_Normal11);
+		SetColor(MAGENTA);
+        ///width = GetTextWidth("Microchip Technology Inc.", (void *) &Font25);
+		width = GetTextWidth(TEXT_STRING, (void *) &Gentium_Normal11);
+        height = GetTextHeight((void *) &Gentium_Normal11);
+
+        ///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Technology Inc.");
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, TEXT_STRING);
+
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);
+        SetColor(BLACK);
+        ClearDevice();
+
+		// draw fonts in the screen
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(LIGHTRED);
+        ///width = GetTextWidth("Microchip Technology Inc.", (void *) &Font25);
+		width = GetTextWidth(TEXT_STRING, (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+
+        ///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "Microchip Technology Inc.");
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, TEXT_STRING);
+
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
 
@@ -399,16 +605,24 @@ void PrimitiveTest( void )
 
         DelayMs(DEMODELAY);
 		DelayMs(DEMODELAY);
+
+/***********************************************************************************************************/
         SetColor(BLACK);
         ClearDevice();
-
-		
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);
+		width = GetTextWidth("draw pictures...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "draw pictures...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);			
+        SetColor(BLACK);
+        ClearDevice();	
 
         SetFont((void *) &Gentium_Normal33);
         SetColor(WHITE);
 		width = GetTextWidth(TEXT_STRING, (void *) &Gentium_Normal33);
-        height = GetTextHeight((void *) &Gentium_Normal33);
-		
+        height = GetTextHeight((void *) &Gentium_Normal33);		
 		// draw pictures in the screen with different bits per pixel
         ///WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower1bit, 2));
 		WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &flower1bit, 1));
@@ -449,7 +663,7 @@ void PrimitiveTest( void )
 		DelayMs(DEMODELAY);
         SetColor(BLACK);
         ClearDevice();
-
+#if 0
         width = GetImageWidth((void *) &flower1bit);
         height = GetImageHeight((void *) &flower1bit);
 
@@ -458,9 +672,34 @@ void PrimitiveTest( void )
         WAIT_UNTIL_FINISH(PutImage((GetMaxX() + 1) / 2 - width  , (GetMaxY() + 1) / 2           , (void *) &flower8bit,  1));
         WAIT_UNTIL_FINISH(PutImage((GetMaxX() + 1) / 2          , (GetMaxY() + 1) / 2           , (void *) &flower16bit, 1));
         DelayMs(DEMODELAY*2);
+#endif		
+		
         SetColor(BLACK);
         ClearDevice();
 
+		
+/***********************************************************************************************************/
+        SetColor(BLACK);
+        ClearDevice();
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);
+		width = GetTextWidth("draw ICONs...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "draw ICONs...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);			
+        SetColor(BLACK);
+        ClearDevice();
+
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);		
+		width = GetTextWidth("1BPP 16x16...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "1BPP 16x16...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);			
+///        SetColor(BLACK);
+///        ClearDevice();	
 		
 		WAIT_UNTIL_FINISH(PutImage(0, 0, (void *) &weighingScale_1bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
@@ -477,21 +716,66 @@ void PrimitiveTest( void )
 		WAIT_UNTIL_FINISH(PutImage(120, 0, (void *) &FolderPhoto_1bpp_6x16, 1));
 		DelayMs(DEMODELAY);		
 		WAIT_UNTIL_FINISH(PutImage(140, 0, (void *) &FolderMusic_1bpp_16x16, 1));
-		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(160, 0, (void *) &FolderFile_1bpp_16x16, 1));
-		DelayMs(DEMODELAY);		
+		DelayMs(DEMODELAY);
+
 		
-		WAIT_UNTIL_FINISH(PutImage(0, 20, (void *) &FolderEmpty_1bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(0, 20, (void *) &FolderFile_1bpp_16x16, 1));
+		DelayMs(DEMODELAY);				
+		WAIT_UNTIL_FINISH(PutImage(20, 20, (void *) &FolderEmpty_1bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(20, 20, (void *) &ECG_1bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(40, 20, (void *) &ECG_1bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(40, 20, (void *) &DateAndTime_1bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(60, 20, (void *) &DateAndTime_1bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		
-		
+
         DelayMs(DEMODELAY);
 		DelayMs(DEMODELAY);
 		
+        SetFont((void *) &Gentium_Normal15);
+		SetColor(WHITE);		
+		width = GetTextWidth("4BPP 16x16...", (void *) &Gentium_Normal15);
+        height = GetTextHeight((void *) &Gentium_Normal15);
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "             ");
+		OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "4BPP 16x16...");
+        DelayMs(DEMODELAY);
+		DelayMs(DEMODELAY);	
+
+		WAIT_UNTIL_FINISH(PutImage(0, 60, (void *) &weighingScale_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(20, 60, (void *) &Volume4bar_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(40, 60, (void *) &Volume3bar_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(60, 60, (void *) &Volume2bar_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(80, 60, (void *) &Volume1bar_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(100, 60, (void *) &Volume0bar_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(120, 60, (void *) &TrashFull_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(140, 60, (void *) &TrashEmpty_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);
 		
+
+		WAIT_UNTIL_FINISH(PutImage(0, 80, (void *) &Settings_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(20, 80, (void *) &Language_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);			
+		WAIT_UNTIL_FINISH(PutImage(40, 80, (void *) &FolderPhoto_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(60, 80, (void *) &FolderMusic_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(80, 80, (void *) &FolderFile_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(100, 80, (void *) &FolderEmpty_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(120, 80, (void *) &ECG_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);	
+		WAIT_UNTIL_FINISH(PutImage(140, 80, (void *) &Sun_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);	
+		
+        SetColor(BLACK);
+        ClearDevice();		
 }
 
