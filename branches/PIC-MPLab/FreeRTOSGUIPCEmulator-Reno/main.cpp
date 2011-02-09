@@ -122,11 +122,11 @@ int main()
 	///xTaskCreate( vUserTask1, ( signed char * )"Task1", 100, NULL, 1, NULL );
 	///printf(" vUserTask1 created\n");
 
-	xTaskCreate( vUserTask2, ( signed char * )"Task2", 100, NULL, 1, NULL );
-	printf(" vUserTask2 created\n");
+///	xTaskCreate( vUserTask2, ( signed char * )"Task2", 100, NULL, 1, NULL );
+///	printf(" vUserTask2 created\n");
 
-///	xTaskCreate( vUserTask3, ( signed char * )"Task3", 100, NULL, 1, NULL );
-///	printf(" vUserTask3 created\n");
+	xTaskCreate( vUserTask3, ( signed char * )"Task3", 100, NULL, 1, NULL );
+	printf(" vUserTask3 created\n");
 	
 	/* Start the scheduler, this function should not return as it causes the execution
 	context to change from main() to one of the created tasks. */

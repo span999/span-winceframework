@@ -6,9 +6,11 @@
 /// include this for PIC graphic lib
 #include "PICgraphic_set.h"
 
+#include "ObjectTest.h"
 #include "FontGentium.h"
-#include "1bpp_icons.h"
-#include "4bpp_icons.h"
+///#include "1bpp_icons.h"
+///#include "4bpp_icons.h"
+
 
 
 GOL_SCHEME      *altScheme;                                 // alternative style scheme
