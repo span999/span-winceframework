@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="1bpp_icons.c" />
+    <ClCompile Include="4bpp_icons.c" />
     <ClCompile Include="defaults.c" />
     <ClCompile Include="FontGentium.c" />
     <ClCompile Include="FreeRTOS\portable\MemMang\heap_3.c" />
