@@ -682,18 +682,18 @@ void PrimitiveTest( void )
 		WAIT_UNTIL_FINISH(PutImage(100, 0, (void *) &Language_1bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
 		WAIT_UNTIL_FINISH(PutImage(120, 0, (void *) &FolderPhoto_1bpp_6x16, 1));
-		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(140, 0, (void *) &FolderMusic_1bpp_16x16, 1));
 		DelayMs(DEMODELAY);
 
 		
-		WAIT_UNTIL_FINISH(PutImage(0, 20, (void *) &FolderFile_1bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(0, 20, (void *) &FolderMusic_1bpp_16x16, 1));
+		DelayMs(DEMODELAY);		
+		WAIT_UNTIL_FINISH(PutImage(20, 20, (void *) &FolderFile_1bpp_16x16, 1));
 		DelayMs(DEMODELAY);				
-		WAIT_UNTIL_FINISH(PutImage(20, 20, (void *) &FolderEmpty_1bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(40, 20, (void *) &FolderEmpty_1bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(40, 20, (void *) &ECG_1bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(60, 20, (void *) &ECG_1bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(60, 20, (void *) &DateAndTime_1bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(80, 20, (void *) &DateAndTime_1bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
 
         DelayMs(DEMODELAY);
@@ -708,39 +708,40 @@ void PrimitiveTest( void )
         DelayMs(DEMODELAY);
 		DelayMs(DEMODELAY);	
 
-		WAIT_UNTIL_FINISH(PutImage(0, 60, (void *) &weighingScale_4bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(0, 100, (void *) &weighingScale_4bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(20, 60, (void *) &Volume4bar_4bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(20, 100, (void *) &Volume4bar_4bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(40, 60, (void *) &Volume3bar_4bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(40, 100, (void *) &Volume3bar_4bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(60, 60, (void *) &Volume2bar_4bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(60, 100, (void *) &Volume2bar_4bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(80, 60, (void *) &Volume1bar_4bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(80, 100, (void *) &Volume1bar_4bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(100, 60, (void *) &Volume0bar_4bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(100, 100, (void *) &Volume0bar_4bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(120, 60, (void *) &TrashFull_4bpp_16x16, 1));
-		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(140, 60, (void *) &TrashEmpty_4bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(120, 100, (void *) &TrashFull_4bpp_16x16, 1));
 		DelayMs(DEMODELAY);
 		
-
-		WAIT_UNTIL_FINISH(PutImage(0, 80, (void *) &Settings_4bpp_16x16, 1));
+		
+		WAIT_UNTIL_FINISH(PutImage(0, 120, (void *) &TrashEmpty_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);
+		WAIT_UNTIL_FINISH(PutImage(20, 120, (void *) &Settings_4bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(20, 80, (void *) &Language_4bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(40, 120, (void *) &Language_4bpp_16x16, 1));
 		DelayMs(DEMODELAY);			
-		WAIT_UNTIL_FINISH(PutImage(40, 80, (void *) &FolderPhoto_4bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(60, 120, (void *) &FolderPhoto_4bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(60, 80, (void *) &FolderMusic_4bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(80, 120, (void *) &FolderMusic_4bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(80, 80, (void *) &FolderFile_4bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(100, 120, (void *) &FolderFile_4bpp_16x16, 1));
 		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(100, 80, (void *) &FolderEmpty_4bpp_16x16, 1));
-		DelayMs(DEMODELAY);		
-		WAIT_UNTIL_FINISH(PutImage(120, 80, (void *) &ECG_4bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(120, 120, (void *) &FolderEmpty_4bpp_16x16, 1));
+		DelayMs(DEMODELAY);
+		
+		WAIT_UNTIL_FINISH(PutImage(0, 140, (void *) &ECG_4bpp_16x16, 1));
 		DelayMs(DEMODELAY);	
-		WAIT_UNTIL_FINISH(PutImage(140, 80, (void *) &Sun_4bpp_16x16, 1));
+		WAIT_UNTIL_FINISH(PutImage(20, 140, (void *) &Sun_4bpp_16x16, 1));
 		DelayMs(DEMODELAY);	
 		
         SetColor(BLACK);
