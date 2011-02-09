@@ -16,6 +16,9 @@
 
 
 
+
+
+
 void graphicsDriver( void * pvParameters )
 {
 	SDLInit();	
@@ -64,7 +67,6 @@ void vUserTask1(void *pvParameters)
 	{;}
 }
 
-///extern "C" void ArcTest( void );
 
 void vUserTask2(void *pvParameters)
 {
@@ -76,13 +78,32 @@ void vUserTask2(void *pvParameters)
 		// Clear screen
 		ClearDevice();
 		
-		PrimitiveTest();
-		
-///		OutTextXY( 10, 10, (unsigned short *)"123456" );
-///		Line( 20, 20, 40, 40 );
-///		Bar( 60, 60, 80, 80 );
+		///PrimitiveTest();
+		ObjectTest();
+
 		vTaskDelay(800);
 	}
+	
+	
+	
+	// Suspend ourselves.
+	vTaskSuspend( NULL );
+
+	while (1)
+	{;}
+}
+
+
+void vUserTask3(void *pvParameters)
+{
+
+	InitGraph();
+	
+	// Clear screen
+	ClearDevice();
+	ObjectTest();
+
+	vTaskDelay(800);
 	
 	// Suspend ourselves.
 	vTaskSuspend( NULL );
@@ -102,9 +123,11 @@ int main()
 	///xTaskCreate( vUserTask1, ( signed char * )"Task1", 100, NULL, 1, NULL );
 	///printf(" vUserTask1 created\n");
 
-	xTaskCreate( vUserTask2, ( signed char * )"Task2", 100, NULL, 1, NULL );
-	printf(" vUserTask2 created\n");
+///	xTaskCreate( vUserTask2, ( signed char * )"Task2", 100, NULL, 1, NULL );
+///	printf(" vUserTask2 created\n");
 
+	xTaskCreate( vUserTask3, ( signed char * )"Task3", 100, NULL, 1, NULL );
+	printf(" vUserTask3 created\n");
 	
 	/* Start the scheduler, this function should not return as it causes the execution
 	context to change from main() to one of the created tasks. */

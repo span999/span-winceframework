@@ -71,7 +71,14 @@
  * Description:  Heigth: 27 pixels, range: '' to '~'
  ***********************************/
 
+#if defined(WIN32)
+///extern const char GOLFontDefault[];
+
+const char GOLFontDefault[] =
+{
+#else
 extern const char __GOLFontDefault[] __attribute__((aligned(2)));
+
 
 const FONT_FLASH GOLFontDefault =
 {
@@ -81,6 +88,7 @@ const FONT_FLASH GOLFontDefault =
 
 const char __GOLFontDefault[] __attribute__((aligned(2))) =
 {
+#endif
 /****************************************
  * Font header
  ****************************************/

@@ -859,8 +859,13 @@ WORD GOLPanelDrawTsk(void)
 
                     // draw upper left portion of the embossed area
                     SetColor(_rpnlEmbossLtColor);
+#if defined(WIN32)
+                    if(!_Arc_(_rpnlX1, _rpnlY1, _rpnlX2, _rpnlY2, _rpnlR - _rpnlEmbossSize, _rpnlR, 0xE1))
+                        return (0);
+#else
                     if(!Arc(_rpnlX1, _rpnlY1, _rpnlX2, _rpnlY2, _rpnlR - _rpnlEmbossSize, _rpnlR, 0xE1))
                         return (0);
+#endif
                     state = ARC1;
                 }
                 else
@@ -874,8 +879,13 @@ WORD GOLPanelDrawTsk(void)
 
                 // draw upper left portion of the embossed area
                 SetColor(_rpnlEmbossDkColor);
+#if defined(WIN32)
+                if(!_Arc_(_rpnlX1, _rpnlY1, _rpnlX2, _rpnlY2, _rpnlR - _rpnlEmbossSize, _rpnlR, 0x1E))
+                    return (0);
+#else
                 if(!Arc(_rpnlX1, _rpnlY1, _rpnlX2, _rpnlY2, _rpnlR - _rpnlEmbossSize, _rpnlR, 0x1E))
                     return (0);
+#endif
                 state = DRAW_FACECOLOR;
                 goto rnd_panel_draw_facecolor;
 
@@ -1209,8 +1219,13 @@ WORD GOLTwoTonePanelDrawTsk(void)
 
                     // draw the outline
 					SetColor(_rpnlFaceColor);
+#if defined(WIN32)
+        			if(!_Arc_(_rpnlX1, _rpnlY1, _rpnlX2, _rpnlY2, _rpnlR - _rpnlEmbossSize, _rpnlR, 0xFF))  	                    
+                        return (0);
+#else
         			if(!Arc(_rpnlX1, _rpnlY1, _rpnlX2, _rpnlY2, _rpnlR - _rpnlEmbossSize, _rpnlR, 0xFF))  	                    
                         return (0);
+#endif
                     state = DRAW_FACECOLOR1;
                 }
                 else

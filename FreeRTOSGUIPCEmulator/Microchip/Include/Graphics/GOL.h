@@ -330,7 +330,11 @@ extern OBJ_HEADER   *_pObjectFocused;
 	#endif
 
 	// Default GOL font.
+#if defined(WIN32)
+	extern const char FONTDEFAULT[];
+#else
 	extern const FONT_FLASH FONTDEFAULT;
+#endif
 
 /*********************************************************************
 * Overview: The following are the style scheme default settings.
@@ -1671,5 +1675,13 @@ WORD    GOLPanelDrawTsk(void);
 *
 ********************************************************************/
 WORD 	GOLTwoTonePanelDrawTsk(void);
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+void ObjectTest( void );	/*add for Object test*/
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
+#endif
 
 #endif // _GOL_H
