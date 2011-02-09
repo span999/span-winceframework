@@ -141,8 +141,12 @@
     <ClCompile Include="FreeRTOS\tasks.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Microchip\Graphics\DisplayDriver.c" />
+    <ClCompile Include="Microchip\Graphics\GOL.c" />
+    <ClCompile Include="Microchip\Graphics\GOLFontDefault.c" />
     <ClCompile Include="Microchip\Graphics\Primitive.c" />
+    <ClCompile Include="ObjectTest.c" />
     <ClCompile Include="Pictures C32.c" />
+    <ClCompile Include="PrimitiveTest.c" />
     <ClCompile Include="SDLDislpayEmulator\SDLDisplay.cpp" />
     <ClCompile Include="StellarisWare\grlib\canvas.c" />
     <ClCompile Include="StellarisWare\grlib\checkbox.c" />

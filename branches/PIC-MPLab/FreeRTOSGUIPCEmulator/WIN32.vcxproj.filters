@@ -537,6 +537,18 @@
     <ClCompile Include="4bpp_icons.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PrimitiveTest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Microchip\Graphics\GOL.c">
+      <Filter>PIC-GraphicLib</Filter>
+    </ClCompile>
+    <ClCompile Include="Microchip\Graphics\GOLFontDefault.c">
+      <Filter>PIC-GraphicLib</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectTest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">
