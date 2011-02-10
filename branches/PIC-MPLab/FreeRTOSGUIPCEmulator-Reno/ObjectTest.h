@@ -157,7 +157,10 @@ typedef enum
     BOX_DRAW_ECG,
     CREATE_PULLDOWN,
     DISPLAY_PULLDOWN,
-
+///	
+	CREATE_RENO_DATASET,
+	DISPLAY_RENO_DATASET,
+///
     // these states are for time and date settings 0xF3xx is used here as a
     // state ID to check when date and time are to be updated or not.
     CREATE_DATETIME         = 0xF300,                       // creates the date and time setting menu		

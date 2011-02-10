@@ -39,6 +39,82 @@ SCREEN_STATES   prevState = CREATE_BUTTONS; // used to mark state where time set
 SCREEN_STATES   prevRefreshState = CREATE_BUTTONS; // used to mark the start of the previous screen
 
 
+///#define DEFAULTBTN_WIDTH	(GetMaxY()/2)
+#define DEFAULTBTN_WIDTH	70
+#define DEFAULTBTN_HEIGHT	20
+
+
+void CreateDefaultBtn(void)
+{
+    OBJ_HEADER  *obj;
+
+    BtnCreate
+    (
+        ID_BUTTON_BACK,             // button ID
+        0,
+        0 + (GetMaxY()-DEFAULTBTN_HEIGHT),                         // left, top corner	
+        0+DEFAULTBTN_WIDTH,
+        GetMaxY(),
+        0,                          // right, bottom corner (with radius = 0)
+        BTN_DRAW,                   // will be dislayed after creation
+        NULL,                       // no bitmap	
+///        (XCHAR *)LeftArrowStr,      // LEFT arrow as text
+        (XCHAR *)"Left",      // LEFT arrow as text
+        navScheme
+    );                              // use navigation scheme
+    obj = (OBJ_HEADER *)BtnCreate
+        (
+            ID_BUTTON_NEXT,         // button ID
+            (GetMaxX()/2),
+            0 + (GetMaxY()-DEFAULTBTN_HEIGHT),
+            (GetMaxX()/2) + DEFAULTBTN_WIDTH,
+            GetMaxY(),
+            0,                      // dimension (with radius = 0)
+            BTN_DRAW,               // will be dislayed and disabled after creation
+            NULL,                   // no bitmap
+///            (XCHAR *)RightArrowStr, // RIGHT arrow as text
+            (XCHAR *)"Right", // RIGHT arrow as text
+            navScheme
+        );                          // use navigation scheme
+
+		#if defined (USE_FOCUS)                    
+    GOLSetFocus(obj);   // set focus for the button
+#endif  
+  
+}
+
+void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText, char *pFunc, char *pData, char *pUnit)
+{
+
+    GbCreate(ID_GROUPBOX1,             	// ID 
+              left,top,right,bottom,           	// dimension
+              GB_DRAW|GB_RIGHT_ALIGN,                 	// will be dislayed after creation
+              pText,             	// text
+              meterScheme);                   	// default GOL scheme 
+
+    StCreate(ID_STATICTEXT1,           	// ID 
+              left+5,top+15,(left+5+70),(top+15+15),           	// dimension
+              ST_DRAW,        	// will be dislayed, has frame
+              pFunc, // multi-line text
+              meterScheme);                   	// default GOL scheme 
+
+    StCreate(ID_STATICTEXT2,           	// ID 
+///             200+20,150+35,(200+20+45),(150+35+25),           	// dimension
+///			  left+((right-left)/3),top+((bottom-top)/2),left+((right-left)/3)+55,top+((bottom-top)/2)+25,
+			  left+((right-left)/3),top+((bottom-top)/2),left+((right-left)/3)+55,bottom-2,
+///              ST_DRAW|ST_FRAME|ST_RIGHT_ALIGN,        	// will be dislayed, has frame
+              ST_DRAW|ST_RIGHT_ALIGN,        	// will be dislayed, has frame
+              pData, // multi-line text
+              ///NULL);                   	// default GOL scheme 
+			  alt2Scheme);                   	// default GOL scheme 
+
+    StCreate(ID_STATICTEXT3,           	// ID 
+              right-5-30,bottom-5-15,(right-5),(bottom-5),           	// dimension
+              ST_DRAW|ST_RIGHT_ALIGN,        	// will be dislayed, has frame
+              pUnit, // multi-line text
+              meterScheme);                   	// default GOL scheme 
+
+}
 
 
 
@@ -51,6 +127,10 @@ void CreateButtons(void)
 	
     GOLFree();                      // free memory for the objects in the previous linked list and start new list
 ///    CreatePage((XCHAR *)ButtonStr);
+	SetColor(BLACK);
+	ClearDevice();
+	CreateDefaultBtn();
+
     BtnCreate
     (
         ID_BUTTON1,                 // button ID
@@ -116,13 +196,15 @@ void CreateButtons(void)
 WORD MsgButtons(WORD objMsg, OBJ_HEADER *pObj)
 {
     OBJ_HEADER  *pOtherRbtn;
+	static BOOL bPressed = FALSE;
 
     switch(GetObjID(pObj))
     {
         case ID_BUTTON_NEXT:
             if(objMsg == BTN_MSG_RELEASED)
             {
-                screenState = CREATE_CHECKBOXES;    // goto check box demo screen
+                ///screenState = CREATE_CHECKBOXES;    // goto check box demo screen
+				screenState = CREATE_RENO_DATASET;
             }
 
             return (1);                             // process by default
@@ -130,21 +212,37 @@ WORD MsgButtons(WORD objMsg, OBJ_HEADER *pObj)
         case ID_BUTTON_BACK:
             if(objMsg == BTN_MSG_RELEASED)
             {
-                screenState = CREATE_ECG;           // goto ECG demo screen
+                ///screenState = CREATE_ECG;           // goto ECG demo screen
+				screenState = CREATE_RENO_DATASET;
             }
 
             return (1);                             // process by default
 
+        case ID_BUTTON1:
+            return (1);                 // process by default
+
+        case ID_BUTTON2:
+            return (1);                 // process by default
+			
         case ID_BUTTON3:
             if(objMsg == BTN_MSG_PRESSED)
             {                           // change text and scheme
                 ///BtnSetText((BUTTON *)pObj, (XCHAR *)HighStr);
-				BtnSetText((BUTTON *)pObj, (XCHAR *)"Go");
+				if( TRUE == bPressed )
+				{
+					BtnSetText((BUTTON *)pObj, (XCHAR *)"Go");
+					bPressed = FALSE;
+				}
+				else
+				{
+					BtnSetText((BUTTON *)pObj, (XCHAR *)"Stop");
+					bPressed = TRUE;
+				}
             }
             else
             {
-                ///BtnSetText((BUTTON *)pObj, (XCHAR *)LowStr);
-				BtnSetText((BUTTON *)pObj, (XCHAR *)"Stop");
+                ;///BtnSetText((BUTTON *)pObj, (XCHAR *)LowStr);
+				;///BtnSetText((BUTTON *)pObj, (XCHAR *)"Stop");
             }
 
             return (1);                 // process by default
@@ -152,7 +250,8 @@ WORD MsgButtons(WORD objMsg, OBJ_HEADER *pObj)
         case ID_BUTTON4:
             if(objMsg == BTN_MSG_PRESSED)
             {
-                if(!GetState(pObj, BTN_PRESSED))
+                ///if(!GetState(pObj, BTN_PRESSED))
+				if(0)
                 {
                     pOtherRbtn = GOLFindObject(ID_BUTTON5);
                     ClrState(pOtherRbtn, BTN_PRESSED);
@@ -204,6 +303,58 @@ WORD MsgButtons(WORD objMsg, OBJ_HEADER *pObj)
 #endif
         default:
             return (1);                 // process by default
+    }
+}
+
+
+void CreateRenoDataSet()
+{
+
+    GOLFree();   // free memory for the objects in the previous linked list and start new list
+
+	///CreateStatusBar("Reno");
+	SetColor(BLACK);
+	ClearDevice();
+	CreateDefaultBtn();
+#if 0
+	CreateDataSet( 30, 40,( 30+260),( 40+65),"DataSet1", "Time", "23:23", "24h");
+	CreateDataSet( 30,105+2,( 30+130-2),(105+65),"DataSet2", "Elevation", "155", "ft");
+	CreateDataSet(160,105+2,(160+130),(105+65),"DataSet3", "Lap Avg HR", "128", "bpm");
+	CreateDataSet( 30,170+2,( 30+130-2),(170+65),"DataSet4", "Distance", "3.12", "mi");
+	CreateDataSet(160,170+2,(160+130),(170+65),"DataSet5", "Avg HR", "88", "bpm");
+#else
+	CreateDataSet( 0,  0,( 0+143),( 0+48),"DataSet1", "Time", "23:23", "24h");
+	CreateDataSet( 0, 50,( 0+143),(50+48),"DataSet2", "Elevation", "155", "ft");
+	CreateDataSet( 0, 98,( 0+143),(98+47),"DataSet3", "Lap Avg HR", "128", "bpm");
+
+#endif
+}
+
+
+
+WORD MsgRenoDataSet(WORD objMsg, OBJ_HEADER* pObj)
+{
+///	OBJ_HEADER* pOtherRbtn;
+
+    switch(GetObjID(pObj))
+    {
+        case ID_BUTTON_NEXT:
+            if(objMsg == BTN_MSG_RELEASED)
+            {
+               ///screenState = CREATE_BUTTONS;// goto check box demo screen
+			   screenState = CREATE_BUTTONS;// goto check box demo screen
+            }
+            return 1; 							// process by default
+
+        case ID_BUTTON_BACK:
+            if(objMsg == BTN_MSG_RELEASED){
+                ///screenState = CREATE_RENO_HOME; 		// goto ECG demo screen
+				screenState = CREATE_BUTTONS;// goto check box demo screen
+            }
+            return 1; 							// process by default
+
+        default:
+            return 1; 							// process by default
     }
 }
 
@@ -321,7 +472,10 @@ void TouchGetMsg( GOL_MSG *msg )
 		msg->uiEvent = touchMsg.uiEvent;
 		msg->param1 = touchMsg.param1;
 		msg->param2 = touchMsg.param2;
-		printf("  touch event %d,%d,%d,%d\n", msg->type, msg->uiEvent, msg->param1, msg->param2);
+		
+		if( EVENT_MOVE != msg->uiEvent )
+			printf("  touch event %d,%d,%d,%d\n", msg->type, msg->uiEvent, msg->param1, msg->param2);
+		
 		touchMsgUpdated = FALSE;
 	}
 }
@@ -329,14 +483,215 @@ void TouchGetMsg( GOL_MSG *msg )
 
 WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 {
-	printf("In GOLMsgCallback\n");
-	return (1);
+///	printf("In GOLMsgCallback\n");
+
+#if 0
+    // beep if button is pressed
+    if(objMsg == BTN_MSG_PRESSED)
+    {
+///        Beep();
+    }
+    else
+    {
+        if(GetObjType(pObj) == OBJ_RADIOBUTTON)
+        {
+///            Beep();
+            
+            if(pObj->ID == ID_RADIOBUTTON5)
+            {
+///                _language = LANG_ENGLISH;
+                screenState = prevRefreshState ; //Goto CREATE_XXX state
+                return(1);
+            }
+            else if(pObj->ID == ID_RADIOBUTTON6)
+            {
+///                _language = LANG_CHINESE;
+                screenState = prevRefreshState ; //Goto CREATE_XXX state
+                return(1);
+            }
+        }
+        else
+        {
+            if(GetObjType(pObj) == OBJ_CHECKBOX)
+                ;///Beep();
+        }
+    }
+#endif
+
+#if 0
+    if((screenState & 0xF300) != 0xF300)
+    {
+
+        // check for time setting press, process only when not setting time and date
+        if(objMsg == ST_MSG_SELECTED)
+        {
+
+            /* note how the states are arranged in the enumeration, the display state is 
+		       right after the create state. So at the time the static text box of the 
+		       time is selected, the state is in one of the displays. So a minus one is needed
+		       to adjust to go back to the create state of the current page.
+		       After the date and time adjust screen is exited, the saved create state will
+		       be entered as the next state. So we get the effect of going back to the previous
+		       screen after date and time settings are done.
+		    */
+            if((GetObjID(pObj) == ID_STATICTEXT1) || (GetObjID(pObj) == ID_STATICTEXT2))
+            {
+                prevState = screenState - 1;        // save the current create state
+                screenState = CREATE_DATETIME;      // go to date and time setting screen
+                return (1);
+            }
+        }
+    }
+#endif
+
+#if 0
+    // check if pull down menu is called
+    if(GetObjID(pObj) == ID_WINDOW1)
+    {
+        if((objMsg == WND_MSG_TITLE) && (screenState != DISPLAY_PULLDOWN))
+        {
+
+            // check area of press
+            if((pMsg->param1 <= 220) && (pMsg->param2 <= 40))
+            {
+                switch(screenState)
+                {
+
+                    // if one of these states we redraw the whole screen since
+                    // these screens have customized graphics.
+                    case DISPLAY_SLIDER:
+                        prevState = CREATE_SLIDER;
+                        break;
+
+                    case DISPLAY_CUSTOMCONTROL:
+                        prevState = CREATE_CUSTOMCONTROL;
+                        break;
+
+                    case DISPLAY_SIGNATURE:
+                        prevState = CREATE_SIGNATURE;
+                        break;
+
+                    case DISPLAY_POT:
+                        prevState = CREATE_POT;
+                        break;
+
+                    case DISPLAY_ECG:
+                        prevState = CREATE_ECG;
+                        break;
+
+                    case DISPLAY_PROGRESSBAR:
+                        prevState = CREATE_PROGRESSBAR;
+                        break;
+
+                    // pull down is disabled when setting date and time
+                    case CREATE_DATETIME:
+                    case DISPLAY_DATETIME:
+                    case DISPLAY_DATE_PDMENU:
+                    case SHOW_DATE_PDMENU:
+                    case HIDE_DATE_PDMENU:
+                        return (0);
+
+                    default:
+                        prevState = screenState;    // save the current create state
+                        break;
+                }
+
+                screenState = CREATE_PULLDOWN;      // go to show pulldown menu state
+                
+                if(pMsg->param1 <= 136)
+                {
+///                    PulldownId = 0;
+                }
+                else
+                {
+                    //PulldownId = 1;
+                }
+                
+                return (1);
+            }
+        }
+    }
+#endif
+
+
+    // process messages for demo screens
+    switch(screenState)
+    {
+        case DISPLAY_BUTTONS:
+            return (MsgButtons(objMsg, pObj));
+
+        case DISPLAY_RENO_DATASET:
+            return (MsgRenoDataSet(objMsg, pObj));
+#if 0
+        case DISPLAY_CHECKBOXES:
+            return (MsgCheckBoxes(objMsg, pObj));
+
+        case DISPLAY_RADIOBUTTONS:
+            return (MsgRadioButtons(objMsg, pObj));
+
+        case DISPLAY_STATICTEXT:
+            return (MsgStaticText(objMsg, pObj));
+
+        case DISPLAY_PICTURE:
+            return (MsgPicture(objMsg, pObj));
+
+        case DISPLAY_SLIDER:
+            return (MsgSlider(objMsg, pObj, pMsg));
+
+        case DISPLAY_PROGRESSBAR:
+            return (MsgProgressBar(objMsg, pObj));
+
+        // date and time settings display
+        case DISPLAY_DATETIME:
+            return (MsgDateTime(objMsg, pObj));
+
+        case DISPLAY_DATE_PDMENU:
+            return (MsgSetDate(objMsg, pObj, pMsg));
+
+        case CREATE_DATETIME:
+        case SHOW_DATE_PDMENU:
+        case HIDE_DATE_PDMENU:
+            return (0);
+
+        case DISPLAY_METER:
+            return (MsgMeter(objMsg, pObj));
+
+        case DISPLAY_DIAL:
+            return (MsgDial(objMsg, pObj));
+
+        case DISPLAY_CUSTOMCONTROL:
+            return (MsgCustomControl(objMsg, pObj, pMsg));
+
+        case DISPLAY_LISTBOX:
+            return (MsgListBox(objMsg, pObj, pMsg));
+
+        case DISPLAY_EDITBOX:
+            return (MsgEditBox(objMsg, pObj, pMsg));
+
+        case DISPLAY_SIGNATURE:
+            return (MsgSignature(objMsg, pObj, pMsg));
+
+        case DISPLAY_POT:
+            return (MsgPotentiometer(objMsg, pObj));
+
+        case DISPLAY_ECG:
+            return (MsgECG(objMsg, pObj));
+
+        case DISPLAY_PULLDOWN:
+            return (MsgPullDown(objMsg, pObj, pMsg));
+#endif
+        default:
+
+            // process message by default
+            return (1);
+    }
+
 }
 
 
 WORD GOLDrawCallback(void)
 {
-	printf("In GOLDrawCallback\n");
+///	printf("In GOLDrawCallback\n");
 	
     switch(screenState)
     {
@@ -350,6 +705,15 @@ WORD GOLDrawCallback(void)
 ///			screenState = CREATE_BUTTONS;                              // switch to next state
             return (1);                                                 // redraw objects if needed
 			
+        case CREATE_RENO_DATASET:
+			prevRefreshState = CREATE_BUTTONS;
+            CreateRenoDataSet(); 							// create window and buttons
+            screenState = DISPLAY_RENO_DATASET; 			// switch to next state
+            return (1); 									// draw objects created
+            
+        case DISPLAY_RENO_DATASET:
+            return (1); 									// redraw objects if needed
+
 		default:
 			return (1);    
 	}
@@ -386,11 +750,17 @@ void myCreateScheme( void )
 ///    altScheme->pFont = (void *)ptrLargeAsianFont;
 ///    navScheme->pFont = (void *)ptrLargeAsianFont;
 	altScheme->pFont = (void *)Gentium_Normal15;
+	altScheme->CommonBkColor = BLACK;	
+	
 	navScheme->pFont = (void *)Gentium_Normal15;
+	navScheme->CommonBkColor = BLACK;
 
     alt2Scheme->TextColor1 = BRIGHTRED;
-    alt2Scheme->TextColor0 = BRIGHTBLUE;
+///    alt2Scheme->TextColor0 = BRIGHTBLUE;
+    alt2Scheme->TextColor0 = LIGHTBLUE;
 ///    alt2Scheme->pFont = (void *)ptrSmallAsianFont;
+	alt2Scheme->pFont = (void *)Gentium_Normal25;
+	alt2Scheme->CommonBkColor = BLACK;	
 
     alt3Scheme->Color0 = LIGHTBLUE;
     alt3Scheme->Color1 = BRIGHTGREEN;
@@ -447,11 +817,14 @@ void myCreateScheme( void )
 
     meterScheme->Color0 = BLACK;
     meterScheme->Color1 = WHITE;
-    meterScheme->TextColor0 = BRIGHTBLUE;
+///    meterScheme->TextColor0 = BRIGHTBLUE;
+	meterScheme->TextColor0 = BRIGHTYELLOW;
     meterScheme->TextColor1 = WHITE;
     meterScheme->EmbossDkColor = GRAY20;
     meterScheme->EmbossLtColor = GRAY80;
 ///    meterScheme->pFont = (void *)ptrSmallAsianFont;
+	meterScheme->pFont = (void *)Gentium_Normal15;
+	meterScheme->CommonBkColor = BLACK;
 
 }
 
@@ -504,7 +877,7 @@ void ObjectTest( void )
 	
     while(1)
     {
-		printf("In message loop\n");
+///		printf("In message loop\n");
         if(GOLDraw())
         {                               // Draw GOL objects
             // Drawing is done here, process messages
