@@ -6,7 +6,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-///#define		OLD_DEMO
+
 
 
 ///include this for grlib
@@ -22,49 +22,18 @@
 
 
 
-#ifdef OLD_DEMO
-void graphicsDriver( void * pvParameters )
-{
-	SDLInit();	
-	WidgetMutexInit();
-	SDLScreenCallbackSet(WidgetPointerMessage);	
-	bool done = false;
-	while(!done)
-	{
-		done = !SDLProcessEvent();			
-		WidgetMessageQueueProcess();
-		vTaskDelay(1);
-	}
-	SDLDestroy();
-	while(1)
-	{;}	
-}
-
-
-/******************************************************************************
-Users functions
-******************************************************************************/
-void OnSliderChange(tWidget *pWidget, long lValue)
-{
-	static char pcSliderText[10];
-	sprintf(pcSliderText, "%3d%%", lValue);     
-	SliderTextSet((tSliderWidget *)pWidget, pcSliderText);
-	WidgetPaint(pWidget);
-}
-#endif
 
 #ifndef OLD_DEMO
 extern "C" void TransIOMsg(unsigned long ulMessage, long lX, long lY);
 void IODriver( void * pvParameters )
 {
 	SDLInit();	
-///	WidgetMutexInit();
 	SDLScreenCallbackSet(TransIOMsg);	
 	bool done = false;
 	while(!done)
 	{
 		done = !SDLProcessEventWIN32();			
-///		WidgetMessageQueueProcess();
+		///
 		vTaskDelay(1);
 	}
 	SDLDestroy();
@@ -73,18 +42,9 @@ void IODriver( void * pvParameters )
 }
 #endif
 
-#ifdef OLD_DEMO
+
 void vUserTask1(void *pvParameters)
 {
-	Slider(sld, WIDGET_ROOT, 0,0,
-		&SDLDisplay, 5, 115, 220, 30, 0, 100, 25,
-		(SL_STYLE_FILL | SL_STYLE_BACKG_FILL | SL_STYLE_OUTLINE |
-		SL_STYLE_TEXT | SL_STYLE_BACKG_TEXT),
-		ClrGray, ClrBlack, ClrSilver, ClrWhite, ClrWhite,
-		&g_sFontCm20, "25%", 0, 0, OnSliderChange);
-
-	WidgetAdd(WIDGET_ROOT, (tWidget *)&sld);
-	WidgetPaint(WIDGET_ROOT);
 	
 	// Suspend ourselves.
 	vTaskSuspend( NULL );
@@ -92,7 +52,7 @@ void vUserTask1(void *pvParameters)
 	while (1)
 	{;}
 }
-#endif
+
 
 
 void vUserTask2(void *pvParameters)
@@ -104,14 +64,10 @@ void vUserTask2(void *pvParameters)
 	{
 		// Clear screen
 		ClearDevice();
-		
 		PrimitiveTest();
-
 		vTaskDelay(800);
 	}
-	
-	
-	
+
 	// Suspend ourselves.
 	vTaskSuspend( NULL );
 
@@ -156,10 +112,12 @@ int main()
 	printf(" vUserTask1 created\n");
 #endif
 
-#if 0	
+#if 0
+	/* for PrimitiveTest */
 	xTaskCreate( vUserTask2, ( signed char * )"Task2", 100, NULL, 1, NULL );
 	printf(" vUserTask2 created\n");
 #else
+	/* for ObjectTest */
 	xTaskCreate( vUserTask3, ( signed char * )"Task3", 100, NULL, 1, NULL );
 	printf(" vUserTask3 created\n");
 #endif
