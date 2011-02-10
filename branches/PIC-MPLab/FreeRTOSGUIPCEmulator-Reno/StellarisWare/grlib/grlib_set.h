@@ -30,23 +30,5 @@
 #define __GRLIB_SET_H__
 
 #include "grlib/grlib.h"
-#include "grlib/widget.h"
-#include "grlib/canvas.h"
-#include "grlib/checkbox.h"
-#include "grlib/container.h"
-#include "grlib/pushbutton.h"
-#include "grlib/radiobutton.h"
-#include "grlib/slider.h"
-#include "grlib/grlib.h"
-#include "grlib/widget.h"
-#include "grlib/canvas.h"
-#include "grlib/checkbox.h"
-#include "grlib/container.h"
-#include "grlib/pushbutton.h"
-#include "grlib/radiobutton.h"
-#include "grlib/slider.h"
-#include "grlib/pushbutton.h"
-#include "grlib/imgbutton.h"
-#include "grlib/listbox.h"
 
 #endif // __GRLIB_SET_H__

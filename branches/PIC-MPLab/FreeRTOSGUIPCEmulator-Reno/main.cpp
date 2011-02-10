@@ -8,8 +8,10 @@
 
 ///#define		OLD_DEMO
 
+
 ///include this for grlib
 #include "grlib/grlib_set.h"
+
 
 /// include this for PIC graphic lib
 #include "PICgraphic_set.h"
@@ -56,7 +58,7 @@ extern "C" void TransIOMsg(unsigned long ulMessage, long lX, long lY);
 void IODriver( void * pvParameters )
 {
 	SDLInit();	
-	WidgetMutexInit();
+///	WidgetMutexInit();
 	SDLScreenCallbackSet(TransIOMsg);	
 	bool done = false;
 	while(!done)
