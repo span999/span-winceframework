@@ -8,8 +8,8 @@
 
 #include "ObjectTest.h"
 #include "FontGentium.h"
-///#include "1bpp_icons.h"
-///#include "4bpp_icons.h"
+#include "1bpp_icons.h"
+#include "4bpp_icons.h"
 
 
 
@@ -33,21 +33,183 @@ OBJ_HEADER      *pGenObj;                                   // pointer to a gene
 ///SLIDER          *pSlider;                                   // pointer to the slider controlling the animation speed
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                            COLORS USED
-/////////////////////////////////////////////////////////////////////////////
-#define GRAY20      RGB565CONVERT(51, 51, 51)
-#define GRAY40      RGB565CONVERT(102, 102, 102)
-#define GRAY80      RGB565CONVERT(204, 204, 204)
-#define GRAY90      RGB565CONVERT(229, 229, 229)
-#define GRAY95      RGB565CONVERT(242, 242, 242)
-#define RED4        RGB565CONVERT(139, 0, 0)
-#define FIREBRICK1  RGB565CONVERT(255, 48, 48)
-#define DARKGREEN   RGB565CONVERT(0, 100, 0)
-#define PALEGREEN   RGB565CONVERT(152, 251, 152)
-#define LIGHTYELLOW RGB565CONVERT(238, 221, 130)
-#define GOLD        RGB565CONVERT(255, 215, 0)
-#define DARKORANGE  RGB565CONVERT(255, 140, 0)
+SCREEN_STATES   screenState = CREATE_BUTTONS;               // current state of main demo state mashine
+
+SCREEN_STATES   prevState = CREATE_BUTTONS; // used to mark state where time setting was called	
+SCREEN_STATES   prevRefreshState = CREATE_BUTTONS; // used to mark the start of the previous screen
+
+
+
+
+
+void CreateButtons(void)
+{
+    #define BTN_ORIGIN_X    (GetMaxX() / 2)
+    #define BTN_ORIGIN_Y    (GetMaxY() / 2)
+	#define BTN_ORIGIN_W    50
+	#define BTN_ORIGIN_H    30
+	
+    GOLFree();                      // free memory for the objects in the previous linked list and start new list
+///    CreatePage((XCHAR *)ButtonStr);
+    BtnCreate
+    (
+        ID_BUTTON1,                 // button ID
+        BTN_ORIGIN_X - 70,
+        BTN_ORIGIN_Y - (BTN_ORIGIN_H/2) - 40,
+        BTN_ORIGIN_X - 70 + BTN_ORIGIN_W,
+        BTN_ORIGIN_Y - (BTN_ORIGIN_H/2) + BTN_ORIGIN_H - 40,			// dimension
+        10,                         // set radius
+        BTN_DRAW,                   // draw a beveled button
+        NULL,                       // no bitmap
+///        (XCHAR *)ButtonStr,         // text
+        (XCHAR *)"Test",         // text
+        altScheme
+    );                              // use alternate scheme
+    BtnCreate
+    (
+        ID_BUTTON2,                 // button ID
+        BTN_ORIGIN_X + (BTN_ORIGIN_X-70),
+        BTN_ORIGIN_Y - (BTN_ORIGIN_H/2) - 40,
+        BTN_ORIGIN_X + (BTN_ORIGIN_X-70) + BTN_ORIGIN_W,
+        BTN_ORIGIN_Y- (BTN_ORIGIN_H/2) + BTN_ORIGIN_H - 40,         // dimension
+        0,
+        BTN_DRAW,                   // will be dislayed after creation
+///        (void *) &gradientButton,   // use bitmap
+        (void *)&ECG_1bpp_16x16,   // use bitmap
+///        (XCHAR *)HomeStr,           // text
+        (XCHAR *)NULL,           // text
+        altScheme
+    );                              // alternative GOL scheme
+    BtnCreate
+    (
+        ID_BUTTON3,                 // button ID
+        BTN_ORIGIN_X - 70,
+        BTN_ORIGIN_Y - (BTN_ORIGIN_H/2) + 40,
+        BTN_ORIGIN_X - 70 + BTN_ORIGIN_W,
+        BTN_ORIGIN_Y - (BTN_ORIGIN_H/2) + BTN_ORIGIN_H + 40,			// dimension
+        0,                         // set radius
+        BTN_DRAW | BTN_TOGGLE,      // draw a vertical capsule button
+        							// that has a toggle behavior
+        NULL, 						// no bitmap
+///        (XCHAR *)LowStr,            // text
+        (XCHAR *)"Test",            // text
+        yellowScheme
+    );                          	// use alternate scheme
+    BtnCreate
+    (
+        ID_BUTTON4,             	// button ID
+        BTN_ORIGIN_X + (BTN_ORIGIN_X-70),
+        BTN_ORIGIN_Y - (BTN_ORIGIN_H/2) + 40,
+        BTN_ORIGIN_X + (BTN_ORIGIN_X-70) + BTN_ORIGIN_W,
+        BTN_ORIGIN_Y - (BTN_ORIGIN_H/2) + BTN_ORIGIN_H + 40,			// dimension
+        5,                     	// set radius
+        BTN_DRAW,               	// draw a vertical capsule button
+        NULL,                   	// no bitmap
+///        (XCHAR *)OnStr,         	// text
+        (XCHAR *)NULL,         	// text
+        greenScheme
+    );                          	// use alternate scheme
+
+}
+
+/* */
+WORD MsgButtons(WORD objMsg, OBJ_HEADER *pObj)
+{
+    OBJ_HEADER  *pOtherRbtn;
+
+    switch(GetObjID(pObj))
+    {
+        case ID_BUTTON_NEXT:
+            if(objMsg == BTN_MSG_RELEASED)
+            {
+                screenState = CREATE_CHECKBOXES;    // goto check box demo screen
+            }
+
+            return (1);                             // process by default
+
+        case ID_BUTTON_BACK:
+            if(objMsg == BTN_MSG_RELEASED)
+            {
+                screenState = CREATE_ECG;           // goto ECG demo screen
+            }
+
+            return (1);                             // process by default
+
+        case ID_BUTTON3:
+            if(objMsg == BTN_MSG_PRESSED)
+            {                           // change text and scheme
+                ///BtnSetText((BUTTON *)pObj, (XCHAR *)HighStr);
+				BtnSetText((BUTTON *)pObj, (XCHAR *)"Go");
+            }
+            else
+            {
+                ///BtnSetText((BUTTON *)pObj, (XCHAR *)LowStr);
+				BtnSetText((BUTTON *)pObj, (XCHAR *)"Stop");
+            }
+
+            return (1);                 // process by default
+
+        case ID_BUTTON4:
+            if(objMsg == BTN_MSG_PRESSED)
+            {
+                if(!GetState(pObj, BTN_PRESSED))
+                {
+                    pOtherRbtn = GOLFindObject(ID_BUTTON5);
+                    ClrState(pOtherRbtn, BTN_PRESSED);
+                    SetState(pOtherRbtn, BTN_DRAW);
+                    SetState(pObj, BTN_PRESSED | BTN_DRAW);
+#if defined (USE_FOCUS)                    
+                    GOLSetFocus(pObj);  // set focus for the button
+#endif                    
+                }
+            }
+
+            return (0);                 // Do not process by default
+#if 0
+        case ID_BUTTON5:
+            if(objMsg == BTN_MSG_PRESSED)
+            {
+                if(!GetState(pObj, BTN_PRESSED))
+                {
+                    pOtherRbtn = GOLFindObject(ID_BUTTON4);
+                    ClrState(pOtherRbtn, BTN_PRESSED);
+                    SetState(pOtherRbtn, BTN_DRAW);
+                    SetState(pObj, BTN_PRESSED | BTN_DRAW);
+#if defined (USE_FOCUS)                                        
+                    GOLSetFocus(pObj);  // set focus for the button
+#endif                    
+                }
+            }
+
+            return (0);                 // Do not process by default
+
+        case ID_BUTTON6:
+            if(objMsg == BTN_MSG_PRESSED)
+            {                           // change face picture
+                BtnSetBitmap(pObj, (void *) &bulbon);
+                BtnSetText((BUTTON *)pObj, (XCHAR *)OnBulbStr);
+                ClrState(pObj, 0x00F0);
+                SetState(pObj, BTN_TEXTBOTTOM | BTN_TEXTRIGHT);
+            }
+
+            if((objMsg == BTN_MSG_RELEASED) || (objMsg == BTN_MSG_CANCELPRESS))
+            {
+                BtnSetBitmap(pObj, (void *) &bulboff);
+                BtnSetText((BUTTON *)pObj, (XCHAR *)OffBulbStr);
+                ClrState(pObj, 0x00F0);
+                SetState(pObj, BTN_TEXTTOP | BTN_TEXTLEFT);
+            }
+
+            return (1);                 // process by default
+#endif
+        default:
+            return (1);                 // process by default
+    }
+}
+
+
+
+
 
 
 
@@ -61,6 +223,22 @@ WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 WORD GOLDrawCallback(void)
 {
 	printf("In GOLDrawCallback\n");
+	
+    switch(screenState)
+    {
+        case CREATE_BUTTONS:
+            prevRefreshState = CREATE_BUTTONS;
+            CreateButtons();        // create window and buttons
+            screenState = DISPLAY_BUTTONS;                              // switch to next state
+            return (1);                                                 // draw objects created
+
+        case DISPLAY_BUTTONS:
+            return (1);                                                 // redraw objects if needed
+			
+		default:
+			return (1);    
+	}
+
 	return (1);
 }
 
@@ -92,6 +270,8 @@ void myCreateScheme( void )
 
 ///    altScheme->pFont = (void *)ptrLargeAsianFont;
 ///    navScheme->pFont = (void *)ptrLargeAsianFont;
+	altScheme->pFont = (void *)Gentium_Normal15;
+	navScheme->pFont = (void *)Gentium_Normal15;
 
     alt2Scheme->TextColor1 = BRIGHTRED;
     alt2Scheme->TextColor0 = BRIGHTBLUE;
@@ -122,6 +302,7 @@ void myCreateScheme( void )
     redScheme->TextColor0 = RGB565CONVERT(0xC8, 0xD5, 0x85);
     redScheme->TextColor1 = BLACK;
 ///    redScheme->pFont = (void *)ptrLargeAsianFont;
+	redScheme->pFont = (void *)Gentium_Normal25;
 
     greenScheme->Color0 = RGB565CONVERT(0x23, 0x9E, 0x0A);
     greenScheme->Color1 = BRIGHTGREEN;
@@ -130,6 +311,7 @@ void myCreateScheme( void )
     greenScheme->TextColor0 = RGB565CONVERT(0xDF, 0xAC, 0x83);
     greenScheme->TextColor1 = BLACK;
 ///    greenScheme->pFont = (void *)ptrLargeAsianFont;
+	greenScheme->pFont = (void *)Gentium_Normal25;
 
     yellowScheme->Color0 = BRIGHTYELLOW;
     yellowScheme->Color1 = YELLOW;
@@ -138,6 +320,7 @@ void myCreateScheme( void )
     yellowScheme->TextColor0 = RGB565CONVERT(0xAF, 0x34, 0xF3);
     yellowScheme->TextColor1 = RED;
 ///    yellowScheme->pFont = (void *)ptrLargeAsianFont;
+	yellowScheme->pFont = (void *)Gentium_Normal25;
 
     timeScheme->Color0 = BLACK;
     timeScheme->Color1 = WHITE;
@@ -197,10 +380,7 @@ void ObjectTest( void )
 	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, "MicroChip AppLib:v2.11");
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
+
 
 /***********************************************************************************************************/
     GOLInit();                          // Initialize graphics library and crete default style scheme for GOL

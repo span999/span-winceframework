@@ -549,6 +549,9 @@
     <ClCompile Include="ObjectTest.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Microchip\Graphics\Button.c">
+      <Filter>PIC-GraphicLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">
