@@ -10,6 +10,7 @@
 extern void  SDLInit(void);
 extern void  SDLDestroy(void);
 extern bool  SDLProcessEvent(void);
+extern bool  SDLProcessEventWIN32(void);
 extern void SDLScreenCallbackSet(void (*pfnCallback)(unsigned long ulMessage, long lX, long lY));
 extern const tDisplay SDLDisplay;
 

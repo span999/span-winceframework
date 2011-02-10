@@ -6,6 +6,8 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
+///#define		OLD_DEMO
+
 ///include this for grlib
 #include "grlib/grlib_set.h"
 
@@ -18,7 +20,7 @@
 
 
 
-
+#ifdef OLD_DEMO
 void graphicsDriver( void * pvParameters )
 {
 	SDLInit();	
@@ -47,7 +49,29 @@ void OnSliderChange(tWidget *pWidget, long lValue)
 	SliderTextSet((tSliderWidget *)pWidget, pcSliderText);
 	WidgetPaint(pWidget);
 }
+#endif
 
+#ifndef OLD_DEMO
+extern "C" void TransIOMsg(unsigned long ulMessage, long lX, long lY);
+void IODriver( void * pvParameters )
+{
+	SDLInit();	
+	WidgetMutexInit();
+	SDLScreenCallbackSet(TransIOMsg);	
+	bool done = false;
+	while(!done)
+	{
+		done = !SDLProcessEventWIN32();			
+///		WidgetMessageQueueProcess();
+		vTaskDelay(1);
+	}
+	SDLDestroy();
+	while(1)
+	{;}	
+}
+#endif
+
+#ifdef OLD_DEMO
 void vUserTask1(void *pvParameters)
 {
 	Slider(sld, WIDGET_ROOT, 0,0,
@@ -66,6 +90,7 @@ void vUserTask1(void *pvParameters)
 	while (1)
 	{;}
 }
+#endif
 
 
 void vUserTask2(void *pvParameters)
@@ -113,15 +138,22 @@ void vUserTask3(void *pvParameters)
 
 
 int main()
-{						
+{
+#ifdef OLD_DEMO						
 	///xTaskCreate( graphicsDriver, "gd", 100, NULL, configMAX_PRIORITIES, NULL );
 	xTaskCreate( graphicsDriver, ( signed char * )"gd", 100, NULL, configMAX_PRIORITIES, NULL );
 	printf(" graphicsDriver created\n");
-	
-	///xTaskCreate( vUserTask1, "Task2",100, NULL, 1, NULL );
-	///xTaskCreate( vUserTask1, ( signed char * )"Task1", 100, NULL, 1, NULL );
-	///printf(" vUserTask1 created\n");
+#else
+	xTaskCreate( IODriver, ( signed char * )"IO", 100, NULL, configMAX_PRIORITIES, NULL );
+	printf(" IODriver created\n");
+#endif
 
+#ifdef OLD_DEMO		
+	xTaskCreate( vUserTask1, "Task2",100, NULL, 1, NULL );
+	xTaskCreate( vUserTask1, ( signed char * )"Task1", 100, NULL, 1, NULL );
+	printf(" vUserTask1 created\n");
+#endif
+	
 ///	xTaskCreate( vUserTask2, ( signed char * )"Task2", 100, NULL, 1, NULL );
 ///	printf(" vUserTask2 created\n");
 

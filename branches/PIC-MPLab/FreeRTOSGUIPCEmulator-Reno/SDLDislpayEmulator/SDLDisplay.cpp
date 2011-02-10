@@ -674,7 +674,7 @@ bool SDLProcessEvent(void)
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
-				//printf("SDL_MOUSEBUTTONDOWN %ux%u", event.button.x, event.button.y); fflush(stdout);
+				printf("SDL_MOUSEBUTTONDOWN %ux%u", event.button.x, event.button.y); fflush(stdout);
 				buttDown = true;
 				
 				
@@ -686,7 +686,7 @@ bool SDLProcessEvent(void)
 				break;
 
 			case SDL_MOUSEBUTTONUP:
-				//printf("SDL_MOUSEBUTTONUP %ux%u", event.button.x, event.button.y); fflush(stdout);		
+				printf("SDL_MOUSEBUTTONUP %ux%u", event.button.x, event.button.y); fflush(stdout);		
 				buttDown = false;
 
 				if(g_pfnTSHandler)
@@ -697,7 +697,7 @@ bool SDLProcessEvent(void)
 				break;
 
 			case SDL_MOUSEMOTION: 
-				//printf("MOUSEMOTION %u,%u", event.motion.x, event.motion.y); fflush(stdout); 
+				printf("MOUSEMOTION %u,%u", event.motion.x, event.motion.y); fflush(stdout); 
 				if(g_pfnTSHandler)
 				{
 						// Send the pen up message to the touch screen event handler.
@@ -727,6 +727,122 @@ bool SDLProcessEvent(void)
 
 	return true;
 } // bool SDLProcessEvent(void)
+
+#if defined(WIN32)
+//*****************************************************************************
+//
+//! Handles events from keyboard and mouse.
+//!
+//! \param None.
+//!
+//! Esc causes exit, F1 displays on std output debug messages about 
+//! widget message queue
+//!
+//! \return true if user exits application.
+//
+//*****************************************************************************
+bool SDLProcessEventWIN32(void)
+{
+	SDL_Event event;		
+	
+	while(SDL_PollEvent(&event))
+	{
+		switch(event.type)
+		{
+			case SDL_KEYDOWN:
+				switch(event.key.keysym.sym)
+				{
+						case SDLK_ESCAPE:
+							SDL_RemoveTimer(timerID);
+							return false;				
+							break;
+
+						default:
+							break;
+				
+						case SDLK_F1:
+// 1. All messages discarded due to queue overflow (g_ulMQOverflow)
+// 2. Messages other than WIDGET_MSG_PTR_MOVE discarded due to queue
+//    overflow (g_ulMQNonMouseOverflow).  In this case, we also remember the
+//    last message that was discarded (g_ulMQLastLostMsg).
+// 3. The number of calls to WidgetMessageQueueAdd that fail due to the queue
+//    mutex already being held.
+// 4. The number of cases where WidgetMessageQueueAdd reused an unread
+//    WIDGET_MSG_PTR_MOVE message when a second one arrived before the previous
+//    one had been processed.
+//
+//*****************************************************************************
+					printf("g_ulMQOverflow %u\n", g_ulMQOverflow); 
+					printf("g_ulMQNonMouseOverflow %u\n", g_ulMQNonMouseOverflow); 
+					printf("g_ulMQLastLostMsg %u\n",g_ulMQLastLostMsg); 
+					printf("g_ulMQMutexClash %u\n",g_ulMQMutexClash); 
+					printf("g_ulMQMoveOverwrite %u\n", g_ulMQMoveOverwrite); 
+					printf("-------------------------------\n"); 
+					
+					fflush(stdout);
+				
+				} //switch(event.key.keysym.sym)
+				break;
+
+			case SDL_MOUSEBUTTONDOWN:
+				//printf("SDL_MOUSEBUTTONDOWN %ux%u", event.button.x, event.button.y);
+				fflush(stdout);
+				buttDown = true;
+				
+				
+				if(g_pfnTSHandler)
+				{
+					// Send the pen up message to the touch screen event handler.
+					g_pfnTSHandler(WIDGET_MSG_PTR_DOWN, event.button.x, event.button.y);
+				}			   			
+				break;
+
+			case SDL_MOUSEBUTTONUP:
+				//printf("SDL_MOUSEBUTTONUP %ux%u", event.button.x, event.button.y);
+				fflush(stdout);		
+				buttDown = false;
+
+				if(g_pfnTSHandler)
+				{
+					// Send the pen up message to the touch screen event handler.
+					g_pfnTSHandler(WIDGET_MSG_PTR_UP, event.button.x, event.button.y);
+				}
+				break;
+
+			case SDL_MOUSEMOTION: 
+				//printf("MOUSEMOTION %u,%u", event.motion.x, event.motion.y); fflush(stdout); 
+				if(g_pfnTSHandler)
+				{
+					// Send the pen up message to the touch screen event handler.
+					g_pfnTSHandler(WIDGET_MSG_PTR_MOVE, event.button.x, event.button.y);
+				}
+				break; 
+			case SDL_USEREVENT: 
+				//printf("user event"); fflush(stdout); 
+				//printf("%u", buttDown); fflush(stdout); 
+				/*if(g_pfnTSHandler)
+				{
+				}
+				*/	
+				break; 		
+
+			case SDL_QUIT:
+				return false;
+				break;
+
+			default:				
+					break;
+		} //switch(event.type)	
+		
+	} // while(SDL_PollEvent(&event))
+
+	displayFlush(NULL);
+
+	return true;
+} // bool SDLProcessEvent(void)
+#endif
+
+
 
 void SDLDestroy()
 {
