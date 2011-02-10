@@ -96,4 +96,81 @@
 #define WAIT_UNTIL_FINISH(x)    while(!x)
 
 
+/////////////////////////////////////////////////////////////////////////////
+//                            COLORS USED
+/////////////////////////////////////////////////////////////////////////////
+#define GRAY20      RGB565CONVERT(51, 51, 51)
+#define GRAY40      RGB565CONVERT(102, 102, 102)
+#define GRAY80      RGB565CONVERT(204, 204, 204)
+#define GRAY90      RGB565CONVERT(229, 229, 229)
+#define GRAY95      RGB565CONVERT(242, 242, 242)
+#define RED4        RGB565CONVERT(139, 0, 0)
+#define FIREBRICK1  RGB565CONVERT(255, 48, 48)
+#define DARKGREEN   RGB565CONVERT(0, 100, 0)
+#define PALEGREEN   RGB565CONVERT(152, 251, 152)
+#define LIGHTYELLOW RGB565CONVERT(238, 221, 130)
+#define GOLD        RGB565CONVERT(255, 215, 0)
+#define DARKORANGE  RGB565CONVERT(255, 140, 0)
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//                            DEMO STATES
+/////////////////////////////////////////////////////////////////////////////
+typedef enum
+{
+    CREATE_BUTTONS          = 0,
+    DISPLAY_BUTTONS,
+    CREATE_CHECKBOXES,
+    DISPLAY_CHECKBOXES,
+    CREATE_RADIOBUTTONS,
+    DISPLAY_RADIOBUTTONS,
+    CREATE_STATICTEXT,
+    DISPLAY_STATICTEXT,
+    CREATE_PICTURE,
+    DISPLAY_PICTURE,
+    CREATE_SLIDER,
+    DISPLAY_SLIDER,
+    CURSOR_DRAW_SLIDER,
+    CREATE_PROGRESSBAR,
+    DISPLAY_PROGRESSBAR,
+    CREATE_LISTBOX,
+    DISPLAY_LISTBOX,
+    CREATE_EDITBOX,
+    DISPLAY_EDITBOX,
+    CREATE_METER,
+    DISPLAY_METER,
+    CREATE_DIAL,
+    DISPLAY_DIAL,
+    CREATE_CUSTOMCONTROL,
+    DISPLAY_CUSTOMCONTROL,
+    CREATE_SIGNATURE,
+    DISPLAY_SIGNATURE,
+    BOX_DRAW_SIGNATURE,
+    CREATE_POT,
+    DISPLAY_POT,
+    BOX_DRAW_POT,
+    CREATE_ECG,
+    DISPLAY_ECG,
+    BOX_DRAW_ECG,
+    CREATE_PULLDOWN,
+    DISPLAY_PULLDOWN,
+
+    // these states are for time and date settings 0xF3xx is used here as a
+    // state ID to check when date and time are to be updated or not.
+    CREATE_DATETIME         = 0xF300,                       // creates the date and time setting menu		
+    DISPLAY_DATETIME        = 0xF301,                       // displays the menu for the date and time setting
+    DISPLAY_DATE_PDMENU     = 0xF302,                       // displays the pulldown menu to set one of the date items (month, day or year)
+    SHOW_DATE_PDMENU        = 0xF303,                       // creates the pulldown menu to set one of the date items (month, day or year)
+    HIDE_DATE_PDMENU        = 0xF304,                       // hides the pulldown menu to set one of the date items (month, day or year)
+} SCREEN_STATES;
+
+
+
+
+
+
+
 #endif	/*#ifndef __OBJECTTEST_H__*/

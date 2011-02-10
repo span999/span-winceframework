@@ -101,7 +101,7 @@
 *********************************************************************/
     #define USE_GOL             // Enable Graphics Object Layer.
 //#define USE_BUTTON          	// Enable Button Object.
-///#define USE_BUTTON_MULTI_LINE   // Enable Multi-Line Button Object
+#define USE_BUTTON_MULTI_LINE   // Enable Multi-Line Button Object
 ///#define USE_WINDOW				// Enable Window Object.
 ///#define USE_CHECKBOX			// Enable Checkbox Object.
 ///#define USE_RADIOBUTTON			// Enable Radio Button Object.
