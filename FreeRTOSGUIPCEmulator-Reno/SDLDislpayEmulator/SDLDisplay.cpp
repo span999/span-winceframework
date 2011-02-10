@@ -5,7 +5,13 @@
 
 #include "grlib/grlib.h"
 // touch screen emulation and debug variables
+#if defined(WIN32)
+#define WIDGET_MSG_PTR_DOWN     0x00000002
+#define WIDGET_MSG_PTR_MOVE     0x00000003
+#define WIDGET_MSG_PTR_UP       0x00000004
+#else
 #include "grlib/widget.h"
+#endif
 
 #include "SDLDisplay.h"
 
@@ -650,6 +656,9 @@ bool SDLProcessEvent(void)
 							break;
 				
 						case SDLK_F1:
+#if defined(WIN32)
+							;
+#else				
 // 1. All messages discarded due to queue overflow (g_ulMQOverflow)
 // 2. Messages other than WIDGET_MSG_PTR_MOVE discarded due to queue
 //    overflow (g_ulMQNonMouseOverflow).  In this case, we also remember the
@@ -669,7 +678,7 @@ bool SDLProcessEvent(void)
 					printf("-------------------------------\n"); 
 					
 					fflush(stdout);
-				
+#endif				
 				} //switch(event.key.keysym.sym)
 				break;
 
@@ -761,6 +770,9 @@ bool SDLProcessEventWIN32(void)
 							break;
 				
 						case SDLK_F1:
+#if defined(WIN32)
+							;
+#else
 // 1. All messages discarded due to queue overflow (g_ulMQOverflow)
 // 2. Messages other than WIDGET_MSG_PTR_MOVE discarded due to queue
 //    overflow (g_ulMQNonMouseOverflow).  In this case, we also remember the
@@ -780,7 +792,7 @@ bool SDLProcessEventWIN32(void)
 					printf("-------------------------------\n"); 
 					
 					fflush(stdout);
-				
+#endif				
 				} //switch(event.key.keysym.sym)
 				break;
 
