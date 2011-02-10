@@ -12,7 +12,7 @@
  *
  * Software License Agreement
  *
- * Copyright © 2008 Microchip Technology Inc.  All rights reserved.
+ * Copyright ?2008 Microchip Technology Inc.  All rights reserved.
  * Microchip licenses to you the right to use, modify, copy and distribute
  * Software only when embedded on a Microchip microcontroller or digital
  * signal controller, which is integrated into your product or third party
@@ -22,7 +22,7 @@
  * You should refer to the license agreement accompanying this Software
  * for additional information regarding your rights and obligations.
  *
- * SOFTWARE AND DOCUMENTATION ARE PROVIDED “AS IS” WITHOUT WARRANTY OF ANY
+ * SOFTWARE AND DOCUMENTATION ARE PROVIDED “AS IS?WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION, ANY WARRANTY
  * OF MERCHANTABILITY, TITLE, NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR
  * PURPOSE. IN NO EVENT SHALL MICROCHIP OR ITS LICENSORS BE LIABLE OR
@@ -127,8 +127,8 @@ void        GbSetText(GROUPBOX *pGb, XCHAR *pText);
 *        		 the user interface.
 *
 * Output: Returns the translated message depending on the received GOL message:
-*		  - GB_MSG_SELECTED – Group Box is selected
-*         - OBJ_MSG_INVALID – Group Box is not affected
+*		  - GB_MSG_SELECTED ?Group Box is selected
+*         - OBJ_MSG_INVALID ?Group Box is not affected
 *
 * Example:
 *   Usage is similar to BtnTranslateMsg() example.

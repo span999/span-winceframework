@@ -111,7 +111,7 @@
 ///#define USE_PROGRESSBAR			// Enable Progress Bar Object.
 ///#define USE_STATICTEXT			// Enable Static Text Object.
 ///#define USE_PICTURE				// Enable Picture Object.
-///#define USE_GROUPBOX			// Enable Group Box Object.
+#define USE_GROUPBOX			// Enable Group Box Object.
 ///#define USE_ROUNDDIAL			// Enable Dial Object.
 ///#define USE_METER				// Enable Meter Object.
 ///#define USE_DIGITALMETER        // Enable DigitalMeter Object.

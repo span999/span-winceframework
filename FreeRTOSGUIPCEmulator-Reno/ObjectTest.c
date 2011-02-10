@@ -209,8 +209,122 @@ WORD MsgButtons(WORD objMsg, OBJ_HEADER *pObj)
 
 
 
+//*****************************************************************************
+//
+//! Sends a pointer message.
+//!
+//! \param ulMessage is the pointer message to be sent.
+//! \param lX is the X coordinate associated with the message.
+//! \param lY is the Y coordinate associated with the message.
+//!
+//! This function sends a pointer message to the root widget.  A pointer driver
+//! (such as a touch screen driver) can use this function to deliver pointer
+//! activity to the widget tree without having to have direct knowledge of the
+//! structure of the widget framework.
+//!
+//! \return Returns 1 if the message was added to the queue, and 0 if it could
+//! not be added since the queue is full.
+//
+//*****************************************************************************
+#define WIDGET_MSG_PTR_DOWN     0x00000002
+#define WIDGET_MSG_PTR_MOVE     0x00000003
+#define WIDGET_MSG_PTR_UP       0x00000004
+
+static BOOL touchMsgUpdated = FALSE;
+static GOL_MSG touchMsg; 
+
+void TransIOMsg(unsigned long ulMessage, long lX, long lY)
+{
+    //
+    // Add the message to the widget message queue.
+    //
+    //return(WidgetMessageQueueAdd(WIDGET_ROOT, ulMessage, lX, lY, 1, 1));
+	
+	///printf("In TransIOMsg\n");
+	
+	if( WIDGET_MSG_PTR_DOWN == ulMessage )
+	{
+		printf("  mice down: x=%d y=%d\n", lX, lY );
+		touchMsg.type = TYPE_TOUCHSCREEN;
+		touchMsg.uiEvent = EVENT_PRESS;
+		touchMsg.param1 = lX;
+		touchMsg.param2 = lY;
+	}
+	else
+	if( WIDGET_MSG_PTR_UP == ulMessage )
+	{
+		printf("  mice up: x=%d y=%d\n", lX, lY );
+		touchMsg.type = TYPE_TOUCHSCREEN;
+		touchMsg.uiEvent = EVENT_RELEASE;
+		touchMsg.param1 = (SHORT)lX;
+		touchMsg.param2 = (SHORT)lY;
+	}
+	else
+	if( WIDGET_MSG_PTR_MOVE == ulMessage )
+	{
+		///printf("  mice move: x=%d y=%d\n", lX, lY );
+		touchMsg.type = TYPE_TOUCHSCREEN;
+		touchMsg.uiEvent = EVENT_MOVE;
+		touchMsg.param1 = (SHORT)lX;
+		touchMsg.param2 = (SHORT)lY;
+	}
+	else
+	{
+		printf("  mice unknow: x=%d y=%d\n", lX, lY );
+		touchMsg.type = TYPE_TOUCHSCREEN;
+		touchMsg.uiEvent = EVENT_INVALID;
+		touchMsg.param1 = (SHORT)lX;
+		touchMsg.param2 = (SHORT)lY;
+	}
+		
+	touchMsgUpdated = TRUE;
+	
+#if 0
+    tWidgetMessageQueue message;
 
 
+        message.ulFlags =  MQ_FLAG_POST_ORDER  | MQ_FLAG_STOP_ON_SUCCESS ;
+    	message.pWidget = WIDGET_ROOT;
+    	message.ulMessage = ulMessage;
+    	message.ulParam1 = lX;
+    	message.ulParam2 = lY;
+
+
+
+        //
+        // Write this message into the message queue.
+        //
+        if( errQUEUE_FULL == xQueueSend( grlibQueue,(const void *)&message, 0 ))
+        {
+            g_ulMQOverflow++;
+        }
+
+   //     portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
+#endif
+        //
+        // Success.
+        //
+        return;
+}
+
+void TouchGetMsg( GOL_MSG *msg )
+{
+	///TODO: move it to queue wait!!
+	while( !touchMsgUpdated )
+	{
+		///printf("Wait touch event!!\n");
+	}
+	
+	if( TRUE == touchMsgUpdated )
+	{
+		msg->type = touchMsg.type;
+		msg->uiEvent = touchMsg.uiEvent;
+		msg->param1 = touchMsg.param1;
+		msg->param2 = touchMsg.param2;
+		printf("  touch event %d,%d,%d,%d\n", msg->type, msg->uiEvent, msg->param1, msg->param2);
+		touchMsgUpdated = FALSE;
+	}
+}
 
 
 WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
@@ -233,6 +347,7 @@ WORD GOLDrawCallback(void)
             return (1);                                                 // draw objects created
 
         case DISPLAY_BUTTONS:
+///			screenState = CREATE_BUTTONS;                              // switch to next state
             return (1);                                                 // redraw objects if needed
 			
 		default:
@@ -393,7 +508,7 @@ void ObjectTest( void )
         if(GOLDraw())
         {                               // Draw GOL objects
             // Drawing is done here, process messages
-///            TouchGetMsg(&msg);          // Get message from touch screen
+            TouchGetMsg(&msg);          // Get message from touch screen
             GOLMsg(&msg);               // Process message
 #if defined (USE_FOCUS)                    
             #if !(defined(__dsPIC33FJ128GP804__) || defined(__PIC24HJ128GP504__))
@@ -402,6 +517,10 @@ void ObjectTest( void )
             #endif
 #endif //#if defined (USE_FOCUS)
         }
+		else
+		{
+			printf("In message loop: !GOLDraw()\n");
+		}
     }
 	
 }
