@@ -3,14 +3,39 @@
 
 #include <SDL.h>
 
-#include "grlib/grlib.h"
+///#include "grlib/grlib.h"
 // touch screen emulation and debug variables
 #if defined(WIN32)
 #define WIDGET_MSG_PTR_DOWN     0x00000002
 #define WIDGET_MSG_PTR_MOVE     0x00000003
 #define WIDGET_MSG_PTR_UP       0x00000004
+
+typedef struct
+{
+    //
+    //! The minimum X coordinate of the rectangle.
+    //
+    short sXMin;
+
+    //
+    //! The minimum Y coordinate of the rectangle.
+    //
+    short sYMin;
+
+    //
+    //! The maximum X coordinate of the rectangle.
+    //
+    short sXMax;
+
+    //
+    //! The maximum Y coordinate of the rectangle.
+    //
+    short sYMax;
+}
+tRectangle;
+
 #else
-#include "grlib/widget.h"
+///#include "grlib/widget.h"
 #endif
 
 #include "SDLDisplay.h"
@@ -871,6 +896,8 @@ void SDLDestroy()
 //! The display structure that describes the driver for the LibSDL driver.
 //
 //*****************************************************************************
+#if defined(WIN32)
+#else
 const tDisplay SDLDisplay =
 {
     sizeof(tDisplay),
@@ -885,6 +912,6 @@ const tDisplay SDLDisplay =
     displayTranslate,
     displayFlush
 };
-
+#endif
 
 
