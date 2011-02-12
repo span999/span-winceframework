@@ -6,6 +6,7 @@
 /// include this for PIC graphic lib
 #include "PICgraphic_set.h"
 
+#include "kbkeymap.h"
 #include "ObjectTest.h"
 #include "FontGentium.h"
 #include "1bpp_icons.h"
@@ -377,12 +378,9 @@ WORD MsgRenoDataSet(WORD objMsg, OBJ_HEADER* pObj)
 //! not be added since the queue is full.
 //
 //*****************************************************************************
-#define WIDGET_MSG_PTR_DOWN     0x00000002
-#define WIDGET_MSG_PTR_MOVE     0x00000003
-#define WIDGET_MSG_PTR_UP       0x00000004
 
-static BOOL touchMsgUpdated = FALSE;
-static GOL_MSG touchMsg; 
+static BOOL ioMsgUpdated = FALSE;
+static GOL_MSG ioMsg; 
 
 void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 {
@@ -396,39 +394,63 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 	if( WIDGET_MSG_PTR_DOWN == ulMessage )
 	{
 		printf("  mice down: x=%d y=%d\n", lX, lY );
-		touchMsg.type = TYPE_TOUCHSCREEN;
-		touchMsg.uiEvent = EVENT_PRESS;
-		touchMsg.param1 = lX;
-		touchMsg.param2 = lY;
+		ioMsg.type = TYPE_TOUCHSCREEN;
+		ioMsg.uiEvent = EVENT_PRESS;
+		ioMsg.param1 = (SHORT)lX;
+		ioMsg.param2 = (SHORT)lY;
 	}
 	else
 	if( WIDGET_MSG_PTR_UP == ulMessage )
 	{
 		printf("  mice up: x=%d y=%d\n", lX, lY );
-		touchMsg.type = TYPE_TOUCHSCREEN;
-		touchMsg.uiEvent = EVENT_RELEASE;
-		touchMsg.param1 = (SHORT)lX;
-		touchMsg.param2 = (SHORT)lY;
+		ioMsg.type = TYPE_TOUCHSCREEN;
+		ioMsg.uiEvent = EVENT_RELEASE;
+		ioMsg.param1 = (SHORT)lX;
+		ioMsg.param2 = (SHORT)lY;
 	}
 	else
 	if( WIDGET_MSG_PTR_MOVE == ulMessage )
 	{
 		///printf("  mice move: x=%d y=%d\n", lX, lY );
-		touchMsg.type = TYPE_TOUCHSCREEN;
-		touchMsg.uiEvent = EVENT_MOVE;
-		touchMsg.param1 = (SHORT)lX;
-		touchMsg.param2 = (SHORT)lY;
+		ioMsg.type = TYPE_TOUCHSCREEN;
+		ioMsg.uiEvent = EVENT_MOVE;
+		ioMsg.param1 = (SHORT)lX;
+		ioMsg.param2 = (SHORT)lY;
+	}
+	else
+	if( WIDGET_MSG_KEY_DOWN == ulMessage )
+	{
+		printf("  keybd down: ID=%d kbscan=%d\n", lX, lY );
+		ioMsg.type = TYPE_KEYBOARD;
+		ioMsg.uiEvent = EVENT_KEYSCAN;
+		ioMsg.param1 = (SHORT)lX;
+		ioMsg.param2 = (SHORT)lY;
+		
+		/*re-mapping key, simulate the key pressed/repeased*/
+		if( KB_KEY_1 == ioMsg.param2 )
+		{	/*simulate the "BACK" key repeased*/
+			ioMsg.param1 = ID_BUTTON_BACK;
+			ioMsg.param2 = SCAN_CRA_RELEASED;
+		}
+		else
+		if( KB_KEY_2 == ioMsg.param2 )
+		{	/*simulate the "NEXT" key repeased*/
+			ioMsg.param1 = ID_BUTTON_NEXT;
+			ioMsg.param2 = SCAN_CRA_RELEASED;
+		}	
+		else
+			ioMsg.param1 = 0;
 	}
 	else
 	{
-		printf("  mice unknow: x=%d y=%d\n", lX, lY );
-		touchMsg.type = TYPE_TOUCHSCREEN;
-		touchMsg.uiEvent = EVENT_INVALID;
-		touchMsg.param1 = (SHORT)lX;
-		touchMsg.param2 = (SHORT)lY;
+		printf("  io unknow: x=%d y=%d\n", lX, lY );
+		ioMsg.type = TYPE_UNKNOWN;
+		ioMsg.uiEvent = EVENT_INVALID;
+		ioMsg.param1 = (SHORT)lX;
+		ioMsg.param2 = (SHORT)lY;
 	}
 		
-	touchMsgUpdated = TRUE;
+	ioMsgUpdated = TRUE;
 	
 #if 0
     tWidgetMessageQueue message;
@@ -460,30 +482,30 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 
 void IOGetMsg( GOL_MSG *msg )
 {
-	///TODO: move it to queue wait!!
-	while( !touchMsgUpdated )
+	/* TODO: move it to queue wait!! */
+	while( !ioMsgUpdated )
 	{
-		///printf("Wait touch event!!\n");
+		/* printf("Wait touch event!!\n"); */
 	}
 	
-	if( TRUE == touchMsgUpdated )
+	if( TRUE == ioMsgUpdated )
 	{
-		msg->type = touchMsg.type;
-		msg->uiEvent = touchMsg.uiEvent;
-		msg->param1 = touchMsg.param1;
-		msg->param2 = touchMsg.param2;
+		msg->type = ioMsg.type;
+		msg->uiEvent = ioMsg.uiEvent;
+		msg->param1 = ioMsg.param1;
+		msg->param2 = ioMsg.param2;
 		
 		if( EVENT_MOVE != msg->uiEvent )
-			printf("  touch event %d,%d,%d,%d\n", msg->type, msg->uiEvent, msg->param1, msg->param2);
+			printf("  io event %d,%d,%d,%d\n", msg->type, msg->uiEvent, msg->param1, msg->param2);
 		
-		touchMsgUpdated = FALSE;
+		ioMsgUpdated = FALSE;
 	}
 }
 
 
 WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 {
-///	printf("In GOLMsgCallback\n");
+	printf("In GOLMsgCallback\n");
 
 #if 0
     // beep if button is pressed
@@ -613,6 +635,28 @@ WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
     }
 #endif
 
+#if defined(WIN32)
+#if 0
+	printf("In GOLMsgCallback 00\n");
+    if( (screenState == DISPLAY_BUTTONS) )
+    {
+		printf("In GOLMsgCallback 11\n");
+        prevState = screenState - 1;        // save the current create state
+        screenState = CREATE_RENO_DATASET;      // go to date and time setting screen
+		return (1);
+	}
+	else
+    if( (screenState == DISPLAY_RENO_DATASET) )
+    {
+		printf("In GOLMsgCallback 22\n");
+        prevState = screenState - 1;        // save the current create state
+        screenState = CREATE_BUTTONS;      // go to date and time setting screen
+		return (1);
+	}
+	else
+		;
+#endif
+#endif
 
     // process messages for demo screens
     switch(screenState)
@@ -691,7 +735,7 @@ WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 
 WORD GOLDrawCallback(void)
 {
-///	printf("In GOLDrawCallback\n");
+	printf("In GOLDrawCallback\n");
 	
     switch(screenState)
     {
