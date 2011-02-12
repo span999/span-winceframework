@@ -315,9 +315,11 @@ void    PutPixel(SHORT x, SHORT y);
 * Side Effects: none
 *
 ********************************************************************/
-///WORD    GetPixel(SHORT x, SHORT y);
+#if defined(WIN32)
 WORD    _GetPixel_(SHORT x, SHORT y);
-
+#else
+WORD    GetPixel(SHORT x, SHORT y)
+#endif
 /*********************************************************************
 * Macros: SetClipRgn(left, top, right, bottom)
 *
