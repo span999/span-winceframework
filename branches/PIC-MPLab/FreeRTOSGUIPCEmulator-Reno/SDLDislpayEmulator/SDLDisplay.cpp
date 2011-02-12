@@ -6,9 +6,9 @@
 ///#include "grlib/grlib.h"
 // touch screen emulation and debug variables
 #if defined(WIN32)
-#define WIDGET_MSG_PTR_DOWN     0x00000002
-#define WIDGET_MSG_PTR_MOVE     0x00000003
-#define WIDGET_MSG_PTR_UP       0x00000004
+
+#include "kbkeymap.h"
+
 
 typedef struct
 {
@@ -796,34 +796,21 @@ bool SDLProcessEventWIN32(void)
 
 #if defined(WIN32)
 						case SDLK_0:
-							printf("  Number key 0 %d\n", event.key.keysym.sym);
-							break;
 						case SDLK_1:
-							printf("  Number key 1 %d\n", event.key.keysym.sym);
-							break;
 						case SDLK_2:
-							printf("  Number key 2 %d\n", event.key.keysym.sym);
-							break;
 						case SDLK_3:
-							printf("  Number key 3 %d\n", event.key.keysym.sym);
-							break;
 						case SDLK_4:
-							printf("  Number key 4 %d\n", event.key.keysym.sym);
-							break;
 						case SDLK_5:
-							printf("  Number key 5 %d\n", event.key.keysym.sym);
-							break;
 						case SDLK_6:
-							printf("  Number key 6 %d\n", event.key.keysym.sym);
-							break;
 						case SDLK_7:
-							printf("  Number key 7 %d\n", event.key.keysym.sym);
-							break;
 						case SDLK_8:
-							printf("  Number key 8 %d\n", event.key.keysym.sym);
-							break;
 						case SDLK_9:
-							printf("  Number key 9 %d\n", event.key.keysym.sym);
+							printf("  Number key %d %d\n", event.key.keysym.sym-KB_KEY_0, event.key.keysym.sym);
+							if(g_pfnTSHandler)
+							{
+								// Send the pen up message to the touch screen event handler.
+								g_pfnTSHandler(WIDGET_MSG_KEY_DOWN, 0, event.key.keysym.sym);
+							}
 							break;
 						
 #endif
