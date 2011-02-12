@@ -793,7 +793,41 @@ bool SDLProcessEventWIN32(void)
 
 						default:
 							break;
-				
+
+#if defined(WIN32)
+						case SDLK_0:
+							printf("  Number key 0 %d\n", event.key.keysym.sym);
+							break;
+						case SDLK_1:
+							printf("  Number key 1 %d\n", event.key.keysym.sym);
+							break;
+						case SDLK_2:
+							printf("  Number key 2 %d\n", event.key.keysym.sym);
+							break;
+						case SDLK_3:
+							printf("  Number key 3 %d\n", event.key.keysym.sym);
+							break;
+						case SDLK_4:
+							printf("  Number key 4 %d\n", event.key.keysym.sym);
+							break;
+						case SDLK_5:
+							printf("  Number key 5 %d\n", event.key.keysym.sym);
+							break;
+						case SDLK_6:
+							printf("  Number key 6 %d\n", event.key.keysym.sym);
+							break;
+						case SDLK_7:
+							printf("  Number key 7 %d\n", event.key.keysym.sym);
+							break;
+						case SDLK_8:
+							printf("  Number key 8 %d\n", event.key.keysym.sym);
+							break;
+						case SDLK_9:
+							printf("  Number key 9 %d\n", event.key.keysym.sym);
+							break;
+						
+#endif
+							
 						case SDLK_F1:
 #if defined(WIN32)
 							;

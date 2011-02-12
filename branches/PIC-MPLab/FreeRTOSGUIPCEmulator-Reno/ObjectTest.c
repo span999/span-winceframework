@@ -458,7 +458,7 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
         return;
 }
 
-void TouchGetMsg( GOL_MSG *msg )
+void IOGetMsg( GOL_MSG *msg )
 {
 	///TODO: move it to queue wait!!
 	while( !touchMsgUpdated )
@@ -881,12 +881,12 @@ void ObjectTest( void )
         if(GOLDraw())
         {                               // Draw GOL objects
             // Drawing is done here, process messages
-            TouchGetMsg(&msg);          // Get message from touch screen
+            IOGetMsg(&msg);          // Get message from touch screen
             GOLMsg(&msg);               // Process message
 #if defined (USE_FOCUS)                    
             #if !(defined(__dsPIC33FJ128GP804__) || defined(__PIC24HJ128GP504__))
 ///            SideButtonsMsg(&msg);       // Get message from side buttons
-            GOLMsg(&msg);               // Process message
+///            GOLMsg(&msg);               // Process message
             #endif
 #endif //#if defined (USE_FOCUS)
         }
