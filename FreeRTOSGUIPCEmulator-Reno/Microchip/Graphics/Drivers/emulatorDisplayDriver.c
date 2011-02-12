@@ -145,15 +145,15 @@ BOOL IsScreenValid( void )
 	else
 	{
 		///screen = SDL_SetVideoMode(320, 240, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
-		screen = SDL_SetVideoMode(GetMaxX()+1, GetMaxY()+1, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+		screen = SDL_SetVideoMode(GetMaxX(), GetMaxY(), 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
 		///screen = SDL_SetVideoMode(GetMaxX()+1, GetMaxY()+1, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
 		if( NULL == screen )
 		{
-			printf(" Unable to set %dx%d video: %s\n", GetMaxX()+1, GetMaxY()+1, SDL_GetError());
+			printf(" Unable to set %dx%d video: %s\n", GetMaxX(), GetMaxY(), SDL_GetError());
 			bRet = FALSE;
 		}
 		else
-			printf(" Create to set %dx%d video: %s\n", GetMaxX()+1, GetMaxY()+1, SDL_GetError());
+			printf(" Create to set %dx%d video: %s\n", GetMaxX(), GetMaxY(), SDL_GetError());
 	}
 	
 	return bRet;
@@ -164,8 +164,8 @@ BOOL IsXYValid(SHORT x, SHORT y)
 	BOOL bRet = FALSE;
 
 	
-	if( x >= 0 && x <= GetMaxX()+1 )
-		if( y >= 0 && y <= GetMaxY()+1 )
+	if( x >= 0 && x <= GetMaxX() )
+		if( y >= 0 && y <= GetMaxY() )
 			bRet = TRUE;
 	
 	if( !bRet )
@@ -372,8 +372,11 @@ void PutPixel(SHORT x, SHORT y)
 * Note: none
 *
 ********************************************************************/
-///WORD GetPixel(SHORT x, SHORT y)
+#if defined(WIN32)
 WORD _GetPixel_(SHORT x, SHORT y)
+#else
+WORD GetPixel(SHORT x, SHORT y)
+#endif
 {
     return (0);
 }
@@ -526,11 +529,13 @@ SHORT GetTextWidth(XCHAR *textString, void *font)
         case FLASH:
 		#if defined(WIN32)
 			pHeader = (FONT_HEADER *)font;
+            fontFirstChar = (char)pHeader->firstChar;
+            fontLastChar = (char)pHeader->lastChar;
 		#else
             pHeader = (FONT_HEADER *) ((FONT_FLASH *)font)->address;
-		#endif	
             fontFirstChar = pHeader->firstChar;
             fontLastChar = pHeader->lastChar;
+		#endif	
             pChTable = (GLYPH_ENTRY *) (pHeader + 1);
             textWidth = 0;
             while((XCHAR)15 < (XCHAR)(ch = *textString++))
