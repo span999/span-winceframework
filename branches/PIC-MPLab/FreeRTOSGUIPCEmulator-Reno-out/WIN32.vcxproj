@@ -140,14 +140,8 @@
     <ClCompile Include="FreeRTOS\queue.c" />
     <ClCompile Include="FreeRTOS\tasks.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Microchip\Graphics\Button.c" />
     <ClCompile Include="Microchip\Graphics\DisplayDriver.c" />
-    <ClCompile Include="Microchip\Graphics\GOL.c" />
-    <ClCompile Include="Microchip\Graphics\GOLFontDefault.c" />
-    <ClCompile Include="Microchip\Graphics\GroupBox.c" />
     <ClCompile Include="Microchip\Graphics\Primitive.c" />
-    <ClCompile Include="Microchip\Graphics\StaticText.c" />
-    <ClCompile Include="ObjectTest.c" />
     <ClCompile Include="Pictures C32.c" />
     <ClCompile Include="PrimitiveTest.c" />
     <ClCompile Include="SDLDislpayEmulator\SDLDisplay.cpp" />

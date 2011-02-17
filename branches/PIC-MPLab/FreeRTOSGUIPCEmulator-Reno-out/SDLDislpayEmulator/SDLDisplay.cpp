@@ -794,26 +794,6 @@ bool SDLProcessEventWIN32(void)
 						default:
 							break;
 
-#if defined(WIN32)
-						case SDLK_0:
-						case SDLK_1:
-						case SDLK_2:
-						case SDLK_3:
-						case SDLK_4:
-						case SDLK_5:
-						case SDLK_6:
-						case SDLK_7:
-						case SDLK_8:
-						case SDLK_9:
-							printf("  Number key %d %d\n", event.key.keysym.sym-KB_KEY_0, event.key.keysym.sym);
-							if(g_pfnTSHandler)
-							{
-								// Send the PC keybd message to the io event handler.
-								g_pfnTSHandler(WIDGET_MSG_KEY_DOWN, 0, event.key.keysym.sym);
-							}
-							break;
-						
-#endif
 							
 						case SDLK_F1:
 #if defined(WIN32)
