@@ -805,6 +805,14 @@ bool SDLProcessEventWIN32(void)
 						case SDLK_7:
 						case SDLK_8:
 						case SDLK_9:
+						case SDLK_y:
+						case SDLK_u:
+						case SDLK_i:
+						case SDLK_o:
+						case SDLK_h:
+						case SDLK_j:
+						case SDLK_k:
+						case SDLK_l:
 							printf("  Number key %d %d\n", event.key.keysym.sym-KB_KEY_0, event.key.keysym.sym);
 							if(g_pfnTSHandler)
 							{

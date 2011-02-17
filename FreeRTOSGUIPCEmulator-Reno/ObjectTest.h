@@ -91,7 +91,25 @@
 #define ID_EB_MINUTE        206
 #define ID_EB_SECOND        207
 
+
+#define ID_RENO_BASE		500
+
+///for HW key simulate
+#define ID_BTN_UP          		(ID_RENO_BASE+1)
+#define ID_BTN_UP_HOLD     		(ID_RENO_BASE+2)
+#define ID_BTN_DOWN         	(ID_RENO_BASE+3)
+#define ID_BTN_DOWN_HOLD    	(ID_RENO_BASE+4)
+#define ID_BTN_EXIT          	(ID_RENO_BASE+5)
+#define ID_BTN_EXIT_HOLD     	(ID_RENO_BASE+6)
+#define ID_BTN_ENTER          	(ID_RENO_BASE+7)
+#define ID_BTN_ENTER_HOLD     	(ID_RENO_BASE+8)
+
+
 #define NAV_BTN_WIDTH		25
+
+
+
+
 
 #define WAIT_UNTIL_FINISH(x)    while(!x)
 
