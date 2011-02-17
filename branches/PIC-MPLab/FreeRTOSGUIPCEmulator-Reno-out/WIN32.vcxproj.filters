@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{051b1e23-070f-4559-b503-5a6b930179b8}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{64be57d8-5f9a-4e8f-a974-f83e7a24745c}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="FreeRTOS">
+      <UniqueIdentifier>{0206cbc6-7582-4745-b971-0c27bc718b1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreeRTOS\Include">
+      <UniqueIdentifier>{d68d87e2-4f46-4e52-8a3f-70f23ed82e29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{7abd1a9a-4994-46ac-b6be-7e84422217df}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="DisplayEmulator">
+      <UniqueIdentifier>{9859a868-ba1c-43d6-abf1-44df89009c41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Grlib">
+      <UniqueIdentifier>{9de06a12-6084-4971-ae8c-1d1f70f3ca02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Grlib\Include">
+      <UniqueIdentifier>{bc6da0f4-2826-4ef3-b099-618e8be4d8d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Grlib\Fonts">
+      <UniqueIdentifier>{6a747c8e-2694-4b25-9264-012d7b24d80d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PIC-GraphicLib">
+      <UniqueIdentifier>{dd2f8209-ce7c-4993-a776-99aeb9714dae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PIC-GraphicLib\Include">
+      <UniqueIdentifier>{85db22f6-3bef-4514-8829-ab40c9f51db6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="FreeRTOS\portable\MemMang\heap_3.c">
+      <Filter>FreeRTOS</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeRTOS\list.c">
+      <Filter>FreeRTOS</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeRTOS\portable\WIN32\port.c">
+      <Filter>FreeRTOS</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeRTOS\queue.c">
+      <Filter>FreeRTOS</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeRTOS\tasks.c">
+      <Filter>FreeRTOS</Filter>
+    </ClCompile>
+    <ClCompile Include="Microchip\Graphics\Primitive.c">
+      <Filter>PIC-GraphicLib</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLDislpayEmulator\SDLDisplay.cpp">
+      <Filter>DisplayEmulator</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="defaults.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Microchip\Graphics\DisplayDriver.c">
+      <Filter>PIC-GraphicLib</Filter>
+    </ClCompile>
+    <ClCompile Include="Pictures C32.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FontGentium.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="1bpp_icons.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="4bpp_icons.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimitiveTest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Microchip\Graphics\GOL.c">
+      <Filter>PIC-GraphicLib</Filter>
+    </ClCompile>
+    <ClCompile Include="Microchip\Graphics\GOLFontDefault.c">
+      <Filter>PIC-GraphicLib</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectTest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Microchip\Graphics\Button.c">
+      <Filter>PIC-GraphicLib</Filter>
+    </ClCompile>
+    <ClCompile Include="Microchip\Graphics\GroupBox.c">
+      <Filter>PIC-GraphicLib</Filter>
+    </ClCompile>
+    <ClCompile Include="Microchip\Graphics\StaticText.c">
+      <Filter>PIC-GraphicLib</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Board.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeRTOSConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeRTOS\portable\WIN32\cpuemu.h">
+      <Filter>FreeRTOS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeRTOS\include\croutine.h">
+      <Filter>FreeRTOS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeRTOS\include\FreeRTOS.h">
+      <Filter>FreeRTOS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeRTOS\include\list.h">
+      <Filter>FreeRTOS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeRTOS\include\portable.h">
+      <Filter>FreeRTOS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeRTOS\portable\WIN32\portmacro.h">
+      <Filter>FreeRTOS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeRTOS\include\projdefs.h">
+      <Filter>FreeRTOS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeRTOS\include\queue.h">
+      <Filter>FreeRTOS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeRTOS\include\semphr.h">
+      <Filter>FreeRTOS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeRTOS\include\StackMacros.h">
+      <Filter>FreeRTOS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeRTOS\include\task.h">
+      <Filter>FreeRTOS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLDislpayEmulator\SDLDisplay.h">
+      <Filter>DisplayEmulator</Filter>
+    </ClInclude>
+    <ClInclude Include="Microchip\Include\Graphics\Primitive.h">
+      <Filter>PIC-GraphicLib\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Microchip\Include\Graphics\Graphics.h">
+      <Filter>PIC-GraphicLib\Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
