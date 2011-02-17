@@ -10,6 +10,21 @@
 #define WIDGET_MSG_KEY_UP       0x00000030
 
 
+#define  KMOD_NONE  			0x0000
+#define	 KMOD_LSHIFT			0x0001
+#define  KMOD_RSHIFT			0x0002
+#define  KMOD_LCTRL				0x0040
+#define  KMOD_RCTRL				0x0080
+#define  KMOD_LALT				0x0100
+#define  KMOD_RALT				0x0200
+#define  KMOD_LMETA				0x0400
+#define  KMOD_RMETA				0x0800
+#define  KMOD_NUM				0x1000
+#define  KMOD_CAPS				0x2000
+#define  KMOD_MODE				0x4000
+#define  KMOD_RESERVED			0x8000
+
+
 /// key code define
 #define KB_KEY_UNKNOW			0
 
@@ -52,6 +67,11 @@
 #define KB_KEY_Z				122
 
 
+#define KB_KEY_RSHIFT			303
+#define KB_KEY_LSHIFT			304
 
+
+#define	KB_MOD_MASK				0xFFFF0000
+#define	KB_CODE_MASK			0x0000FFFF
 
 #endif /* #ifndef __KBKEYMAP_H__ */
