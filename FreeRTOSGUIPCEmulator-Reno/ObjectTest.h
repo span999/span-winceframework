@@ -191,6 +191,21 @@ typedef enum
 
 
 
+typedef WORD (*PFNMSGCALLBACK)(WORD objMsg, OBJ_HEADER *pObj);
+typedef WORD (*PFNDRAWCALLBACK)(void);
+
+
+
+typedef struct
+{
+    PFNMSGCALLBACK    pfnMsgCallback;     // 
+    PFNDRAWCALLBACK   pfnDrawCallback;      // 
+    SHORT   height;          // 
+    SHORT   width;           // 
+} FRAME_HEADER;
+
+
+
 
 
 
