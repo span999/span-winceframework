@@ -459,9 +459,9 @@ void SetFont(void *font)
     _fontFirstChar = pHeader->firstChar;
     _fontLastChar = pHeader->lastChar;
     _fontHeight = pHeader->height;
-	printf(" firstChar=%d[0x%x]\n", _fontFirstChar, _fontFirstChar);
-	printf(" lastChar=%d[0x%x]\n", _fontLastChar, _fontLastChar);
-	printf(" height=%d[0x%x]\n", _fontHeight, _fontHeight);
+///	printf(" firstChar=%d[0x%x]\n", _fontFirstChar, _fontFirstChar);
+///	printf(" lastChar=%d[0x%x]\n", _fontLastChar, _fontLastChar);
+///	printf(" height=%d[0x%x]\n", _fontHeight, _fontHeight);
 }
 #endif //#ifndef USE_DRV_SETFONT
 
@@ -540,14 +540,14 @@ SHORT GetTextWidth(XCHAR *textString, void *font)
             textWidth = 0;
             while((XCHAR)15 < (XCHAR)(ch = *textString++))
             {
-				printf(" this char=%c[0x%x]\n", *(XCHAR *)textString, *(XCHAR *)textString );
+				///printf(" this char=%c[0x%x]\n", *(XCHAR *)textString, *(XCHAR *)textString );
                 if((XCHAR)ch < (XCHAR)fontFirstChar)
                     continue;
                 if((XCHAR)ch > (XCHAR)fontLastChar)
                     continue;
                 textWidth += (pChTable + ((XCHAR)ch - (XCHAR)fontFirstChar))->width;
             }
-			printf(" textWidth=%c[0x%x],%d[0x%x]\n", ch, ch, textWidth, textWidth);
+			///printf(" textWidth=%c[0x%x],%d[0x%x]\n", ch, ch, textWidth, textWidth);
             return (textWidth);
                 #endif
                 #ifdef USE_FONT_EXTERNAL
@@ -600,7 +600,7 @@ SHORT GetTextHeight(void *font)
                 #ifdef USE_FONT_FLASH
         case FLASH:
 		#if defined(WIN32)
-			printf(" height=%d[0x%x]\n", ((FONT_HEADER *) ((FONT_HEADER *)font))->height, ((FONT_HEADER *) ((FONT_HEADER *)font))->height);
+			///printf(" height=%d[0x%x]\n", ((FONT_HEADER *) ((FONT_HEADER *)font))->height, ((FONT_HEADER *) ((FONT_HEADER *)font))->height);
 			return ((FONT_HEADER *) ((FONT_HEADER *)font))->height;
 		#else
             return ((FONT_HEADER *) ((FONT_FLASH *)font)->address)->height;
