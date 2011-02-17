@@ -797,11 +797,17 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 	else
 	if( WIDGET_MSG_KEY_DOWN == ulMessage )
 	{
-		printf("  keybd down: ID=%d kbscan=%d\n", lX, lY );
+		SHORT	kbscan;
+		SHORT	kbstat;
+		
+		kbscan = (lY&0xFFFF);
+		kbstat = ((lY>>16)&0xFFFF);
+		printf("  keybd down: ID=%d kbscan=%d kbstat=0x%x\n", lX, kbscan, kbstat );
 		ioMsg.type = TYPE_KEYBOARD;
 		ioMsg.uiEvent = EVENT_KEYSCAN;
 		ioMsg.param1 = (SHORT)lX;
-		ioMsg.param2 = (SHORT)lY;
+///		ioMsg.param2 = (SHORT)lY;
+		ioMsg.param2 = (SHORT)kbscan;
 		
 		/*re-mapping key, simulate the key pressed/repeased*/
 		if( KB_KEY_1 == ioMsg.param2 )
@@ -818,7 +824,10 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 		else
 		if( KB_KEY_I == ioMsg.param2 )
 		{	/*simulate the "UP" key repeased*/
-			ioMsg.param1 = ID_BTN_UP;
+			if( (kbstat&0x3) > 0 )
+				ioMsg.param1 = ID_BTN_UP_HOLD;
+			else
+				ioMsg.param1 = ID_BTN_UP;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
 		}
 		else
@@ -830,7 +839,10 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 		else
 		if( KB_KEY_K == ioMsg.param2 )
 		{	/*simulate the "DOWN" key repeased*/
-			ioMsg.param1 = ID_BTN_DOWN;
+			if( (kbstat&0x3) > 0 )
+				ioMsg.param1 = ID_BTN_DOWN_HOLD;
+			else
+				ioMsg.param1 = ID_BTN_DOWN;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
 		}
 		else
@@ -842,7 +854,10 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 		else
 		if( KB_KEY_U == ioMsg.param2 )
 		{	/*simulate the "EXIT" key repeased*/
-			ioMsg.param1 = ID_BTN_EXIT;
+			if( (kbstat&0x3) > 0 )
+				ioMsg.param1 = ID_BTN_EXIT_HOLD;
+			else
+				ioMsg.param1 = ID_BTN_EXIT;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
 		}
 		else
@@ -854,7 +869,10 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 		else
 		if( KB_KEY_J == ioMsg.param2 )
 		{	/*simulate the "ENTER" key repeased*/
-			ioMsg.param1 = ID_BTN_ENTER;
+			if( (kbstat&0x3) > 0 )
+				ioMsg.param1 = ID_BTN_ENTER_HOLD;
+			else
+				ioMsg.param1 = ID_BTN_ENTER;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
 		}
 		else
