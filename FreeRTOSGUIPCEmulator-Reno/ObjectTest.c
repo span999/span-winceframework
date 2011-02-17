@@ -81,7 +81,7 @@ void CreateDefaultBtn(void)
         );                          // use navigation scheme
 
 	/* add Reno 4(8) buttons simulate (include press/hold action) */
-    obj = (OBJ_HEADER *)BtnCreate
+    BtnCreate
         (
             ID_BTN_UP,         // button ID
             0,
@@ -94,7 +94,7 @@ void CreateDefaultBtn(void)
             (XCHAR *)NULL, 			// RIGHT arrow as text
             navScheme
         );                          // use navigation scheme
-    obj = (OBJ_HEADER *)BtnCreate
+    BtnCreate
         (
             ID_BTN_DOWN,         // button ID
             0,
@@ -107,7 +107,7 @@ void CreateDefaultBtn(void)
             (XCHAR *)NULL, 			// RIGHT arrow as text
             navScheme
         );                          // use navigation scheme
-    obj = (OBJ_HEADER *)BtnCreate
+    BtnCreate
         (
             ID_BTN_EXIT,         // button ID
             0,
@@ -120,7 +120,7 @@ void CreateDefaultBtn(void)
             (XCHAR *)NULL, 			// RIGHT arrow as text
             navScheme
         );                          // use navigation scheme
-    obj = (OBJ_HEADER *)BtnCreate
+    BtnCreate
         (
             ID_BTN_ENTER,         // button ID
             0,
@@ -134,7 +134,7 @@ void CreateDefaultBtn(void)
             navScheme
         );                          // use navigation scheme
 
-    obj = (OBJ_HEADER *)BtnCreate
+    BtnCreate
         (
             ID_BTN_UP_HOLD,         // button ID
             0,
@@ -147,7 +147,7 @@ void CreateDefaultBtn(void)
             (XCHAR *)NULL, 			// RIGHT arrow as text
             navScheme
         );                          // use navigation scheme
-    obj = (OBJ_HEADER *)BtnCreate
+    BtnCreate
         (
             ID_BTN_DOWN_HOLD,         // button ID
             0,
@@ -160,7 +160,7 @@ void CreateDefaultBtn(void)
             (XCHAR *)NULL, 			// RIGHT arrow as text
             navScheme
         );                          // use navigation scheme
-    obj = (OBJ_HEADER *)BtnCreate
+    BtnCreate
         (
             ID_BTN_EXIT_HOLD,         // button ID
             0,
@@ -173,7 +173,7 @@ void CreateDefaultBtn(void)
             (XCHAR *)NULL, 			// RIGHT arrow as text
             navScheme
         );                          // use navigation scheme
-    obj = (OBJ_HEADER *)BtnCreate
+    BtnCreate
         (
             ID_BTN_ENTER_HOLD,         // button ID
             0,
@@ -324,7 +324,7 @@ WORD MsgButtons(WORD objMsg, OBJ_HEADER *pObj)
             if(objMsg == BTN_MSG_RELEASED)
             {
                 ///screenState = CREATE_ECG;           // goto ECG demo screen
-				screenState = CREATE_RENO_DATASET;
+				screenState = CREATE_LISTBOX;
             }
 
             return (1);                             // process by default
@@ -464,7 +464,7 @@ WORD MsgRenoDataSet(WORD objMsg, OBJ_HEADER* pObj)
             if(objMsg == BTN_MSG_RELEASED)
             {
                ///screenState = CREATE_BUTTONS;// goto check box demo screen
-			   screenState = CREATE_BUTTONS;// goto check box demo screen
+				screenState = CREATE_LISTBOX;// goto check box demo screen
             }
             return 1; 							// process by default
 
@@ -472,6 +472,7 @@ WORD MsgRenoDataSet(WORD objMsg, OBJ_HEADER* pObj)
             if(objMsg == BTN_MSG_RELEASED){
                 ///screenState = CREATE_RENO_HOME; 		// goto ECG demo screen
 				screenState = CREATE_BUTTONS;// goto check box demo screen
+
             }
             return 1; 							// process by default
 
@@ -479,6 +480,261 @@ WORD MsgRenoDataSet(WORD objMsg, OBJ_HEADER* pObj)
             return 1; 							// process by default
     }
 }
+
+
+void AddItemList(XCHAR *pText, LISTBOX *pLb)
+{
+    XCHAR   *pointer;
+    WORD    ctr;
+
+    if(pText != NULL)
+    {
+        pointer = pText;
+        ctr = 0;
+        while(*pointer)
+        {
+            if(NULL == LbAddItem(pLb, NULL, pointer, NULL, 0, ctr))
+                break;
+            while(*pointer++ > 31);
+            if(*(pointer - 1) == 0)
+                break;
+            ctr++;
+        }
+    }
+}
+
+
+#define pMyItemList (XCHAR*)ListboxLstStr
+
+// creates list box demo screen
+void CreateListBox(void)
+{
+    LISTBOX *pLb;
+
+    #define LB_ORIGIN_X ((GetMaxX() - 260 + 1) / 2)
+    #define LB_ORIGIN_Y ((40 + GetMaxY() - 192 + 1) / 2)
+
+    GOLFree();                                      // free memory for the objects in the previous linked list and start new list
+	
+	CreateDefaultBtn();
+///    CreatePage((XCHAR *)ListBoxStr);                //
+    pLb = LbCreate
+        (
+            ID_LISTBOX1,                            // ID
+            0,
+            0,
+            GetMaxX(),
+            GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
+            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+///            pMyItemList,
+            (XCHAR*)"ListBox",
+            altScheme
+        );                                          // use alternate scheme
+	
+	
+	AddItemList( (XCHAR *)"ListItem1", pLb);
+	AddItemList( (XCHAR *)"ListItem2", pLb);
+#if 0		
+    SldCreate
+    (
+        ID_SLIDER1,                                 // ID
+        LB_ORIGIN_X + 220,
+        LB_ORIGIN_Y + 82,
+        LB_ORIGIN_X + 250,
+        LB_ORIGIN_Y + 160,                          // dimension
+        SLD_DRAW | SLD_SCROLLBAR | SLD_VERTICAL,    // vertical, will be dislayed after creation
+        LbGetCount(pLb),                            // range
+        1,                          // page
+        LbGetCount(pLb) - 1,        // pos
+        altScheme
+    );                              // use alternate scheme
+    BtnCreate
+    (
+        ID_BUTTON1,                 // ID
+        LB_ORIGIN_X + 220,
+        LB_ORIGIN_Y + 52,
+        LB_ORIGIN_X + 250,
+        LB_ORIGIN_Y + 82,
+        0,                          // dimension (no radius)
+        BTN_DRAW,                   // will be dislayed after creation
+        NULL,                       // no bitmap
+        (XCHAR *)UpArrowStr,        // Up Arrow
+        altScheme
+    );                              // use alternate scheme
+    BtnCreate
+    (
+        ID_BUTTON2,                 // ID
+        LB_ORIGIN_X + 220,
+        LB_ORIGIN_Y + 162,
+        LB_ORIGIN_X + 250,
+        LB_ORIGIN_Y + 192,
+        0,                          // dimension (no radius)
+        BTN_DRAW,                   // will be dislayed after creation
+        NULL,                       // no bitmap
+        (XCHAR *)DownArrowStr,      // Down Arrow
+        altScheme
+    );                              // use alternate scheme
+    CbCreate
+    (
+        ID_CHECKBOX1,               // ID
+        LB_ORIGIN_X + 10,
+        LB_ORIGIN_Y + 20,
+        LB_ORIGIN_X + 110,
+        LB_ORIGIN_Y + 45,           // dimension
+        CB_DRAW,                    // will be dislayed after creation
+        (XCHAR *)SingleStr,         // "Single"
+        altScheme
+    );                              // alternative GOL scheme
+    CbCreate
+    (
+        ID_CHECKBOX2,               // ID
+        LB_ORIGIN_X + 140,
+        LB_ORIGIN_Y + 20,
+        LB_ORIGIN_X + 240,
+        LB_ORIGIN_Y + 45,           // dimension
+        CB_DRAW,                    // will be dislayed after creation
+        (XCHAR *)AlignCenterStr,    // "Center"
+        altScheme
+    );                              // alternative GOL scheme
+    GbCreate
+    (
+        ID_GROUPBOX1,               // ID
+        LB_ORIGIN_X + 0,
+        LB_ORIGIN_Y + 0,
+        LB_ORIGIN_X + 127,
+        LB_ORIGIN_Y + 50,           // dimension
+        GB_DRAW | GB_CENTER_ALIGN,  // will be dislayed after creation
+        (XCHAR *)SelectionStr,      // "Selection"
+        alt4Scheme
+    );                              // alternate scheme
+    GbCreate
+    (
+        ID_GROUPBOX2,               // ID
+        LB_ORIGIN_X + 130,
+        LB_ORIGIN_Y + 0,
+        LB_ORIGIN_X + 260,
+        LB_ORIGIN_Y + 50,           // dimension
+        GB_DRAW | GB_CENTER_ALIGN,  // will be dislayed after creation
+        (XCHAR *)AlignmentStr,      // "Alignment"
+        alt4Scheme
+    );                              // alternate scheme
+#endif
+}
+
+// processes messages for list box demo screen
+WORD MsgListBox(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+    LISTBOX *pLb;
+///    SLIDER  *pSld;
+
+    pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
+///    pSld = (SLIDER *)GOLFindObject(ID_SLIDER1);
+
+    switch(GetObjID(pObj))
+    {
+        case ID_LISTBOX1:
+
+            // Process message by default
+            LbMsgDefault(objMsg, (LISTBOX *)pObj, pMsg);
+
+            // Set new list box position
+///            SldSetPos(pSld, LbGetCount(pLb) - LbGetFocusedItem(pLb));
+///            SetState(pSld, SLD_DRAW_THUMB);
+
+            // The message was processed
+            return (0);
+#if 0
+        case ID_SLIDER1:
+
+			if((objMsg == SLD_MSG_INC) || (objMsg == SLD_MSG_DEC)) 			
+            {
+	        	// Process message by default
+	            SldMsgDefault(objMsg, (SLIDER *)pObj, pMsg);
+	
+	            // Set new list box position
+	            if(LbGetFocusedItem(pLb) != LbGetCount(pLb) - SldGetPos(pSld))
+	            {
+	                LbSetFocusedItem(pLb, LbGetCount(pLb) - SldGetPos(pSld));
+	                SetState(pLb, LB_DRAW_ITEMS);
+	            }
+	        } 
+
+            // The message was processed
+            return (0);
+
+        case ID_BUTTON1:
+            if(objMsg == BTN_MSG_RELEASED)
+            {
+                LbSetFocusedItem(pLb, LbGetFocusedItem(pLb) - 1);
+                SetState(pLb, LB_DRAW_ITEMS);
+                SldSetPos(pSld, SldGetPos(pSld) + 1);
+                SetState(pSld, SLD_DRAW_THUMB);
+            }
+
+            return (1);
+
+        case ID_BUTTON2:
+            if(objMsg == BTN_MSG_RELEASED)
+            {
+                LbSetFocusedItem(pLb, LbGetFocusedItem(pLb) + 1);
+                SetState(pLb, LB_DRAW_ITEMS);
+                SldSetPos(pSld, SldGetPos(pSld) - 1);
+                SetState(pSld, SLD_DRAW_THUMB);
+            }
+
+            return (1);
+
+        case ID_CHECKBOX1:
+            if(objMsg == CB_MSG_CHECKED)
+            {
+                SetState(pLb, LB_SINGLE_SEL | LB_DRAW);
+                LbChangeSel(pLb, pLb->pFocusItem);
+            }
+            else
+            {
+                ClrState(pLb, LB_SINGLE_SEL);
+            }
+
+            return (1);
+
+        case ID_CHECKBOX2:
+            if(objMsg == CB_MSG_CHECKED)
+            {
+                SetState(pLb, LB_CENTER_ALIGN);
+            }
+            else
+            {
+                ClrState(pLb, LB_CENTER_ALIGN);
+            }
+
+            SetState(pLb, LB_DRAW);
+            return (1);
+#endif
+        case ID_BUTTON_NEXT:
+            if(objMsg == BTN_MSG_RELEASED)
+            {
+                ///screenState = CREATE_EDITBOX;       // goto edit box screen
+				screenState = CREATE_BUTTONS;       // goto edit box screen
+				printf("123\n");
+            }
+
+            return (1);                             // process by default
+
+        case ID_BUTTON_BACK:
+            if(objMsg == BTN_MSG_RELEASED)
+            {
+                ///screenState = CREATE_PROGRESSBAR;   // goto progress bar screen
+				screenState = CREATE_RENO_DATASET;   // goto progress bar screen
+				printf("456\n");
+            }
+
+            return (1);                             // process by default
+
+        default:
+            return (1);                             // process by default
+    }
+}
+
 
 
 
@@ -674,7 +930,7 @@ void IOGetMsg( GOL_MSG *msg )
 
 WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 {
-	printf("In GOLMsgCallback\n");
+///	printf("In GOLMsgCallback\n");
 
 #if 0
     // beep if button is pressed
@@ -874,10 +1130,10 @@ WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 
         case DISPLAY_CUSTOMCONTROL:
             return (MsgCustomControl(objMsg, pObj, pMsg));
-
+#endif
         case DISPLAY_LISTBOX:
             return (MsgListBox(objMsg, pObj, pMsg));
-
+#if 0
         case DISPLAY_EDITBOX:
             return (MsgEditBox(objMsg, pObj, pMsg));
 
@@ -904,13 +1160,13 @@ WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 
 WORD GOLDrawCallback(void)
 {
-	printf("In GOLDrawCallback\n");
+///	printf("In GOLDrawCallback\n");
 	
     switch(screenState)
     {
         case CREATE_BUTTONS:
             prevRefreshState = CREATE_BUTTONS;
-            CreateButtons();        // create window and buttons
+            CreateButtons();        									// create window and buttons
             screenState = DISPLAY_BUTTONS;                              // switch to next state
             return (1);                                                 // draw objects created
 
@@ -927,6 +1183,53 @@ WORD GOLDrawCallback(void)
         case DISPLAY_RENO_DATASET:
             return (1); 									// redraw objects if needed
 
+        case CREATE_LISTBOX:
+            prevRefreshState = CREATE_LISTBOX;
+            CreateListBox();                    // create list box test screen
+            screenState = DISPLAY_LISTBOX;      // switch to next state
+            return (1);                         // draw objects created
+
+        case DISPLAY_LISTBOX:
+
+            // this moves the slider and editbox for the date setting to
+            // move while the up or down arrow buttons are pressed
+#if 0
+            if((tick - prevTick) > 5000)
+            {
+                pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
+///                pSld = (SLIDER *)GOLFindObject(ID_SLIDER1);
+///                pObj = GOLFindObject(ID_BUTTON1);
+
+                if(GetState(pObj, BTN_PRESSED))
+                {
+                    LbSetFocusedItem(pLb, LbGetFocusedItem(pLb) - 1);
+                    SetState(pLb, LB_DRAW_ITEMS);
+                    SldSetPos(pSld, SldGetPos(pSld) + 1);
+                    SetState(pSld, SLD_DRAW_THUMB);
+                }
+
+                pObj = GOLFindObject(ID_BUTTON2);
+
+                if(GetState(pObj, BTN_PRESSED))
+                {
+                    LbSetFocusedItem(pLb, LbGetFocusedItem(pLb) + 1);
+                    SetState(pLb, LB_DRAW_ITEMS);
+                    SldSetPos(pSld, SldGetPos(pSld) - 1);
+                    SetState(pSld, SLD_DRAW_THUMB);
+                }
+
+                prevTick = tick;
+            }
+#else
+			{    
+				LISTBOX *pLb;
+				pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
+				SetState(pLb, LB_DRAW_ITEMS);
+			}	
+#endif
+            return (1);                         // draw objects
+
+			
 		default:
 			return (1);    
 	}

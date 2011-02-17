@@ -106,7 +106,7 @@
 ///#define USE_CHECKBOX			// Enable Checkbox Object.
 ///#define USE_RADIOBUTTON			// Enable Radio Button Object.
 ///#define USE_EDITBOX				// Enable Edit Box Object.
-///#define USE_LISTBOX				// Enable List Box Object.
+#define USE_LISTBOX				// Enable List Box Object.
 ///#define USE_SLIDER          	// Enable Slider or Scroll Bar Object.
 ///#define USE_PROGRESSBAR			// Enable Progress Bar Object.
 #define USE_STATICTEXT			// Enable Static Text Object.
