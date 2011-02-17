@@ -102,6 +102,9 @@
     <ClCompile Include="Microchip\Graphics\StaticText.c">
       <Filter>PIC-GraphicLib</Filter>
     </ClCompile>
+    <ClCompile Include="Microchip\Graphics\ListBox.c">
+      <Filter>PIC-GraphicLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">

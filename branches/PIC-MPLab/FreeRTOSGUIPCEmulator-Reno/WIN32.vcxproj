@@ -145,6 +145,7 @@
     <ClCompile Include="Microchip\Graphics\GOL.c" />
     <ClCompile Include="Microchip\Graphics\GOLFontDefault.c" />
     <ClCompile Include="Microchip\Graphics\GroupBox.c" />
+    <ClCompile Include="Microchip\Graphics\ListBox.c" />
     <ClCompile Include="Microchip\Graphics\Primitive.c" />
     <ClCompile Include="Microchip\Graphics\StaticText.c" />
     <ClCompile Include="ObjectTest.c" />
