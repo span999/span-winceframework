@@ -43,6 +43,8 @@ SCREEN_STATES   prevRefreshState = CREATE_BUTTONS; // used to mark the start of 
 ///#define DEFAULTBTN_WIDTH	(GetMaxY()/2)
 #define DEFAULTBTN_WIDTH	70
 #define DEFAULTBTN_HEIGHT	20
+#define HWBTN_WIDTH		20
+#define HWBTN_HEIGHT	15
 
 
 void CreateDefaultBtn(void)
@@ -78,7 +80,115 @@ void CreateDefaultBtn(void)
             navScheme
         );                          // use navigation scheme
 
-		#if defined (USE_FOCUS)                    
+	/* add Reno 4(8) buttons simulate (include press/hold action) */
+    obj = (OBJ_HEADER *)BtnCreate
+        (
+            ID_BTN_UP,         // button ID
+            0,
+            0 + (HWBTN_HEIGHT*0),
+            HWBTN_WIDTH,
+            HWBTN_HEIGHT*1,
+            0,                      // dimension (with radius = 0)
+            BTN_HIDE,               // will be dislayed and disabled after creation
+            NULL,                   // no bitmap
+            (XCHAR *)NULL, 			// RIGHT arrow as text
+            navScheme
+        );                          // use navigation scheme
+    obj = (OBJ_HEADER *)BtnCreate
+        (
+            ID_BTN_DOWN,         // button ID
+            0,
+            0 + (HWBTN_HEIGHT*1),
+            HWBTN_WIDTH,
+            HWBTN_HEIGHT*2,
+            0,                      // dimension (with radius = 0)
+            BTN_HIDE,               // will be dislayed and disabled after creation
+            NULL,                   // no bitmap
+            (XCHAR *)NULL, 			// RIGHT arrow as text
+            navScheme
+        );                          // use navigation scheme
+    obj = (OBJ_HEADER *)BtnCreate
+        (
+            ID_BTN_EXIT,         // button ID
+            0,
+            0 + (HWBTN_HEIGHT*2),
+            HWBTN_WIDTH,
+            HWBTN_HEIGHT*3,
+            0,                      // dimension (with radius = 0)
+            BTN_HIDE,               // will be dislayed and disabled after creation
+            NULL,                   // no bitmap
+            (XCHAR *)NULL, 			// RIGHT arrow as text
+            navScheme
+        );                          // use navigation scheme
+    obj = (OBJ_HEADER *)BtnCreate
+        (
+            ID_BTN_ENTER,         // button ID
+            0,
+            0 + (HWBTN_HEIGHT*3),
+            HWBTN_WIDTH,
+            HWBTN_HEIGHT*4,
+            0,                      // dimension (with radius = 0)
+            BTN_HIDE,               // will be dislayed and disabled after creation
+            NULL,                   // no bitmap
+            (XCHAR *)NULL, 			// RIGHT arrow as text
+            navScheme
+        );                          // use navigation scheme
+
+    obj = (OBJ_HEADER *)BtnCreate
+        (
+            ID_BTN_UP_HOLD,         // button ID
+            0,
+            0 + (HWBTN_HEIGHT*4),
+            HWBTN_WIDTH,
+            HWBTN_HEIGHT*5,
+            0,                      // dimension (with radius = 0)
+            BTN_HIDE,               // will be dislayed and disabled after creation
+            NULL,                   // no bitmap
+            (XCHAR *)NULL, 			// RIGHT arrow as text
+            navScheme
+        );                          // use navigation scheme
+    obj = (OBJ_HEADER *)BtnCreate
+        (
+            ID_BTN_DOWN_HOLD,         // button ID
+            0,
+            0 + (HWBTN_HEIGHT*5),
+            HWBTN_WIDTH,
+            HWBTN_HEIGHT*6,
+            0,                      // dimension (with radius = 0)
+            BTN_HIDE,               // will be dislayed and disabled after creation
+            NULL,                   // no bitmap
+            (XCHAR *)NULL, 			// RIGHT arrow as text
+            navScheme
+        );                          // use navigation scheme
+    obj = (OBJ_HEADER *)BtnCreate
+        (
+            ID_BTN_EXIT_HOLD,         // button ID
+            0,
+            0 + (HWBTN_HEIGHT*6),
+            HWBTN_WIDTH,
+            HWBTN_HEIGHT*7,
+            0,                      // dimension (with radius = 0)
+            BTN_HIDE,               // will be dislayed and disabled after creation
+            NULL,                   // no bitmap
+            (XCHAR *)NULL, 			// RIGHT arrow as text
+            navScheme
+        );                          // use navigation scheme
+    obj = (OBJ_HEADER *)BtnCreate
+        (
+            ID_BTN_ENTER_HOLD,         // button ID
+            0,
+            0 + (HWBTN_HEIGHT*8),
+            HWBTN_WIDTH,
+            HWBTN_HEIGHT*9,
+            0,                      // dimension (with radius = 0)
+            BTN_HIDE,               // will be dislayed and disabled after creation
+            NULL,                   // no bitmap
+            (XCHAR *)NULL, 			// RIGHT arrow as text
+            navScheme
+        );                          // use navigation scheme
+
+		
+#if defined (USE_FOCUS)                    
     GOLSetFocus(obj);   // set focus for the button
 #endif  
   
@@ -219,6 +329,17 @@ WORD MsgButtons(WORD objMsg, OBJ_HEADER *pObj)
 
             return (1);                             // process by default
 
+        case ID_BTN_UP:
+        case ID_BTN_UP_HOLD:
+        case ID_BTN_DOWN:
+        case ID_BTN_DOWN_HOLD:
+        case ID_BTN_EXIT:
+        case ID_BTN_EXIT_HOLD:
+        case ID_BTN_ENTER:
+        case ID_BTN_ENTER_HOLD:
+            return (0);                             // do nothing since it's HW key simulate
+	
+			
         case ID_BUTTON1:
             return (1);                 // process by default
 
@@ -437,7 +558,55 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 		{	/*simulate the "NEXT" key repeased*/
 			ioMsg.param1 = ID_BUTTON_NEXT;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
-		}	
+		}
+		else
+		if( KB_KEY_I == ioMsg.param2 )
+		{	/*simulate the "UP" key repeased*/
+			ioMsg.param1 = ID_BTN_UP;
+			ioMsg.param2 = SCAN_CRA_RELEASED;
+		}
+		else
+		if( KB_KEY_O == ioMsg.param2 )
+		{	/*simulate the "UP" key hold*/
+			ioMsg.param1 = ID_BTN_UP_HOLD;
+			ioMsg.param2 = SCAN_CRA_RELEASED;
+		}
+		else
+		if( KB_KEY_K == ioMsg.param2 )
+		{	/*simulate the "DOWN" key repeased*/
+			ioMsg.param1 = ID_BTN_DOWN;
+			ioMsg.param2 = SCAN_CRA_RELEASED;
+		}
+		else
+		if( KB_KEY_L == ioMsg.param2 )
+		{	/*simulate the "DOWN" key hold*/
+			ioMsg.param1 = ID_BTN_DOWN_HOLD;
+			ioMsg.param2 = SCAN_CRA_RELEASED;
+		}
+		else
+		if( KB_KEY_U == ioMsg.param2 )
+		{	/*simulate the "EXIT" key repeased*/
+			ioMsg.param1 = ID_BTN_EXIT;
+			ioMsg.param2 = SCAN_CRA_RELEASED;
+		}
+		else
+		if( KB_KEY_Y == ioMsg.param2 )
+		{	/*simulate the "EXIT" key hold*/
+			ioMsg.param1 = ID_BTN_EXIT_HOLD;
+			ioMsg.param2 = SCAN_CRA_RELEASED;
+		}
+		else
+		if( KB_KEY_J == ioMsg.param2 )
+		{	/*simulate the "ENTER" key repeased*/
+			ioMsg.param1 = ID_BTN_ENTER;
+			ioMsg.param2 = SCAN_CRA_RELEASED;
+		}
+		else
+		if( KB_KEY_H == ioMsg.param2 )
+		{	/*simulate the "ENTER" key hold*/
+			ioMsg.param1 = ID_BTN_ENTER_HOLD;
+			ioMsg.param2 = SCAN_CRA_RELEASED;
+		}
 		else
 			ioMsg.param1 = 0;
 	}
