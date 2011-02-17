@@ -28,7 +28,7 @@ extern "C" void TransIOMsg(unsigned long ulMessage, long lX, long lY);
 void IODriver( void * pvParameters )
 {
 	SDLInit();	
-	SDLScreenCallbackSet(TransIOMsg);	
+	
 	bool done = false;
 	while(!done)
 	{
@@ -76,35 +76,14 @@ void vUserTask2(void *pvParameters)
 }
 
 
-void vUserTask3(void *pvParameters)
-{
-
-	InitGraph();
-	
-	// Clear screen
-	ClearDevice();
-	ObjectTest();
-
-	vTaskDelay(800);
-	
-	// Suspend ourselves.
-	vTaskSuspend( NULL );
-
-	while (1)
-	{;}
-}
 
 
 int main()
 {
-#ifdef OLD_DEMO						
-	///xTaskCreate( graphicsDriver, "gd", 100, NULL, configMAX_PRIORITIES, NULL );
-	xTaskCreate( graphicsDriver, ( signed char * )"gd", 100, NULL, configMAX_PRIORITIES, NULL );
-	printf(" graphicsDriver created\n");
-#else
+
 	xTaskCreate( IODriver, ( signed char * )"IO", 100, NULL, configMAX_PRIORITIES, NULL );
 	printf(" IODriver created\n");
-#endif
+
 
 #ifdef OLD_DEMO		
 	xTaskCreate( vUserTask1, "Task2",100, NULL, 1, NULL );
@@ -112,15 +91,9 @@ int main()
 	printf(" vUserTask1 created\n");
 #endif
 
-#if 0
 	/* for PrimitiveTest */
 	xTaskCreate( vUserTask2, ( signed char * )"Task2", 100, NULL, 1, NULL );
 	printf(" vUserTask2 created\n");
-#else
-	/* for ObjectTest */
-	xTaskCreate( vUserTask3, ( signed char * )"Task3", 100, NULL, 1, NULL );
-	printf(" vUserTask3 created\n");
-#endif
 	
 	/* Start the scheduler, this function should not return as it causes the execution
 	context to change from main() to one of the created tasks. */
