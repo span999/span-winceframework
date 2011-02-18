@@ -178,6 +178,8 @@ typedef enum
 ///	
 	CREATE_RENO_DATASET,
 	DISPLAY_RENO_DATASET,
+	CREATE_TEXTENTRYPAD,
+	DISPLAY_TEXTENTRYPAD,
 ///
     // these states are for time and date settings 0xF3xx is used here as a
     // state ID to check when date and time are to be updated or not.
@@ -191,22 +193,43 @@ typedef enum
 
 
 
-typedef WORD (*PFNMSGCALLBACK)(WORD objMsg, OBJ_HEADER *pObj);
+typedef WORD (*PFNMSGCALLBACK)(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
 typedef WORD (*PFNDRAWCALLBACK)(void);
-
+///typedef WORD (*PFNBTNHANDLE)(OBJ_HEADER objID);
+typedef WORD (*PFNBTNHANDLE)(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
 
 
 typedef struct
 {
-    PFNMSGCALLBACK    pfnMsgCallback;     // 
-    PFNDRAWCALLBACK   pfnDrawCallback;      // 
+    PFNMSGCALLBACK		pfnMsgCallback;     // 
+    PFNDRAWCALLBACK		pfnDrawCallback;    // 
+	PFNBTNHANDLE		pfnBtnHandle;		// handle button event for this frame.
     SHORT   height;          // 
     SHORT   width;           // 
 } FRAME_HEADER;
 
 
+typedef struct
+{
+	SCREEN_STATES		privStat;
+	SCREEN_STATES		nowStat;
+	SCREEN_STATES		nextStat;
+	FRAME_HEADER*		pnowStatFrame;
+	BOOL 				IsFrameCreate;
+} SCREEN_STATUS;
+
+
+/// API for screen status handle
+void scrInitStat(SCREEN_STATUS* pScreenStat);
+void scrNextStat(SCREEN_STATUS* pScreenStat);
+void scrPrivStat(SCREEN_STATUS* pScreenStat);
+
+
+/// use for MsgCallback & DrawCallback
+WORD scrMsgCbHandler(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
+void scrDrawCbHandler(void);
 
 
 
 
-#endif	/*#ifndef __OBJECTTEST_H__*/
+#endif	/*#ifndef __OBJECTTEST_H__*/
