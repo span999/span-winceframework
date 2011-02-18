@@ -11,7 +11,7 @@
 #include "FontGentium.h"
 #include "1bpp_icons.h"
 #include "4bpp_icons.h"
-
+#include "magellan_logo.h"
 
 
 GOL_SCHEME      *altScheme;                                 // alternative style scheme
@@ -33,6 +33,8 @@ OBJ_HEADER      *pGenObj;                                   // pointer to a gene
 ///PROGRESSBAR     *pProgressBar;                              // pointer to progress bar object for progress bar demo
 ///SLIDER          *pSlider;                                   // pointer to the slider controlling the animation speed
 
+SCREEN_STATUS	scrStatus;
+SCREEN_STATUS* psrcStat;
 
 SCREEN_STATES   screenState = CREATE_BUTTONS;               // current state of main demo state mashine
 
@@ -194,6 +196,53 @@ void CreateDefaultBtn(void)
   
 }
 
+
+WORD MsgDefaultBtn(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+        case ID_BUTTON_NEXT:
+            if(objMsg == BTN_MSG_RELEASED)
+				scrNextStat( psrcStat );
+            return (1);                             // process by default
+
+        case ID_BUTTON_BACK:
+            if(objMsg == BTN_MSG_RELEASED)
+				scrPrivStat( psrcStat );
+            return (1);                             // process by default
+
+        case ID_BTN_UP:
+            if(objMsg == BTN_MSG_RELEASED)
+				scrPrivStat( psrcStat );
+			return (0);
+			
+        case ID_BTN_UP_HOLD:
+			return (0); 
+			
+        case ID_BTN_DOWN:
+            if(objMsg == BTN_MSG_RELEASED)
+				scrNextStat( psrcStat );
+			return (0); 
+			
+        case ID_BTN_DOWN_HOLD:
+			return (0); 
+			
+        case ID_BTN_EXIT:
+            if(objMsg == BTN_MSG_RELEASED)
+				scrPrivStat( psrcStat );
+			return (0);  
+
+        case ID_BTN_EXIT_HOLD:
+        case ID_BTN_ENTER:
+        case ID_BTN_ENTER_HOLD:
+            return (0);                             // do nothing since it's HW key simulate
+	
+        default:
+            return (1);                 // process by default
+    }
+}
+
+
 void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText, char *pFunc, char *pData, char *pUnit)
 {
 
@@ -304,42 +353,13 @@ void CreateButtons(void)
 }
 
 /* */
-WORD MsgButtons(WORD objMsg, OBJ_HEADER *pObj)
+WORD MsgButtons(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 {
     OBJ_HEADER  *pOtherRbtn;
 	static BOOL bPressed = FALSE;
 
     switch(GetObjID(pObj))
-    {
-        case ID_BUTTON_NEXT:
-            if(objMsg == BTN_MSG_RELEASED)
-            {
-                ///screenState = CREATE_CHECKBOXES;    // goto check box demo screen
-				screenState = CREATE_RENO_DATASET;
-            }
-
-            return (1);                             // process by default
-
-        case ID_BUTTON_BACK:
-            if(objMsg == BTN_MSG_RELEASED)
-            {
-                ///screenState = CREATE_ECG;           // goto ECG demo screen
-				screenState = CREATE_LISTBOX;
-            }
-
-            return (1);                             // process by default
-
-        case ID_BTN_UP:
-        case ID_BTN_UP_HOLD:
-        case ID_BTN_DOWN:
-        case ID_BTN_DOWN_HOLD:
-        case ID_BTN_EXIT:
-        case ID_BTN_EXIT_HOLD:
-        case ID_BTN_ENTER:
-        case ID_BTN_ENTER_HOLD:
-            return (0);                             // do nothing since it's HW key simulate
-	
-			
+    {			
         case ID_BUTTON1:
             return (1);                 // process by default
 
@@ -386,50 +406,25 @@ WORD MsgButtons(WORD objMsg, OBJ_HEADER *pObj)
             }
 
             return (0);                 // Do not process by default
-#if 0
-        case ID_BUTTON5:
-            if(objMsg == BTN_MSG_PRESSED)
-            {
-                if(!GetState(pObj, BTN_PRESSED))
-                {
-                    pOtherRbtn = GOLFindObject(ID_BUTTON4);
-                    ClrState(pOtherRbtn, BTN_PRESSED);
-                    SetState(pOtherRbtn, BTN_DRAW);
-                    SetState(pObj, BTN_PRESSED | BTN_DRAW);
-#if defined (USE_FOCUS)                                        
-                    GOLSetFocus(pObj);  // set focus for the button
-#endif                    
-                }
-            }
 
-            return (0);                 // Do not process by default
-
-        case ID_BUTTON6:
-            if(objMsg == BTN_MSG_PRESSED)
-            {                           // change face picture
-                BtnSetBitmap(pObj, (void *) &bulbon);
-                BtnSetText((BUTTON *)pObj, (XCHAR *)OnBulbStr);
-                ClrState(pObj, 0x00F0);
-                SetState(pObj, BTN_TEXTBOTTOM | BTN_TEXTRIGHT);
-            }
-
-            if((objMsg == BTN_MSG_RELEASED) || (objMsg == BTN_MSG_CANCELPRESS))
-            {
-                BtnSetBitmap(pObj, (void *) &bulboff);
-                BtnSetText((BUTTON *)pObj, (XCHAR *)OffBulbStr);
-                ClrState(pObj, 0x00F0);
-                SetState(pObj, BTN_TEXTTOP | BTN_TEXTLEFT);
-            }
-
-            return (1);                 // process by default
-#endif
-        default:
+		default:
             return (1);                 // process by default
     }
 }
 
+WORD MsgButtonsDefaultBtn(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+		///case ID_BUTTON: here, if you want different key response.
+        default:
+            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+    }
+}
 
-void CreateRenoDataSet()
+
+
+void CreateRenoDataSet(void)
 {
 
     GOLFree();   // free memory for the objects in the previous linked list and start new list
@@ -454,35 +449,29 @@ void CreateRenoDataSet()
 
 
 
-WORD MsgRenoDataSet(WORD objMsg, OBJ_HEADER* pObj)
+WORD MsgRenoDataSet(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 {
-///	OBJ_HEADER* pOtherRbtn;
 
     switch(GetObjID(pObj))
     {
-        case ID_BUTTON_NEXT:
-            if(objMsg == BTN_MSG_RELEASED)
-            {
-               ///screenState = CREATE_BUTTONS;// goto check box demo screen
-				screenState = CREATE_LISTBOX;// goto check box demo screen
-            }
-            return 1; 							// process by default
-
-        case ID_BUTTON_BACK:
-            if(objMsg == BTN_MSG_RELEASED){
-                ///screenState = CREATE_RENO_HOME; 		// goto ECG demo screen
-				screenState = CREATE_BUTTONS;// goto check box demo screen
-
-            }
-            return 1; 							// process by default
-
         default:
             return 1; 							// process by default
     }
 }
 
 
-void AddItemList(XCHAR *pText, LISTBOX *pLb)
+WORD MsgRenoDataSetDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {	
+		///case ID_BUTTON: here, if you want different key response.
+        default:
+            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+    }
+}
+
+
+void AddItemList(XCHAR *pText, LISTBOX *pLb, void *pIcon)
 {
     XCHAR   *pointer;
     WORD    ctr;
@@ -493,7 +482,8 @@ void AddItemList(XCHAR *pText, LISTBOX *pLb)
         ctr = 0;
         while(*pointer)
         {
-            if(NULL == LbAddItem(pLb, NULL, pointer, NULL, 0, ctr))
+            ///if(NULL == LbAddItem(pLb, NULL, pointer, NULL, 0, ctr))
+			if(NULL == LbAddItem(pLb, NULL, pointer, pIcon, 0, ctr))
                 break;
             while(*pointer++ > 31);
             if(*(pointer - 1) == 0)
@@ -504,15 +494,11 @@ void AddItemList(XCHAR *pText, LISTBOX *pLb)
 }
 
 
-#define pMyItemList (XCHAR*)ListboxLstStr
 
 // creates list box demo screen
 void CreateListBox(void)
 {
     LISTBOX *pLb;
-
-    #define LB_ORIGIN_X ((GetMaxX() - 260 + 1) / 2)
-    #define LB_ORIGIN_Y ((40 + GetMaxY() - 192 + 1) / 2)
 
     GOLFree();                                      // free memory for the objects in the previous linked list and start new list
 	
@@ -526,109 +512,23 @@ void CreateListBox(void)
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
             LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
-///            pMyItemList,
-            (XCHAR*)"ListBox",
-            altScheme
+            (XCHAR*)"Activity Data Screen",
+            alt2Scheme
         );                                          // use alternate scheme
 	
 	
-	AddItemList( (XCHAR *)"ListItem1", pLb);
-	AddItemList( (XCHAR *)"ListItem2", pLb);
-#if 0		
-    SldCreate
-    (
-        ID_SLIDER1,                                 // ID
-        LB_ORIGIN_X + 220,
-        LB_ORIGIN_Y + 82,
-        LB_ORIGIN_X + 250,
-        LB_ORIGIN_Y + 160,                          // dimension
-        SLD_DRAW | SLD_SCROLLBAR | SLD_VERTICAL,    // vertical, will be dislayed after creation
-        LbGetCount(pLb),                            // range
-        1,                          // page
-        LbGetCount(pLb) - 1,        // pos
-        altScheme
-    );                              // use alternate scheme
-    BtnCreate
-    (
-        ID_BUTTON1,                 // ID
-        LB_ORIGIN_X + 220,
-        LB_ORIGIN_Y + 52,
-        LB_ORIGIN_X + 250,
-        LB_ORIGIN_Y + 82,
-        0,                          // dimension (no radius)
-        BTN_DRAW,                   // will be dislayed after creation
-        NULL,                       // no bitmap
-        (XCHAR *)UpArrowStr,        // Up Arrow
-        altScheme
-    );                              // use alternate scheme
-    BtnCreate
-    (
-        ID_BUTTON2,                 // ID
-        LB_ORIGIN_X + 220,
-        LB_ORIGIN_Y + 162,
-        LB_ORIGIN_X + 250,
-        LB_ORIGIN_Y + 192,
-        0,                          // dimension (no radius)
-        BTN_DRAW,                   // will be dislayed after creation
-        NULL,                       // no bitmap
-        (XCHAR *)DownArrowStr,      // Down Arrow
-        altScheme
-    );                              // use alternate scheme
-    CbCreate
-    (
-        ID_CHECKBOX1,               // ID
-        LB_ORIGIN_X + 10,
-        LB_ORIGIN_Y + 20,
-        LB_ORIGIN_X + 110,
-        LB_ORIGIN_Y + 45,           // dimension
-        CB_DRAW,                    // will be dislayed after creation
-        (XCHAR *)SingleStr,         // "Single"
-        altScheme
-    );                              // alternative GOL scheme
-    CbCreate
-    (
-        ID_CHECKBOX2,               // ID
-        LB_ORIGIN_X + 140,
-        LB_ORIGIN_Y + 20,
-        LB_ORIGIN_X + 240,
-        LB_ORIGIN_Y + 45,           // dimension
-        CB_DRAW,                    // will be dislayed after creation
-        (XCHAR *)AlignCenterStr,    // "Center"
-        altScheme
-    );                              // alternative GOL scheme
-    GbCreate
-    (
-        ID_GROUPBOX1,               // ID
-        LB_ORIGIN_X + 0,
-        LB_ORIGIN_Y + 0,
-        LB_ORIGIN_X + 127,
-        LB_ORIGIN_Y + 50,           // dimension
-        GB_DRAW | GB_CENTER_ALIGN,  // will be dislayed after creation
-        (XCHAR *)SelectionStr,      // "Selection"
-        alt4Scheme
-    );                              // alternate scheme
-    GbCreate
-    (
-        ID_GROUPBOX2,               // ID
-        LB_ORIGIN_X + 130,
-        LB_ORIGIN_Y + 0,
-        LB_ORIGIN_X + 260,
-        LB_ORIGIN_Y + 50,           // dimension
-        GB_DRAW | GB_CENTER_ALIGN,  // will be dislayed after creation
-        (XCHAR *)AlignmentStr,      // "Alignment"
-        alt4Scheme
-    );                              // alternate scheme
-#endif
+	AddItemList( (XCHAR *)"Screen 1 >", pLb, &PCGaming2_1bpp_16x16);
+	AddItemList( (XCHAR *)"Screen 2 >", pLb, &PCGaming1_1bpp_16x16);
+	AddItemList( (XCHAR *)"Add Screen >", pLb, NULL);
+	LbSetFocusedItem( pLb, 1 );
 }
 
 // processes messages for list box demo screen
 WORD MsgListBox(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 {
-    LISTBOX *pLb;
-///    SLIDER  *pSld;
+///    LISTBOX *pLb;
 
-    pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
-///    pSld = (SLIDER *)GOLFindObject(ID_SLIDER1);
+///    pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
 
     switch(GetObjID(pObj))
     {
@@ -637,104 +537,197 @@ WORD MsgListBox(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
             // Process message by default
             LbMsgDefault(objMsg, (LISTBOX *)pObj, pMsg);
 
-            // Set new list box position
-///            SldSetPos(pSld, LbGetCount(pLb) - LbGetFocusedItem(pLb));
-///            SetState(pSld, SLD_DRAW_THUMB);
-
             // The message was processed
             return (0);
-#if 0
-        case ID_SLIDER1:
-
-			if((objMsg == SLD_MSG_INC) || (objMsg == SLD_MSG_DEC)) 			
-            {
-	        	// Process message by default
-	            SldMsgDefault(objMsg, (SLIDER *)pObj, pMsg);
-	
-	            // Set new list box position
-	            if(LbGetFocusedItem(pLb) != LbGetCount(pLb) - SldGetPos(pSld))
-	            {
-	                LbSetFocusedItem(pLb, LbGetCount(pLb) - SldGetPos(pSld));
-	                SetState(pLb, LB_DRAW_ITEMS);
-	            }
-	        } 
-
-            // The message was processed
-            return (0);
-
-        case ID_BUTTON1:
-            if(objMsg == BTN_MSG_RELEASED)
-            {
-                LbSetFocusedItem(pLb, LbGetFocusedItem(pLb) - 1);
-                SetState(pLb, LB_DRAW_ITEMS);
-                SldSetPos(pSld, SldGetPos(pSld) + 1);
-                SetState(pSld, SLD_DRAW_THUMB);
-            }
-
-            return (1);
-
-        case ID_BUTTON2:
-            if(objMsg == BTN_MSG_RELEASED)
-            {
-                LbSetFocusedItem(pLb, LbGetFocusedItem(pLb) + 1);
-                SetState(pLb, LB_DRAW_ITEMS);
-                SldSetPos(pSld, SldGetPos(pSld) - 1);
-                SetState(pSld, SLD_DRAW_THUMB);
-            }
-
-            return (1);
-
-        case ID_CHECKBOX1:
-            if(objMsg == CB_MSG_CHECKED)
-            {
-                SetState(pLb, LB_SINGLE_SEL | LB_DRAW);
-                LbChangeSel(pLb, pLb->pFocusItem);
-            }
-            else
-            {
-                ClrState(pLb, LB_SINGLE_SEL);
-            }
-
-            return (1);
-
-        case ID_CHECKBOX2:
-            if(objMsg == CB_MSG_CHECKED)
-            {
-                SetState(pLb, LB_CENTER_ALIGN);
-            }
-            else
-            {
-                ClrState(pLb, LB_CENTER_ALIGN);
-            }
-
-            SetState(pLb, LB_DRAW);
-            return (1);
-#endif
-        case ID_BUTTON_NEXT:
-            if(objMsg == BTN_MSG_RELEASED)
-            {
-                ///screenState = CREATE_EDITBOX;       // goto edit box screen
-				screenState = CREATE_BUTTONS;       // goto edit box screen
-				printf("123\n");
-            }
-
-            return (1);                             // process by default
-
-        case ID_BUTTON_BACK:
-            if(objMsg == BTN_MSG_RELEASED)
-            {
-                ///screenState = CREATE_PROGRESSBAR;   // goto progress bar screen
-				screenState = CREATE_RENO_DATASET;   // goto progress bar screen
-				printf("456\n");
-            }
-
-            return (1);                             // process by default
 
         default:
             return (1);                             // process by default
     }
 }
 
+
+
+WORD MsgListBoxDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+	LISTBOX *pLb;
+	
+	pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
+
+    switch(GetObjID(pObj))
+    {
+		///case ID_BUTTON: here, if you want different key response.
+        case ID_BTN_UP:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( 1 == sFocusedItem )
+					LbSetFocusedItem( pLb, (sLbCount - 1));
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem - 1));
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0);  	
+        case ID_BTN_DOWN:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( (sLbCount - 1) == sFocusedItem )
+					LbSetFocusedItem( pLb, 1);
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem + 1));
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				LbChangeSel(pLb, pLb->pFocusItem);
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        default:
+            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+    }
+}
+
+
+void CreateTextEntryPad(void)
+{
+#define NTEXT_H	40
+#define NTEXT_W	35
+#define NBTN_H	20
+#define NBTN_W	25
+
+    GOLFree();                                      // free memory for the objects in the previous linked list and start new list
+	SetColor(BLACK);
+	ClearDevice();	
+	CreateDefaultBtn();
+
+	StCreate(
+		ID_STATICTEXT1,
+        ((GetMaxX() - (NTEXT_W+NBTN_W)) >> 1),
+        ((GetMaxY() - (NTEXT_H+NBTN_H)) >> 1),
+        ((GetMaxX() - (NTEXT_W+NBTN_W)) >> 1) + NTEXT_W,
+        ((GetMaxY() - (NTEXT_H+NBTN_H)) >> 1) + NTEXT_H,                      // dimension
+		LB_DRAW | ST_CENTER_ALIGN | ST_FRAME | LB_FOCUSED,                   // will be dislayed after creation
+		(XCHAR *)"1",
+		alt2Scheme
+	);
+	
+    BtnCreate
+    (
+        ID_BUTTON1,                 // button ID
+        ((GetMaxX() - (NTEXT_W+NBTN_W)) >> 1) + NTEXT_W,
+        ((GetMaxY() - (NTEXT_H+NBTN_H)) >> 1),
+        ((GetMaxX() - (NTEXT_W+NBTN_W)) >> 1) + NTEXT_W + NBTN_W,
+        ((GetMaxY() - (NTEXT_H+NBTN_H)) >> 1) + NBTN_H,                      // dimension
+        0,                         // set radius
+        BTN_DRAW,                   // draw a beveled button
+        NULL,                       // no bitmap
+        (XCHAR *)"^",         // text
+        alt2Scheme
+    );                              // use alternate scheme
+    BtnCreate
+    (
+        ID_BUTTON2,                 // button ID
+        ((GetMaxX() - (NTEXT_W+NBTN_W)) >> 1) + NTEXT_W,
+        ((GetMaxY() - (NTEXT_H+NBTN_H)) >> 1) + NBTN_H,
+        ((GetMaxX() - (NTEXT_W+NBTN_W)) >> 1) + NTEXT_W + NBTN_W,
+        ((GetMaxY() - (NTEXT_H+NBTN_H)) >> 1) + NBTN_H + NBTN_H,                      // dimension
+        0,
+        BTN_DRAW,                   // will be dislayed after creation
+        (void *)NULL,   // use bitmap
+        (XCHAR *)"v",           // text
+        alt2Scheme
+    );  
+	
+}
+
+// processes messages for list box demo screen
+WORD MsgTextEntryPad(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+        default:
+            return (1);                             // process by default
+    }
+}
+
+WORD MsgTextEntryPadDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+	static SHORT sIdx = 0;
+	STATICTEXT *pSt;
+	pSt = (STATICTEXT *)GOLFindObject(ID_STATICTEXT1);
+	
+	if( 0 == sIdx )
+		sIdx = (SHORT)*StGetText(pSt);
+	
+    switch(GetObjID(pObj))
+    {	
+		///case ID_BUTTON: here, if you want different key response.
+        case ID_BTN_UP:
+		case ID_BUTTON1:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				XCHAR xT;
+				xT = *StGetText(pSt);
+				printf("%d ",xT);
+				if( 57 == sIdx )
+				{
+					sIdx = 48;
+					xT = (XCHAR)"0";
+					StSetText( pSt, &xT );
+				}
+				else
+				{
+					sIdx++;
+					xT = (XCHAR)(sIdx);			
+					StSetText( pSt, &xT );
+				}
+				printf("%d ",*StGetText(pSt));
+				SetState(pSt, ST_DRAW);
+			}
+			return (0);  	
+        case ID_BTN_DOWN:
+		case ID_BUTTON2:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				XCHAR *pT = NULL;
+				XCHAR xT = 48;
+				pT = StGetText(pSt);
+				printf("%d ",*pT);
+				if( 48 == *pT )
+				{
+					*pT = (XCHAR)"9";
+					StSetText( pSt, pT );
+				}
+				else
+				{
+					SHORT sD;
+					sD = (SHORT)*pT;
+					sD = sD - 1;
+					*pT = sD;
+					StSetText( pSt, pT );
+				}
+				printf("%d ",*pT);
+				SetState(pSt, ST_DRAW);
+			}
+			return (0); 
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///LbChangeSel(pLb, pLb->pFocusItem);
+				///SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        default:
+            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+    }
+}
 
 
 
@@ -814,12 +807,14 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 		{	/*simulate the "BACK" key repeased*/
 			ioMsg.param1 = ID_BUTTON_BACK;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
+			printf("  keybd down: simulate BACK key\n");
 		}
 		else
 		if( KB_KEY_2 == ioMsg.param2 )
 		{	/*simulate the "NEXT" key repeased*/
 			ioMsg.param1 = ID_BUTTON_NEXT;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
+			printf("  keybd down: simulate NEXT key\n");
 		}
 		else
 		if( KB_KEY_I == ioMsg.param2 )
@@ -829,12 +824,14 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 			else
 				ioMsg.param1 = ID_BTN_UP;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
+			printf("  keybd down: simulate UP key\n");
 		}
 		else
 		if( KB_KEY_O == ioMsg.param2 )
 		{	/*simulate the "UP" key hold*/
 			ioMsg.param1 = ID_BTN_UP_HOLD;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
+			printf("  keybd down: simulate UP_HOLD key\n");
 		}
 		else
 		if( KB_KEY_K == ioMsg.param2 )
@@ -844,12 +841,14 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 			else
 				ioMsg.param1 = ID_BTN_DOWN;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
+			printf("  keybd down: simulate DOWN key\n");
 		}
 		else
 		if( KB_KEY_L == ioMsg.param2 )
 		{	/*simulate the "DOWN" key hold*/
 			ioMsg.param1 = ID_BTN_DOWN_HOLD;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
+			printf("  keybd down: simulate DOWN_HOLD key\n");
 		}
 		else
 		if( KB_KEY_U == ioMsg.param2 )
@@ -859,12 +858,14 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 			else
 				ioMsg.param1 = ID_BTN_EXIT;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
+			printf("  keybd down: simulate EXIT key\n");
 		}
 		else
 		if( KB_KEY_Y == ioMsg.param2 )
 		{	/*simulate the "EXIT" key hold*/
 			ioMsg.param1 = ID_BTN_EXIT_HOLD;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
+			printf("  keybd down: simulate EXIT_HOLD key\n");
 		}
 		else
 		if( KB_KEY_J == ioMsg.param2 )
@@ -874,12 +875,14 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 			else
 				ioMsg.param1 = ID_BTN_ENTER;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
+			printf("  keybd down: simulate ENTER key\n");
 		}
 		else
 		if( KB_KEY_H == ioMsg.param2 )
 		{	/*simulate the "ENTER" key hold*/
 			ioMsg.param1 = ID_BTN_ENTER_HOLD;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
+			printf("  keybd down: simulate ENTER_HOLD key\n");
 		}
 		else
 			ioMsg.param1 = 0;
@@ -950,38 +953,6 @@ WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 {
 ///	printf("In GOLMsgCallback\n");
 
-#if 0
-    // beep if button is pressed
-    if(objMsg == BTN_MSG_PRESSED)
-    {
-///        Beep();
-    }
-    else
-    {
-        if(GetObjType(pObj) == OBJ_RADIOBUTTON)
-        {
-///            Beep();
-            
-            if(pObj->ID == ID_RADIOBUTTON5)
-            {
-///                _language = LANG_ENGLISH;
-                screenState = prevRefreshState ; //Goto CREATE_XXX state
-                return(1);
-            }
-            else if(pObj->ID == ID_RADIOBUTTON6)
-            {
-///                _language = LANG_CHINESE;
-                screenState = prevRefreshState ; //Goto CREATE_XXX state
-                return(1);
-            }
-        }
-        else
-        {
-            if(GetObjType(pObj) == OBJ_CHECKBOX)
-                ;///Beep();
-        }
-    }
-#endif
 
 #if 0
     if((screenState & 0xF300) != 0xF300)
@@ -1010,176 +981,33 @@ WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 #endif
 
 #if 0
-    // check if pull down menu is called
-    if(GetObjID(pObj) == ID_WINDOW1)
-    {
-        if((objMsg == WND_MSG_TITLE) && (screenState != DISPLAY_PULLDOWN))
-        {
-
-            // check area of press
-            if((pMsg->param1 <= 220) && (pMsg->param2 <= 40))
-            {
-                switch(screenState)
-                {
-
-                    // if one of these states we redraw the whole screen since
-                    // these screens have customized graphics.
-                    case DISPLAY_SLIDER:
-                        prevState = CREATE_SLIDER;
-                        break;
-
-                    case DISPLAY_CUSTOMCONTROL:
-                        prevState = CREATE_CUSTOMCONTROL;
-                        break;
-
-                    case DISPLAY_SIGNATURE:
-                        prevState = CREATE_SIGNATURE;
-                        break;
-
-                    case DISPLAY_POT:
-                        prevState = CREATE_POT;
-                        break;
-
-                    case DISPLAY_ECG:
-                        prevState = CREATE_ECG;
-                        break;
-
-                    case DISPLAY_PROGRESSBAR:
-                        prevState = CREATE_PROGRESSBAR;
-                        break;
-
-                    // pull down is disabled when setting date and time
-                    case CREATE_DATETIME:
-                    case DISPLAY_DATETIME:
-                    case DISPLAY_DATE_PDMENU:
-                    case SHOW_DATE_PDMENU:
-                    case HIDE_DATE_PDMENU:
-                        return (0);
-
-                    default:
-                        prevState = screenState;    // save the current create state
-                        break;
-                }
-
-                screenState = CREATE_PULLDOWN;      // go to show pulldown menu state
-                
-                if(pMsg->param1 <= 136)
-                {
-///                    PulldownId = 0;
-                }
-                else
-                {
-                    //PulldownId = 1;
-                }
-                
-                return (1);
-            }
-        }
-    }
-#endif
-
-#if defined(WIN32)
-#if 0
-	printf("In GOLMsgCallback 00\n");
-    if( (screenState == DISPLAY_BUTTONS) )
-    {
-		printf("In GOLMsgCallback 11\n");
-        prevState = screenState - 1;        // save the current create state
-        screenState = CREATE_RENO_DATASET;      // go to date and time setting screen
-		return (1);
-	}
-	else
-    if( (screenState == DISPLAY_RENO_DATASET) )
-    {
-		printf("In GOLMsgCallback 22\n");
-        prevState = screenState - 1;        // save the current create state
-        screenState = CREATE_BUTTONS;      // go to date and time setting screen
-		return (1);
-	}
-	else
-		;
-#endif
-#endif
-
     // process messages for demo screens
     switch(screenState)
     {
         case DISPLAY_BUTTONS:
-            return (MsgButtons(objMsg, pObj));
+            return (MsgButtons(objMsg, pObj, pMsg));
 
         case DISPLAY_RENO_DATASET:
-            return (MsgRenoDataSet(objMsg, pObj));
-#if 0
-        case DISPLAY_CHECKBOXES:
-            return (MsgCheckBoxes(objMsg, pObj));
+            return (MsgRenoDataSet(objMsg, pObj, pMsg));
 
-        case DISPLAY_RADIOBUTTONS:
-            return (MsgRadioButtons(objMsg, pObj));
-
-        case DISPLAY_STATICTEXT:
-            return (MsgStaticText(objMsg, pObj));
-
-        case DISPLAY_PICTURE:
-            return (MsgPicture(objMsg, pObj));
-
-        case DISPLAY_SLIDER:
-            return (MsgSlider(objMsg, pObj, pMsg));
-
-        case DISPLAY_PROGRESSBAR:
-            return (MsgProgressBar(objMsg, pObj));
-
-        // date and time settings display
-        case DISPLAY_DATETIME:
-            return (MsgDateTime(objMsg, pObj));
-
-        case DISPLAY_DATE_PDMENU:
-            return (MsgSetDate(objMsg, pObj, pMsg));
-
-        case CREATE_DATETIME:
-        case SHOW_DATE_PDMENU:
-        case HIDE_DATE_PDMENU:
-            return (0);
-
-        case DISPLAY_METER:
-            return (MsgMeter(objMsg, pObj));
-
-        case DISPLAY_DIAL:
-            return (MsgDial(objMsg, pObj));
-
-        case DISPLAY_CUSTOMCONTROL:
-            return (MsgCustomControl(objMsg, pObj, pMsg));
-#endif
-        case DISPLAY_LISTBOX:
+		case DISPLAY_LISTBOX:
             return (MsgListBox(objMsg, pObj, pMsg));
-#if 0
-        case DISPLAY_EDITBOX:
-            return (MsgEditBox(objMsg, pObj, pMsg));
 
-        case DISPLAY_SIGNATURE:
-            return (MsgSignature(objMsg, pObj, pMsg));
-
-        case DISPLAY_POT:
-            return (MsgPotentiometer(objMsg, pObj));
-
-        case DISPLAY_ECG:
-            return (MsgECG(objMsg, pObj));
-
-        case DISPLAY_PULLDOWN:
-            return (MsgPullDown(objMsg, pObj, pMsg));
-#endif
-        default:
-
+		default:
             // process message by default
             return (1);
     }
-
+#else
+	return scrMsgCbHandler(objMsg, pObj, pMsg);
+#endif
 }
 
 
 WORD GOLDrawCallback(void)
 {
 ///	printf("In GOLDrawCallback\n");
-	
+
+#if 0	
     switch(screenState)
     {
         case CREATE_BUTTONS:
@@ -1189,7 +1017,6 @@ WORD GOLDrawCallback(void)
             return (1);                                                 // draw objects created
 
         case DISPLAY_BUTTONS:
-///			screenState = CREATE_BUTTONS;                              // switch to next state
             return (1);                                                 // redraw objects if needed
 			
         case CREATE_RENO_DATASET:
@@ -1211,47 +1038,19 @@ WORD GOLDrawCallback(void)
 
             // this moves the slider and editbox for the date setting to
             // move while the up or down arrow buttons are pressed
-#if 0
-            if((tick - prevTick) > 5000)
-            {
-                pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
-///                pSld = (SLIDER *)GOLFindObject(ID_SLIDER1);
-///                pObj = GOLFindObject(ID_BUTTON1);
-
-                if(GetState(pObj, BTN_PRESSED))
-                {
-                    LbSetFocusedItem(pLb, LbGetFocusedItem(pLb) - 1);
-                    SetState(pLb, LB_DRAW_ITEMS);
-                    SldSetPos(pSld, SldGetPos(pSld) + 1);
-                    SetState(pSld, SLD_DRAW_THUMB);
-                }
-
-                pObj = GOLFindObject(ID_BUTTON2);
-
-                if(GetState(pObj, BTN_PRESSED))
-                {
-                    LbSetFocusedItem(pLb, LbGetFocusedItem(pLb) + 1);
-                    SetState(pLb, LB_DRAW_ITEMS);
-                    SldSetPos(pSld, SldGetPos(pSld) - 1);
-                    SetState(pSld, SLD_DRAW_THUMB);
-                }
-
-                prevTick = tick;
-            }
-#else
 			{    
 				LISTBOX *pLb;
 				pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
 				SetState(pLb, LB_DRAW_ITEMS);
 			}	
-#endif
             return (1);                         // draw objects
-
 			
 		default:
 			return (1);    
 	}
-
+#else
+	scrDrawCbHandler();
+#endif
 	return (1);
 }
 
@@ -1373,6 +1172,9 @@ void ObjectTest( void )
 	
 	GOL_MSG msg;                        // GOL message structure to interact with GOL
 
+	psrcStat = &scrStatus;
+	scrInitStat( psrcStat );
+	
 /***********************************************************************************************************/
 	SetColor(BLACK);
 	ClearDevice();
@@ -1404,6 +1206,36 @@ void ObjectTest( void )
 	DelayMs(DEMODELAY);	
 
 
+	
+/***********************************************************************************************************/
+	SetColor(BLACK);
+	ClearDevice();
+
+	width = GetImageWidth((void *) &magellan_logo_01);
+	height = GetImageHeight((void *) &magellan_logo_01);
+	
+	width = (GetMaxX() - width) >> 1;
+	height = (GetMaxY() - height) >> 1;
+	
+	WAIT_UNTIL_FINISH(PutImage(width, height, (void *) &magellan_logo_01, 1));
+	DelayMs(DEMODELAY);
+	WAIT_UNTIL_FINISH(PutImage(width, height, (void *) &magellan_logo_02, 1));
+	DelayMs(DEMODELAY);
+	WAIT_UNTIL_FINISH(PutImage(width, height, (void *) &magellan_logo_03, 1));
+	DelayMs(DEMODELAY);
+	WAIT_UNTIL_FINISH(PutImage(width, height, (void *) &magellan_logo_04, 1));
+	DelayMs(DEMODELAY);
+	WAIT_UNTIL_FINISH(PutImage(width, height, (void *) &magellan_logo_05, 1));
+	DelayMs(DEMODELAY);
+	WAIT_UNTIL_FINISH(PutImage(width, height, (void *) &magellan_logo_06, 1));
+	DelayMs(DEMODELAY);
+	WAIT_UNTIL_FINISH(PutImage(width, height, (void *) &magellan_logo_07, 1));
+	DelayMs(DEMODELAY);
+	WAIT_UNTIL_FINISH(PutImage(width, height, (void *) &magellan_logo_08, 1));
+	DelayMs(DEMODELAY);
+	
+	
+	
 /***********************************************************************************************************/
     GOLInit();                          // Initialize graphics library and crete default style scheme for GOL
 	
@@ -1431,4 +1263,196 @@ void ObjectTest( void )
     }
 	
 }
+
+
+FRAME_HEADER fhButtons = {
+	MsgButtons,
+	CreateButtons,
+	MsgButtonsDefaultBtn,
+	0,
+	0
+};
+
+FRAME_HEADER fhRenoDataSet = {
+	MsgRenoDataSet,
+	CreateRenoDataSet,
+	MsgRenoDataSetDefaultBtn,
+	0,
+	0
+};
+
+FRAME_HEADER fhListBox = {
+	MsgListBox,
+	CreateListBox,
+	MsgListBoxDefaultBtn,
+	0,
+	0
+};
+
+
+FRAME_HEADER fhTextEnteryPad = {
+	MsgTextEntryPad,
+	CreateTextEntryPad,
+	MsgTextEntryPadDefaultBtn,
+	0,
+	0
+};
+
+
+/// API for screen status handle
+void scrInitStat(SCREEN_STATUS* pScreenStat)
+{
+	if( pScreenStat )
+	{
+		pScreenStat->privStat = CREATE_BUTTONS;
+		pScreenStat->nowStat = CREATE_BUTTONS;
+		pScreenStat->nextStat = CREATE_BUTTONS;
+		pScreenStat->pnowStatFrame = &fhButtons;
+		pScreenStat->IsFrameCreate = TRUE;
+	}
+}
+
+
+void scrNextStat(SCREEN_STATUS* pScreenStat)
+{
+	if( pScreenStat )
+	{
+		switch(pScreenStat->nowStat)
+		{
+			case CREATE_BUTTONS:
+				pScreenStat->privStat = pScreenStat->nowStat;
+				pScreenStat->nowStat = DISPLAY_BUTTONS;
+				pScreenStat->nextStat = CREATE_RENO_DATASET;
+				pScreenStat->pnowStatFrame = &fhButtons;
+				pScreenStat->IsFrameCreate = FALSE;
+				break;
+			case DISPLAY_BUTTONS:
+				pScreenStat->privStat = pScreenStat->nowStat;
+				pScreenStat->nowStat = pScreenStat->nextStat;
+				pScreenStat->nextStat = DISPLAY_RENO_DATASET;
+				pScreenStat->pnowStatFrame = &fhRenoDataSet;
+				pScreenStat->IsFrameCreate = TRUE;
+				break;
+			case CREATE_RENO_DATASET:
+				pScreenStat->privStat = pScreenStat->nowStat;
+				pScreenStat->nowStat = pScreenStat->nextStat;
+				pScreenStat->nextStat = CREATE_LISTBOX;
+				pScreenStat->pnowStatFrame = &fhRenoDataSet;
+				pScreenStat->IsFrameCreate = FALSE;
+				break;
+			case DISPLAY_RENO_DATASET:
+				pScreenStat->privStat = pScreenStat->nowStat;
+				pScreenStat->nowStat = pScreenStat->nextStat;
+				pScreenStat->nextStat = DISPLAY_LISTBOX;
+				pScreenStat->pnowStatFrame = &fhListBox;
+				pScreenStat->IsFrameCreate = TRUE;
+				break;
+			case CREATE_LISTBOX:
+				pScreenStat->privStat = pScreenStat->nowStat;
+				pScreenStat->nowStat = pScreenStat->nextStat;
+				pScreenStat->nextStat = CREATE_TEXTENTRYPAD;
+				pScreenStat->pnowStatFrame = &fhListBox;
+				pScreenStat->IsFrameCreate = FALSE;
+				break;
+			case DISPLAY_LISTBOX:
+				pScreenStat->privStat = pScreenStat->nowStat;
+				pScreenStat->nowStat = pScreenStat->nextStat;
+				pScreenStat->nextStat = DISPLAY_TEXTENTRYPAD;
+				pScreenStat->pnowStatFrame = &fhTextEnteryPad;
+				pScreenStat->IsFrameCreate = TRUE;
+				break;
+			case CREATE_TEXTENTRYPAD:
+				pScreenStat->privStat = pScreenStat->nowStat;
+				pScreenStat->nowStat = pScreenStat->nextStat;
+				pScreenStat->nextStat = CREATE_BUTTONS;
+				pScreenStat->pnowStatFrame = &fhTextEnteryPad;
+				pScreenStat->IsFrameCreate = FALSE;
+				break;
+			case DISPLAY_TEXTENTRYPAD:
+				pScreenStat->privStat = pScreenStat->nowStat;
+				pScreenStat->nowStat = pScreenStat->nextStat;
+				pScreenStat->nextStat = DISPLAY_BUTTONS;
+				pScreenStat->pnowStatFrame = &fhButtons;
+				pScreenStat->IsFrameCreate = TRUE;
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+
+void scrPrivStat(SCREEN_STATUS* pScreenStat)
+{
+	if( pScreenStat )
+	{
+		switch(pScreenStat->nowStat)
+		{
+			case CREATE_BUTTONS:
+				break;
+			case DISPLAY_BUTTONS:
+				pScreenStat->privStat = DISPLAY_LISTBOX;
+				pScreenStat->nowStat = CREATE_TEXTENTRYPAD;
+				pScreenStat->nextStat = DISPLAY_TEXTENTRYPAD;
+				pScreenStat->pnowStatFrame = &fhTextEnteryPad;
+				pScreenStat->IsFrameCreate = TRUE;
+				break;
+			case CREATE_RENO_DATASET:
+				break;
+			case DISPLAY_RENO_DATASET:
+				pScreenStat->privStat = DISPLAY_TEXTENTRYPAD;
+				pScreenStat->nowStat = CREATE_BUTTONS;
+				pScreenStat->nextStat = DISPLAY_BUTTONS;
+				pScreenStat->pnowStatFrame = &fhButtons;
+				pScreenStat->IsFrameCreate = TRUE;
+				break;
+			case CREATE_LISTBOX:
+				break;
+			case DISPLAY_LISTBOX:
+				pScreenStat->privStat = DISPLAY_BUTTONS;
+				pScreenStat->nowStat = CREATE_RENO_DATASET;
+				pScreenStat->nextStat = DISPLAY_RENO_DATASET;
+				pScreenStat->pnowStatFrame = &fhRenoDataSet;
+				pScreenStat->IsFrameCreate = TRUE;
+				break;
+			case CREATE_TEXTENTRYPAD:
+				break;
+			case DISPLAY_TEXTENTRYPAD:
+				pScreenStat->privStat = DISPLAY_RENO_DATASET;
+				pScreenStat->nowStat = CREATE_LISTBOX;
+				pScreenStat->nextStat = DISPLAY_LISTBOX;
+				pScreenStat->pnowStatFrame = &fhListBox;
+				pScreenStat->IsFrameCreate = TRUE;
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+
+
+/// use for MsgCallback & DrawCallback
+WORD scrMsgCbHandler(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+	WORD wRet;
+	
+	///go check if key/button msg first...
+	wRet = psrcStat->pnowStatFrame->pfnBtnHandle(objMsg, pObj, pMsg);
+	if( wRet )
+		wRet = psrcStat->pnowStatFrame->pfnMsgCallback(objMsg, pObj, pMsg);
+	
+	return wRet;
+}
+
+
+void scrDrawCbHandler(void)
+{
+	if( psrcStat->IsFrameCreate )
+	{
+		psrcStat->pnowStatFrame->pfnDrawCallback();
+		scrNextStat( psrcStat );
+	}
+}
+
 
