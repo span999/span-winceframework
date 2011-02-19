@@ -659,12 +659,17 @@ WORD MsgTextEntryPad(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 
 WORD MsgTextEntryPadDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 {
-	static SHORT sIdx = 0;
+	static XCHAR sIdx = 0;
+	static XCHAR scNum[2];
 	STATICTEXT *pSt;
 	pSt = (STATICTEXT *)GOLFindObject(ID_STATICTEXT1);
 	
 	if( 0 == sIdx )
-		sIdx = (SHORT)*StGetText(pSt);
+	{
+		sIdx = *StGetText(pSt);
+		scNum[0] = sIdx;
+		scNum[1] = '\0';
+	}
 	
     switch(GetObjID(pObj))
     {	
@@ -673,21 +678,16 @@ WORD MsgTextEntryPadDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 		case ID_BUTTON1:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				XCHAR xT;
-				xT = *StGetText(pSt);
-				printf("%d ",xT);
 				if( 57 == sIdx )
 				{
 					sIdx = 48;
-					xT = (XCHAR)"0";
-					StSetText( pSt, &xT );
 				}
 				else
 				{
 					sIdx++;
-					xT = (XCHAR)(sIdx);			
-					StSetText( pSt, &xT );
 				}
+				scNum[0] = sIdx;
+				StSetText( pSt, scNum );
 				printf("%d ",*StGetText(pSt));
 				SetState(pSt, ST_DRAW);
 			}
@@ -696,24 +696,17 @@ WORD MsgTextEntryPadDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 		case ID_BUTTON2:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				XCHAR *pT = NULL;
-				XCHAR xT = 48;
-				pT = StGetText(pSt);
-				printf("%d ",*pT);
-				if( 48 == *pT )
+				if( 48 == sIdx )
 				{
-					*pT = (XCHAR)"9";
-					StSetText( pSt, pT );
+					sIdx = 57;
 				}
 				else
 				{
-					SHORT sD;
-					sD = (SHORT)*pT;
-					sD = sD - 1;
-					*pT = sD;
-					StSetText( pSt, pT );
+					sIdx--;
 				}
-				printf("%d ",*pT);
+				scNum[0] = sIdx;
+				StSetText( pSt, scNum );
+				printf("%d ",*StGetText(pSt));
 				SetState(pSt, ST_DRAW);
 			}
 			return (0); 
