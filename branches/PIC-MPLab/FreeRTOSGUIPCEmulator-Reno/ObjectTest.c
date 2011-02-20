@@ -601,9 +601,9 @@ WORD MsgListBoxDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 
 void CreateTextEntryPad(void)
 {
-#define NTEXT_H	40
-#define NTEXT_W	35
-#define NBTN_H	20
+#define NTEXT_H	25
+#define NTEXT_W	25
+#define NBTN_H	25
 #define NBTN_W	25
 
     GOLFree();                                      // free memory for the objects in the previous linked list and start new list
@@ -613,10 +613,10 @@ void CreateTextEntryPad(void)
 
 	StCreate(
 		ID_STATICTEXT1,
-        ((GetMaxX() - (NTEXT_W+NBTN_W)) >> 1),
-        ((GetMaxY() - (NTEXT_H+NBTN_H)) >> 1),
-        ((GetMaxX() - (NTEXT_W+NBTN_W)) >> 1) + NTEXT_W,
-        ((GetMaxY() - (NTEXT_H+NBTN_H)) >> 1) + NTEXT_H,                      // dimension
+        ((GetMaxX() - (NTEXT_W)) >> 1),
+        ((GetMaxY() - (NTEXT_H)) >> 1),
+        ((GetMaxX() - (NTEXT_W)) >> 1) + NTEXT_W,
+        ((GetMaxY() - (NTEXT_H)) >> 1) + NTEXT_H,                      // dimension
 		LB_DRAW | ST_CENTER_ALIGN | ST_FRAME | LB_FOCUSED,                   // will be dislayed after creation
 		(XCHAR *)"1",
 		alt2Scheme
@@ -625,27 +625,27 @@ void CreateTextEntryPad(void)
     BtnCreate
     (
         ID_BUTTON1,                 // button ID
-        ((GetMaxX() - (NTEXT_W+NBTN_W)) >> 1) + NTEXT_W,
-        ((GetMaxY() - (NTEXT_H+NBTN_H)) >> 1),
-        ((GetMaxX() - (NTEXT_W+NBTN_W)) >> 1) + NTEXT_W + NBTN_W,
-        ((GetMaxY() - (NTEXT_H+NBTN_H)) >> 1) + NBTN_H,                      // dimension
+        ((GetMaxX() - (NTEXT_W)) >> 1),
+        ((GetMaxY() - (NTEXT_H)) >> 1) - NBTN_H,
+        ((GetMaxX() - (NTEXT_W)) >> 1) + NTEXT_W,
+        ((GetMaxY() - (NTEXT_H)) >> 1) + NTEXT_H - NBTN_H,                      // dimension
         0,                         // set radius
         BTN_DRAW,                   // draw a beveled button
-        NULL,                       // no bitmap
-        (XCHAR *)"^",         // text
+        (void *)&I16164_Top,                       // no bitmap
+        (XCHAR *)NULL,         // text
         alt2Scheme
     );                              // use alternate scheme
     BtnCreate
     (
         ID_BUTTON2,                 // button ID
-        ((GetMaxX() - (NTEXT_W+NBTN_W)) >> 1) + NTEXT_W,
-        ((GetMaxY() - (NTEXT_H+NBTN_H)) >> 1) + NBTN_H,
-        ((GetMaxX() - (NTEXT_W+NBTN_W)) >> 1) + NTEXT_W + NBTN_W,
-        ((GetMaxY() - (NTEXT_H+NBTN_H)) >> 1) + NBTN_H + NBTN_H,                      // dimension
+        ((GetMaxX() - (NTEXT_W)) >> 1),
+        ((GetMaxY() - (NTEXT_H)) >> 1) + NBTN_H,
+        ((GetMaxX() - (NTEXT_W)) >> 1) + NTEXT_W,
+        ((GetMaxY() - (NTEXT_H)) >> 1) + NTEXT_H + NBTN_H,                      // dimension
         0,
         BTN_DRAW,                   // will be dislayed after creation
-        (void *)NULL,   // use bitmap
-        (XCHAR *)"v",           // text
+        (void *)&I16164_Bottom,   // use bitmap
+        (XCHAR *)NULL,           // text
         alt2Scheme
     );  
 	
