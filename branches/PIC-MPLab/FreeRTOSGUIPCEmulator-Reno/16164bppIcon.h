@@ -1,0 +1,63 @@
+#ifndef __16164BPPICON_H__
+#define  __16164BPPICON_H__
+
+#define Yes_SIZE     166
+extern IMAGE_FLASH I16164_Yes;
+#define Red_pin_SIZE     166
+extern IMAGE_FLASH I16164_Red_pin;
+#define Red_mark_SIZE     166
+extern IMAGE_FLASH I16164_Red_mark;
+#define Top_SIZE     166
+extern IMAGE_FLASH I16164_Top;
+#define Percent_SIZE     166
+extern IMAGE_FLASH I16164_Percent;
+#define No_entry_SIZE     166
+extern IMAGE_FLASH I16164_No_entry;
+#define Mute_SIZE     166
+extern IMAGE_FLASH I16164_Mute;
+#define Male_symbol_SIZE     166
+extern IMAGE_FLASH I16164_Male_symbol;
+#define Last_SIZE     166
+extern IMAGE_FLASH I16164_Last;
+#define Heart_SIZE     166
+extern IMAGE_FLASH I16164_Heart;
+#define First_SIZE     166
+extern IMAGE_FLASH I16164_First;
+#define Female_symbol_SIZE     166
+extern IMAGE_FLASH I16164_Female_symbol;
+#define Error_SIZE     166
+extern IMAGE_FLASH I16164_Error;
+#define Down_SIZE     166
+extern IMAGE_FLASH I16164_Down;
+#define Delete_SIZE     166
+extern IMAGE_FLASH I16164_Delete;
+#define Danger_SIZE     166
+extern IMAGE_FLASH I16164_Danger;
+#define Create_SIZE     166
+extern IMAGE_FLASH I16164_Create;
+#define Compass_SIZE     166
+extern IMAGE_FLASH I16164_Compass;
+#define Clock_SIZE     166
+extern IMAGE_FLASH I16164_Clock;
+#define Cancel_SIZE     166
+extern IMAGE_FLASH I16164_Cancel;
+#define Bottom_SIZE     166
+extern IMAGE_FLASH I16164_Bottom;
+#define Black_tag_SIZE     166
+extern IMAGE_FLASH I16164_Black_tag;
+#define Black_pin_SIZE     166
+extern IMAGE_FLASH I16164_Black_pin;
+#define Back_SIZE     166
+extern IMAGE_FLASH I16164_Back;
+#define Apply_SIZE     166
+extern IMAGE_FLASH I16164_Apply;
+#define Alarm_clock_SIZE     166
+extern IMAGE_FLASH I16164_Alarm_clock;
+#define Alert_SIZE     166
+extern IMAGE_FLASH I16164_Alert;
+#define About_SIZE     166
+extern IMAGE_FLASH I16164_About;
+#define Abort_SIZE     166
+extern IMAGE_FLASH I16164_Abort;
+
+#endif
