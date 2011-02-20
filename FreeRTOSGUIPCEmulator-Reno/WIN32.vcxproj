@@ -130,6 +130,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="16164bppIcon.c" />
     <ClCompile Include="1bpp_icons.c" />
     <ClCompile Include="4bpp_icons.c" />
     <ClCompile Include="defaults.c" />
@@ -139,7 +140,6 @@
     <ClCompile Include="FreeRTOS\portable\WIN32\port.c" />
     <ClCompile Include="FreeRTOS\queue.c" />
     <ClCompile Include="FreeRTOS\tasks.c" />
-    <ClCompile Include="magellan_logo.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Microchip\Graphics\Button.c" />
     <ClCompile Include="Microchip\Graphics\DisplayDriver.c" />
