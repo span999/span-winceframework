@@ -3,6 +3,8 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
+///#define		USE_MAGELLAN_LOGO
+
 /// include this for PIC graphic lib
 #include "PICgraphic_set.h"
 
@@ -11,8 +13,10 @@
 #include "FontGentium.h"
 #include "1bpp_icons.h"
 #include "4bpp_icons.h"
+#include "16164bppIcon.h"
+#ifdef USE_MAGELLAN_LOGO
 #include "magellan_logo.h"
-
+#endif
 
 GOL_SCHEME      *altScheme;                                 // alternative style scheme
 GOL_SCHEME      *alt2Scheme;                                // alternative 2 style scheme
@@ -1201,6 +1205,8 @@ void ObjectTest( void )
 
 	
 /***********************************************************************************************************/
+
+#ifdef USE_MAGELLAN_LOGO
 	SetColor(BLACK);
 	ClearDevice();
 
@@ -1226,7 +1232,7 @@ void ObjectTest( void )
 	DelayMs(DEMODELAY);
 	WAIT_UNTIL_FINISH(PutImage(width, height, (void *) &magellan_logo_08, 1));
 	DelayMs(DEMODELAY);
-	
+#endif
 	
 	
 /***********************************************************************************************************/
