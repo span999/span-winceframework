@@ -1475,11 +1475,25 @@ void scrNextStat(SCREEN_STATUS* pScreenStat)
 			case CREATE_TEXTENTRYPAD:
 				pScreenStat->privStat = pScreenStat->nowStat;
 				pScreenStat->nowStat = pScreenStat->nextStat;
-				pScreenStat->nextStat = CREATE_BUTTONS;
+				pScreenStat->nextStat = CREATE_NUMENTRYPAD;
 				pScreenStat->pnowStatFrame = &fhTextEnteryPad;
 				pScreenStat->IsFrameCreate = FALSE;
 				break;
 			case DISPLAY_TEXTENTRYPAD:
+				pScreenStat->privStat = pScreenStat->nowStat;
+				pScreenStat->nowStat = pScreenStat->nextStat;
+				pScreenStat->nextStat = DISPLAY_NUMENTRYPAD;
+				pScreenStat->pnowStatFrame = &fhNumEnteryPad;
+				pScreenStat->IsFrameCreate = TRUE;
+				break;
+			case CREATE_NUMENTRYPAD:
+				pScreenStat->privStat = pScreenStat->nowStat;
+				pScreenStat->nowStat = pScreenStat->nextStat;
+				pScreenStat->nextStat = CREATE_BUTTONS;
+				pScreenStat->pnowStatFrame = &fhNumEnteryPad;
+				pScreenStat->IsFrameCreate = FALSE;
+				break;
+			case DISPLAY_NUMENTRYPAD:
 				pScreenStat->privStat = pScreenStat->nowStat;
 				pScreenStat->nowStat = pScreenStat->nextStat;
 				pScreenStat->nextStat = DISPLAY_BUTTONS;
@@ -1502,16 +1516,16 @@ void scrPrivStat(SCREEN_STATUS* pScreenStat)
 			case CREATE_BUTTONS:
 				break;
 			case DISPLAY_BUTTONS:
-				pScreenStat->privStat = DISPLAY_LISTBOX;
-				pScreenStat->nowStat = CREATE_TEXTENTRYPAD;
-				pScreenStat->nextStat = DISPLAY_TEXTENTRYPAD;
-				pScreenStat->pnowStatFrame = &fhTextEnteryPad;
+				pScreenStat->privStat = DISPLAY_TEXTENTRYPAD;
+				pScreenStat->nowStat = CREATE_NUMENTRYPAD;
+				pScreenStat->nextStat = DISPLAY_NUMENTRYPAD;
+				pScreenStat->pnowStatFrame = &fhNumEnteryPad;
 				pScreenStat->IsFrameCreate = TRUE;
 				break;
 			case CREATE_RENO_DATASET:
 				break;
 			case DISPLAY_RENO_DATASET:
-				pScreenStat->privStat = DISPLAY_TEXTENTRYPAD;
+				pScreenStat->privStat = DISPLAY_NUMENTRYPAD;
 				pScreenStat->nowStat = CREATE_BUTTONS;
 				pScreenStat->nextStat = DISPLAY_BUTTONS;
 				pScreenStat->pnowStatFrame = &fhButtons;
@@ -1533,6 +1547,15 @@ void scrPrivStat(SCREEN_STATUS* pScreenStat)
 				pScreenStat->nowStat = CREATE_LISTBOX;
 				pScreenStat->nextStat = DISPLAY_LISTBOX;
 				pScreenStat->pnowStatFrame = &fhListBox;
+				pScreenStat->IsFrameCreate = TRUE;
+				break;
+			case CREATE_NUMENTRYPAD:
+				break;
+			case DISPLAY_NUMENTRYPAD:
+				pScreenStat->privStat = DISPLAY_LISTBOX;
+				pScreenStat->nowStat = CREATE_TEXTENTRYPAD;
+				pScreenStat->nextStat = DISPLAY_TEXTENTRYPAD;
+				pScreenStat->pnowStatFrame = &fhTextEnteryPad;
 				pScreenStat->IsFrameCreate = TRUE;
 				break;
 			default:

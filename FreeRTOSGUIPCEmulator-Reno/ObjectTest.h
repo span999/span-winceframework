@@ -180,6 +180,8 @@ typedef enum
 	DISPLAY_RENO_DATASET,
 	CREATE_TEXTENTRYPAD,
 	DISPLAY_TEXTENTRYPAD,
+	CREATE_NUMENTRYPAD,
+	DISPLAY_NUMENTRYPAD,
 ///
     // these states are for time and date settings 0xF3xx is used here as a
     // state ID to check when date and time are to be updated or not.
