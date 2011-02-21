@@ -140,6 +140,7 @@
     <ClCompile Include="FreeRTOS\portable\WIN32\port.c" />
     <ClCompile Include="FreeRTOS\queue.c" />
     <ClCompile Include="FreeRTOS\tasks.c" />
+    <ClCompile Include="magellan_logo.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Microchip\Graphics\Button.c" />
     <ClCompile Include="Microchip\Graphics\DisplayDriver.c" />

@@ -105,6 +105,9 @@
     <ClCompile Include="Microchip\Graphics\ListBox.c">
       <Filter>PIC-GraphicLib</Filter>
     </ClCompile>
+    <ClCompile Include="magellan_logo.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="16164bppIcon.c">
       <Filter>Source Files</Filter>
     </ClCompile>

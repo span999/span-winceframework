@@ -3,7 +3,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-///#define		USE_MAGELLAN_LOGO
+#define		USE_MAGELLAN_LOGO
 
 /// include this for PIC graphic lib
 #include "PICgraphic_set.h"
@@ -68,7 +68,7 @@ void CreateDefaultBtn(void)
         BTN_DRAW,                   // will be dislayed after creation
         NULL,                       // no bitmap	
 ///        (XCHAR *)LeftArrowStr,      // LEFT arrow as text
-        (XCHAR *)"Left",      // LEFT arrow as text
+        (XCHAR *)"Priv",      // LEFT arrow as text
         navScheme
     );                              // use navigation scheme
     obj = (OBJ_HEADER *)BtnCreate
@@ -82,7 +82,7 @@ void CreateDefaultBtn(void)
             BTN_DRAW,               // will be dislayed and disabled after creation
             NULL,                   // no bitmap
 ///            (XCHAR *)RightArrowStr, // RIGHT arrow as text
-            (XCHAR *)"Right", // RIGHT arrow as text
+            (XCHAR *)"Next", // RIGHT arrow as text
             navScheme
         );                          // use navigation scheme
 
