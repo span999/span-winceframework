@@ -194,7 +194,8 @@ typedef enum
 
 
 typedef WORD (*PFNMSGCALLBACK)(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
-typedef WORD (*PFNDRAWCALLBACK)(void);
+///typedef WORD (*PFNDRAWCALLBACK)(void);
+typedef void (*PFNDRAWCALLBACK)(WORD wDrawOption);
 ///typedef WORD (*PFNBTNHANDLE)(OBJ_HEADER objID);
 typedef WORD (*PFNBTNHANDLE)(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
 
@@ -204,6 +205,7 @@ typedef struct
     PFNMSGCALLBACK		pfnMsgCallback;     // 
     PFNDRAWCALLBACK		pfnDrawCallback;    // 
 	PFNBTNHANDLE		pfnBtnHandle;		// handle button event for this frame.
+	WORD				wDrawOption;
     SHORT   height;          // 
     SHORT   width;           // 
 } FRAME_HEADER;

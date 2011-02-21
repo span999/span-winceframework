@@ -282,7 +282,7 @@ void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText
 
 
 
-void CreateButtons(void)
+void CreateButtons(WORD wDrawOption)
 {
     #define BTN_ORIGIN_X    (GetMaxX() / 2)
     #define BTN_ORIGIN_Y    (GetMaxY() / 2)
@@ -428,7 +428,7 @@ WORD MsgButtonsDefaultBtn(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 
 
 
-void CreateRenoDataSet(void)
+void CreateRenoDataSet(WORD wDrawOption)
 {
 
     GOLFree();   // free memory for the objects in the previous linked list and start new list
@@ -500,7 +500,7 @@ void AddItemList(XCHAR *pText, LISTBOX *pLb, void *pIcon)
 
 
 // creates list box demo screen
-void CreateListBox(void)
+void CreateListBox(WORD wDrawOption)
 {
     LISTBOX *pLb;
 
@@ -599,7 +599,7 @@ WORD MsgListBoxDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 }
 
 
-void CreateTextEntryPad(void)
+void CreateTextEntryPad(WORD wDrawOption)
 {
 #define NTEXT_H	25
 #define NTEXT_W	25
@@ -611,6 +611,8 @@ void CreateTextEntryPad(void)
 	ClearDevice();	
 	CreateDefaultBtn();
 
+	if( 1 == wDrawOption )
+	{
 	StCreate(
 		ID_STATICTEXT1,
         ((GetMaxX() - (NTEXT_W)) >> 1),
@@ -618,9 +620,23 @@ void CreateTextEntryPad(void)
         ((GetMaxX() - (NTEXT_W)) >> 1) + NTEXT_W,
         ((GetMaxY() - (NTEXT_H)) >> 1) + NTEXT_H,                      // dimension
 		LB_DRAW | ST_CENTER_ALIGN | ST_FRAME | LB_FOCUSED,                   // will be dislayed after creation
-		(XCHAR *)"1",
+		(XCHAR *)"A",
 		alt2Scheme
 	);
+	}
+	else
+	{
+	StCreate(
+		ID_STATICTEXT1,
+        ((GetMaxX() - (NTEXT_W)) >> 1),
+        ((GetMaxY() - (NTEXT_H)) >> 1),
+        ((GetMaxX() - (NTEXT_W)) >> 1) + NTEXT_W,
+        ((GetMaxY() - (NTEXT_H)) >> 1) + NTEXT_H,                      // dimension
+		LB_DRAW | ST_CENTER_ALIGN | ST_FRAME | LB_FOCUSED,                   // will be dislayed after creation
+		(XCHAR *)"0",
+		alt2Scheme
+	);
+	}
 	
     BtnCreate
     (
@@ -651,7 +667,7 @@ void CreateTextEntryPad(void)
 	
 }
 
-// processes messages for list box demo screen
+
 WORD MsgTextEntryPad(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 {
     switch(GetObjID(pObj))
@@ -662,6 +678,87 @@ WORD MsgTextEntryPad(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 }
 
 WORD MsgTextEntryPadDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+	static XCHAR sIdx = 0;
+	static XCHAR scNum[2];
+	STATICTEXT *pSt;
+	pSt = (STATICTEXT *)GOLFindObject(ID_STATICTEXT1);
+	
+	if( 0 == sIdx )
+	{
+		sIdx = *StGetText(pSt);
+		scNum[0] = sIdx;
+		scNum[1] = '\0';
+	}
+	
+    switch(GetObjID(pObj))
+    {	
+		///case ID_BUTTON: here, if you want different key response.
+        case ID_BTN_UP:
+		case ID_BUTTON1:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				if( 90 == sIdx )
+				{
+					sIdx = 65;
+				}
+				else
+				{
+					sIdx++;
+				}
+				scNum[0] = sIdx;
+				StSetText( pSt, scNum );
+				printf("%d ",*StGetText(pSt));
+				SetState(pSt, ST_DRAW);
+			}
+			return (0);  	
+        case ID_BTN_DOWN:
+		case ID_BUTTON2:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				if( 65 == sIdx )
+				{
+					sIdx = 90;
+				}
+				else
+				{
+					sIdx--;
+				}
+				scNum[0] = sIdx;
+				StSetText( pSt, scNum );
+				printf("%d ",*StGetText(pSt));
+				SetState(pSt, ST_DRAW);
+			}
+			return (0); 
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///LbChangeSel(pLb, pLb->pFocusItem);
+				///SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        default:
+            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+    }
+}
+
+
+void CreateNumEntryPad(WORD wDrawOption)
+{
+	CreateTextEntryPad(wDrawOption);
+}
+
+
+WORD MsgNumEntryPad(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+        default:
+            return (1);                             // process by default
+    }
+}
+
+WORD MsgNumEntryPadDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 {
 	static XCHAR sIdx = 0;
 	static XCHAR scNum[2];
@@ -725,6 +822,7 @@ WORD MsgTextEntryPadDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
             return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
     }
 }
+
 
 
 
@@ -1269,6 +1367,7 @@ FRAME_HEADER fhButtons = {
 	CreateButtons,
 	MsgButtonsDefaultBtn,
 	0,
+	0,
 	0
 };
 
@@ -1276,6 +1375,7 @@ FRAME_HEADER fhRenoDataSet = {
 	MsgRenoDataSet,
 	CreateRenoDataSet,
 	MsgRenoDataSetDefaultBtn,
+	0,
 	0,
 	0
 };
@@ -1285,6 +1385,7 @@ FRAME_HEADER fhListBox = {
 	CreateListBox,
 	MsgListBoxDefaultBtn,
 	0,
+	0,
 	0
 };
 
@@ -1293,9 +1394,20 @@ FRAME_HEADER fhTextEnteryPad = {
 	MsgTextEntryPad,
 	CreateTextEntryPad,
 	MsgTextEntryPadDefaultBtn,
+	1,		///text pad
 	0,
 	0
 };
+
+FRAME_HEADER fhNumEnteryPad = {
+	MsgNumEntryPad,
+	CreateNumEntryPad,
+	MsgNumEntryPadDefaultBtn,
+	0,		///number pad
+	0,
+	0
+};
+
 
 
 /// API for screen status handle
@@ -1449,7 +1561,7 @@ void scrDrawCbHandler(void)
 {
 	if( psrcStat->IsFrameCreate )
 	{
-		psrcStat->pnowStatFrame->pfnDrawCallback();
+		psrcStat->pnowStatFrame->pfnDrawCallback(psrcStat->pnowStatFrame->wDrawOption);
 		scrNextStat( psrcStat );
 	}
 }
