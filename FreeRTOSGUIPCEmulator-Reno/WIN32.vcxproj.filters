@@ -37,6 +37,15 @@
     <Filter Include="PIC-GraphicLib\Include">
       <UniqueIdentifier>{85db22f6-3bef-4514-8829-ab40c9f51db6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GUIC">
+      <UniqueIdentifier>{2b951cb0-5e17-4fb6-aac7-7e06543e5a13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUIC\Include">
+      <UniqueIdentifier>{cec2eac1-9f43-4249-858e-f4560af381d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUIC\Res">
+      <UniqueIdentifier>{a97007d8-382d-4257-82dc-be07c4865766}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FreeRTOS\portable\MemMang\heap_3.c">
@@ -69,18 +78,6 @@
     <ClCompile Include="Microchip\Graphics\DisplayDriver.c">
       <Filter>PIC-GraphicLib</Filter>
     </ClCompile>
-    <ClCompile Include="Pictures C32.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FontGentium.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="1bpp_icons.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="4bpp_icons.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PrimitiveTest.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -105,11 +102,26 @@
     <ClCompile Include="Microchip\Graphics\ListBox.c">
       <Filter>PIC-GraphicLib</Filter>
     </ClCompile>
-    <ClCompile Include="magellan_logo.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="GUIC\res\1bpp_icons.c">
+      <Filter>GUIC\Res</Filter>
     </ClCompile>
-    <ClCompile Include="16164bppIcon.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="GUIC\res\4bpp_icons.c">
+      <Filter>GUIC\Res</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIC\res\16164bppIcon.c">
+      <Filter>GUIC\Res</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIC\res\FontGentium.c">
+      <Filter>GUIC\Res</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIC\res\magellan_logo.c">
+      <Filter>GUIC\Res</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIC\res\Pictures C32.c">
+      <Filter>GUIC\Res</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIC\guic.c">
+      <Filter>GUIC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +172,24 @@
     </ClInclude>
     <ClInclude Include="Microchip\Include\Graphics\Graphics.h">
       <Filter>PIC-GraphicLib\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIC\inc\1bpp_icons.h">
+      <Filter>GUIC\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIC\inc\4bpp_icons.h">
+      <Filter>GUIC\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIC\inc\16164bppIcon.h">
+      <Filter>GUIC\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIC\inc\FontGentium.h">
+      <Filter>GUIC\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIC\inc\kbkeymap.h">
+      <Filter>GUIC\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIC\inc\magellan_logo.h">
+      <Filter>GUIC\Include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

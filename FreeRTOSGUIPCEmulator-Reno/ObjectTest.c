@@ -8,7 +8,7 @@
 /// include this for PIC graphic lib
 #include "PICgraphic_set.h"
 
-#include "kbkeymap.h"
+#include "guic.h"
 #include "ObjectTest.h"
 #include "FontGentium.h"
 #include "1bpp_icons.h"
@@ -67,7 +67,6 @@ void CreateDefaultBtn(void)
         0,                          // right, bottom corner (with radius = 0)
         BTN_DRAW,                   // will be dislayed after creation
         NULL,                       // no bitmap	
-///        (XCHAR *)LeftArrowStr,      // LEFT arrow as text
         (XCHAR *)"Priv",      // LEFT arrow as text
         navScheme
     );                              // use navigation scheme
@@ -81,7 +80,6 @@ void CreateDefaultBtn(void)
             0,                      // dimension (with radius = 0)
             BTN_DRAW,               // will be dislayed and disabled after creation
             NULL,                   // no bitmap
-///            (XCHAR *)RightArrowStr, // RIGHT arrow as text
             (XCHAR *)"Next", // RIGHT arrow as text
             navScheme
         );                          // use navigation scheme
@@ -1047,54 +1045,7 @@ void IOGetMsg( GOL_MSG *msg )
 WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 {
 ///	printf("In GOLMsgCallback\n");
-
-
-#if 0
-    if((screenState & 0xF300) != 0xF300)
-    {
-
-        // check for time setting press, process only when not setting time and date
-        if(objMsg == ST_MSG_SELECTED)
-        {
-
-            /* note how the states are arranged in the enumeration, the display state is 
-		       right after the create state. So at the time the static text box of the 
-		       time is selected, the state is in one of the displays. So a minus one is needed
-		       to adjust to go back to the create state of the current page.
-		       After the date and time adjust screen is exited, the saved create state will
-		       be entered as the next state. So we get the effect of going back to the previous
-		       screen after date and time settings are done.
-		    */
-            if((GetObjID(pObj) == ID_STATICTEXT1) || (GetObjID(pObj) == ID_STATICTEXT2))
-            {
-                prevState = screenState - 1;        // save the current create state
-                screenState = CREATE_DATETIME;      // go to date and time setting screen
-                return (1);
-            }
-        }
-    }
-#endif
-
-#if 0
-    // process messages for demo screens
-    switch(screenState)
-    {
-        case DISPLAY_BUTTONS:
-            return (MsgButtons(objMsg, pObj, pMsg));
-
-        case DISPLAY_RENO_DATASET:
-            return (MsgRenoDataSet(objMsg, pObj, pMsg));
-
-		case DISPLAY_LISTBOX:
-            return (MsgListBox(objMsg, pObj, pMsg));
-
-		default:
-            // process message by default
-            return (1);
-    }
-#else
 	return scrMsgCbHandler(objMsg, pObj, pMsg);
-#endif
 }
 
 
@@ -1585,7 +1536,7 @@ void scrDrawCbHandler(void)
 	if( psrcStat->IsFrameCreate )
 	{
 		psrcStat->pnowStatFrame->pfnDrawCallback(psrcStat->pnowStatFrame->wDrawOption);
-		scrNextStat( psrcStat );
+		scrNextStat( psrcStat );	///create->display
 	}
 }
 

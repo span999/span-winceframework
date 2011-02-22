@@ -53,7 +53,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>SDL\include;FreeRTOS\include;FreeRTOS\portable;StellarisWare;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>SDL\include;FreeRTOS\include;FreeRTOS\portable;GUIC\inc;StellarisWare;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_WIN32_WINNT=0x0400;WINVER=0x400;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -130,17 +130,19 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="16164bppIcon.c" />
-    <ClCompile Include="1bpp_icons.c" />
-    <ClCompile Include="4bpp_icons.c" />
     <ClCompile Include="defaults.c" />
-    <ClCompile Include="FontGentium.c" />
     <ClCompile Include="FreeRTOS\portable\MemMang\heap_3.c" />
     <ClCompile Include="FreeRTOS\list.c" />
     <ClCompile Include="FreeRTOS\portable\WIN32\port.c" />
     <ClCompile Include="FreeRTOS\queue.c" />
     <ClCompile Include="FreeRTOS\tasks.c" />
-    <ClCompile Include="magellan_logo.c" />
+    <ClCompile Include="GUIC\guic.c" />
+    <ClCompile Include="GUIC\res\16164bppIcon.c" />
+    <ClCompile Include="GUIC\res\1bpp_icons.c" />
+    <ClCompile Include="GUIC\res\4bpp_icons.c" />
+    <ClCompile Include="GUIC\res\FontGentium.c" />
+    <ClCompile Include="GUIC\res\magellan_logo.c" />
+    <ClCompile Include="GUIC\res\Pictures C32.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Microchip\Graphics\Button.c" />
     <ClCompile Include="Microchip\Graphics\DisplayDriver.c" />
@@ -151,7 +153,6 @@
     <ClCompile Include="Microchip\Graphics\Primitive.c" />
     <ClCompile Include="Microchip\Graphics\StaticText.c" />
     <ClCompile Include="ObjectTest.c" />
-    <ClCompile Include="Pictures C32.c" />
     <ClCompile Include="PrimitiveTest.c" />
     <ClCompile Include="SDLDislpayEmulator\SDLDisplay.cpp" />
   </ItemGroup>
@@ -169,6 +170,12 @@
     <ClInclude Include="FreeRTOS\include\semphr.h" />
     <ClInclude Include="FreeRTOS\include\StackMacros.h" />
     <ClInclude Include="FreeRTOS\include\task.h" />
+    <ClInclude Include="GUIC\inc\16164bppIcon.h" />
+    <ClInclude Include="GUIC\inc\1bpp_icons.h" />
+    <ClInclude Include="GUIC\inc\4bpp_icons.h" />
+    <ClInclude Include="GUIC\inc\FontGentium.h" />
+    <ClInclude Include="GUIC\inc\kbkeymap.h" />
+    <ClInclude Include="GUIC\inc\magellan_logo.h" />
     <ClInclude Include="Microchip\Include\Graphics\Graphics.h" />
     <ClInclude Include="Microchip\Include\Graphics\Primitive.h" />
     <ClInclude Include="SDLDislpayEmulator\SDLDisplay.h" />
