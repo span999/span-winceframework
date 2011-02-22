@@ -123,6 +123,9 @@
     <ClCompile Include="GUIC\guic.c">
       <Filter>GUIC</Filter>
     </ClCompile>
+    <ClCompile Include="Microchip\Graphics\Window.c">
+      <Filter>PIC-GraphicLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">

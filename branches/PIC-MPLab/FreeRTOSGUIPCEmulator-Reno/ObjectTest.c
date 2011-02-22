@@ -283,9 +283,9 @@ void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText
 void CreateButtons(WORD wDrawOption)
 {
     #define BTN_ORIGIN_X    (GetMaxX() / 2)
-    #define BTN_ORIGIN_Y    (GetMaxY() / 2)
-	#define BTN_ORIGIN_W    50
-	#define BTN_ORIGIN_H    30
+    #define BTN_ORIGIN_Y    ((GetMaxY() - DEFAULTBTN_HEIGHT) / 2)
+	#define BTN_ORIGIN_W    40
+	#define BTN_ORIGIN_H    25
 	
     GOLFree();                      // free memory for the objects in the previous linked list and start new list
 ///    CreatePage((XCHAR *)ButtonStr);
@@ -293,57 +293,67 @@ void CreateButtons(WORD wDrawOption)
 	ClearDevice();
 	CreateDefaultBtn();
 
+    WndCreate
+    (
+        ID_WINDOW1,                 // ID
+        0,
+        0,
+        GetMaxX(),
+        GetMaxY() - DEFAULTBTN_HEIGHT,                  // dimension
+        WND_DRAW,                   // will be dislayed after creation
+        (void *) &I16164_Alert,         // icon
+///        pText,                      // set text
+		(XCHAR *)"Main Page...",         // text
+        altScheme
+    );                              // default GOL scheme	
+	
     BtnCreate
     (
         ID_BUTTON1,                 // button ID
-        BTN_ORIGIN_X - 70,
-        BTN_ORIGIN_Y - (BTN_ORIGIN_H/2) - 40,
-        BTN_ORIGIN_X - 70 + BTN_ORIGIN_W,
-        BTN_ORIGIN_Y - (BTN_ORIGIN_H/2) + BTN_ORIGIN_H - 40,			// dimension
+        BTN_ORIGIN_X - 60,
+        BTN_ORIGIN_Y - 30,
+        BTN_ORIGIN_X - 60 + BTN_ORIGIN_W,
+        BTN_ORIGIN_Y - 30 + BTN_ORIGIN_H,			// dimension
         10,                         // set radius
         BTN_DRAW,                   // draw a beveled button
         NULL,                       // no bitmap
-///        (XCHAR *)ButtonStr,         // text
         (XCHAR *)"Test",         // text
         altScheme
     );                              // use alternate scheme
     BtnCreate
     (
         ID_BUTTON2,                 // button ID
-        BTN_ORIGIN_X + (BTN_ORIGIN_X-70),
-        BTN_ORIGIN_Y - (BTN_ORIGIN_H/2) - 40,
-        BTN_ORIGIN_X + (BTN_ORIGIN_X-70) + BTN_ORIGIN_W,
-        BTN_ORIGIN_Y- (BTN_ORIGIN_H/2) + BTN_ORIGIN_H - 40,         // dimension
+        BTN_ORIGIN_X + 10,
+        BTN_ORIGIN_Y - 30,
+        BTN_ORIGIN_X + 10 + BTN_ORIGIN_W,
+        BTN_ORIGIN_Y - 30 + BTN_ORIGIN_H,         // dimension
         0,
         BTN_DRAW,                   // will be dislayed after creation
-///        (void *) &gradientButton,   // use bitmap
         (void *)&ECG_1bpp_16x16,   // use bitmap
-///        (XCHAR *)HomeStr,           // text
         (XCHAR *)NULL,           // text
         altScheme
     );                              // alternative GOL scheme
     BtnCreate
     (
         ID_BUTTON3,                 // button ID
-        BTN_ORIGIN_X - 70,
-        BTN_ORIGIN_Y - (BTN_ORIGIN_H/2) + 40,
-        BTN_ORIGIN_X - 70 + BTN_ORIGIN_W,
-        BTN_ORIGIN_Y - (BTN_ORIGIN_H/2) + BTN_ORIGIN_H + 40,			// dimension
+        BTN_ORIGIN_X - 60,
+        BTN_ORIGIN_Y + 20,
+        BTN_ORIGIN_X - 60 + BTN_ORIGIN_W,
+        BTN_ORIGIN_Y + 20 + BTN_ORIGIN_H,			// dimension
         0,                         // set radius
         BTN_DRAW | BTN_TOGGLE,      // draw a vertical capsule button
         							// that has a toggle behavior
         NULL, 						// no bitmap
-///        (XCHAR *)LowStr,            // text
         (XCHAR *)"Test",            // text
         yellowScheme
     );                          	// use alternate scheme
     BtnCreate
     (
         ID_BUTTON4,             	// button ID
-        BTN_ORIGIN_X + (BTN_ORIGIN_X-70),
-        BTN_ORIGIN_Y - (BTN_ORIGIN_H/2) + 40,
-        BTN_ORIGIN_X + (BTN_ORIGIN_X-70) + BTN_ORIGIN_W,
-        BTN_ORIGIN_Y - (BTN_ORIGIN_H/2) + BTN_ORIGIN_H + 40,			// dimension
+        BTN_ORIGIN_X + 10,
+        BTN_ORIGIN_Y + 20,
+        BTN_ORIGIN_X + 10 + BTN_ORIGIN_W,
+        BTN_ORIGIN_Y + 20 + BTN_ORIGIN_H,         // dimension
         5,                     	// set radius
         BTN_DRAW,               	// draw a vertical capsule button
         NULL,                   	// no bitmap
