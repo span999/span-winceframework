@@ -16,7 +16,7 @@
 
 #include "FieldCommon.h"
 #include "FieldSettingMenu.h"
-
+#include "FieldDataMode.h"
 
 
 
@@ -92,7 +92,13 @@ WORD MsgSettingMenu_mainDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 					LbSetFocusedItem( pLb, (sFocusedItem - 1));
 				SetState(pLb, LB_DRAW_ITEMS);
 			}
-			return (0);  	
+			return (0);
+        case ID_BTN_UP_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///power down
+			}
+			return (0);  
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
@@ -104,6 +110,14 @@ WORD MsgSettingMenu_mainDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 				else
 					LbSetFocusedItem( pLb, (sFocusedItem + 1));
 				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        case ID_BTN_DOWN_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///Navigation mode, setting, avtivity data, quick info, history
+				scrSetStat(&fhDataMode_one);
+				scrCreateInit();
 			}
 			return (0); 
         case ID_BTN_ENTER:

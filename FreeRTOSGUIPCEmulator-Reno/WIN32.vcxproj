@@ -132,7 +132,11 @@
   <ItemGroup>
     <ClCompile Include="defaults.c" />
     <ClCompile Include="FieldCommon.c" />
+    <ClCompile Include="FieldDataMode.c" />
+    <ClCompile Include="FieldInfoMode.c" />
+    <ClCompile Include="FieldMapMode.c" />
     <ClCompile Include="FieldSettingMenu.c" />
+    <ClCompile Include="FieldWatchMode.c" />
     <ClCompile Include="FreeRTOS\portable\MemMang\heap_3.c" />
     <ClCompile Include="FreeRTOS\list.c" />
     <ClCompile Include="FreeRTOS\portable\WIN32\port.c" />

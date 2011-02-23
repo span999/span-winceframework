@@ -16,6 +16,8 @@
 
 #include "FieldCommon.h"
 #include "FieldSettingMenu.h"
+#include "FieldDataMode.h"
+
 
 GOL_SCHEME      *altScheme;                                 // alternative style scheme
 GOL_SCHEME      *alt2Scheme;                                // alternative 2 style scheme
@@ -249,27 +251,30 @@ void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText
               meterScheme);                   	// default GOL scheme 
 
     StCreate(ID_STATICTEXT1,           	// ID 
-              left+5,top+15,(left+5+70),(top+15+15),           	// dimension
+              left+5,top+10,(left+5+70),(top+10+15),           	// dimension
               ST_DRAW,        	// will be dislayed, has frame
               pFunc, // multi-line text
               meterScheme);                   	// default GOL scheme 
-
+#if 0
     StCreate(ID_STATICTEXT2,           	// ID 
-///             200+20,150+35,(200+20+45),(150+35+25),           	// dimension
-///			  left+((right-left)/3),top+((bottom-top)/2),left+((right-left)/3)+55,top+((bottom-top)/2)+25,
-			  left+((right-left)/3),top+((bottom-top)/2),left+((right-left)/3)+55,bottom-2,
-///              ST_DRAW|ST_FRAME|ST_RIGHT_ALIGN,        	// will be dislayed, has frame
+			  left+((right-left)/3),top+((bottom-top)/2),right-((right-left)/3),bottom-2,
               ST_DRAW|ST_RIGHT_ALIGN,        	// will be dislayed, has frame
               pData, // multi-line text
-              ///NULL);                   	// default GOL scheme 
 			  alt2Scheme);                   	// default GOL scheme 
-
+#endif
     StCreate(ID_STATICTEXT3,           	// ID 
               right-5-30,bottom-5-15,(right-5),(bottom-5),           	// dimension
               ST_DRAW|ST_RIGHT_ALIGN,        	// will be dislayed, has frame
               pUnit, // multi-line text
               meterScheme);                   	// default GOL scheme 
 
+    StCreate(ID_STATICTEXT2,           	// ID 
+			  left+((right-left)/3),top+((bottom-top)/2),right-((right-left)/3),bottom-2,
+              ST_DRAW|ST_RIGHT_ALIGN,        	// will be dislayed, has frame
+              pData, // multi-line text
+			  alt2Scheme);                   	// default GOL scheme 
+
+			  
 }
 
 
@@ -419,7 +424,8 @@ void scrInitStat(void)
 		psrcStat->nowStat = CREATE_BUTTONS;
 		psrcStat->nextStat = CREATE_BUTTONS;
 ///		psrcStat->pnowStatFrame = &fhButtons;
-		psrcStat->pnowStatFrame = &fhSettingMenu_main;
+///		psrcStat->pnowStatFrame = &fhSettingMenu_main;
+		psrcStat->pnowStatFrame = &fhDataMode_one;
 		psrcStat->IsFrameCreate = TRUE;
 	}
 }
