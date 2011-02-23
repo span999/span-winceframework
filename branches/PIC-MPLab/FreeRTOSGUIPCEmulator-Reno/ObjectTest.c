@@ -18,6 +18,11 @@
 #include "magellan_logo.h"
 #endif
 
+#include "FieldCommon.h"
+#include "FieldSettingMenu.h"
+
+
+#if 0
 GOL_SCHEME      *altScheme;                                 // alternative style scheme
 GOL_SCHEME      *alt2Scheme;                                // alternative 2 style scheme
 GOL_SCHEME      *alt3Scheme;                                // alternative 3 style scheme
@@ -44,8 +49,38 @@ SCREEN_STATES   screenState = CREATE_BUTTONS;               // current state of 
 
 SCREEN_STATES   prevState = CREATE_BUTTONS; // used to mark state where time setting was called	
 SCREEN_STATES   prevRefreshState = CREATE_BUTTONS; // used to mark the start of the previous screen
+#endif
+
+#if 0
+void CreateSettingMenu_main(WORD wDrawOption);
+WORD MsgSettingMenu_main(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
+WORD MsgSettingMenu_mainDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg);
+
+void CreateSettingMenu_user(WORD wDrawOption);
+WORD MsgSettingMenu_user(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
+WORD MsgSettingMenu_userDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg);
 
 
+FRAME_HEADER fhSettingMenu_main = {
+	MsgSettingMenu_main,
+	CreateSettingMenu_main,
+	MsgSettingMenu_mainDefaultBtn,
+	0,		///no option
+	0,
+	0
+};
+
+FRAME_HEADER fhSettingMenu_user = {
+	MsgSettingMenu_user,
+	CreateSettingMenu_user,
+	MsgSettingMenu_userDefaultBtn,
+	0,		///no option
+	0,
+	0
+};
+#endif
+
+#if 0
 ///#define DEFAULTBTN_WIDTH	(GetMaxY()/2)
 #define DEFAULTBTN_WIDTH	70
 #define DEFAULTBTN_HEIGHT	20
@@ -277,7 +312,7 @@ void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText
               meterScheme);                   	// default GOL scheme 
 
 }
-
+#endif
 
 
 void CreateButtons(WORD wDrawOption)
@@ -482,7 +517,7 @@ WORD MsgRenoDataSetDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
     }
 }
 
-
+#if 0
 void AddItemList(XCHAR *pText, LISTBOX *pLb, void *pIcon)
 {
     XCHAR   *pointer;
@@ -504,7 +539,7 @@ void AddItemList(XCHAR *pText, LISTBOX *pLb, void *pIcon)
         }
     }
 }
-
+#endif
 
 
 // creates list box demo screen
@@ -832,6 +867,214 @@ WORD MsgNumEntryPadDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 }
 
 
+#if 0
+void CreateSettingMenu_main(WORD wDrawOption)
+{
+    LISTBOX *pLb;
+
+    GOLFree();                                      // free memory for the objects in the previous linked list and start new list
+
+	SetColor(BLACK);
+	ClearDevice();	
+
+	CreateDefaultBtn();
+
+	
+    pLb = LbCreate
+        (
+            ID_LISTBOX1,                            // ID
+            0,
+            0,
+            GetMaxX(),
+            GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
+            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            (XCHAR*)"<<Setting Menu>>",
+            alt3Scheme
+        );                                          // use alternate scheme
+	
+	
+	AddItemList( (XCHAR *)"User >", pLb, &PCGaming2_1bpp_16x16);
+	AddItemList( (XCHAR *)"Device >", pLb, &Settings_4bpp_16x16);
+	AddItemList( (XCHAR *)"Activity >", pLb, &PCGaming1_1bpp_16x16);
+	AddItemList( (XCHAR *)"Navigation >", pLb, &I16164_Compass);
+	LbSetFocusedItem( pLb, 1 );
+
+}
+
+
+WORD MsgSettingMenu_main(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+        case ID_LISTBOX1:
+
+            // Process message by default
+            LbMsgDefault(objMsg, (LISTBOX *)pObj, pMsg);
+
+            // The message was processed
+            return (0);
+
+        default:
+            return (1);                             // process by default
+    }
+}
+
+WORD MsgSettingMenu_mainDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+	LISTBOX *pLb;
+	
+	pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
+
+    switch(GetObjID(pObj))
+    {
+		///case ID_BUTTON: here, if you want different key response.
+        case ID_BTN_UP:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( 1 == sFocusedItem )
+					LbSetFocusedItem( pLb, (sLbCount - 1));
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem - 1));
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0);  	
+        case ID_BTN_DOWN:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( (sLbCount - 1) == sFocusedItem )
+					LbSetFocusedItem( pLb, 1);
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem + 1));
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				LbChangeSel(pLb, pLb->pFocusItem);
+				SetState(pLb, LB_DRAW_ITEMS);
+				scrSetStat(psrcStat, &fhSettingMenu_user);
+				scrCreateInit( psrcStat );;
+			}
+			return (0); 
+        default:
+            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+    }
+}
+
+
+void CreateSettingMenu_user(WORD wDrawOption)
+{
+    LISTBOX *pLb;
+
+    GOLFree();                                      // free memory for the objects in the previous linked list and start new list
+
+	SetColor(BLACK);
+	ClearDevice();	
+
+	CreateDefaultBtn();
+
+	
+    pLb = LbCreate
+        (
+            ID_LISTBOX1,                            // ID
+            0,
+            0,
+            GetMaxX(),
+            GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
+            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            (XCHAR*)"<<User Setting>>",
+            alt3Scheme
+        );                                          // use alternate scheme
+	
+	
+	AddItemList( (XCHAR *)"Physical Info", pLb, &I16164_About);
+	AddItemList( (XCHAR *)"Contact Info", pLb, &I16164_About);
+	AddItemList( (XCHAR *)"Emergency Info", pLb, &I16164_About);
+	LbSetFocusedItem( pLb, 1 );
+
+}
+
+
+WORD MsgSettingMenu_user(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+        case ID_LISTBOX1:
+
+            // Process message by default
+            LbMsgDefault(objMsg, (LISTBOX *)pObj, pMsg);
+
+            // The message was processed
+            return (0);
+
+        default:
+            return (1);                             // process by default
+    }
+}
+
+WORD MsgSettingMenu_userDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+	LISTBOX *pLb;
+	
+	pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
+
+    switch(GetObjID(pObj))
+    {
+		///case ID_BUTTON: here, if you want different key response.
+        case ID_BTN_UP:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( 1 == sFocusedItem )
+					LbSetFocusedItem( pLb, (sLbCount - 1));
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem - 1));
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0);  	
+        case ID_BTN_DOWN:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( (sLbCount - 1) == sFocusedItem )
+					LbSetFocusedItem( pLb, 1);
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem + 1));
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				LbChangeSel(pLb, pLb->pFocusItem);
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        case ID_BTN_EXIT:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				scrSetStat(psrcStat, &fhSettingMenu_main);
+				scrCreateInit( psrcStat );;
+			}
+			return (0); 
+
+        default:
+            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+    }
+}
+#endif
+
 
 
 //*****************************************************************************
@@ -1111,111 +1354,6 @@ WORD GOLDrawCallback(void)
 }
 
 
-void myCreateScheme( void )
-{
-    // create the alternate schemes
-    navScheme = GOLCreateScheme();      // alternative scheme for the navigate buttons
-    altScheme = GOLCreateScheme();      // create alternative 1 style scheme
-    alt2Scheme = GOLCreateScheme();     // create alternative 2 style scheme
-    alt3Scheme = GOLCreateScheme();     // create alternative 3 style scheme
-    alt4Scheme = GOLCreateScheme();     // create alternative 4 style scheme
-    alt5Scheme = GOLCreateScheme();     // create alternative 5 style scheme
-    timeScheme = GOLCreateScheme();
-    meterScheme = GOLCreateScheme();    // create meter scheme
-    redScheme = GOLCreateScheme();      // create red style scheme
-    greenScheme = GOLCreateScheme();    // create green style scheme
-    yellowScheme = GOLCreateScheme();   // create yellow style scheme
-
-    /* for Truly display */
-    altScheme->Color0 = RGB565CONVERT(0x4C, 0x8E, 0xFF);
-    altScheme->Color1 = RGB565CONVERT(255, 102, 0);
-    altScheme->EmbossDkColor = RGB565CONVERT(0x1E, 0x00, 0xE5);
-    altScheme->EmbossLtColor = RGB565CONVERT(0xA9, 0xDB, 0xEF);
-    altScheme->ColorDisabled = RGB565CONVERT(0xD4, 0xE1, 0xF7);
-    altScheme->TextColor1 = BRIGHTBLUE;
-    altScheme->TextColor0 = RGB565CONVERT(255, 102, 0);
-    altScheme->TextColorDisabled = RGB565CONVERT(0xB8, 0xB9, 0xBC);
-
-///    altScheme->pFont = (void *)ptrLargeAsianFont;
-///    navScheme->pFont = (void *)ptrLargeAsianFont;
-	altScheme->pFont = (void *)Gentium_Normal15;
-	altScheme->CommonBkColor = BLACK;	
-	
-	navScheme->pFont = (void *)Gentium_Normal15;
-	navScheme->CommonBkColor = BLACK;
-
-    alt2Scheme->TextColor1 = BRIGHTRED;
-///    alt2Scheme->TextColor0 = BRIGHTBLUE;
-    alt2Scheme->TextColor0 = LIGHTBLUE;
-///    alt2Scheme->pFont = (void *)ptrSmallAsianFont;
-	alt2Scheme->pFont = (void *)Gentium_Normal25;
-	alt2Scheme->CommonBkColor = BLACK;	
-
-    alt3Scheme->Color0 = LIGHTBLUE;
-    alt3Scheme->Color1 = BRIGHTGREEN;
-    alt3Scheme->TextColor0 = BLACK;
-    alt3Scheme->TextColor1 = WHITE;
-///    alt3Scheme->pFont = (void *)ptrSmallAsianFont;
-
-    alt4Scheme->Color0 = LIGHTBLUE;
-    alt4Scheme->Color1 = BRIGHTGREEN;
-    alt4Scheme->TextColor0 = BLACK;
-    alt4Scheme->TextColor1 = WHITE;
-///    alt4Scheme->pFont = (void *)ptrSmallAsianFont;
-
-    alt5Scheme->Color0 = LIGHTBLUE;
-    alt5Scheme->Color1 = BRIGHTRED;
-    alt5Scheme->TextColor0 = BLACK;
-    alt5Scheme->TextColor1 = WHITE;
-///    alt5Scheme->pFont = (void *) &monofont; //monofont is equal width font, required for digitalmeter widget
-
-    redScheme->Color0 = RGB565CONVERT(0xCC, 0x00, 0x00);
-    redScheme->Color1 = BRIGHTRED;
-    redScheme->EmbossDkColor = RED4;
-    redScheme->EmbossLtColor = FIREBRICK1;
-    redScheme->TextColor0 = RGB565CONVERT(0xC8, 0xD5, 0x85);
-    redScheme->TextColor1 = BLACK;
-///    redScheme->pFont = (void *)ptrLargeAsianFont;
-	redScheme->pFont = (void *)Gentium_Normal25;
-
-    greenScheme->Color0 = RGB565CONVERT(0x23, 0x9E, 0x0A);
-    greenScheme->Color1 = BRIGHTGREEN;
-    greenScheme->EmbossDkColor = DARKGREEN;
-    greenScheme->EmbossLtColor = PALEGREEN;
-    greenScheme->TextColor0 = RGB565CONVERT(0xDF, 0xAC, 0x83);
-    greenScheme->TextColor1 = BLACK;
-///    greenScheme->pFont = (void *)ptrLargeAsianFont;
-	greenScheme->pFont = (void *)Gentium_Normal25;
-
-    yellowScheme->Color0 = BRIGHTYELLOW;
-    yellowScheme->Color1 = YELLOW;
-    yellowScheme->EmbossDkColor = RGB565CONVERT(0xFF, 0x94, 0x4C);
-    yellowScheme->EmbossLtColor = RGB565CONVERT(0xFD, 0xFF, 0xB2);
-    yellowScheme->TextColor0 = RGB565CONVERT(0xAF, 0x34, 0xF3);
-    yellowScheme->TextColor1 = RED;
-///    yellowScheme->pFont = (void *)ptrLargeAsianFont;
-	yellowScheme->pFont = (void *)Gentium_Normal25;
-
-    timeScheme->Color0 = BLACK;
-    timeScheme->Color1 = WHITE;
-    timeScheme->TextColor0 = BRIGHTBLUE;
-    timeScheme->TextColor1 = WHITE;
-    timeScheme->EmbossDkColor = GRAY20;
-    timeScheme->EmbossLtColor = GRAY80;
-///    timeScheme->pFont = (void *) &GOLSmallFont;
-
-    meterScheme->Color0 = BLACK;
-    meterScheme->Color1 = WHITE;
-///    meterScheme->TextColor0 = BRIGHTBLUE;
-	meterScheme->TextColor0 = BRIGHTYELLOW;
-    meterScheme->TextColor1 = WHITE;
-    meterScheme->EmbossDkColor = GRAY20;
-    meterScheme->EmbossLtColor = GRAY80;
-///    meterScheme->pFont = (void *)ptrSmallAsianFont;
-	meterScheme->pFont = (void *)Gentium_Normal15;
-	meterScheme->CommonBkColor = BLACK;
-
-}
 
 
 #define MIN(x,y)                ((x > y)? y: x)
@@ -1228,8 +1366,8 @@ void ObjectTest( void )
 	
 	GOL_MSG msg;                        // GOL message structure to interact with GOL
 
-	psrcStat = &scrStatus;
-	scrInitStat( psrcStat );
+
+	scrInitStat();
 	
 /***********************************************************************************************************/
 	SetColor(BLACK);
@@ -1371,183 +1509,8 @@ FRAME_HEADER fhNumEnteryPad = {
 
 
 
-/// API for screen status handle
-void scrInitStat(SCREEN_STATUS* pScreenStat)
-{
-	if( pScreenStat )
-	{
-		pScreenStat->privStat = CREATE_BUTTONS;
-		pScreenStat->nowStat = CREATE_BUTTONS;
-		pScreenStat->nextStat = CREATE_BUTTONS;
-		pScreenStat->pnowStatFrame = &fhButtons;
-		pScreenStat->IsFrameCreate = TRUE;
-	}
-}
-
-
-void scrNextStat(SCREEN_STATUS* pScreenStat)
-{
-	if( pScreenStat )
-	{
-		switch(pScreenStat->nowStat)
-		{
-			case CREATE_BUTTONS:
-				pScreenStat->privStat = pScreenStat->nowStat;
-				pScreenStat->nowStat = DISPLAY_BUTTONS;
-				pScreenStat->nextStat = CREATE_RENO_DATASET;
-				pScreenStat->pnowStatFrame = &fhButtons;
-				pScreenStat->IsFrameCreate = FALSE;
-				break;
-			case DISPLAY_BUTTONS:
-				pScreenStat->privStat = pScreenStat->nowStat;
-				pScreenStat->nowStat = pScreenStat->nextStat;
-				pScreenStat->nextStat = DISPLAY_RENO_DATASET;
-				pScreenStat->pnowStatFrame = &fhRenoDataSet;
-				pScreenStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_RENO_DATASET:
-				pScreenStat->privStat = pScreenStat->nowStat;
-				pScreenStat->nowStat = pScreenStat->nextStat;
-				pScreenStat->nextStat = CREATE_LISTBOX;
-				pScreenStat->pnowStatFrame = &fhRenoDataSet;
-				pScreenStat->IsFrameCreate = FALSE;
-				break;
-			case DISPLAY_RENO_DATASET:
-				pScreenStat->privStat = pScreenStat->nowStat;
-				pScreenStat->nowStat = pScreenStat->nextStat;
-				pScreenStat->nextStat = DISPLAY_LISTBOX;
-				pScreenStat->pnowStatFrame = &fhListBox;
-				pScreenStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_LISTBOX:
-				pScreenStat->privStat = pScreenStat->nowStat;
-				pScreenStat->nowStat = pScreenStat->nextStat;
-				pScreenStat->nextStat = CREATE_TEXTENTRYPAD;
-				pScreenStat->pnowStatFrame = &fhListBox;
-				pScreenStat->IsFrameCreate = FALSE;
-				break;
-			case DISPLAY_LISTBOX:
-				pScreenStat->privStat = pScreenStat->nowStat;
-				pScreenStat->nowStat = pScreenStat->nextStat;
-				pScreenStat->nextStat = DISPLAY_TEXTENTRYPAD;
-				pScreenStat->pnowStatFrame = &fhTextEnteryPad;
-				pScreenStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_TEXTENTRYPAD:
-				pScreenStat->privStat = pScreenStat->nowStat;
-				pScreenStat->nowStat = pScreenStat->nextStat;
-				pScreenStat->nextStat = CREATE_NUMENTRYPAD;
-				pScreenStat->pnowStatFrame = &fhTextEnteryPad;
-				pScreenStat->IsFrameCreate = FALSE;
-				break;
-			case DISPLAY_TEXTENTRYPAD:
-				pScreenStat->privStat = pScreenStat->nowStat;
-				pScreenStat->nowStat = pScreenStat->nextStat;
-				pScreenStat->nextStat = DISPLAY_NUMENTRYPAD;
-				pScreenStat->pnowStatFrame = &fhNumEnteryPad;
-				pScreenStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_NUMENTRYPAD:
-				pScreenStat->privStat = pScreenStat->nowStat;
-				pScreenStat->nowStat = pScreenStat->nextStat;
-				pScreenStat->nextStat = CREATE_BUTTONS;
-				pScreenStat->pnowStatFrame = &fhNumEnteryPad;
-				pScreenStat->IsFrameCreate = FALSE;
-				break;
-			case DISPLAY_NUMENTRYPAD:
-				pScreenStat->privStat = pScreenStat->nowStat;
-				pScreenStat->nowStat = pScreenStat->nextStat;
-				pScreenStat->nextStat = DISPLAY_BUTTONS;
-				pScreenStat->pnowStatFrame = &fhButtons;
-				pScreenStat->IsFrameCreate = TRUE;
-				break;
-			default:
-				break;
-		}
-	}
-}
-
-
-void scrPrivStat(SCREEN_STATUS* pScreenStat)
-{
-	if( pScreenStat )
-	{
-		switch(pScreenStat->nowStat)
-		{
-			case CREATE_BUTTONS:
-				break;
-			case DISPLAY_BUTTONS:
-				pScreenStat->privStat = DISPLAY_TEXTENTRYPAD;
-				pScreenStat->nowStat = CREATE_NUMENTRYPAD;
-				pScreenStat->nextStat = DISPLAY_NUMENTRYPAD;
-				pScreenStat->pnowStatFrame = &fhNumEnteryPad;
-				pScreenStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_RENO_DATASET:
-				break;
-			case DISPLAY_RENO_DATASET:
-				pScreenStat->privStat = DISPLAY_NUMENTRYPAD;
-				pScreenStat->nowStat = CREATE_BUTTONS;
-				pScreenStat->nextStat = DISPLAY_BUTTONS;
-				pScreenStat->pnowStatFrame = &fhButtons;
-				pScreenStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_LISTBOX:
-				break;
-			case DISPLAY_LISTBOX:
-				pScreenStat->privStat = DISPLAY_BUTTONS;
-				pScreenStat->nowStat = CREATE_RENO_DATASET;
-				pScreenStat->nextStat = DISPLAY_RENO_DATASET;
-				pScreenStat->pnowStatFrame = &fhRenoDataSet;
-				pScreenStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_TEXTENTRYPAD:
-				break;
-			case DISPLAY_TEXTENTRYPAD:
-				pScreenStat->privStat = DISPLAY_RENO_DATASET;
-				pScreenStat->nowStat = CREATE_LISTBOX;
-				pScreenStat->nextStat = DISPLAY_LISTBOX;
-				pScreenStat->pnowStatFrame = &fhListBox;
-				pScreenStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_NUMENTRYPAD:
-				break;
-			case DISPLAY_NUMENTRYPAD:
-				pScreenStat->privStat = DISPLAY_LISTBOX;
-				pScreenStat->nowStat = CREATE_TEXTENTRYPAD;
-				pScreenStat->nextStat = DISPLAY_TEXTENTRYPAD;
-				pScreenStat->pnowStatFrame = &fhTextEnteryPad;
-				pScreenStat->IsFrameCreate = TRUE;
-				break;
-			default:
-				break;
-		}
-	}
-}
 
 
 
-/// use for MsgCallback & DrawCallback
-WORD scrMsgCbHandler(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
-{
-	WORD wRet;
-	
-	///go check if key/button msg first...
-	wRet = psrcStat->pnowStatFrame->pfnBtnHandle(objMsg, pObj, pMsg);
-	if( wRet )
-		wRet = psrcStat->pnowStatFrame->pfnMsgCallback(objMsg, pObj, pMsg);
-	
-	return wRet;
-}
-
-
-void scrDrawCbHandler(void)
-{
-	if( psrcStat->IsFrameCreate )
-	{
-		psrcStat->pnowStatFrame->pfnDrawCallback(psrcStat->pnowStatFrame->wDrawOption);
-		scrNextStat( psrcStat );	///create->display
-	}
-}
 
 
