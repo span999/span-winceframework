@@ -19,7 +19,14 @@ extern const char Gentium_Normal15[];
 extern const char Gentium_Bold33[];
 #define Gentium_Bold25_SIZE     4767
 extern const char Gentium_Bold25[];
-
+#define Gentium_Normal23_SIZE     4003
+extern const char Gentium_Normal23[];
+#define Gentium_Normal17_SIZE     2228
+extern const char Gentium_Normal17[];
+#define Gentium_Normal19_SIZE     2691
+extern const char Gentium_Normal19[];
+#define Gentium_Normal21_SIZE     3353
+extern const char Gentium_Normal21[];
 #else
 
 #define Gentium_Italic33_SIZE     8840
@@ -38,7 +45,14 @@ extern FONT_FLASH Gentium_Normal15;
 extern FONT_FLASH Gentium_Bold33;
 #define Gentium_Bold25_SIZE     4767
 extern FONT_FLASH Gentium_Bold25;
-
+#define Gentium_Normal23_SIZE     4003
+extern FONT_FLASH Gentium_Normal23;
+#define Gentium_Normal17_SIZE     2228
+extern FONT_FLASH Gentium_Normal17;
+#define Gentium_Normal19_SIZE     2691
+extern FONT_FLASH Gentium_Normal19;
+#define Gentium_Normal21_SIZE     3353
+extern FONT_FLASH Gentium_Normal21;
 #endif
 
 #endif
