@@ -126,6 +126,12 @@
     <ClCompile Include="Microchip\Graphics\Window.c">
       <Filter>PIC-GraphicLib</Filter>
     </ClCompile>
+    <ClCompile Include="FieldSettingMenu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FieldCommon.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">

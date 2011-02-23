@@ -99,15 +99,6 @@ typedef struct
 } SCREEN_STATUS;
 
 
-/// API for screen status handle
-void scrInitStat(SCREEN_STATUS* pScreenStat);
-void scrNextStat(SCREEN_STATUS* pScreenStat);
-void scrPrivStat(SCREEN_STATUS* pScreenStat);
-
-
-/// use for MsgCallback & DrawCallback
-WORD scrMsgCbHandler(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
-void scrDrawCbHandler(void);
 
 
 
