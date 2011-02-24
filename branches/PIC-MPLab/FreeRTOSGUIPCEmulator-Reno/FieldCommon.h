@@ -147,6 +147,11 @@ extern OBJ_HEADER      *pNavList;                                  // pointer to
 
 void myCreateScheme( void );
 
+
+void updateLastView(FRAME_HEADER* pLastFrame);
+FRAME_HEADER* getLastView(void);
+
+
 /// API for screen status handle
 void scrInitStat(void);
 void scrNextStat(void);
@@ -154,6 +159,7 @@ void scrPrivStat(void);
 void scrCreateDone(void);
 void scrCreateInit(void);
 void scrSetStat(FRAME_HEADER* phFrame);
+FRAME_HEADER* scrGetStat(void);
 
 /// use for MsgCallback & DrawCallback
 WORD scrMsgCbHandler(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);

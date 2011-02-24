@@ -81,9 +81,18 @@ WORD MsgWatchMode_watchDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
         case ID_BTN_UP_HOLD:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				///data mode or power down
-				scrSetStat(&fhDataMode_one);
-				scrCreateInit();
+				///fitness mode or power down
+				popupOption.PopItemNum = 2;
+				popupOption.pPopTitle = "Options";
+				popupOption.pPrivFrame = scrGetStat();
+				popupOption.pPopItemList->pPopItem1->pPopMsg = "Fitness Mode";
+				popupOption.pPopItemList->pPopItem1->pIcon = &PCGaming1_4bpp_16x16;
+				popupOption.pPopItemList->pPopItem1->pGoFrame = &fhDataMode_two;
+				popupOption.pPopItemList->pPopItem2->pPopMsg = "Power Down";
+				popupOption.pPopItemList->pPopItem2->pIcon = &I16164_Abort;
+				popupOption.pPopItemList->pPopItem2->pGoFrame = &fhDeviceMode_poweroff;
+				scrSetStat(&fhDeviceMode_popup);
+				scrCreateInit();	
 			}
 			return (0); 
         case ID_BTN_DOWN:

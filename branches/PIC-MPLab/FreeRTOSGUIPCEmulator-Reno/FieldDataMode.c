@@ -18,6 +18,104 @@
 #include "FieldDataMode.h"
 #include "FieldMapMode.h"
 #include "FieldWatchMode.h"
+#include "FieldInfoMode.h"
+#include "FieldSettingMenu.h"
+
+
+
+WORD MsgDefaultBtn_datamodes(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+        case ID_BUTTON_NEXT:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+            return (0);
+
+        case ID_BUTTON_BACK:
+             if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+            return (0);
+
+        case ID_BTN_UP:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+            return (0);
+			
+        case ID_BTN_UP_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///watch mode or power down
+				popupOption.PopItemNum = 2;
+				popupOption.pPopTitle = "Options";
+				popupOption.pPrivFrame = scrGetStat();
+				popupOption.pPopItemList->pPopItem1->pPopMsg = "Watch Mode";
+				popupOption.pPopItemList->pPopItem1->pIcon = &I16164_Clock;
+				popupOption.pPopItemList->pPopItem1->pGoFrame = &fhWatchMode_watch;
+				popupOption.pPopItemList->pPopItem2->pPopMsg = "Power Down";
+				popupOption.pPopItemList->pPopItem2->pIcon = &I16164_Abort;
+				popupOption.pPopItemList->pPopItem2->pGoFrame = &fhDeviceMode_poweroff;
+				scrSetStat(&fhDeviceMode_popup);
+				scrCreateInit();
+			}
+            return (0);
+			
+        case ID_BTN_DOWN:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+            return (0);
+			
+        case ID_BTN_DOWN_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///Navigation mode, setting, avtivity data, quick info, history
+				popupOption.PopItemNum = 3;
+				popupOption.pPopTitle = "Options";
+				popupOption.pPrivFrame = scrGetStat();
+				popupOption.pPopItemList->pPopItem1->pPopMsg = "Navigation";
+				popupOption.pPopItemList->pPopItem1->pIcon = &I16164_Compass;
+				popupOption.pPopItemList->pPopItem1->pGoFrame = &fhMapMode_navgation;
+				popupOption.pPopItemList->pPopItem2->pPopMsg = "Quick Info";
+				popupOption.pPopItemList->pPopItem2->pIcon = &I16164_About;
+				popupOption.pPopItemList->pPopItem2->pGoFrame = &fhInfoMode_info;
+				popupOption.pPopItemList->pPopItem3->pPopMsg = "Setting";
+				popupOption.pPopItemList->pPopItem3->pIcon = &Settings_4bpp_16x16;
+				popupOption.pPopItemList->pPopItem3->pGoFrame = &fhSettingMenu_main;
+
+				scrSetStat(&fhDeviceMode_popup);
+				scrCreateInit();
+			}
+            return (0);
+			
+        case ID_BTN_EXIT:
+            if(objMsg == BTN_MSG_RELEASED)
+			{	
+			}
+            return (0);
+        case ID_BTN_EXIT_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+            return (0);
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+            return (0);
+        case ID_BTN_ENTER_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+            return (0);                             // do nothing since it's HW key simulate
+	
+        default:
+            return (1);                 // process by default
+    }
+}
 
 
 
@@ -84,17 +182,7 @@ void CreateRenoDataSet(WORD wDrawOption)
 			break;
 	}
 	
-	
-#if 0
-	CreateDataSet( 30, 40,( 30+260),( 40+65),"DataSet1", "Time", "23:23", "24h");
-	CreateDataSet( 30,105+2,( 30+130-2),(105+65),"DataSet2", "Elevation", "155", "ft");
-	CreateDataSet(160,105+2,(160+130),(105+65),"DataSet3", "Lap Avg HR", "128", "bpm");
-	CreateDataSet( 30,170+2,( 30+130-2),(170+65),"DataSet4", "Distance", "3.12", "mi");
-	CreateDataSet(160,170+2,(160+130),(170+65),"DataSet5", "Avg HR", "88", "bpm");
-#else
-
-
-#endif
+	updateLastView( scrGetStat() );	///update last view
 }
 
 
@@ -120,26 +208,10 @@ WORD MsgRenoDataSet_oneDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 				scrCreateInit();
 			}
 			return (0); 
-        case ID_BTN_UP_HOLD:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				///watch mode or power down
-				scrSetStat(&fhWatchMode_watch);
-				scrCreateInit();
-			}
-			return (0); 
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				scrSetStat(&fhDataMode_two);
-				scrCreateInit();
-			}
-			return (0); 
-        case ID_BTN_DOWN_HOLD:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				///Navigation mode, setting, avtivity data, quick info, history
-				scrSetStat(&fhDeviceMode_popup);
 				scrCreateInit();
 			}
 			return (0); 
@@ -169,7 +241,7 @@ WORD MsgRenoDataSet_oneDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_datamodes(objMsg, pObj, pMsg));                 // process by default
 	}
 }
 
@@ -196,26 +268,10 @@ WORD MsgRenoDataSet_twoDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 				scrCreateInit();
 			}
 			return (0); 
-        case ID_BTN_UP_HOLD:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				///watch mode or power down
-				scrSetStat(&fhWatchMode_watch);
-				scrCreateInit();
-			}
-			return (0); 
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				scrSetStat(&fhDataMode_three);
-				scrCreateInit();
-			}
-			return (0); 
-        case ID_BTN_DOWN_HOLD:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				///Navigation mode, setting, avtivity data, quick info, history
-				scrSetStat(&fhDeviceMode_popup);
 				scrCreateInit();
 			}
 			return (0); 
@@ -245,7 +301,7 @@ WORD MsgRenoDataSet_twoDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_datamodes(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -272,26 +328,10 @@ WORD MsgRenoDataSet_threeDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg
 				scrCreateInit();
 			}
 			return (0); 
-        case ID_BTN_UP_HOLD:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				///watch mode or power down
-				scrSetStat(&fhWatchMode_watch);
-				scrCreateInit();
-			}
-			return (0); 
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				scrSetStat(&fhDataMode_four);
-				scrCreateInit();
-			}
-			return (0); 
-        case ID_BTN_DOWN_HOLD:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				///Navigation mode, setting, avtivity data, quick info, history
-				scrSetStat(&fhDeviceMode_popup);
 				scrCreateInit();
 			}
 			return (0); 
@@ -321,7 +361,7 @@ WORD MsgRenoDataSet_threeDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_datamodes(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -348,26 +388,10 @@ WORD MsgRenoDataSet_fourDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 				scrCreateInit();
 			}
 			return (0); 
-        case ID_BTN_UP_HOLD:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				///watch mode or power down
-				scrSetStat(&fhWatchMode_watch);
-				scrCreateInit();
-			}
-			return (0); 
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				scrSetStat(&fhDataMode_five);
-				scrCreateInit();
-			}
-			return (0); 
-        case ID_BTN_DOWN_HOLD:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				///Navigation mode, setting, avtivity data, quick info, history
-				scrSetStat(&fhDeviceMode_popup);
 				scrCreateInit();
 			}
 			return (0); 
@@ -397,7 +421,7 @@ WORD MsgRenoDataSet_fourDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_datamodes(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -424,26 +448,10 @@ WORD MsgRenoDataSet_fiveDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 				scrCreateInit();
 			}
 			return (0); 
-        case ID_BTN_UP_HOLD:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				///watch mode or power down
-				scrSetStat(&fhWatchMode_watch);
-				scrCreateInit();
-			}
-			return (0); 
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				scrSetStat(&fhDataMode_six);
-				scrCreateInit();
-			}
-			return (0); 
-        case ID_BTN_DOWN_HOLD:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				///Navigation mode, setting, avtivity data, quick info, history
-				scrSetStat(&fhDeviceMode_popup);
 				scrCreateInit();
 			}
 			return (0); 
@@ -473,7 +481,7 @@ WORD MsgRenoDataSet_fiveDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_datamodes(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -500,26 +508,10 @@ WORD MsgRenoDataSet_sixDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 				scrCreateInit();
 			}
 			return (0); 
-        case ID_BTN_UP_HOLD:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				///watch mode or power down
-				scrSetStat(&fhWatchMode_watch);
-				scrCreateInit();
-			}
-			return (0); 
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				scrSetStat(&fhDataMode_one);
-				scrCreateInit();
-			}
-			return (0); 
-        case ID_BTN_DOWN_HOLD:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				///Navigation mode, setting, avtivity data, quick info, history
-				scrSetStat(&fhDeviceMode_popup);
 				scrCreateInit();
 			}
 			return (0); 
@@ -549,7 +541,7 @@ WORD MsgRenoDataSet_sixDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_datamodes(objMsg, pObj, pMsg));                 // process by default
     }
 }
 

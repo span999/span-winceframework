@@ -17,6 +17,104 @@
 #include "FieldCommon.h"
 #include "FieldSettingMenu.h"
 #include "FieldDataMode.h"
+#include "FieldWatchMode.h"
+#include "FieldMapMode.h"
+#include "FieldInfoMode.h"
+
+
+
+
+WORD MsgDefaultBtn_settings(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+        case ID_BUTTON_NEXT:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+            return (0);
+
+        case ID_BUTTON_BACK:
+             if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+            return (0);
+
+        case ID_BTN_UP:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+            return (0);
+			
+        case ID_BTN_UP_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///watch mode or power down
+				popupOption.PopItemNum = 2;
+				popupOption.pPopTitle = "Options";
+				popupOption.pPrivFrame = scrGetStat();
+				popupOption.pPopItemList->pPopItem1->pPopMsg = "Watch Mode";
+				popupOption.pPopItemList->pPopItem1->pIcon = &I16164_Clock;
+				popupOption.pPopItemList->pPopItem1->pGoFrame = &fhWatchMode_watch;
+				popupOption.pPopItemList->pPopItem2->pPopMsg = "Power Down";
+				popupOption.pPopItemList->pPopItem2->pIcon = &I16164_Abort;
+				popupOption.pPopItemList->pPopItem2->pGoFrame = &fhDeviceMode_poweroff;
+				scrSetStat(&fhDeviceMode_popup);
+				scrCreateInit();
+			}
+            return (0);
+			
+        case ID_BTN_DOWN:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+            return (0);
+			
+        case ID_BTN_DOWN_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///Navigation mode, setting, avtivity data, quick info, history
+				popupOption.PopItemNum = 3;
+				popupOption.pPopTitle = "Options";
+				popupOption.pPrivFrame = scrGetStat();
+				popupOption.pPopItemList->pPopItem1->pPopMsg = "Navigation";
+				popupOption.pPopItemList->pPopItem1->pIcon = &I16164_Compass;
+				popupOption.pPopItemList->pPopItem1->pGoFrame = &fhMapMode_navgation;
+				popupOption.pPopItemList->pPopItem2->pPopMsg = "Quick Info";
+				popupOption.pPopItemList->pPopItem2->pIcon = &I16164_About;
+				popupOption.pPopItemList->pPopItem2->pGoFrame = &fhInfoMode_info;
+				popupOption.pPopItemList->pPopItem3->pPopMsg = "Activity Data";
+				popupOption.pPopItemList->pPopItem3->pIcon = &PCGaming1_4bpp_16x16;
+				popupOption.pPopItemList->pPopItem3->pGoFrame = &fhDataMode_two;
+			}
+            return (0);
+			
+        case ID_BTN_EXIT:
+            if(objMsg == BTN_MSG_RELEASED)
+			{	
+			}
+            return (0);
+        case ID_BTN_EXIT_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+            return (0);
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+            return (0);
+        case ID_BTN_ENTER_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+            return (0);                             // do nothing since it's HW key simulate
+	
+        default:
+            return (1);                 // process by default
+    }
+}
+
 
 
 
@@ -93,12 +191,6 @@ WORD MsgSettingMenu_mainDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 				SetState(pLb, LB_DRAW_ITEMS);
 			}
 			return (0);
-        case ID_BTN_UP_HOLD:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				///power down
-			}
-			return (0);  
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
@@ -112,14 +204,15 @@ WORD MsgSettingMenu_mainDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 				SetState(pLb, LB_DRAW_ITEMS);
 			}
 			return (0); 
-        case ID_BTN_DOWN_HOLD:
+        case ID_BTN_EXIT:
+        case ID_BTN_EXIT_HOLD:
             if(objMsg == BTN_MSG_RELEASED)
-			{
-				///Navigation mode, setting, avtivity data, quick info, history
-				scrSetStat(&fhDataMode_one);
+			{	///back to last info mode, map mode, data mode
+				///how ???
+				scrSetStat( getLastView() );
 				scrCreateInit();
 			}
-			return (0); 
+            return (0);
         case ID_BTN_ENTER:
             if(objMsg == BTN_MSG_RELEASED)
 			{
@@ -278,7 +371,7 @@ WORD MsgSettingMenu_userDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -347,7 +440,7 @@ WORD MsgSettingMenu_physicalinfoDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MS
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -416,7 +509,7 @@ WORD MsgSettingMenu_contactinfoDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -485,7 +578,7 @@ WORD MsgSettingMenu_emergencyinfoDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_M
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -637,7 +730,7 @@ WORD MsgSettingMenu_deviceDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMs
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -761,7 +854,7 @@ WORD MsgSettingMenu_gpsDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -831,7 +924,7 @@ WORD MsgSettingMenu_languageDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *p
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -963,7 +1056,7 @@ WORD MsgSettingMenu_datetimeDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *p
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -1099,7 +1192,7 @@ WORD MsgSettingMenu_unitsofmeasureDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -1219,7 +1312,7 @@ WORD MsgSettingMenu_displayDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pM
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -1355,7 +1448,7 @@ WORD MsgSettingMenu_recordingDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -1487,7 +1580,7 @@ WORD MsgSettingMenu_feedbackDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *p
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -1558,7 +1651,7 @@ WORD MsgSettingMenu_equipment2DefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG 
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -1627,7 +1720,7 @@ WORD MsgSettingMenu_deviceinfoDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG 
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -1754,7 +1847,7 @@ WORD MsgSettingMenu_activityDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *p
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -1823,7 +1916,7 @@ WORD MsgSettingMenu_curactivityprofiDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GO
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -1975,7 +2068,7 @@ WORD MsgSettingMenu_activityprofisetDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GO
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -2043,7 +2136,7 @@ WORD MsgSettingMenu_multisportsetupDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -2112,7 +2205,7 @@ WORD MsgSettingMenu_profilenameDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -2181,7 +2274,7 @@ WORD MsgSettingMenu_activitytypeDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MS
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -2250,7 +2343,7 @@ WORD MsgSettingMenu_speedpaceprefDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_M
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -2374,7 +2467,7 @@ WORD MsgSettingMenu_recordprefDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG 
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -2505,7 +2598,7 @@ WORD MsgSettingMenu_datascreensDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -2632,7 +2725,7 @@ WORD MsgSettingMenu_trainingzonesDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_M
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -2777,7 +2870,7 @@ WORD MsgSettingMenu_trainingalertsDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -2849,7 +2942,7 @@ WORD MsgSettingMenu_equipmentDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -2974,7 +3067,7 @@ WORD MsgSettingMenu_navigationDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG 
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -3043,7 +3136,7 @@ WORD MsgSettingMenu_mapbreadcrumbscreenDefaultBtn(WORD objMsg, OBJ_HEADER* pObj,
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
@@ -3112,7 +3205,7 @@ WORD MsgSettingMenu_navtolocDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *p
 			return (0); 
 
         default:
-            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
     }
 }
 
