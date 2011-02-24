@@ -17,8 +17,8 @@
 #include "FieldCommon.h"
 #include "FieldWatchMode.h"
 #include "FieldSettingMenu.h"
-
-
+#include "FieldDataMode.h"
+#include "FieldMapMode.h"
 
 
 void CreateInfoMode_info(WORD wDrawOption)
@@ -43,7 +43,10 @@ void CreateInfoMode_info(WORD wDrawOption)
 ///        pText,                      // set text
 		(XCHAR *)"<<Info Mode>>",         // text
         alt3Scheme
-    );   }
+    );   
+	
+	updateLastView( scrGetStat() );	///update last view
+}
 
 
 
@@ -71,8 +74,17 @@ WORD MsgInfoMode_infoDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///watch mode or power down
-				scrSetStat(&fhWatchMode_watch);
-				scrCreateInit();
+				popupOption.PopItemNum = 2;
+				popupOption.pPopTitle = "Options";
+				popupOption.pPrivFrame = scrGetStat();
+				popupOption.pPopItemList->pPopItem1->pPopMsg = "Watch Mode";
+				popupOption.pPopItemList->pPopItem1->pIcon = &I16164_Clock;
+				popupOption.pPopItemList->pPopItem1->pGoFrame = &fhWatchMode_watch;
+				popupOption.pPopItemList->pPopItem2->pPopMsg = "Power Down";
+				popupOption.pPopItemList->pPopItem2->pIcon = &I16164_Abort;
+				popupOption.pPopItemList->pPopItem2->pGoFrame = &fhDeviceMode_poweroff;
+				scrSetStat(&fhDeviceMode_popup);
+				scrCreateInit();	
 			}
 			return (0); 
         case ID_BTN_DOWN:
@@ -85,7 +97,20 @@ WORD MsgInfoMode_infoDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///Navigation mode, setting, avtivity data, quick info, history
-				scrSetStat(&fhSettingMenu_main);
+				popupOption.PopItemNum = 3;
+				popupOption.pPopTitle = "Options";
+				popupOption.pPrivFrame = scrGetStat();
+				popupOption.pPopItemList->pPopItem1->pPopMsg = "Activity Data";
+				popupOption.pPopItemList->pPopItem1->pIcon = &PCGaming1_4bpp_16x16;
+				popupOption.pPopItemList->pPopItem1->pGoFrame = &fhDataMode_two;
+				popupOption.pPopItemList->pPopItem2->pPopMsg = "Navigation";
+				popupOption.pPopItemList->pPopItem2->pIcon = &I16164_Compass;
+				popupOption.pPopItemList->pPopItem2->pGoFrame = &fhMapMode_navgation;
+				popupOption.pPopItemList->pPopItem3->pPopMsg = "Setting";
+				popupOption.pPopItemList->pPopItem3->pIcon = &Settings_4bpp_16x16;
+				popupOption.pPopItemList->pPopItem3->pGoFrame = &fhSettingMenu_main;
+
+				scrSetStat(&fhDeviceMode_popup);
 				scrCreateInit();
 			}
 			return (0); 

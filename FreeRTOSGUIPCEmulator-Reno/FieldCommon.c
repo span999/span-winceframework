@@ -44,7 +44,7 @@ SCREEN_STATES   prevRefreshState = CREATE_BUTTONS; // used to mark the start of 
 ///span use
 SCREEN_STATUS	scrStatus;
 SCREEN_STATUS	*psrcStat;
-
+static FRAME_HEADER	*pLastViewFrame;
 
 
 
@@ -417,7 +417,17 @@ void myCreateScheme( void )
 }
 
 
-
+void updateLastView(FRAME_HEADER* pLastFrame)
+{
+	pLastViewFrame = pLastFrame;
+}
+	
+FRAME_HEADER* getLastView(void)
+{
+	return pLastViewFrame;
+}
+	
+	
 /// API for screen status handle
 void scrInitStat(void)
 {
@@ -594,6 +604,11 @@ void scrCreateInit(void)
 void scrSetStat(FRAME_HEADER* phFrame)
 {
 	psrcStat->pnowStatFrame = phFrame;
+}
+
+FRAME_HEADER* scrGetStat(void)
+{
+	return (psrcStat->pnowStatFrame);
 }
 
 

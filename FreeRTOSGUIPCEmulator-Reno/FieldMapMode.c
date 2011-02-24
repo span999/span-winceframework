@@ -18,6 +18,8 @@
 #include "FieldMapMode.h"
 #include "FieldWatchMode.h"
 #include "FieldInfoMode.h"
+#include "FieldDataMode.h"
+#include "FieldSettingMenu.h"
 
 
 
@@ -45,7 +47,7 @@ void CreateMapMode_navigation(WORD wDrawOption)
         alt3Scheme
     );                              // default GOL scheme
 	
-	
+	updateLastView( scrGetStat() );	///update last view
 }
 
 
@@ -74,7 +76,16 @@ WORD MsgMapMode_navigationDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMs
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///watch mode or power down
-				scrSetStat(&fhWatchMode_watch);
+				popupOption.PopItemNum = 2;
+				popupOption.pPopTitle = "Options";
+				popupOption.pPrivFrame = scrGetStat();
+				popupOption.pPopItemList->pPopItem1->pPopMsg = "Watch Mode";
+				popupOption.pPopItemList->pPopItem1->pIcon = &I16164_Clock;
+				popupOption.pPopItemList->pPopItem1->pGoFrame = &fhWatchMode_watch;
+				popupOption.pPopItemList->pPopItem2->pPopMsg = "Power Down";
+				popupOption.pPopItemList->pPopItem2->pIcon = &I16164_Abort;
+				popupOption.pPopItemList->pPopItem2->pGoFrame = &fhDeviceMode_poweroff;
+				scrSetStat(&fhDeviceMode_popup);
 				scrCreateInit();				
 			}
 			return (0); 
@@ -88,9 +99,21 @@ WORD MsgMapMode_navigationDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMs
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///Navigation mode, setting, avtivity data, quick info, history
-				scrSetStat(&fhInfoMode_info);
+				popupOption.PopItemNum = 3;
+				popupOption.pPopTitle = "Options";
+				popupOption.pPrivFrame = scrGetStat();
+				popupOption.pPopItemList->pPopItem1->pPopMsg = "Activity Data";
+				popupOption.pPopItemList->pPopItem1->pIcon = &PCGaming1_4bpp_16x16;
+				popupOption.pPopItemList->pPopItem1->pGoFrame = &fhDataMode_two;
+				popupOption.pPopItemList->pPopItem2->pPopMsg = "Quick Info";
+				popupOption.pPopItemList->pPopItem2->pIcon = &I16164_About;
+				popupOption.pPopItemList->pPopItem2->pGoFrame = &fhInfoMode_info;
+				popupOption.pPopItemList->pPopItem3->pPopMsg = "Setting";
+				popupOption.pPopItemList->pPopItem3->pIcon = &Settings_4bpp_16x16;
+				popupOption.pPopItemList->pPopItem3->pGoFrame = &fhSettingMenu_main;
+
+				scrSetStat(&fhDeviceMode_popup);
 				scrCreateInit();				
-				
 			}
 			return (0); 
         case ID_BTN_ENTER:
