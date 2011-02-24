@@ -167,6 +167,7 @@ void AddItemList(XCHAR *pText, LISTBOX *pLb, void *pIcon);
 
 
 ///#define  USE_DEFAULTBTN
+#define		USE_MAGELLAN_LOGO
 
 #ifdef USE_DEFAULTBTN
 #define DEFAULTBTN_WIDTH	70
@@ -177,6 +178,11 @@ void AddItemList(XCHAR *pText, LISTBOX *pLb, void *pIcon);
 #endif
 #define HWBTN_WIDTH		20
 #define HWBTN_HEIGHT	15
+
+
+#define MIN(x,y)                ((x > y)? y: x)
+#define WAIT_UNTIL_FINISH(x)    while(!x)	
+#define DEMODELAY				1000
 
 
 #endif	/*#ifndef __FIELDCOMMON_H__*/
