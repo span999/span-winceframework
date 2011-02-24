@@ -17,6 +17,11 @@
 #include "FieldCommon.h"
 #include "FieldWatchMode.h"
 #include "FieldDataMode.h"
+#include "FieldMapMode.h"
+#include "FieldSettingMenu.h"
+#include "FieldInfoMode.h"
+
+
 
 #ifdef USE_MAGELLAN_LOGO
 #include "magellan_logo.h"
@@ -375,6 +380,248 @@ WORD MsgDeviceMode_bootingDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMs
 	}
 }
 
+#define  VAR_OPTION
+
+
+void CreateDeviceMode_popup(WORD wDrawOption)
+{
+    LISTBOX *pLb;
+#ifdef VAR_OPTION
+	POPUPITEM_HEADER*	pPopItems;
+	SHORT	sCount = 0;
+#endif
+	
+    GOLFree();                                      // free memory for the objects in the previous linked list and start new list
+
+///	SetColor(BLACK);
+///	ClearDevice();	
+
+	CreateDefaultBtn();
+	
+    pLb = LbCreate
+        (
+            ID_LISTBOX1,                            // ID
+            POPUP_FRAME_OFFSET_W,
+            POPUP_FRAME_OFFSET_H,
+            GetMaxX() - POPUP_FRAME_OFFSET_W,
+            GetMaxY() - DEFAULTBTN_HEIGHT - POPUP_FRAME_OFFSET_H,  // dimension
+            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+#ifdef VAR_OPTION
+            (XCHAR*)(popupOption.pPopTitle),
+#else			
+            (XCHAR*)"<Options>",
+#endif
+            altScheme
+        );                                          // use alternate scheme
+
+#ifdef VAR_OPTION
+	pPopItems = popupOption.pPopItemList->pPopItem1;
+	while( sCount < popupOption.PopItemNum )
+	{
+		AddItemList( (XCHAR *)pPopItems->pPopMsg, pLb, pPopItems->pIcon);
+		sCount++;
+		pPopItems++;
+	}
+#else			
+	AddItemList( (XCHAR *)"Navigation", pLb, &I16164_About);
+	AddItemList( (XCHAR *)"Quick Info", pLb, &I16164_About);
+	AddItemList( (XCHAR *)"Setting/History", pLb, &I16164_About);
+#endif
+	LbSetFocusedItem( pLb, 1 );	
+}
+
+
+
+WORD MsgDeviceMode_popup(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+        case ID_LISTBOX1:
+
+            // Process message by default
+            LbMsgDefault(objMsg, (LISTBOX *)pObj, pMsg);
+
+            // The message was processed
+            return (0);
+        default:
+            return 1; 							// process by default
+    }
+}
+
+WORD MsgDeviceMode_popupDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+	LISTBOX *pLb;
+#ifdef VAR_OPTION
+	POPUPITEM_HEADER*	pPopItems;
+#endif
+	
+	pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
+    switch(GetObjID(pObj))
+    {
+		///case ID_BUTTON: here, if you want different key response.
+        case ID_BTN_UP:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( 1 == sFocusedItem )
+					LbSetFocusedItem( pLb, (sLbCount - 1));
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem - 1));
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        case ID_BTN_UP_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///power down
+			}
+			return (0); 
+        case ID_BTN_DOWN:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( (sLbCount - 1) == sFocusedItem )
+					LbSetFocusedItem( pLb, 1);
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem + 1));
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        case ID_BTN_DOWN_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///???
+				
+			}
+			return (0); 
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///record
+				SHORT sFocusedItem;
+				sFocusedItem = LbGetFocusedItem(pLb);			
+
+#ifdef VAR_OPTION
+				pPopItems = popupOption.pPopItemList->pPopItem1;
+				scrSetStat( (pPopItems+(sFocusedItem-1))->pGoFrame );
+#else				
+				switch(sFocusedItem)
+				{
+					case 1:
+						scrSetStat(&fhMapMode_navgation);
+						break;
+					case 2:
+						scrSetStat(&fhInfoMode_info);
+						break;
+					case 3:
+						scrSetStat(&fhSettingMenu_main);
+						break;
+					default:
+						scrSetStat(&fhSettingMenu_main);
+						break;
+				}
+#endif				
+				scrCreateInit();
+			}
+			return (0); 
+        case ID_BTN_ENTER_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///reset
+			}
+			return (0); 
+        case ID_BTN_EXIT:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///lap, back to privious
+#ifdef VAR_OPTION
+				scrSetStat(popupOption.pPrivFrame);
+#else
+				scrSetStat(&fhDataMode_three);
+#endif
+				scrCreateInit();
+			}
+			return (0); 
+        case ID_BTN_EXIT_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///mark-next
+			}
+			return (0); 
+
+        default:
+            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+	}
+}
+
+
+POPUPITEM_HEADER popitem1 = 
+{
+	"1                   ",
+	&I16164_About,
+	&fhMapMode_navgation
+};
+
+POPUPITEM_HEADER popitem2 = 
+{
+	"2                   ",
+	&I16164_About,
+	&fhMapMode_navgation
+};
+
+POPUPITEM_HEADER popitem3 = 
+{
+	"3                   ",
+	&I16164_About,
+	&fhMapMode_navgation
+};
+
+POPUPITEM_HEADER popitem4 = 
+{
+	"4                   ",
+	&I16164_About,
+	&fhMapMode_navgation
+};
+
+POPUPITEM_HEADER popitem5 = 
+{
+	"5                   ",
+	&I16164_About,
+	&fhMapMode_navgation
+};
+
+POPUPITEM_HEADER popitem6 = 
+{
+	"6                   ",
+	&I16164_About,
+	&fhMapMode_navgation
+};
+
+
+POPUPITEMLIST_HEADER popitemlist =
+{
+	&popitem1,
+	&popitem2,
+	&popitem3,
+	&popitem4,
+	&popitem5,
+	&popitem6,
+};
+
+
+POPUPOPTION_HEADER popupOption = 
+{
+	3,						///item number
+	"t                  ",				///title
+	&fhDataMode_three,		///privious frame
+	&popitemlist
+};
+
+
 
 
 FRAME_HEADER fhWatchMode_watch = {
@@ -401,6 +648,16 @@ FRAME_HEADER fhDeviceMode_booting = {
 	MsgDeviceMode_booting,
 	CreateDeviceMode_booting,
 	MsgDeviceMode_bootingDefaultBtn,
+	0,		///no option
+	0,
+	0
+};
+
+
+FRAME_HEADER fhDeviceMode_popup = {
+	MsgDeviceMode_popup,
+	CreateDeviceMode_popup,
+	MsgDeviceMode_popupDefaultBtn,
 	0,		///no option
 	0,
 	0
