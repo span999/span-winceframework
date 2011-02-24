@@ -3,7 +3,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-#define		USE_MAGELLAN_LOGO
+///#define		USE_MAGELLAN_LOGO
 
 /// include this for PIC graphic lib
 #include "PICgraphic_set.h"
@@ -19,7 +19,7 @@
 #endif
 
 #include "FieldCommon.h"
-#include "FieldSettingMenu.h"
+///#include "FieldSettingMenu.h"
 
 
 
@@ -790,10 +790,11 @@ WORD GOLDrawCallback(void)
 
 
 
-
+#if 0
 #define MIN(x,y)                ((x > y)? y: x)
 #define WAIT_UNTIL_FINISH(x)    while(!x)	
 #define DEMODELAY				1000
+#endif
 
 void ObjectTest( void )
 {
@@ -803,7 +804,8 @@ void ObjectTest( void )
 
 
 	scrInitStat();
-	
+
+#if 0	
 /***********************************************************************************************************/
 	SetColor(BLACK);
 	ClearDevice();
@@ -866,6 +868,7 @@ void ObjectTest( void )
 	DelayMs(DEMODELAY);
 #endif
 	
+#endif
 	
 /***********************************************************************************************************/
     GOLInit();                          // Initialize graphics library and crete default style scheme for GOL

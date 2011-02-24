@@ -17,6 +17,7 @@
 #include "FieldCommon.h"
 #include "FieldSettingMenu.h"
 #include "FieldDataMode.h"
+#include "FieldWatchMode.h"
 
 
 GOL_SCHEME      *altScheme;                                 // alternative style scheme
@@ -51,9 +52,9 @@ SCREEN_STATUS	*psrcStat;
 
 void CreateDefaultBtn(void)
 {
+#ifdef USE_DEFAULTBTN
     OBJ_HEADER  *obj;
 
-#ifdef USE_DEFAULTBTN
     BtnCreate
     (
         ID_BUTTON_BACK,             // button ID
@@ -428,9 +429,9 @@ void scrInitStat(void)
 		psrcStat->nowStat = CREATE_BUTTONS;
 		psrcStat->nextStat = CREATE_BUTTONS;
 ///		psrcStat->pnowStatFrame = &fhButtons;
-///		psrcStat->pnowStatFrame = &fhSettingMenu_main;
+		psrcStat->pnowStatFrame = &fhDeviceMode_poweroff;
 ///		psrcStat->pnowStatFrame = &fhDataMode_one;
-		psrcStat->pnowStatFrame = &fhDataMode_two;
+///		psrcStat->pnowStatFrame = &fhDataMode_two;
 		psrcStat->IsFrameCreate = TRUE;
 	}
 }
