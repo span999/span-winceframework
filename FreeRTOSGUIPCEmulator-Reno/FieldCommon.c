@@ -425,7 +425,8 @@ void scrInitStat(void)
 		psrcStat->nextStat = CREATE_BUTTONS;
 ///		psrcStat->pnowStatFrame = &fhButtons;
 ///		psrcStat->pnowStatFrame = &fhSettingMenu_main;
-		psrcStat->pnowStatFrame = &fhDataMode_one;
+///		psrcStat->pnowStatFrame = &fhDataMode_one;
+		psrcStat->pnowStatFrame = &fhDataMode_two;
 		psrcStat->IsFrameCreate = TRUE;
 	}
 }
