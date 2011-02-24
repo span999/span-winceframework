@@ -45,7 +45,7 @@ void CreateWatchMode_watch(WORD wDrawOption)
         alt3Scheme
     );                              // default GOL scheme
 	
-	CreateDataSet( 0,  30, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, "Watch Mode", "Time", "23:23", "24h");
+	CreateDataSet( 0,  40, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, "Watch Mode", "Time", "23:23", "24h");
 	
 }
 
