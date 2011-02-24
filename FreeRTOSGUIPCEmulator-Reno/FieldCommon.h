@@ -176,8 +176,10 @@ void AddItemList(XCHAR *pText, LISTBOX *pLb, void *pIcon);
 #define DEFAULTBTN_WIDTH	0
 #define DEFAULTBTN_HEIGHT	0
 #endif
-#define HWBTN_WIDTH		20
-#define HWBTN_HEIGHT	15
+///#define HWBTN_WIDTH		20
+///#define HWBTN_HEIGHT	15
+#define HWBTN_WIDTH		2
+#define HWBTN_HEIGHT	1
 
 
 #define MIN(x,y)                ((x > y)? y: x)
