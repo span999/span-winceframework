@@ -166,9 +166,15 @@ void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText
 void AddItemList(XCHAR *pText, LISTBOX *pLb, void *pIcon);
 
 
+///#define  USE_DEFAULTBTN
 
+#ifdef USE_DEFAULTBTN
 #define DEFAULTBTN_WIDTH	70
 #define DEFAULTBTN_HEIGHT	20
+#else
+#define DEFAULTBTN_WIDTH	0
+#define DEFAULTBTN_HEIGHT	0
+#endif
 #define HWBTN_WIDTH		20
 #define HWBTN_HEIGHT	15
 

@@ -53,6 +53,7 @@ void CreateDefaultBtn(void)
 {
     OBJ_HEADER  *obj;
 
+#ifdef USE_DEFAULTBTN
     BtnCreate
     (
         ID_BUTTON_BACK,             // button ID
@@ -79,6 +80,7 @@ void CreateDefaultBtn(void)
             (XCHAR *)"Next", // RIGHT arrow as text
             navScheme
         );                          // use navigation scheme
+#endif
 
 	/* add Reno 4(8) buttons simulate (include press/hold action) */
     BtnCreate
@@ -188,8 +190,10 @@ void CreateDefaultBtn(void)
         );                          // use navigation scheme
 
 		
-#if defined (USE_FOCUS)                    
+#if defined (USE_FOCUS) 
+#ifdef USE_DEFAULTBTN                  
     GOLSetFocus(obj);   // set focus for the button
+#endif
 #endif  
   
 }
