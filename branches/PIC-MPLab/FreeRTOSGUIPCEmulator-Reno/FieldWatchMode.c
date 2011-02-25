@@ -9,10 +9,15 @@
 
 #include "guic.h"
 #include "ObjectTest.h"
+#if 0
 #include "FontGentium.h"
 #include "1bpp_icons.h"
 #include "4bpp_icons.h"
 #include "16164bppIcon.h"
+#else
+#include "fonts.h"
+#include "icons.h"
+#endif
 
 #include "FieldCommon.h"
 #include "FieldWatchMode.h"
@@ -233,6 +238,7 @@ WORD MsgDeviceMode_poweroffDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pM
 void CreateDeviceMode_booting(WORD wDrawOption)
 {
     SHORT       width, height;
+	void	*pNowFont = NULL;
 
     GOLFree();   // free memory for the objects in the previous linked list and start new list
 
@@ -244,29 +250,36 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 /***********************************************************************************************************/
 	SetColor(BLACK);
 	ClearDevice();
+	
 	// draw fonts in the screen
-	SetFont((void *) &Gentium_Normal15);
+	pNowFont = (void *)&Gentium_Normal15;
+	///pNowFont = (void *)&comic_Normal15;
+	SetFont(pNowFont);
 	SetColor(LIGHTRED);
-	width = GetTextWidth("This Demo bases on", (void *) &Gentium_Normal15);
-	height = GetTextHeight((void *) &Gentium_Normal15);
+	width = GetTextWidth("This Demo bases on", pNowFont);
+	height = GetTextHeight(pNowFont);
 	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, "This Demo bases on");
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
-	SetFont((void *) &Gentium_Normal15);
+	///pNowFont = (void *)&Gentium_Normal15;
+	pNowFont = (void *)&comic_Normal19;
+	SetFont(pNowFont);
 	SetColor(LIGHTGREEN);
-	width = GetTextWidth("freeRTOS:v6.1.0", (void *) &Gentium_Normal15);
-	height = GetTextHeight((void *) &Gentium_Normal15);
+	width = GetTextWidth("freeRTOS:v6.1.0", pNowFont);
+	height = GetTextHeight(pNowFont);
 	OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "freeRTOS:v6.1.0");
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
-	SetFont((void *) &Gentium_Normal15);
+	///pNowFont = (void *)&Gentium_Normal15;
+	pNowFont = (void *)&comic_Normal15;
+	SetFont(pNowFont);
 	SetColor(LIGHTBLUE);
-	width = GetTextWidth("MicroChip AppLib:v2.11", (void *) &Gentium_Normal15);
-	height = GetTextHeight((void *) &Gentium_Normal15);
+	width = GetTextWidth("MicroChip AppLib:v2.11", pNowFont);
+	height = GetTextHeight(pNowFont);
 	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, "MicroChip AppLib:v2.11");
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	

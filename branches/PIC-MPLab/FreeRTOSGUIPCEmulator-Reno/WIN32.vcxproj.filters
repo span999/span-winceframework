@@ -144,6 +144,9 @@
     <ClCompile Include="FieldWatchMode.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GUIC\res\FontComic.c">
+      <Filter>GUIC\Res</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">
