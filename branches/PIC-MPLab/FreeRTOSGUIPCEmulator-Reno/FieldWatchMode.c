@@ -3,7 +3,6 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-
 /// include this for PIC graphic lib
 #include "PICgraphic_set.h"
 
@@ -11,29 +10,38 @@
 #include "ObjectTest.h"
 #include "fonts.h"
 #include "icons.h"
-
-#include "FieldCommon.h"
-#include "FieldWatchMode.h"
-#include "FieldDataMode.h"
-#include "FieldMapMode.h"
-#include "FieldSettingMenu.h"
-#include "FieldInfoMode.h"
-
-
+#include "fields.h"
 
 #ifdef USE_MAGELLAN_LOGO
 #include "magellan_logo.h"
 #endif
 
 
+void PPMenuSetUp( SHORT	ItemNum, XCHAR *pTitle, FRAME_HEADER *pPrivF )
+{
+	popupOption.PopItemNum = ItemNum;
+	popupOption.pPopTitle = pTitle;
+	popupOption.pPrivFrame = pPrivF;
+}
+
+void PPMenuItemsSetUp( SHORT ItemNum, XCHAR *pMsg, void *pIcon, FRAME_HEADER *pFrame2Go )
+{
+	POPUPITEM_HEADER **ppThisMI = NULL;
+	
+	ppThisMI = &(popupOption.pPopItemList->pPopItem1) + (ItemNum-1);
+	
+	(*ppThisMI)->pPopMsg = pMsg;
+	(*ppThisMI)->pIcon = pIcon;
+	(*ppThisMI)->pGoFrame = pFrame2Go;
+}
+
+
+
+
 void CreateWatchMode_watch(WORD wDrawOption)
 {
-
     GOLFree();   // free memory for the objects in the previous linked list and start new list
-
-	SetColor(BLACK);
-	ClearDevice();
-
+	gcCleanScreen();
 	CreateDefaultBtn();
 
     WndCreate
@@ -51,7 +59,6 @@ void CreateWatchMode_watch(WORD wDrawOption)
     );                              // default GOL scheme
 	
 	CreateDataSet( 0,  40, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, "Watch Mode", "Time", "23:23", "24h");
-	
 }
 
 
@@ -80,17 +87,24 @@ WORD MsgWatchMode_watchDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///fitness mode or power down
-				popupOption.PopItemNum = 2;
-				popupOption.pPopTitle = "Options";
-				popupOption.pPrivFrame = scrGetStat();
-				popupOption.pPopItemList->pPopItem1->pPopMsg = "Fitness Mode";
-				popupOption.pPopItemList->pPopItem1->pIcon = &PCGaming1_4bpp_16x16;
-				popupOption.pPopItemList->pPopItem1->pGoFrame = &fhDataMode_two;
-				popupOption.pPopItemList->pPopItem2->pPopMsg = "Power Down";
-				popupOption.pPopItemList->pPopItem2->pIcon = &I16164_Abort;
-				popupOption.pPopItemList->pPopItem2->pGoFrame = &fhDeviceMode_poweroff;
-				scrSetStat(&fhDeviceMode_popup);
-				scrCreateInit();	
+				///popupOption.PopItemNum = 2;
+				///popupOption.pPopTitle = "Options";
+				///popupOption.pPrivFrame = scrGetStat();
+				///PPMenuSetUp( 2, "Options", scrGetStat() );
+				PPMenuSetUp( 2, OptionsENStr, scrGetStat() );
+				///popupOption.pPopItemList->pPopItem1->pPopMsg = "Fitness Mode";
+				///popupOption.pPopItemList->pPopItem1->pIcon = &PCGaming1_4bpp_16x16;
+				///popupOption.pPopItemList->pPopItem1->pGoFrame = &fhDataMode_two;
+				///PPMenuItem1SetUp( "Fitness Mode", &PCGaming1_4bpp_16x16, &fhDataMode_two );
+				PPMenuItem1SetUp( FitnessModeENStr, &PCGaming1_4bpp_16x16, &fhDataMode_two );
+				///popupOption.pPopItemList->pPopItem2->pPopMsg = "Power Down";
+				///popupOption.pPopItemList->pPopItem2->pIcon = &I16164_Abort;
+				///popupOption.pPopItemList->pPopItem2->pGoFrame = &fhDeviceMode_poweroff;
+				///PPMenuItem2SetUp( "Power Down", &I16164_Abort, &fhDeviceMode_poweroff );
+				PPMenuItem2SetUp( PowerDownENStr, &I16164_Abort, &fhDeviceMode_poweroff );
+				///scrSetStat(&fhDeviceMode_popup);
+				///scrCreateInit();
+				scrSetNEXT(&fhDeviceMode_popup);
 			}
 			return (0); 
         case ID_BTN_DOWN:
@@ -141,18 +155,16 @@ void CreateDeviceMode_poweroff(WORD wDrawOption)
     SHORT       width, height;
 
     GOLFree();   // free memory for the objects in the previous linked list and start new list
-
-	SetColor(BLACK);
-	ClearDevice();
-
+	gcCleanScreen();
 	CreateDefaultBtn();
 
 	// draw fonts in the screen
-    SetFont((void *) &Gentium_Normal25);
-	SetColor(LIGHTGREEN);
-	width = GetTextWidth("PowerOff", (void *) &Gentium_Normal25);
-    height = GetTextHeight((void *) &Gentium_Normal25);
-	OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height - DEFAULTBTN_HEIGHT) >> 1, "PowerOff");
+    ///SetFont((void *) &Gentium_Normal25);
+	///SetColor(LIGHTGREEN);
+	width = GetTextWidth(PoweroffModeENStr, (void *) &Gentium_Normal25U);
+    height = GetTextHeight((void *) &Gentium_Normal25U);
+	///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height - DEFAULTBTN_HEIGHT) >> 1, "PowerOff");
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height - DEFAULTBTN_HEIGHT) >> 1, PoweroffModeENStr, &Gentium_Normal25U, LIGHTGREEN);
 }
 
 
@@ -181,8 +193,9 @@ WORD MsgDeviceMode_poweroffDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pM
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///power up
-				scrSetStat(&fhDeviceMode_booting);
-				scrCreateInit();
+				///scrSetStat(&fhDeviceMode_booting);
+				///scrCreateInit();
+				scrSetNEXT(&fhDeviceMode_booting);
 			}
 			return (0); 
         case ID_BTN_DOWN:
@@ -234,24 +247,28 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	void	*pNowFont = NULL;
 
     GOLFree();   // free memory for the objects in the previous linked list and start new list
-
-	SetColor(BLACK);
-	ClearDevice();
-
+	gcCleanScreen();
 	CreateDefaultBtn();
 
 /***********************************************************************************************************/
-	SetColor(BLACK);
-	ClearDevice();
+	///SetColor(BLACK);
+	///ClearDevice();
 
 	// draw fonts in the screen
 	pNowFont = (void *)&kaiu_Norma25;
 	///pNowFont = (void *)&comic_Normal15;
+	
+	#if 0
 	SetFont(pNowFont);
 	SetColor(LIGHTRED);
 	width = GetTextWidth(MitacBrandingStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-60, MitacBrandingStr);
+	#else
+	width = GetTextWidth(MitacBrandingStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-60, MitacBrandingStr, pNowFont, LIGHTRED);
+	#endif
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 	
@@ -259,130 +276,143 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	///pNowFont = (void *)&Gentium_Normal15;
 	///pNowFont = (void *)&kaiu_Normal18;
 	///pNowFont = (void *)&comic_Normal15;
-	pNowFont = (void *)&Gentium_Normal21U;
-	SetFont(pNowFont);
-	SetColor(LIGHTRED);
+	pNowFont = (void *)&Gentium_Normal17U;
+	///SetFont(pNowFont);
+	///SetColor(LIGHTRED);
 	width = GetTextWidth(BootupInfo01Str, pNowFont);
 	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, BootupInfo01Str);
+	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, BootupInfo01Str);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, BootupInfo01Str, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	///pNowFont = (void *)&Gentium_Normal15;
 	///pNowFont = (void *)&comic_Normal19;
-	pNowFont = (void *)&Gentium_Normal21U;
-	SetFont(pNowFont);
-	SetColor(LIGHTGREEN);
+	pNowFont = (void *)&Gentium_Normal17U;
+	///SetFont(pNowFont);
+	///SetColor(LIGHTGREEN);
 	width = GetTextWidth(BootupInfo02Str, pNowFont);
 	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, BootupInfo02Str);
+	///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, BootupInfo02Str);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, BootupInfo02Str, pNowFont, LIGHTGREEN);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	///pNowFont = (void *)&Gentium_Normal15;
 	///pNowFont = (void *)&comic_Normal15;
-	pNowFont = (void *)&Gentium_Normal21U;
-	SetFont(pNowFont);
-	SetColor(LIGHTBLUE);
+	pNowFont = (void *)&Gentium_Normal17U;
+	///SetFont(pNowFont);
+	///SetColor(LIGHTBLUE);
 	width = GetTextWidth(BootupInfo03Str, pNowFont);
 	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, BootupInfo03Str);
+	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, BootupInfo03Str);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, BootupInfo03Str, pNowFont, LIGHTBLUE);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	if(1)
 	{
 	XCHAR *pxStr = NULL;
-	SetColor(BLACK);
-	ClearDevice();
+	///SetColor(BLACK);
+	///ClearDevice();
+	gcCleanScreen();
 	
+	pNowFont = (void *)&Gentium_Normal19U;
 	// draw fonts in the screen
 	pxStr = TestSettingENStr;
-	pNowFont = (void *)&Gentium_Normal21U;
-	SetFont(pNowFont);
-	SetColor(LIGHTRED);
+	///pNowFont = (void *)&Gentium_Normal21U;
+	///SetFont(pNowFont);
+	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-80, pxStr);
+	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-80, pxStr);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, 0, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	pxStr = TestSettingSPStr;
-	pNowFont = (void *)&Gentium_Normal21U;
-	SetFont(pNowFont);
-	SetColor(LIGHTRED);
+	///pNowFont = (void *)&Gentium_Normal21U;
+	///SetFont(pNowFont);
+	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-60, pxStr);
+	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-60, pxStr);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, 20, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	pxStr = TestSettingFRStr;
-	pNowFont = (void *)&Gentium_Normal21U;
-	SetFont(pNowFont);
-	SetColor(LIGHTRED);
+	///pNowFont = (void *)&Gentium_Normal21U;
+	///SetFont(pNowFont);
+	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-40, pxStr);
+	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-40, pxStr);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, 40, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	pxStr = TestSettingITStr;
-	pNowFont = (void *)&Gentium_Normal21U;
-	SetFont(pNowFont);
-	SetColor(LIGHTRED);
+	///pNowFont = (void *)&Gentium_Normal21U;
+	///SetFont(pNowFont);
+	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, pxStr);
+	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, pxStr);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, 60, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	pxStr = TestSettingPOStr;
-	pNowFont = (void *)&Gentium_Normal21U;
-	SetFont(pNowFont);
-	SetColor(LIGHTRED);
+	///pNowFont = (void *)&Gentium_Normal21U;
+	///SetFont(pNowFont);
+	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+0, pxStr);
+	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+0, pxStr);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, 80, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	pxStr = TestSettingDUStr;
-	pNowFont = (void *)&Gentium_Normal21U;
-	SetFont(pNowFont);
-	SetColor(LIGHTRED);
+	///pNowFont = (void *)&Gentium_Normal21U;
+	///SetFont(pNowFont);
+	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, pxStr);
+	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, pxStr);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, 100, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	pxStr = TestSettingGEStr;
-	pNowFont = (void *)&Gentium_Normal21U;
-	SetFont(pNowFont);
-	SetColor(LIGHTRED);
+	///pNowFont = (void *)&Gentium_Normal21U;
+	///SetFont(pNowFont);
+	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+40, pxStr);
+	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+40, pxStr);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, 120, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	pxStr = TestSettingDAStr;
-	pNowFont = (void *)&Gentium_Normal21U;
-	SetFont(pNowFont);
-	SetColor(LIGHTRED);
+	///pNowFont = (void *)&Gentium_Normal21U;
+	///SetFont(pNowFont);
+	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+60, pxStr);
+	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+60, pxStr);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, 140, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
@@ -391,8 +421,9 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	if(1)
 	{
 	XCHAR *pxStr = NULL;
-	SetColor(BLACK);
-	ClearDevice();
+	///SetColor(BLACK);
+	///ClearDevice();
+	gcCleanScreen();
 	
 	// draw fonts in the screen
 	pxStr = TestMenuENStr;
@@ -542,24 +573,27 @@ WORD MsgDeviceMode_bootingDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMs
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///display mode change 1,2,3
-				scrSetStat(&fhDataMode_two);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_two);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_two);
 			}
 			return (0); 
         case ID_BTN_UP_HOLD:
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///power down
-				scrSetStat(&fhDeviceMode_poweroff);
-				scrCreateInit();
+				///scrSetStat(&fhDeviceMode_poweroff);
+				///scrCreateInit();
+				scrSetNEXT(&fhDeviceMode_poweroff);
 			}
 			return (0); 
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///display mode change 3,2,1
-				scrSetStat(&fhDataMode_two);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_two);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_two);
 			}
 			return (0); 
         case ID_BTN_DOWN_HOLD:
@@ -573,8 +607,9 @@ WORD MsgDeviceMode_bootingDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMs
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///record
-				scrSetStat(&fhDataMode_two);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_two);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_two);
 			}
 			return (0); 
         case ID_BTN_ENTER_HOLD:
@@ -587,8 +622,9 @@ WORD MsgDeviceMode_bootingDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMs
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///lap
-				scrSetStat(&fhDataMode_two);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_two);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_two);
 			}
 			return (0); 
         case ID_BTN_EXIT_HOLD:
@@ -603,21 +639,16 @@ WORD MsgDeviceMode_bootingDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMs
 	}
 }
 
-#define  VAR_OPTION
 
 
 void CreateDeviceMode_popup(WORD wDrawOption)
 {
     LISTBOX *pLb;
-#ifdef VAR_OPTION
 	POPUPITEM_HEADER*	pPopItems;
 	SHORT	sCount = 0;
-#endif
+
 	
     GOLFree();                                      // free memory for the objects in the previous linked list and start new list
-
-///	SetColor(BLACK);
-///	ClearDevice();	
 
 	CreateDefaultBtn();
 	
@@ -628,16 +659,11 @@ void CreateDeviceMode_popup(WORD wDrawOption)
             POPUP_FRAME_OFFSET_H,
             GetMaxX() - POPUP_FRAME_OFFSET_W,
             GetMaxY() - DEFAULTBTN_HEIGHT - POPUP_FRAME_OFFSET_H,  // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
-#ifdef VAR_OPTION
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)(popupOption.pPopTitle),
-#else			
-            (XCHAR*)"<Options>",
-#endif
-            altScheme
+            popupMenuScheme
         );                                          // use alternate scheme
 
-#ifdef VAR_OPTION
 	pPopItems = popupOption.pPopItemList->pPopItem1;
 	while( sCount < popupOption.PopItemNum )
 	{
@@ -645,11 +671,7 @@ void CreateDeviceMode_popup(WORD wDrawOption)
 		sCount++;
 		pPopItems++;
 	}
-#else			
-	AddItemList( (XCHAR *)"Navigation", pLb, &I16164_About);
-	AddItemList( (XCHAR *)"Quick Info", pLb, &I16164_About);
-	AddItemList( (XCHAR *)"Setting/History", pLb, &I16164_About);
-#endif
+
 	LbSetFocusedItem( pLb, 1 );	
 }
 
@@ -663,7 +685,6 @@ WORD MsgDeviceMode_popup(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 
             // Process message by default
             LbMsgDefault(objMsg, (LISTBOX *)pObj, pMsg);
-
             // The message was processed
             return (0);
         default:
@@ -674,9 +695,8 @@ WORD MsgDeviceMode_popup(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 WORD MsgDeviceMode_popupDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 {
 	LISTBOX *pLb;
-#ifdef VAR_OPTION
 	POPUPITEM_HEADER*	pPopItems;
-#endif
+
 	
 	pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
     switch(GetObjID(pObj))
@@ -728,27 +748,10 @@ WORD MsgDeviceMode_popupDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 				SHORT sFocusedItem;
 				sFocusedItem = LbGetFocusedItem(pLb);			
 
-#ifdef VAR_OPTION
 				pPopItems = popupOption.pPopItemList->pPopItem1;
-				scrSetStat( (pPopItems+(sFocusedItem-1))->pGoFrame );
-#else				
-				switch(sFocusedItem)
-				{
-					case 1:
-						scrSetStat(&fhMapMode_navgation);
-						break;
-					case 2:
-						scrSetStat(&fhInfoMode_info);
-						break;
-					case 3:
-						scrSetStat(&fhSettingMenu_main);
-						break;
-					default:
-						scrSetStat(&fhSettingMenu_main);
-						break;
-				}
-#endif				
-				scrCreateInit();
+				///scrSetStat( (pPopItems+(sFocusedItem-1))->pGoFrame );			
+				///scrCreateInit();
+				scrSetNEXT( (pPopItems+(sFocusedItem-1))->pGoFrame );
 			}
 			return (0); 
         case ID_BTN_ENTER_HOLD:
@@ -761,12 +764,9 @@ WORD MsgDeviceMode_popupDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///lap, back to privious
-#ifdef VAR_OPTION
-				scrSetStat(popupOption.pPrivFrame);
-#else
-				scrSetStat(&fhDataMode_three);
-#endif
-				scrCreateInit();
+				///scrSetStat(popupOption.pPrivFrame);
+				///scrCreateInit();
+				scrSetNEXT(popupOption.pPrivFrame);
 			}
 			return (0); 
         case ID_BTN_EXIT_HOLD:

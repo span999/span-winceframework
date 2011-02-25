@@ -9,7 +9,9 @@
 
 #include "guic.h"
 #include "ObjectTest.h"
+#if 1
 #include "FontGentium.h"
+#include "FontGentiumU.h"
 #include "1bpp_icons.h"
 #include "4bpp_icons.h"
 #include "16164bppIcon.h"
@@ -18,7 +20,11 @@
 #include "FieldSettingMenu.h"
 #include "FieldDataMode.h"
 #include "FieldWatchMode.h"
-
+#else
+#include "fonts.h"
+#include "icons.h"
+#include "fields.h"
+#endif
 
 GOL_SCHEME      *altScheme;                                 // alternative style scheme
 GOL_SCHEME      *alt2Scheme;                                // alternative 2 style scheme
@@ -31,6 +37,8 @@ GOL_SCHEME      *navScheme;                                 // style scheme for 
 GOL_SCHEME      *redScheme;                                 // alternative red style scheme
 GOL_SCHEME      *greenScheme;                               // alternative green style scheme
 GOL_SCHEME      *yellowScheme;                              // alternative yellow style scheme
+GOL_SCHEME      *popupMenuScheme;                              // alternative yellow style scheme
+
 OBJ_HEADER      *pNavList;                                  // pointer to navigation list
 volatile DWORD  tick = 0;                                   // tick counter
 char            animate;                                    // switch to control animation for picture demo
@@ -246,7 +254,8 @@ WORD MsgDefaultBtn(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 }
 
 
-void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText, char *pFunc, char *pData, char *pUnit)
+///void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText, char *pFunc, char *pData, char *pUnit)
+void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHAR *pText, XCHAR *pFunc, XCHAR *pData, XCHAR *pUnit)
 {
 
     GbCreate(ID_GROUPBOX1,             	// ID 
@@ -323,6 +332,7 @@ void myCreateScheme( void )
     redScheme = GOLCreateScheme();      // create red style scheme
     greenScheme = GOLCreateScheme();    // create green style scheme
     yellowScheme = GOLCreateScheme();   // create yellow style scheme
+	popupMenuScheme = GOLCreateScheme();   // create popup menu style scheme
 
     /* for Truly display */
     altScheme->Color0 = RGB565CONVERT(0x4C, 0x8E, 0xFF);
@@ -334,6 +344,18 @@ void myCreateScheme( void )
     altScheme->TextColor0 = RGB565CONVERT(255, 102, 0);
     altScheme->TextColorDisabled = RGB565CONVERT(0xB8, 0xB9, 0xBC);
 
+
+    popupMenuScheme->Color0 = GRAY80;	//item background
+    popupMenuScheme->Color1 = BLACK;	//reversed
+    popupMenuScheme->EmbossDkColor = GRAY20;
+    popupMenuScheme->EmbossLtColor = GRAY20;
+    popupMenuScheme->ColorDisabled = BRIGHTGREEN;
+    popupMenuScheme->TextColor1 = GRAY80;		//reversed
+    popupMenuScheme->TextColor0 = BLACK;		//font color
+    popupMenuScheme->TextColorDisabled = BRIGHTRED;
+	popupMenuScheme->pFont = (void *)Gentium_Normal19U;
+	popupMenuScheme->CommonBkColor = BRIGHTYELLOW;			
+	
 ///    altScheme->pFont = (void *)ptrLargeAsianFont;
 ///    navScheme->pFont = (void *)ptrLargeAsianFont;
 	altScheme->pFont = (void *)Gentium_Normal15;
@@ -605,6 +627,13 @@ void scrSetStat(FRAME_HEADER* phFrame)
 {
 	psrcStat->pnowStatFrame = phFrame;
 }
+
+void scrSetNEXT(FRAME_HEADER* phFrame)
+{
+	psrcStat->pnowStatFrame = phFrame;
+	psrcStat->IsFrameCreate = TRUE;
+}
+
 
 FRAME_HEADER* scrGetStat(void)
 {

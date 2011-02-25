@@ -144,6 +144,8 @@ extern GOL_SCHEME      *greenScheme;                               // alternativ
 extern GOL_SCHEME      *yellowScheme;                              // alternative yellow style scheme
 extern OBJ_HEADER      *pNavList;                                  // pointer to navigation list
 
+extern GOL_SCHEME      *popupMenuScheme;                                 // Popup Menu style scheme
+
 
 void myCreateScheme( void );
 
@@ -151,8 +153,9 @@ void myCreateScheme( void );
 void updateLastView(FRAME_HEADER* pLastFrame);
 FRAME_HEADER* getLastView(void);
 
-
-/// API for screen status handle
+/*
+	API for screen status handle
+*/
 void scrInitStat(void);
 void scrNextStat(void);
 void scrPrivStat(void);
@@ -160,6 +163,9 @@ void scrCreateDone(void);
 void scrCreateInit(void);
 void scrSetStat(FRAME_HEADER* phFrame);
 FRAME_HEADER* scrGetStat(void);
+void scrSetNEXT(FRAME_HEADER* phFrame);
+
+
 
 /// use for MsgCallback & DrawCallback
 WORD scrMsgCbHandler(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
@@ -168,7 +174,8 @@ void scrDrawCbHandler(void);
 
 void CreateDefaultBtn(void);
 WORD MsgDefaultBtn(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
-void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText, char *pFunc, char *pData, char *pUnit);
+///void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText, char *pFunc, char *pData, char *pUnit);
+void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHAR *pText, XCHAR *pFunc, XCHAR *pData, XCHAR *pUnit);
 void AddItemList(XCHAR *pText, LISTBOX *pLb, void *pIcon);
 
 

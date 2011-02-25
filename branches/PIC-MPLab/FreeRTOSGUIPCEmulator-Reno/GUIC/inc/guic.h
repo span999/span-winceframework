@@ -8,6 +8,8 @@
 
 #include <kbkeymap.h>
 
+
+
 typedef WORD (*PFNMSGCALLBACK)(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
 typedef void (*PFNDRAWCALLBACK)(WORD wDrawOption);
 typedef WORD (*PFNBTNHANDLE)(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
@@ -77,7 +79,9 @@ typedef enum
 
 
 
-
+/*
+	type define for fframe header and screen
+*/
 typedef struct
 {
     PFNMSGCALLBACK		pfnMsgCallback;     // 
@@ -100,7 +104,7 @@ typedef struct
 
 
 
-
-
+extern void gcCleanScreen(void);
+extern WORD gcColFntOutTextXY( SHORT x, SHORT y, XCHAR *textString, void *font, WORD color );
 
 #endif	/*#ifndef __GUIC_H__*/
