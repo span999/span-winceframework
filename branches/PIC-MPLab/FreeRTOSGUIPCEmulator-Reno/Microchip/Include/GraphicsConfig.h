@@ -125,7 +125,7 @@
 *
 *********************************************************************/
 
-///#define USE_MULTIBYTECHAR
+#define USE_MULTIBYTECHAR
 
 /*********************************************************************
 * Overview: Font data can be placed in two locations. One is in 
