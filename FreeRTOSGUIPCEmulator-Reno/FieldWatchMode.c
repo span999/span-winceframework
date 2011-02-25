@@ -9,15 +9,8 @@
 
 #include "guic.h"
 #include "ObjectTest.h"
-#if 0
-#include "FontGentium.h"
-#include "1bpp_icons.h"
-#include "4bpp_icons.h"
-#include "16164bppIcon.h"
-#else
 #include "fonts.h"
 #include "icons.h"
-#endif
 
 #include "FieldCommon.h"
 #include "FieldWatchMode.h"
@@ -250,39 +243,247 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 /***********************************************************************************************************/
 	SetColor(BLACK);
 	ClearDevice();
-	
+
 	// draw fonts in the screen
-	pNowFont = (void *)&Gentium_Normal15;
+	pNowFont = (void *)&kaiu_Norma25;
 	///pNowFont = (void *)&comic_Normal15;
 	SetFont(pNowFont);
 	SetColor(LIGHTRED);
-	width = GetTextWidth("This Demo bases on", pNowFont);
+	width = GetTextWidth(MitacBrandingStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, "This Demo bases on");
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-60, MitacBrandingStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	
+	// draw fonts in the screen
+	///pNowFont = (void *)&Gentium_Normal15;
+	///pNowFont = (void *)&kaiu_Normal18;
+	///pNowFont = (void *)&comic_Normal15;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(BootupInfo01Str, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, BootupInfo01Str);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	///pNowFont = (void *)&Gentium_Normal15;
-	pNowFont = (void *)&comic_Normal19;
+	///pNowFont = (void *)&comic_Normal19;
+	pNowFont = (void *)&Gentium_Normal21U;
 	SetFont(pNowFont);
 	SetColor(LIGHTGREEN);
-	width = GetTextWidth("freeRTOS:v6.1.0", pNowFont);
+	width = GetTextWidth(BootupInfo02Str, pNowFont);
 	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, "freeRTOS:v6.1.0");
+	OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, BootupInfo02Str);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	///pNowFont = (void *)&Gentium_Normal15;
-	pNowFont = (void *)&comic_Normal15;
+	///pNowFont = (void *)&comic_Normal15;
+	pNowFont = (void *)&Gentium_Normal21U;
 	SetFont(pNowFont);
 	SetColor(LIGHTBLUE);
-	width = GetTextWidth("MicroChip AppLib:v2.11", pNowFont);
+	width = GetTextWidth(BootupInfo03Str, pNowFont);
 	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, "MicroChip AppLib:v2.11");
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, BootupInfo03Str);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
+
+	if(1)
+	{
+	XCHAR *pxStr = NULL;
+	SetColor(BLACK);
+	ClearDevice();
+	
+	// draw fonts in the screen
+	pxStr = TestSettingENStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-80, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	// draw fonts in the screen
+	pxStr = TestSettingSPStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-60, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	// draw fonts in the screen
+	pxStr = TestSettingFRStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-40, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	// draw fonts in the screen
+	pxStr = TestSettingITStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	// draw fonts in the screen
+	pxStr = TestSettingPOStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+0, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	// draw fonts in the screen
+	pxStr = TestSettingDUStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	// draw fonts in the screen
+	pxStr = TestSettingGEStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+40, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	// draw fonts in the screen
+	pxStr = TestSettingDAStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+60, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	}
+
+	if(1)
+	{
+	XCHAR *pxStr = NULL;
+	SetColor(BLACK);
+	ClearDevice();
+	
+	// draw fonts in the screen
+	pxStr = TestMenuENStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-80, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	// draw fonts in the screen
+	pxStr = TestMenuSPStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-60, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	// draw fonts in the screen
+	pxStr = TestMenuFRStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-40, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	// draw fonts in the screen
+	pxStr = TestMenuITStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	// draw fonts in the screen
+	pxStr = TestMenuPOStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+0, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	// draw fonts in the screen
+	pxStr = TestMenuDUStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	// draw fonts in the screen
+	pxStr = TestMenuGEStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+40, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	// draw fonts in the screen
+	pxStr = TestMenuDAStr;
+	pNowFont = (void *)&Gentium_Normal21U;
+	SetFont(pNowFont);
+	SetColor(LIGHTRED);
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+60, pxStr);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+
+	}
+
 
 
 	

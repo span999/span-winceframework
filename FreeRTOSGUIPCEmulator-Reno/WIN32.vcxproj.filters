@@ -147,6 +147,15 @@
     <ClCompile Include="GUIC\res\FontComic.c">
       <Filter>GUIC\Res</Filter>
     </ClCompile>
+    <ClCompile Include="GUIC\res\FontKaiu.c">
+      <Filter>GUIC\Res</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIC\res\FontAnnabelScript.c">
+      <Filter>GUIC\Res</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIC\res\FontGentiumU.c">
+      <Filter>GUIC\Res</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">
