@@ -414,8 +414,8 @@ WORD Bar(SHORT left, SHORT top, SHORT right, SHORT bottom)
 void ClearDevice(void)
 {
 	if( IsScreenValid() )
-		///displayRectFill( NULL, 0, GetMaxY(), GetMaxX(), 0, 0x00ffffff );	///clean in white
-		displayRectFill( NULL, 0, GetMaxY(), GetMaxX(), 0, 0x00000000 );	///clean in black
+		displayRectFill( NULL, 0, GetMaxY(), GetMaxX(), 0, 0x00ffffff );	///clean in white
+		///displayRectFill( NULL, 0, GetMaxY(), GetMaxX(), 0, 0x00000000 );	///clean in black
 }
 
 #endif

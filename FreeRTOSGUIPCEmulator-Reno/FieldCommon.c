@@ -9,9 +9,11 @@
 
 #include "guic.h"
 #include "ObjectTest.h"
-#if 1
+///#include "FontMonacoUfontref.h"
+#if 0
 #include "FontGentium.h"
-#include "FontGentiumU.h"
+///#include "FontGentiumU.h"
+#include "FontMonacoU.h"
 #include "1bpp_icons.h"
 #include "4bpp_icons.h"
 #include "16164bppIcon.h"
@@ -353,7 +355,8 @@ void myCreateScheme( void )
     popupMenuScheme->TextColor1 = GRAY80;		//reversed
     popupMenuScheme->TextColor0 = BLACK;		//font color
     popupMenuScheme->TextColorDisabled = BRIGHTRED;
-	popupMenuScheme->pFont = (void *)Gentium_Normal19U;
+	///popupMenuScheme->pFont = (void *)Gentium_Normal19U;
+	popupMenuScheme->pFont = (void *)&Monaco_Normal18U;
 	popupMenuScheme->CommonBkColor = BRIGHTYELLOW;			
 	
 ///    altScheme->pFont = (void *)ptrLargeAsianFont;

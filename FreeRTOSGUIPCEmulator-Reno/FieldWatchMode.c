@@ -87,23 +87,9 @@ WORD MsgWatchMode_watchDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///fitness mode or power down
-				///popupOption.PopItemNum = 2;
-				///popupOption.pPopTitle = "Options";
-				///popupOption.pPrivFrame = scrGetStat();
-				///PPMenuSetUp( 2, "Options", scrGetStat() );
 				PPMenuSetUp( 2, OptionsENStr, scrGetStat() );
-				///popupOption.pPopItemList->pPopItem1->pPopMsg = "Fitness Mode";
-				///popupOption.pPopItemList->pPopItem1->pIcon = &PCGaming1_4bpp_16x16;
-				///popupOption.pPopItemList->pPopItem1->pGoFrame = &fhDataMode_two;
-				///PPMenuItem1SetUp( "Fitness Mode", &PCGaming1_4bpp_16x16, &fhDataMode_two );
 				PPMenuItem1SetUp( FitnessModeENStr, &PCGaming1_4bpp_16x16, &fhDataMode_two );
-				///popupOption.pPopItemList->pPopItem2->pPopMsg = "Power Down";
-				///popupOption.pPopItemList->pPopItem2->pIcon = &I16164_Abort;
-				///popupOption.pPopItemList->pPopItem2->pGoFrame = &fhDeviceMode_poweroff;
-				///PPMenuItem2SetUp( "Power Down", &I16164_Abort, &fhDeviceMode_poweroff );
 				PPMenuItem2SetUp( PowerDownENStr, &I16164_Abort, &fhDeviceMode_poweroff );
-				///scrSetStat(&fhDeviceMode_popup);
-				///scrCreateInit();
 				scrSetNEXT(&fhDeviceMode_popup);
 			}
 			return (0); 
@@ -152,19 +138,19 @@ WORD MsgWatchMode_watchDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 
 void CreateDeviceMode_poweroff(WORD wDrawOption)
 {
-    SHORT       width, height;
+    SHORT	width, height;
+	void	*pNowFont = NULL;
 
     GOLFree();   // free memory for the objects in the previous linked list and start new list
 	gcCleanScreen();
 	CreateDefaultBtn();
 
 	// draw fonts in the screen
-    ///SetFont((void *) &Gentium_Normal25);
-	///SetColor(LIGHTGREEN);
-	width = GetTextWidth(PoweroffModeENStr, (void *) &Gentium_Normal25U);
-    height = GetTextHeight((void *) &Gentium_Normal25U);
-	///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height - DEFAULTBTN_HEIGHT) >> 1, "PowerOff");
-	gcColFntOutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height - DEFAULTBTN_HEIGHT) >> 1, PoweroffModeENStr, &Gentium_Normal25U, LIGHTGREEN);
+	///pNowFont = (void *)&Gentium_Normal25U;
+	pNowFont = (void *)&Monaco_Normal30U;
+	width = GetTextWidth(PoweroffModeENStr, pNowFont);
+    height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height - DEFAULTBTN_HEIGHT) >> 1, PoweroffModeENStr, pNowFont, BLACK);
 }
 
 
@@ -193,8 +179,6 @@ WORD MsgDeviceMode_poweroffDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pM
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///power up
-				///scrSetStat(&fhDeviceMode_booting);
-				///scrCreateInit();
 				scrSetNEXT(&fhDeviceMode_booting);
 			}
 			return (0); 
@@ -257,18 +241,9 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	// draw fonts in the screen
 	pNowFont = (void *)&kaiu_Norma25;
 	///pNowFont = (void *)&comic_Normal15;
-	
-	#if 0
-	SetFont(pNowFont);
-	SetColor(LIGHTRED);
-	width = GetTextWidth(MitacBrandingStr, pNowFont);
-	height = GetTextHeight(pNowFont);
-	OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-60, MitacBrandingStr);
-	#else
 	width = GetTextWidth(MitacBrandingStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-60, MitacBrandingStr, pNowFont, LIGHTRED);
-	#endif
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 	
@@ -276,12 +251,10 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	///pNowFont = (void *)&Gentium_Normal15;
 	///pNowFont = (void *)&kaiu_Normal18;
 	///pNowFont = (void *)&comic_Normal15;
-	pNowFont = (void *)&Gentium_Normal17U;
-	///SetFont(pNowFont);
-	///SetColor(LIGHTRED);
+	///pNowFont = (void *)&Gentium_Normal17U;
+	pNowFont = (void *)&Monaco_Normal15U;
 	width = GetTextWidth(BootupInfo01Str, pNowFont);
 	height = GetTextHeight(pNowFont);
-	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, BootupInfo01Str);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, BootupInfo01Str, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
@@ -289,145 +262,107 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	// draw fonts in the screen
 	///pNowFont = (void *)&Gentium_Normal15;
 	///pNowFont = (void *)&comic_Normal19;
-	pNowFont = (void *)&Gentium_Normal17U;
-	///SetFont(pNowFont);
-	///SetColor(LIGHTGREEN);
+	///pNowFont = (void *)&Gentium_Normal17U;
+	pNowFont = (void *)&Monaco_Normal15U;
 	width = GetTextWidth(BootupInfo02Str, pNowFont);
 	height = GetTextHeight(pNowFont);
-	///OutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, BootupInfo02Str);
-	gcColFntOutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, BootupInfo02Str, pNowFont, LIGHTGREEN);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, BootupInfo02Str, pNowFont, GREEN);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	///pNowFont = (void *)&Gentium_Normal15;
 	///pNowFont = (void *)&comic_Normal15;
-	pNowFont = (void *)&Gentium_Normal17U;
-	///SetFont(pNowFont);
-	///SetColor(LIGHTBLUE);
+	///pNowFont = (void *)&Gentium_Normal17U;
+	pNowFont = (void *)&Monaco_Normal15U;
 	width = GetTextWidth(BootupInfo03Str, pNowFont);
 	height = GetTextHeight(pNowFont);
-	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, BootupInfo03Str);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, BootupInfo03Str, pNowFont, LIGHTBLUE);
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
-	if(1)
+	if(0)
 	{
 	XCHAR *pxStr = NULL;
-	///SetColor(BLACK);
-	///ClearDevice();
 	gcCleanScreen();
 	
-	pNowFont = (void *)&Gentium_Normal19U;
+	///pNowFont = (void *)&Gentium_Normal19U;
+	pNowFont = (void *)&Monaco_Normal18U;
 	// draw fonts in the screen
 	pxStr = TestSettingENStr;
 	///pNowFont = (void *)&Gentium_Normal21U;
-	///SetFont(pNowFont);
-	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-80, pxStr);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, 0, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	pxStr = TestSettingSPStr;
 	///pNowFont = (void *)&Gentium_Normal21U;
-	///SetFont(pNowFont);
-	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-60, pxStr);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, 20, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	pxStr = TestSettingFRStr;
 	///pNowFont = (void *)&Gentium_Normal21U;
-	///SetFont(pNowFont);
-	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-40, pxStr);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, 40, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	pxStr = TestSettingITStr;
 	///pNowFont = (void *)&Gentium_Normal21U;
-	///SetFont(pNowFont);
-	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, pxStr);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, 60, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	pxStr = TestSettingPOStr;
 	///pNowFont = (void *)&Gentium_Normal21U;
-	///SetFont(pNowFont);
-	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+0, pxStr);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, 80, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	pxStr = TestSettingDUStr;
 	///pNowFont = (void *)&Gentium_Normal21U;
-	///SetFont(pNowFont);
-	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, pxStr);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, 100, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	pxStr = TestSettingGEStr;
 	///pNowFont = (void *)&Gentium_Normal21U;
-	///SetFont(pNowFont);
-	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+40, pxStr);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, 120, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	pxStr = TestSettingDAStr;
 	///pNowFont = (void *)&Gentium_Normal21U;
-	///SetFont(pNowFont);
-	///SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
-	///OutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+60, pxStr);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, 140, pxStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
 
 	}
 
-	if(1)
+	if(0)
 	{
 	XCHAR *pxStr = NULL;
-	///SetColor(BLACK);
-	///ClearDevice();
 	gcCleanScreen();
 	
+	pNowFont = (void *)&Monaco_Normal18U;
 	// draw fonts in the screen
 	pxStr = TestMenuENStr;
-	pNowFont = (void *)&Gentium_Normal21U;
+	///pNowFont = (void *)&Gentium_Normal21U;
 	SetFont(pNowFont);
 	SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
@@ -438,7 +373,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	pxStr = TestMenuSPStr;
-	pNowFont = (void *)&Gentium_Normal21U;
+	///pNowFont = (void *)&Gentium_Normal21U;
 	SetFont(pNowFont);
 	SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
@@ -449,7 +384,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	pxStr = TestMenuFRStr;
-	pNowFont = (void *)&Gentium_Normal21U;
+	///pNowFont = (void *)&Gentium_Normal21U;
 	SetFont(pNowFont);
 	SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
@@ -460,7 +395,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	pxStr = TestMenuITStr;
-	pNowFont = (void *)&Gentium_Normal21U;
+	///pNowFont = (void *)&Gentium_Normal21U;
 	SetFont(pNowFont);
 	SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
@@ -471,7 +406,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	pxStr = TestMenuPOStr;
-	pNowFont = (void *)&Gentium_Normal21U;
+	///pNowFont = (void *)&Gentium_Normal21U;
 	SetFont(pNowFont);
 	SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
@@ -482,7 +417,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	pxStr = TestMenuDUStr;
-	pNowFont = (void *)&Gentium_Normal21U;
+	///pNowFont = (void *)&Gentium_Normal21U;
 	SetFont(pNowFont);
 	SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
@@ -493,7 +428,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	pxStr = TestMenuGEStr;
-	pNowFont = (void *)&Gentium_Normal21U;
+	///pNowFont = (void *)&Gentium_Normal21U;
 	SetFont(pNowFont);
 	SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
@@ -504,7 +439,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	pxStr = TestMenuDAStr;
-	pNowFont = (void *)&Gentium_Normal21U;
+	///pNowFont = (void *)&Gentium_Normal21U;
 	SetFont(pNowFont);
 	SetColor(LIGHTRED);
 	width = GetTextWidth(pxStr, pNowFont);
@@ -515,12 +450,198 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	}
 
+	if(1)
+	{
+	XCHAR *pxStr = NULL;
+	SHORT nowY = 0;
+	gcCleanScreen();
+	
+	// draw fonts in the screen
+	pxStr = OptionsENStr;
+	pNowFont = (void *)&Monaco_Normal15U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY( 5, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);
+	///nowY = nowY + height;
+
+	// draw fonts in the screen
+	pxStr = OptionsSPStr;
+	pNowFont = (void *)&Monaco_Normal18U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY( 70, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);
+	nowY = nowY + height;
+
+	// draw fonts in the screen
+	pxStr = OptionsFRStr;
+	pNowFont = (void *)&Monaco_Normal20U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	nowY = nowY + height;
+
+	// draw fonts in the screen
+	pxStr = OptionsITStr;
+	pNowFont = (void *)&Monaco_Normal23U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	nowY = nowY + height;
+
+	// draw fonts in the screen
+	pxStr = OptionsPOStr;
+	pNowFont = (void *)&Monaco_Normal27U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	nowY = nowY + height;
+
+	// draw fonts in the screen
+	pxStr = OptionsDUStr;
+	pNowFont = (void *)&Monaco_Normal30U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	nowY = nowY + height;
+
+	// draw fonts in the screen
+	pxStr = OptionsGEStr;
+	pNowFont = (void *)&Monaco_Normal31U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	nowY = nowY + height;
+
+	// draw fonts in the screen
+	pxStr = OptionsDAStr;
+	pNowFont = (void *)&Monaco_Normal35U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	nowY = nowY + height;
+
+	
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	}
+
+	if(1)
+	{
+	XCHAR *pxStr = NULL;
+	SHORT nowY = 0;
+	gcCleanScreen();
+	
+	// draw fonts in the screen
+	pxStr = NumbersENStr;
+	pNowFont = (void *)&Monaco_Normal15U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY( 5, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);
+	///nowY = nowY + height;
+
+	// draw fonts in the screen
+	///pxStr = OptionsSPStr;
+	pNowFont = (void *)&Monaco_Normal15U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY( 60, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);
+	nowY = nowY + height;
+
+	// draw fonts in the screen
+	///pxStr = OptionsFRStr;
+	pNowFont = (void *)&Monaco_Normal18U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	nowY = nowY + height;
+
+	// draw fonts in the screen
+	///pxStr = OptionsITStr;
+	pNowFont = (void *)&Monaco_Normal20U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	nowY = nowY + height;
+
+	// draw fonts in the screen
+	///pxStr = OptionsPOStr;
+	pNowFont = (void *)&Monaco_Normal23U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	nowY = nowY + height;
+
+	// draw fonts in the screen
+	///pxStr = OptionsDUStr;
+	pNowFont = (void *)&Monaco_Normal27U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	nowY = nowY + height;
+
+	// draw fonts in the screen
+	///pxStr = OptionsGEStr;
+	pNowFont = (void *)&Monaco_Normal27U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	nowY = nowY + height;
+
+	// draw fonts in the screen
+	///pxStr = OptionsDAStr;
+	pNowFont = (void *)&Monaco_Normal30U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	nowY = nowY + height;
+
+	
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
+	}
 
 
 	
 /***********************************************************************************************************/
 
 #ifdef USE_MAGELLAN_LOGO
+	#ifdef USE_ANIMATION
 	SetColor(BLACK);
 	ClearDevice();
 
@@ -546,6 +667,21 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	DelayMs(DEMODELAY);
 	WAIT_UNTIL_FINISH(PutImage(width, height, (void *) &magellan_logo_08, 1));
 	DelayMs(DEMODELAY);
+	#else
+	gcCleanScreen();
+
+	width = GetImageWidth((void *) &Reno_magellan_logo_8bit);
+	height = GetImageHeight((void *) &Reno_magellan_logo_8bit);
+	
+	width = (GetMaxX() - width) >> 1;
+	height = (GetMaxY() - height) >> 1;
+	
+	WAIT_UNTIL_FINISH(PutImage(width, height, (void *) &Reno_magellan_logo_8bit, 1));
+	DelayMs(DEMODELAY);	
+	DelayMs(DEMODELAY);	
+	DelayMs(DEMODELAY);	
+	DelayMs(DEMODELAY);	
+	#endif
 #endif
 
 ///				scrSetStat(&fhDataMode_two);
