@@ -151,6 +151,7 @@
     <ClCompile Include="GUIC\res\FontGentium.c" />
     <ClCompile Include="GUIC\res\FontGentiumU.c" />
     <ClCompile Include="GUIC\res\FontKaiu.c" />
+    <ClCompile Include="GUIC\res\FontMonacoU.c" />
     <ClCompile Include="GUIC\res\magellan_logo.c" />
     <ClCompile Include="GUIC\res\Pictures C32.c" />
     <ClCompile Include="main.cpp" />

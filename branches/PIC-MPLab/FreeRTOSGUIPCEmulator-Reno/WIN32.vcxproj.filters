@@ -156,6 +156,9 @@
     <ClCompile Include="GUIC\res\FontGentiumU.c">
       <Filter>GUIC\Res</Filter>
     </ClCompile>
+    <ClCompile Include="GUIC\res\FontMonacoU.c">
+      <Filter>GUIC\Res</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">

@@ -105,6 +105,7 @@ typedef struct
 
 
 extern void gcCleanScreen(void);
+extern void gcColorScreen(WORD color);
 extern WORD gcColFntOutTextXY( SHORT x, SHORT y, XCHAR *textString, void *font, WORD color );
 
 #endif	/*#ifndef __GUIC_H__*/

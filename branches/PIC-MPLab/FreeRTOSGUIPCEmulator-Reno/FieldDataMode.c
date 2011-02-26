@@ -9,6 +9,7 @@
 
 #include "guic.h"
 #include "ObjectTest.h"
+#if 0
 #include "FontGentium.h"
 #include "1bpp_icons.h"
 #include "4bpp_icons.h"
@@ -20,7 +21,11 @@
 #include "FieldWatchMode.h"
 #include "FieldInfoMode.h"
 #include "FieldSettingMenu.h"
-
+#else
+#include "fonts.h"
+#include "icons.h"
+#include "fields.h"
+#endif
 
 
 WORD MsgDefaultBtn_datamodes(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
@@ -49,17 +54,21 @@ WORD MsgDefaultBtn_datamodes(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///watch mode or power down
-				popupOption.PopItemNum = 2;
-				popupOption.pPopTitle = "Options";
-				popupOption.pPrivFrame = scrGetStat();
-				popupOption.pPopItemList->pPopItem1->pPopMsg = "Watch Mode";
-				popupOption.pPopItemList->pPopItem1->pIcon = &I16164_Clock;
-				popupOption.pPopItemList->pPopItem1->pGoFrame = &fhWatchMode_watch;
-				popupOption.pPopItemList->pPopItem2->pPopMsg = "Power Down";
-				popupOption.pPopItemList->pPopItem2->pIcon = &I16164_Abort;
-				popupOption.pPopItemList->pPopItem2->pGoFrame = &fhDeviceMode_poweroff;
-				scrSetStat(&fhDeviceMode_popup);
-				scrCreateInit();
+				///popupOption.PopItemNum = 2;
+				///popupOption.pPopTitle = "Options";
+				///popupOption.pPrivFrame = scrGetStat();
+				///popupOption.pPopItemList->pPopItem1->pPopMsg = "Watch Mode";
+				///popupOption.pPopItemList->pPopItem1->pIcon = &I16164_Clock;
+				///popupOption.pPopItemList->pPopItem1->pGoFrame = &fhWatchMode_watch;
+				///popupOption.pPopItemList->pPopItem2->pPopMsg = "Power Down";
+				///popupOption.pPopItemList->pPopItem2->pIcon = &I16164_Abort;
+				///popupOption.pPopItemList->pPopItem2->pGoFrame = &fhDeviceMode_poweroff;
+				///scrSetStat(&fhDeviceMode_popup);
+				///scrCreateInit();
+				PPMenuSetUp( 2, OptionsENStr, scrGetStat() );
+				PPMenuItem1SetUp( WatchModeENStr, &I16164_Clock, &fhWatchMode_watch );
+				PPMenuItem2SetUp( PowerDownENStr, &I16164_Abort, &fhDeviceMode_poweroff );
+				scrSetNEXT(&fhDeviceMode_popup);
 			}
             return (0);
 			
@@ -73,21 +82,25 @@ WORD MsgDefaultBtn_datamodes(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///Navigation mode, setting, avtivity data, quick info, history
-				popupOption.PopItemNum = 3;
-				popupOption.pPopTitle = "Options";
-				popupOption.pPrivFrame = scrGetStat();
-				popupOption.pPopItemList->pPopItem1->pPopMsg = "Navigation";
-				popupOption.pPopItemList->pPopItem1->pIcon = &I16164_Compass;
-				popupOption.pPopItemList->pPopItem1->pGoFrame = &fhMapMode_navgation;
-				popupOption.pPopItemList->pPopItem2->pPopMsg = "Quick Info";
-				popupOption.pPopItemList->pPopItem2->pIcon = &I16164_About;
-				popupOption.pPopItemList->pPopItem2->pGoFrame = &fhInfoMode_info;
-				popupOption.pPopItemList->pPopItem3->pPopMsg = "Setting";
-				popupOption.pPopItemList->pPopItem3->pIcon = &Settings_4bpp_16x16;
-				popupOption.pPopItemList->pPopItem3->pGoFrame = &fhSettingMenu_main;
-
-				scrSetStat(&fhDeviceMode_popup);
-				scrCreateInit();
+				///popupOption.PopItemNum = 3;
+				///popupOption.pPopTitle = "Options";
+				///popupOption.pPrivFrame = scrGetStat();
+				///popupOption.pPopItemList->pPopItem1->pPopMsg = "Navigation";
+				///popupOption.pPopItemList->pPopItem1->pIcon = &I16164_Compass;
+				///popupOption.pPopItemList->pPopItem1->pGoFrame = &fhMapMode_navgation;
+				///popupOption.pPopItemList->pPopItem2->pPopMsg = "Quick Info";
+				///popupOption.pPopItemList->pPopItem2->pIcon = &I16164_About;
+				///popupOption.pPopItemList->pPopItem2->pGoFrame = &fhInfoMode_info;
+				///popupOption.pPopItemList->pPopItem3->pPopMsg = "Setting";
+				///popupOption.pPopItemList->pPopItem3->pIcon = &Settings_4bpp_16x16;
+				///popupOption.pPopItemList->pPopItem3->pGoFrame = &fhSettingMenu_main;
+				///scrSetStat(&fhDeviceMode_popup);
+				///scrCreateInit();
+				PPMenuSetUp( 3, OptionsENStr, scrGetStat() );
+				PPMenuItem1SetUp( NavigationENStr, &I16164_Compass, &fhMapMode_navgation );
+				PPMenuItem2SetUp( QuickInfoENStr, &I16164_About, &fhInfoMode_info );
+				PPMenuItem3SetUp( SettingsENStr, &I16164_Apply, &fhSettingMenu_main );
+				scrSetNEXT(&fhDeviceMode_popup);
 			}
             return (0);
 			
@@ -204,15 +217,17 @@ WORD MsgRenoDataSet_oneDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
         case ID_BTN_UP:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				scrSetStat(&fhDataMode_six);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_six);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_six);
 			}
 			return (0); 
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				scrSetStat(&fhDataMode_two);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_two);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_two);
 			}
 			return (0); 
         case ID_BTN_ENTER:
@@ -264,15 +279,17 @@ WORD MsgRenoDataSet_twoDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
         case ID_BTN_UP:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				scrSetStat(&fhDataMode_one);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_one);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_one);
 			}
 			return (0); 
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				scrSetStat(&fhDataMode_three);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_three);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_three);
 			}
 			return (0); 
         case ID_BTN_ENTER:
@@ -324,15 +341,17 @@ WORD MsgRenoDataSet_threeDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg
         case ID_BTN_UP:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				scrSetStat(&fhDataMode_two);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_two);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_two);
 			}
 			return (0); 
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				scrSetStat(&fhDataMode_four);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_four);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_four);
 			}
 			return (0); 
         case ID_BTN_ENTER:
@@ -384,15 +403,17 @@ WORD MsgRenoDataSet_fourDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
         case ID_BTN_UP:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				scrSetStat(&fhDataMode_three);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_three);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_three);
 			}
 			return (0); 
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				scrSetStat(&fhDataMode_five);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_five);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_five);
 			}
 			return (0); 
         case ID_BTN_ENTER:
@@ -444,15 +465,17 @@ WORD MsgRenoDataSet_fiveDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
         case ID_BTN_UP:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				scrSetStat(&fhDataMode_four);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_four);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_four);
 			}
 			return (0); 
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				scrSetStat(&fhDataMode_six);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_six);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_six);
 			}
 			return (0); 
         case ID_BTN_ENTER:
@@ -504,15 +527,17 @@ WORD MsgRenoDataSet_sixDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
         case ID_BTN_UP:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				scrSetStat(&fhDataMode_five);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_five);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_five);
 			}
 			return (0); 
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				scrSetStat(&fhDataMode_one);
-				scrCreateInit();
+				///scrSetStat(&fhDataMode_one);
+				///scrCreateInit();
+				scrSetNEXT(&fhDataMode_one);
 			}
 			return (0); 
         case ID_BTN_ENTER:

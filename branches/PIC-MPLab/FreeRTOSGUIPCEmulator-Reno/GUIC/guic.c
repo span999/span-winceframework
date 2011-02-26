@@ -4,12 +4,20 @@
 ///#include <task.h>
 
 #include <guic.h>
-
+#include "FontKaiufontref.h"
+#include "FontMonacoUfontref.h"
 
 
 void gcCleanScreen(void)
 {
 	SetColor(BLACK);
+	ClearDevice();
+}
+
+
+void gcColorScreen(WORD color)
+{
+	SetColor(color);
 	ClearDevice();
 }
 
