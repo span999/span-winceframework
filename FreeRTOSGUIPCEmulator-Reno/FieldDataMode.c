@@ -158,9 +158,6 @@ w= 0x0077,
 x= 0x0078, 
 y= 0x0079, 
 z= 0x007A,
-/= 0x002F, 
-:= 0x003A,
-%= 0x0025,
 */
 const XCHAR Func01Str[] = {	0x006C, 0x0061, 0x0070, 0x0020, 0x0061, 0x0076, 0x0067, 0x0020, 0x0070, 0x0061, 0x0063, 0x0065, // lap avg pace
 							0x0000};  
@@ -170,6 +167,10 @@ const XCHAR Func03Str[] = {	0x006C, 0x0061, 0x0070, 0x0020, 0x006D, 0x0061, 0x00
 							0x0000};
 const XCHAR Func04Str[] = {	0x006C, 0x0061, 0x0070, 0x0020, 0x0061, 0x0076, 0x0067, 0x0020, 0x0068, 0x0072, // lap avg hr
 							0x0000};  
+const XCHAR Func05Str[] = {	0x0064, 0x0069, 0x0073, 0x0074, 0x0061, 0x006E, 0x0063, 0x0065, // distance
+							0x0000};  
+const XCHAR Func06Str[] = {	0x0065, 0x006C, 0x0065, 0x0076, 0x0061, 0x0074, 0x0069, 0x006F, 0x006E, // elevation
+							0x0000};  
 
 							
 const XCHAR Unit01Str[] = {	0x002F, 0x006D, 0x0069, // /mi
@@ -178,9 +179,15 @@ const XCHAR Unit02Str[] = {	0x0025, // %
 							0x0000};  
 const XCHAR Unit03Str[] = {	0x0062, 0x0070, 0x006D, // bpm
 							0x0000};  
+const XCHAR Unit04Str[] = {	0x0066, 0x0074, // ft
+							0x0000};  
 
 						
 /*
+/= 0x002F, 
+:= 0x003A,
+%= 0x0025,
+.= 0x002E.
 0x0030, 0x0031, 0x0032, 0x0033, 0x0034, 0x0035, 0x0036, 0x0037, 0x0038, 0x0039,
 */							
 const XCHAR Data01Str[] = {	0x0031, 0x0030, 0x003A, 0x0032, 0x0030, // 10:20
@@ -190,6 +197,10 @@ const XCHAR Data02Str[] = {	0x0032, 0x0030, 0x003A, 0x0031, 0x0039, 0x003A, 0x00
 const XCHAR Data03Str[] = {	0x0031, 0x0035, // 15
 							0x0000};  
 const XCHAR Data04Str[] = {	0x0031, 0x0036, 0x0030, // 160
+							0x0000};  
+const XCHAR Data05Str[] = {	0x0033, 0x002E, 0x0030, 0x0030, // 3.00
+							0x0000};  
+const XCHAR Data06Str[] = {	0x0031, 0x0035, 0x0035, // 155
 							0x0000};  
 							
 							
@@ -248,22 +259,34 @@ void CreateRenoDataSet(WORD wDrawOption)
 		#endif
 			break;
 		case 5:
-			CreateDataSet( 0, 0, GetMaxX(), (GetMaxY()-DEFAULTBTN_HEIGHT)/3, "DataSet1", "Time", "23:23", "24h");
-			CreateDataSet( 0, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, "DataSet2", "Elevation", "155", "ft");
-			CreateDataSet( GetMaxX()/2, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX(), ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, "DataSet3", "Lap Avg HR", "128", "bpm");
-			CreateDataSet( 0, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX()/2, GetMaxY()-DEFAULTBTN_HEIGHT, "DataSet4", "Distance", "3.12", "mi");
-			CreateDataSet( GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, "DataSet5", "Avg HR", "88", "bpm");
+			///CreateDataSet( 0, 0, GetMaxX(), (GetMaxY()-DEFAULTBTN_HEIGHT)/3, "DataSet1", "Time", "23:23", "24h");
+			///CreateDataSet( 0, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, "DataSet2", "Elevation", "155", "ft");
+			///CreateDataSet( GetMaxX()/2, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX(), ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, "DataSet3", "Lap Avg HR", "128", "bpm");
+			///CreateDataSet( 0, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX()/2, GetMaxY()-DEFAULTBTN_HEIGHT, "DataSet4", "Distance", "3.12", "mi");
+			///CreateDataSet( GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, "DataSet5", "Avg HR", "88", "bpm");
+			CreateDataSet( 0, 0, GetMaxX(), (GetMaxY()-DEFAULTBTN_HEIGHT)/3, NULL, Func03Str, Data03Str, Unit02Str);
+			CreateDataSet( 0, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, NULL, Func02Str, Data02Str, NULL);
+			CreateDataSet( GetMaxX()/2, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX(), ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, NULL, Func04Str, Data04Str, Unit03Str);
+			CreateDataSet( 0, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX()/2, GetMaxY()-DEFAULTBTN_HEIGHT, NULL, Func01Str, Data01Str, Unit01Str);
+			CreateDataSet( GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, NULL, Func05Str, Data05Str, Unit01Str);
 			break;
 		case 6:
-			CreateDataSet( 0, 0, GetMaxX()/2, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, "DataSet1", "Time", "23:23", "24h");
-			CreateDataSet( GetMaxX()/2, 0, GetMaxX(), (GetMaxY()-DEFAULTBTN_HEIGHT)/3, "DataSet2", "Distance", "3.12", "mi");
-			CreateDataSet( 0, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, "DataSet3", "Elevation", "155", "ft");
-			CreateDataSet( GetMaxX()/2, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX(), ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, "DataSet4", "Lap Avg HR", "128", "bpm");
-			CreateDataSet( 0, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX()/2, GetMaxY()-DEFAULTBTN_HEIGHT, "DataSet5", "Distance", "3.12", "mi");
-			CreateDataSet( GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, "DataSet6", "Avg HR", "88", "bpm");
+			///CreateDataSet( 0, 0, GetMaxX()/2, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, "DataSet1", "Time", "23:23", "24h");
+			///CreateDataSet( GetMaxX()/2, 0, GetMaxX(), (GetMaxY()-DEFAULTBTN_HEIGHT)/3, "DataSet2", "Distance", "3.12", "mi");
+			///CreateDataSet( 0, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, "DataSet3", "Elevation", "155", "ft");
+			///CreateDataSet( GetMaxX()/2, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX(), ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, "DataSet4", "Lap Avg HR", "128", "bpm");
+			///CreateDataSet( 0, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX()/2, GetMaxY()-DEFAULTBTN_HEIGHT, "DataSet5", "Distance", "3.12", "mi");
+			///CreateDataSet( GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, "DataSet6", "Avg HR", "88", "bpm");
+			CreateDataSet( 0, 0, GetMaxX()/2, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, NULL, Func03Str, Data03Str, Unit02Str);
+			CreateDataSet( GetMaxX()/2, 0, GetMaxX(), (GetMaxY()-DEFAULTBTN_HEIGHT)/3, NULL, Func02Str, Data02Str, NULL);
+			CreateDataSet( 0, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, NULL, Func04Str, Data04Str, Unit03Str);
+			CreateDataSet( GetMaxX()/2, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX(), ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, NULL, Func01Str, Data01Str, Unit01Str);
+			CreateDataSet( 0, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX()/2, GetMaxY()-DEFAULTBTN_HEIGHT, NULL, Func05Str, Data05Str, Unit01Str);
+			CreateDataSet( GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, NULL, Func06Str, Data06Str, Unit04Str);			
 			break;			
 		default:
-			CreateDataSet( 0,  0, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, "DataSet1", "Time", "23:23", "24h");
+			///CreateDataSet( 0,  0, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, "DataSet1", "Time", "23:23", "24h");
+			CreateDataSet( 0,  0, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, NULL, Func01Str, Data01Str, Unit01Str);
 			break;
 	}
 	

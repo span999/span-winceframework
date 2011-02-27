@@ -458,7 +458,7 @@ void myCreateScheme( void )
     dataSetScheme2->TextColorDisabled = BRIGHTRED;
 	dataSetScheme2->pFont = (void *)&Monaco_Normal46U;
 	dataSetScheme2->CommonBkColor = GRAY80;			
-	
+
 ///    altScheme->pFont = (void *)ptrLargeAsianFont;
 ///    navScheme->pFont = (void *)ptrLargeAsianFont;
 	altScheme->pFont = (void *)Gentium_Normal15;
