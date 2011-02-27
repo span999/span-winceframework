@@ -39,7 +39,10 @@ GOL_SCHEME      *navScheme;                                 // style scheme for 
 GOL_SCHEME      *redScheme;                                 // alternative red style scheme
 GOL_SCHEME      *greenScheme;                               // alternative green style scheme
 GOL_SCHEME      *yellowScheme;                              // alternative yellow style scheme
-GOL_SCHEME      *popupMenuScheme;                              // alternative yellow style scheme
+GOL_SCHEME      *popupMenuScheme;                           // popup menu style scheme
+GOL_SCHEME      *dataSetScheme;								// dataset style scheme	
+GOL_SCHEME      *dataSetScheme2;								// dataset style scheme	
+
 
 OBJ_HEADER      *pNavList;                                  // pointer to navigation list
 volatile DWORD  tick = 0;                                   // tick counter
@@ -255,7 +258,7 @@ WORD MsgDefaultBtn(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
     }
 }
 
-
+#if 0
 ///void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText, char *pFunc, char *pData, char *pUnit)
 void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHAR *pText, XCHAR *pFunc, XCHAR *pData, XCHAR *pUnit)
 {
@@ -292,7 +295,80 @@ void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHAR *pTex
 
 			  
 }
+#else
+STATICTEXT *CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHAR *pText, XCHAR *pFunc, XCHAR *pData, XCHAR *pUnit)
+{
+    SHORT	width, height, temp;
+	SHORT	dataframeoffset, unitoffset;
+	void	*pNowFont = NULL;
+	STATICTEXT *pObj = NULL;
+	GOL_SCHEME *pSch = NULL;
+	
+	///draw the frame
+	SetColor(BLACK);
+	Line(left,top,right,top);
+	Line(left,top,left,bottom);
+	Line(right,top,right,bottom);
+	Line(left,bottom,right,bottom);
 
+	if( (bottom-top) < (GetMaxY()/2)-5 )
+	{	/// 1/3 height
+		if( (right-left) < (GetMaxX()-5) )
+		{	/// 1/2 width
+			pSch = dataSetScheme2;
+			pNowFont = (void *)&Monaco_Normal15U;
+			pSch->pFont = (void *)&Monaco_Normal23U;
+			dataframeoffset = 0;
+			unitoffset = 0;
+		}
+		else
+		{
+			pSch = dataSetScheme;
+			pNowFont = (void *)&Monaco_Normal20U;
+			pSch->pFont = (void *)&Monaco_Normal42U;
+			dataframeoffset = 5;
+			unitoffset = 2;
+		}	
+	}
+	else
+	{
+		pSch = dataSetScheme;
+		pNowFont = (void *)&Monaco_Normal20U;
+		pSch->pFont = (void *)&Monaco_Normal46U;
+		dataframeoffset = 5;
+		unitoffset = 2;
+	}
+	
+	
+	///draw function name
+	///pNowFont = (void *)&Monaco_Normal20U;
+	height = GetTextHeight(pNowFont);
+	temp = top+2;
+	gcColFntOutTextXY( left+4, temp, pFunc, pNowFont, BLACK);
+	temp = temp+height;
+
+	///draw the data value	
+	width = GetTextWidth(pData, pSch->pFont);
+	height = GetTextHeight(pSch->pFont);
+    pObj = StCreate(ID_DATASETVALUE1,           	// ID 
+			  (left+(((right-left)-width)>>1)), (temp+(((bottom-temp)-height)>>1))+dataframeoffset, (left+(((right-left)-width)>>1))+width, (temp+(((bottom-temp)-height)>>1))+height-dataframeoffset,
+              ST_DRAW|ST_CENTER_ALIGN,        	// will be dislayed, has frame
+              pData, // multi-line text
+			  pSch);                   	// default GOL scheme 
+
+	///draw the unit
+	if( NULL != pUnit )
+	{
+		width = (left+(((right-left)-width)>>1))+width;
+		temp = (temp+(((bottom-temp)-height)>>1))+height-dataframeoffset+unitoffset;
+		///pNowFont = (void *)&Monaco_Normal20U;
+		height = GetTextHeight(pNowFont);
+		gcColFntOutTextXY( width+2, temp-height, pUnit, pNowFont, BLACK);
+	}
+
+	return pObj;
+}
+#endif
 
 
 
@@ -335,7 +411,9 @@ void myCreateScheme( void )
     greenScheme = GOLCreateScheme();    // create green style scheme
     yellowScheme = GOLCreateScheme();   // create yellow style scheme
 	popupMenuScheme = GOLCreateScheme();   // create popup menu style scheme
-
+	dataSetScheme = GOLCreateScheme();   // create DataSet style scheme
+	dataSetScheme2 = GOLCreateScheme();   // create DataSet style scheme
+	
     /* for Truly display */
     altScheme->Color0 = RGB565CONVERT(0x4C, 0x8E, 0xFF);
     altScheme->Color1 = RGB565CONVERT(255, 102, 0);
@@ -358,6 +436,28 @@ void myCreateScheme( void )
 	///popupMenuScheme->pFont = (void *)Gentium_Normal19U;
 	popupMenuScheme->pFont = (void *)&Monaco_Normal18U;
 	popupMenuScheme->CommonBkColor = BRIGHTYELLOW;			
+
+    dataSetScheme->Color0 = GRAY80;	//item background
+    dataSetScheme->Color1 = BLACK;	//reversed
+    dataSetScheme->EmbossDkColor = GRAY20;
+    dataSetScheme->EmbossLtColor = GRAY20;
+    dataSetScheme->ColorDisabled = BRIGHTGREEN;
+    dataSetScheme->TextColor1 = GRAY80;		//reversed
+    dataSetScheme->TextColor0 = BLACK;		//font color
+    dataSetScheme->TextColorDisabled = BRIGHTRED;
+	dataSetScheme->pFont = (void *)&Monaco_Normal46U;
+	dataSetScheme->CommonBkColor = GRAY80;			
+
+    dataSetScheme2->Color0 = GRAY80;	//item background
+    dataSetScheme2->Color1 = BLACK;	//reversed
+    dataSetScheme2->EmbossDkColor = GRAY20;
+    dataSetScheme2->EmbossLtColor = GRAY20;
+    dataSetScheme2->ColorDisabled = BRIGHTGREEN;
+    dataSetScheme2->TextColor1 = GRAY80;		//reversed
+    dataSetScheme2->TextColor0 = BLACK;		//font color
+    dataSetScheme2->TextColorDisabled = BRIGHTRED;
+	dataSetScheme2->pFont = (void *)&Monaco_Normal46U;
+	dataSetScheme2->CommonBkColor = GRAY80;			
 	
 ///    altScheme->pFont = (void *)ptrLargeAsianFont;
 ///    navScheme->pFont = (void *)ptrLargeAsianFont;

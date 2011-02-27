@@ -145,6 +145,8 @@ extern GOL_SCHEME      *yellowScheme;                              // alternativ
 extern OBJ_HEADER      *pNavList;                                  // pointer to navigation list
 
 extern GOL_SCHEME      *popupMenuScheme;                                 // Popup Menu style scheme
+extern GOL_SCHEME      *dataSetScheme;                                 // dataSet style scheme
+extern GOL_SCHEME      *dataSetScheme2;                                 // dataSet style scheme
 
 
 void myCreateScheme( void );
@@ -175,7 +177,8 @@ void scrDrawCbHandler(void);
 void CreateDefaultBtn(void);
 WORD MsgDefaultBtn(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
 ///void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText, char *pFunc, char *pData, char *pUnit);
-void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHAR *pText, XCHAR *pFunc, XCHAR *pData, XCHAR *pUnit);
+///void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHAR *pText, XCHAR *pFunc, XCHAR *pData, XCHAR *pUnit);
+STATICTEXT *CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHAR *pText, XCHAR *pFunc, XCHAR *pData, XCHAR *pUnit);
 void AddItemList(XCHAR *pText, LISTBOX *pLb, void *pIcon);
 
 

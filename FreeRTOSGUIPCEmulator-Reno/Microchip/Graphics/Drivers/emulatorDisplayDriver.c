@@ -145,7 +145,7 @@ BOOL IsScreenValid( void )
 	else
 	{
 		///screen = SDL_SetVideoMode(320, 240, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
-		screen = SDL_SetVideoMode(GetMaxX(), GetMaxY(), 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+		screen = SDL_SetVideoMode(GetMaxX()+1, GetMaxY()+1, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
 		///screen = SDL_SetVideoMode(GetMaxX()+1, GetMaxY()+1, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
 		if( NULL == screen )
 		{

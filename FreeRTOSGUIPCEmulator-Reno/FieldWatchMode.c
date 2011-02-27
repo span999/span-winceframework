@@ -252,7 +252,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	///pNowFont = (void *)&kaiu_Normal18;
 	///pNowFont = (void *)&comic_Normal15;
 	///pNowFont = (void *)&Gentium_Normal17U;
-	pNowFont = (void *)&Monaco_Normal15U;
+	pNowFont = (void *)&Monaco_Normal18U;
 	width = GetTextWidth(BootupInfo01Str, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, BootupInfo01Str, pNowFont, LIGHTRED);
@@ -263,7 +263,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	///pNowFont = (void *)&Gentium_Normal15;
 	///pNowFont = (void *)&comic_Normal19;
 	///pNowFont = (void *)&Gentium_Normal17U;
-	pNowFont = (void *)&Monaco_Normal15U;
+	pNowFont = (void *)&Monaco_Normal18U;
 	width = GetTextWidth(BootupInfo02Str, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, BootupInfo02Str, pNowFont, GREEN);
@@ -450,7 +450,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	}
 
-	if(1)
+	if(0)
 	{
 	XCHAR *pxStr = NULL;
 	SHORT nowY = 0;
@@ -543,7 +543,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	DelayMs(DEMODELAY);	
 	}
 
-	if(1)
+	if(0)
 	{
 	XCHAR *pxStr = NULL;
 	SHORT nowY = 0;
