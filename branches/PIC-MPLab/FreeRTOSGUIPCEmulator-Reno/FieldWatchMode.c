@@ -11,6 +11,7 @@
 #include "fonts.h"
 #include "icons.h"
 #include "fields.h"
+#include "StringID.h"
 
 #ifdef USE_MAGELLAN_LOGO
 #include "magellan_logo.h"
@@ -54,11 +55,12 @@ void CreateWatchMode_watch(WORD wDrawOption)
         WND_DRAW,                   // will be dislayed after creation
         (void *) &I16164_Clock,         // icon
 ///        pText,                      // set text
-		(XCHAR *)"<<Watch Mode>>",         // text
+		(XCHAR *)IdGetMString(4,gLanguage),         // text
         alt3Scheme
     );                              // default GOL scheme
 	
-	CreateDataSet( 0,  40, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, "Watch Mode", "Time", "23:23", "24h");
+	///CreateDataSet( 0,  40, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, "Watch Mode", "Time", "23:23", "24h");
+	CreateDataSet( 0,  40, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, NULL, IdGetMString(4,gLanguage), "23:23", "24h");
 }
 
 
@@ -138,19 +140,33 @@ WORD MsgWatchMode_watchDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 
 void CreateDeviceMode_poweroff(WORD wDrawOption)
 {
-    SHORT	width, height;
+    SHORT	width, height, NowY, Loop;
 	void	*pNowFont = NULL;
 
     GOLFree();   // free memory for the objects in the previous linked list and start new list
 	gcCleanScreen();
 	CreateDefaultBtn();
 
+#if 0
 	// draw fonts in the screen
 	///pNowFont = (void *)&Gentium_Normal25U;
 	pNowFont = (void *)&Monaco_Normal30U;
-	width = GetTextWidth(PoweroffModeENStr, pNowFont);
+	width = GetTextWidth(IdGetMString(0,EN), pNowFont);
     height = GetTextHeight(pNowFont);
-	gcColFntOutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height - DEFAULTBTN_HEIGHT) >> 1, PoweroffModeENStr, pNowFont, BLACK);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height - DEFAULTBTN_HEIGHT) >> 1, IdGetMString(0,EN), pNowFont, BLACK);
+#else	
+	NowY = 3;
+	Loop = 0;
+	pNowFont = (void *)&Monaco_Normal20U;
+	
+	for( Loop = 0; Loop < 8; Loop++ )
+	{
+		width = GetTextWidth(IdGetMString(0,Loop), pNowFont);
+		height = GetTextHeight(pNowFont);
+		gcColFntOutTextXY((GetMaxX() - width) >> 1, NowY, IdGetMString(0,Loop), pNowFont, (gLanguage==Loop)?LIGHTRED:BLACK);
+		NowY = NowY + height;
+	}
+#endif	
 }
 
 
@@ -204,6 +220,12 @@ WORD MsgDeviceMode_poweroffDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pM
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///reset
+				///change language test here
+				gLanguage++;
+				if( 8 == gLanguage )
+					gLanguage = 0;
+				
+				scrSetNEXT(&fhDeviceMode_poweroff);
 			}
 			return (0); 
         case ID_BTN_EXIT:
@@ -227,7 +249,8 @@ WORD MsgDeviceMode_poweroffDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pM
 
 void CreateDeviceMode_booting(WORD wDrawOption)
 {
-    SHORT       width, height;
+    SHORT	width, height;
+	WORD 	wStrID = 0;
 	void	*pNowFont = NULL;
 
     GOLFree();   // free memory for the objects in the previous linked list and start new list
@@ -251,11 +274,11 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	///pNowFont = (void *)&kaiu_Normal18;
 	///pNowFont = (void *)&comic_Normal15;
 	///pNowFont = (void *)&Gentium_Normal17U;
-	pNowFont = (void *)&Monaco_Normal18U;
+	pNowFont = (void *)&Monaco_Normal15U;
 	width = GetTextWidth(BootupInfo01Str, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, BootupInfo01Str, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);
 
 	// draw fonts in the screen
 	///pNowFont = (void *)&Gentium_Normal15;
@@ -265,7 +288,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(BootupInfo02Str, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, BootupInfo02Str, pNowFont, GREEN);
-	DelayMs(DEMODELAY);	
+	//DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	///pNowFont = (void *)&Gentium_Normal15;
@@ -277,6 +300,24 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, BootupInfo03Str, pNowFont, LIGHTBLUE);
 	DelayMs(DEMODELAY);
 
+	/* multi-language test
+	wStrID = 0;
+	pNowFont = (void *)&Monaco_Normal18U;
+	width = GetTextWidth(IdGetMString(wStrID,EN), pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+40, IdGetMString(wStrID,EN), pNowFont, LIGHTBLUE);
+	DelayMs(DEMODELAY);
+
+	pNowFont = (void *)&Monaco_Normal18U;
+	width = GetTextWidth(IdGetMString(wStrID,SP), pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+60, IdGetMString(wStrID,SP), pNowFont, LIGHTBLUE);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);
+	*/
+	
 	if(0)
 	{
 	XCHAR *pxStr = NULL;
@@ -453,7 +494,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	gcCleanScreen();
 	
 	// draw fonts in the screen
-	pxStr = OptionsENStr;
+	pxStr = IdGetMString(1,EN);
 	pNowFont = (void *)&Monaco_Normal15U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
@@ -463,7 +504,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	///nowY = nowY + height;
 
 	// draw fonts in the screen
-	pxStr = OptionsSPStr;
+	pxStr = IdGetMString(1,SP);
 	pNowFont = (void *)&Monaco_Normal18U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
@@ -473,7 +514,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	nowY = nowY + height;
 
 	// draw fonts in the screen
-	pxStr = OptionsFRStr;
+	pxStr = IdGetMString(1,FR);
 	pNowFont = (void *)&Monaco_Normal20U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
@@ -483,7 +524,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	nowY = nowY + height;
 
 	// draw fonts in the screen
-	pxStr = OptionsITStr;
+	pxStr = IdGetMString(1,IT);
 	pNowFont = (void *)&Monaco_Normal23U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
@@ -493,7 +534,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	nowY = nowY + height;
 
 	// draw fonts in the screen
-	pxStr = OptionsPOStr;
+	pxStr = IdGetMString(1,PO);
 	pNowFont = (void *)&Monaco_Normal27U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
@@ -503,7 +544,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	nowY = nowY + height-10;
 
 	// draw fonts in the screen
-	pxStr = OptionsDUStr;
+	pxStr = IdGetMString(1,DU);
 	pNowFont = (void *)&Monaco_Normal30U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
@@ -513,7 +554,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	nowY = nowY + height-5;
 
 	// draw fonts in the screen
-	pxStr = OptionsGEStr;
+	pxStr = IdGetMString(1,GE);
 	pNowFont = (void *)&Monaco_Normal31U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
@@ -523,7 +564,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	nowY = nowY + height-10;
 
 	// draw fonts in the screen
-	pxStr = OptionsDAStr;
+	pxStr = IdGetMString(1,DA);
 	pNowFont = (void *)&Monaco_Normal35U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
