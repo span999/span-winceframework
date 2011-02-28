@@ -245,7 +245,6 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-60, MitacBrandingStr, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
 	
 	// draw fonts in the screen
 	///pNowFont = (void *)&Gentium_Normal15;
@@ -257,7 +256,6 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)-20, BootupInfo01Str, pNowFont, LIGHTRED);
 	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
 	///pNowFont = (void *)&Gentium_Normal15;
@@ -267,7 +265,6 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(BootupInfo02Str, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, BootupInfo02Str, pNowFont, GREEN);
-	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
 
 	// draw fonts in the screen
@@ -279,7 +276,6 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, BootupInfo03Str, pNowFont, LIGHTBLUE);
 	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
 
 	if(0)
 	{
@@ -450,7 +446,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	}
 
-	if(0)
+	if(1)
 	{
 	XCHAR *pxStr = NULL;
 	SHORT nowY = 0;
@@ -462,8 +458,8 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY( 5, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);
 	///nowY = nowY + height;
 
 	// draw fonts in the screen
@@ -472,8 +468,8 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY( 70, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);
 	nowY = nowY + height;
 
 	// draw fonts in the screen
@@ -482,8 +478,8 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
 	nowY = nowY + height;
 
 	// draw fonts in the screen
@@ -492,8 +488,8 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
 	nowY = nowY + height;
 
 	// draw fonts in the screen
@@ -502,9 +498,9 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
-	nowY = nowY + height;
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
+	nowY = nowY + height-10;
 
 	// draw fonts in the screen
 	pxStr = OptionsDUStr;
@@ -512,9 +508,9 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
-	nowY = nowY + height;
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
+	nowY = nowY + height-5;
 
 	// draw fonts in the screen
 	pxStr = OptionsGEStr;
@@ -522,9 +518,9 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
-	nowY = nowY + height;
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
+	nowY = nowY + height-10;
 
 	// draw fonts in the screen
 	pxStr = OptionsDAStr;
@@ -532,18 +528,18 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
 	nowY = nowY + height;
 
 	
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
 	}
 
-	if(0)
+	if(1)
 	{
 	XCHAR *pxStr = NULL;
 	SHORT nowY = 0;
@@ -555,8 +551,8 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY( 5, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);
 	///nowY = nowY + height;
 
 	// draw fonts in the screen
@@ -565,8 +561,8 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY( 60, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);
 	nowY = nowY + height;
 
 	// draw fonts in the screen
@@ -575,8 +571,8 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
 	nowY = nowY + height;
 
 	// draw fonts in the screen
@@ -585,8 +581,8 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
 	nowY = nowY + height;
 
 	// draw fonts in the screen
@@ -595,8 +591,8 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
 	nowY = nowY + height;
 
 	// draw fonts in the screen
@@ -605,8 +601,8 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
 	nowY = nowY + height;
 
 	// draw fonts in the screen
@@ -615,8 +611,8 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
 	nowY = nowY + height;
 
 	// draw fonts in the screen
@@ -625,15 +621,15 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
 	nowY = nowY + height;
 
 	
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
-	DelayMs(DEMODELAY);
-	DelayMs(DEMODELAY);	
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
 	}
 
 
@@ -679,8 +675,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	WAIT_UNTIL_FINISH(PutImage(width, height, (void *) &Reno_magellan_logo_8bit, 1));
 	DelayMs(DEMODELAY);	
 	DelayMs(DEMODELAY);	
-	DelayMs(DEMODELAY);	
-	DelayMs(DEMODELAY);	
+
 	#endif
 #endif
 

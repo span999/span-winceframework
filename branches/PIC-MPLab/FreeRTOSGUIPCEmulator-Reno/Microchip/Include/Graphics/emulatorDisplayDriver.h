@@ -474,5 +474,9 @@ WORD    GetPixel(SHORT x, SHORT y)
 * Side Effects: none
 *
 ********************************************************************/
+#if defined(WIN32)
+extern void    DelayMs(WORD time);
+#else
 void    DelayMs(WORD time);
+#endif
 #endif // _EMULATOR_DISPLAY_DRIVER_H
