@@ -713,6 +713,7 @@ void IOGetMsg( GOL_MSG *msg )
 	while( !ioMsgUpdated )
 	{
 		/* printf("Wait touch event!!\n"); */
+		Sleep(100);
 	}
 	
 	if( TRUE == ioMsgUpdated )
