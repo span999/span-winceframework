@@ -37,6 +37,7 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  *****************************************************************************/
+
 #include "Graphics/Graphics.h"
 
 #include <SDL.h>
@@ -96,8 +97,7 @@ void DelayMs(WORD time)
     #define DELAY_1MS   16000 / 5               // for 16MIPS
 
 #if defined(WIN32)
-
-
+	#if 0
 void WIN32_ms_sleep( UINT16 mswait )
 {
 	UINT uiLoop = 0;
@@ -119,8 +119,12 @@ void DelayMs(WORD time)
 ///    while(time--)
 ///        for(delay = 0; delay < DELAY_1MS; delay++);
 ///		Sleep( time );
-	WIN32_ms_sleep( 1000 * time );
+	///WIN32_ms_sleep( 1000 * time );
+	Sleep(time);
 }
+	#else
+	///we handle this other place
+	#endif
 #else
 /* */
 void DelayMs(WORD time)
