@@ -27,6 +27,8 @@
 #include "icons.h"
 #include "fields.h"
 #endif
+#include "StringID.h"
+
 
 GOL_SCHEME      *altScheme;                                 // alternative style scheme
 GOL_SCHEME      *alt2Scheme;                                // alternative 2 style scheme

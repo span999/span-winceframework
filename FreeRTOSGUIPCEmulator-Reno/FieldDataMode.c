@@ -26,6 +26,10 @@
 #include "icons.h"
 #include "fields.h"
 #endif
+#include "StringID.h"
+
+
+
 
 
 WORD MsgDefaultBtn_datamodes(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
@@ -65,9 +69,9 @@ WORD MsgDefaultBtn_datamodes(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 				///popupOption.pPopItemList->pPopItem2->pGoFrame = &fhDeviceMode_poweroff;
 				///scrSetStat(&fhDeviceMode_popup);
 				///scrCreateInit();
-				PPMenuSetUp( 2, OptionsENStr, scrGetStat() );
-				PPMenuItem1SetUp( WatchModeENStr, &I16164_Clock, &fhWatchMode_watch );
-				PPMenuItem2SetUp( PowerDownENStr, &I16164_Abort, &fhDeviceMode_poweroff );
+				PPMenuSetUp( 2, IdGetMString(1,gLanguage), scrGetStat() );
+				PPMenuItem1SetUp( IdGetMString(4,gLanguage), &I16164_Clock, &fhWatchMode_watch );
+				PPMenuItem2SetUp( IdGetMString(3,gLanguage), &I16164_Abort, &fhDeviceMode_poweroff );
 				scrSetNEXT(&fhDeviceMode_popup);
 			}
             return (0);
@@ -96,10 +100,11 @@ WORD MsgDefaultBtn_datamodes(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 				///popupOption.pPopItemList->pPopItem3->pGoFrame = &fhSettingMenu_main;
 				///scrSetStat(&fhDeviceMode_popup);
 				///scrCreateInit();
-				PPMenuSetUp( 3, OptionsENStr, scrGetStat() );
-				PPMenuItem1SetUp( NavigationENStr, &I16164_Compass, &fhMapMode_navgation );
-				PPMenuItem2SetUp( QuickInfoENStr, &I16164_About, &fhInfoMode_info );
-				PPMenuItem3SetUp( SettingsENStr, &I16164_Apply, &fhSettingMenu_main );
+				PPMenuSetUp( 4, IdGetMString(1,gLanguage), scrGetStat() );
+				PPMenuItem1SetUp( IdGetMString(5,gLanguage), &I16164_Compass, &fhMapMode_navgation );
+				PPMenuItem2SetUp( IdGetMString(6,gLanguage), &I16164_About, &fhInfoMode_info );
+				PPMenuItem3SetUp( IdGetMString(7,gLanguage), &I16164_Apply, &fhSettingMenu_main );
+				PPMenuItem4SetUp( IdGetMString(8,gLanguage), &I16164_Apply, &fhSettingMenu_main );
 				scrSetNEXT(&fhDeviceMode_popup);
 			}
             return (0);

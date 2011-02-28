@@ -9,6 +9,7 @@
 
 #include "guic.h"
 #include "ObjectTest.h"
+#if 0
 #include "FontGentium.h"
 #include "1bpp_icons.h"
 #include "4bpp_icons.h"
@@ -20,8 +21,12 @@
 #include "FieldWatchMode.h"
 #include "FieldMapMode.h"
 #include "FieldInfoMode.h"
-
-
+#else
+#include "fonts.h"
+#include "icons.h"
+#include "fields.h"
+#endif
+#include "StringID.h"
 
 
 WORD MsgDefaultBtn_settings(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
@@ -138,15 +143,19 @@ void CreateSettingMenu_main(WORD wDrawOption)
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
             LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
-            (XCHAR*)"<<Setting Menu>>",
+            (XCHAR*)IdGetMString(7,gLanguage),
             alt3Scheme
         );                                          // use alternate scheme
 	
 	
-	AddItemList( (XCHAR *)"User >", pLb, &PCGaming2_1bpp_16x16);
-	AddItemList( (XCHAR *)"Device >", pLb, &Settings_4bpp_16x16);
-	AddItemList( (XCHAR *)"Activity >", pLb, &PCGaming1_1bpp_16x16);
-	AddItemList( (XCHAR *)"Navigation >", pLb, &I16164_Compass);
+//	AddItemList( (XCHAR *)"User >", pLb, &PCGaming2_1bpp_16x16);
+//	AddItemList( (XCHAR *)"Device >", pLb, &Settings_4bpp_16x16);
+//	AddItemList( (XCHAR *)"Activity >", pLb, &PCGaming1_1bpp_16x16);
+//	AddItemList( (XCHAR *)"Navigation >", pLb, &I16164_Compass);
+	AddItemList( (XCHAR *)IdGetMString(10,gLanguage), pLb, &PCGaming2_1bpp_16x16);
+	AddItemList( (XCHAR *)IdGetMString(11,gLanguage), pLb, &Settings_4bpp_16x16);
+	AddItemList( (XCHAR *)IdGetMString(12,gLanguage), pLb, &PCGaming1_1bpp_16x16);
+	AddItemList( (XCHAR *)IdGetMString(5,gLanguage), pLb, &I16164_Compass);
 	LbSetFocusedItem( pLb, 1 );
 
 }
