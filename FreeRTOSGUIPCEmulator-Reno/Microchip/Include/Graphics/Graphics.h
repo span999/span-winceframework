@@ -127,6 +127,9 @@
     #ifdef USE_LISTBOX
         #include "ListBox.h"
     #endif
+	#ifdef USE_RENO_LISTBOX
+		#include "renoListBox.h"
+	#endif
     #ifdef USE_ROUNDDIAL
         #include "RoundDial.h"
     #endif
