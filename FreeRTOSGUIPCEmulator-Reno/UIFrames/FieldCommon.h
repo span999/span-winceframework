@@ -149,7 +149,7 @@ extern GOL_SCHEME      *popupMenuScheme;                                 // Popu
 extern GOL_SCHEME      *dataSetScheme;                                 // dataSet style scheme
 extern GOL_SCHEME      *dataSetScheme2;                                 // dataSet style scheme
 extern GOL_SCHEME      *windowScheme;                                 // window style scheme
-
+extern GOL_SCHEME      *popupAskScheme;                                 // Popup Ask style scheme
 
 void myCreateScheme( void );
 
@@ -167,6 +167,7 @@ void scrCreateDone(void);
 void scrCreateInit(void);
 void scrSetStat(FRAME_HEADER* phFrame);
 FRAME_HEADER* scrGetStat(void);
+FRAME_HEADER* scrGetPrivStat(void);
 void scrSetNEXT(FRAME_HEADER* phFrame);
 
 
