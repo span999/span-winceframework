@@ -36,6 +36,28 @@ void PPMenuItemsSetUp( SHORT ItemNum, XCHAR *pMsg, void *pIcon, FRAME_HEADER *pF
 	(*ppThisMI)->pGoFrame = pFrame2Go;
 }
 
+const XCHAR Ask01Str[] = {	0x0041, 0x0073, 0x006B, 0x003F, 0x003F, // Ask??
+							0x0000};  
+
+
+void PPAskSetUp( SHORT ItemNum, XCHAR *pTitle, FRAME_HEADER *pPrivF )
+{
+	popupAsk.PopItemNum = ItemNum;
+	popupAsk.pPopTitle = pTitle;
+	popupAsk.pPrivFrame = pPrivF;
+}
+
+void PPAskItemsSetUp( SHORT ItemNum, XCHAR *pMsg, void *pIcon, FRAME_HEADER *pFrame2Go )
+{
+	POPUPITEM_HEADER **ppThisMI = NULL;
+	
+	ppThisMI = &(popupAsk.pPopAskList->pPopItem11) + (ItemNum-1);
+	
+	(*ppThisMI)->pPopMsg = pMsg;
+	(*ppThisMI)->pIcon = pIcon;
+	(*ppThisMI)->pGoFrame = pFrame2Go;
+}
+
 
 const XCHAR Time01Str[] = {	0x004D, 0x006F, 0x006E, 0x0064, 0x0061, 0x0079, // Monday
 							0x0000};  
@@ -121,9 +143,17 @@ WORD MsgWatchMode_watchDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///fitness mode or power down
-				PPMenuSetUp( 2, OptionsENStr, scrGetStat() );
-				PPMenuItem1SetUp( FitnessModeENStr, &PCGaming1_4bpp_16x16, &fhDataMode_two );
-				PPMenuItem2SetUp( PowerDownENStr, &I16164_Abort, &fhDeviceMode_poweroff );
+				///PPMenuSetUp( 2, OptionsENStr, scrGetStat() );
+				PPMenuSetUp( 2, IdGetMString(1,gLanguage), scrGetStat() );
+				///PPMenuItem1SetUp( FitnessModeENStr, &PCGaming1_4bpp_16x16, &fhDataMode_two );
+				PPMenuItem1SetUp( IdGetMString(2,gLanguage), &PCGaming1_4bpp_16x16, &fhDataMode_two );
+				{	///setup for fhDeviceMode_popask
+					PPAskSetUp( 2, Ask01Str, scrGetStat() );
+					PPAskItem1SetUp( IdGetMString(3,gLanguage), NULL, &fhDeviceMode_poweroff );
+					PPAskItem2SetUp( IdGetMString(4,gLanguage), NULL, scrGetStat() );
+				}
+				///PPMenuItem2SetUp( PowerDownENStr, &I16164_Abort, &fhDeviceMode_poweroff );
+				PPMenuItem2SetUp( IdGetMString(3,gLanguage), &I16164_Abort, &fhDeviceMode_popask );
 				scrSetNEXT(&fhDeviceMode_popup);
 			}
 			return (0); 
@@ -520,7 +550,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	}
 
-	if(1)
+	if(0)
 	{
 	XCHAR *pxStr = NULL;
 	SHORT nowY = 0;
@@ -613,7 +643,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	//DelayMs(DEMODELAY);	
 	}
 
-	if(1)
+	if(0)
 	{
 	XCHAR *pxStr = NULL;
 	SHORT nowY = 0;
@@ -989,6 +1019,173 @@ WORD MsgDeviceMode_popupDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 }
 
 
+void CreateDeviceMode_popask(WORD wDrawOption)
+{
+//    LISTBOX *pLb;
+//	POPUPITEM_HEADER*	pPopItems;
+//	SHORT	sCount = 0;
+
+	
+    GOLFree();                                      // free memory for the objects in the previous linked list and start new list
+
+	CreateDefaultBtn();
+#if 0	
+    pLb = LbCreate
+        (
+            ID_LISTBOX1,                            // ID
+            POPUP_FRAME_OFFSET_W,
+            POPUP_FRAME_OFFSET_H,
+            GetMaxX() - POPUP_FRAME_OFFSET_W,
+            GetMaxY() - DEFAULTBTN_HEIGHT - POPUP_FRAME_OFFSET_H,  // dimension
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
+            (XCHAR*)(popupOption.pPopTitle),
+            popupMenuScheme
+        );                                          // use alternate scheme
+
+	pPopItems = popupOption.pPopItemList->pPopItem1;
+	while( sCount < popupOption.PopItemNum )
+	{
+		AddItemList( (XCHAR *)pPopItems->pPopMsg, pLb, pPopItems->pIcon);
+		sCount++;
+		pPopItems++;
+	}
+
+	LbSetFocusedItem( pLb, 1 );	
+#else
+    BtnCreate
+    (
+        ID_BUTTON7,             // button ID
+        0 + POASK_FRAME_OFFSET_W,
+        0 + POASK_FRAME_OFFSET_H,                         // left, top corner	
+        GetMaxX() - POASK_FRAME_OFFSET_W,
+        GetMaxY() - POASK_FRAME_OFFSET_H,
+        15,                          // right, bottom corner (with radius = 0)
+        BTN_DRAW,                   // will be dislayed after creation
+        NULL,                       // no bitmap	
+        NULL,      // LEFT arrow as text
+        popupAskScheme
+    );
+
+    BtnCreate
+    (
+        ID_BUTTON1,             // button ID
+        ((GetMaxX() - POASK_FRAME_W) >> 1),
+        ((GetMaxY() - POASK_FRAME_H) >> 1),                         // left, top corner	
+        ((GetMaxX() - POASK_FRAME_W) >> 1) + POASK_FRAME_W,
+        ((GetMaxY() - POASK_FRAME_H) >> 1) + POASK_FRAME_H,
+        0,                          // right, bottom corner (with radius = 0)
+        BTN_DRAW,                   // will be dislayed after creation
+        NULL,                       // no bitmap	
+        popupAsk.pPopAskList->pPopItem11->pPopMsg,      // LEFT arrow as text
+        popupAskScheme
+    ); 
+
+    BtnCreate
+    (
+        ID_BUTTON2,             // button ID
+        ((GetMaxX() - POASK_FRAME_W) >> 1),
+        ((GetMaxY() - POASK_FRAME_H) >> 1) + POASK_FRAME_H + 5,                         // left, top corner	
+        ((GetMaxX() - POASK_FRAME_W) >> 1) + POASK_FRAME_W,
+        ((GetMaxY() - POASK_FRAME_H) >> 1) + POASK_FRAME_H + POASK_FRAME_H + 5,
+        0,                          // right, bottom corner (with radius = 0)
+        BTN_DRAW,                   // will be dislayed after creation
+        NULL,                       // no bitmap	
+        popupAsk.pPopAskList->pPopItem12->pPopMsg,      // LEFT arrow as text
+        popupAskScheme
+    ); 
+	
+#endif
+}
+
+
+
+WORD MsgDeviceMode_popask(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+        default:
+            return 1; 							// process by default
+    }
+}
+
+WORD MsgDeviceMode_popaskDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+//	LISTBOX *pLb;
+//	POPUPITEM_HEADER*	pPopItems;
+
+	
+//	pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
+    switch(GetObjID(pObj))
+    {
+		///case ID_BUTTON: here, if you want different key response.
+        case ID_BUTTON7:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+			return (0); 
+        case ID_BTN_UP:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+			return (0); 
+        case ID_BTN_UP_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///power down
+			}
+			return (0); 
+        case ID_BTN_DOWN:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+			}
+			return (0); 
+        case ID_BTN_DOWN_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///???
+				
+			}
+			return (0); 
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///record
+				///pPopItems = popupAsk.pPopAskList->pPopItem11;
+				scrSetNEXT( popupAsk.pPopAskList->pPopItem11->pGoFrame );
+			}
+			return (0); 
+        case ID_BTN_ENTER_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///reset
+			}
+			return (0); 
+        case ID_BTN_EXIT:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///lap, back to privious
+			#if 0	
+				scrSetNEXT(popupAsk.pPrivFrame);
+			#else
+				scrSetNEXT( popupAsk.pPopAskList->pPopItem12->pGoFrame );
+			#endif
+			}
+			return (0); 
+        case ID_BTN_EXIT_HOLD:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///mark-next
+			}
+			return (0); 
+
+        default:
+            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+	}
+}
+
+
+
+
 POPUPITEM_HEADER popitem1 = 
 {
 	"1                   ",
@@ -1032,6 +1229,22 @@ POPUPITEM_HEADER popitem6 =
 };
 
 
+POPUPITEM_HEADER popitem11 = 
+{
+	"11                  ",
+	&I16164_About,
+	&fhMapMode_navgation
+};
+
+POPUPITEM_HEADER popitem12 = 
+{
+	"12                  ",
+	&I16164_About,
+	&fhMapMode_navgation
+};
+
+
+///popup menu
 POPUPITEMLIST_HEADER popitemlist =
 {
 	&popitem1,
@@ -1049,6 +1262,23 @@ POPUPOPTION_HEADER popupOption =
 	"t                  ",				///title
 	&fhDataMode_three,		///privious frame
 	&popitemlist
+};
+
+
+///popup ask 
+POPUPASKLIST_HEADER popasklist =
+{
+	&popitem11,
+	&popitem12,
+};
+
+
+POPUPASK_HEADER popupAsk = 
+{
+	2,						///item number
+	"t                  ",				///title
+	&fhDataMode_three,		///privious frame
+	&popasklist
 };
 
 
@@ -1088,6 +1318,16 @@ FRAME_HEADER fhDeviceMode_popup = {
 	MsgDeviceMode_popup,
 	CreateDeviceMode_popup,
 	MsgDeviceMode_popupDefaultBtn,
+	0,		///no option
+	0,
+	0
+};
+
+
+FRAME_HEADER fhDeviceMode_popask = {
+	MsgDeviceMode_popask,
+	CreateDeviceMode_popask,
+	MsgDeviceMode_popaskDefaultBtn,
 	0,		///no option
 	0,
 	0
