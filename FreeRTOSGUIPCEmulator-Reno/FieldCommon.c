@@ -319,7 +319,7 @@ STATICTEXT *CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHA
 		{	/// 1/2 width
 			pSch = dataSetScheme2;
 			pNowFont = (void *)&Monaco_Normal15U;
-			pSch->pFont = (void *)&Monaco_Normal23U;
+			pSch->pFont = (void *)&Monaco_Normal20U;
 			dataframeoffset = 0;
 			unitoffset = 0;
 		}
@@ -327,7 +327,7 @@ STATICTEXT *CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHA
 		{
 			pSch = dataSetScheme;
 			pNowFont = (void *)&Monaco_Normal20U;
-			pSch->pFont = (void *)&Monaco_Normal42U;
+			pSch->pFont = (void *)&Monaco_Normal41U;
 			dataframeoffset = 5;
 			unitoffset = 2;
 		}	
@@ -336,7 +336,7 @@ STATICTEXT *CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHA
 	{
 		pSch = dataSetScheme;
 		pNowFont = (void *)&Monaco_Normal20U;
-		pSch->pFont = (void *)&Monaco_Normal46U;
+		pSch->pFont = (void *)&Monaco_Normal41U;
 		dataframeoffset = 5;
 		unitoffset = 2;
 	}
@@ -436,7 +436,7 @@ void myCreateScheme( void )
     popupMenuScheme->TextColor0 = BLACK;		//font color
     popupMenuScheme->TextColorDisabled = BRIGHTRED;
 	///popupMenuScheme->pFont = (void *)Gentium_Normal19U;
-	popupMenuScheme->pFont = (void *)&Monaco_Normal18U;
+	popupMenuScheme->pFont = (void *)&Monaco_Normal19U;
 	popupMenuScheme->CommonBkColor = BRIGHTYELLOW;			
 
     dataSetScheme->Color0 = GRAY80;	//item background
@@ -447,7 +447,7 @@ void myCreateScheme( void )
     dataSetScheme->TextColor1 = GRAY80;		//reversed
     dataSetScheme->TextColor0 = BLACK;		//font color
     dataSetScheme->TextColorDisabled = BRIGHTRED;
-	dataSetScheme->pFont = (void *)&Monaco_Normal46U;
+	dataSetScheme->pFont = (void *)&Monaco_Normal45U;
 	dataSetScheme->CommonBkColor = GRAY80;			
 
     dataSetScheme2->Color0 = GRAY80;	//item background
@@ -458,7 +458,7 @@ void myCreateScheme( void )
     dataSetScheme2->TextColor1 = GRAY80;		//reversed
     dataSetScheme2->TextColor0 = BLACK;		//font color
     dataSetScheme2->TextColorDisabled = BRIGHTRED;
-	dataSetScheme2->pFont = (void *)&Monaco_Normal46U;
+	dataSetScheme2->pFont = (void *)&Monaco_Normal45U;
 	dataSetScheme2->CommonBkColor = GRAY80;			
 
 ///    altScheme->pFont = (void *)ptrLargeAsianFont;

@@ -159,6 +159,7 @@ void CreateDeviceMode_poweroff(WORD wDrawOption)
 	Loop = 0;
 	pNowFont = (void *)&Monaco_Normal20U;
 	
+	///list down all language supported.
 	for( Loop = 0; Loop < 8; Loop++ )
 	{
 		width = GetTextWidth(IdGetMString(0,Loop), pNowFont);
@@ -220,7 +221,7 @@ WORD MsgDeviceMode_poweroffDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pM
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///reset
-				///change language test here
+				///change language setting test here
 				gLanguage++;
 				if( 8 == gLanguage )
 					gLanguage = 0;
@@ -284,7 +285,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	///pNowFont = (void *)&Gentium_Normal15;
 	///pNowFont = (void *)&comic_Normal19;
 	///pNowFont = (void *)&Gentium_Normal17U;
-	pNowFont = (void *)&Monaco_Normal18U;
+	pNowFont = (void *)&Monaco_Normal19U;
 	width = GetTextWidth(BootupInfo02Str, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, (GetMaxY() - height) >> 1, BootupInfo02Str, pNowFont, GREEN);
@@ -324,7 +325,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	gcCleanScreen();
 	
 	///pNowFont = (void *)&Gentium_Normal19U;
-	pNowFont = (void *)&Monaco_Normal18U;
+	pNowFont = (void *)&Monaco_Normal19U;
 	// draw fonts in the screen
 	pxStr = TestSettingENStr;
 	///pNowFont = (void *)&Gentium_Normal21U;
@@ -396,7 +397,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	XCHAR *pxStr = NULL;
 	gcCleanScreen();
 	
-	pNowFont = (void *)&Monaco_Normal18U;
+	pNowFont = (void *)&Monaco_Normal19U;
 	// draw fonts in the screen
 	pxStr = TestMenuENStr;
 	///pNowFont = (void *)&Gentium_Normal21U;
@@ -505,7 +506,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	pxStr = IdGetMString(1,SP);
-	pNowFont = (void *)&Monaco_Normal18U;
+	pNowFont = (void *)&Monaco_Normal19U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY( 70, nowY, pxStr, pNowFont, LIGHTRED);
@@ -555,7 +556,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	pxStr = IdGetMString(1,GE);
-	pNowFont = (void *)&Monaco_Normal31U;
+	pNowFont = (void *)&Monaco_Normal30U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
@@ -608,7 +609,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	///pxStr = OptionsFRStr;
-	pNowFont = (void *)&Monaco_Normal18U;
+	pNowFont = (void *)&Monaco_Normal19U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
