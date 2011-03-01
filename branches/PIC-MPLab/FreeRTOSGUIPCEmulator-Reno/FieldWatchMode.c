@@ -885,6 +885,7 @@ WORD MsgDeviceMode_popupDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 					LbSetFocusedItem( pLb, (sLbCount - 1));
 				else
 					LbSetFocusedItem( pLb, (sFocusedItem - 1));
+				LbChangeSel(pLb, pLb->pFocusItem);
 				SetState(pLb, LB_DRAW_ITEMS);
 			}
 			return (0); 
@@ -904,6 +905,7 @@ WORD MsgDeviceMode_popupDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 					LbSetFocusedItem( pLb, 1);
 				else
 					LbSetFocusedItem( pLb, (sFocusedItem + 1));
+				LbChangeSel(pLb, pLb->pFocusItem);
 				SetState(pLb, LB_DRAW_ITEMS);
 			}
 			return (0); 
