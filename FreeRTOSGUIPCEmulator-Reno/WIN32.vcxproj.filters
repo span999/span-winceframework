@@ -46,6 +46,9 @@
     <Filter Include="GUIC\Res">
       <UniqueIdentifier>{a97007d8-382d-4257-82dc-be07c4865766}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GUIC\copo">
+      <UniqueIdentifier>{db5d66d5-4fca-4e78-856f-1656b3f78fd0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FreeRTOS\portable\MemMang\heap_3.c">
@@ -161,6 +164,9 @@
     </ClCompile>
     <ClCompile Include="StringID.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIC\copo\renoListBox.c">
+      <Filter>GUIC\copo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -37,10 +37,19 @@ void PPMenuItemsSetUp( SHORT ItemNum, XCHAR *pMsg, void *pIcon, FRAME_HEADER *pF
 }
 
 
+const XCHAR Time01Str[] = {	0x004D, 0x006F, 0x006E, 0x0064, 0x0061, 0x0079, // Monday
+							0x0000};  
+const XCHAR Time02Str[] = {	0x0046, 0x0065, 0x0062, 0x0020, 0x0032, 0x0038, 0x002C, 0x0020, 0x0032, 0x0030, 0x0031, 0x0031, // Feb 28, 2011
+							0x0000};  
+const XCHAR Time03Str[] = {	0x0031, 0x0030, 0x003A, 0x0034, 0x0037, // 10:47
+							0x0000};  
+
 
 
 void CreateWatchMode_watch(WORD wDrawOption)
 {
+	SHORT	width, height;
+
     GOLFree();   // free memory for the objects in the previous linked list and start new list
 	gcCleanScreen();
 	CreateDefaultBtn();
@@ -56,11 +65,34 @@ void CreateWatchMode_watch(WORD wDrawOption)
         (void *) &I16164_Clock,         // icon
 ///        pText,                      // set text
 		(XCHAR *)IdGetMString(4,gLanguage),         // text
-        alt3Scheme
+        windowScheme
     );                              // default GOL scheme
 	
 	///CreateDataSet( 0,  40, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, "Watch Mode", "Time", "23:23", "24h");
-	CreateDataSet( 0,  40, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, NULL, IdGetMString(4,gLanguage), "23:23", "24h");
+	///CreateDataSet( 0,  40, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, NULL, IdGetMString(4,gLanguage), "23:23", "24h");
+	
+	width = GetTextWidth(Time01Str, dataSetScheme2->pFont);
+	height = GetTextHeight(dataSetScheme2->pFont);
+	StCreate(ID_STATICTEXT1,           	// ID 
+			  5, 50, 5+width, 75,
+              ST_DRAW,        	// will be dislayed, has frame
+              Time01Str, // multi-line text
+			  dataSetScheme2);                   	// default GOL scheme 
+			  
+	width = GetTextWidth(Time02Str, dataSetScheme2->pFont);
+	StCreate(ID_STATICTEXT2,           	// ID 
+			  5, 80, 5+width, 100,
+              ST_DRAW,        	// will be dislayed, has frame
+              Time02Str, // multi-line text
+			  dataSetScheme2);                   	// default GOL scheme 
+
+	width = GetTextWidth(Time03Str, dataSetScheme2->pFont);
+	StCreate(ID_STATICTEXT3,           	// ID 
+			  5, 105, 5+width, 125,
+              ST_DRAW,        	// will be dislayed, has frame
+              Time03Str, // multi-line text
+			  dataSetScheme2);                   	// default GOL scheme 
+
 }
 
 
@@ -506,7 +538,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	pxStr = IdGetMString(1,SP);
-	pNowFont = (void *)&Monaco_Normal19U;
+	pNowFont = (void *)&Monaco_Normal16U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY( 70, nowY, pxStr, pNowFont, LIGHTRED);
@@ -516,7 +548,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	pxStr = IdGetMString(1,FR);
-	pNowFont = (void *)&Monaco_Normal20U;
+	pNowFont = (void *)&Monaco_Normal19U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
@@ -526,7 +558,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	pxStr = IdGetMString(1,IT);
-	pNowFont = (void *)&Monaco_Normal23U;
+	pNowFont = (void *)&Monaco_Normal20U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
@@ -536,37 +568,37 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	pxStr = IdGetMString(1,PO);
+	pNowFont = (void *)&Monaco_Normal23U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
+	nowY = nowY + height;
+
+	// draw fonts in the screen
+	pxStr = IdGetMString(1,DU);
+	pNowFont = (void *)&Monaco_Normal26U;
+	width = GetTextWidth(pxStr, pNowFont);
+	height = GetTextHeight(pNowFont);
+	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
+	//DelayMs(DEMODELAY);
+	//DelayMs(DEMODELAY);	
+	nowY = nowY + height;
+
+	// draw fonts in the screen
+	pxStr = IdGetMString(1,GE);
 	pNowFont = (void *)&Monaco_Normal27U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
 	//DelayMs(DEMODELAY);
 	//DelayMs(DEMODELAY);	
-	nowY = nowY + height-10;
-
-	// draw fonts in the screen
-	pxStr = IdGetMString(1,DU);
-	pNowFont = (void *)&Monaco_Normal30U;
-	width = GetTextWidth(pxStr, pNowFont);
-	height = GetTextHeight(pNowFont);
-	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
-	//DelayMs(DEMODELAY);
-	//DelayMs(DEMODELAY);	
-	nowY = nowY + height-5;
-
-	// draw fonts in the screen
-	pxStr = IdGetMString(1,GE);
-	pNowFont = (void *)&Monaco_Normal30U;
-	width = GetTextWidth(pxStr, pNowFont);
-	height = GetTextHeight(pNowFont);
-	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
-	//DelayMs(DEMODELAY);
-	//DelayMs(DEMODELAY);	
-	nowY = nowY + height-10;
+	nowY = nowY + height;
 
 	// draw fonts in the screen
 	pxStr = IdGetMString(1,DA);
-	pNowFont = (void *)&Monaco_Normal35U;
+	pNowFont = (void *)&Monaco_Normal30U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);
@@ -599,7 +631,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	///pxStr = OptionsSPStr;
-	pNowFont = (void *)&Monaco_Normal15U;
+	pNowFont = (void *)&Monaco_Normal16U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY( 60, nowY, pxStr, pNowFont, LIGHTRED);
@@ -639,7 +671,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	// draw fonts in the screen
 	///pxStr = OptionsDUStr;
-	pNowFont = (void *)&Monaco_Normal27U;
+	pNowFont = (void *)&Monaco_Normal26U;
 	width = GetTextWidth(pxStr, pNowFont);
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, nowY, pxStr, pNowFont, LIGHTRED);

@@ -142,6 +142,7 @@
     <ClCompile Include="FreeRTOS\portable\WIN32\port.c" />
     <ClCompile Include="FreeRTOS\queue.c" />
     <ClCompile Include="FreeRTOS\tasks.c" />
+    <ClCompile Include="GUIC\copo\renoListBox.c" />
     <ClCompile Include="GUIC\guic.c" />
     <ClCompile Include="GUIC\res\16164bppIcon.c" />
     <ClCompile Include="GUIC\res\1bpp_icons.c" />
