@@ -49,6 +49,9 @@
     <Filter Include="GUIC\copo">
       <UniqueIdentifier>{db5d66d5-4fca-4e78-856f-1656b3f78fd0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UIframework">
+      <UniqueIdentifier>{137b9c91-992a-4113-b397-76a190e24adc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FreeRTOS\portable\MemMang\heap_3.c">
@@ -129,24 +132,6 @@
     <ClCompile Include="Microchip\Graphics\Window.c">
       <Filter>PIC-GraphicLib</Filter>
     </ClCompile>
-    <ClCompile Include="FieldSettingMenu.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FieldCommon.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FieldDataMode.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FieldInfoMode.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FieldMapMode.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FieldWatchMode.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GUIC\res\FontComic.c">
       <Filter>GUIC\Res</Filter>
     </ClCompile>
@@ -162,11 +147,29 @@
     <ClCompile Include="GUIC\res\FontMonacoU.c">
       <Filter>GUIC\Res</Filter>
     </ClCompile>
-    <ClCompile Include="StringID.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GUIC\copo\renoListBox.c">
       <Filter>GUIC\copo</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFrames\StringID.c">
+      <Filter>UIframework</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFrames\FieldCommon.c">
+      <Filter>UIframework</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFrames\FieldDataMode.c">
+      <Filter>UIframework</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFrames\FieldInfoMode.c">
+      <Filter>UIframework</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFrames\FieldMapMode.c">
+      <Filter>UIframework</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFrames\FieldSettingMenu.c">
+      <Filter>UIframework</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFrames\FieldWatchMode.c">
+      <Filter>UIframework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

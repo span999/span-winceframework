@@ -510,23 +510,9 @@ WORD MsgNumEntryPadDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 
 
 
-
-
 //*****************************************************************************
 //
-//! Sends a pointer message.
-//!
-//! \param ulMessage is the pointer message to be sent.
-//! \param lX is the X coordinate associated with the message.
-//! \param lY is the Y coordinate associated with the message.
-//!
-//! This function sends a pointer message to the root widget.  A pointer driver
-//! (such as a touch screen driver) can use this function to deliver pointer
-//! activity to the widget tree without having to have direct knowledge of the
-//! structure of the widget framework.
-//!
-//! \return Returns 1 if the message was added to the queue, and 0 if it could
-//! not be added since the queue is full.
+//! Sends a IO message.
 //
 //*****************************************************************************
 
@@ -580,7 +566,6 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 		ioMsg.type = TYPE_KEYBOARD;
 		ioMsg.uiEvent = EVENT_KEYSCAN;
 		ioMsg.param1 = (SHORT)lX;
-///		ioMsg.param2 = (SHORT)lY;
 		ioMsg.param2 = (SHORT)kbscan;
 		
 		/*re-mapping key, simulate the key pressed/repeased*/
@@ -680,17 +665,9 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 	ioMsgUpdated = TRUE;
 	
 #if 0
-    tWidgetMessageQueue message;
-
-
-        message.ulFlags =  MQ_FLAG_POST_ORDER  | MQ_FLAG_STOP_ON_SUCCESS ;
-    	message.pWidget = WIDGET_ROOT;
-    	message.ulMessage = ulMessage;
-    	message.ulParam1 = lX;
-    	message.ulParam2 = lY;
-
-
-
+	/*
+	TODO:
+	*/
         //
         // Write this message into the message queue.
         //
@@ -699,7 +676,7 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
             g_ulMQOverflow++;
         }
 
-   //     portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
+	//     portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
 #endif
         //
         // Success.
@@ -741,72 +718,25 @@ WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 WORD GOLDrawCallback(void)
 {
 ///	printf("In GOLDrawCallback\n");
-
-#if 0	
-    switch(screenState)
-    {
-        case CREATE_BUTTONS:
-            prevRefreshState = CREATE_BUTTONS;
-            CreateButtons();        									// create window and buttons
-            screenState = DISPLAY_BUTTONS;                              // switch to next state
-            return (1);                                                 // draw objects created
-
-        case DISPLAY_BUTTONS:
-            return (1);                                                 // redraw objects if needed
-			
-        case CREATE_RENO_DATASET:
-			prevRefreshState = CREATE_BUTTONS;
-            CreateRenoDataSet(); 							// create window and buttons
-            screenState = DISPLAY_RENO_DATASET; 			// switch to next state
-            return (1); 									// draw objects created
-            
-        case DISPLAY_RENO_DATASET:
-            return (1); 									// redraw objects if needed
-
-        case CREATE_LISTBOX:
-            prevRefreshState = CREATE_LISTBOX;
-            CreateListBox();                    // create list box test screen
-            screenState = DISPLAY_LISTBOX;      // switch to next state
-            return (1);                         // draw objects created
-
-        case DISPLAY_LISTBOX:
-
-            // this moves the slider and editbox for the date setting to
-            // move while the up or down arrow buttons are pressed
-			{    
-				LISTBOX *pLb;
-				pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
-				SetState(pLb, LB_DRAW_ITEMS);
-			}	
-            return (1);                         // draw objects
-			
-		default:
-			return (1);    
-	}
-#else
 	scrDrawCbHandler();
-#endif
 	return (1);
 }
 
 
-
-#if 0
-#define MIN(x,y)                ((x > y)? y: x)
-#define WAIT_UNTIL_FINISH(x)    while(!x)	
-#define DEMODELAY				1000
-#endif
+///#define	BOOTMESSAGE
 
 void ObjectTest( void )
 {
+#ifdef BOOTMESSAGE
     SHORT       width, height;
-	
+#endif	
 	GOL_MSG msg;                        // GOL message structure to interact with GOL
 
-
 	scrInitStat();
-
-#if 0	
+#if BOOTMESSAGE	
+/*
+	you place some message on screen even before frames state.
+*/
 /***********************************************************************************************************/
 	SetColor(BLACK);
 	ClearDevice();
@@ -885,10 +815,7 @@ void ObjectTest( void )
             IOGetMsg(&msg);          // Get message from touch screen
             GOLMsg(&msg);               // Process message
 #if defined (USE_FOCUS)                    
-            #if !(defined(__dsPIC33FJ128GP804__) || defined(__PIC24HJ128GP504__))
-///            SideButtonsMsg(&msg);       // Get message from side buttons
-///            GOLMsg(&msg);               // Process message
-            #endif
+
 #endif //#if defined (USE_FOCUS)
         }
 		else
@@ -908,16 +835,8 @@ FRAME_HEADER fhButtons = {
 	0,
 	0
 };
-#if 0
-FRAME_HEADER fhRenoDataSet = {
-	MsgRenoDataSet,
-	CreateRenoDataSet,
-	MsgRenoDataSetDefaultBtn,
-	0,
-	0,
-	0
-};
-#endif
+
+
 FRAME_HEADER fhListBox = {
 	MsgListBox,
 	CreateListBox,
@@ -936,6 +855,7 @@ FRAME_HEADER fhTextEnteryPad = {
 	0,
 	0
 };
+
 
 FRAME_HEADER fhNumEnteryPad = {
 	MsgNumEntryPad,

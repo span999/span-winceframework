@@ -95,9 +95,11 @@ typedef struct
 
 typedef struct
 {
-	SCREEN_STATES		privStat;
-	SCREEN_STATES		nowStat;
-	SCREEN_STATES		nextStat;
+//	SCREEN_STATES		privStat;
+//	SCREEN_STATES		nowStat;
+//	SCREEN_STATES		nextStat;
+	FRAME_HEADER*		pprivStatFrame;
+	FRAME_HEADER*		pnextStatFrame;
 	FRAME_HEADER*		pnowStatFrame;
 	BOOL 				IsFrameCreate;
 } SCREEN_STATUS;
