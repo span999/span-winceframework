@@ -9,24 +9,9 @@
 
 #include "guic.h"
 #include "ObjectTest.h"
-///#include "FontMonacoUfontref.h"
-#if 0
-#include "FontGentium.h"
-///#include "FontGentiumU.h"
-#include "FontMonacoU.h"
-#include "1bpp_icons.h"
-#include "4bpp_icons.h"
-#include "16164bppIcon.h"
-
-#include "FieldCommon.h"
-#include "FieldSettingMenu.h"
-#include "FieldDataMode.h"
-#include "FieldWatchMode.h"
-#else
 #include "fonts.h"
 #include "icons.h"
 #include "fields.h"
-#endif
 #include "StringID.h"
 
 
@@ -261,44 +246,6 @@ WORD MsgDefaultBtn(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
     }
 }
 
-#if 0
-///void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, char *pText, char *pFunc, char *pData, char *pUnit)
-void CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHAR *pText, XCHAR *pFunc, XCHAR *pData, XCHAR *pUnit)
-{
-
-    GbCreate(ID_GROUPBOX1,             	// ID 
-              left,top,right,bottom,           	// dimension
-              GB_DRAW|GB_RIGHT_ALIGN,                 	// will be dislayed after creation
-              pText,             	// text
-              meterScheme);                   	// default GOL scheme 
-
-    StCreate(ID_STATICTEXT1,           	// ID 
-              left+5,top+10,(left+5+70),(top+10+15),           	// dimension
-              ST_DRAW,        	// will be dislayed, has frame
-              pFunc, // multi-line text
-              meterScheme);                   	// default GOL scheme 
-#if 0
-    StCreate(ID_STATICTEXT2,           	// ID 
-			  left+((right-left)/3),top+((bottom-top)/2),right-((right-left)/3),bottom-2,
-              ST_DRAW|ST_RIGHT_ALIGN,        	// will be dislayed, has frame
-              pData, // multi-line text
-			  alt2Scheme);                   	// default GOL scheme 
-#endif
-    StCreate(ID_STATICTEXT3,           	// ID 
-              right-5-30,bottom-5-15,(right-5),(bottom-5),           	// dimension
-              ST_DRAW|ST_RIGHT_ALIGN,        	// will be dislayed, has frame
-              pUnit, // multi-line text
-              meterScheme);                   	// default GOL scheme 
-
-    StCreate(ID_STATICTEXT2,           	// ID 
-			  left+((right-left)/3),top+((bottom-top)/2),right-((right-left)/3),bottom-2,
-              ST_DRAW|ST_RIGHT_ALIGN,        	// will be dislayed, has frame
-              pData, // multi-line text
-			  alt2Scheme);                   	// default GOL scheme 
-
-			  
-}
-#else
 STATICTEXT *CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHAR *pText, XCHAR *pFunc, XCHAR *pData, XCHAR *pUnit)
 {
     SHORT	width, height, temp;
@@ -371,8 +318,6 @@ STATICTEXT *CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHA
 
 	return pObj;
 }
-#endif
-
 
 
 
@@ -577,13 +522,9 @@ void scrInitStat(void)
 	
 	if( psrcStat )
 	{
-		psrcStat->privStat = CREATE_BUTTONS;
-		psrcStat->nowStat = CREATE_BUTTONS;
-		psrcStat->nextStat = CREATE_BUTTONS;
-///		psrcStat->pnowStatFrame = &fhButtons;
+		psrcStat->pprivStatFrame = NULL;
+		psrcStat->pnextStatFrame = NULL;
 		psrcStat->pnowStatFrame = &fhDeviceMode_poweroff;
-///		psrcStat->pnowStatFrame = &fhDataMode_one;
-///		psrcStat->pnowStatFrame = &fhDataMode_two;
 		psrcStat->IsFrameCreate = TRUE;
 	}
 }
@@ -591,165 +532,41 @@ void scrInitStat(void)
 
 void scrNextStat(void)
 {
-#if 0
-	if( psrcStat )
-	{
-		switch(psrcStat->nowStat)
-		{
-			case CREATE_BUTTONS:
-				psrcStat->privStat = psrcStat->nowStat;
-				psrcStat->nowStat = DISPLAY_BUTTONS;
-				psrcStat->nextStat = CREATE_RENO_DATASET;
-				psrcStat->pnowStatFrame = &fhButtons;
-				psrcStat->IsFrameCreate = FALSE;
-				break;
-			case DISPLAY_BUTTONS:
-				psrcStat->privStat = psrcStat->nowStat;
-				psrcStat->nowStat = psrcStat->nextStat;
-				psrcStat->nextStat = DISPLAY_RENO_DATASET;
-				psrcStat->pnowStatFrame = &fhRenoDataSet;
-				psrcStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_RENO_DATASET:
-				psrcStat->privStat = psrcStat->nowStat;
-				psrcStat->nowStat = psrcStat->nextStat;
-				psrcStat->nextStat = CREATE_LISTBOX;
-				psrcStat->pnowStatFrame = &fhRenoDataSet;
-				psrcStat->IsFrameCreate = FALSE;
-				break;
-			case DISPLAY_RENO_DATASET:
-				psrcStat->privStat = psrcStat->nowStat;
-				psrcStat->nowStat = psrcStat->nextStat;
-				psrcStat->nextStat = DISPLAY_LISTBOX;
-				psrcStat->pnowStatFrame = &fhListBox;
-				psrcStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_LISTBOX:
-				psrcStat->privStat = psrcStat->nowStat;
-				psrcStat->nowStat = psrcStat->nextStat;
-				psrcStat->nextStat = CREATE_TEXTENTRYPAD;
-				psrcStat->pnowStatFrame = &fhListBox;
-				psrcStat->IsFrameCreate = FALSE;
-				break;
-			case DISPLAY_LISTBOX:
-				psrcStat->privStat = psrcStat->nowStat;
-				psrcStat->nowStat = psrcStat->nextStat;
-				psrcStat->nextStat = DISPLAY_TEXTENTRYPAD;
-				psrcStat->pnowStatFrame = &fhTextEnteryPad;
-				psrcStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_TEXTENTRYPAD:
-				psrcStat->privStat = psrcStat->nowStat;
-				psrcStat->nowStat = psrcStat->nextStat;
-				psrcStat->nextStat = CREATE_NUMENTRYPAD;
-				psrcStat->pnowStatFrame = &fhTextEnteryPad;
-				psrcStat->IsFrameCreate = FALSE;
-				break;
-			case DISPLAY_TEXTENTRYPAD:
-				psrcStat->privStat = psrcStat->nowStat;
-				psrcStat->nowStat = psrcStat->nextStat;
-				psrcStat->nextStat = DISPLAY_NUMENTRYPAD;
-				psrcStat->pnowStatFrame = &fhNumEnteryPad;
-				psrcStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_NUMENTRYPAD:
-				psrcStat->privStat = psrcStat->nowStat;
-				psrcStat->nowStat = psrcStat->nextStat;
-				psrcStat->nextStat = CREATE_BUTTONS;
-				psrcStat->pnowStatFrame = &fhNumEnteryPad;
-				psrcStat->IsFrameCreate = FALSE;
-				break;
-			case DISPLAY_NUMENTRYPAD:
-				psrcStat->privStat = psrcStat->nowStat;
-				psrcStat->nowStat = psrcStat->nextStat;
-				psrcStat->nextStat = DISPLAY_BUTTONS;
-				psrcStat->pnowStatFrame = &fhButtons;
-				psrcStat->IsFrameCreate = TRUE;
-				break;
-			default:
-				break;
-		}
-	}
-#endif	
 }
 
 
 void scrPrivStat(void)
 {
-#if 0
-	if( psrcStat )
-	{
-		switch(psrcStat->nowStat)
-		{
-			case CREATE_BUTTONS:
-				break;
-			case DISPLAY_BUTTONS:
-				psrcStat->privStat = DISPLAY_TEXTENTRYPAD;
-				psrcStat->nowStat = CREATE_NUMENTRYPAD;
-				psrcStat->nextStat = DISPLAY_NUMENTRYPAD;
-				psrcStat->pnowStatFrame = &fhNumEnteryPad;
-				psrcStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_RENO_DATASET:
-				break;
-			case DISPLAY_RENO_DATASET:
-				psrcStat->privStat = DISPLAY_NUMENTRYPAD;
-				psrcStat->nowStat = CREATE_BUTTONS;
-				psrcStat->nextStat = DISPLAY_BUTTONS;
-				psrcStat->pnowStatFrame = &fhButtons;
-				psrcStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_LISTBOX:
-				break;
-			case DISPLAY_LISTBOX:
-				psrcStat->privStat = DISPLAY_BUTTONS;
-				psrcStat->nowStat = CREATE_RENO_DATASET;
-				psrcStat->nextStat = DISPLAY_RENO_DATASET;
-				psrcStat->pnowStatFrame = &fhRenoDataSet;
-				psrcStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_TEXTENTRYPAD:
-				break;
-			case DISPLAY_TEXTENTRYPAD:
-				psrcStat->privStat = DISPLAY_RENO_DATASET;
-				psrcStat->nowStat = CREATE_LISTBOX;
-				psrcStat->nextStat = DISPLAY_LISTBOX;
-				psrcStat->pnowStatFrame = &fhListBox;
-				psrcStat->IsFrameCreate = TRUE;
-				break;
-			case CREATE_NUMENTRYPAD:
-				break;
-			case DISPLAY_NUMENTRYPAD:
-				psrcStat->privStat = DISPLAY_LISTBOX;
-				psrcStat->nowStat = CREATE_TEXTENTRYPAD;
-				psrcStat->nextStat = DISPLAY_TEXTENTRYPAD;
-				psrcStat->pnowStatFrame = &fhTextEnteryPad;
-				psrcStat->IsFrameCreate = TRUE;
-				break;
-			default:
-				break;
-		}
-	}
-#endif	
 }
+
 
 void scrCreateDone(void)
 {
 	psrcStat->IsFrameCreate = FALSE;
 }
 
+
 void scrCreateInit(void)
 {
 	psrcStat->IsFrameCreate = TRUE;
 }
+
+
+void scrStepIn(void)
+{
+	psrcStat->pprivStatFrame = psrcStat->pnowStatFrame;
+}
+
 
 void scrSetStat(FRAME_HEADER* phFrame)
 {
 	psrcStat->pnowStatFrame = phFrame;
 }
 
+
 void scrSetNEXT(FRAME_HEADER* phFrame)
 {
+	scrStepIn();
 	psrcStat->pnowStatFrame = phFrame;
 	psrcStat->IsFrameCreate = TRUE;
 }
@@ -780,7 +597,6 @@ void scrDrawCbHandler(void)
 	if( psrcStat->IsFrameCreate )
 	{
 		psrcStat->pnowStatFrame->pfnDrawCallback(psrcStat->pnowStatFrame->wDrawOption);
-///		scrNextStat( psrcStat );	///create->display
 		scrCreateDone();	///create->display
 	}
 }

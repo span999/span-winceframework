@@ -53,7 +53,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>SDL\include;FreeRTOS\include;FreeRTOS\portable;GUIC\inc;StellarisWare;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>SDL\include;FreeRTOS\include;FreeRTOS\portable;GUIC\inc;UIFrames;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_WIN32_WINNT=0x0400;WINVER=0x400;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -131,12 +131,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="defaults.c" />
-    <ClCompile Include="FieldCommon.c" />
-    <ClCompile Include="FieldDataMode.c" />
-    <ClCompile Include="FieldInfoMode.c" />
-    <ClCompile Include="FieldMapMode.c" />
-    <ClCompile Include="FieldSettingMenu.c" />
-    <ClCompile Include="FieldWatchMode.c" />
     <ClCompile Include="FreeRTOS\portable\MemMang\heap_3.c" />
     <ClCompile Include="FreeRTOS\list.c" />
     <ClCompile Include="FreeRTOS\portable\WIN32\port.c" />
@@ -168,7 +162,13 @@
     <ClCompile Include="ObjectTest.c" />
     <ClCompile Include="PrimitiveTest.c" />
     <ClCompile Include="SDLDislpayEmulator\SDLDisplay.cpp" />
-    <ClCompile Include="StringID.c" />
+    <ClCompile Include="UIFrames\FieldCommon.c" />
+    <ClCompile Include="UIFrames\FieldDataMode.c" />
+    <ClCompile Include="UIFrames\FieldInfoMode.c" />
+    <ClCompile Include="UIFrames\FieldMapMode.c" />
+    <ClCompile Include="UIFrames\FieldSettingMenu.c" />
+    <ClCompile Include="UIFrames\FieldWatchMode.c" />
+    <ClCompile Include="UIFrames\StringID.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
