@@ -9,17 +9,23 @@
 
 #include "guic.h"
 #include "ObjectTest.h"
+#if 0
 #include "FontGentium.h"
 #include "1bpp_icons.h"
 #include "4bpp_icons.h"
 #include "16164bppIcon.h"
 
 #include "FieldCommon.h"
-#include "FieldMapMode.h"
 #include "FieldWatchMode.h"
-#include "FieldInfoMode.h"
-#include "FieldDataMode.h"
 #include "FieldSettingMenu.h"
+#include "FieldDataMode.h"
+#include "FieldMapMode.h"
+#else
+#include "fonts.h"
+#include "icons.h"
+#include "fields.h"
+#endif
+#include "StringID.h"
 
 
 
@@ -43,8 +49,8 @@ void CreateMapMode_navigation(WORD wDrawOption)
         WND_DRAW,                   // will be dislayed after creation
         (void *) &I16164_Compass,         // icon
 ///        pText,                      // set text
-		(XCHAR *)"<<Map Mode>>",         // text
-        alt3Scheme
+		(XCHAR *)IdGetMString(5,gLanguage),         // text
+        windowScheme
     );                              // default GOL scheme
 	
 	updateLastView( scrGetStat() );	///update last view
@@ -76,6 +82,7 @@ WORD MsgMapMode_navigationDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMs
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///watch mode or power down
+			#if 0
 				popupOption.PopItemNum = 2;
 				popupOption.pPopTitle = "Options";
 				popupOption.pPrivFrame = scrGetStat();
@@ -86,7 +93,13 @@ WORD MsgMapMode_navigationDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMs
 				popupOption.pPopItemList->pPopItem2->pIcon = &I16164_Abort;
 				popupOption.pPopItemList->pPopItem2->pGoFrame = &fhDeviceMode_poweroff;
 				scrSetStat(&fhDeviceMode_popup);
-				scrCreateInit();				
+				scrCreateInit();
+			#else	
+				PPMenuSetUp( 2, IdGetMString(1,gLanguage), scrGetStat() );
+				PPMenuItem1SetUp( IdGetMString(4,gLanguage), &I16164_Clock, &fhWatchMode_watch );
+				PPMenuItem2SetUp( IdGetMString(3,gLanguage), &I16164_Abort, &fhDeviceMode_poweroff );
+				scrSetNEXT(&fhDeviceMode_popup);
+			#endif				
 			}
 			return (0); 
         case ID_BTN_DOWN:
@@ -99,6 +112,7 @@ WORD MsgMapMode_navigationDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMs
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///Navigation mode, setting, avtivity data, quick info, history
+			#if 0
 				popupOption.PopItemNum = 3;
 				popupOption.pPopTitle = "Options";
 				popupOption.pPrivFrame = scrGetStat();
@@ -113,7 +127,15 @@ WORD MsgMapMode_navigationDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMs
 				popupOption.pPopItemList->pPopItem3->pGoFrame = &fhSettingMenu_main;
 
 				scrSetStat(&fhDeviceMode_popup);
-				scrCreateInit();				
+				scrCreateInit();
+			#else
+				PPMenuSetUp( 4, IdGetMString(1,gLanguage), scrGetStat() );
+				PPMenuItem1SetUp( IdGetMString(9,gLanguage), &PCGaming1_4bpp_16x16, &fhDataMode_two );
+				PPMenuItem2SetUp( IdGetMString(6,gLanguage), &I16164_About, &fhInfoMode_info );
+				PPMenuItem3SetUp( IdGetMString(7,gLanguage), &I16164_Apply, &fhSettingMenu_main );
+				PPMenuItem4SetUp( IdGetMString(8,gLanguage), &I16164_Apply, &fhSettingMenu_main );
+				scrSetNEXT(&fhDeviceMode_popup);
+			#endif						
 			}
 			return (0); 
         case ID_BTN_ENTER:

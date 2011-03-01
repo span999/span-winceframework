@@ -33,17 +33,18 @@
 GOL_SCHEME      *altScheme;                                 // alternative style scheme
 GOL_SCHEME      *alt2Scheme;                                // alternative 2 style scheme
 GOL_SCHEME      *alt3Scheme;                                // alternative 3 style scheme
-GOL_SCHEME      *alt4Scheme;                                // alternative 4 style scheme
-GOL_SCHEME      *alt5Scheme;                                // alternative 5 style scheme
-GOL_SCHEME      *timeScheme;
-GOL_SCHEME      *meterScheme;                               // meter scheme
+///GOL_SCHEME      *alt4Scheme;                                // alternative 4 style scheme
+///GOL_SCHEME      *alt5Scheme;                                // alternative 5 style scheme
+///GOL_SCHEME      *timeScheme;
+///GOL_SCHEME      *meterScheme;                               // meter scheme
 GOL_SCHEME      *navScheme;                                 // style scheme for the navigation
-GOL_SCHEME      *redScheme;                                 // alternative red style scheme
+///GOL_SCHEME      *redScheme;                                 // alternative red style scheme
 GOL_SCHEME      *greenScheme;                               // alternative green style scheme
 GOL_SCHEME      *yellowScheme;                              // alternative yellow style scheme
 GOL_SCHEME      *popupMenuScheme;                           // popup menu style scheme
 GOL_SCHEME      *dataSetScheme;								// dataset style scheme	
 GOL_SCHEME      *dataSetScheme2;								// dataset style scheme	
+GOL_SCHEME      *windowScheme;								// dataset style scheme	
 
 
 OBJ_HEADER      *pNavList;                                  // pointer to navigation list
@@ -405,16 +406,17 @@ void myCreateScheme( void )
     altScheme = GOLCreateScheme();      // create alternative 1 style scheme
     alt2Scheme = GOLCreateScheme();     // create alternative 2 style scheme
     alt3Scheme = GOLCreateScheme();     // create alternative 3 style scheme
-    alt4Scheme = GOLCreateScheme();     // create alternative 4 style scheme
-    alt5Scheme = GOLCreateScheme();     // create alternative 5 style scheme
-    timeScheme = GOLCreateScheme();
-    meterScheme = GOLCreateScheme();    // create meter scheme
-    redScheme = GOLCreateScheme();      // create red style scheme
+///    alt4Scheme = GOLCreateScheme();     // create alternative 4 style scheme
+///    alt5Scheme = GOLCreateScheme();     // create alternative 5 style scheme
+///    timeScheme = GOLCreateScheme();
+///    meterScheme = GOLCreateScheme();    // create meter scheme
+///    redScheme = GOLCreateScheme();      // create red style scheme
     greenScheme = GOLCreateScheme();    // create green style scheme
     yellowScheme = GOLCreateScheme();   // create yellow style scheme
 	popupMenuScheme = GOLCreateScheme();   // create popup menu style scheme
 	dataSetScheme = GOLCreateScheme();   // create DataSet style scheme
 	dataSetScheme2 = GOLCreateScheme();   // create DataSet style scheme
+	windowScheme = GOLCreateScheme();   // create Window style scheme
 	
     /* for Truly display */
     altScheme->Color0 = RGB565CONVERT(0x4C, 0x8E, 0xFF);
@@ -458,9 +460,22 @@ void myCreateScheme( void )
     dataSetScheme2->TextColor1 = GRAY80;		//reversed
     dataSetScheme2->TextColor0 = BLACK;		//font color
     dataSetScheme2->TextColorDisabled = BRIGHTRED;
-	dataSetScheme2->pFont = (void *)&Monaco_Normal45U;
+	///dataSetScheme2->pFont = (void *)&Monaco_Normal45U;
+	dataSetScheme2->pFont = (void *)&Monaco_Normal20U;
 	dataSetScheme2->CommonBkColor = GRAY80;			
 
+	windowScheme->Color0 = GRAY80;	//item background
+    windowScheme->Color1 = BLACK;	//reversed
+    windowScheme->EmbossDkColor = GRAY20;
+    windowScheme->EmbossLtColor = GRAY20;
+    windowScheme->ColorDisabled = BRIGHTGREEN;
+    windowScheme->TextColor1 = GRAY80;		//reversed
+    windowScheme->TextColor0 = BLACK;		//font color
+    windowScheme->TextColorDisabled = BRIGHTRED;
+	windowScheme->pFont = (void *)&Monaco_Normal20U;
+	windowScheme->CommonBkColor = WHITE;			
+	
+	
 ///    altScheme->pFont = (void *)ptrLargeAsianFont;
 ///    navScheme->pFont = (void *)ptrLargeAsianFont;
 	altScheme->pFont = (void *)Gentium_Normal15;
@@ -483,26 +498,26 @@ void myCreateScheme( void )
     alt3Scheme->pFont = (void *)Gentium_Normal21;
 	alt3Scheme->CommonBkColor = BLACK;	
 	
-    alt4Scheme->Color0 = LIGHTBLUE;
-    alt4Scheme->Color1 = BRIGHTGREEN;
-    alt4Scheme->TextColor0 = BLACK;
-    alt4Scheme->TextColor1 = WHITE;
+///    alt4Scheme->Color0 = LIGHTBLUE;
+///    alt4Scheme->Color1 = BRIGHTGREEN;
+///    alt4Scheme->TextColor0 = BLACK;
+///    alt4Scheme->TextColor1 = WHITE;
 ///    alt4Scheme->pFont = (void *)ptrSmallAsianFont;
 
-    alt5Scheme->Color0 = LIGHTBLUE;
-    alt5Scheme->Color1 = BRIGHTRED;
-    alt5Scheme->TextColor0 = BLACK;
-    alt5Scheme->TextColor1 = WHITE;
+///    alt5Scheme->Color0 = LIGHTBLUE;
+///    alt5Scheme->Color1 = BRIGHTRED;
+///    alt5Scheme->TextColor0 = BLACK;
+///    alt5Scheme->TextColor1 = WHITE;
 ///    alt5Scheme->pFont = (void *) &monofont; //monofont is equal width font, required for digitalmeter widget
 
-    redScheme->Color0 = RGB565CONVERT(0xCC, 0x00, 0x00);
-    redScheme->Color1 = BRIGHTRED;
-    redScheme->EmbossDkColor = RED4;
-    redScheme->EmbossLtColor = FIREBRICK1;
-    redScheme->TextColor0 = RGB565CONVERT(0xC8, 0xD5, 0x85);
-    redScheme->TextColor1 = BLACK;
+///    redScheme->Color0 = RGB565CONVERT(0xCC, 0x00, 0x00);
+///    redScheme->Color1 = BRIGHTRED;
+///    redScheme->EmbossDkColor = RED4;
+///    redScheme->EmbossLtColor = FIREBRICK1;
+///    redScheme->TextColor0 = RGB565CONVERT(0xC8, 0xD5, 0x85);
+///    redScheme->TextColor1 = BLACK;
 ///    redScheme->pFont = (void *)ptrLargeAsianFont;
-	redScheme->pFont = (void *)Gentium_Normal25;
+///	redScheme->pFont = (void *)Gentium_Normal25;
 
     greenScheme->Color0 = RGB565CONVERT(0x23, 0x9E, 0x0A);
     greenScheme->Color1 = BRIGHTGREEN;
@@ -522,24 +537,24 @@ void myCreateScheme( void )
 ///    yellowScheme->pFont = (void *)ptrLargeAsianFont;
 	yellowScheme->pFont = (void *)Gentium_Normal25;
 
-    timeScheme->Color0 = BLACK;
-    timeScheme->Color1 = WHITE;
-    timeScheme->TextColor0 = BRIGHTBLUE;
-    timeScheme->TextColor1 = WHITE;
-    timeScheme->EmbossDkColor = GRAY20;
-    timeScheme->EmbossLtColor = GRAY80;
+///    timeScheme->Color0 = BLACK;
+///    timeScheme->Color1 = WHITE;
+///    timeScheme->TextColor0 = BRIGHTBLUE;
+///    timeScheme->TextColor1 = WHITE;
+///    timeScheme->EmbossDkColor = GRAY20;
+///    timeScheme->EmbossLtColor = GRAY80;
 ///    timeScheme->pFont = (void *) &GOLSmallFont;
 
-    meterScheme->Color0 = BLACK;
-    meterScheme->Color1 = WHITE;
+///    meterScheme->Color0 = BLACK;
+///    meterScheme->Color1 = WHITE;
 ///    meterScheme->TextColor0 = BRIGHTBLUE;
-	meterScheme->TextColor0 = BRIGHTYELLOW;
-    meterScheme->TextColor1 = WHITE;
-    meterScheme->EmbossDkColor = GRAY20;
-    meterScheme->EmbossLtColor = GRAY80;
+///	meterScheme->TextColor0 = BRIGHTYELLOW;
+///    meterScheme->TextColor1 = WHITE;
+///    meterScheme->EmbossDkColor = GRAY20;
+///    meterScheme->EmbossLtColor = GRAY80;
 ///    meterScheme->pFont = (void *)ptrSmallAsianFont;
-	meterScheme->pFont = (void *)Gentium_Normal15;
-	meterScheme->CommonBkColor = BLACK;
+///	meterScheme->pFont = (void *)Gentium_Normal15;
+///	meterScheme->CommonBkColor = BLACK;
 
 }
 

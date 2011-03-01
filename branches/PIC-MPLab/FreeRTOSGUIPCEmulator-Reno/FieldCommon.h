@@ -135,12 +135,12 @@
 extern GOL_SCHEME      *altScheme;                                 // alternative style scheme
 extern GOL_SCHEME      *alt2Scheme;                                // alternative 2 style scheme
 extern GOL_SCHEME      *alt3Scheme;                                // alternative 3 style scheme
-extern GOL_SCHEME      *alt4Scheme;                                // alternative 4 style scheme
-extern GOL_SCHEME      *alt5Scheme;                                // alternative 5 style scheme
-extern GOL_SCHEME      *timeScheme;
-extern GOL_SCHEME      *meterScheme;                               // meter scheme
+///extern GOL_SCHEME      *alt4Scheme;                                // alternative 4 style scheme
+///extern GOL_SCHEME      *alt5Scheme;                                // alternative 5 style scheme
+///extern GOL_SCHEME      *timeScheme;
+///extern GOL_SCHEME      *meterScheme;                               // meter scheme
 extern GOL_SCHEME      *navScheme;                                 // style scheme for the navigation
-extern GOL_SCHEME      *redScheme;                                 // alternative red style scheme
+///extern GOL_SCHEME      *redScheme;                                 // alternative red style scheme
 extern GOL_SCHEME      *greenScheme;                               // alternative green style scheme
 extern GOL_SCHEME      *yellowScheme;                              // alternative yellow style scheme
 extern OBJ_HEADER      *pNavList;                                  // pointer to navigation list
@@ -148,6 +148,7 @@ extern OBJ_HEADER      *pNavList;                                  // pointer to
 extern GOL_SCHEME      *popupMenuScheme;                                 // Popup Menu style scheme
 extern GOL_SCHEME      *dataSetScheme;                                 // dataSet style scheme
 extern GOL_SCHEME      *dataSetScheme2;                                 // dataSet style scheme
+extern GOL_SCHEME      *windowScheme;                                 // window style scheme
 
 
 void myCreateScheme( void );
