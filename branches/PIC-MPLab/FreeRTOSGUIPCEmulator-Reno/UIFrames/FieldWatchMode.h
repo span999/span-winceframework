@@ -77,6 +77,12 @@ extern void PPAskItemsSetUp( SHORT ItemNum, XCHAR *pMsg, void *pIcon, FRAME_HEAD
 #define 	PPAskItem1SetUp(a,b,c) PPAskItemsSetUp( 1, a, b, c)
 #define 	PPAskItem2SetUp(a,b,c) PPAskItemsSetUp( 2, a, b, c)
 
+///temp
+extern const XCHAR Ask01Str[];
+extern const XCHAR Ask02Str[];
+extern const XCHAR Ask03Str[];
+extern const XCHAR Ask04Str[];
+
 
 
 
