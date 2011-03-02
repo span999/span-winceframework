@@ -517,6 +517,55 @@ void myCreateScheme( void )
 }
 
 
+
+XCHAR Num2Xchar( WORD wNum )
+{
+	XCHAR xRet = 0x0;
+
+	switch (wNum)
+	{
+		case 0:
+			xRet = 0x0030;
+			break;
+		case 1:
+			xRet = 0x0031;
+			break;
+		case 2:
+			xRet = 0x0032;
+			break;
+		case 3:
+			xRet = 0x0033;
+			break;
+		case 4:
+			xRet = 0x0034;
+			break;
+		case 5:
+			xRet = 0x0035;
+			break;
+		case 6:
+			xRet = 0x0036;
+			break;
+		case 7:
+			xRet = 0x0037;
+			break;
+		case 8:
+			xRet = 0x0038;
+			break;
+		case 9:
+			xRet = 0x0039;
+			break;
+		default:
+			xRet = 0x003F;
+			break;
+
+	}
+	
+	return xRet;
+}
+
+
+
+
 void updateLastView(FRAME_HEADER* pLastFrame)
 {
 	pLastViewFrame = pLastFrame;
@@ -614,6 +663,17 @@ FRAME_HEADER* scrGetPrivStat(void)
 }
 
 
+BOOL scrIsUpdateVaild(void)
+{
+	BOOL bRet = FALSE;
+	
+	if( psrcStat->pnowStatFrame->pfnUpdateCallback )
+		bRet = TRUE;
+		
+	return bRet;
+}
+
+
 /// use for MsgCallback & DrawCallback
 WORD scrMsgCbHandler(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 {
@@ -637,8 +697,11 @@ void scrDrawCbHandler(void)
 	}
 	else
 	{
-		printf("scrDrawCbHandler display\n");
-		psrcStat->pnowStatFrame->pfnDrawCallback(psrcStat->pnowStatFrame->wDrawOption);
+		if( psrcStat->pnowStatFrame->pfnUpdateCallback )
+		{	///display update
+			///printf("scrDrawCbHandler display\n");
+			psrcStat->pnowStatFrame->pfnUpdateCallback(psrcStat->pnowStatFrame->wDrawOption);
+		}
 	}
 }
 

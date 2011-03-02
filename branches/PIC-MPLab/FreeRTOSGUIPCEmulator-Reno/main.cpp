@@ -110,8 +110,8 @@ void vUserTask4(void *pvParameters)
 #else	
 	while(1)
 	{
-		Sleep( 100 );
-		gdwTickCount = gdwTickCount + 100;
+		Sleep( 20 );
+		gdwTickCount = gdwTickCount + 20;
 		///printf("Ticking...%d...", gdwTickCount);
 	}
 #endif
