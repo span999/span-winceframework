@@ -149,16 +149,14 @@ WORD MsgWatchMode_watchDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///fitness mode or power down
-				///PPMenuSetUp( 2, OptionsENStr, scrGetStat() );
 				PPMenuSetUp( 2, IdGetMString(1,gLanguage), scrGetStat() );
-				///PPMenuItem1SetUp( FitnessModeENStr, &PCGaming1_4bpp_16x16, &fhDataMode_two );
 				PPMenuItem1SetUp( IdGetMString(2,gLanguage), &PCGaming1_4bpp_16x16, &fhDataMode_two );
 				{	///setup for fhDeviceMode_popask
 					PPAskSetUp( 2, Ask02Str, scrGetStat() );
 					PPAskItem1SetUp( Ask03Str, NULL, &fhDeviceMode_poweroff );
 					PPAskItem2SetUp( Ask04Str, NULL, scrGetStat() );
 				}
-				///PPMenuItem2SetUp( PowerDownENStr, &I16164_Abort, &fhDeviceMode_poweroff );
+				///PPMenuItem2SetUp( IdGetMString(3,gLanguage), &I16164_Abort, &fhDeviceMode_poweroff );
 				PPMenuItem2SetUp( IdGetMString(3,gLanguage), &I16164_Abort, &fhDeviceMode_popask );
 				scrSetNEXT(&fhDeviceMode_popup);
 			}

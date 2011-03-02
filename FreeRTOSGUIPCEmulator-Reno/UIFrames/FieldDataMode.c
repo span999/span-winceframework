@@ -58,20 +58,15 @@ WORD MsgDefaultBtn_datamodes(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///watch mode or power down
-				///popupOption.PopItemNum = 2;
-				///popupOption.pPopTitle = "Options";
-				///popupOption.pPrivFrame = scrGetStat();
-				///popupOption.pPopItemList->pPopItem1->pPopMsg = "Watch Mode";
-				///popupOption.pPopItemList->pPopItem1->pIcon = &I16164_Clock;
-				///popupOption.pPopItemList->pPopItem1->pGoFrame = &fhWatchMode_watch;
-				///popupOption.pPopItemList->pPopItem2->pPopMsg = "Power Down";
-				///popupOption.pPopItemList->pPopItem2->pIcon = &I16164_Abort;
-				///popupOption.pPopItemList->pPopItem2->pGoFrame = &fhDeviceMode_poweroff;
-				///scrSetStat(&fhDeviceMode_popup);
-				///scrCreateInit();
 				PPMenuSetUp( 2, IdGetMString(1,gLanguage), scrGetStat() );
 				PPMenuItem1SetUp( IdGetMString(4,gLanguage), &I16164_Clock, &fhWatchMode_watch );
-				PPMenuItem2SetUp( IdGetMString(3,gLanguage), &I16164_Abort, &fhDeviceMode_poweroff );
+				{	///setup for fhDeviceMode_popask
+					PPAskSetUp( 2, Ask02Str, scrGetStat() );
+					PPAskItem1SetUp( Ask03Str, NULL, &fhDeviceMode_poweroff );
+					PPAskItem2SetUp( Ask04Str, NULL, scrGetStat() );
+				}
+				///PPMenuItem2SetUp( IdGetMString(3,gLanguage), &I16164_Abort, &fhDeviceMode_poweroff );
+				PPMenuItem2SetUp( IdGetMString(3,gLanguage), &I16164_Abort, &fhDeviceMode_popask );
 				scrSetNEXT(&fhDeviceMode_popup);
 			}
             return (0);
@@ -86,20 +81,6 @@ WORD MsgDefaultBtn_datamodes(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
             if(objMsg == BTN_MSG_RELEASED)
 			{
 				///Navigation mode, setting, avtivity data, quick info, history
-				///popupOption.PopItemNum = 3;
-				///popupOption.pPopTitle = "Options";
-				///popupOption.pPrivFrame = scrGetStat();
-				///popupOption.pPopItemList->pPopItem1->pPopMsg = "Navigation";
-				///popupOption.pPopItemList->pPopItem1->pIcon = &I16164_Compass;
-				///popupOption.pPopItemList->pPopItem1->pGoFrame = &fhMapMode_navgation;
-				///popupOption.pPopItemList->pPopItem2->pPopMsg = "Quick Info";
-				///popupOption.pPopItemList->pPopItem2->pIcon = &I16164_About;
-				///popupOption.pPopItemList->pPopItem2->pGoFrame = &fhInfoMode_info;
-				///popupOption.pPopItemList->pPopItem3->pPopMsg = "Setting";
-				///popupOption.pPopItemList->pPopItem3->pIcon = &Settings_4bpp_16x16;
-				///popupOption.pPopItemList->pPopItem3->pGoFrame = &fhSettingMenu_main;
-				///scrSetStat(&fhDeviceMode_popup);
-				///scrCreateInit();
 				PPMenuSetUp( 4, IdGetMString(1,gLanguage), scrGetStat() );
 				PPMenuItem1SetUp( IdGetMString(5,gLanguage), &I16164_Compass, &fhMapMode_navgation );
 				PPMenuItem2SetUp( IdGetMString(6,gLanguage), &I16164_About, &fhInfoMode_info );
