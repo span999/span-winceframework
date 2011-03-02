@@ -179,6 +179,22 @@ BOOL IsXYValid(SHORT x, SHORT y)
 }
 
 
+BOOL IsXYClip(SHORT x, SHORT y)
+{
+	BOOL bRet = FALSE;
+	
+	if( CLIP_ENABLE == _clipRgn )
+	{
+		bRet = TRUE;
+		if( x >= _clipLeft && x <= _clipRight )
+			if( y >= _clipTop && y <= _clipBottom )
+				bRet = FALSE;
+	}		
+	
+	return bRet;
+}
+
+
 Uint32 TransColors()
 {
 	Uint32 cc = 0;
@@ -352,7 +368,7 @@ void ResetDevice(void)
 ********************************************************************/
 void PutPixel(SHORT x, SHORT y)
 {
-	if( IsScreenValid() && IsXYValid( x, y ) )
+	if( IsScreenValid() && !IsXYClip( x, y ) && IsXYValid( x, y )  )
 	{
 		///printf(">>>emulatorDisplayDriver: PutPixel x=%d,y=%d\n", x, y);
 		///displayPixelDraw( NULL, x, y, _color.Val );
