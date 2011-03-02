@@ -690,7 +690,7 @@ void IOGetMsg( GOL_MSG *msg )
 	while( !ioMsgUpdated )
 	{
 		/* printf("Wait touch event!!\n"); */
-		Sleep(100);
+		Sleep(50);
 	}
 	
 	if( TRUE == ioMsgUpdated )
