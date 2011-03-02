@@ -38,6 +38,12 @@ void PPMenuItemsSetUp( SHORT ItemNum, XCHAR *pMsg, void *pIcon, FRAME_HEADER *pF
 
 const XCHAR Ask01Str[] = {	0x0041, 0x0073, 0x006B, 0x003F, 0x003F, // Ask??
 							0x0000};  
+const XCHAR Ask02Str[] = {	0x0041, 0x0072, 0x0065, 0x0020, 0x0079, 0x006F, 0x0075, 0x0020, 0x0073, 0x0075, 0x0072, 0x0065, 0x003F, // Are you sure?
+							0x0000};  
+const XCHAR Ask03Str[] = {	0x0042, 0x0061, 0x0063, 0x006B, 0x0020, 0x002D, 0x003E, 0x0020, 0x004E, 0x006F, // Back -> No
+							0x0000};  
+const XCHAR Ask04Str[] = {	0x0045, 0x006E, 0x0074, 0x0065, 0x0072, 0x0020, 0x002D, 0x003E, 0x0020, 0x0059, 0x0065, 0x0073, // Enter -> Yes
+							0x0000};  
 
 
 void PPAskSetUp( SHORT ItemNum, XCHAR *pTitle, FRAME_HEADER *pPrivF )
@@ -148,9 +154,9 @@ WORD MsgWatchMode_watchDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 				///PPMenuItem1SetUp( FitnessModeENStr, &PCGaming1_4bpp_16x16, &fhDataMode_two );
 				PPMenuItem1SetUp( IdGetMString(2,gLanguage), &PCGaming1_4bpp_16x16, &fhDataMode_two );
 				{	///setup for fhDeviceMode_popask
-					PPAskSetUp( 2, Ask01Str, scrGetStat() );
-					PPAskItem1SetUp( IdGetMString(3,gLanguage), NULL, &fhDeviceMode_poweroff );
-					PPAskItem2SetUp( IdGetMString(4,gLanguage), NULL, scrGetStat() );
+					PPAskSetUp( 2, Ask02Str, scrGetStat() );
+					PPAskItem1SetUp( Ask03Str, NULL, &fhDeviceMode_poweroff );
+					PPAskItem2SetUp( Ask04Str, NULL, scrGetStat() );
 				}
 				///PPMenuItem2SetUp( PowerDownENStr, &I16164_Abort, &fhDeviceMode_poweroff );
 				PPMenuItem2SetUp( IdGetMString(3,gLanguage), &I16164_Abort, &fhDeviceMode_popask );
@@ -1060,9 +1066,9 @@ void CreateDeviceMode_popask(WORD wDrawOption)
         GetMaxX() - POASK_FRAME_OFFSET_W,
         GetMaxY() - POASK_FRAME_OFFSET_H,
         15,                          // right, bottom corner (with radius = 0)
-        BTN_DRAW,                   // will be dislayed after creation
+        BTN_DRAW|BTN_TEXTTOP,                   // will be dislayed after creation
         NULL,                       // no bitmap	
-        NULL,      // LEFT arrow as text
+        popupAsk.pPopTitle,      // LEFT arrow as text
         popupAskScheme
     );
 
