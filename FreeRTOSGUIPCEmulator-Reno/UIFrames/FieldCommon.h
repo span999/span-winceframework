@@ -159,6 +159,9 @@ void myCreateScheme( void );
 void updateLastView(FRAME_HEADER* pLastFrame);
 FRAME_HEADER* getLastView(void);
 
+
+extern XCHAR Num2Xchar( WORD wNum );
+
 /*
 	API for screen status handle
 */
@@ -174,6 +177,7 @@ FRAME_HEADER* scrGetPrivStat(void);
 void scrSetNEXT(FRAME_HEADER* phFrame);
 void scrFixStat(void);
 void scrUnFixStat(void);
+BOOL scrIsUpdateVaild(void);
 
 
 /// use for MsgCallback & DrawCallback

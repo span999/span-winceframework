@@ -69,7 +69,7 @@ const XCHAR Time01Str[] = {	0x004D, 0x006F, 0x006E, 0x0064, 0x0061, 0x0079, // M
 							0x0000};  
 const XCHAR Time02Str[] = {	0x0046, 0x0065, 0x0062, 0x0020, 0x0032, 0x0038, 0x002C, 0x0020, 0x0032, 0x0030, 0x0031, 0x0031, // Feb 28, 2011
 							0x0000};  
-const XCHAR Time03Str[] = {	0x0031, 0x0030, 0x003A, 0x0034, 0x0037, // 10:47
+const XCHAR Time03Str[] = {	0x0030, 0x0030, 0x003A, 0x0030, 0x0030, 0x003A, 0x0030, 0x0030, // 00:00:00
 							0x0000};  
 
 
@@ -123,6 +123,54 @@ void CreateWatchMode_watch(WORD wDrawOption)
 
 }
 
+
+XCHAR xString[] = { 0x0000, 0x0000, 0x003A, 0x0000, 0x0000, 0x003A, 0x0000, 0x0000, 0x0000, 0x0000, };
+
+void UpdateWatchMode_watch(WORD wDrawOption)
+{
+	static WORD wMs = 0;
+	static WORD wSec = 0;
+	static WORD wSecO = 7;
+	static WORD wMin = 0;
+	static WORD wHour = 0;
+		
+	wMs = wMs + 100;
+	///if( 1000 == wMs )
+	if( 800 == wMs )
+	{
+		wMs = 0;	///reset
+		wSec = wSec + 1;
+		if( 60 == wSec )
+		{
+			wSec = 0;	///reset
+			wMin = wMin + 1;
+			if( 60 == wMin )
+			{
+				wMin = 0;
+				wHour = wHour + 1;
+				if( 24 == wHour )
+					wHour = 0;
+			}
+		}		
+	}
+		
+		
+	if( wSecO != wSec )
+	{
+		STATICTEXT *pObj = NULL;
+		pObj = (STATICTEXT *)GOLFindObject(ID_STATICTEXT3);
+
+		xString[0] = Num2Xchar(wHour/10);
+		xString[1] = Num2Xchar(wHour%10);		
+		xString[3] = Num2Xchar(wMin/10);
+		xString[4] = Num2Xchar(wMin%10);
+		xString[6] = Num2Xchar(wSec/10);
+		xString[7] = Num2Xchar(wSec%10);
+		StSetText( pObj, xString );
+		SetState( pObj, ST_DRAW );
+		wSecO = wSec;
+	}
+}
 
 
 WORD MsgWatchMode_watch(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
@@ -320,6 +368,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	WORD 	wStrID = 0;
 	void	*pNowFont = NULL;
 
+	/*
 	if( scrIsCreateDone() )
 	{	
 		STATICTEXT *pObj = NULL;
@@ -330,7 +379,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 		SetState(pObj, ST_DRAW);
 		return;
 	}
-	
+	*/
     GOLFree();   // free memory for the objects in the previous linked list and start new list
 	gcCleanScreen();
 	CreateDefaultBtn();
@@ -797,13 +846,14 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	#endif
 #endif
-
+	
+	if( 0 )
 	{
 		STATICTEXT *pObj = NULL;
 		pObj = StCreate(ID_STATICTEXT1,           	// ID 
 			  15, 130, 128, 150,
               ST_DRAW,        	// will be dislayed, has frame
-              Ask02Str, // multi-line text
+              (XCHAR *)Ask02Str, // multi-line text
 			  popupAskScheme);                   	// default GOL scheme 
 
 
@@ -816,6 +866,38 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 }
 
+
+
+
+void UpdateDeviceMode_booting(WORD wDrawOption)
+{
+	static	WORD wCount = 0;
+	static	SHORT sOffset = 0;
+    SHORT	width, height;
+	void	*pNowFont = NULL;	
+	XCHAR 	*pxStr = NULL;
+	
+
+	wCount = wCount + 1;
+	
+	if( 0 == wCount%1 )
+	{
+		SetClip(1);
+		SetClipRgn(15, 130, 128, 150);
+		// draw fonts in the screen
+		pxStr = NumbersENStr;
+		pNowFont = (void *)&Monaco_Normal20U;
+		width = GetTextWidth(pxStr, pNowFont);
+		height = GetTextHeight(pNowFont);
+		SetColor(WHITE);
+		Bar(0, 130, GetMaxX(), 150);
+		gcColFntOutTextXY( 15-sOffset, 130, pxStr, pNowFont, LIGHTRED);
+		sOffset++;
+		if( width == sOffset )
+			sOffset = 0;
+		SetClip(0);
+	}
+}
 
 
 WORD MsgDeviceMode_booting(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
@@ -1333,7 +1415,7 @@ FRAME_HEADER fhWatchMode_watch = {
 	CreateWatchMode_watch,
 	MsgWatchMode_watchDefaultBtn,
 	0,		///no option
-	0,
+	UpdateWatchMode_watch,
 	0
 };
 
@@ -1353,7 +1435,7 @@ FRAME_HEADER fhDeviceMode_booting = {
 	CreateDeviceMode_booting,
 	MsgDeviceMode_bootingDefaultBtn,
 	0,		///no option
-	0,
+	UpdateDeviceMode_booting,
 	0
 };
 

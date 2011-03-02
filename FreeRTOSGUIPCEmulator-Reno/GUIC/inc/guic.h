@@ -88,7 +88,7 @@ typedef struct
     PFNDRAWCALLBACK		pfnDrawCallback;    // 
 	PFNBTNHANDLE		pfnBtnHandle;		// handle button event for this frame.
 	WORD				wDrawOption;
-    SHORT   height;          // 
+    PFNDRAWCALLBACK   	pfnUpdateCallback;  // 
     SHORT   width;           // 
 } FRAME_HEADER;
 
