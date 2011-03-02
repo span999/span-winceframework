@@ -95,24 +95,26 @@
 
 #define ID_RENO_BASE		500
 
+///for ticking simulate
+#define ID_TICKING         		(ID_RENO_BASE+8)
+
 ///for HW key simulate
-#define ID_BTN_UP          		(ID_RENO_BASE+1)
-#define ID_BTN_UP_HOLD     		(ID_RENO_BASE+2)
-#define ID_BTN_DOWN         	(ID_RENO_BASE+3)
-#define ID_BTN_DOWN_HOLD    	(ID_RENO_BASE+4)
-#define ID_BTN_EXIT          	(ID_RENO_BASE+5)
-#define ID_BTN_EXIT_HOLD     	(ID_RENO_BASE+6)
-#define ID_BTN_ENTER          	(ID_RENO_BASE+7)
-#define ID_BTN_ENTER_HOLD     	(ID_RENO_BASE+8)
+#define ID_BTN_UP          		(ID_RENO_BASE+11)
+#define ID_BTN_UP_HOLD     		(ID_RENO_BASE+12)
+#define ID_BTN_DOWN         	(ID_RENO_BASE+13)
+#define ID_BTN_DOWN_HOLD    	(ID_RENO_BASE+14)
+#define ID_BTN_EXIT          	(ID_RENO_BASE+15)
+#define ID_BTN_EXIT_HOLD     	(ID_RENO_BASE+16)
+#define ID_BTN_ENTER          	(ID_RENO_BASE+17)
+#define ID_BTN_ENTER_HOLD     	(ID_RENO_BASE+18)
+#define ID_DATASETVALUE1      	(ID_RENO_BASE+19)
+#define ID_DATASETVALUE2      	(ID_RENO_BASE+20)
+#define ID_DATASETVALUE3      	(ID_RENO_BASE+21)
+#define ID_DATASETVALUE4      	(ID_RENO_BASE+22)
+#define ID_DATASETVALUE5      	(ID_RENO_BASE+23)
+#define ID_DATASETVALUE6      	(ID_RENO_BASE+24)
 
 
-#define NAV_BTN_WIDTH		25
-
-
-
-
-
-#define WAIT_UNTIL_FINISH(x)    while(!x)
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -165,11 +167,13 @@ void scrNextStat(void);
 void scrPrivStat(void);
 void scrCreateDone(void);
 void scrCreateInit(void);
+BOOL scrIsCreateDone(void);
 void scrSetStat(FRAME_HEADER* phFrame);
 FRAME_HEADER* scrGetStat(void);
 FRAME_HEADER* scrGetPrivStat(void);
 void scrSetNEXT(FRAME_HEADER* phFrame);
-
+void scrFixStat(void);
+void scrUnFixStat(void);
 
 
 /// use for MsgCallback & DrawCallback
@@ -200,6 +204,9 @@ void AddItemList(XCHAR *pText, LISTBOX *pLb, void *pIcon);
 #define HWBTN_WIDTH		2
 #define HWBTN_HEIGHT	1
 
+
+#define NAV_BTN_WIDTH		25
+///#define WAIT_UNTIL_FINISH(x)    while(!x)
 
 #define MIN(x,y)                ((x > y)? y: x)
 #define WAIT_UNTIL_FINISH(x)    while(!x)	
