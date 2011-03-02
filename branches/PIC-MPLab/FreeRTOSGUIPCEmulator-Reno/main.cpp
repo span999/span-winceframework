@@ -20,7 +20,7 @@
 
 
 
-
+extern "C" DWORD gdwTickCount;
 
 
 #ifndef OLD_DEMO
@@ -95,6 +95,35 @@ void vUserTask3(void *pvParameters)
 }
 
 
+void vUserTask4(void *pvParameters)
+{
+#if 0 ///portTICK_RATE_MS is not working here in semulator
+	portTickType xLastWakeTime;
+	while(1)
+	{
+		///vTaskDelay(100);
+		vTaskDelayUntil( &xLastWakeTime, 1000/portTICK_RATE_MS);
+		gdwTickCount = gdwTickCount + 1000;
+		printf("Ticking...%d...", gdwTickCount);
+	}
+
+#else	
+	while(1)
+	{
+		Sleep( 100 );
+		gdwTickCount = gdwTickCount + 100;
+		///printf("Ticking...%d...", gdwTickCount);
+	}
+#endif
+	// Suspend ourselves.
+	vTaskSuspend( NULL );
+
+	while (1)
+	{;}
+}
+
+
+
 int main()
 {
 #ifdef OLD_DEMO						
@@ -121,6 +150,10 @@ int main()
 	xTaskCreate( vUserTask3, ( signed char * )"Task3", 100, NULL, 1, NULL );
 	printf(" vUserTask3 created\n");
 #endif
+
+	/* ticking simulate */
+	xTaskCreate( vUserTask4, ( signed char * )"Task4", 100, NULL, 1, NULL );
+	printf(" vUserTask4 created\n");
 	
 	/* Start the scheduler, this function should not return as it causes the execution
 	context to change from main() to one of the created tasks. */

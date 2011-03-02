@@ -23,7 +23,8 @@
 
 
 
-
+DWORD gdwTickCount = 0;
+static DWORD dwTickCnt = 0;
 
 void CreateButtons(WORD wDrawOption)
 {
@@ -684,13 +685,24 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
         return;
 }
 
+#define TICK_SEMULATE
+
+
 void IOGetMsg( GOL_MSG *msg )
 {
+#ifdef TICK_SEMULATE
+	if( 0 == dwTickCnt )	///init
+		dwTickCnt = gdwTickCount;
+#endif		
 	/* TODO: move it to queue wait!! */
 	while( !ioMsgUpdated )
 	{
 		/* printf("Wait touch event!!\n"); */
 		Sleep(50);
+#ifdef TICK_SEMULATE		
+		if( (dwTickCnt - gdwTickCount) > 99 )
+			break;
+#endif
 	}
 	
 	if( TRUE == ioMsgUpdated )
@@ -705,19 +717,31 @@ void IOGetMsg( GOL_MSG *msg )
 		
 		ioMsgUpdated = FALSE;
 	}
+#ifdef TICK_SEMULATE	
+	else	///tickcount hit
+	{
+		///printf("123");
+		///msg->type = TYPE_KEYBOARD;
+		msg->type = TYPE_TOUCHSCREEN;
+		///msg->type = TYPE_UNKNOWN;
+		msg->uiEvent = EVENT_RELEASE;
+		msg->param1 = ID_TICKING;
+		msg->param2 = SCAN_CRA_RELEASED;	
+	}
+#endif
 }
 
 
 WORD GOLMsgCallback(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 {
-///	printf("In GOLMsgCallback\n");
+	printf("In GOLMsgCallback\n");
 	return scrMsgCbHandler(objMsg, pObj, pMsg);
 }
 
 
 WORD GOLDrawCallback(void)
 {
-///	printf("In GOLDrawCallback\n");
+	printf("In GOLDrawCallback\n");
 	scrDrawCbHandler();
 	return (1);
 }

@@ -47,7 +47,7 @@ SCREEN_STATES   prevRefreshState = CREATE_BUTTONS; // used to mark the start of 
 SCREEN_STATUS	scrStatus;
 SCREEN_STATUS	*psrcStat;
 static FRAME_HEADER	*pLastViewFrame;
-
+static BOOL bStatFixed = FALSE;
 
 
 
@@ -539,6 +539,7 @@ void scrInitStat(void)
 		psrcStat->pnextStatFrame = NULL;
 		psrcStat->pnowStatFrame = &fhDeviceMode_poweroff;
 		psrcStat->IsFrameCreate = TRUE;
+		scrUnFixStat();
 	}
 }
 
@@ -555,9 +556,14 @@ void scrPrivStat(void)
 
 void scrCreateDone(void)
 {
-	psrcStat->IsFrameCreate = FALSE;
+	if( !bStatFixed )
+		psrcStat->IsFrameCreate = FALSE;
 }
 
+BOOL scrIsCreateDone(void)
+{
+	return (!psrcStat->IsFrameCreate);
+}
 
 void scrCreateInit(void)
 {
@@ -574,6 +580,7 @@ void scrStepIn(void)
 void scrSetStat(FRAME_HEADER* phFrame)
 {
 	psrcStat->pnowStatFrame = phFrame;
+	scrUnFixStat();
 }
 
 
@@ -582,6 +589,17 @@ void scrSetNEXT(FRAME_HEADER* phFrame)
 	scrStepIn();
 	psrcStat->pnowStatFrame = phFrame;
 	psrcStat->IsFrameCreate = TRUE;
+	scrUnFixStat();
+}
+
+void scrFixStat(void)
+{
+	bStatFixed = TRUE;
+}
+
+void scrUnFixStat(void)
+{
+	bStatFixed = FALSE;
 }
 
 
@@ -616,6 +634,11 @@ void scrDrawCbHandler(void)
 	{
 		psrcStat->pnowStatFrame->pfnDrawCallback(psrcStat->pnowStatFrame->wDrawOption);
 		scrCreateDone();	///create->display
+	}
+	else
+	{
+		printf("scrDrawCbHandler display\n");
+		psrcStat->pnowStatFrame->pfnDrawCallback(psrcStat->pnowStatFrame->wDrawOption);
 	}
 }
 

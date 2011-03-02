@@ -320,6 +320,17 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	WORD 	wStrID = 0;
 	void	*pNowFont = NULL;
 
+	if( scrIsCreateDone() )
+	{	
+		STATICTEXT *pObj = NULL;
+		
+		printf("Display Booting start!!\n");
+		pObj = GOLFindObject(ID_STATICTEXT1);
+		StSetText( pObj, Ask01Str );
+		SetState(pObj, ST_DRAW);
+		return;
+	}
+	
     GOLFree();   // free memory for the objects in the previous linked list and start new list
 	gcCleanScreen();
 	CreateDefaultBtn();
@@ -787,17 +798,39 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	#endif
 #endif
 
+	{
+		STATICTEXT *pObj = NULL;
+		pObj = StCreate(ID_STATICTEXT1,           	// ID 
+			  15, 130, 128, 150,
+              ST_DRAW,        	// will be dislayed, has frame
+              Ask02Str, // multi-line text
+			  popupAskScheme);                   	// default GOL scheme 
+
+
+		//SetState(pObj, ST_DRAW);
+		//scrFixStat();
+	}
 ///				scrSetStat(&fhDataMode_two);
 ///				scrCreateInit();
-	
+	printf("Create Booting done!!\n");
+
 }
 
 
 
 WORD MsgDeviceMode_booting(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 {
+	
+	if( pMsg )
+		printf("[%d, %d, %d, %d]\n", pMsg->type, pMsg->uiEvent, pMsg->param1, pMsg->param2);
+	else
+		printf("error!!!\n");
+	
     switch(GetObjID(pObj))
     {
+		case ID_TICKING:
+			printf("ID_TICKING!!\n");
+			return (0); 
         default:
             return 1; 							// process by default
     }
@@ -805,6 +838,11 @@ WORD MsgDeviceMode_booting(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 
 WORD MsgDeviceMode_bootingDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 {
+	if( pMsg )
+		printf("22[%d, %d, %d, %d]\n", pMsg->type, pMsg->uiEvent, pMsg->param1, pMsg->param2);
+	else
+		printf("error!!!\n");
+
     switch(GetObjID(pObj))
     {
 		///case ID_BUTTON: here, if you want different key response.
