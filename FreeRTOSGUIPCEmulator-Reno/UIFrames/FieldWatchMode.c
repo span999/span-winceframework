@@ -1149,7 +1149,8 @@ WORD MsgDeviceMode_popaskDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg
 				///???
 				
 			}
-			return (0); 
+			return (0);
+		case ID_BUTTON2:
         case ID_BTN_ENTER:
             if(objMsg == BTN_MSG_RELEASED)
 			{
@@ -1163,7 +1164,8 @@ WORD MsgDeviceMode_popaskDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg
 			{
 				///reset
 			}
-			return (0); 
+			return (0);
+		case ID_BUTTON1:
         case ID_BTN_EXIT:
             if(objMsg == BTN_MSG_RELEASED)
 			{
