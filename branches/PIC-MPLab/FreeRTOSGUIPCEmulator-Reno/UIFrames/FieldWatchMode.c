@@ -1166,29 +1166,7 @@ void CreateDeviceMode_popask(WORD wDrawOption)
     GOLFree();                                      // free memory for the objects in the previous linked list and start new list
 
 	CreateDefaultBtn();
-#if 0	
-    pLb = LbCreate
-        (
-            ID_LISTBOX1,                            // ID
-            POPUP_FRAME_OFFSET_W,
-            POPUP_FRAME_OFFSET_H,
-            GetMaxX() - POPUP_FRAME_OFFSET_W,
-            GetMaxY() - DEFAULTBTN_HEIGHT - POPUP_FRAME_OFFSET_H,  // dimension
-            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
-            (XCHAR*)(popupOption.pPopTitle),
-            popupMenuScheme
-        );                                          // use alternate scheme
 
-	pPopItems = popupOption.pPopItemList->pPopItem1;
-	while( sCount < popupOption.PopItemNum )
-	{
-		AddItemList( (XCHAR *)pPopItems->pPopMsg, pLb, pPopItems->pIcon);
-		sCount++;
-		pPopItems++;
-	}
-
-	LbSetFocusedItem( pLb, 1 );	
-#else
     BtnCreate
     (
         ID_BUTTON7,             // button ID
@@ -1230,8 +1208,7 @@ void CreateDeviceMode_popask(WORD wDrawOption)
         popupAsk.pPopAskList->pPopItem12->pPopMsg,      // LEFT arrow as text
         popupAskScheme
     ); 
-	
-#endif
+
 }
 
 
