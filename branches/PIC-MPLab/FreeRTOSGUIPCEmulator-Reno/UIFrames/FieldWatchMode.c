@@ -362,6 +362,18 @@ WORD MsgDeviceMode_poweroffDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pM
 }
 
 
+const XCHAR AdditionalInfo01Str[] = { 	0x0057, 0x0065, 0x0020, 0x0061, 0x0072, 0x0065, 0x0020, 0x0061, 0x0073, 0x006B, // We are ask
+										0x0065, 0x0064, 0x0020, 0x0074, 0x006F, 0x0020, 0x0070, 0x0075, 0x0074, 0x0020, // ed to put 
+										0x0073, 0x006F, 0x006D, 0x0065, 0x0020, 0x0061, 0x0064, 0x0064, 0x0069, 0x0074, // some addit
+										0x0069, 0x006F, 0x006E, 0x0061, 0x006C, 0x0020, 0x0069, 0x006E, 0x0066, 0x006F, // ional info
+										0x0028, 0x0045, 0x0055, 0x004C, 0x0041, 0x002C, 0x0077, 0x0061, 0x0072, 0x0072, // (EULA,warr
+										0x0061, 0x006E, 0x0074, 0x0079, 0x002C, 0x0063, 0x006F, 0x0070, 0x0079, 0x0072, // anty,copyr
+										0x0069, 0x0067, 0x0068, 0x0074, 0x0029, 0x0020, 0x0068, 0x0065, 0x0072, 0x0065, // ight) here
+										0x002E, 0x002E, 0x002E, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, // ...
+									0x0000}; 
+
+
+
 void CreateDeviceMode_booting(WORD wDrawOption)
 {
     SHORT	width, height;
@@ -853,20 +865,19 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 		pObj = StCreate(ID_STATICTEXT1,           	// ID 
 			  15, 130, 128, 150,
               ST_DRAW,        	// will be dislayed, has frame
-              (XCHAR *)Ask02Str, // multi-line text
+              (XCHAR *)AdditionalInfo01Str, // multi-line text
 			  popupAskScheme);                   	// default GOL scheme 
 
 
 		//SetState(pObj, ST_DRAW);
 		//scrFixStat();
+		DelayMs(DEMODELAY);	
+		DelayMs(DEMODELAY);	
 	}
-///				scrSetStat(&fhDataMode_two);
-///				scrCreateInit();
+
 	printf("Create Booting done!!\n");
 
 }
-
-
 
 
 void UpdateDeviceMode_booting(WORD wDrawOption)
@@ -880,20 +891,22 @@ void UpdateDeviceMode_booting(WORD wDrawOption)
 
 	wCount = wCount + 1;
 	
-	if( 0 == wCount%1 )
+	if( (0 == wCount%1) )
 	{
 		SetClip(1);
 		SetClipRgn(15, 130, 128, 150);
 		// draw fonts in the screen
-		pxStr = NumbersENStr;
+		pxStr = AdditionalInfo01Str;
 		pNowFont = (void *)&Monaco_Normal20U;
 		width = GetTextWidth(pxStr, pNowFont);
 		height = GetTextHeight(pNowFont);
 		SetColor(WHITE);
 		Bar(0, 130, GetMaxX(), 150);
-		gcColFntOutTextXY( 15-sOffset, 130, pxStr, pNowFont, LIGHTRED);
+		gcColFntOutTextXY( 15-sOffset, 130, pxStr, pNowFont, LIGHTBLUE);
 		sOffset++;
-		if( width == sOffset )
+		sOffset++;
+		sOffset++;
+		if( width < sOffset )
 			sOffset = 0;
 		SetClip(0);
 	}
