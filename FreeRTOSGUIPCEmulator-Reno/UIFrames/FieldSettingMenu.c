@@ -31,6 +31,9 @@
 
 WORD MsgDefaultBtn_settings(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 {
+	LISTBOX *pLb;
+	
+	pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
     switch(GetObjID(pObj))
     {
         case ID_BUTTON_NEXT:
@@ -48,6 +51,15 @@ WORD MsgDefaultBtn_settings(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
         case ID_BTN_UP:
             if(objMsg == BTN_MSG_RELEASED)
 			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( 1 == sFocusedItem )
+					LbSetFocusedItem( pLb, (sLbCount - 1));
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem - 1));
+				LbChangeSel(pLb, pLb->pFocusItem);
+				SetState(pLb, LB_DRAW_ITEMS);
 			}
             return (0);
 			
@@ -72,6 +84,15 @@ WORD MsgDefaultBtn_settings(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
         case ID_BTN_DOWN:
             if(objMsg == BTN_MSG_RELEASED)
 			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( (sLbCount - 1) == sFocusedItem )
+					LbSetFocusedItem( pLb, 1);
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem + 1));
+				LbChangeSel(pLb, pLb->pFocusItem);
+				SetState(pLb, LB_DRAW_ITEMS);
 			}
             return (0);
 			
@@ -142,7 +163,7 @@ void CreateSettingMenu_main(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)IdGetMString(7,gLanguage),
             alt3Scheme
         );                                          // use alternate scheme
@@ -197,6 +218,7 @@ WORD MsgSettingMenu_mainDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 					LbSetFocusedItem( pLb, (sLbCount - 1));
 				else
 					LbSetFocusedItem( pLb, (sFocusedItem - 1));
+				LbChangeSel(pLb, pLb->pFocusItem);
 				SetState(pLb, LB_DRAW_ITEMS);
 			}
 			return (0);
@@ -210,6 +232,7 @@ WORD MsgSettingMenu_mainDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 					LbSetFocusedItem( pLb, 1);
 				else
 					LbSetFocusedItem( pLb, (sFocusedItem + 1));
+				LbChangeSel(pLb, pLb->pFocusItem);
 				SetState(pLb, LB_DRAW_ITEMS);
 			}
 			return (0); 
@@ -276,7 +299,7 @@ void CreateSettingMenu_user(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<User Setting>>",
             alt3Scheme
         );                                          // use alternate scheme
@@ -316,6 +339,7 @@ WORD MsgSettingMenu_userDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
     switch(GetObjID(pObj))
     {
 		///case ID_BUTTON: here, if you want different key response.
+#if 0
         case ID_BTN_UP:
             if(objMsg == BTN_MSG_RELEASED)
 			{
@@ -342,6 +366,7 @@ WORD MsgSettingMenu_userDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 				SetState(pLb, LB_DRAW_ITEMS);
 			}
 			return (0); 
+#endif
         case ID_BTN_ENTER:
             if(objMsg == BTN_MSG_RELEASED)
 			{
@@ -611,7 +636,7 @@ void CreateSettingMenu_device(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<Device Setting>>",
             alt3Scheme
         );                                          // use alternate scheme
@@ -763,7 +788,7 @@ void CreateSettingMenu_gps(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<GPS>>",
             alt3Scheme
         );                                          // use alternate scheme
@@ -957,7 +982,7 @@ void CreateSettingMenu_datetime(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<Date & Time>>",
             alt3Scheme
         );                                          // use alternate scheme
@@ -1089,7 +1114,7 @@ void CreateSettingMenu_unitsofmeasure(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<Date & Time>>",
             alt3Scheme
         );                                          // use alternate scheme
@@ -1225,7 +1250,7 @@ void CreateSettingMenu_display(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<Display>>",
             alt3Scheme
         );                                          // use alternate scheme
@@ -1345,7 +1370,7 @@ void CreateSettingMenu_recording(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<Recording>>",
             alt3Scheme
         );                                          // use alternate scheme
@@ -1481,7 +1506,7 @@ void CreateSettingMenu_feedback(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<Feedback>>",
             alt3Scheme
         );                                          // use alternate scheme
@@ -1755,7 +1780,7 @@ void CreateSettingMenu_activity(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<Activity Setting>>",
             alt3Scheme
         );                                          // use alternate scheme
@@ -1949,7 +1974,7 @@ void CreateSettingMenu_activityprofiset(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<Activity Profile Setting>>",
             alt3Scheme
         );                                          // use alternate scheme
@@ -2376,7 +2401,7 @@ void CreateSettingMenu_recordpref(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<Recording Preference>>",
             alt3Scheme
         );                                          // use alternate scheme
@@ -2503,7 +2528,7 @@ void CreateSettingMenu_datascreens(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<Data Screens>>",
             alt3Scheme
         );                                          // use alternate scheme
@@ -2631,7 +2656,7 @@ void CreateSettingMenu_trainingzones(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<Training Zones>>",
             alt3Scheme
         );                                          // use alternate scheme
@@ -2758,7 +2783,7 @@ void CreateSettingMenu_trainingalerts(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<Training Alerts>>",
             alt3Scheme
         );                                          // use alternate scheme
@@ -2976,7 +3001,7 @@ void CreateSettingMenu_navigation(WORD wDrawOption)
             0,
             GetMaxX(),
             GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
-            LB_DRAW | LB_FOCUSED,                   // will be dislayed after creation
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
             (XCHAR*)"<<Navigation Setting>>",
             alt3Scheme
         );                                          // use alternate scheme
