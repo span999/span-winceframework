@@ -302,7 +302,7 @@ STATICTEXT *CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHA
 	width = GetTextWidth(pData, pSch->pFont);
 	height = GetTextHeight(pSch->pFont);
     pObj = StCreate(ID_DATASETVALUE1,           	// ID 
-			  (left+(((right-left)-width)>>1)), (temp+(((bottom-temp)-height)>>1))+dataframeoffset, (left+(((right-left)-width)>>1))+width, (temp+(((bottom-temp)-height)>>1))+height-dataframeoffset,
+			  (left+(((right-left)-width)>>1))-ST_INDENT, (temp+(((bottom-temp)-height)>>1))+dataframeoffset, (left+(((right-left)-width)>>1))+width, (temp+(((bottom-temp)-height)>>1))+height-dataframeoffset,
               ST_DRAW|ST_CENTER_ALIGN,        	// will be dislayed, has frame
               pData, // multi-line text
 			  pSch);                   	// default GOL scheme 

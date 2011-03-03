@@ -102,21 +102,21 @@ void CreateWatchMode_watch(WORD wDrawOption)
 	width = GetTextWidth(Time01Str, dataSetScheme2->pFont);
 	height = GetTextHeight(dataSetScheme2->pFont);
 	StCreate(ID_STATICTEXT1,           	// ID 
-			  5, 50, 5+width, 75,
+			  5, 50, 5+width+ST_INDENT, 75,
               ST_DRAW,        	// will be dislayed, has frame
               Time01Str, // multi-line text
 			  dataSetScheme2);                   	// default GOL scheme 
 			  
 	width = GetTextWidth(Time02Str, dataSetScheme2->pFont);
 	StCreate(ID_STATICTEXT2,           	// ID 
-			  5, 80, 5+width, 100,
+			  5, 80, 5+width+ST_INDENT, 100,
               ST_DRAW,        	// will be dislayed, has frame
               Time02Str, // multi-line text
 			  dataSetScheme2);                   	// default GOL scheme 
 
 	width = GetTextWidth(Time03Str, dataSetScheme2->pFont);
 	StCreate(ID_STATICTEXT3,           	// ID 
-			  5, 105, 5+width, 125,
+			  5, 105, 5+width+ST_INDENT, 125,
               ST_DRAW,        	// will be dislayed, has frame
               Time03Str, // multi-line text
 			  dataSetScheme2);                   	// default GOL scheme 
