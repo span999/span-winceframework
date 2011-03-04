@@ -167,7 +167,6 @@ void CreateSettingMenu_main(WORD wDrawOption)
             (XCHAR*)IdGetMString(13,gLanguage),
             alt3Scheme
         );                                          // use alternate scheme
-	
 
 	AddItemList( (XCHAR *)IdGetMString(10,gLanguage), pLb, &PCGaming2_1bpp_16x16);
 	AddItemList( (XCHAR *)IdGetMString(11,gLanguage), pLb, &Settings_4bpp_16x16);
