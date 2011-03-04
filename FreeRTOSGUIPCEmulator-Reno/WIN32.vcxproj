@@ -164,6 +164,7 @@
     <ClCompile Include="SDLDislpayEmulator\SDLDisplay.cpp" />
     <ClCompile Include="UIFrames\FieldCommon.c" />
     <ClCompile Include="UIFrames\FieldDataMode.c" />
+    <ClCompile Include="UIFrames\FieldHistoryMenu.c" />
     <ClCompile Include="UIFrames\FieldInfoMode.c" />
     <ClCompile Include="UIFrames\FieldMapMode.c" />
     <ClCompile Include="UIFrames\FieldSettingMenu.c" />

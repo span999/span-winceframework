@@ -7,5 +7,6 @@
 #include "FieldMapMode.h"
 #include "FieldSettingMenu.h"
 #include "FieldInfoMode.h"
+#include "FieldHistoryMenu.h"
 
 #endif	/*#ifndef __FIELDS_H__*/

@@ -171,6 +171,9 @@
     <ClCompile Include="UIFrames\FieldWatchMode.c">
       <Filter>UIframework</Filter>
     </ClCompile>
+    <ClCompile Include="UIFrames\FieldHistoryMenu.c">
+      <Filter>UIframework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">
