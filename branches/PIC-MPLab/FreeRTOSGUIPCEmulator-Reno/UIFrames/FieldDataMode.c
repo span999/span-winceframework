@@ -85,7 +85,7 @@ WORD MsgDefaultBtn_datamodes(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 				PPMenuItem1SetUp( IdGetMString(5,gLanguage), &I16164_Compass, &fhMapMode_navgation );
 				PPMenuItem2SetUp( IdGetMString(6,gLanguage), &I16164_About, &fhInfoMode_info );
 				PPMenuItem3SetUp( IdGetMString(7,gLanguage), &I16164_Apply, &fhSettingMenu_main );
-				PPMenuItem4SetUp( IdGetMString(8,gLanguage), &I16164_Apply, &fhSettingMenu_main );
+				PPMenuItem4SetUp( IdGetMString(8,gLanguage), &I16164_Apply, &fhHistoryMenu_main );
 				scrSetNEXT(&fhDeviceMode_popup);
 			}
             return (0);

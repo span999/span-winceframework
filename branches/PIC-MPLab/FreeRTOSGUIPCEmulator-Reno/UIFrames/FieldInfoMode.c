@@ -95,7 +95,7 @@ WORD MsgInfoMode_infoDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 				PPMenuItem1SetUp( IdGetMString(9,gLanguage), &PCGaming1_4bpp_16x16, &fhDataMode_two );
 				PPMenuItem2SetUp( IdGetMString(5,gLanguage), &I16164_Compass, &fhMapMode_navgation );
 				PPMenuItem3SetUp( IdGetMString(7,gLanguage), &I16164_Apply, &fhSettingMenu_main );
-				PPMenuItem4SetUp( IdGetMString(8,gLanguage), &I16164_Apply, &fhSettingMenu_main );
+				PPMenuItem4SetUp( IdGetMString(8,gLanguage), &I16164_Apply, &fhHistoryMenu_main );
 				scrSetNEXT(&fhDeviceMode_popup);		
 			}
 			return (0); 
