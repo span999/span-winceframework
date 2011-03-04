@@ -34,6 +34,9 @@ typedef struct
 	COMMONMENUITEM_HEADER		Item6;
 } COMMONMENU_HEADER;
 
+extern void CreateCommonMenu(WORD wDrawOption);
+extern WORD MsgCommonMenu(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
+extern WORD MsgCommonMenu_DefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg);
 
 extern FRAME_HEADER fhHistoryMenu_main;
 extern FRAME_HEADER fhHistoryMenu_activityhistory;
