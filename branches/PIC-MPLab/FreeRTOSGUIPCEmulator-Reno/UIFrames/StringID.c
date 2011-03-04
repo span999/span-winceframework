@@ -32,7 +32,7 @@ const XCHAR *StringTableEN[] = {
 	ViewENStr,					// "View"					,16
 	DeleteENStr,				// "Delete"					,17
 	AllActivitiesENStr,			// "All Activities"			,18
-	ActivityTypeENStr,			// "ActivityType"			,19
+	ActivityTypeENStr,			// "Activity Type"			,19
 	IndividualActivityENStr,	// "Individual Activity"	,20
 	SessionENStr,				// "Session"				,21
 	LapENStr,					// "Lap"					,22
