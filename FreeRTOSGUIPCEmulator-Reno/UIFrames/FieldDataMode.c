@@ -116,7 +116,7 @@ WORD MsgDefaultBtn_datamodes(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
     }
 }
 
-
+#if 0
 /*
 a= 0x0061, 0x0041,
 b= 0x0062, 
@@ -192,7 +192,7 @@ const XCHAR Data05Str[] = {	0x0033, 0x002E, 0x0030, 0x0030, // 3.00
 							0x0000};  
 const XCHAR Data06Str[] = {	0x0031, 0x0035, 0x0035, // 155
 							0x0000};  
-							
+#endif							
 							
 							
 void CreateRenoDataSet(WORD wDrawOption)

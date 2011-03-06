@@ -982,6 +982,406 @@ WORD MsgSettingMenu_ASactivityprofilesettingsDefaultBtn(WORD objMsg, OBJ_HEADER*
     }
 }
 
+
+
+
+
+
+const XCHAR ADS01Str[] = {	0x0041, 0x0064, 0x0064, 0x0020, 0x0053, 0x0063, 0x0072, 0x0065, 0x0065, 0x006E,// Add Screen
+							0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,// 
+							0x0000};  
+const XCHAR ADS02Str[] = {	0x004E, 0x0065, 0x0077, 0x0020, 0x0053, 0x0063, 0x0072, 0x0065, 0x0065, 0x006E,// New Screen
+							0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,// 
+							0x0000};  
+const XCHAR ADS03Str[] = {	0x0043, 0x006F, 0x0070, 0x0079, 0x0020, 0x004C, 0x0061, 0x0073, 0x0074, 0x0020,// Copy Last 
+							0x0053, 0x0063, 0x0072, 0x0065, 0x0065, 0x006E, 0x0000, 0x0000, 0x0000, 0x0000,// Screen
+							0x0000};  
+
+
+
+
+
+
+
+
+
+void CreateSettingMenu_SAPSDSactivitydatascreens(WORD wDrawOption)
+{
+    LISTBOX *pLb;
+
+    GOLFree();                                      // free memory for the objects in the previous linked list and start new list
+
+	SetColor(BLACK);
+	ClearDevice();	
+
+	CreateDefaultBtn();
+
+	
+    pLb = LbCreate
+        (
+            ID_LISTBOX1,                            // ID
+            0,
+            0,
+            GetMaxX(),
+            GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
+            (XCHAR*)IdGetMString(83,gLanguage),
+            popupMenuScheme
+        );                                          // use alternate scheme
+	
+	if( 0 )
+	{	///depends on what we had before...
+	AddItemList( (XCHAR *)IdGetMString(89,gLanguage), pLb, NULL);
+	AddItemList( (XCHAR *)IdGetMString(85,gLanguage), pLb, NULL);
+	AddItemList( (XCHAR *)IdGetMString(81,gLanguage), pLb, NULL);
+	AddItemList( (XCHAR *)IdGetMString(78,gLanguage), pLb, NULL);
+	}
+	AddItemList( (XCHAR *)ADS01Str, pLb, &I16164_About);
+
+	LbSetFocusedItem( pLb, 1 );
+
+}
+
+
+WORD MsgSettingMenu_SAPSDSactivitydatascreens(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+        case ID_LISTBOX1:
+
+            // Process message by default
+            LbMsgDefault(objMsg, (LISTBOX *)pObj, pMsg);
+
+            // The message was processed
+            return (0);
+
+        default:
+            return (1);                             // process by default
+    }
+}
+
+WORD MsgSettingMenu_SAPSDSactivitydatascreensDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+	LISTBOX *pLb;
+	
+	pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
+
+    switch(GetObjID(pObj))
+    {
+		///case ID_BUTTON: here, if you want different key response.
+        case ID_BTN_UP:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( 1 == sFocusedItem )
+					LbSetFocusedItem( pLb, (sLbCount - 1));
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem - 1));
+				LbChangeSel(pLb, pLb->pFocusItem);
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0);  	
+        case ID_BTN_DOWN:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( (sLbCount - 1) == sFocusedItem )
+					LbSetFocusedItem( pLb, 1);
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem + 1));
+				LbChangeSel(pLb, pLb->pFocusItem);
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);			
+				
+				
+				if( sFocusedItem == (sLbCount-1) )
+				{
+						///this is the last one, "add screen"
+						scrSetNEXT( &fhSettingMenu_SAPSDSADSaddscreen );
+				}
+				else
+				{
+				switch(sFocusedItem)
+				{
+					case 9:
+						scrSetNEXT( &fhSettingMenu_ASAPSDSactivitydatascreens );
+						break;
+					default:
+						scrSetNEXT( &fhSettingMenu_ASAPSDSactivitydatascreens );
+						break;
+				}
+				}
+			}
+			return (0); 
+        case ID_BTN_EXIT:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				scrSetNEXT( &fhSettingMenu_main );
+			}
+			return (0); 
+
+        default:
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
+    }
+}
+
+void CreateSettingMenu_SAPSDSADSaddscreen(WORD wDrawOption)
+{
+    LISTBOX *pLb;
+
+    GOLFree();                                      // free memory for the objects in the previous linked list and start new list
+
+	SetColor(BLACK);
+	ClearDevice();	
+
+	CreateDefaultBtn();
+
+	
+    pLb = LbCreate
+        (
+            ID_LISTBOX1,                            // ID
+            0,
+            0,
+            GetMaxX(),
+            GetMaxY()-DEFAULTBTN_HEIGHT,                      // dimension
+            LB_DRAW | LB_FOCUSED | LB_SINGLE_SEL,                   // will be dislayed after creation
+            (XCHAR*)ADS01Str,
+            popupMenuScheme
+        );                                          // use alternate scheme
+	
+	
+	AddItemList( (XCHAR *)ADS02Str, pLb, &I16164_About);
+	if( 0 )
+	{	///depends on what we had before...
+		///copy last screen
+	AddItemList( (XCHAR *)IdGetMString(89,gLanguage), pLb, NULL);
+
+	}
+	LbSetFocusedItem( pLb, 1 );
+
+}
+
+
+WORD MsgSettingMenu_SAPSDSADSaddscreen(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+        case ID_LISTBOX1:
+
+            // Process message by default
+            LbMsgDefault(objMsg, (LISTBOX *)pObj, pMsg);
+
+            // The message was processed
+            return (0);
+
+        default:
+            return (1);                             // process by default
+    }
+}
+
+WORD MsgSettingMenu_SAPSDSADSaddscreenDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+	LISTBOX *pLb;
+	
+	pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
+
+    switch(GetObjID(pObj))
+    {
+		///case ID_BUTTON: here, if you want different key response.
+        case ID_BTN_UP:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( 1 == sFocusedItem )
+					LbSetFocusedItem( pLb, (sLbCount - 1));
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem - 1));
+				LbChangeSel(pLb, pLb->pFocusItem);
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0);  	
+        case ID_BTN_DOWN:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( (sLbCount - 1) == sFocusedItem )
+					LbSetFocusedItem( pLb, 1);
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem + 1));
+				LbChangeSel(pLb, pLb->pFocusItem);
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);			
+				
+				switch(sFocusedItem)
+				{
+					case 1:	///new screen
+						scrSetNEXT( &fhSettingMenu_SAPSDSADSaddscreenX );
+						break;
+					case 2:	///copy last screen
+						scrSetNEXT( &fhSettingMenu_ASAPSDSactivitydatascreens );
+						break;
+					default:
+						scrSetNEXT( &fhSettingMenu_ASAPSDSactivitydatascreens );
+						break;
+				}
+			}
+			return (0); 
+        case ID_BTN_EXIT:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				scrSetNEXT( &fhSettingMenu_main );
+			}
+			return (0); 
+
+        default:
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
+    }
+}
+
+void CreateSettingMenu_SAPSDSADSaddscreenX(WORD wDrawOption)
+{
+    LISTBOX *pLb;
+
+    GOLFree();                                      // free memory for the objects in the previous linked list and start new list
+
+	SetColor(BLACK);
+	ClearDevice();	
+
+	CreateDefaultBtn();
+
+	
+     WndCreate
+    (
+        ID_WINDOW1,                 // ID
+        0,
+        0,
+        GetMaxX(),
+        ///GetMaxY() - DEFAULTBTN_HEIGHT,                  // dimension
+		40,
+        WND_DRAW,                   // will be dislayed after creation
+        (void *) &I16164_About,         // icon
+///        pText,                      // set text
+		(XCHAR *)ADS01Str,         // text
+        popupMenuScheme
+    ); 
+
+	CreateDataSet( 0,  40, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, NULL, Func01Str, Data01Str, Unit01Str);
+	
+}
+
+
+WORD MsgSettingMenu_SAPSDSADSaddscreenX(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+        case ID_LISTBOX1:
+
+            // Process message by default
+            LbMsgDefault(objMsg, (LISTBOX *)pObj, pMsg);
+
+            // The message was processed
+            return (0);
+
+        default:
+            return (1);                             // process by default
+    }
+}
+
+WORD MsgSettingMenu_SAPSDSADSaddscreenXDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+	LISTBOX *pLb;
+	
+	pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
+
+    switch(GetObjID(pObj))
+    {
+		///case ID_BUTTON: here, if you want different key response.
+        case ID_BTN_UP:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( 1 == sFocusedItem )
+					LbSetFocusedItem( pLb, (sLbCount - 1));
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem - 1));
+				LbChangeSel(pLb, pLb->pFocusItem);
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0);  	
+        case ID_BTN_DOWN:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);
+				if( (sLbCount - 1) == sFocusedItem )
+					LbSetFocusedItem( pLb, 1);
+				else
+					LbSetFocusedItem( pLb, (sFocusedItem + 1));
+				LbChangeSel(pLb, pLb->pFocusItem);
+				SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				SHORT sLbCount, sFocusedItem;
+				sLbCount = LbGetCount(pLb);
+				sFocusedItem = LbGetFocusedItem(pLb);			
+				
+				switch(sFocusedItem)
+				{
+					case 1:	///new screen
+						scrSetNEXT( &fhSettingMenu_main );
+						break;
+					case 2:	///copy last screen
+						scrSetNEXT( &fhSettingMenu_main );
+						break;
+					default:
+						scrSetNEXT( &fhSettingMenu_main );
+						break;
+				}
+			}
+			return (0); 
+        case ID_BTN_EXIT:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				scrSetNEXT( &fhSettingMenu_main );
+			}
+			return (0); 
+
+        default:
+            return (MsgDefaultBtn_settings(objMsg, pObj, pMsg));                 // process by default
+    }
+}
+
+
+
+
 void CreateSettingMenu_multisportsetup(WORD wDrawOption)
 {
 
@@ -1979,7 +2379,7 @@ COMMONMENU_HEADER mhCommonMenu_ASAPSdatascreens = {
 	1,
 	3,
 	{ 84, NULL, &I16164_Apply, &fhSettingMenu_main },
-	{ 83, NULL, &I16164_Apply, &fhSettingMenu_main },
+	{ 83, NULL, &I16164_Apply, &fhSettingMenu_ASAPSDSactivitydatascreens },
 	{ 82, NULL, &I16164_Apply, &fhSettingMenu_main },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
@@ -1993,6 +2393,39 @@ FRAME_HEADER fhSettingMenu_ASAPSdatascreens = {
 	0,		///no option
 	NULL,
 	(void *)&mhCommonMenu_ASAPSdatascreens
+};
+
+/*
+*/
+FRAME_HEADER fhSettingMenu_ASAPSDSactivitydatascreens = {
+	MsgSettingMenu_SAPSDSactivitydatascreens,
+	CreateSettingMenu_SAPSDSactivitydatascreens,
+	MsgSettingMenu_SAPSDSactivitydatascreensDefaultBtn,
+	0,		///no option
+	NULL,
+	NULL
+};
+
+/*
+*/
+FRAME_HEADER fhSettingMenu_SAPSDSADSaddscreen = {
+	MsgSettingMenu_SAPSDSADSaddscreen,
+	CreateSettingMenu_SAPSDSADSaddscreen,
+	MsgSettingMenu_SAPSDSADSaddscreenDefaultBtn,
+	0,		///no option
+	NULL,
+	NULL
+};
+
+/*
+*/
+FRAME_HEADER fhSettingMenu_SAPSDSADSaddscreenX = {
+	MsgSettingMenu_SAPSDSADSaddscreenX,
+	CreateSettingMenu_SAPSDSADSaddscreenX,
+	MsgSettingMenu_SAPSDSADSaddscreenXDefaultBtn,
+	0,		///no option
+	NULL,
+	NULL
 };
 
 /*

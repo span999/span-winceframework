@@ -285,7 +285,7 @@ WORD MsgListBoxDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
     }
 }
 
-
+#if 0
 void CreateTextEntryPad(WORD wDrawOption)
 {
 #define NTEXT_H	25
@@ -509,7 +509,7 @@ WORD MsgNumEntryPadDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
             return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
     }
 }
-
+#endif
 
 
 //*****************************************************************************
@@ -874,7 +874,7 @@ FRAME_HEADER fhListBox = {
 	0
 };
 
-
+#if 0
 FRAME_HEADER fhTextEnteryPad = {
 	MsgTextEntryPad,
 	CreateTextEntryPad,
@@ -893,7 +893,7 @@ FRAME_HEADER fhNumEnteryPad = {
 	0,
 	0
 };
-
+#endif
 
 
 
