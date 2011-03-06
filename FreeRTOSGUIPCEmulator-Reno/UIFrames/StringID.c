@@ -76,6 +76,36 @@ const XCHAR *StringTableEN[] = {
 	DeviceInformationENStr,		// "Device Information"		,60	
 	CurrentActivityProfileENStr,	// "Current Activity Profile"		,61
 	ActivityProfileSettingsENStr,	// "Activity Profile Settings"	,62	
+	VerticalSpeedENStr,			// "Vertical Speed"			,63	
+	TimeENStr,					// "Time"					,64	
+	SpeedPaceENStr,				// "Speed/Pace"				,65	
+	GradeENStr,					// "Grade"					,66	
+	CaloriesENStr,				// "Calories"				,67	
+	CadenceENStr,				// "Cadence"				,68	
+	NavigatetoLocationENStr,	// "Navigate to Location"	,69	
+	MapBreadcrumbENStr,			// "Map & Breadcrumb"		,70	
+	PowerAlertENStr,			// "Power Alert"			,71	
+	CadenceAlertENStr,			// "Cadence Alert"			,72	
+	HeartRateAlertENStr,		// "Heart Rate Alert"		,73	
+	SpeedPaceAlertENStr,		// "Speed Pace Alert"		,74	
+	TimeAlertENStr,				// "Time Alert"				,75	
+	DistanceAlertENStr,			// "Distance Alert"			,76	
+	CaloriesAlertENStr,			// "Calories Alert"			,77	
+	TrainingAlertsENStr,		// "Training Alerts"		,78	
+	PowerZonesENStr,			// "Power Zones"			,79	
+	HeartRateZonesENStr,		// "Heart Rate Zones"		,80	
+	TrainingZonesENStr,			// "Training Zones"			,81	
+	ActivityPacerScreenENStr,	// "Activity Pacer Screen"	,82	
+	ActivityDataScreensENStr,	// "Activity Data Screens"	,83	
+	AutoScrollENStr,			// "Auto Scroll"			,84	
+	DataScreensENStr,			// "Data Screens"			,85	
+	AutoPauseENStr,				// "Auto Pause"				,86	
+	AutoLapENStr,				// "Auto Lap"				,87	
+	AutoPauseENStr,				// "Auto Pause"				,88	
+	RecordingPreferencesENStr,	// "Recording Preferences"	,89	
+	SpeedPacePreferenceENStr,	// "Speed Pace Preference"	,90	
+	ProfileNameENStr,			// "Profile Name"			,91	
+	MultiSportSetupENStr,		// "MultiSport Setup"		,92	
 	
 };
 
@@ -143,6 +173,36 @@ const XCHAR *StringTableSP[] = {
 	DeviceInformationSPStr,		// "Device Information"		,60	
 	CurrentActivityProfileSPStr,	// "Current Activity Profile"		,61
 	ActivityProfileSettingsSPStr,	// "Activity Profile Settings"	,62	
+	VerticalSpeedSPStr,			// "Vertical Speed"			,63	
+	TimeSPStr,					// "Time"					,64	
+	SpeedPaceSPStr,				// "Speed/Pace"				,65	
+	GradeSPStr,					// "Grade"					,66	
+	CaloriesSPStr,				// "Calories"				,67	
+	CadenceSPStr,				// "Cadence"				,68	
+	NavigatetoLocationSPStr,	// "Navigate to Location"	,69	
+	MapBreadcrumbSPStr,			// "Map & Breadcrumb"		,70	
+	PowerAlertSPStr,			// "Power Alert"			,71	
+	CadenceAlertSPStr,			// "Cadence Alert"			,72	
+	HeartRateAlertSPStr,		// "Heart Rate Alert"		,73	
+	SpeedPaceAlertSPStr,		// "Speed Pace Alert"		,74	
+	TimeAlertSPStr,				// "Time Alert"				,75	
+	DistanceAlertSPStr,			// "Distance Alert"			,76	
+	CaloriesAlertSPStr,			// "Calories Alert"			,77	
+	TrainingAlertsSPStr,		// "Training Alerts"		,78	
+	PowerZonesSPStr,			// "Power Zones"			,79	
+	HeartRateZonesSPStr,		// "Heart Rate Zones"		,80	
+	TrainingZonesSPStr,			// "Training Zones"			,81	
+	ActivityPacerScreenSPStr,	// "Activity Pacer Screen"	,82	
+	ActivityDataScreensSPStr,	// "Activity Data Screens"	,83	
+	AutoScrollSPStr,			// "Auto Scroll"			,84	
+	DataScreensSPStr,			// "Data Screens"			,85	
+	AutoPauseSPStr,				// "Auto Pause"				,86	
+	AutoLapSPStr,				// "Auto Lap"				,87	
+	AutoPauseSPStr,				// "Auto Pause"				,88	
+	RecordingPreferencesSPStr,	// "Recording Preferences"	,89	
+	SpeedPacePreferenceSPStr,	// "Speed Pace Preference"	,90	
+	ProfileNameSPStr,			// "Profile Name"			,91	
+	MultiSportSetupSPStr,		// "MultiSport Setup"		,92	
 
 };
 
@@ -210,6 +270,36 @@ const XCHAR *StringTableFR[] = {
 	DeviceInformationFRStr,		// "Device Information"		,60	
 	CurrentActivityProfileFRStr,	// "Current Activity Profile"		,61
 	ActivityProfileSettingsFRStr,	// "Activity Profile Settings"	,62	
+	VerticalSpeedFRStr,			// "Vertical Speed"			,63	
+	TimeFRStr,					// "Time"					,64	
+	SpeedPaceFRStr,				// "Speed/Pace"				,65	
+	GradeFRStr,					// "Grade"					,66	
+	CaloriesFRStr,				// "Calories"				,67	
+	CadenceFRStr,				// "Cadence"				,68	
+	NavigatetoLocationFRStr,	// "Navigate to Location"	,69	
+	MapBreadcrumbFRStr,			// "Map & Breadcrumb"		,70	
+	PowerAlertFRStr,			// "Power Alert"			,71	
+	CadenceAlertFRStr,			// "Cadence Alert"			,72	
+	HeartRateAlertFRStr,		// "Heart Rate Alert"		,73	
+	SpeedPaceAlertFRStr,		// "Speed Pace Alert"		,74	
+	TimeAlertFRStr,				// "Time Alert"				,75	
+	DistanceAlertFRStr,			// "Distance Alert"			,76	
+	CaloriesAlertFRStr,			// "Calories Alert"			,77	
+	TrainingAlertsFRStr,		// "Training Alerts"		,78	
+	PowerZonesFRStr,			// "Power Zones"			,79	
+	HeartRateZonesFRStr,		// "Heart Rate Zones"		,80	
+	TrainingZonesFRStr,			// "Training Zones"			,81	
+	ActivityPacerScreenFRStr,	// "Activity Pacer Screen"	,82	
+	ActivityDataScreensFRStr,	// "Activity Data Screens"	,83	
+	AutoScrollFRStr,			// "Auto Scroll"			,84	
+	DataScreensFRStr,			// "Data Screens"			,85	
+	AutoPauseFRStr,				// "Auto Pause"				,86	
+	AutoLapFRStr,				// "Auto Lap"				,87	
+	AutoPauseFRStr,				// "Auto Pause"				,88	
+	RecordingPreferencesFRStr,	// "Recording Preferences"	,89	
+	SpeedPacePreferenceFRStr,	// "Speed Pace Preference"	,90	
+	ProfileNameFRStr,			// "Profile Name"			,91	
+	MultiSportSetupFRStr,		// "MultiSport Setup"		,92	
 
 };
 
@@ -277,6 +367,36 @@ const XCHAR *StringTableIT[] = {
 	DeviceInformationITStr,		// "Device Information"		,60	
 	CurrentActivityProfileITStr,	// "Current Activity Profile"		,61
 	ActivityProfileSettingsITStr,	// "Activity Profile Settings"	,62	
+	VerticalSpeedITStr,			// "Vertical Speed"			,63	
+	TimeITStr,					// "Time"					,64	
+	SpeedPaceITStr,				// "Speed/Pace"				,65	
+	GradeITStr,					// "Grade"					,66	
+	CaloriesITStr,				// "Calories"				,67	
+	CadenceITStr,				// "Cadence"				,68	
+	NavigatetoLocationITStr,	// "Navigate to Location"	,69	
+	MapBreadcrumbITStr,			// "Map & Breadcrumb"		,70	
+	PowerAlertITStr,			// "Power Alert"			,71	
+	CadenceAlertITStr,			// "Cadence Alert"			,72	
+	HeartRateAlertITStr,		// "Heart Rate Alert"		,73	
+	SpeedPaceAlertITStr,		// "Speed Pace Alert"		,74	
+	TimeAlertITStr,				// "Time Alert"				,75	
+	DistanceAlertITStr,			// "Distance Alert"			,76	
+	CaloriesAlertITStr,			// "Calories Alert"			,77	
+	TrainingAlertsITStr,		// "Training Alerts"		,78	
+	PowerZonesITStr,			// "Power Zones"			,79	
+	HeartRateZonesITStr,		// "Heart Rate Zones"		,80	
+	TrainingZonesITStr,			// "Training Zones"			,81	
+	ActivityPacerScreenITStr,	// "Activity Pacer Screen"	,82	
+	ActivityDataScreensITStr,	// "Activity Data Screens"	,83	
+	AutoScrollITStr,			// "Auto Scroll"			,84	
+	DataScreensITStr,			// "Data Screens"			,85	
+	AutoPauseITStr,				// "Auto Pause"				,86	
+	AutoLapITStr,				// "Auto Lap"				,87	
+	AutoPauseITStr,				// "Auto Pause"				,88	
+	RecordingPreferencesITStr,	// "Recording Preferences"	,89	
+	SpeedPacePreferenceITStr,	// "Speed Pace Preference"	,90	
+	ProfileNameITStr,			// "Profile Name"			,91	
+	MultiSportSetupITStr,		// "MultiSport Setup"		,92	
 
 };
 
@@ -344,6 +464,36 @@ const XCHAR *StringTablePO[] = {
 	DeviceInformationPOStr,		// "Device Information"		,60	
 	CurrentActivityProfilePOStr,	// "Current Activity Profile"		,61
 	ActivityProfileSettingsPOStr,	// "Activity Profile Settings"	,62	
+	VerticalSpeedPOStr,			// "Vertical Speed"			,63	
+	TimePOStr,					// "Time"					,64	
+	SpeedPacePOStr,				// "Speed/Pace"				,65	
+	GradePOStr,					// "Grade"					,66	
+	CaloriesPOStr,				// "Calories"				,67	
+	CadencePOStr,				// "Cadence"				,68	
+	NavigatetoLocationPOStr,	// "Navigate to Location"	,69	
+	MapBreadcrumbPOStr,			// "Map & Breadcrumb"		,70	
+	PowerAlertPOStr,			// "Power Alert"			,71	
+	CadenceAlertPOStr,			// "Cadence Alert"			,72	
+	HeartRateAlertPOStr,		// "Heart Rate Alert"		,73	
+	SpeedPaceAlertPOStr,		// "Speed Pace Alert"		,74	
+	TimeAlertPOStr,				// "Time Alert"				,75	
+	DistanceAlertPOStr,			// "Distance Alert"			,76	
+	CaloriesAlertPOStr,			// "Calories Alert"			,77	
+	TrainingAlertsPOStr,		// "Training Alerts"		,78	
+	PowerZonesPOStr,			// "Power Zones"			,79	
+	HeartRateZonesPOStr,		// "Heart Rate Zones"		,80	
+	TrainingZonesPOStr,			// "Training Zones"			,81	
+	ActivityPacerScreenPOStr,	// "Activity Pacer Screen"	,82	
+	ActivityDataScreensPOStr,	// "Activity Data Screens"	,83	
+	AutoScrollPOStr,			// "Auto Scroll"			,84	
+	DataScreensPOStr,			// "Data Screens"			,85	
+	AutoPausePOStr,				// "Auto Pause"				,86	
+	AutoLapPOStr,				// "Auto Lap"				,87	
+	AutoPausePOStr,				// "Auto Pause"				,88	
+	RecordingPreferencesPOStr,	// "Recording Preferences"	,89	
+	SpeedPacePreferencePOStr,	// "Speed Pace Preference"	,90	
+	ProfileNamePOStr,			// "Profile Name"			,91	
+	MultiSportSetupPOStr,		// "MultiSport Setup"		,92	
 
 };
 
@@ -411,6 +561,36 @@ const XCHAR *StringTableDU[] = {
 	DeviceInformationDUStr,		// "Device Information"		,60	
 	CurrentActivityProfileDUStr,	// "Current Activity Profile"		,61
 	ActivityProfileSettingsDUStr,	// "Activity Profile Settings"	,62	
+	VerticalSpeedDUStr,			// "Vertical Speed"			,63	
+	TimeDUStr,					// "Time"					,64	
+	SpeedPaceDUStr,				// "Speed/Pace"				,65	
+	GradeDUStr,					// "Grade"					,66	
+	CaloriesDUStr,				// "Calories"				,67	
+	CadenceDUStr,				// "Cadence"				,68	
+	NavigatetoLocationDUStr,	// "Navigate to Location"	,69	
+	MapBreadcrumbDUStr,			// "Map & Breadcrumb"		,70	
+	PowerAlertDUStr,			// "Power Alert"			,71	
+	CadenceAlertDUStr,			// "Cadence Alert"			,72	
+	HeartRateAlertDUStr,		// "Heart Rate Alert"		,73	
+	SpeedPaceAlertDUStr,		// "Speed Pace Alert"		,74	
+	TimeAlertDUStr,				// "Time Alert"				,75	
+	DistanceAlertDUStr,			// "Distance Alert"			,76	
+	CaloriesAlertDUStr,			// "Calories Alert"			,77	
+	TrainingAlertsDUStr,		// "Training Alerts"		,78	
+	PowerZonesDUStr,			// "Power Zones"			,79	
+	HeartRateZonesDUStr,		// "Heart Rate Zones"		,80	
+	TrainingZonesDUStr,			// "Training Zones"			,81	
+	ActivityPacerScreenDUStr,	// "Activity Pacer Screen"	,82	
+	ActivityDataScreensDUStr,	// "Activity Data Screens"	,83	
+	AutoScrollDUStr,			// "Auto Scroll"			,84	
+	DataScreensDUStr,			// "Data Screens"			,85	
+	AutoPauseDUStr,				// "Auto Pause"				,86	
+	AutoLapDUStr,				// "Auto Lap"				,87	
+	AutoPauseDUStr,				// "Auto Pause"				,88	
+	RecordingPreferencesDUStr,	// "Recording Preferences"	,89	
+	SpeedPacePreferenceDUStr,	// "Speed Pace Preference"	,90	
+	ProfileNameDUStr,			// "Profile Name"			,91	
+	MultiSportSetupDUStr,		// "MultiSport Setup"		,92	
 
 };
 
@@ -478,6 +658,36 @@ const XCHAR *StringTableGE[] = {
 	DeviceInformationGEStr,		// "Device Information"		,60	
 	CurrentActivityProfileGEStr,	// "Current Activity Profile"		,61
 	ActivityProfileSettingsGEStr,	// "Activity Profile Settings"	,62	
+	VerticalSpeedGEStr,			// "Vertical Speed"			,63	
+	TimeGEStr,					// "Time"					,64	
+	SpeedPaceGEStr,				// "Speed/Pace"				,65	
+	GradeGEStr,					// "Grade"					,66	
+	CaloriesGEStr,				// "Calories"				,67	
+	CadenceGEStr,				// "Cadence"				,68	
+	NavigatetoLocationGEStr,	// "Navigate to Location"	,69	
+	MapBreadcrumbGEStr,			// "Map & Breadcrumb"		,70	
+	PowerAlertGEStr,			// "Power Alert"			,71	
+	CadenceAlertGEStr,			// "Cadence Alert"			,72	
+	HeartRateAlertGEStr,		// "Heart Rate Alert"		,73	
+	SpeedPaceAlertGEStr,		// "Speed Pace Alert"		,74	
+	TimeAlertGEStr,				// "Time Alert"				,75	
+	DistanceAlertGEStr,			// "Distance Alert"			,76	
+	CaloriesAlertGEStr,			// "Calories Alert"			,77	
+	TrainingAlertsGEStr,		// "Training Alerts"		,78	
+	PowerZonesGEStr,			// "Power Zones"			,79	
+	HeartRateZonesGEStr,		// "Heart Rate Zones"		,80	
+	TrainingZonesGEStr,			// "Training Zones"			,81	
+	ActivityPacerScreenGEStr,	// "Activity Pacer Screen"	,82	
+	ActivityDataScreensGEStr,	// "Activity Data Screens"	,83	
+	AutoScrollGEStr,			// "Auto Scroll"			,84	
+	DataScreensGEStr,			// "Data Screens"			,85	
+	AutoPauseGEStr,				// "Auto Pause"				,86	
+	AutoLapGEStr,				// "Auto Lap"				,87	
+	AutoPauseGEStr,				// "Auto Pause"				,88	
+	RecordingPreferencesGEStr,	// "Recording Preferences"	,89	
+	SpeedPacePreferenceGEStr,	// "Speed Pace Preference"	,90	
+	ProfileNameGEStr,			// "Profile Name"			,91	
+	MultiSportSetupGEStr,		// "MultiSport Setup"		,92	
 
 };
 
@@ -545,6 +755,36 @@ const XCHAR *StringTableDA[] = {
 	DeviceInformationDAStr,		// "Device Information"		,60	
 	CurrentActivityProfileDAStr,	// "Current Activity Profile"		,61
 	ActivityProfileSettingsDAStr,	// "Activity Profile Settings"	,62	
+	VerticalSpeedDAStr,			// "Vertical Speed"			,63	
+	TimeDAStr,					// "Time"					,64	
+	SpeedPaceDAStr,				// "Speed/Pace"				,65	
+	GradeDAStr,					// "Grade"					,66	
+	CaloriesDAStr,				// "Calories"				,67	
+	CadenceDAStr,				// "Cadence"				,68	
+	NavigatetoLocationDAStr,	// "Navigate to Location"	,69	
+	MapBreadcrumbDAStr,			// "Map & Breadcrumb"		,70	
+	PowerAlertDAStr,			// "Power Alert"			,71	
+	CadenceAlertDAStr,			// "Cadence Alert"			,72	
+	HeartRateAlertDAStr,		// "Heart Rate Alert"		,73	
+	SpeedPaceAlertDAStr,		// "Speed Pace Alert"		,74	
+	TimeAlertDAStr,				// "Time Alert"				,75	
+	DistanceAlertDAStr,			// "Distance Alert"			,76	
+	CaloriesAlertDAStr,			// "Calories Alert"			,77	
+	TrainingAlertsDAStr,		// "Training Alerts"		,78	
+	PowerZonesDAStr,			// "Power Zones"			,79	
+	HeartRateZonesDAStr,		// "Heart Rate Zones"		,80	
+	TrainingZonesDAStr,			// "Training Zones"			,81	
+	ActivityPacerScreenDAStr,	// "Activity Pacer Screen"	,82	
+	ActivityDataScreensDAStr,	// "Activity Data Screens"	,83	
+	AutoScrollDAStr,			// "Auto Scroll"			,84	
+	DataScreensDAStr,			// "Data Screens"			,85	
+	AutoPauseDAStr,				// "Auto Pause"				,86	
+	AutoLapDAStr,				// "Auto Lap"				,87	
+	AutoPauseDAStr,				// "Auto Pause"				,88	
+	RecordingPreferencesDAStr,	// "Recording Preferences"	,89	
+	SpeedPacePreferenceDAStr,	// "Speed Pace Preference"	,90	
+	ProfileNameDAStr,			// "Profile Name"			,91	
+	MultiSportSetupDAStr,		// "MultiSport Setup"		,92	
 
 };
 
