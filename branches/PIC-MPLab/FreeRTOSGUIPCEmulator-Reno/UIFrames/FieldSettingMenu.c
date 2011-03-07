@@ -1901,7 +1901,8 @@ COMMONMENU_HEADER mhCommonMenu_user = {
 	{ 30, NULL, &I16164_Apply, &fhSettingMenu_emergencyinfo },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	&fhSettingMenu_main
 };
 
 FRAME_HEADER fhSettingMenu_user = {
@@ -1976,7 +1977,8 @@ COMMONMENU_HEADER mhCommonMenu_gps = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_gps = {
@@ -2007,7 +2009,8 @@ COMMONMENU_HEADER mhCommonMenu_language = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_language = {
@@ -2038,7 +2041,8 @@ COMMONMENU_HEADER mhCommonMenu_datetime = {
 	{ 38, NULL, &I16164_Apply, &fhSettingMenu_main },
 	{ 39, NULL, &I16164_Apply, &fhSettingMenu_main },
 	{ 0, NULL, NULL, NULL },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_datetime = {
@@ -2069,7 +2073,8 @@ COMMONMENU_HEADER mhCommonMenu_unitsofmeasure = {
 	{ 43, NULL, &I16164_Apply, &fhSettingMenu_main },
 	{ 44, NULL, &I16164_Apply, &fhSettingMenu_main },
 	{ 45, NULL, &I16164_Apply, &fhSettingMenu_main },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_unitsofmeasure = {
@@ -2100,7 +2105,8 @@ COMMONMENU_HEADER mhCommonMenu_display = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_display = {
@@ -2131,7 +2137,8 @@ COMMONMENU_HEADER mhCommonMenu_recording = {
 	{ 51, NULL, &I16164_Apply, &fhSettingMenu_main },
 	{ 52, NULL, &I16164_Apply, &fhSettingMenu_main },
 	{ 53, NULL, &I16164_Apply, &fhSettingMenu_main },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_recording = {
@@ -2162,7 +2169,8 @@ COMMONMENU_HEADER mhCommonMenu_feedback = {
 	{ 57, NULL, &I16164_Apply, &fhSettingMenu_main },
 	{ 58, NULL, &I16164_Apply, &fhSettingMenu_main },
 	{ 0, NULL, NULL, NULL },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_feedback = {
@@ -2193,7 +2201,8 @@ COMMONMENU_HEADER mhCommonMenu_equipment2 = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_equipment2 = {
@@ -2224,7 +2233,8 @@ COMMONMENU_HEADER mhCommonMenu_deviceinfo = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_deviceinfo = {
@@ -2266,7 +2276,8 @@ COMMONMENU_HEADER mhCommonMenu_activity = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_activity = {
@@ -2352,7 +2363,8 @@ COMMONMENU_HEADER mhCommonMenu_ASAPSrecordingpref = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_ASAPSrecordingpref = {
@@ -2383,7 +2395,8 @@ COMMONMENU_HEADER mhCommonMenu_ASAPSdatascreens = {
 	{ 82, NULL, &I16164_Apply, &fhSettingMenu_main },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_ASAPSdatascreens = {
@@ -2447,7 +2460,8 @@ COMMONMENU_HEADER mhCommonMenu_ASAPStrainingzone = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_ASAPStrainingzone = {
@@ -2479,6 +2493,7 @@ COMMONMENU_HEADER mhCommonMenu_ASAPStrainingalerts = {
 	{ 74, NULL, &I16164_Apply, &fhSettingMenu_main },
 	{ 73, NULL, &I16164_Apply, &fhSettingMenu_main },
 	{ 72, NULL, &I16164_Apply, &fhSettingMenu_main },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_ASAPStrainingalerts = {
@@ -2522,7 +2537,8 @@ COMMONMENU_HEADER mhCommonMenu_navigation = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	{ 0, NULL, NULL, NULL }
+	{ 0, NULL, NULL, NULL },
+	NULL
 };
 
 FRAME_HEADER fhSettingMenu_navigation = {
