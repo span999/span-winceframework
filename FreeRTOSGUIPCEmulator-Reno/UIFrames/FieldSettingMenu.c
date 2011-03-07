@@ -1319,52 +1319,13 @@ WORD MsgSettingMenu_SAPSDSADSaddscreenXDefaultBtn(WORD objMsg, OBJ_HEADER* pObj,
     {
 		///case ID_BUTTON: here, if you want different key response.
         case ID_BTN_UP:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				SHORT sLbCount, sFocusedItem;
-				sLbCount = LbGetCount(pLb);
-				sFocusedItem = LbGetFocusedItem(pLb);
-				if( 1 == sFocusedItem )
-					LbSetFocusedItem( pLb, (sLbCount - 1));
-				else
-					LbSetFocusedItem( pLb, (sFocusedItem - 1));
-				LbChangeSel(pLb, pLb->pFocusItem);
-				SetState(pLb, LB_DRAW_ITEMS);
-			}
 			return (0);  	
         case ID_BTN_DOWN:
-            if(objMsg == BTN_MSG_RELEASED)
-			{
-				SHORT sLbCount, sFocusedItem;
-				sLbCount = LbGetCount(pLb);
-				sFocusedItem = LbGetFocusedItem(pLb);
-				if( (sLbCount - 1) == sFocusedItem )
-					LbSetFocusedItem( pLb, 1);
-				else
-					LbSetFocusedItem( pLb, (sFocusedItem + 1));
-				LbChangeSel(pLb, pLb->pFocusItem);
-				SetState(pLb, LB_DRAW_ITEMS);
-			}
 			return (0); 
         case ID_BTN_ENTER:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				SHORT sLbCount, sFocusedItem;
-				sLbCount = LbGetCount(pLb);
-				sFocusedItem = LbGetFocusedItem(pLb);			
-				
-				switch(sFocusedItem)
-				{
-					case 1:	///new screen
-						scrSetNEXT( &fhSettingMenu_main );
-						break;
-					case 2:	///copy last screen
-						scrSetNEXT( &fhSettingMenu_main );
-						break;
-					default:
-						scrSetNEXT( &fhSettingMenu_main );
-						break;
-				}
+				scrSetNEXT( &fhNumEnteryPad );
 			}
 			return (0); 
         case ID_BTN_EXIT:

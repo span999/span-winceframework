@@ -353,8 +353,8 @@ void CreateTextEntryPad(WORD wDrawOption)
 #define NBTN_W	25
 
     GOLFree();                                      // free memory for the objects in the previous linked list and start new list
-	SetColor(BLACK);
-	ClearDevice();	
+//	SetColor(BLACK);
+//	ClearDevice();	
 	CreateDefaultBtn();
 
 	if( 1 == wDrawOption )
