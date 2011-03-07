@@ -30,7 +30,8 @@ GOL_SCHEME      *popupMenuScheme;                           // popup menu style 
 GOL_SCHEME      *dataSetScheme;								// dataset style scheme	
 GOL_SCHEME      *dataSetScheme2;								// dataset style scheme	
 GOL_SCHEME      *windowScheme;								// dataset style scheme	
-GOL_SCHEME      *popupAskScheme;                           // popup ask style scheme
+GOL_SCHEME      *popupAskScheme;                           	// popup ask style scheme
+GOL_SCHEME      *entryPadScheme;							// entry pad style scheme
 
 
 OBJ_HEADER      *pNavList;                                  // pointer to navigation list
@@ -610,6 +611,7 @@ void myCreateScheme( void )
 	dataSetScheme2 = GOLCreateScheme();   // create DataSet style scheme
 	windowScheme = GOLCreateScheme();   // create Window style scheme
 	popupAskScheme = GOLCreateScheme();   // create popup ask style scheme
+	entryPadScheme = GOLCreateScheme();   // create entry pad style scheme
 	
     /* for Truly display */
     altScheme->Color0 = RGB565CONVERT(0x4C, 0x8E, 0xFF);
@@ -678,6 +680,17 @@ void myCreateScheme( void )
     popupAskScheme->TextColorDisabled = BRIGHTRED;
 	popupAskScheme->pFont = (void *)&Monaco_Normal19U;
 	popupAskScheme->CommonBkColor = BRIGHTYELLOW;
+	
+	entryPadScheme->Color0 = GRAY80;	//item background
+    entryPadScheme->Color1 = BLACK;	//reversed
+    entryPadScheme->EmbossDkColor = GRAY20;
+    entryPadScheme->EmbossLtColor = GRAY20;
+    entryPadScheme->ColorDisabled = BRIGHTGREEN;
+    entryPadScheme->TextColor1 = GRAY80;		//reversed
+    entryPadScheme->TextColor0 = BLACK;		//font color
+    entryPadScheme->TextColorDisabled = BRIGHTRED;
+	entryPadScheme->pFont = (void *)&Monaco_Normal23U;
+	entryPadScheme->CommonBkColor = BRIGHTYELLOW;
 	
 	
 ///    altScheme->pFont = (void *)ptrLargeAsianFont;

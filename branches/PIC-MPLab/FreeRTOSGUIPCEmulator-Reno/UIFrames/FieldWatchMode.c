@@ -65,6 +65,239 @@ void PPAskItemsSetUp( SHORT ItemNum, XCHAR *pMsg, void *pIcon, FRAME_HEADER *pFr
 }
 
 
+void CreateTextEntryPadHook(WORD wDrawOption)
+{
+	///create objs for use
+#define NTEXT_H	25
+#define NTEXT_W	25
+#define NBTN_H	25
+#define NBTN_W	25
+
+//    GOLFree();                                      // free memory for the objects in the previous linked list and start new list
+//	SetColor(BLACK);
+//	ClearDevice();	
+//	CreateDefaultBtn();
+
+	if( 1 == wDrawOption )
+	{
+		StCreate(
+			ID_ENTRY_STATICTEXT,
+			((GetMaxX() - (NTEXT_W)) >> 1),
+			((GetMaxY() - (NTEXT_H)) >> 1),
+			((GetMaxX() - (NTEXT_W)) >> 1) + NTEXT_W,
+			((GetMaxY() - (NTEXT_H)) >> 1) + NTEXT_H,                      // dimension
+			LB_DRAW | ST_CENTER_ALIGN | ST_FRAME | LB_FOCUSED,                   // will be dislayed after creation
+			(XCHAR *)"A",
+			entryPadScheme
+		);
+	}
+	else
+	{
+		StCreate(
+			ID_ENTRY_STATICTEXT,
+			((GetMaxX() - (NTEXT_W)) >> 1),
+			((GetMaxY() - (NTEXT_H)) >> 1),
+			((GetMaxX() - (NTEXT_W)) >> 1) + NTEXT_W,
+			((GetMaxY() - (NTEXT_H)) >> 1) + NTEXT_H,                      // dimension
+			LB_DRAW | ST_CENTER_ALIGN | ST_FRAME | LB_FOCUSED,                   // will be dislayed after creation
+			(XCHAR *)"0",
+			entryPadScheme
+		);
+	}
+	
+    BtnCreate
+    (
+        ID_ENTRY_BTN_UP,                 // button ID
+        ((GetMaxX() - (NTEXT_W)) >> 1),
+        ((GetMaxY() - (NTEXT_H)) >> 1) - NBTN_H,
+        ((GetMaxX() - (NTEXT_W)) >> 1) + NTEXT_W,
+        ((GetMaxY() - (NTEXT_H)) >> 1) + NTEXT_H - NBTN_H,                      // dimension
+        0,                         // set radius
+        BTN_DRAW,                   // draw a beveled button
+        (void *)&I16164_Top,                       // no bitmap
+        (XCHAR *)NULL,         // text
+        entryPadScheme
+    );                              // use alternate scheme
+
+    BtnCreate
+    (
+        ID_ENTRY_BTN_DOWN,                 // button ID
+        ((GetMaxX() - (NTEXT_W)) >> 1),
+        ((GetMaxY() - (NTEXT_H)) >> 1) + NBTN_H,
+        ((GetMaxX() - (NTEXT_W)) >> 1) + NTEXT_W,
+        ((GetMaxY() - (NTEXT_H)) >> 1) + NTEXT_H + NBTN_H,                      // dimension
+        0,
+        BTN_DRAW,                   // will be dislayed after creation
+        (void *)&I16164_Bottom,   // use bitmap
+        (XCHAR *)NULL,           // text
+        popupMenuScheme
+    );  
+	
+
+}
+
+WORD MsgTextEntryPadHook(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+        default:
+            return (1);                             // process by default
+    }
+}
+
+WORD MsgTextEntryPadDefaultBtnHook(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+	static XCHAR sIdx = 0;
+	static XCHAR scNum[2];
+	STATICTEXT *pSt;
+	pSt = (STATICTEXT *)GOLFindObject(ID_STATICTEXT1);
+	
+	if( 0 == sIdx )
+	{
+		sIdx = *StGetText(pSt);
+		scNum[0] = sIdx;
+		scNum[1] = '\0';
+	}
+	
+    switch(GetObjID(pObj))
+    {	
+		///case ID_BUTTON: here, if you want different key response.
+        case ID_BTN_UP:
+		case ID_ENTRY_BTN_UP:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				if( 90 == sIdx )
+				{
+					sIdx = 65;
+				}
+				else
+				{
+					sIdx++;
+				}
+				scNum[0] = sIdx;
+				StSetText( pSt, scNum );
+				printf("%d ",*StGetText(pSt));
+				SetState(pSt, ST_DRAW);
+			}
+			return (0);  	
+        case ID_BTN_DOWN:
+		case ID_ENTRY_BTN_DOWN:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				if( 65 == sIdx )
+				{
+					sIdx = 90;
+				}
+				else
+				{
+					sIdx--;
+				}
+				scNum[0] = sIdx;
+				StSetText( pSt, scNum );
+				printf("%d ",*StGetText(pSt));
+				SetState(pSt, ST_DRAW);
+			}
+			return (0); 
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///LbChangeSel(pLb, pLb->pFocusItem);
+				///SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        default:
+            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+    }
+}
+
+void CreateNumEntryPadHook(WORD wDrawOption)
+{
+	CreateTextEntryPadHook(wDrawOption);
+}
+
+
+WORD MsgNumEntryPadHook(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
+{
+    switch(GetObjID(pObj))
+    {
+        default:
+            return (1);                             // process by default
+    }
+}
+
+WORD MsgNumEntryPadDefaultBtnHook(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
+{
+	static XCHAR sIdx = 0;
+	static XCHAR scNum[2];
+	STATICTEXT *pSt;
+	pSt = (STATICTEXT *)GOLFindObject(ID_ENTRY_STATICTEXT);
+	
+	if( 0 == sIdx )
+	{
+		sIdx = *StGetText(pSt);
+		scNum[0] = sIdx;
+		scNum[1] = '\0';
+	}
+	
+    switch(GetObjID(pObj))
+    {	
+		///case ID_BUTTON: here, if you want different key response.
+        case ID_BTN_UP:
+		case ID_ENTRY_BTN_UP:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				if( 57 == sIdx )
+				{
+					sIdx = 48;
+				}
+				else
+				{
+					sIdx++;
+				}
+				scNum[0] = sIdx;
+				StSetText( pSt, scNum );
+				printf("%d ",*StGetText(pSt));
+				SetState(pSt, ST_DRAW);
+			}
+			return (0);  	
+        case ID_BTN_DOWN:
+		case ID_ENTRY_BTN_DOWN:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				if( 48 == sIdx )
+				{
+					sIdx = 57;
+				}
+				else
+				{
+					sIdx--;
+				}
+				scNum[0] = sIdx;
+				StSetText( pSt, scNum );
+				printf("%d ",*StGetText(pSt));
+				SetState(pSt, ST_DRAW);
+			}
+			return (0); 
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				///LbChangeSel(pLb, pLb->pFocusItem);
+				///SetState(pLb, LB_DRAW_ITEMS);
+			}
+			return (0); 
+        default:
+            return (MsgDefaultBtn(objMsg, pObj, pMsg));                 // process by default
+    }
+}
+
+
+
+
+
+
+
+
+
 const XCHAR Time01Str[] = {	0x004D, 0x006F, 0x006E, 0x0064, 0x0061, 0x0079, // Monday
 							0x0000};  
 const XCHAR Time02Str[] = {	0x0046, 0x0065, 0x0062, 0x0020, 0x0032, 0x0038, 0x002C, 0x0020, 0x0032, 0x0030, 0x0031, 0x0031, // Feb 28, 2011
