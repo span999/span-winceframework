@@ -32,6 +32,7 @@ typedef struct
 	COMMONMENUITEM_HEADER		Item4;
 	COMMONMENUITEM_HEADER		Item5;
 	COMMONMENUITEM_HEADER		Item6;
+	FRAME_HEADER* 				pMenuUpFrame;
 } COMMONMENU_HEADER;
 
 extern void CreateCommonMenu(WORD wDrawOption);
