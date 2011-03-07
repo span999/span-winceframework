@@ -150,7 +150,7 @@ WORD MsgTextEntryPadDefaultBtnHook(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 	static XCHAR sIdx = 0;
 	static XCHAR scNum[2];
 	STATICTEXT *pSt;
-	pSt = (STATICTEXT *)GOLFindObject(ID_STATICTEXT1);
+	pSt = (STATICTEXT *)GOLFindObject(ID_ENTRY_STATICTEXT);
 	
 	if( 0 == sIdx )
 	{
@@ -232,7 +232,8 @@ WORD MsgNumEntryPadDefaultBtnHook(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 	STATICTEXT *pSt;
 	pSt = (STATICTEXT *)GOLFindObject(ID_ENTRY_STATICTEXT);
 	
-	if( 0 == sIdx )
+	///if( 0 == sIdx )
+	if(1)
 	{
 		sIdx = *StGetText(pSt);
 		scNum[0] = sIdx;

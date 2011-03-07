@@ -1305,9 +1305,9 @@ void UpdateSettingMenu_SAPSDSADSaddscreenX(WORD wDrawOption)
 
 	cNow[0] = *StGetText(pObj);
 		
-	printf("number pad = %\n", cNow[0]);
+	printf("number pad = %c\n", cNow[0]);
 	
-	if( cNow[0] == 0 || cNow[0] > '6' )
+	if( cNow[0] == 0 || cNow[0] > '6' || cNow[0] == '0' )
 		cNow[0] = '1';
 
     GOLFree();      // free memory for the objects in the previous linked list and start new list
@@ -1425,7 +1425,7 @@ WORD MsgSettingMenu_SAPSDSADSaddscreenXDefaultBtn(WORD objMsg, OBJ_HEADER* pObj,
         case ID_BTN_EXIT:
             if(objMsg == BTN_MSG_RELEASED)
 			{
-				scrSetNEXT( &fhSettingMenu_main );
+				scrSetNEXT( &fhSettingMenu_ASAPSdatascreens );
 			}
 			return (0); 
 
