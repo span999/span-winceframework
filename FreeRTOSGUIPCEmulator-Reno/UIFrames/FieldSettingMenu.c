@@ -1264,7 +1264,7 @@ void CreateSettingMenu_SAPSDSADSaddscreenX(WORD wDrawOption)
 {
     LISTBOX *pLb;
 
-    GOLFree();                                      // free memory for the objects in the previous linked list and start new list
+    GOLFree();      // free memory for the objects in the previous linked list and start new list
 
 	SetColor(BLACK);
 	ClearDevice();	
@@ -1289,7 +1289,90 @@ void CreateSettingMenu_SAPSDSADSaddscreenX(WORD wDrawOption)
 
 	CreateDataSet( 0,  40, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, NULL, Func01Str, Data01Str, Unit01Str);
 	
+	CreateNumEntryPadHook(0);
+	
 }
+
+
+void UpdateSettingMenu_SAPSDSADSaddscreenX(WORD wDrawOption)
+{
+	STATICTEXT *pObj = NULL;
+	static XCHAR cNow[2] = { 0, 0};
+	
+	pObj = (STATICTEXT *)GOLFindObject(ID_ENTRY_STATICTEXT);
+	if( NULL == pObj )
+		return;
+
+	cNow[0] = *StGetText(pObj);
+		
+	printf("number pad = %\n", cNow[0]);
+	
+	if( cNow[0] == 0 || cNow[0] > '6' )
+		cNow[0] = '1';
+
+    GOLFree();      // free memory for the objects in the previous linked list and start new list
+	SetColor(BLACK);
+	ClearDevice();	
+	CreateDefaultBtn();
+	
+	if( cNow[0] == '1' )
+	{
+		CreateDataSet( 0,  0, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, NULL, Func01Str, Data01Str, Unit01Str);
+	}
+	else
+	if( cNow[0] == '2' )
+	{
+		CreateDataSet( 0,  0, GetMaxX(), (GetMaxY()-DEFAULTBTN_HEIGHT)/2, NULL, Func01Str, Data01Str, Unit01Str);
+		CreateDataSet( 0, (GetMaxY()-DEFAULTBTN_HEIGHT)/2, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, NULL, Func02Str, Data02Str, NULL);
+	}
+	else
+	if( cNow[0] == '3' )
+	{
+		CreateDataSet( 0,  0, GetMaxX(), (GetMaxY()-DEFAULTBTN_HEIGHT)/3, NULL, Func03Str, Data03Str, Unit02Str);
+		CreateDataSet( 0, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX(), ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, NULL, Func02Str, Data02Str, NULL);
+		CreateDataSet( 0, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX(), (GetMaxY()-DEFAULTBTN_HEIGHT), NULL, Func04Str, Data04Str, Unit03Str);
+	}
+	else
+	if( cNow[0] == '4' )
+	{
+		CreateDataSet( 0,  0, GetMaxX(), (GetMaxY()-DEFAULTBTN_HEIGHT)/3, NULL, Func03Str, Data03Str, Unit02Str);
+		CreateDataSet( 0, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX(), ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, NULL, Func02Str, Data02Str, NULL);
+		CreateDataSet( 0, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX()/2, (GetMaxY()-DEFAULTBTN_HEIGHT), NULL, Func04Str, Data04Str, Unit03Str);
+		CreateDataSet( GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX(), (GetMaxY()-DEFAULTBTN_HEIGHT), NULL, Func01Str, Data01Str, Unit01Str);
+	}
+	else
+	if( cNow[0] == '5' )
+	{
+		CreateDataSet( 0, 0, GetMaxX(), (GetMaxY()-DEFAULTBTN_HEIGHT)/3, NULL, Func03Str, Data03Str, Unit02Str);
+		CreateDataSet( 0, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, NULL, Func02Str, Data02Str, NULL);
+		CreateDataSet( GetMaxX()/2, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX(), ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, NULL, Func04Str, Data04Str, Unit03Str);
+		CreateDataSet( 0, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX()/2, GetMaxY()-DEFAULTBTN_HEIGHT, NULL, Func01Str, Data01Str, Unit01Str);
+		CreateDataSet( GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, NULL, Func05Str, Data05Str, Unit01Str);
+	}
+	else
+	if( cNow[0] == '6' )
+	{
+		CreateDataSet( 0, 0, GetMaxX()/2, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, NULL, Func03Str, Data03Str, Unit02Str);
+		CreateDataSet( GetMaxX()/2, 0, GetMaxX(), (GetMaxY()-DEFAULTBTN_HEIGHT)/3, NULL, Func02Str, Data02Str, NULL);
+		CreateDataSet( 0, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, NULL, Func04Str, Data04Str, Unit03Str);
+		CreateDataSet( GetMaxX()/2, (GetMaxY()-DEFAULTBTN_HEIGHT)/3, GetMaxX(), ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, NULL, Func01Str, Data01Str, Unit01Str);
+		CreateDataSet( 0, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX()/2, GetMaxY()-DEFAULTBTN_HEIGHT, NULL, Func05Str, Data05Str, Unit01Str);
+		CreateDataSet( GetMaxX()/2, ((GetMaxY()-DEFAULTBTN_HEIGHT)/3)*2, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, NULL, Func06Str, Data06Str, Unit04Str);			
+	}
+	else
+	{
+		CreateDataSet( 0,  0, GetMaxX(), GetMaxY()-DEFAULTBTN_HEIGHT, NULL, Func01Str, Data01Str, Unit01Str);
+	}
+	
+	CreateNumEntryPadHook(0);
+	
+	pObj = (STATICTEXT *)GOLFindObject(ID_ENTRY_STATICTEXT);
+	if( NULL == pObj )
+		return;
+
+	StSetText( pObj, cNow );
+}
+
 
 
 WORD MsgSettingMenu_SAPSDSADSaddscreenX(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
@@ -1311,13 +1394,11 @@ WORD MsgSettingMenu_SAPSDSADSaddscreenX(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *
 
 WORD MsgSettingMenu_SAPSDSADSaddscreenXDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 {
-	LISTBOX *pLb;
 	
-	pLb = (LISTBOX *)GOLFindObject(ID_LISTBOX1);
-
     switch(GetObjID(pObj))
     {
 		///case ID_BUTTON: here, if you want different key response.
+	#if 0	
         case ID_BTN_UP:
 			return (0);  	
         case ID_BTN_DOWN:
@@ -1327,7 +1408,20 @@ WORD MsgSettingMenu_SAPSDSADSaddscreenXDefaultBtn(WORD objMsg, OBJ_HEADER* pObj,
 			{
 				scrSetNEXT( &fhNumEnteryPad );
 			}
-			return (0); 
+			return (0);
+	#else
+        case ID_BTN_UP:
+        case ID_ENTRY_BTN_UP:
+        case ID_BTN_DOWN:
+        case ID_ENTRY_BTN_DOWN:
+			return (MsgNumEntryPadDefaultBtnHook(objMsg, pObj, pMsg));
+	#endif
+        case ID_BTN_ENTER:
+            if(objMsg == BTN_MSG_RELEASED)
+			{
+				//scrSetNEXT( &fhNumEnteryPad );
+			}
+			return (0);
         case ID_BTN_EXIT:
             if(objMsg == BTN_MSG_RELEASED)
 			{
@@ -2398,7 +2492,7 @@ FRAME_HEADER fhSettingMenu_SAPSDSADSaddscreenX = {
 	CreateSettingMenu_SAPSDSADSaddscreenX,
 	MsgSettingMenu_SAPSDSADSaddscreenXDefaultBtn,
 	0,		///no option
-	NULL,
+	UpdateSettingMenu_SAPSDSADSaddscreenX,
 	NULL
 };
 

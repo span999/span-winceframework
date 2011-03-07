@@ -113,6 +113,9 @@
 #define ID_DATASETVALUE4      	(ID_RENO_BASE+22)
 #define ID_DATASETVALUE5      	(ID_RENO_BASE+23)
 #define ID_DATASETVALUE6      	(ID_RENO_BASE+24)
+#define ID_ENTRY_STATICTEXT     (ID_RENO_BASE+25)
+#define ID_ENTRY_BTN_UP     	(ID_RENO_BASE+26)
+#define ID_ENTRY_BTN_DOWN     	(ID_RENO_BASE+27)
 
 
 
@@ -147,12 +150,12 @@ extern GOL_SCHEME      *greenScheme;                               // alternativ
 extern GOL_SCHEME      *yellowScheme;                              // alternative yellow style scheme
 extern OBJ_HEADER      *pNavList;                                  // pointer to navigation list
 
-extern GOL_SCHEME      *popupMenuScheme;                                 // Popup Menu style scheme
-extern GOL_SCHEME      *dataSetScheme;                                 // dataSet style scheme
-extern GOL_SCHEME      *dataSetScheme2;                                 // dataSet style scheme
-extern GOL_SCHEME      *windowScheme;                                 // window style scheme
-extern GOL_SCHEME      *popupAskScheme;                                 // Popup Ask style scheme
-
+extern GOL_SCHEME      *popupMenuScheme;				// Popup Menu style scheme
+extern GOL_SCHEME      *dataSetScheme;					// dataSet style scheme
+extern GOL_SCHEME      *dataSetScheme2;					// dataSet style scheme
+extern GOL_SCHEME      *windowScheme;					// window style scheme
+extern GOL_SCHEME      *popupAskScheme;					// Popup Ask style scheme
+extern GOL_SCHEME      *entryPadScheme;					// entry pad style scheme
 void myCreateScheme( void );
 
 

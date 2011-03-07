@@ -77,6 +77,22 @@ extern void PPAskItemsSetUp( SHORT ItemNum, XCHAR *pMsg, void *pIcon, FRAME_HEAD
 #define 	PPAskItem1SetUp(a,b,c) PPAskItemsSetUp( 1, a, b, c)
 #define 	PPAskItem2SetUp(a,b,c) PPAskItemsSetUp( 2, a, b, c)
 
+
+
+/// entry pad
+extern void CreateTextEntryPadHook(WORD wDrawOption);
+extern WORD MsgTextEntryPadHook(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
+extern WORD MsgTextEntryPadDefaultBtnHook(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg);
+extern void CreateNumEntryPadHook(WORD wDrawOption);
+extern WORD MsgNumEntryPadHook(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg);
+extern WORD MsgNumEntryPadDefaultBtnHook(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg);
+
+
+
+
+
+
+
 ///temp
 extern const XCHAR Ask01Str[];
 extern const XCHAR Ask02Str[];
