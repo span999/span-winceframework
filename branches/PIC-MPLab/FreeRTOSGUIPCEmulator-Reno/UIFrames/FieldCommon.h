@@ -217,4 +217,9 @@ void AddItemList(XCHAR *pText, LISTBOX *pLb, void *pIcon);
 #define DEMODELAY				1000
 
 
+extern FRAME_HEADER fhTextEnteryPad;
+extern FRAME_HEADER fhNumEnteryPad;
+
+
+
 #endif	/*#ifndef __FIELDCOMMON_H__*/
