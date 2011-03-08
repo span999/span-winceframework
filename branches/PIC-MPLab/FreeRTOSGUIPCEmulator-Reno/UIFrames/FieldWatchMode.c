@@ -672,6 +672,8 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	height = GetTextHeight(pNowFont);
 	gcColFntOutTextXY((GetMaxX() - width) >> 1, ((GetMaxY() - height) >> 1)+20, BootupInfo03Str, pNowFont, LIGHTBLUE);
 	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);
 
 	/* multi-language test
 	wStrID = 0;
@@ -860,7 +862,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	}
 
-	if(0)
+	if(1)
 	{
 	XCHAR *pxStr = NULL;
 	SHORT nowY = 0;
@@ -949,11 +951,11 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
-	//DelayMs(DEMODELAY);
-	//DelayMs(DEMODELAY);	
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
 	}
 
-	if(0)
+	if(1)
 	{
 	XCHAR *pxStr = NULL;
 	SHORT nowY = 0;
@@ -1042,8 +1044,8 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	
 	DelayMs(DEMODELAY);
 	DelayMs(DEMODELAY);	
-	//DelayMs(DEMODELAY);
-	//DelayMs(DEMODELAY);	
+	DelayMs(DEMODELAY);
+	DelayMs(DEMODELAY);	
 	}
 
 

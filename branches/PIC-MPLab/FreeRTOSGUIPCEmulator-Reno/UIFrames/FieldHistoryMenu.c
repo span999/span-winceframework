@@ -405,7 +405,7 @@ COMMONMENU_HEADER mhCommonMenu_activityhistory = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	NULL
+	&fhHistoryMenu_main
 };
 
 FRAME_HEADER fhHistoryMenu_activityhistory = {
@@ -438,7 +438,7 @@ COMMONMENU_HEADER mhCommonMenu_AHview = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	NULL
+	&fhHistoryMenu_activityhistory
 };
 
 FRAME_HEADER fhHistoryMenu_AHview = {
@@ -471,7 +471,7 @@ COMMONMENU_HEADER mhCommonMenu_AHdelete = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	NULL
+	&fhHistoryMenu_activityhistory
 };
 
 FRAME_HEADER fhHistoryMenu_AHdelete = {
@@ -505,7 +505,7 @@ COMMONMENU_HEADER mhCommonMenu_activitytotals = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	NULL
+	&fhHistoryMenu_main
 };
 
 FRAME_HEADER fhHistoryMenu_activitytotals = {
@@ -538,7 +538,7 @@ COMMONMENU_HEADER mhCommonMenu_ATview = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	NULL
+	&fhHistoryMenu_activitytotals
 };
 
 FRAME_HEADER fhHistoryMenu_ATview = {
@@ -571,7 +571,7 @@ COMMONMENU_HEADER mhCommonMenu_ATclear = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	NULL
+	&fhHistoryMenu_activitytotals
 };
 
 FRAME_HEADER fhHistoryMenu_ATclear = {
@@ -605,7 +605,7 @@ COMMONMENU_HEADER mhCommonMenu_locationhistory = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	NULL
+	&fhHistoryMenu_main
 };
 
 FRAME_HEADER fhHistoryMenu_locationhistory = {
@@ -638,7 +638,7 @@ COMMONMENU_HEADER mhCommonMenu_LHview = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	NULL
+	&fhHistoryMenu_locationhistory
 };
 
 FRAME_HEADER fhHistoryMenu_LHview = {
@@ -671,7 +671,7 @@ COMMONMENU_HEADER mhCommonMenu_LHdelete = {
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
 	{ 0, NULL, NULL, NULL },
-	NULL
+	&fhHistoryMenu_locationhistory
 };
 
 FRAME_HEADER fhHistoryMenu_LHdelete = {
