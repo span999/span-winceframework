@@ -269,7 +269,7 @@ STATICTEXT *CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHA
 		{	/// 1/2 width
 			pSch = dataSetScheme2;
 			pNowFont = (void *)&Monaco_Normal15U;
-			pSch->pFont = (void *)&Monaco_Normal20U;
+			pSch->pFont = (void *)&Monaco_Normal26U;
 			dataframeoffset = 0;
 			unitoffset = 0;
 		}
@@ -286,7 +286,7 @@ STATICTEXT *CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHA
 	{
 		pSch = dataSetScheme;
 		pNowFont = (void *)&Monaco_Normal20U;
-		pSch->pFont = (void *)&Monaco_Normal41U;
+		pSch->pFont = (void *)&Monaco_Normal45U;
 		dataframeoffset = 5;
 		unitoffset = 2;
 	}
@@ -311,11 +311,53 @@ STATICTEXT *CreateDataSet(SHORT left, SHORT top, SHORT right, SHORT bottom, XCHA
 	///draw the unit
 	if( NULL != pUnit )
 	{
+	if( 0 != unitoffset )
+	{
 		width = (left+(((right-left)-width)>>1))+width;
 		temp = (temp+(((bottom-temp)-height)>>1))+height-dataframeoffset+unitoffset;
-		///pNowFont = (void *)&Monaco_Normal20U;
 		height = GetTextHeight(pNowFont);
 		gcColFntOutTextXY( width+2, temp-height, pUnit, pNowFont, BLACK);
+	}
+	else
+	{
+		SHORT sN;
+		sN = GetTextWidth(pUnit, pNowFont);
+		printf("%d\n", sN);
+		if( 5 == sN )
+		{
+			width = (left+(((right-left)-width)>>1))+width;
+			temp = (temp+(((bottom-temp)-height)>>1))+height-dataframeoffset+unitoffset;
+			height = GetTextHeight(pNowFont);
+			gcColFntOutTextXY( width+2, temp-height, pUnit, pNowFont, BLACK);
+		}
+		else
+		if( 10 == sN )
+		{
+			XCHAR tempStr[] = {0x0062, 0x0000};
+			width = (left+(((right-left)-width)>>1))+width;
+			temp = (temp+(((bottom-temp)-height)>>1))+height-dataframeoffset+unitoffset;
+			height = GetTextHeight(pNowFont);
+			tempStr[0] = pUnit[1];
+			gcColFntOutTextXY( width+2, temp-height, tempStr, pNowFont, BLACK);
+			tempStr[0] = pUnit[0];
+			gcColFntOutTextXY( width+2, temp-height-height+7, tempStr, pNowFont, BLACK);
+
+		}
+		else
+		if( 15 == sN )
+		{
+			XCHAR tempStr[] = {0x0062, 0x0000};
+			width = (left+(((right-left)-width)>>1))+width;
+			temp = (temp+(((bottom-temp)-height)>>1))+height-dataframeoffset+unitoffset;
+			height = GetTextHeight(pNowFont);
+			tempStr[0] = pUnit[2];
+			gcColFntOutTextXY( width+2, temp-height, tempStr, pNowFont, BLACK);
+			tempStr[0] = pUnit[1];
+			gcColFntOutTextXY( width+2, temp-height-height+7, tempStr, pNowFont, BLACK);
+			tempStr[0] = pUnit[0];
+			gcColFntOutTextXY( width+2, temp-height-height-height+7+7, tempStr, pNowFont, BLACK);
+		}
+	}
 	}
 
 	return pObj;
