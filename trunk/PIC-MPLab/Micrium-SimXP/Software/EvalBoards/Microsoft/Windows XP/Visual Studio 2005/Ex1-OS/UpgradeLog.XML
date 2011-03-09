@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="uCOS-II">
+</Property><Property Name="Solution File" Value="D:\workshop\PIC-GUI\Micrium-SimXP\Software\EvalBoards\Microsoft\Windows XP\Visual Studio 2005\Ex1-OS\uCOS-II.sln">
+</Property><Property Name="Date" Value="2011年3月9日">
+</Property><Property Name="Time" Value="11:50">
+</Property></Properties><Event ErrorLevel="2" Project="uCOS-II" Source="uCOS-II.vcproj" Description="The project file 'D:\workshop\PIC-GUI\Micrium-SimXP\Software\EvalBoards\Microsoft\Windows XP\Visual Studio 2005\Ex1-OS\uCOS-II.vcproj' cannot be updated to this Visual Studio 2005 version format because it is read-only on disk. Please set the permissions on the project file and re-open it to migrate the project.">
+</Event><Event ErrorLevel="2" Project="" Source="uCOS-II.sln" Description="Solution file 'D:\workshop\PIC-GUI\Micrium-SimXP\Software\EvalBoards\Microsoft\Windows XP\Visual Studio 2005\Ex1-OS\uCOS-II.sln' cannot be converted because it is read-only on disk. To convert the solution, change the permissions on the solution file to allow modification and re-open it.">
+</Event><Event ErrorLevel="3" Project="" Source="uCOS-II.sln" Description="Not Converted">
+</Event></UpgradeLog>
