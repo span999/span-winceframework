@@ -36,13 +36,13 @@ void PPMenuItemsSetUp( SHORT ItemNum, XCHAR *pMsg, void *pIcon, FRAME_HEADER *pF
 	(*ppThisMI)->pGoFrame = pFrame2Go;
 }
 
-const XCHAR Ask01Str[] = {	0x0041, 0x0073, 0x006B, 0x003F, 0x003F, // Ask??
+const XCHAR Ask01Str[] = {	0x002D, 0x0050, 0x006F, 0x0077, 0x0065, 0x0072, 0x0020, 0x004F, 0x0066, 0x0066, 0x002D,// -Power Off-
 							0x0000};  
 const XCHAR Ask02Str[] = {	0x0041, 0x0072, 0x0065, 0x0020, 0x0079, 0x006F, 0x0075, 0x0020, 0x0073, 0x0075, 0x0072, 0x0065, 0x003F, // Are you sure?
 							0x0000};  
-const XCHAR Ask03Str[] = {	0x0042, 0x0061, 0x0063, 0x006B, 0x0020, 0x002D, 0x003E, 0x0020, 0x004E, 0x006F, // Back -> No
+const XCHAR Ask03Str[] = {	0x0042, 0x0061, 0x0063, 0x006B, 0x002D, 0x003E, 0x004E, 0x006F, // Back->No
 							0x0000};  
-const XCHAR Ask04Str[] = {	0x0045, 0x006E, 0x0074, 0x0065, 0x0072, 0x0020, 0x002D, 0x003E, 0x0020, 0x0059, 0x0065, 0x0073, // Enter -> Yes
+const XCHAR Ask04Str[] = {	0x0045, 0x006E, 0x0074, 0x0065, 0x0072, 0x002D, 0x003E, 0x0059, 0x0065, 0x0073, // Enter->Yes
 							0x0000};  
 
 
@@ -862,7 +862,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 
 	}
 
-	if(1)
+	if(0)
 	{
 	XCHAR *pxStr = NULL;
 	SHORT nowY = 0;
@@ -955,7 +955,7 @@ void CreateDeviceMode_booting(WORD wDrawOption)
 	DelayMs(DEMODELAY);	
 	}
 
-	if(1)
+	if(0)
 	{
 	XCHAR *pxStr = NULL;
 	SHORT nowY = 0;
@@ -1394,13 +1394,9 @@ WORD MsgDeviceMode_popupDefaultBtn(WORD objMsg, OBJ_HEADER* pObj, GOL_MSG *pMsg)
 
 void CreateDeviceMode_popask(WORD wDrawOption)
 {
-//    LISTBOX *pLb;
-//	POPUPITEM_HEADER*	pPopItems;
-//	SHORT	sCount = 0;
 
 	
     GOLFree();                                      // free memory for the objects in the previous linked list and start new list
-
 	CreateDefaultBtn();
 
     BtnCreate
@@ -1410,20 +1406,48 @@ void CreateDeviceMode_popask(WORD wDrawOption)
         0 + POASK_FRAME_OFFSET_H,                         // left, top corner	
         GetMaxX() - POASK_FRAME_OFFSET_W,
         GetMaxY() - POASK_FRAME_OFFSET_H,
-        15,                          // right, bottom corner (with radius = 0)
+        8,                          // right, bottom corner (with radius = 0)
         BTN_DRAW|BTN_TEXTTOP,                   // will be dislayed after creation
         NULL,                       // no bitmap	
         popupAsk.pPopTitle,      // LEFT arrow as text
-        popupAskScheme
+        popupMenuScheme
     );
 
     BtnCreate
     (
+        ID_BUTTON3,             // button ID
+        ((GetMaxX() - POASK_FRAME_W) >> 1),
+        ((GetMaxY() - POASK_FRAME_H) >> 1) - 40,                         // left, top corner	
+        ((GetMaxX() - POASK_FRAME_W) >> 1) + POASK_FRAME_W,
+        ((GetMaxY() - POASK_FRAME_H) >> 1) - 40 + POASK_FRAME_H,
+        0,                          // right, bottom corner (with radius = 0)
+        BTN_DRAW,                   // will be dislayed after creation
+        NULL,                       // no bitmap	
+        Ask01Str,      // LEFT arrow as text
+        popupAskScheme
+    ); 
+
+    BtnCreate
+    (
+        ID_BUTTON4,             // button ID
+        ((GetMaxX() - POASK_FRAME_W) >> 1),
+        ((GetMaxY() - POASK_FRAME_H) >> 1) - 10,                         // left, top corner	
+        ((GetMaxX() - POASK_FRAME_W) >> 1) + POASK_FRAME_W,
+        ((GetMaxY() - POASK_FRAME_H) >> 1) - 10 + POASK_FRAME_H,
+        0,                          // right, bottom corner (with radius = 0)
+        BTN_DRAW,                   // will be dislayed after creation
+        NULL,                       // no bitmap	
+        Ask02Str,      // LEFT arrow as text
+        popupAskScheme
+    ); 
+	
+    BtnCreate
+    (
         ID_BUTTON1,             // button ID
         ((GetMaxX() - POASK_FRAME_W) >> 1),
-        ((GetMaxY() - POASK_FRAME_H) >> 1),                         // left, top corner	
+        ((GetMaxY() - POASK_FRAME_H) >> 1) + 25,                         // left, top corner	
         ((GetMaxX() - POASK_FRAME_W) >> 1) + POASK_FRAME_W,
-        ((GetMaxY() - POASK_FRAME_H) >> 1) + POASK_FRAME_H,
+        ((GetMaxY() - POASK_FRAME_H) >> 1) + 25 + POASK_FRAME_H,
         0,                          // right, bottom corner (with radius = 0)
         BTN_DRAW,                   // will be dislayed after creation
         NULL,                       // no bitmap	
@@ -1435,9 +1459,9 @@ void CreateDeviceMode_popask(WORD wDrawOption)
     (
         ID_BUTTON2,             // button ID
         ((GetMaxX() - POASK_FRAME_W) >> 1),
-        ((GetMaxY() - POASK_FRAME_H) >> 1) + POASK_FRAME_H + 5,                         // left, top corner	
+        ((GetMaxY() - POASK_FRAME_H) >> 1) + 25 + POASK_FRAME_H + 2,                         // left, top corner	
         ((GetMaxX() - POASK_FRAME_W) >> 1) + POASK_FRAME_W,
-        ((GetMaxY() - POASK_FRAME_H) >> 1) + POASK_FRAME_H + POASK_FRAME_H + 5,
+        ((GetMaxY() - POASK_FRAME_H) >> 1) + 25 + POASK_FRAME_H + POASK_FRAME_H + 2,
         0,                          // right, bottom corner (with radius = 0)
         BTN_DRAW,                   // will be dislayed after creation
         NULL,                       // no bitmap	
