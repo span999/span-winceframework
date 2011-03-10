@@ -712,15 +712,15 @@ void myCreateScheme( void )
 	windowScheme->pFont = (void *)&Monaco_Normal20U;
 	windowScheme->CommonBkColor = WHITE;			
 	
-	popupAskScheme->Color0 = GRAY80;	//item background
+	popupAskScheme->Color0 = WHITE;	//item background
     popupAskScheme->Color1 = BLACK;	//reversed
-    popupAskScheme->EmbossDkColor = GRAY20;
-    popupAskScheme->EmbossLtColor = GRAY20;
+    popupAskScheme->EmbossDkColor = WHITE;
+    popupAskScheme->EmbossLtColor = WHITE;
     popupAskScheme->ColorDisabled = BRIGHTGREEN;
     popupAskScheme->TextColor1 = GRAY80;		//reversed
     popupAskScheme->TextColor0 = BLACK;		//font color
     popupAskScheme->TextColorDisabled = BRIGHTRED;
-	popupAskScheme->pFont = (void *)&Monaco_Normal19U;
+	popupAskScheme->pFont = (void *)&Monaco_Normal16U;
 	popupAskScheme->CommonBkColor = BRIGHTYELLOW;
 	
 	entryPadScheme->Color0 = GRAY80;	//item background

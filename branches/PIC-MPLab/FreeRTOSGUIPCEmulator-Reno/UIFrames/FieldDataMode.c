@@ -61,7 +61,8 @@ WORD MsgDefaultBtn_datamodes(WORD objMsg, OBJ_HEADER *pObj, GOL_MSG *pMsg)
 				PPMenuSetUp( 2, IdGetMString(1,gLanguage), scrGetStat() );
 				PPMenuItem1SetUp( IdGetMString(4,gLanguage), &I16164_Clock, &fhWatchMode_watch );
 				{	///setup for fhDeviceMode_popask
-					PPAskSetUp( 2, Ask02Str, scrGetStat() );
+					///PPAskSetUp( 2, Ask02Str, scrGetStat() );
+					PPAskSetUp( 2, NULL, scrGetStat() );
 					PPAskItem1SetUp( Ask03Str, NULL, &fhDeviceMode_poweroff );
 					PPAskItem2SetUp( Ask04Str, NULL, scrGetStat() );
 				}

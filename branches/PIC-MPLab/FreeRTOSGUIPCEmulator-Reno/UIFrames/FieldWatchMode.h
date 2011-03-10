@@ -52,10 +52,10 @@ typedef struct
     POPUPASKLIST_HEADER*		pPopAskList;   /// content of all popup items
 } POPUPASK_HEADER;
 
-#define		POASK_FRAME_OFFSET_W	15
-#define		POASK_FRAME_OFFSET_H	35
-#define		POASK_FRAME_W	90
-#define		POASK_FRAME_H	25
+#define		POASK_FRAME_OFFSET_W	14
+#define		POASK_FRAME_OFFSET_H	14
+#define		POASK_FRAME_W	100
+#define		POASK_FRAME_H	20
 
 
 
