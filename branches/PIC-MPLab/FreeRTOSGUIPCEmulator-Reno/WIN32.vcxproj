@@ -142,6 +142,7 @@
     <ClCompile Include="GUIC\res\1bpp_icons.c" />
     <ClCompile Include="GUIC\res\4bpp_icons.c" />
     <ClCompile Include="GUIC\res\FontAnnabelScript.c" />
+    <ClCompile Include="GUIC\res\FontArialU.c" />
     <ClCompile Include="GUIC\res\FontComic.c" />
     <ClCompile Include="GUIC\res\FontGentium.c" />
     <ClCompile Include="GUIC\res\FontGentiumU.c" />
