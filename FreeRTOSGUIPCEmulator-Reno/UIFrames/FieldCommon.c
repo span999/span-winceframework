@@ -675,7 +675,8 @@ void myCreateScheme( void )
     popupMenuScheme->TextColor0 = BLACK;		//font color
     popupMenuScheme->TextColorDisabled = BRIGHTRED;
 	///popupMenuScheme->pFont = (void *)Gentium_Normal19U;
-	popupMenuScheme->pFont = (void *)&Monaco_Normal19U;
+	///popupMenuScheme->pFont = (void *)&Monaco_Normal19U;
+	popupMenuScheme->pFont = (void *)&Arial_Normal14U;
 	popupMenuScheme->CommonBkColor = BRIGHTYELLOW;			
 
     dataSetScheme->Color0 = GRAY80;	//item background

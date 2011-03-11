@@ -15,6 +15,8 @@
 #include "FontMonacoU.h"
 ///#include "FontMonacoUfontref.h"
 #include "FontMonacoUext.h"
+#include "FontArialU.h"
+#include "FontArialUext.h"
 #endif
 
 #endif	/*#ifndef __FONTS_H__*/
