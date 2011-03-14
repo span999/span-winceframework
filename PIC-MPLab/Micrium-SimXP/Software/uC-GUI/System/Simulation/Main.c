@@ -20,5 +20,7 @@ Purpose     : Call of MainTask
 void MainTask(void);
 
 void main(void) {
-  MainTask();
+	///MainTask_test
+	///MainTask();
+	MainTask_multi();
 }

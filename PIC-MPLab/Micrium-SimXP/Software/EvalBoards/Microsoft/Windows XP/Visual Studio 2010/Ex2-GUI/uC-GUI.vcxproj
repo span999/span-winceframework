@@ -48,7 +48,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\..\..\ucos-ii\source;..\..\..\..\..\ucos-ii\Ports\WIN32;..\..\..\..\..\EvalBoards\Microsoft\Windows XP\Visual Studio 2010\Ex2-GUI;..\..\..\..\..\;..\..\..\..\..\uC-GUI\GUI\Core;..\..\..\..\..\uC-GUI\GUI\WM;..\..\..\..\..\uC-GUI\GUI\Widget;..\..\..\..\..\uC-GUI\config;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\..\ucos-ii\source;..\..\..\..\..\ucos-ii\Ports\WIN32;..\..\..\..\..\EvalBoards\Microsoft\Windows XP\Visual Studio 2010\Ex2-GUI;..\..\..\..\..\;..\..\..\..\..\uC-GUI\GUI\Core;..\..\..\..\..\uC-GUI\GUI\WM;..\..\..\..\..\uC-GUI\GUI\Widget;..\..\..\..\..\uC-GUI\config;..\..\..\..\..\uC-GUI\System\Simulation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -89,6 +89,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo.C" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo_1bpp.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MT_MultiTasking.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\XEye.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAArc.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAChar.c" />
