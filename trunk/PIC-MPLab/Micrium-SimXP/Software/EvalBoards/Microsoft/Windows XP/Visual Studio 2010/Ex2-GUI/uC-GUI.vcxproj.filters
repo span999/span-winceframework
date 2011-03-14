@@ -1897,6 +1897,9 @@
     <ClCompile Include="app.c">
       <Filter>App</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MT_MultiTasking.c">
+      <Filter>App</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_cfg.h">

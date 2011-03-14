@@ -31,7 +31,7 @@ extern const GUI_BITMAP bmMicriumLogo_1bpp;
   *******************************************************************
 */
 
-#if 0
+#if 1
 void MainTask_test(void) {
 #else
 void MainTask(void) {

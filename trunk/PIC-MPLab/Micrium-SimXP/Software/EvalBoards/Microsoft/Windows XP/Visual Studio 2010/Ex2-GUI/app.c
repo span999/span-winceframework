@@ -193,7 +193,7 @@ void  AppTask2 (void *p_arg)
 //    OSStatInit();                                /* Determine CPU capacity                                                     */
 #endif
     
-	MainTask();
+///	MainTask();
 	
     while (TRUE)                                 /* Task body, always written as an infinite loop.                             */
 	{       		
