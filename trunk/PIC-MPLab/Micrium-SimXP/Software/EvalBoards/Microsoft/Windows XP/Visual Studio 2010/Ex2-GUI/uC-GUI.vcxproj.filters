@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="app.c">
-      <Filter>App</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\uCOS-II\Ports\Win32\os_cpu_c.c">
       <Filter>uCOS_II-Port</Filter>
     </ClCompile>
@@ -44,9 +41,6 @@
       <Filter>uCOS-II</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo_1bpp.c">
-      <Filter>uC-GUI\Application</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MainTask.c">
       <Filter>uC-GUI\Application</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo.C">
@@ -1867,6 +1861,42 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MultiLayer\LCD_4.c">
       <Filter>uC-GUI\GUI\MultiLayer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\XEye.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAArc.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAChar2.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAChar4.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAChar.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAACircle.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAALib.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAALine.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAPoly.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAPolyOut.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\Main.c">
+      <Filter>uC-GUI\System\Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="app.c">
+      <Filter>App</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_cfg.h">
@@ -1999,6 +2029,9 @@
     </Filter>
     <Filter Include="uC-GUI\GUI\MultiLayer">
       <UniqueIdentifier>{0e8ddeb8-dc54-4167-931a-0db78ba7bc87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\GUI\AntiAlias">
+      <UniqueIdentifier>{7c3d4e89-f98d-48fd-9904-a74efa7c6a1f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

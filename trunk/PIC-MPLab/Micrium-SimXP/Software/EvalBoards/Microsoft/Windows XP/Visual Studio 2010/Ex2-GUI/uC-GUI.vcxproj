@@ -87,9 +87,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MainTask.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo.C" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo_1bpp.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\XEye.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAArc.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAChar.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAChar2.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAChar4.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAACircle.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAALib.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAALine.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAPoly.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAPolyOut.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP111.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP222.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP233.c" />
@@ -694,8 +703,8 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__SendMessageIfEnabled.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__SendMessageNoPara.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__UpdateChildPositions.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\Main.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\SIM_X.c" />
-    <ClCompile Include="app.c" />
     <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_core.c" />
     <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_dbg_r.c" />
     <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_flag.c" />
@@ -709,6 +718,7 @@
     <ClCompile Include="..\..\..\..\..\ucos-ii\source\os_tmr.c" />
     <ClCompile Include="..\..\..\..\..\uCOS-II\Ports\Win32\os_cpu_c.c" />
     <ClCompile Include="..\..\..\..\..\uCOS-II\Ports\Win32\os_trace.c" />
+    <ClCompile Include="app.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\uC-GUI\Config\GUIConf.h" />
