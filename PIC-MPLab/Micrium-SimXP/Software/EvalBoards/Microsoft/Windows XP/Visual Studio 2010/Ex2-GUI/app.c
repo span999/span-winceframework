@@ -189,6 +189,8 @@ void  AppTask2 (void *p_arg)
 //    OSStatInit();                                /* Determine CPU capacity                                                     */
 #endif
     
+	MainTask();
+	
     while (TRUE)                                 /* Task body, always written as an infinite loop.                             */
 	{       		
 		OS_Printf("Task2:Delay 2 sec and print\n");  /* your code here. Create more tasks, etc.                                    */
