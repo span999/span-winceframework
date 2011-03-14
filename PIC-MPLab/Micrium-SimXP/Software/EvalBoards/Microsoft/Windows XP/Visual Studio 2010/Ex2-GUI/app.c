@@ -63,7 +63,11 @@ static  void  AppTerminalRx(INT8U rx_data);
 *********************************************************************************************************
 */
 
+#if 0
 void main(int argc, char *argv[])
+#else
+void __main(int argc, char *argv[])
+#endif
 {
 	INT8U  err;
 
