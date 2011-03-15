@@ -189,9 +189,12 @@ static void _DemoTransWindow(void) {
 *
 **********************************************************************
 */
-
+#if 0
 void MainTask(void) {
-  GUI_Init();
+#else
+void MainTask_eyes(void) {
+#endif
+	GUI_Init();
   _DemoTransWindow();
 }
 

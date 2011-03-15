@@ -221,7 +221,11 @@ static void _GUI_Task(void) {
   static OS_TASK aTCB[3];               /* Task control blocks */
 #endif
 
+#if 0
+void MainTask(void) {
+#else
 void MainTask_multi(void) {
+#endif
   /* Init GUI */
   GUI_Init();
   WM_SetCreateFlags(WM_CF_MEMDEV);              /* Use memory devices on all windows to avoid flicker */
