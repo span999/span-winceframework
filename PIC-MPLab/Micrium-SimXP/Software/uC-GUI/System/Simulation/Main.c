@@ -17,10 +17,17 @@ Purpose     : Call of MainTask
 --------------------END-OF-HEADER-------------------------------------
 */
 
-void MainTask(void);
+///void MainTask(void);
 
-void main(void) {
-	///MainTask_test();
-	MainTask();
+///void main(void) {
+	///MainTask_test
+	///MainTask();
 	///MainTask_multi();
+///}
+
+void MainTask(void) {
+	///MainTask_test();
+	///MainTask_eyes();
+	///MainTask_multi();
+	MainTask_MultiEdit();
 }

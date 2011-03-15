@@ -1861,6 +1861,9 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MultiLayer\LCD_4.c">
       <Filter>uC-GUI\GUI\MultiLayer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\XEye.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAArc.c">
       <Filter>uC-GUI\GUI\AntiAlias</Filter>
     </ClCompile>
@@ -1888,19 +1891,19 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAPolyOut.c">
       <Filter>uC-GUI\GUI\AntiAlias</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\Main.c">
-      <Filter>uC-GUI\System\Simulation</Filter>
-    </ClCompile>
     <ClCompile Include="app.c">
-      <Filter>App</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MT_MultiTasking.c">
       <Filter>App</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MainTask.c">
       <Filter>uC-GUI\Application</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\XEye.c">
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MT_MultiTasking.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\Main.c">
+      <Filter>uC-GUI\System\Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\WIDGET_Multiedit.c">
       <Filter>uC-GUI\Application</Filter>
     </ClCompile>
   </ItemGroup>

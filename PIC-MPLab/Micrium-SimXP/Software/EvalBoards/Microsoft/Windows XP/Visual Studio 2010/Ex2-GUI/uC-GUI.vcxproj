@@ -49,7 +49,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\..\..\ucos-ii\source;..\..\..\..\..\ucos-ii\Ports\WIN32;..\..\..\..\..\EvalBoards\Microsoft\Windows XP\Visual Studio 2010\Ex2-GUI;..\..\..\..\..\;..\..\..\..\..\uC-GUI\GUI\Core;..\..\..\..\..\uC-GUI\GUI\WM;..\..\..\..\..\uC-GUI\GUI\Widget;..\..\..\..\..\uC-GUI\config;..\..\..\..\..\uC-GUI\System\Simulation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;LCD_USE_WINSIM;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -59,11 +59,11 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>WinMM.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>WinMM.lib;..\..\..\..\..\uC-GUI\System\Simulation\GUISim.lib;..\..\..\..\..\uC-GUI\System\Simulation\Simulation.res;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)uC-GUI.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)uC-GUI.pdb</ProgramDatabaseFile>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalOptions>"..\..\..\..\..\uC-GUI\System\Simulation\GUISim.lib" %(AdditionalOptions)</AdditionalOptions>
       <IgnoreSpecificDefaultLibraries>libc.lib</IgnoreSpecificDefaultLibraries>
@@ -91,6 +91,7 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo.C" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo_1bpp.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MT_MultiTasking.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\WIDGET_Multiedit.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\XEye.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAArc.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAChar.c" />
