@@ -87,6 +87,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MainTask.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo.C" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo_1bpp.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MT_MultiTasking.c" />
