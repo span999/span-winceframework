@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="uCOS-II"
+	Name="uC-GUI"
 	ProjectGUID="{7FBC7CA1-DFFA-4A1B-AB20-2BCB2E622C6E}"
 	RootNamespace="uC-GUI"
 	Keyword="Win32Proj"
