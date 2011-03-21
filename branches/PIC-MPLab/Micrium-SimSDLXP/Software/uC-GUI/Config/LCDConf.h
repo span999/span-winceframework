@@ -27,8 +27,18 @@ Purpose     : Sample configuration file
 **********************************************************************
 */
 
+#ifdef _USE_SDL_LCD
+#ifdef _USE_RENO_DEV	/// for reno config
+#define LCD_XSIZE      (144)   /* X-resolution of LCD, Logical coor. */
+#define LCD_YSIZE      (168)   /* Y-resolution of LCD, Logical coor. */
+#else
+#define LCD_XSIZE      (320)   /* X-resolution of LCD, Logical coor. */
+#define LCD_YSIZE      (240)   /* Y-resolution of LCD, Logical coor. */
+#endif
+#else
 #define LCD_XSIZE      (640)   /* X-resolution of LCD, Logical coor. */
 #define LCD_YSIZE      (480)   /* Y-resolution of LCD, Logical coor. */
+#endif
 
 #define LCD_BITSPERPIXEL (8)
 //#define LCD_BITSPERPIXEL (16)

@@ -18,6 +18,7 @@ Purpose     : Call of MainTask
 */
 
 ///void MainTask(void);
+void GUIDEMO_main(void);
 
 ///void main(void) {
 	///MainTask_test
@@ -29,5 +30,6 @@ void MainTask(void) {
 	///MainTask_test();
 	///MainTask_eyes();
 	///MainTask_multi();
-	MainTask_MultiEdit();
+	///MainTask_MultiEdit();
+	GUIDEMO_main();
 }
