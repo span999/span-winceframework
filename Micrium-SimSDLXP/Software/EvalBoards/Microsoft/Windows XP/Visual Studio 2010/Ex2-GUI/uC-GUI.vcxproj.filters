@@ -1906,6 +1906,75 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\WIDGET_Multiedit.c">
       <Filter>uC-GUI\Application</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Automotive.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Bitmap4bpp.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Bitmap.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Circle.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_ColorBar.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_ColorList.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Cursor.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Dialog.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Font.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_FrameWin.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Graph.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_HardwareInfo.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Intro.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_LUT.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_MemDevB.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Messagebox.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Navi.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Polygon.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_ProgBar.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Speed.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Touch.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\SeggerLogoBlue.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_cfg.h">
@@ -2041,6 +2110,9 @@
     </Filter>
     <Filter Include="uC-GUI\GUI\AntiAlias">
       <UniqueIdentifier>{7c3d4e89-f98d-48fd-9904-a74efa7c6a1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\Application\GUIDemo">
+      <UniqueIdentifier>{30e025f5-2b20-4fa9-9791-6c5b126d822b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
