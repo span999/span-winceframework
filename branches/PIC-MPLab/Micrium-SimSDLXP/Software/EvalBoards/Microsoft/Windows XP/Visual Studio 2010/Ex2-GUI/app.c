@@ -26,6 +26,8 @@
 #define  TASK_START_PRIO    5
 #define  TASK_1_PRIO		(TASK_START_PRIO+1)
 #define  TASK_2_PRIO		(TASK_START_PRIO+2)
+#define  TASK_3_PRIO		(TASK_START_PRIO+3)
+#define  TASK_4_PRIO		(TASK_START_PRIO+4)
 #define  TASK_1_ID			(TASK_START_PRIO+1)
 #define  TASK_2_ID			(TASK_START_PRIO+2)
 #define  TASK_3_ID			(TASK_START_PRIO+3)
@@ -81,7 +83,7 @@ void __main(int argc, char *argv[])
 {
 	INT8U  err;
 
-	printf("\nOS start!!!\n");
+	OS_Printf("\nmain start!!!\n");
 	fflush(stdout);
 #if 0
     BSP_IntDisAll();                       /* For an embedded target, disable all interrupts until we are ready to accept them */
@@ -134,6 +136,8 @@ void __main(int argc, char *argv[])
 
 	AppTaskCreate();		
 
+
+	OS_Printf("\nabout to start all tasks !!!\n");
     OSStart();                             /* Start multitasking (i.e. give control to uC/OS-II)                               */
 }
 /*$PAGE*/
@@ -237,7 +241,8 @@ static  void  AppTaskCreate(void)
   OSTaskCreateExt(AppTaskUserIF,
 					(void *)0,
 					(OS_STK *)&AppTaskUserIFStk[APP_TASK_USER_IF_STK_SIZE-1],
-					APP_TASK_USER_IF_PRIO,
+			//		APP_TASK_USER_IF_PRIO,
+					TASK_3_PRIO,
 					TASK_3_ID,
 					(OS_STK *)&AppTaskUserIFStk[0],
                     APP_TASK_USER_IF_STK_SIZE,
@@ -246,14 +251,15 @@ static  void  AppTaskCreate(void)
 
 
 #if (OS_TASK_NAME_SIZE > 8)
-  OSTaskNameSet(APP_TASK_USER_IF_PRIO, "User I/F", &err);
+  OSTaskNameSet(APP_TASK_USER_IF_PRIO, "User_IF", &err);
 #endif
 
 
   OSTaskCreateExt(AppTaskKbd,
 					(void *)0,
 					(OS_STK *)&AppTaskKbdStk[APP_TASK_KBD_STK_SIZE-1],
-					APP_TASK_KBD_PRIO,
+			//		APP_TASK_KBD_PRIO,
+					TASK_4_PRIO,
 					TASK_4_ID,
 					(OS_STK *)&AppTaskKbdStk[0],
                     APP_TASK_KBD_STK_SIZE,
@@ -283,15 +289,14 @@ static  void  AppTaskCreate(void)
 
 static  void  AppTaskUserIF (void *p_arg)
 {
-		printf("\nAppTaskUserIF !!!\n");
-		///fflush(stdout);
+	OS_Printf("\nAppTaskUserIF !!!\n");
 	///(void)p_arg;
 
 	// GUI_Init();
 	while(DEF_TRUE) 
     {
-		printf("\nAppTaskUserIF !!!\n");
-		///fflush(stdout);
+		OS_Printf("\nAppTaskUserIF !!!\n");
+		OSTimeDlyHMSM(0,0,1,0);
 		///MainTask_GUI(); 
 //	  	GUIDEMO_Touch();
     }
@@ -326,7 +331,7 @@ static  void  AppTaskKbd (void *p_arg)
 		{
 		    ///GPIO_SetBits(GPIOD,GPIO_Pin_8);
 			///GPIO_ResetBits(GPIOD,GPIO_Pin_11);
-			printf("\nAppTaskKbd !!");
+			OS_Printf("\nAppTaskKbd !!");
 		}
 		else
 		{
