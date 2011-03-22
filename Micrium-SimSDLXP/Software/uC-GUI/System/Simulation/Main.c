@@ -18,7 +18,22 @@ Purpose     : Call of MainTask
 */
 
 ///void MainTask(void);
+
+#ifdef TEST_PROJ
+void MainTask_test(void);
+#endif
+#ifdef MEDIT_PROJ
+void MainTask_MultiEdit(void);
+#endif
+#ifdef EYES_PROJ
+void MainTask_eyes(void);
+#endif
+#ifdef GUIDEMO_PROJ
 void GUIDEMO_main(void);
+#endif
+#ifdef DASHBOARD_PROJ
+void MainTask_DashB(void);
+#endif
 
 ///void main(void) {
 	///MainTask_test
@@ -27,9 +42,20 @@ void GUIDEMO_main(void);
 ///}
 
 void MainTask(void) {
-	///MainTask_test();
-	///MainTask_eyes();
+#ifdef TEST_PROJ
+	MainTask_test();
+#endif
+#ifdef EYES_PROJ
+	MainTask_eyes();
+#endif
 	///MainTask_multi();
-	///MainTask_MultiEdit();
+#ifdef MEDIT_PROJ
+	MainTask_MultiEdit();
+#endif
+#ifdef GUIDEMO_PROJ	
 	GUIDEMO_main();
+#endif
+#ifdef DASHBOARD_PROJ	
+	MainTask_DashB();
+#endif	
 }
