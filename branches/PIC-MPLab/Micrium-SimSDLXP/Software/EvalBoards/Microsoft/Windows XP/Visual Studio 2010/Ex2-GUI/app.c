@@ -275,6 +275,10 @@ static  void  AppTaskCreate(void)
 }
 
 
+#if defined(OS_PLUS_GUI)
+void MainTask_GUI(void);
+#endif
+
 /*
 *********************************************************************************************************
 *                                         USER INTERFACE TASK
@@ -297,7 +301,7 @@ static  void  AppTaskUserIF (void *p_arg)
     {
 		OS_Printf("\nAppTaskUserIF !!!\n");
 		OSTimeDlyHMSM(0,0,1,0);
-		///MainTask_GUI(); 
+		MainTask_GUI(); 
 //	  	GUIDEMO_Touch();
     }
 }

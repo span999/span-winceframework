@@ -1,15 +1,6 @@
 /*
 *********************************************************************************************************
 *                                                uC/GUI
-*                        Universal graphic software for embedded applications
-*
-*                       (c) Copyright 2002, Micrium Inc., Weston, FL
-*                       (c) Copyright 2002, SEGGER Microcontroller Systeme GmbH
-*
-*              µC/GUI is protected by international copyright laws. Knowledge of the
-*              source code may not be used to write a similar product. This file may
-*              only be used in accordance with a license and should not be redistributed
-*              in any way. We appreciate your understanding and fairness.
 *
 ----------------------------------------------------------------------
 File        : LCDNull.C
@@ -19,7 +10,7 @@ Purpose     : Empty driver
 ----------------------------------------------------------------------   
 Version-Date---Author-Explanation                                        
 ----------------------------------------------------------------------   
-0.90.00 030627 JE     a) First release
+
 ---------------------------END-OF-HEADER------------------------------
 */
 
@@ -38,9 +29,20 @@ Version-Date---Author-Explanation
 
   Logging - required only for higher debug levels
 */
-void GUI_X_Log     (const char *s)     { /*SIM_Log(s);*/ }
-void GUI_X_Warn    (const char *s)     { /*SIM_Warn(s);*/ }
-void GUI_X_ErrorOut(const char *s)     { /*SIM_ErrorOut(s);*/ }
+void GUI_X_Log (const char *s)
+{
+	/*SIM_Log(s);*/ 
+}
+
+void GUI_X_Warn (const char *s)     
+{ 
+	/*SIM_Warn(s);*/
+}
+
+void GUI_X_ErrorOut (const char *s)     
+{ 
+	/*SIM_ErrorOut(s);*/ 
+}
 
 
 /*********************************************************************
@@ -153,7 +155,11 @@ void LCD_Off(void) {}
 *       LCD_L0_Init
 */
 int LCD_L0_Init(void) {
-  return 0;
+	/// init the SDL
+	///SDLInit();	
+	///SDLScreenCallbackSet(TransIOMsg);
+
+	return 0;
 }
 
 /*********************************************************************
