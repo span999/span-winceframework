@@ -1975,6 +1975,9 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\SeggerLogoBlue.c">
       <Filter>uC-GUI\Application\GUIDemo</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\Dashboard.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_cfg.h">
