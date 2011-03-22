@@ -43,10 +43,17 @@ Purpose     : Example demonstrates MultiTasking capabilities of emWin
   #define START_MT()  OS_Terminate(0)
   #define Delay(t)    OS_Delay(t)
 #else
+	#ifdef USE_SDL_LCD
+  ///#include "RTOS.h"    /* Definitions for embOS */
+  #define CREATE_TASK(pTCB, pName, pFunc, Priority, pStack)  OS_CREATETASK(pTCB, pName, pFunc, Priority, pStack)
+  #define START_MT()  OS_Terminate(0)
+  #define Delay(t)    OS_Delay(t)
+	#else
   #include "SIM.h"     /* Definitions for the Win32 simulation */
   #define CREATE_TASK(pTCB, pName, pFunc, Priority, pStack)   SIM_CreateTask(pName, pFunc)
   #define START_MT()  SIM_Start()
   #define Delay(t)    SIM_Delay(t)
+	#endif
 #endif
 
 /*******************************************************************

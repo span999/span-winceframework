@@ -37,7 +37,6 @@ Purpose     : Glue code for including the configured driver
 *
 **********************************************************************
 */
-
 #include "LCD_L0_Generic.c"
 
 /*********************************************************************
@@ -91,7 +90,11 @@ Purpose     : Glue code for including the configured driver
     #error LCD Config error !
   #endif
 #else
-  #include "LCDWin.c"
+	#if defined(USE_SDL_LCD)
+		#include "LCDSDL.c"
+	#else
+		#include "LCDWin.c"
+	#endif
 #endif
 
 #endif /* LCD_INCLUDEDRIVER_H */

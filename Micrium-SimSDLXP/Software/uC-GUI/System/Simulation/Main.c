@@ -41,7 +41,11 @@ void MainTask_DashB(void);
 	///MainTask_multi();
 ///}
 
+#if defined(OS_PLUS_GUI)
+void MainTask_GUI(void) {
+#else
 void MainTask(void) {
+#endif
 #ifdef TEST_PROJ
 	MainTask_test();
 #endif

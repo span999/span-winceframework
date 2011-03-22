@@ -1081,12 +1081,6 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WMTouch.c">
       <Filter>uC-GUI\GUI\WM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\SIM_X.c">
-      <Filter>uC-GUI\System\Simulation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\LCDDriver\LCDWin.c">
-      <Filter>uC-GUI\GUI\LCDDriver</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV.c">
       <Filter>uC-GUI\GUI\MemDev</Filter>
     </ClCompile>
@@ -1897,9 +1891,6 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MainTask.c">
       <Filter>uC-GUI\Application</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MT_MultiTasking.c">
-      <Filter>uC-GUI\Application</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\Main.c">
       <Filter>uC-GUI\System\Simulation</Filter>
     </ClCompile>
@@ -1977,6 +1968,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\Dashboard.c">
       <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\GUI_X_set.c">
+      <Filter>uC-GUI\System\Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\LCDDriver\LCDSDL.c">
+      <Filter>uC-GUI\GUI\LCDDriver</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
