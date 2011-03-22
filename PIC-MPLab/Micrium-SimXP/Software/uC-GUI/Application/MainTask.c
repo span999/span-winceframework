@@ -17,6 +17,8 @@
 */
 
 
+#if defined(TEST_PROJ)
+
 #include "GUI.h"
 
 extern const GUI_BITMAP bmMicriumLogo;
@@ -78,3 +80,6 @@ void MainTask_test(void) {
   GUI_DispStringHCenterAt("Micriµm Inc.",LCDXSize/2,YPos+60);;
   GUI_Delay(1000);
 }
+
+
+#endif	/* #if defined(TEST_PROJ) */

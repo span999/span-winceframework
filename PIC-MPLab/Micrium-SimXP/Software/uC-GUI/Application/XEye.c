@@ -22,6 +22,8 @@ Purpose     : Demonstrates the use of transparent windows
 #include "GUI.h"
 #include "FRAMEWIN.h"
 
+#if defined(EYES_PROJ)
+
 /*********************************************************************
 *
 *       defines
@@ -199,3 +201,4 @@ void MainTask_eyes(void) {
 }
 
 
+#endif	/* #if defined(EYES_PROJ) */
