@@ -57,6 +57,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalOptions>/D "_USE_SDL_LCD" /D "TEST_PROJ" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>WinMM.lib;..\..\..\..\..\uC-GUI\System\Simulation\GUISim.lib;..\..\..\..\..\uC-GUI\System\Simulation\Simulation.res;%(AdditionalDependencies)</AdditionalDependencies>
@@ -87,6 +88,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\Dashboard.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Automotive.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Bitmap.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Bitmap4bpp.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Circle.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_ColorBar.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_ColorList.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Cursor.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Dialog.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Font.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_FrameWin.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Graph.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_HardwareInfo.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Intro.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_LUT.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_MemDevB.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Messagebox.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Navi.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Polygon.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_ProgBar.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Speed.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Touch.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\SeggerLogoBlue.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MainTask.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo.C" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo_1bpp.c" />

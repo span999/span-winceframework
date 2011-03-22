@@ -30,6 +30,8 @@ Purpose     : Demonstrates the use of the MULTIEDIT widget.
 **********************************************************************
 */
 
+#if defined(MEDIT_PROJ)
+
 #define SPEED         1000
 
 #define MIN_SIZE_X    200
@@ -433,3 +435,7 @@ void MainTask_MultiEdit(void) {
     GUI_Delay(SPEED);
   }
 }
+
+
+
+#endif	/* #if defined(MEDIT_PROJ) */
