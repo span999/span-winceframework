@@ -77,7 +77,8 @@ void  GUI_X_Delay (int period)
 */
 void GUI_X_ExecIdle (void) 
 {
-    OS_X_Delay(1);
+    ///OS_X_Delay(1);
+	OSTimeDly(50);
 }
 
 

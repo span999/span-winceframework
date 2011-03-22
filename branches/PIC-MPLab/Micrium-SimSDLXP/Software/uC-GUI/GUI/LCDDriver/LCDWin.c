@@ -54,7 +54,6 @@ Known problems or limitations with current version
 */
 
 #if defined(WIN32) && !defined(LCD_SIMCONTROLLER)
-
 #include <windows.h>
 #include "LCD.h"
 #include "LCD_Private.h"              /* include LCDConf.h */

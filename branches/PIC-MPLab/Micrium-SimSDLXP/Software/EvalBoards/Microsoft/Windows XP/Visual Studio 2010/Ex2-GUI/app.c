@@ -28,6 +28,8 @@
 #define  TASK_2_PRIO		(TASK_START_PRIO+2)
 #define  TASK_1_ID			(TASK_START_PRIO+1)
 #define  TASK_2_ID			(TASK_START_PRIO+2)
+#define  TASK_3_ID			(TASK_START_PRIO+3)
+#define  TASK_4_ID			(TASK_START_PRIO+4)
 
 
 /*
@@ -40,6 +42,9 @@ OS_STK        AppStartTaskStk[TASK_STK_SIZE];
 OS_STK        AppTask1Stk[TASK_STK_SIZE];
 OS_STK        AppTask2Stk[TASK_STK_SIZE];
 
+OS_STK		AppTaskUserIFStk[APP_TASK_USER_IF_STK_SIZE];
+OS_STK		AppTaskKbdStk[APP_TASK_KBD_STK_SIZE];
+
 /*
 *********************************************************************************************************
 *                                            FUNCTION PROTOTYPES
@@ -49,6 +54,11 @@ OS_STK        AppTask2Stk[TASK_STK_SIZE];
 static  void  AppStartTask(void *p_arg);
 static  void  AppTask1(void *p_arg);
 static  void  AppTask2(void *p_arg);
+
+static  void  AppTaskCreate(void);
+static void AppTaskUserIF(void *p_arg);
+static void AppTaskKbd(void *p_arg);
+
 
 #if OS_VIEW_MODULE > 0
 static  void  AppTerminalRx(INT8U rx_data);
@@ -63,7 +73,7 @@ static  void  AppTerminalRx(INT8U rx_data);
 *********************************************************************************************************
 */
 
-#if 0
+#ifdef OS_PLUS_GUI
 void main(int argc, char *argv[])
 #else
 void __main(int argc, char *argv[])
@@ -71,7 +81,8 @@ void __main(int argc, char *argv[])
 {
 	INT8U  err;
 
-
+	printf("\nOS start!!!\n");
+	fflush(stdout);
 #if 0
     BSP_IntDisAll();                       /* For an embedded target, disable all interrupts until we are ready to accept them */
 #endif
@@ -106,20 +117,22 @@ void __main(int argc, char *argv[])
                     (OS_STK *)&AppTask2Stk[0],
                     TASK_STK_SIZE,
                     (void *)0,
-                    OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR);
-
+                    OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR);		
+					
 					
 #if OS_TASK_NAME_SIZE > 11
     OSTaskNameSet(APP_TASK_START_PRIO, (INT8U *)"Start Task", &err);
 #endif
 
 #if OS_TASK_NAME_SIZE > 14
-    OSTaskNameSet(OS_IDLE_PRIO, (INT8U *)"uC/OS-II Idle", &err);
+///    OSTaskNameSet(OS_IDLE_PRIO, (INT8U *)"uC/OS-II Idle", &err);
 #endif
 
 #if (OS_TASK_NAME_SIZE > 14) && (OS_TASK_STAT_EN > 0)
-    OSTaskNameSet(OS_STAT_PRIO, "uC/OS-II Stat", &err);
+///    OSTaskNameSet(OS_STAT_PRIO, "uC/OS-II Stat", &err);
 #endif
+
+	AppTaskCreate();		
 
     OSStart();                             /* Start multitasking (i.e. give control to uC/OS-II)                               */
 }
@@ -204,6 +217,128 @@ void  AppTask2 (void *p_arg)
 
 
 
+
+/*
+*********************************************************************************************************
+*                                      CREATE APPLICATION TASKS
+*
+* Description:  This function creates the application tasks.
+*
+* Arguments  :  none
+*
+* Returns    :  none
+*********************************************************************************************************
+*/
+
+static  void  AppTaskCreate(void)
+{
+  INT8U  err;
+
+  OSTaskCreateExt(AppTaskUserIF,
+					(void *)0,
+					(OS_STK *)&AppTaskUserIFStk[APP_TASK_USER_IF_STK_SIZE-1],
+					APP_TASK_USER_IF_PRIO,
+					TASK_3_ID,
+					(OS_STK *)&AppTaskUserIFStk[0],
+                    APP_TASK_USER_IF_STK_SIZE,
+                    (void *)0,
+                    OS_TASK_OPT_STK_CHK|OS_TASK_OPT_STK_CLR);
+
+
+#if (OS_TASK_NAME_SIZE > 8)
+  OSTaskNameSet(APP_TASK_USER_IF_PRIO, "User I/F", &err);
+#endif
+
+
+  OSTaskCreateExt(AppTaskKbd,
+					(void *)0,
+					(OS_STK *)&AppTaskKbdStk[APP_TASK_KBD_STK_SIZE-1],
+					APP_TASK_KBD_PRIO,
+					TASK_4_ID,
+					(OS_STK *)&AppTaskKbdStk[0],
+                    APP_TASK_KBD_STK_SIZE,
+                    (void *)0,
+                    OS_TASK_OPT_STK_CHK|OS_TASK_OPT_STK_CLR);
+
+#if (OS_TASK_NAME_SIZE > 8)
+  OSTaskNameSet(APP_TASK_KBD_PRIO, "Keyboard", &err);
+#endif
+
+
+  
+}
+
+
+/*
+*********************************************************************************************************
+*                                         USER INTERFACE TASK
+*
+* Description : This task updates the LCD screen based on messages passed to it by AppTaskKbd().
+*
+* Arguments   : p_arg   is the argument passed to 'AppStartUserIF()' by 'OSTaskCreate()'.
+*
+* Returns     : none
+*********************************************************************************************************
+*/
+
+static  void  AppTaskUserIF (void *p_arg)
+{
+		printf("\nAppTaskUserIF !!!\n");
+		///fflush(stdout);
+	///(void)p_arg;
+
+	// GUI_Init();
+	while(DEF_TRUE) 
+    {
+		printf("\nAppTaskUserIF !!!\n");
+		///fflush(stdout);
+		///MainTask_GUI(); 
+//	  	GUIDEMO_Touch();
+    }
+}
+
+
+/*
+*********************************************************************************************************
+*                                    KEYBOARD RESPONSE TASK
+*
+* Description : This task monitors the state of the push buttons and passes messages to AppTaskUserIF()
+*
+* Arguments   : p_arg   is the argument passed to 'AppStartKbd()' by 'OSTaskCreate()'.
+*
+* Returns     : none
+*********************************************************************************************************
+*/
+
+static  void  AppTaskKbd (void *p_arg)
+{
+	///u8 tick=0;
+	INT8U tick = 0;
+	(void)p_arg;
+	
+	while(DEF_TRUE) 
+    {
+		tick++;
+        ///OSTimeDlyHMSM(0,0,0,10);
+		OSTimeDlyHMSM(0,0,0,100); 
+///		GUI_TOUCH_Exec(); 
+		if(tick&0x10)
+		{
+		    ///GPIO_SetBits(GPIOD,GPIO_Pin_8);
+			///GPIO_ResetBits(GPIOD,GPIO_Pin_11);
+			printf("\nAppTaskKbd !!");
+		}
+		else
+		{
+		 	///GPIO_ResetBits(GPIOD,GPIO_Pin_8);
+			///GPIO_SetBits(GPIOD,GPIO_Pin_11);
+		}
+	   ;
+	   /*	 
+		OSTimeDlyHMSM(0,0,0,500);
+		*/
+	}
+}
 
 
 

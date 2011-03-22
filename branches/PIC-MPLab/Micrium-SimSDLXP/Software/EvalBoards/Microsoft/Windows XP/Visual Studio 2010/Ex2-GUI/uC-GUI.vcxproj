@@ -49,7 +49,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\..\..\ucos-ii\source;..\..\..\..\..\ucos-ii\Ports\WIN32;..\..\..\..\..\EvalBoards\Microsoft\Windows XP\Visual Studio 2010\Ex2-GUI;..\..\..\..\..\;..\..\..\..\..\uC-GUI\GUI\Core;..\..\..\..\..\uC-GUI\GUI\WM;..\..\..\..\..\uC-GUI\GUI\Widget;..\..\..\..\..\uC-GUI\config;..\..\..\..\..\uC-GUI\System\Simulation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;LCD_USE_WINSIM;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;LCD_USE_WINSIM;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -57,16 +57,15 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalOptions>/D "_USE_SDL_LCD" /D "TEST_PROJ" %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/D "USE_SDL_LCD" /D "OS_PLUS_GUI" /D "TEST_PROJ" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>WinMM.lib;..\..\..\..\..\uC-GUI\System\Simulation\GUISim.lib;..\..\..\..\..\uC-GUI\System\Simulation\Simulation.res;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>WinMM.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)uC-GUI.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)uC-GUI.pdb</ProgramDatabaseFile>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalOptions>"..\..\..\..\..\uC-GUI\System\Simulation\GUISim.lib" %(AdditionalOptions)</AdditionalOptions>
       <IgnoreSpecificDefaultLibraries>libc.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -115,7 +114,6 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MainTask.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo.C" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo_1bpp.c" />
-    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MT_MultiTasking.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\WIDGET_Multiedit.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\XEye.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAArc.c" />
@@ -400,7 +398,7 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FD60x80.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FD64.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FD80.c" />
-    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\LCDDriver\LCDWin.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\LCDDriver\LCDSDL.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_1.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_16.c" />
@@ -731,8 +729,8 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__SendMessageIfEnabled.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__SendMessageNoPara.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__UpdateChildPositions.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\GUI_X_set.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\Main.c" />
-    <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\SIM_X.c" />
     <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_core.c" />
     <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_dbg_r.c" />
     <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_flag.c" />
