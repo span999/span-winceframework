@@ -18,6 +18,8 @@
 #ifndef HAVE_BOOLEAN
 typedef int boolean;
 typedef int bool;
+typedef int BOOL;
+typedef int SHORT;
 #endif
 #ifndef FALSE			/* in case these macros already exist */
 #define FALSE	0		/* values of boolean */

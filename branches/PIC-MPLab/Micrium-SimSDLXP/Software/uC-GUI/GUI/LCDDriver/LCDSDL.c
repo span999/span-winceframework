@@ -20,6 +20,7 @@ Version-Date---Author-Explanation
 
 ///for SDL
 #include "SDLdefine.h"
+#include <SDL.h>
 #include "..\..\System\SDLDislpayEmulator\SDLDisplay.h"
 
 ///#if (LCD_CONTROLLER == -2) \
@@ -232,6 +233,201 @@ void GUI_X_ErrorOut (const char *s)
 
 /*********************************************************************
 *
+*       SDL specified functions
+*
+**********************************************************************
+*/
+
+void Lock(SDL_Surface *screen)
+{
+	if ( SDL_MUSTLOCK(screen) )
+	{
+		if ( SDL_LockSurface(screen) < 0 )
+		{
+			//exit(1);
+		}
+	}
+}
+
+
+void Unlock(SDL_Surface *screen)
+{
+	if ( SDL_MUSTLOCK(screen) )
+	{
+		SDL_UnlockSurface(screen);
+	}
+}
+
+
+#define GetMaxX()   (320 - 1)
+#define GetMaxY()   (240 - 1)
+
+
+// global surface - screen
+SDL_Surface *screen = NULL;
+
+void Init_SDL_ScreenSurface(void)
+{
+	screen = SDL_SetVideoMode(GetMaxX()+1, GetMaxY()+1, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+}
+
+
+BOOL IsScreenValid( void )
+{
+	BOOL bRet = FALSE;
+
+	if( NULL != screen )
+		bRet = TRUE;
+	else
+	{
+	#if 0
+		///screen = SDL_SetVideoMode(320, 240, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+		screen = SDL_SetVideoMode(GetMaxX()+1, GetMaxY()+1, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+		///screen = SDL_SetVideoMode(GetMaxX()+1, GetMaxY()+1, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	#else
+		Init_SDL_ScreenSurface();
+	#endif
+		if( NULL == screen )
+		{
+			printf(" Unable to set %dx%d video: %s\n", GetMaxX(), GetMaxY(), SDL_GetError());
+			bRet = FALSE;
+		}
+		else
+			printf(" Create to set %dx%d video: %s\n", GetMaxX(), GetMaxY(), SDL_GetError());
+	}
+	
+	return bRet;
+}
+
+
+int TransColors( int PixelIndex )
+{
+	static int cc = 0x0fff;
+
+	printf("\nTransColors=0x%x", PixelIndex);
+	
+	if( (-1) == PixelIndex )
+		return 0xffffff;
+	else
+		cc = PixelIndex;
+
+	/// reverse the define of RGB565CONVERT
+	///cc = cc | ((_color.Val & 0x0000001F) << (0+3)) ;
+	///cc = cc | ((_color.Val & 0x000007E0) << (3+2)) ;
+	///cc = cc | ((_color.Val & 0x0000F800) << (5+3)) ;
+
+	return cc;
+}
+
+
+void DrawPixel(SDL_Surface *screen, int x, int y, unsigned long val)
+{
+
+	Uint8 R;
+	Uint8 G;
+	Uint8 B;
+
+	Uint32 color;
+
+	// extract Red Green Blue colors
+	R = (Uint8) (val >> 16) & 0xFF;
+	G = (Uint8) (val >> 8 ) & 0xFF;
+	B = (Uint8) (val >> 0 ) & 0xFF;
+
+	color = SDL_MapRGB(screen->format, R, G, B);
+///	Uint32 color = SDL_MapRGB(screen->format, R, G, B);
+  
+ 
+	switch (screen->format->BytesPerPixel)
+	{
+		case 1:
+		{
+			Uint8 *bufp;
+			bufp = (Uint8 *)screen->pixels + y*screen->pitch + x;
+			*bufp = color;
+		}
+		break;
+		case 2:
+		{
+			Uint16 *bufp;
+			bufp = (Uint16 *)screen->pixels + y*screen->pitch/2 + x;
+			*bufp = color;
+		}
+		break;
+		case 3:
+		{
+			Uint8 *bufp;
+			bufp = (Uint8 *)screen->pixels + y*screen->pitch + x * 3;
+			if(SDL_BYTEORDER == SDL_LIL_ENDIAN)
+			{
+				bufp[0] = color;
+				bufp[1] = color >> 8;
+				bufp[2] = color >> 16;
+			} else {
+				bufp[2] = color;
+				bufp[1] = color >> 8;
+				bufp[0] = color >> 16;
+			}
+		}
+		break;
+		case 4:
+		{
+			Uint32 *bufp;
+			bufp = (Uint32 *)screen->pixels + y*screen->pitch/4 + x;
+			*bufp = color;
+		}
+		break;
+	}
+  
+}
+
+
+static void displayPixelDraw(void *pvDisplayData, long lX, long lY, unsigned long ulValue)
+{
+	
+//	printf("%u-%u-%u ",lX, lY, ulValue);
+	Lock(screen);
+	DrawPixel(screen, lX, lY, ulValue);
+	Unlock(screen);
+//	SDL_UpdateRect(screen, lX, lY, 1, 1);
+
+	
+}
+
+
+static void displayRectFill(void *pvDisplayData,
+							SHORT left, SHORT top, SHORT right, SHORT bottom,
+                            unsigned long ulValue)
+{
+    SDL_Rect rect;
+
+    rect.x = (left>right)?right:left;
+	rect.y = (top>bottom)?bottom:top;
+	rect.w = abs(right - left) + 1;
+	rect.h = abs(top - bottom) + 1;
+	
+	if( rect.w > GetMaxX() )
+		rect.w = GetMaxX();
+
+	if( rect.h > GetMaxY() )
+		rect.h = GetMaxY();
+
+		
+	SDL_FillRect(screen, &rect, ulValue);
+	
+	//SDL_Flip(screen);
+	
+}
+
+
+
+
+
+
+
+
+/*********************************************************************
+*
 *       Exported functions
 *
 **********************************************************************
@@ -243,6 +439,8 @@ void GUI_X_ErrorOut (const char *s)
 */
 void LCD_L0_SetPixelIndex(int x, int y, int PixelIndex) {
 	printf("\nLCD_L0_SetPixelIndex");
+	if( IsScreenValid() )
+		displayPixelDraw( NULL, x, y, TransColors(PixelIndex) );
 	GUI_USE_PARA(x);
 	GUI_USE_PARA(y);
 	GUI_USE_PARA(PixelIndex);
@@ -297,6 +495,10 @@ void LCD_L0_DrawVLine(int x, int y0,  int y1) {
 */
 void LCD_L0_FillRect(int x0, int y0, int x1, int y1) {
 	printf("\nLCD_L0_FillRect");
+	if( IsScreenValid() ) {
+		///displayRectFill( NULL, left, top, right, bottom, _color.Val );
+		displayRectFill( NULL, x0, y0, x1, y1, TransColors(-1) );
+	}
 	GUI_USE_PARA(x0);
 	GUI_USE_PARA(y0);
 	GUI_USE_PARA(x1);
@@ -357,7 +559,7 @@ int LCD_L0_Init(void) {
 *       LCD_L0_SetLUTEntry
 */
 void LCD_L0_SetLUTEntry(U8 Pos, LCD_COLOR Color) {
-	printf("\nLCD_L0_SetLUTEntry");
+///	printf("\nLCD_L0_SetLUTEntry");
 	GUI_USE_PARA(Pos);
 	GUI_USE_PARA(Color);
 }
