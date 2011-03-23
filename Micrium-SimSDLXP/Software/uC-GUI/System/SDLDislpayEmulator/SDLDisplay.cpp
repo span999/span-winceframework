@@ -44,7 +44,9 @@ extern Uint32 my_callbackfunc(Uint32 interval, void *param);
 
 // global surface - screen
 ///SDL_Surface *screen;
-SDL_Surface *screen = NULL;
+///SDL_Surface *screen = NULL;
+///we do it in driver!!
+extern "C" SDL_Surface *screen;
 
 // global timer
 SDL_TimerID timerID = NULL;
@@ -64,6 +66,10 @@ bool buttDown = false;
 //! Call back for touch screen(emulated by mouse)
 //*****************************************************************************
 static void (*g_pfnTSHandler)(unsigned long ulMessage, long lX, long lY) = NULL;
+
+
+///we do it in driver!!
+extern "C" void Init_SDL_ScreenSurface(void);
 
 //*****************************************************************************
 //
@@ -89,8 +95,11 @@ void SDLInit(void)
 		SDL_Quit();
 		exit(1);
 	}
-
+#if 0	///we do it in driver!!
 	screen = SDL_SetVideoMode(320, 240, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);  
+#else
+	Init_SDL_ScreenSurface();
+#endif
 	if(screen == NULL)
 	{
 		printf(" Unable to set %dx%d video: %s\n", 320, 240, SDL_GetError());
