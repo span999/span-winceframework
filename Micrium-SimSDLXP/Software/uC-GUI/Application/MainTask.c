@@ -50,9 +50,11 @@ void MainTask_test(void) {
 
 	GUI_Init();
 	GUI_SetBkColor(GUI_RED); GUI_Clear();
-	GUI_Delay(1000);
+	///GUI_Delay(1000);
+	GUI_Delay(100);
 	GUI_SetBkColor(GUI_BLUE); GUI_Clear();
-	GUI_Delay(1000);
+	///GUI_Delay(1000);
+	GUI_Delay(100);
 	GUI_SetColor(GUI_WHITE);
 
 	for (i=0; i<1000; i+=10) {
