@@ -125,7 +125,7 @@ void __main(int argc, char *argv[])
                     TASK_STK_SIZE,
                     (void *)0,
                     OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR);		
-					
+				
 					
 #if OS_TASK_NAME_SIZE > 11
     OSTaskNameSet(APP_TASK_START_PRIO, (INT8U *)"Start Task", &err);
@@ -175,8 +175,8 @@ void  AppStartTask (void *p_arg)
     
     while (TRUE)                                 /* Task body, always written as an infinite loop.                             */
 	{       		
-		OS_Printf("StartTask: Delay 1 second and print\n");  /* your code here. Create more tasks, etc.                                    */
-        OSTimeDlyHMSM(0, 0, 1, 0);       
+		OS_Printf("StartTask: Delay 2 second and print\n");  /* your code here. Create more tasks, etc.                                    */
+        OSTimeDlyHMSM(0, 0, 2, 0);       
     }
 }
 
@@ -196,8 +196,8 @@ void  AppTask1 (void *p_arg)
     
     while (TRUE)                                 /* Task body, always written as an infinite loop.                             */
 	{       		
-		OS_Printf("Task1:Delay 500 ms and print\n");  /* your code here. Create more tasks, etc.                                    */
-        OSTimeDlyHMSM(0, 0, 0, 500);       
+		OS_Printf("Task1:Delay 5000 ms and print\n");  /* your code here. Create more tasks, etc.                                    */
+        OSTimeDlyHMSM(0, 0, 0, 5000);       
     }
 }
 
@@ -219,8 +219,8 @@ void  AppTask2 (void *p_arg)
 	
     while (TRUE)                                 /* Task body, always written as an infinite loop.                             */
 	{       		
-		OS_Printf("Task2:Delay 2 sec and print\n");  /* your code here. Create more tasks, etc.                                    */
-        OSTimeDlyHMSM(0, 0, 2, 0);       
+		OS_Printf("Task2:Delay 2.7 sec and print\n");  /* your code here. Create more tasks, etc.                                    */
+        OSTimeDlyHMSM(0, 0, 2, 700);       
     }
 }
 
@@ -350,7 +350,7 @@ static  void  AppTaskKbd (void *p_arg)
     {
 		tick++;
         ///OSTimeDlyHMSM(0,0,0,10);
-		OSTimeDlyHMSM(0,0,0,100); 
+		OSTimeDlyHMSM(0,0,0,800); 
 ///		GUI_TOUCH_Exec(); 
 		if(tick&0x10)
 		{

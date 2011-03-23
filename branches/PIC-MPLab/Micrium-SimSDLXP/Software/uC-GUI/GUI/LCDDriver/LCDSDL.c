@@ -258,9 +258,9 @@ void Unlock(SDL_Surface *screen)
 	}
 }
 
-
-#define GetMaxX()   (320 - 1)
-#define GetMaxY()   (240 - 1)
+/* LCD resolution set in LCDConf.h */
+#define GetMaxX()   (LCD_XSIZE - 1)
+#define GetMaxY()   (LCD_YSIZE - 1)
 
 
 // global surface - screen
@@ -269,6 +269,7 @@ SDL_Surface *screen = NULL;
 void Init_SDL_ScreenSurface(void)
 {
 	screen = SDL_SetVideoMode(GetMaxX()+1, GetMaxY()+1, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	///screen = SDL_SetVideoMode(GetMaxX()+1, GetMaxY()+1, 8, SDL_HWSURFACE | SDL_DOUBLEBUF);
 }
 
 
@@ -303,20 +304,33 @@ BOOL IsScreenValid( void )
 int TransColors( int PixelIndex )
 {
 	static int cc = 0x0fff;
+	int tt = 0x0;
 
-	printf("\nTransColors=0x%x", PixelIndex);
-	
+	///printf("\nTransColors=0x%x", PixelIndex);
+
 	if( (-1) == PixelIndex )
-		return 0xffffff;
+	{
+		;///return 0xffffff;
+		cc = GUI_Index2Color(LCD_COLORINDEX);
+	}
 	else
-		cc = PixelIndex;
+	{
+		cc = GUI_Index2Color(LCD_COLORINDEX);
+		///cc = GUI_Index2Color(PixelIndex);
+		///printf("\nTransColors=0x%x->0x%x", PixelIndex, cc);
+	}
 
 	/// reverse the define of RGB565CONVERT
 	///cc = cc | ((_color.Val & 0x0000001F) << (0+3)) ;
 	///cc = cc | ((_color.Val & 0x000007E0) << (3+2)) ;
 	///cc = cc | ((_color.Val & 0x0000F800) << (5+3)) ;
 
-	return cc;
+	/// reverse the B,R of RGB888CONVERT
+	tt = (cc&0x00ffff)|((cc<<16)&0xff0000);	///R->B
+	tt = (tt&0xffff00)|((cc>>16)&0x0000ff);	///B->R
+	
+	///return cc;
+	return tt;
 }
 
 
@@ -382,13 +396,21 @@ void DrawPixel(SDL_Surface *screen, int x, int y, unsigned long val)
 }
 
 
+static void displayRectFill(void *pvDisplayData,
+							SHORT left, SHORT top, SHORT right, SHORT bottom,
+                            unsigned long ulValue);
+
 static void displayPixelDraw(void *pvDisplayData, long lX, long lY, unsigned long ulValue)
 {
 	
 //	printf("%u-%u-%u ",lX, lY, ulValue);
+#if 0
 	Lock(screen);
 	DrawPixel(screen, lX, lY, ulValue);
 	Unlock(screen);
+#else
+	displayRectFill( NULL, lX, lY, lX, lY, ulValue );
+#endif
 //	SDL_UpdateRect(screen, lX, lY, 1, 1);
 
 	
@@ -423,6 +445,280 @@ static void displayRectFill(void *pvDisplayData,
 
 
 
+/*********************************************************************
+*
+*       _DrawBitLine1BPP
+*/
+static void _DrawBitLine1BPP(int x, int y, U8 const*p, int Diff, int xsize, const LCD_PIXELINDEX*pTrans) {
+
+  LCD_PIXELINDEX Index0 = *(pTrans+0);
+  LCD_PIXELINDEX Index1 = *(pTrans+1);
+  x+=Diff;
+  switch (GUI_Context.DrawMode & (LCD_DRAWMODE_TRANS|LCD_DRAWMODE_XOR)) {
+  case 0:    /* Write mode */
+    do {
+      ///LCDSIM_SetPixelIndex(x++,y, (*p & (0x80>>Diff)) ? Index1 : Index0, LCD_DISPLAY_INDEX);
+	  LCD_L0_SetPixelIndex(x++,y, (*p & (0x80>>Diff)) ? Index1 : Index0);
+			if (++Diff==8) {
+        Diff=0;
+				p++;
+			}
+		} while (--xsize);
+    break;
+  case LCD_DRAWMODE_TRANS:
+    do {
+  		if (*p & (0x80>>Diff))
+        ///LCDSIM_SetPixelIndex(x,y, Index1, LCD_DISPLAY_INDEX);
+		LCD_L0_SetPixelIndex(x,y, Index1);
+      x++;
+			if (++Diff==8) {
+        Diff=0;
+				p++;
+			}
+		} while (--xsize);
+    break;
+  case LCD_DRAWMODE_XOR:;
+    do {
+  		if (*p & (0x80>>Diff)) {
+        //int Pixel = LCDSIM_GetPixelIndex(x,y, LCD_DISPLAY_INDEX);
+        ///LCDSIM_SetPixelIndex(x,y, LCD_NUM_COLORS-1-Pixel, LCD_DISPLAY_INDEX);
+		//LCD_L0_SetPixelIndex(x,y, LCD_NUM_COLORS-1-Pixel);
+		printf("dddd");
+      }
+      x++;
+			if (++Diff==8) {
+        Diff=0;
+				p++;
+			}
+		} while (--xsize);
+    break;
+	}
+
+}
+
+/*********************************************************************
+*
+*       _DrawBitLine2BPP
+*/
+#if (LCD_MAX_LOG_COLORS > 2)
+static void _DrawBitLine2BPP(int x, int y, U8 const * p, int Diff, int xsize, const LCD_PIXELINDEX * pTrans) {
+#if 0
+  LCD_PIXELINDEX Pixels = *p;
+  int CurrentPixel = Diff;
+  x += Diff;
+  switch (GUI_Context.DrawMode & (LCD_DRAWMODE_TRANS | LCD_DRAWMODE_XOR)) {
+    case 0:
+      if (pTrans) {
+        do {
+          int Shift = (3 - CurrentPixel) << 1;
+          int Index = (Pixels & (0xC0 >> (6 - Shift))) >> Shift;
+          LCD_PIXELINDEX PixelIndex = *(pTrans + Index);
+          SETPIXEL(x++, y, PixelIndex);
+          if (++CurrentPixel == 4) {
+            CurrentPixel = 0;
+            Pixels = *(++p);
+          }
+		    } while (--xsize);
+      } else {
+        do {
+          int Shift = (3 - CurrentPixel) << 1;
+          int Index = (Pixels & (0xC0 >> (6 - Shift))) >> Shift;
+          SETPIXEL(x++, y, Index);
+          if (++CurrentPixel == 4) {
+            CurrentPixel = 0;
+            Pixels = *(++p);
+          }
+		    } while (--xsize);
+      }
+      break;
+    case LCD_DRAWMODE_TRANS:
+      if (pTrans) {
+        do {
+          int Shift = (3 - CurrentPixel) << 1;
+          int Index = (Pixels & (0xC0 >> (6 - Shift))) >> Shift;
+          if (Index) {
+            LCD_PIXELINDEX PixelIndex = *(pTrans + Index);
+            SETPIXEL(x, y, PixelIndex);
+          }
+          x++;
+          if (++CurrentPixel == 4) {
+            CurrentPixel = 0;
+            Pixels = *(++p);
+          }
+		    } while (--xsize);
+      } else {
+        do {
+          int Shift = (3 - CurrentPixel) << 1;
+          int Index = (Pixels & (0xC0 >> (6 - Shift))) >> Shift;
+          if (Index) {
+            SETPIXEL(x, y, Index);
+          }
+          x++;
+          if (++CurrentPixel == 4) {
+            CurrentPixel = 0;
+            Pixels = *(++p);
+          }
+		    } while (--xsize);
+      }
+      break;
+  }
+#endif
+}
+#endif
+
+/*********************************************************************
+*
+*       _DrawBitLine4BPP
+*/
+#if (LCD_MAX_LOG_COLORS > 4)
+static void _DrawBitLine4BPP(int x, int y, U8 const * p, int Diff, int xsize, const LCD_PIXELINDEX * pTrans) {
+#if 0
+  LCD_PIXELINDEX Pixels = *p;
+  int CurrentPixel = Diff;
+  x += Diff;
+  switch (GUI_Context.DrawMode & (LCD_DRAWMODE_TRANS | LCD_DRAWMODE_XOR)) {
+    case 0:
+      if (pTrans) {
+        do {
+          int Shift = (1 - CurrentPixel) << 2;
+          int Index = (Pixels & (0xF0 >> (4 - Shift))) >> Shift;
+          LCD_PIXELINDEX PixelIndex = *(pTrans + Index);
+          SETPIXEL(x++, y, PixelIndex);
+          if (++CurrentPixel == 2) {
+            CurrentPixel = 0;
+            Pixels = *(++p);
+          }
+		    } while (--xsize);
+      } else {
+        do {
+          int Shift = (1 - CurrentPixel) << 2;
+          int Index = (Pixels & (0xF0 >> (4 - Shift))) >> Shift;
+          SETPIXEL(x++, y, Index);
+          if (++CurrentPixel == 2) {
+            CurrentPixel = 0;
+            Pixels = *(++p);
+          }
+		    } while (--xsize);
+      }
+      break;
+    case LCD_DRAWMODE_TRANS:
+      if (pTrans) {
+        do {
+          int Shift = (1 - CurrentPixel) << 2;
+          int Index = (Pixels & (0xF0 >> (4 - Shift))) >> Shift;
+          if (Index) {
+            LCD_PIXELINDEX PixelIndex = *(pTrans + Index);
+            SETPIXEL(x, y, PixelIndex);
+          }
+          x++;
+          if (++CurrentPixel == 2) {
+            CurrentPixel = 0;
+            Pixels = *(++p);
+          }
+		    } while (--xsize);
+      } else {
+        do {
+          int Shift = (1 - CurrentPixel) << 2;
+          int Index = (Pixels & (0xF0 >> (4 - Shift))) >> Shift;
+          if (Index) {
+            SETPIXEL(x, y, Index);
+          }
+          x++;
+          if (++CurrentPixel == 2) {
+            CurrentPixel = 0;
+            Pixels = *(++p);
+          }
+		    } while (--xsize);
+      }
+      break;
+  }
+#endif
+}
+#endif
+
+/*********************************************************************
+*
+*       _DrawBitLine8BPP
+*/
+#if (LCD_MAX_LOG_COLORS > 16)
+static void _DrawBitLine8BPP(int x, int y, U8 const*p, int xsize, const LCD_PIXELINDEX*pTrans) {
+#if 1
+  LCD_PIXELINDEX pixel;
+  if ((GUI_Context.DrawMode & LCD_DRAWMODE_TRANS)==0) {
+    if (pTrans) {
+      for (;xsize > 0; xsize--,x++,p++) {
+        pixel = *p;
+        ///SETPIXEL(x, y, *(pTrans+pixel));
+		displayPixelDraw( NULL, x, y, TransColors(*(pTrans+pixel)) );
+      }
+    } else {
+      for (;xsize > 0; xsize--,x++,p++) {
+        ///SETPIXEL(x, y, *p);
+		displayPixelDraw( NULL, x, y, TransColors(*p) );
+      }
+    }
+  } else {   /* Handle transparent bitmap */
+    if (pTrans) {
+      for (; xsize > 0; xsize--, x++, p++) {
+        pixel = *p;
+        if (pixel) {
+          ///SETPIXEL(x+0, y, *(pTrans+pixel));
+		  displayPixelDraw( NULL, x+0, y, TransColors(*(pTrans+pixel)) );
+        }
+      }
+    } else {
+      for (; xsize > 0; xsize--, x++, p++) {
+        pixel = *p;
+        if (pixel) {
+          ///SETPIXEL(x+0, y, pixel);
+		  displayPixelDraw( NULL, x+0, y, TransColors(pixel) );
+        }
+      }
+    }
+  }
+#endif
+}
+#endif
+
+/*********************************************************************
+*
+*       _DrawBitLine16BPP
+*/
+#if (LCD_BITSPERPIXEL > 8)
+static void _DrawBitLine16BPP(int x, int y, U16 const*p, int xsize, const LCD_PIXELINDEX*pTrans) {
+#if 0
+  LCD_PIXELINDEX pixel;
+  if ((GUI_Context.DrawMode & LCD_DRAWMODE_TRANS)==0) {
+    if (pTrans) {
+      for (;xsize > 0; xsize--,x++,p++) {
+        pixel = *p;
+        SETPIXEL(x, y, *(pTrans+pixel));
+      }
+    } else {
+      for (;xsize > 0; xsize--,x++,p++) {
+        SETPIXEL(x, y, *p);
+      }
+    }
+  } else {   /* Handle transparent bitmap */
+    if (pTrans) {
+      for (; xsize > 0; xsize--, x++, p++) {
+        pixel = *p;
+        if (pixel) {
+          SETPIXEL(x+0, y, *(pTrans+pixel));
+        }
+      }
+    } else {
+      for (; xsize > 0; xsize--, x++, p++) {
+        pixel = *p;
+        if (pixel) {
+          SETPIXEL(x+0, y, pixel);
+        }
+      }
+    }
+  }
+#endif
+}
+#endif
 
 
 
@@ -438,9 +734,13 @@ static void displayRectFill(void *pvDisplayData,
 *       LCD_L0_SetPixelIndex
 */
 void LCD_L0_SetPixelIndex(int x, int y, int PixelIndex) {
-	printf("\nLCD_L0_SetPixelIndex");
+	///printf("\nLCD_L0_SetPixelIndex");
 	if( IsScreenValid() )
-		displayPixelDraw( NULL, x, y, TransColors(PixelIndex) );
+	{
+		///displayPixelDraw( NULL, x, y, TransColors(PixelIndex) );
+		displayPixelDraw( NULL, x, y, TransColors(-1) );
+		///displayRectFill( NULL, x, y, x, y, TransColors(-1) );
+	}
 	GUI_USE_PARA(x);
 	GUI_USE_PARA(y);
 	GUI_USE_PARA(PixelIndex);
@@ -451,10 +751,10 @@ void LCD_L0_SetPixelIndex(int x, int y, int PixelIndex) {
 *       LCD_L0_GetPixelIndex
 */
 unsigned int LCD_L0_GetPixelIndex(int x, int y) {
-	printf("\nLCD_L0_GetPixelIndex");
+	//printf("\nLCD_L0_GetPixelIndex");
 	GUI_USE_PARA(x);
 	GUI_USE_PARA(y);
-  return 0;
+	return 0;
 }
 
 /*********************************************************************
@@ -472,7 +772,23 @@ void LCD_L0_XorPixel(int x, int y) {
 *       LCD_L0_DrawHLine
 */
 void LCD_L0_DrawHLine(int x0, int y,  int x1) {
-	printf("\nLCD_L0_DrawHLine");
+	///printf("\nLCD_L0_DrawHLine");
+#if 0	
+	if (GUI_Context.DrawMode & LCD_DRAWMODE_XOR) {
+		for (;x0 <= x1; x0++) {
+			;///XORPIXEL(x0, y);
+		}
+	} else {
+		for (;x0 <= x1; x0++) {
+			///SETPIXEL(x0, y, LCD_COLORINDEX);
+			if( IsScreenValid() )
+				///displayPixelDraw( NULL, x0, y, TransColors(-1) );
+				displayPixelDraw( NULL, x0, y, GUI_Context.Color );
+		}
+	}
+#else
+	displayRectFill( NULL, x0, y, x1, y, TransColors(-1) );
+#endif	
 	GUI_USE_PARA(x0);
 	GUI_USE_PARA(y);
 	GUI_USE_PARA(x1);
@@ -484,6 +800,7 @@ void LCD_L0_DrawHLine(int x0, int y,  int x1) {
 */
 void LCD_L0_DrawVLine(int x, int y0,  int y1) {
 	printf("\nLCD_L0_DrawVLine");
+	displayRectFill( NULL, x, y0, x, y1, TransColors(-1) );
 	GUI_USE_PARA(x);
 	GUI_USE_PARA(y0);
 	GUI_USE_PARA(y1);
@@ -497,6 +814,7 @@ void LCD_L0_FillRect(int x0, int y0, int x1, int y1) {
 	printf("\nLCD_L0_FillRect");
 	if( IsScreenValid() ) {
 		///displayRectFill( NULL, left, top, right, bottom, _color.Val );
+		///displayRectFill( NULL, x0, y0, x1, y1, TransColors(LCD_DISPLAY_INDEX) );
 		displayRectFill( NULL, x0, y0, x1, y1, TransColors(-1) );
 	}
 	GUI_USE_PARA(x0);
@@ -516,7 +834,43 @@ void LCD_L0_DrawBitmap(int x0, int y0,
                        const U8 GUI_UNI_PTR * pData, int Diff,
                        const LCD_PIXELINDEX* pTrans)
 {
-	printf("\nLCD_L0_DrawBitmap");
+
+  int i;
+
+///	printf("\nLCD_L0_DrawBitmap, x=%d[%d] y=%d[%d] bpp=%d bpl=%d \n", x0, xsize, y0, ysize, BitsPerPixel, BytesPerLine);
+
+  /*
+     Use DrawBitLineXBPP
+  */
+  for (i=0; i<ysize; i++) {
+    switch (BitsPerPixel) {
+    case 1:
+      _DrawBitLine1BPP(x0, i+y0, pData, Diff, xsize, pTrans);
+      break;
+    #if (LCD_MAX_LOG_COLORS > 2)
+      case 2:
+        _DrawBitLine2BPP(x0, i+y0, pData, Diff, xsize, pTrans);
+        break;
+    #endif
+    #if (LCD_MAX_LOG_COLORS > 4)
+      case 4:
+        _DrawBitLine4BPP(x0, i+y0, pData, Diff, xsize, pTrans);
+        break;
+    #endif
+    #if (LCD_MAX_LOG_COLORS > 16)
+      case 8:
+        _DrawBitLine8BPP(x0, i+y0, pData, xsize, pTrans);
+        break;
+    #endif
+    #if (LCD_BITSPERPIXEL > 8)
+      case 16:
+        _DrawBitLine16BPP(x0, i+y0, (const U16 *)pData, xsize, pTrans);
+        break;
+    #endif
+    }
+    pData += BytesPerLine;
+  }	
+	
 	GUI_USE_PARA(x0);
 	GUI_USE_PARA(y0);
 	GUI_USE_PARA(xsize);
