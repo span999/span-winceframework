@@ -256,7 +256,7 @@ static  void  AppTaskCreate(void)
 
 
 #if (OS_TASK_NAME_SIZE > 8)
-  OSTaskNameSet(APP_TASK_USER_IF_PRIO, "User_IF", &err);
+  OSTaskNameSet(APP_TASK_USER_IF_PRIO, (INT8U*)"User_IF", &err);
 #endif
 
 
@@ -272,7 +272,7 @@ static  void  AppTaskCreate(void)
                     OS_TASK_OPT_STK_CHK|OS_TASK_OPT_STK_CLR);
 
 #if (OS_TASK_NAME_SIZE > 8)
-  OSTaskNameSet(APP_TASK_KBD_PRIO, "Keyboard", &err);
+  OSTaskNameSet(APP_TASK_KBD_PRIO, (INT8U*)"Keyboard", &err);
 #endif
 
 
@@ -288,7 +288,7 @@ static  void  AppTaskCreate(void)
                     OS_TASK_OPT_STK_CHK|OS_TASK_OPT_STK_CLR);
 
 #if (OS_TASK_NAME_SIZE > 8)
-  OSTaskNameSet(TASK_5_PRIO, "SDL_IO", &err);
+  OSTaskNameSet(TASK_5_PRIO, (INT8U*)"SDL_IO", &err);
 #endif
 
   
@@ -296,7 +296,8 @@ static  void  AppTaskCreate(void)
 
 
 #if defined(OS_PLUS_GUI)
-void MainTask_GUI(void);
+//void MainTask_GUI(void);
+extern "C" void MainTask_GUI(void);
 #endif
 
 /*
@@ -376,7 +377,7 @@ static  void  AppTaskSDLio (void *p_arg)
 {
 	
 	(void)p_arg;
-
+	OS_Printf("\nAppTaskSDLio !!");
 	SDLIODriver(0);
 }
 

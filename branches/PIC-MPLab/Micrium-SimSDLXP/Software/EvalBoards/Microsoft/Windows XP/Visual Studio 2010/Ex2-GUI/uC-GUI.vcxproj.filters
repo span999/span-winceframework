@@ -1885,9 +1885,6 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAPolyOut.c">
       <Filter>uC-GUI\GUI\AntiAlias</Filter>
     </ClCompile>
-    <ClCompile Include="app.c">
-      <Filter>App</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MainTask.c">
       <Filter>uC-GUI\Application</Filter>
     </ClCompile>
@@ -1975,6 +1972,12 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\LCDDriver\LCDSDL.c">
       <Filter>uC-GUI\GUI\LCDDriver</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\System\SDLDislpayEmulator\SDLDisplay.cpp">
+      <Filter>uC-GUI\System\SDLDislpayEmulator</Filter>
+    </ClCompile>
+    <ClCompile Include="app.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_cfg.h">
@@ -2055,6 +2058,9 @@
     <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_Intern_ConfDep.h">
       <Filter>uC-GUI\GUI\WM</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\System\SDLDislpayEmulator\SDLDisplay.h">
+      <Filter>uC-GUI\System\SDLDislpayEmulator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="App">
@@ -2113,6 +2119,9 @@
     </Filter>
     <Filter Include="uC-GUI\Application\GUIDemo">
       <UniqueIdentifier>{30e025f5-2b20-4fa9-9791-6c5b126d822b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\System\SDLDislpayEmulator">
+      <UniqueIdentifier>{dd04ca64-7ec7-482b-88bd-1e2abff5fcd7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

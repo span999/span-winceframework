@@ -930,30 +930,6 @@ void SDLDestroy()
 //
 //*****************************************************************************
 #if defined(WIN32)
-extern "C" void TransIOMsg(unsigned long ulMessage, long lX, long lY);
-extern "C" void GUI_X_Delay( int );
-///extern "C" INT8U OSTimeDlyHMSM(INT8U hours, INT8U minutes, INT8U seconds, INT16U ms);
-void SDLIODriver( void * pvParameters )
-{
-	bool done = false;
-
-	SDLInit();	
-	SDLScreenCallbackSet(TransIOMsg);	
-
-	while(!done)
-	{
-		done = !SDLProcessEventWIN32();			
-		///
-		printf("\nIn SDLIODriver\n");
-		///vTaskDelay(1);
-		///OSTimeDlyHMSM(0, 0, 0, 1);
-		GUI_X_Delay( 10 );
-	}
-	SDLDestroy();
-	while(1)
-	{;}	
-}
-
 #else
 const tDisplay SDLDisplay =
 {

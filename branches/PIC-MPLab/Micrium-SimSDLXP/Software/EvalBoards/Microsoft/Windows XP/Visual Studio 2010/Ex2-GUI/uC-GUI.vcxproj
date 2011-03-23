@@ -48,7 +48,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\..\..\ucos-ii\source;..\..\..\..\..\ucos-ii\Ports\WIN32;..\..\..\..\..\EvalBoards\Microsoft\Windows XP\Visual Studio 2010\Ex2-GUI;..\..\..\..\..\;..\..\..\..\..\uC-GUI\GUI\Core;..\..\..\..\..\uC-GUI\GUI\WM;..\..\..\..\..\uC-GUI\GUI\Widget;..\..\..\..\..\uC-GUI\config;..\..\..\..\..\uC-GUI\System\Simulation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\..\ucos-ii\source;..\..\..\..\..\ucos-ii\Ports\WIN32;..\..\..\..\..\EvalBoards\Microsoft\Windows XP\Visual Studio 2010\Ex2-GUI;..\..\..\..\..\;..\..\..\..\..\uC-GUI\GUI\Core;..\..\..\..\..\uC-GUI\GUI\WM;..\..\..\..\..\uC-GUI\GUI\Widget;..\..\..\..\..\uC-GUI\config;..\..\..\..\..\uC-GUI\System\Simulation;..\..\..\..\..\uC-GUI\System\SDLDislpayEmulator;..\..\..\..\..\uC-GUI\System\SDL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;LCD_USE_WINSIM;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -60,7 +60,7 @@
       <AdditionalOptions>/D "USE_SDL_LCD" /D "OS_PLUS_GUI" /D "TEST_PROJ" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>WinMM.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>WinMM.lib;..\..\..\..\..\uC-GUI\System\SDL\lib\SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)uC-GUI.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)uC-GUI.pdb</ProgramDatabaseFile>
@@ -729,6 +729,7 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__SendMessageIfEnabled.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__SendMessageNoPara.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__UpdateChildPositions.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\System\SDLDislpayEmulator\SDLDisplay.cpp" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\GUI_X_set.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\Main.c" />
     <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_core.c" />
@@ -744,7 +745,7 @@
     <ClCompile Include="..\..\..\..\..\ucos-ii\source\os_tmr.c" />
     <ClCompile Include="..\..\..\..\..\uCOS-II\Ports\Win32\os_cpu_c.c" />
     <ClCompile Include="..\..\..\..\..\uCOS-II\Ports\Win32\os_trace.c" />
-    <ClCompile Include="app.c" />
+    <ClCompile Include="app.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\uC-GUI\Config\GUIConf.h" />
@@ -767,6 +768,7 @@
     <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GUI.h" />
     <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_Intern.h" />
     <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_Intern_ConfDep.h" />
+    <ClInclude Include="..\..\..\..\..\uC-GUI\System\SDLDislpayEmulator\SDLDisplay.h" />
     <ClInclude Include="app_cfg.h" />
     <ClInclude Include="includes.h" />
     <ClInclude Include="os_cfg.h" />
