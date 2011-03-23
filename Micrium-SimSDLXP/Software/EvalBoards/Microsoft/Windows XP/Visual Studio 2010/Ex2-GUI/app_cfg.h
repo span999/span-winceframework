@@ -31,7 +31,9 @@
 
 #define  APP_TASK_START_STK_SIZE    128
 
-#define  APP_TASK_USER_IF_STK_SIZE           256
-#define  APP_TASK_KBD_STK_SIZE               256
+#define  APP_TASK_USER_IF_STK_SIZE  256
+#define  APP_TASK_KBD_STK_SIZE      256
+#define  APP_TASK_SDLIO_STK_SIZE    128
+
 
 #define	 OS_TASK_TMR_PRIO			3
