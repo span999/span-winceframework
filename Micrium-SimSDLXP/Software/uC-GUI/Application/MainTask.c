@@ -72,7 +72,8 @@ void MainTask_test(void) {
 		GUI_DrawHLine(i,20,len+20);
 	}
 
-	GUI_Delay(1000);
+	///GUI_Delay(1000);
+	GUI_Delay(100);
 	GUI_Clear();
   
 	if (LCD_GET_YSIZE()>(100+bmMicriumLogo_1bpp.YSize)) {

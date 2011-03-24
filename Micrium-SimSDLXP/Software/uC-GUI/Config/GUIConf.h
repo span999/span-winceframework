@@ -31,6 +31,7 @@ Purpose     : Configures abilities, fonts etc.
 #define GUI_OS                    (1)  /* Compile with multitasking support */
 #define GUI_SUPPORT_TOUCH         (1)  /* Support a touch screen (req. win-manager) */
 #define GUI_SUPPORT_UNICODE       (1)  /* Support mixed ASCII/UNICODE strings */
+///#define GUI_SUPPORT_UNICODE       (0)  /* Support mixed ASCII/UNICODE strings */
 
 #define GUI_DEFAULT_FONT          &GUI_Font6x8
 
@@ -48,7 +49,7 @@ Purpose     : Configures abilities, fonts etc.
 
 #define GUI_WINSUPPORT            1  /* Window manager package available */
 ///#define GUI_WINSUPPORT            0  /* Window manager package available */
-#if defined(DASHBOARD_PROJ) || defined(GUIDEMO_PROJ)
+#if defined(DASHBOARD_PROJ) || defined(GUIDEMO_PROJ) || defined(TEST_PROJ)
 	#define GUI_SUPPORT_MEMDEV        1  /* Memory devices available */
 #else
 	#define GUI_SUPPORT_MEMDEV        0  /* Memory devices available */
