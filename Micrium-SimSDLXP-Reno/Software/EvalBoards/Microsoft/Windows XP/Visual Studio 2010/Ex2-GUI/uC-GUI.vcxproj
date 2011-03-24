@@ -57,7 +57,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalOptions>/D "USE_SDL_LCD" /D "OS_PLUS_GUI" /D "TEST_PROJ" %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/D "USE_SDL_LCD" /D "OS_PLUS_GUI" /D "GUIDEMO_PROJ" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>WinMM.lib;..\..\..\..\..\uC-GUI\System\SDL\lib\SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
