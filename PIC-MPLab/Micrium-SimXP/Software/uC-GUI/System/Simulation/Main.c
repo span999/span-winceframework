@@ -52,7 +52,8 @@ void MainTask(void) {
 #ifdef MEDIT_PROJ
 	MainTask_MultiEdit();
 #endif
-#ifdef GUIDEMO_PROJ	
+#ifdef GUIDEMO_PROJ
+	///GUI_Init();
 	GUIDEMO_main();
 #endif
 #ifdef DASHBOARD_PROJ	
