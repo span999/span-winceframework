@@ -315,8 +315,8 @@ int TransColors( int PixelIndex )
 	}
 	else
 	{
-		cc = GUI_Index2Color(LCD_COLORINDEX);
-		///cc = GUI_Index2Color(PixelIndex);
+		///cc = GUI_Index2Color(LCD_COLORINDEX);
+		cc = GUI_Index2Color(PixelIndex);
 		///printf("\nTransColors=0x%x->0x%x", PixelIndex, cc);
 	}
 
@@ -404,7 +404,7 @@ static void displayPixelDraw(void *pvDisplayData, long lX, long lY, unsigned lon
 {
 	
 //	printf("%u-%u-%u ",lX, lY, ulValue);
-#if 0
+#if 1
 	Lock(screen);
 	DrawPixel(screen, lX, lY, ulValue);
 	Unlock(screen);
@@ -737,8 +737,8 @@ void LCD_L0_SetPixelIndex(int x, int y, int PixelIndex) {
 	///printf("\nLCD_L0_SetPixelIndex");
 	if( IsScreenValid() )
 	{
-		///displayPixelDraw( NULL, x, y, TransColors(PixelIndex) );
-		displayPixelDraw( NULL, x, y, TransColors(-1) );
+		displayPixelDraw( NULL, x, y, TransColors(PixelIndex) );
+		///displayPixelDraw( NULL, x, y, TransColors(-1) );
 		///displayRectFill( NULL, x, y, x, y, TransColors(-1) );
 	}
 	GUI_USE_PARA(x);
