@@ -49,7 +49,7 @@ Purpose     : Configures abilities, fonts etc.
 
 #define GUI_WINSUPPORT            1  /* Window manager package available */
 ///#define GUI_WINSUPPORT            0  /* Window manager package available */
-#if defined(DASHBOARD_PROJ) || defined(GUIDEMO_PROJ) || defined(TEST_PROJ)
+#if defined(DASHBOARD_PROJ) || defined(GUIDEMO_PROJ)
 	#define GUI_SUPPORT_MEMDEV        1  /* Memory devices available */
 #else
 	#define GUI_SUPPORT_MEMDEV        0  /* Memory devices available */
