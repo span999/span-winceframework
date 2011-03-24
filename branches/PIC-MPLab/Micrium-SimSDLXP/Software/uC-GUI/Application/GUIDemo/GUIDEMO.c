@@ -326,6 +326,7 @@ void GUIDEMO_main(void) {
     int i;
     int xSize, ySize, xPos, yPos;
   #endif
+  GUI_Init();	///init GUI system first
   #if (GUI_SUPPORT_CURSOR|GUI_SUPPORT_TOUCH)
     GUI_CURSOR_Show();
   #endif
@@ -398,6 +399,7 @@ void GUIDEMO_main(void) {
   #if GUI_WINSUPPORT
     int i;
   #endif
+  GUI_Init();	///init GUI system first
   #if GUI_WINSUPPORT
     #if GUI_NUM_LAYERS > 1
       FRAMEWIN_CreateAsChild(10, 10, 100, 100, WM_GetDesktopWindowEx(1), "Display 1", NULL, WM_CF_SHOW);
