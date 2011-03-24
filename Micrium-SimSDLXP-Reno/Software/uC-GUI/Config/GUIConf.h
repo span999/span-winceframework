@@ -30,6 +30,7 @@ Purpose     : Configures abilities, fonts etc.
 
 #define GUI_OS                    (1)  /* Compile with multitasking support */
 #define GUI_SUPPORT_TOUCH         (1)  /* Support a touch screen (req. win-manager) */
+///#define GUI_SUPPORT_TOUCH         (0)  /* Support a touch screen (req. win-manager) */
 #define GUI_SUPPORT_UNICODE       (1)  /* Support mixed ASCII/UNICODE strings */
 ///#define GUI_SUPPORT_UNICODE       (0)  /* Support mixed ASCII/UNICODE strings */
 
