@@ -34,6 +34,9 @@ void GUIDEMO_main(void);
 #ifdef DASHBOARD_PROJ
 void MainTask_DashB(void);
 #endif
+#ifdef RENOUI_PROJ
+void MainTask_RenoUItest(void);
+#endif
 
 ///void main(void) {
 	///MainTask_test
@@ -46,13 +49,16 @@ void MainTask_GUI(void) {
 #else
 void MainTask(void) {
 #endif
+
 #ifdef TEST_PROJ
 	MainTask_test();
 #endif
 #ifdef EYES_PROJ
 	MainTask_eyes();
 #endif
+
 	///MainTask_multi();
+
 #ifdef MEDIT_PROJ
 	MainTask_MultiEdit();
 #endif
@@ -62,5 +68,10 @@ void MainTask(void) {
 #endif
 #ifdef DASHBOARD_PROJ	
 	MainTask_DashB();
-#endif	
+#endif
+#ifdef RENOUI_PROJ
+	MainTask_RenoUItest();
+#endif
+
+
 }

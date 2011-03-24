@@ -799,7 +799,7 @@ void LCD_L0_DrawHLine(int x0, int y,  int x1) {
 *       LCD_L0_DrawVLine
 */
 void LCD_L0_DrawVLine(int x, int y0,  int y1) {
-	printf("\nLCD_L0_DrawVLine");
+	///printf("\nLCD_L0_DrawVLine");
 	displayRectFill( NULL, x, y0, x, y1, TransColors(-1) );
 	GUI_USE_PARA(x);
 	GUI_USE_PARA(y0);
@@ -811,7 +811,7 @@ void LCD_L0_DrawVLine(int x, int y0,  int y1) {
 *       LCD_L0_FillRect
 */
 void LCD_L0_FillRect(int x0, int y0, int x1, int y1) {
-	printf("\nLCD_L0_FillRect");
+	///printf("\nLCD_L0_FillRect");
 	if( IsScreenValid() ) {
 		///displayRectFill( NULL, left, top, right, bottom, _color.Val );
 		///displayRectFill( NULL, x0, y0, x1, y1, TransColors(LCD_DISPLAY_INDEX) );
