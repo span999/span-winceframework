@@ -1978,6 +1978,9 @@
     <ClCompile Include="app.cpp">
       <Filter>App</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUImain.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_cfg.h">
