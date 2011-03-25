@@ -18,7 +18,7 @@
 
 #if defined(RENOUI_PROJ)
 
-
+#include "LCD_ConfDefaults.h"  /* valid LCD configuration */
 #include "GUI.h"
 #if GUI_WINSUPPORT
 //  #include "PROGBAR.h"
@@ -27,8 +27,8 @@
   #include "BUTTON.h"
 #endif
 
-void WindowMain( void );
-
+void FrameCenter( void );
+void StartWindow( int );
 
 
 /*
@@ -80,7 +80,7 @@ void MainTask_RenoUItest(void) {
 		GUI_DispDecMin(i);
 	}
 
-	GUI_Delay(1000);
+	GUI_Delay(100);
 	
 	for (i=60; i<150; i+=10) {
 		GUI_DrawVLine(i,0,168);
@@ -94,10 +94,10 @@ void MainTask_RenoUItest(void) {
 		GUI_DrawHLine(i,20,len+20);
 	}
 
-	GUI_Delay(1000);
+	GUI_Delay(100);
 	GUI_Clear();
 
-	WindowMain();
+	FrameCenter();
 
 #if 0	
 	if (LCD_GET_YSIZE()>(100+bmMicriumLogo_1bpp.YSize)) {
@@ -122,9 +122,13 @@ void MainTask_RenoUItest(void) {
 }
 
 
-static void _UpdateCmdWin(void) {
-  #if GUI_WINSUPPORT && GUIDEMO_LARGE
-    WM_InvalidateWindow(_ahInfoWin[1]);
+///static void _UpdateCmdWin(void) {
+static void _UpdateCmdWin(FRAMEWIN_Handle hFrame) {
+  #if GUI_WINSUPPORT
+    ///WM_InvalidateWindow(_ahInfoWin[1]);
+	WM_InvalidateWindow(hFrame);
+	WM_DeleteWindow(hFrame);
+	///GUI_MEMDEV_Clear(NULL);
   #endif
 }
 
@@ -152,7 +156,8 @@ static int _iTest, _iTestMinor;
 #endif
 
 
-void WindowMain( void )
+
+void StartWindow( int iOption )
 {
 static BUTTON_Handle   _ahButton[2];
 static FRAMEWIN_Handle _ahFrameWin[3];
@@ -160,24 +165,150 @@ static FRAMEWIN_Handle _ahInfoWin[2];
 static int _ButtonSizeX, _ButtonSizeY;
 
     /* Calculate position and size of FrameWin[1] */
-    _ButtonSizeX = 30;
-    _ButtonSizeY = 20;
+///    _ButtonSizeX = 60;
+///    _ButtonSizeY = 40;
+    _ButtonSizeX = 25*iOption;
+    _ButtonSizeY = 20*iOption;
 
     /* Create the control window incl. buttons */
 	///create frame
-    _ahFrameWin[1] = FRAMEWIN_Create("Control", &_cbCmdWin, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, LCD_GetXSize(), LCD_GetYSize());
+    ///_ahFrameWin[1] = FRAMEWIN_CreateEx("Control", &_cbCmdWin, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, LCD_GetXSize(), LCD_GetYSize());
+	_ahFrameWin[1] = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, "Control", &_cbCmdWin);
 	///get frame handle
     _ahInfoWin[1] = WM_GetClientWindow(_ahFrameWin[1]);
-	///create button with frame handle
-    _ahButton[0] = BUTTON_CreateAsChild(4, 20, _ButtonSizeX, _ButtonSizeY, _ahInfoWin[1], 'H', WM_CF_SHOW | WM_CF_STAYONTOP | WM_CF_MEMDEV);
-    _ahButton[1] = BUTTON_CreateAsChild(40, 20, _ButtonSizeX, _ButtonSizeY, _ahInfoWin[1], 'N', WM_CF_SHOW | WM_CF_STAYONTOP | WM_CF_MEMDEV);
+	///create button within frame handle
+    _ahButton[0] = BUTTON_CreateAsChild(10, 20, _ButtonSizeX, _ButtonSizeY, _ahInfoWin[1], 'H', WM_CF_SHOW | WM_CF_STAYONTOP | WM_CF_MEMDEV);
+    _ahButton[1] = BUTTON_CreateAsChild(10, 90, _ButtonSizeX, _ButtonSizeY, _ahInfoWin[1], 'N', WM_CF_SHOW | WM_CF_STAYONTOP | WM_CF_MEMDEV);
     BUTTON_SetText(_ahButton[0], "Halt");
     BUTTON_SetText(_ahButton[1], "Next");
 	
-	GUI_Delay(1000);
-    _UpdateCmdWin();
+	GUI_Delay(100);
+    ///_UpdateCmdWin();
+	_UpdateCmdWin(_ahInfoWin[1]);
+	GUI_SetBkColor(GUI_GRAY);
+	GUI_Clear();	
+    
+	WM_ExecIdle();
+}
+
+
+void FontWindow( int iOption )
+{
+  int NumColors = LCD_GetDevCap(LCD_DEVCAP_NUMCOLORS);
+  int Lines = (NumColors - 1) / 16 + 1;
+  int y0;
+  #if (LCD_BITSPERPIXEL > 8)
+    int XStep = LCD_XSIZE / 256;
+    int YStep = NumColors / 256;
+  #endif
+  int i;
+  #if GUIDEMO_LARGE
+    y0 = 70;
+  #elif !(GUIDEMO_TINY)
+    #if (LCD_YSIZE < 120)
+      y0 = 50;
+    #else
+      y0 = 55;
+    #endif
+  #else
+    y0 = 16;
+  #endif
+//  GUIDEMO_ShowIntro("Available colors",
+//                    "Shows the first of the"
+//                    "\navailable colors in the"
+//                    "\nsimulated configuration");
+	printf("\nFontWindow\n");
+
+
+  GUI_SetColor(GUI_WHITE);
+  GUI_SetBkColor(GUI_BLACK); 
+  GUI_Clear();
+	GUI_SetFont(&GUI_Font8x16);
+	GUI_DispString("Available colors\n");
+  #if !(GUIDEMO_TINY)
+	  GUI_SetFont(&GUI_Font8_ASCII);
+    #ifdef LCD_CONTROLLER
+      GUI_DispString("\nLCD_CONTROLLER: ");
+      GUI_DispDecMin(LCD_CONTROLLER);
+      GUI_DispString("\n");
+    #endif
+    GUI_DispDecMin(LCD_BITSPERPIXEL);
+    GUI_DispString(" bpp");
+    #ifdef LCD_BUSWIDTH
+      GUI_DispString(", ");
+      GUI_DispDecMin(LCD_BUSWIDTH);
+      GUI_DispString(" bit bus");
+    #endif
+    GUI_DispString(", ");
+    GUI_DispDecMin(NumColors);
+    GUI_DispString(" colors\n");
+    #if (LCD_FIXEDPALETTE) 
+      GUI_DispString("Fixed palette: ");
+      GUI_DispDecMin(LCD_FIXEDPALETTE);
+    #else
+      GUI_DispString("(Custom)");
+    #endif
+  #endif
+  #if (LCD_BITSPERPIXEL <= 8)
+  {
+    int XStep = LCD_XSIZE / 16;
+    #if (LCD_YSIZE < 320)
+      int YStep = (LCD_YSIZE - y0) / Lines;
+    #else
+      int YStep = (LCD_YSIZE - y0 - 60) / Lines;
+    #endif
+    int dy = (YStep <= 3) ? 1 : 2;
+	  for (i = 0; i < NumColors; i++) {
+      GUI_SetColorIndex(i);
+      GUI_FillRect((i%16) * XStep + 2,
+                   (i/16) * YStep + y0 + 1,
+                   (i%16 + 1) * XStep - 1,
+                   (i/16 + 1) * YStep + y0 - dy);
+    }
+  }
+  #else
+  {
+	  for (i = 0; i < NumColors; i++) {
+      GUI_SetColorIndex(i);
+      GUI_DrawPoint((U8)(i) + ((LCD_XSIZE - 1 - 256) >> 1), (i >> 8) + y0);
+    }
+  }
+  #endif
+  GUIDEMO_Delay(2500);
+
+}
+
+
+
+
+void spClearScreen( void )
+{
+	GUI_SetBkColor(GUI_GRAY);
+	GUI_Clear();
+	GUI_Delay(100);
+}
+
+
+void FrameCenter( void )
+{
+	int iLoop = 3;
+    GUI_CONTEXT ContextOld;
+    
 	
-    WM_ExecIdle();
+	while( iLoop > 0 )
+	{
+		GUI_SaveContext(&ContextOld);
+		StartWindow( iLoop );
+		spClearScreen();
+		GUI_RestoreContext(&ContextOld);
+		GUI_SaveContext(&ContextOld);
+		FontWindow( iLoop );
+		spClearScreen();
+		GUI_RestoreContext(&ContextOld);
+		
+		iLoop--;
+	}
+	
 }
 
 
