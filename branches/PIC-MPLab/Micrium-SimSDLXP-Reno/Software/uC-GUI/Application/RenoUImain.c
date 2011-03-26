@@ -28,8 +28,13 @@
 #endif
 
 void FrameCenter( void );
-void StartWindow( int );
+void StartWindow( int iOption );
+void SecondWindow( int iOption );
 
+
+#ifndef NULL
+	#define NULL (0)
+#endif
 
 /*
   *******************************************************************
@@ -182,13 +187,44 @@ static int _ButtonSizeX, _ButtonSizeY;
     BUTTON_SetText(_ahButton[0], "Halt");
     BUTTON_SetText(_ahButton[1], "Next");
 	
+	WM_ExecIdle();
+	
 	GUI_Delay(100);
     ///_UpdateCmdWin();
 	_UpdateCmdWin(_ahInfoWin[1]);
 	GUI_SetBkColor(GUI_GRAY);
 	GUI_Clear();	
     
-	WM_ExecIdle();
+	///WM_ExecIdle();
+}
+
+
+void SecondWindow( int iOption )
+{
+static FRAMEWIN_Handle _ahFrameWin[3];
+static FRAMEWIN_Handle _ahInfoWin[2];
+    int xSize, ySize, xPos, yPos;
+
+    /* Calculate position and size of FrameWin[0] */
+    ///xSize = LCD_GetXSize() / 2;
+	xSize = LCD_GetXSize();
+    ///ySize = 65;
+	ySize = LCD_GetYSize() ;
+    ///xPos  = LCD_GetXSize() - xSize;
+	xPos = 0;
+    yPos  = 0;
+    /* Create info window and run the individual demos */
+    _ahFrameWin[0] = FRAMEWIN_Create("emWin Demo", NULL, WM_CF_STAYONTOP, xPos, yPos, xSize, ySize);
+//    _ahInfoWin[0] = WM_GetFirstChild(_ahFrameWin[0]);
+    _ahInfoWin[0] = WM_CreateWindowAsChild(0, 0, 0, 0, WM_GetFirstChild(_ahFrameWin[0]), WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0);
+	
+    WM_ExecIdle();
+
+	GUI_Delay(100);
+    ///_UpdateCmdWin();
+	_UpdateCmdWin(WM_GetFirstChild(_ahFrameWin[0]));
+	GUI_SetBkColor(GUI_GRAY);
+	GUI_Clear();
 }
 
 
@@ -297,10 +333,17 @@ void FrameCenter( void )
 	
 	while( iLoop > 0 )
 	{
+	#if 0
 		GUI_SaveContext(&ContextOld);
 		StartWindow( iLoop );
 		spClearScreen();
 		GUI_RestoreContext(&ContextOld);
+	#endif	
+		GUI_SaveContext(&ContextOld);
+		SecondWindow( iLoop );
+		spClearScreen();
+		GUI_RestoreContext(&ContextOld);
+		
 		GUI_SaveContext(&ContextOld);
 		FontWindow( iLoop );
 		spClearScreen();

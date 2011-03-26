@@ -324,6 +324,7 @@ static  void  AppTaskUserIF (void *p_arg)
 		OSTimeDlyHMSM(0,0,1,0);
 		MainTask_GUI(); 
 //	  	GUIDEMO_Touch();
+		break;
     }
 }
 
