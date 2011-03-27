@@ -732,6 +732,7 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__UpdateChildPositions.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\System\SDLDislpayEmulator\SDLDisplay.cpp" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\GUI_X_set.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\GUI_X_Touch.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\Main.c" />
     <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_core.c" />
     <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_dbg_r.c" />

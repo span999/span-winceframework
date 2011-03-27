@@ -351,8 +351,13 @@ static  void  AppTaskKbd (void *p_arg)
     {
 		tick++;
         ///OSTimeDlyHMSM(0,0,0,10);
-		OSTimeDlyHMSM(0,0,0,800); 
-///		GUI_TOUCH_Exec(); 
+		OSTimeDlyHMSM(0,0,0,800);
+
+///		if( thouch changed )
+///		GUI_TOUCH_Exec();
+///		if( key changed )
+///		GUI_TOUCH_Exec();
+ 
 		if(tick&0x10)
 		{
 		    ///GPIO_SetBits(GPIOD,GPIO_Pin_8);

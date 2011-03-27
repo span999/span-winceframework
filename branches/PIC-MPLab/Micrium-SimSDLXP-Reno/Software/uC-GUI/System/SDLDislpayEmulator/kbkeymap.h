@@ -25,6 +25,9 @@
 #define  KMOD_RESERVED			0x8000
 
 
+/// the user define area in uC/GUI is above
+/// GUI_ID_USER  0x800
+
 /// key code define
 #define KB_KEY_UNKNOW			0
 

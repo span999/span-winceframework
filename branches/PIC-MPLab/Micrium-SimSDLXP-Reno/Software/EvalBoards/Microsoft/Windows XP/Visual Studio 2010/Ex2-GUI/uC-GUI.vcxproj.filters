@@ -1981,6 +1981,9 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUImain.c">
       <Filter>uC-GUI\Application</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\GUI_X_Touch.c">
+      <Filter>uC-GUI\System\Simulation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_cfg.h">
