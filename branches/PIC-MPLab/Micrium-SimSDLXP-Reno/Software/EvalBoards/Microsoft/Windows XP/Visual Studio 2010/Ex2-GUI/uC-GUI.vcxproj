@@ -115,6 +115,7 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo.C" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo_1bpp.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUImain.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\Startup_Screen_1.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\WIDGET_Multiedit.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\XEye.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAArc.c" />
