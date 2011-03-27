@@ -1984,6 +1984,9 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\GUI_X_Touch.c">
       <Filter>uC-GUI\System\Simulation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\Startup_Screen_1.c">
+      <Filter>uC-GUI\Application\res</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_cfg.h">
@@ -2128,6 +2131,9 @@
     </Filter>
     <Filter Include="uC-GUI\System\SDLDislpayEmulator">
       <UniqueIdentifier>{dd04ca64-7ec7-482b-88bd-1e2abff5fcd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\Application\res">
+      <UniqueIdentifier>{52cdb182-5b4a-4234-8edc-f7c7b5c42516}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

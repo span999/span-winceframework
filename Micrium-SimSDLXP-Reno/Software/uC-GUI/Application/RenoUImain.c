@@ -30,6 +30,7 @@
 void FrameCenter( void );
 void StartWindow( int iOption );
 void SecondWindow( int iOption );
+void BootWindow( int iOption );
 
 
 #ifndef NULL
@@ -168,6 +169,13 @@ static int _iTest, _iTestMinor;
 }
 #endif
 
+
+extern GUI_CONST_STORAGE GUI_BITMAP bmStartup_Screen_1;
+void BootWindow( int iOption )
+{
+
+	GUI_DrawBitmap(&bmStartup_Screen_1, 0, 0);
+}
 
 
 void StartWindow( int iOption )
@@ -348,6 +356,12 @@ void FrameCenter( void )
 
 	while( iLoop > 0 )
 	{
+		spClearScreen();
+		
+		GUI_SaveContext(&ContextOld);
+		BootWindow(0);
+		spClearScreen();
+		GUI_RestoreContext(&ContextOld);
 	#if 1
 		GUI_SaveContext(&ContextOld);
 		StartWindow( iLoop );
