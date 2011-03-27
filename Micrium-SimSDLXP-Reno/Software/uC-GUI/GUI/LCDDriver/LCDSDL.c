@@ -22,6 +22,7 @@ Version-Date---Author-Explanation
 #include "SDLdefine.h"
 #include <SDL.h>
 #include "..\..\System\SDLDislpayEmulator\SDLDisplay.h"
+#include "..\..\System\SDLDislpayEmulator\kbkeymap.h"
 
 ///#if (LCD_CONTROLLER == -2) \
 ///    && (!defined(WIN32) | defined(LCD_SIMCONTROLLER))
@@ -50,32 +51,32 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 	
 	printf("\nIn TransIOMsg\n");
 
-#if 0
+#if 1
 	if( WIDGET_MSG_PTR_DOWN == ulMessage )
 	{
 		printf("  mice down: x=%d y=%d\n", lX, lY );
-		ioMsg.type = TYPE_TOUCHSCREEN;
-		ioMsg.uiEvent = EVENT_PRESS;
-		ioMsg.param1 = (SHORT)lX;
-		ioMsg.param2 = (SHORT)lY;
+		///ioMsg.type = TYPE_TOUCHSCREEN;
+		///ioMsg.uiEvent = EVENT_PRESS;
+		///ioMsg.param1 = (SHORT)lX;
+		///ioMsg.param2 = (SHORT)lY;
 	}
 	else
 	if( WIDGET_MSG_PTR_UP == ulMessage )
 	{
 		printf("  mice up: x=%d y=%d\n", lX, lY );
-		ioMsg.type = TYPE_TOUCHSCREEN;
-		ioMsg.uiEvent = EVENT_RELEASE;
-		ioMsg.param1 = (SHORT)lX;
-		ioMsg.param2 = (SHORT)lY;
+		///ioMsg.type = TYPE_TOUCHSCREEN;
+		///ioMsg.uiEvent = EVENT_RELEASE;
+		///ioMsg.param1 = (SHORT)lX;
+		///ioMsg.param2 = (SHORT)lY;
 	}
 	else
 	if( WIDGET_MSG_PTR_MOVE == ulMessage )
 	{
 		///printf("  mice move: x=%d y=%d\n", lX, lY );
-		ioMsg.type = TYPE_TOUCHSCREEN;
-		ioMsg.uiEvent = EVENT_MOVE;
-		ioMsg.param1 = (SHORT)lX;
-		ioMsg.param2 = (SHORT)lY;
+		///ioMsg.type = TYPE_TOUCHSCREEN;
+		///ioMsg.uiEvent = EVENT_MOVE;
+		///ioMsg.param1 = (SHORT)lX;
+		///ioMsg.param2 = (SHORT)lY;
 	}
 	else
 	if( WIDGET_MSG_KEY_DOWN == ulMessage )
@@ -86,11 +87,11 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 		kbscan = (lY&0xFFFF);
 		kbstat = ((lY>>16)&0xFFFF);
 		printf("  keybd down: ID=%d kbscan=%d kbstat=0x%x\n", lX, kbscan, kbstat );
-		ioMsg.type = TYPE_KEYBOARD;
-		ioMsg.uiEvent = EVENT_KEYSCAN;
-		ioMsg.param1 = (SHORT)lX;
-		ioMsg.param2 = (SHORT)kbscan;
-		
+		///ioMsg.type = TYPE_KEYBOARD;
+		///ioMsg.uiEvent = EVENT_KEYSCAN;
+		///ioMsg.param1 = (SHORT)lX;
+		///ioMsg.param2 = (SHORT)kbscan;
+	#if 0	
 		/*re-mapping key, simulate the key pressed/repeased*/
 		if( KB_KEY_1 == ioMsg.param2 )
 		{	/*simulate the "BACK" key repeased*/
@@ -175,14 +176,15 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 		}
 		else
 			ioMsg.param1 = 0;
+	#endif		
 	}
 	else
 	{
 		printf("  io unknow: x=%d y=%d\n", lX, lY );
-		ioMsg.type = TYPE_UNKNOWN;
-		ioMsg.uiEvent = EVENT_INVALID;
-		ioMsg.param1 = (SHORT)lX;
-		ioMsg.param2 = (SHORT)lY;
+		///ioMsg.type = TYPE_UNKNOWN;
+		///ioMsg.uiEvent = EVENT_INVALID;
+		///ioMsg.param1 = (SHORT)lX;
+		///ioMsg.param2 = (SHORT)lY;
 	}
 		
 	ioMsgUpdated = TRUE;

@@ -143,20 +143,28 @@ static void _cbCmdWin(WM_MESSAGE* pMsg)
 {
 static int _iTest, _iTestMinor;
 
-  switch (pMsg->MsgId) {
-  case WM_PAINT:
-    /* Update info in command window */
-    GUI_SetBkColor(GUI_GRAY);
-    GUI_Clear();
-    GUI_DispStringAt("Demo ", 0, 0);
-    GUI_DispDecMin(_iTest + 1);
-    GUI_DispString(".");
-    GUI_DispDecMin(_iTestMinor);
-    GUI_DispString("/");
-//    GUI_DispDecMin(countof(_apfTest));
-  default:
-    WM_DefaultProc(pMsg);
-  }
+	switch (pMsg->MsgId) {
+		case WM_CREATE:
+			break;
+		case WM_TOUCH:
+			break;
+		case WM_KEY:
+			break;
+		case WM_GET_ID:
+			break;
+		case WM_PAINT:
+			/* Update info in command window */
+			GUI_SetBkColor(GUI_GRAY);
+			GUI_Clear();
+			GUI_DispStringAt("Demo ", 0, 0);
+			GUI_DispDecMin(_iTest + 1);
+			GUI_DispString(".");
+			GUI_DispDecMin(_iTestMinor);
+			GUI_DispString("/");
+//    		GUI_DispDecMin(countof(_apfTest));
+		default:
+			WM_DefaultProc(pMsg);
+	}
 }
 #endif
 
@@ -177,11 +185,11 @@ static int _ButtonSizeX, _ButtonSizeY;
 
     /* Create the control window incl. buttons */
 	///create frame
-    ///_ahFrameWin[1] = FRAMEWIN_CreateEx("Control", &_cbCmdWin, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, LCD_GetXSize(), LCD_GetYSize());
+    ///_ahFrameWin[1] = FRAMEWIN_Create("Control", &_cbCmdWin, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, LCD_GetXSize(), LCD_GetYSize());
 	_ahFrameWin[1] = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, "Control", &_cbCmdWin);
-	///get frame handle
+	///get window handle of the frame, there is always a window created while frame created.
     _ahInfoWin[1] = WM_GetClientWindow(_ahFrameWin[1]);
-	///create button within frame handle
+	///create button within windows of frame
     _ahButton[0] = BUTTON_CreateAsChild(10, 20, _ButtonSizeX, _ButtonSizeY, _ahInfoWin[1], 'H', WM_CF_SHOW | WM_CF_STAYONTOP | WM_CF_MEMDEV);
     _ahButton[1] = BUTTON_CreateAsChild(10, 90, _ButtonSizeX, _ButtonSizeY, _ahInfoWin[1], 'N', WM_CF_SHOW | WM_CF_STAYONTOP | WM_CF_MEMDEV);
     BUTTON_SetText(_ahButton[0], "Halt");
@@ -191,7 +199,8 @@ static int _ButtonSizeX, _ButtonSizeY;
 	
 	GUI_Delay(100);
     ///_UpdateCmdWin();
-	_UpdateCmdWin(_ahInfoWin[1]);
+	///_UpdateCmdWin(_ahInfoWin[1]);
+	_UpdateCmdWin(_ahFrameWin[1]);		///kill frame will kill all window in
 	GUI_SetBkColor(GUI_GRAY);
 	GUI_Clear();	
     
@@ -214,15 +223,20 @@ static FRAMEWIN_Handle _ahInfoWin[2];
 	xPos = 0;
     yPos  = 0;
     /* Create info window and run the individual demos */
-    _ahFrameWin[0] = FRAMEWIN_Create("emWin Demo", NULL, WM_CF_STAYONTOP, xPos, yPos, xSize, ySize);
+	///create frame
+    ///_ahFrameWin[0] = FRAMEWIN_Create("emWin Demo", NULL, WM_CF_STAYONTOP, xPos, yPos, xSize, ySize);
+	_ahFrameWin[0] = FRAMEWIN_CreateEx(xPos, yPos, xSize, ySize, WM_HWIN_NULL, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, "Win Demo", NULL);
 //    _ahInfoWin[0] = WM_GetFirstChild(_ahFrameWin[0]);
-    _ahInfoWin[0] = WM_CreateWindowAsChild(0, 0, 0, 0, WM_GetFirstChild(_ahFrameWin[0]), WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0);
-	
+	///create window within frame
+    ///_ahInfoWin[0] = WM_CreateWindowAsChild(0, 0, 0, 0, WM_GetFirstChild(_ahFrameWin[0]), WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0);
+	_ahInfoWin[0] = WM_CreateWindowAsChild(xPos, yPos-20, xSize, ySize-20, WM_GetFirstChild(_ahFrameWin[0]), WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0);
+
     WM_ExecIdle();
 
 	GUI_Delay(100);
     ///_UpdateCmdWin();
-	_UpdateCmdWin(WM_GetFirstChild(_ahFrameWin[0]));
+	///_UpdateCmdWin(WM_GetFirstChild(_ahFrameWin[0]));
+	_UpdateCmdWin(_ahFrameWin[0]);
 	GUI_SetBkColor(GUI_GRAY);
 	GUI_Clear();
 }
@@ -330,10 +344,11 @@ void FrameCenter( void )
 	int iLoop = 3;
     GUI_CONTEXT ContextOld;
     
-	
+	spClearScreen();
+
 	while( iLoop > 0 )
 	{
-	#if 0
+	#if 1
 		GUI_SaveContext(&ContextOld);
 		StartWindow( iLoop );
 		spClearScreen();

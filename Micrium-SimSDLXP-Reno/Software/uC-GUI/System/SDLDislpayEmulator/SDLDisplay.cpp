@@ -953,7 +953,7 @@ void SDLIODriver( void * pvParameters )
 	{
 		done = !SDLProcessEventWIN32();			
 		///
-		printf("\nIn SDLIODriver\n");
+		///printf("\nIn SDLIODriver\n");
 		///vTaskDelay(1);
 		///OSTimeDlyHMSM(0, 0, 0, 1);
 		GUI_X_Delay( 10 );
