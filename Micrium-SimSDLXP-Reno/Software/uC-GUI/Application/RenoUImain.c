@@ -41,8 +41,12 @@ void BootWindow( int iOption );
 void spSetDefaultEffect ( void )
 {
 	///WIDGET_SetDefaultEffect(&WIDGET_Effect_3D);
-	///WIDGET_SetDefaultEffect(&WIDGET_Effect_Simple);
-	WIDGET_SetDefaultEffect(&WIDGET_Effect_None);
+	WIDGET_SetDefaultEffect(&WIDGET_Effect_Simple);
+	///WIDGET_SetDefaultEffect(&WIDGET_Effect_None);
+	
+	FRAMEWIN_SetDefaultBorderSize( 0 );
+
+
 }
 
 
@@ -210,6 +214,10 @@ static int _ButtonSizeX, _ButtonSizeY;
 	///create frame
     ///_ahFrameWin[1] = FRAMEWIN_Create("Control", &_cbCmdWin, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, LCD_GetXSize(), LCD_GetYSize());
 	_ahFrameWin[1] = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, "Control", &_cbCmdWin);
+	
+	///adjust the title height
+	FRAMEWIN_SetTitleHeight( _ahFrameWin[1], 25);
+	
 	///get window handle of the frame, there is always a window created while frame created.
     _ahInfoWin[1] = WM_GetClientWindow(_ahFrameWin[1]);
 	///create button within windows of frame
