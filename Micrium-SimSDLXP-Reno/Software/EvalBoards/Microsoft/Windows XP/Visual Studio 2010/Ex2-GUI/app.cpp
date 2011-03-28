@@ -340,6 +340,7 @@ static  void  AppTaskUserIF (void *p_arg)
 * Returns     : none
 *********************************************************************************************************
 */
+extern void TaskKbdHook( void * pvParameters );
 
 static  void  AppTaskKbd (void *p_arg)
 {
@@ -347,8 +348,11 @@ static  void  AppTaskKbd (void *p_arg)
 	INT8U tick = 0;
 	(void)p_arg;
 	
+	OSTimeDlyHMSM(0,0,0,800);
+	
 	while(DEF_TRUE) 
     {
+#if 1	
 		tick++;
         ///OSTimeDlyHMSM(0,0,0,10);
 		OSTimeDlyHMSM(0,0,0,800);
@@ -370,6 +374,9 @@ static  void  AppTaskKbd (void *p_arg)
 			///GPIO_SetBits(GPIOD,GPIO_Pin_11);
 		}
 	   ;
+#else
+		///TaskKbdHook(0);
+#endif   
 	   /*	 
 		OSTimeDlyHMSM(0,0,0,500);
 		*/

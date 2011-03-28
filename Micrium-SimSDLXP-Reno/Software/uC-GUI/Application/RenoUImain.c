@@ -25,6 +25,7 @@
 //  #include "LISTBOX.h"
   #include "FRAMEWIN.h"
   #include "BUTTON.h"
+  #include "TEXT.h"
 #endif
 
 void FrameCenter( void );
@@ -36,6 +37,10 @@ void BootWindow( int iOption );
 #ifndef NULL
 	#define NULL (0)
 #endif
+
+
+static TEXT_Handle		ghTEXT = 0;
+
 
 
 void spSetDefaultEffect ( void )
@@ -157,13 +162,95 @@ static void _UpdateCmdWin(FRAMEWIN_Handle hFrame) {
 static void _cbCmdWin(WM_MESSAGE* pMsg)
 {
 static int _iTest, _iTestMinor;
+	int Key = 0;
 
+	printf("_cbCmdWin() ==> %d \n", pMsg->MsgId);
 	switch (pMsg->MsgId) {
 		case WM_CREATE:
+			printf("_cbCmdWin() WM_CREATE!!!!!!!!!!!!!!!!!\n");
 			break;
+		case WM_MOVE:
+			printf("_cbCmdWin() WM_MOVE!!!!!!!!!!!!!!!!!\n");
+			break;
+		case WM_SIZE:
+			printf("_cbCmdWin() WM_SIZE!!!!!!!!!!!!!!!!!\n");
+			break;
+
 		case WM_TOUCH:
 			break;
+		case WM_NOTIFY_PARENT:
+			break;
 		case WM_KEY:
+			printf("_cbCmdWin() WM_KEY!!!!!!!!!!!!!!!!!\n");
+		#if 0
+			if (((WM_KEY_INFO*)(pMsg->Data.p))->PressedCnt > 0) {
+				Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+					if (Key == GUI_KEY_INSERT) {
+						WM_HWIN hWin;
+						hWin = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_OVERWRITE);
+						_Overwrite ^= 1;
+						_SetButtonState(hWin, _Overwrite);
+					}
+			}
+		#else
+			if (((WM_KEY_INFO*)(pMsg->Data.p))->Key > 0) {
+				Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+				printf("_cbCmdWin() WM_KEY=%d[%c]\n", Key, Key);
+				
+				if( 'u' == Key ) 
+					GUI_DispStringAt("-exit key-", 0, 80);
+				else	
+				if( 'y' == Key ) 
+					GUI_DispStringAt("-exit key-hold", 0, 80);
+				else	
+				if( 'i' == Key ) 
+					GUI_DispStringAt("-up key-", 0, 80);
+				else	
+				if( 'o' == Key ) 
+					GUI_DispStringAt("-up key-hold", 0, 80);
+				else	
+				if( 'j' == Key ) 
+					GUI_DispStringAt("-enter key-", 0, 80);
+				else	
+				if( 'h' == Key ) 
+					GUI_DispStringAt("-enter key-hold", 0, 80);
+				else	
+				if( 'k' == Key ) 
+					GUI_DispStringAt("-down key-", 0, 80);
+				else	
+				if( 'l' == Key ) 
+					GUI_DispStringAt("-down key-hold", 0, 80);
+				
+				if( ghTEXT != 0 )
+				{
+					if( 'u' == Key ) 
+						TEXT_SetText( ghTEXT, "-exit key-");
+					else	
+					if( 'y' == Key ) 
+						TEXT_SetText( ghTEXT, "-exit key-hold");
+					else	
+					if( 'i' == Key ) 
+						TEXT_SetText( ghTEXT, "-up key-");
+					else	
+					if( 'o' == Key ) 
+						TEXT_SetText( ghTEXT, "-up key-hold");
+					else	
+					if( 'j' == Key ) 
+						TEXT_SetText( ghTEXT, "-enter key-");
+					else	
+					if( 'h' == Key ) 
+						TEXT_SetText( ghTEXT, "-enter key-hold");
+					else	
+					if( 'k' == Key ) 
+						TEXT_SetText( ghTEXT, "-down key-");
+					else	
+					if( 'l' == Key ) 
+						TEXT_SetText( ghTEXT, "-down key-hold");
+				}
+				
+			}
+		#endif
+			
 			break;
 		case WM_GET_ID:
 			break;
@@ -218,6 +305,9 @@ static int _ButtonSizeX, _ButtonSizeY;
 	///adjust the title height
 	FRAMEWIN_SetTitleHeight( _ahFrameWin[1], 25);
 	
+	WM_SetCallback(_ahFrameWin[1], _cbCmdWin);
+	WM_SetFocus(_ahFrameWin[1]);
+	
 	///get window handle of the frame, there is always a window created while frame created.
     _ahInfoWin[1] = WM_GetClientWindow(_ahFrameWin[1]);
 	///create button within windows of frame
@@ -226,9 +316,11 @@ static int _ButtonSizeX, _ButtonSizeY;
     BUTTON_SetText(_ahButton[0], "Halt");
     BUTTON_SetText(_ahButton[1], "Next");
 	
+	ghTEXT = TEXT_CreateEx(10, 148, 70, 20, _ahInfoWin[1], WM_CF_SHOW, GUI_TA_HCENTER, 0, "test");
+	
 	WM_ExecIdle();
 	
-	GUI_Delay(300);
+	GUI_Delay(1000);
     ///_UpdateCmdWin();
 	///_UpdateCmdWin(_ahInfoWin[1]);
 	_UpdateCmdWin(_ahFrameWin[1]);		///kill frame will kill all window in
