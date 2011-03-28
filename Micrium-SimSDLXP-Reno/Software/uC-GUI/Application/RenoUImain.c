@@ -22,7 +22,7 @@
 #include "GUI.h"
 #if GUI_WINSUPPORT
 //  #include "PROGBAR.h"
-//  #include "LISTBOX.h"
+  #include "LISTBOX.h"
   #include "FRAMEWIN.h"
   #include "BUTTON.h"
   #include "TEXT.h"
@@ -32,6 +32,7 @@ void FrameCenter( void );
 void StartWindow( int iOption );
 void SecondWindow( int iOption );
 void BootWindow( int iOption );
+void ListboxWindow( int iOption );
 
 
 #ifndef NULL
@@ -454,6 +455,32 @@ void FontWindow( int iOption )
 
 }
 
+static const GUI_ConstString _apListBox[] = {
+  "English", "Deutsch", "Français", "Japanese", "Italiano", NULL
+};
+
+void ListboxWindow( int iOption )
+{
+	FRAMEWIN_Handle	hFrame;
+	LISTBOX_Handle	hList;
+	int				iTmp = 0;
+	
+	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, "List Box", &_cbCmdWin);
+	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
+	
+	hList = LISTBOX_CreateEx(0, iTmp, LCD_GetXSize(), LCD_GetYSize()-iTmp, (WM_HWIN)hFrame, WM_CF_SHOW, 0, 0, _apListBox);
+	
+	
+    WM_ExecIdle();
+
+	GUI_Delay(300);
+    ///_UpdateCmdWin();
+	///_UpdateCmdWin(WM_GetFirstChild(_ahFrameWin[0]));
+	_UpdateCmdWin(hFrame);
+	GUI_SetBkColor(GUI_GRAY);
+	GUI_Clear();
+}
+
 
 
 
@@ -494,6 +521,11 @@ void FrameCenter( void )
 		
 		GUI_SaveContext(&ContextOld);
 		FontWindow( iLoop );
+		spClearScreen();
+		GUI_RestoreContext(&ContextOld);
+		
+		GUI_SaveContext(&ContextOld);
+		ListboxWindow(0);
 		spClearScreen();
 		GUI_RestoreContext(&ContextOld);
 		
