@@ -30,6 +30,16 @@ Version-Date---Author-Explanation
 
 
 
+void TaskKbdHook( void * pvParameters )
+{
+	int iKey = 0;
+	
+	printf("  TaskKbdHook:\n");
+	iKey = GUI_WaitKey();
+	printf("  TaskKbdHook: keycode=%d\n", iKey);
+
+}
+
 
 
 //*****************************************************************************
@@ -87,11 +97,12 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 		kbscan = (lY&0xFFFF);
 		kbstat = ((lY>>16)&0xFFFF);
 		printf("  keybd down: ID=%d kbscan=%d kbstat=0x%x\n", lX, kbscan, kbstat );
-		///ioMsg.type = TYPE_KEYBOARD;
-		///ioMsg.uiEvent = EVENT_KEYSCAN;
-		///ioMsg.param1 = (SHORT)lX;
-		///ioMsg.param2 = (SHORT)kbscan;
 	#if 0	
+		ioMsg.type = TYPE_KEYBOARD;
+		ioMsg.uiEvent = EVENT_KEYSCAN;
+		ioMsg.param1 = (SHORT)lX;
+		ioMsg.param2 = (SHORT)kbscan;
+
 		/*re-mapping key, simulate the key pressed/repeased*/
 		if( KB_KEY_1 == ioMsg.param2 )
 		{	/*simulate the "BACK" key repeased*/
@@ -176,7 +187,24 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 		}
 		else
 			ioMsg.param1 = 0;
-	#endif		
+
+	#endif				
+		///GUI_SendKeyMsg(int Key, int Pressed);
+		GUI_SendKeyMsg(kbscan, (WIDGET_MSG_KEY_DOWN == ulMessage)?1:0 );
+
+	}
+	else
+	if( WIDGET_MSG_KEY_UP == ulMessage )
+	{
+		SHORT	kbscan;
+		SHORT	kbstat;
+		
+		kbscan = (lY&0xFFFF);
+		kbstat = ((lY>>16)&0xFFFF);
+		printf("  keybd up: ID=%d kbscan=%d kbstat=0x%x\n", lX, kbscan, kbstat );
+		
+		///GUI_SendKeyMsg(int Key, int Pressed);
+		GUI_SendKeyMsg(kbscan, (WIDGET_MSG_KEY_DOWN == ulMessage)?1:0 );
 	}
 	else
 	{
@@ -188,6 +216,8 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 	}
 		
 	ioMsgUpdated = TRUE;
+
+	
 #endif
 
 #if 0

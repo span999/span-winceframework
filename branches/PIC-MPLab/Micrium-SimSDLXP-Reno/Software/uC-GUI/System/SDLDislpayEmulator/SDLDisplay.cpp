@@ -956,7 +956,8 @@ void SDLIODriver( void * pvParameters )
 		///printf("\nIn SDLIODriver\n");
 		///vTaskDelay(1);
 		///OSTimeDlyHMSM(0, 0, 0, 1);
-		GUI_X_Delay( 10 );
+		///GUI_X_Delay( 10 );
+		GUI_X_Delay( 1 );
 	}
 	SDLDestroy();
 	while(1)
