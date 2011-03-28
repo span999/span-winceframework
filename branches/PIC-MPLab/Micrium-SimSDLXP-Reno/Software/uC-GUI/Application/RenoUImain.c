@@ -37,6 +37,16 @@ void BootWindow( int iOption );
 	#define NULL (0)
 #endif
 
+
+void spSetDefaultEffect ( void )
+{
+	///WIDGET_SetDefaultEffect(&WIDGET_Effect_3D);
+	///WIDGET_SetDefaultEffect(&WIDGET_Effect_Simple);
+	WIDGET_SetDefaultEffect(&WIDGET_Effect_None);
+}
+
+
+
 /*
   *******************************************************************
   *
@@ -173,8 +183,10 @@ static int _iTest, _iTestMinor;
 extern GUI_CONST_STORAGE GUI_BITMAP bmStartup_Screen_1;
 void BootWindow( int iOption )
 {
-
+	GUI_DispStringAt("BootWindow\n", 10, 65 );
+	GUI_Delay(300);
 	GUI_DrawBitmap(&bmStartup_Screen_1, 0, 0);
+	GUI_Delay(300);
 }
 
 
@@ -184,6 +196,9 @@ static BUTTON_Handle   _ahButton[2];
 static FRAMEWIN_Handle _ahFrameWin[3];
 static FRAMEWIN_Handle _ahInfoWin[2];
 static int _ButtonSizeX, _ButtonSizeY;
+
+
+	spSetDefaultEffect();
 
     /* Calculate position and size of FrameWin[1] */
 ///    _ButtonSizeX = 60;
@@ -205,7 +220,7 @@ static int _ButtonSizeX, _ButtonSizeY;
 	
 	WM_ExecIdle();
 	
-	GUI_Delay(100);
+	GUI_Delay(300);
     ///_UpdateCmdWin();
 	///_UpdateCmdWin(_ahInfoWin[1]);
 	_UpdateCmdWin(_ahFrameWin[1]);		///kill frame will kill all window in
@@ -221,6 +236,9 @@ void SecondWindow( int iOption )
 static FRAMEWIN_Handle _ahFrameWin[3];
 static FRAMEWIN_Handle _ahInfoWin[2];
     int xSize, ySize, xPos, yPos;
+
+
+	spSetDefaultEffect();
 
     /* Calculate position and size of FrameWin[0] */
     ///xSize = LCD_GetXSize() / 2;
@@ -241,7 +259,7 @@ static FRAMEWIN_Handle _ahInfoWin[2];
 
     WM_ExecIdle();
 
-	GUI_Delay(100);
+	GUI_Delay(300);
     ///_UpdateCmdWin();
 	///_UpdateCmdWin(WM_GetFirstChild(_ahFrameWin[0]));
 	_UpdateCmdWin(_ahFrameWin[0]);
@@ -276,7 +294,7 @@ void FontWindow( int iOption )
 //                    "\navailable colors in the"
 //                    "\nsimulated configuration");
 	printf("\nFontWindow\n");
-
+	spSetDefaultEffect();
 
   GUI_SetColor(GUI_WHITE);
   GUI_SetBkColor(GUI_BLACK); 
@@ -332,7 +350,7 @@ void FontWindow( int iOption )
     }
   }
   #endif
-  GUIDEMO_Delay(2500);
+  GUI_Delay(300);
 
 }
 
@@ -351,7 +369,8 @@ void FrameCenter( void )
 {
 	int iLoop = 3;
     GUI_CONTEXT ContextOld;
-    
+
+
 	spClearScreen();
 
 	while( iLoop > 0 )
