@@ -50,7 +50,7 @@ void spSetDefaultEffect ( void )
 	WIDGET_SetDefaultEffect(&WIDGET_Effect_Simple);
 	///WIDGET_SetDefaultEffect(&WIDGET_Effect_None);
 	
-	FRAMEWIN_SetDefaultBorderSize( 0 );
+	FRAMEWIN_SetDefaultBorderSize( 1 );
 
 
 }
@@ -256,6 +256,7 @@ static int _iTest, _iTestMinor;
 		case WM_GET_ID:
 			break;
 		case WM_PAINT:
+			///WM_DefaultProc(pMsg);
 			/* Update info in command window */
 			GUI_SetBkColor(GUI_GRAY);
 			GUI_Clear();
@@ -265,6 +266,128 @@ static int _iTest, _iTestMinor;
 			GUI_DispDecMin(_iTestMinor);
 			GUI_DispString("/");
 //    		GUI_DispDecMin(countof(_apfTest));
+			break;
+		default:
+			WM_DefaultProc(pMsg);
+	}
+}
+#endif
+
+
+#if (GUI_WINSUPPORT)
+static void _cbFrameWin(WM_MESSAGE* pMsg)
+{
+static int _iTest, _iTestMinor;
+	int Key = 0;
+
+	printf("_cbFrameWin() ==> %d \n", pMsg->MsgId);
+	switch (pMsg->MsgId) {
+		case WM_CREATE:
+			printf("_cbFrameWin() WM_CREATE!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_MOVE:
+			printf("_cbFrameWin() WM_MOVE!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_SIZE:
+			printf("_cbFrameWin() WM_SIZE!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+			break;
+
+		case WM_TOUCH:
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_NOTIFY_PARENT:
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_KEY:
+			printf("_cbFrameWin() WM_KEY!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+		#if 0
+			if (((WM_KEY_INFO*)(pMsg->Data.p))->PressedCnt > 0) {
+				Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+					if (Key == GUI_KEY_INSERT) {
+						WM_HWIN hWin;
+						hWin = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_OVERWRITE);
+						_Overwrite ^= 1;
+						_SetButtonState(hWin, _Overwrite);
+					}
+			}
+		#else
+			if (((WM_KEY_INFO*)(pMsg->Data.p))->Key > 0) {
+				Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+				printf("_cbFrameWin() WM_KEY=%d[%c]\n", Key, Key);
+				
+				if( 'u' == Key ) 
+					GUI_DispStringAt("-exit key-", 0, 80);
+				else	
+				if( 'y' == Key ) 
+					GUI_DispStringAt("-exit key-hold", 0, 80);
+				else	
+				if( 'i' == Key ) 
+					GUI_DispStringAt("-up key-", 0, 80);
+				else	
+				if( 'o' == Key ) 
+					GUI_DispStringAt("-up key-hold", 0, 80);
+				else	
+				if( 'j' == Key ) 
+					GUI_DispStringAt("-enter key-", 0, 80);
+				else	
+				if( 'h' == Key ) 
+					GUI_DispStringAt("-enter key-hold", 0, 80);
+				else	
+				if( 'k' == Key ) 
+					GUI_DispStringAt("-down key-", 0, 80);
+				else	
+				if( 'l' == Key ) 
+					GUI_DispStringAt("-down key-hold", 0, 80);
+				
+				if( ghTEXT != 0 )
+				{
+					if( 'u' == Key ) 
+						TEXT_SetText( ghTEXT, "-exit key-");
+					else	
+					if( 'y' == Key ) 
+						TEXT_SetText( ghTEXT, "-exit key-hold");
+					else	
+					if( 'i' == Key ) 
+						TEXT_SetText( ghTEXT, "-up key-");
+					else	
+					if( 'o' == Key ) 
+						TEXT_SetText( ghTEXT, "-up key-hold");
+					else	
+					if( 'j' == Key ) 
+						TEXT_SetText( ghTEXT, "-enter key-");
+					else	
+					if( 'h' == Key ) 
+						TEXT_SetText( ghTEXT, "-enter key-hold");
+					else	
+					if( 'k' == Key ) 
+						TEXT_SetText( ghTEXT, "-down key-");
+					else	
+					if( 'l' == Key ) 
+						TEXT_SetText( ghTEXT, "-down key-hold");
+				}
+				
+			}
+		#endif
+			
+			break;
+		case WM_GET_ID:
+			WM_DefaultProc(pMsg);
+			break;
+	#if 0		
+		case WM_PAINT:
+			printf("_cbFrameWin() WM_PAINT!!!!!!!!!!!!!!!!!\n");
+			///WM_DefaultProc(pMsg);
+			/* Update info in command window */
+			///GUI_SetBkColor(GUI_GRAY);
+			///GUI_Clear();
+			GUI_DispStringAt("Frame ", 80, 0);
+			WM_DefaultProc(pMsg);
+			break;
+	#endif		
 		default:
 			WM_DefaultProc(pMsg);
 	}
@@ -306,7 +429,7 @@ static int _ButtonSizeX, _ButtonSizeY;
 	///adjust the title height
 	FRAMEWIN_SetTitleHeight( _ahFrameWin[1], 25);
 	
-	WM_SetCallback(_ahFrameWin[1], _cbCmdWin);
+	///WM_SetCallback(_ahFrameWin[1], _cbFrameWin);
 	WM_SetFocus(_ahFrameWin[1]);
 	
 	///get window handle of the frame, there is always a window created while frame created.
@@ -321,7 +444,7 @@ static int _ButtonSizeX, _ButtonSizeY;
 	
 	WM_ExecIdle();
 	
-	GUI_Delay(1000);
+	GUI_Delay(300);
     ///_UpdateCmdWin();
 	///_UpdateCmdWin(_ahInfoWin[1]);
 	_UpdateCmdWin(_ahFrameWin[1]);		///kill frame will kill all window in
@@ -331,7 +454,7 @@ static int _ButtonSizeX, _ButtonSizeY;
 	///WM_ExecIdle();
 }
 
-
+#define		EDGEOFFSET	20
 void SecondWindow( int iOption )
 {
 static FRAMEWIN_Handle _ahFrameWin[3];
@@ -343,24 +466,26 @@ static FRAMEWIN_Handle _ahInfoWin[2];
 
     /* Calculate position and size of FrameWin[0] */
     ///xSize = LCD_GetXSize() / 2;
-	xSize = LCD_GetXSize();
+	xSize = LCD_GetXSize()-(EDGEOFFSET*2);
     ///ySize = 65;
-	ySize = LCD_GetYSize() ;
+	ySize = LCD_GetYSize()-(EDGEOFFSET*2);
     ///xPos  = LCD_GetXSize() - xSize;
-	xPos = 0;
-    yPos  = 0;
+	xPos = EDGEOFFSET;
+    yPos  = EDGEOFFSET;
     /* Create info window and run the individual demos */
 	///create frame
     ///_ahFrameWin[0] = FRAMEWIN_Create("emWin Demo", NULL, WM_CF_STAYONTOP, xPos, yPos, xSize, ySize);
 	_ahFrameWin[0] = FRAMEWIN_CreateEx(xPos, yPos, xSize, ySize, WM_HWIN_NULL, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, "Win Demo", NULL);
 //    _ahInfoWin[0] = WM_GetFirstChild(_ahFrameWin[0]);
 	///create window within frame
-    ///_ahInfoWin[0] = WM_CreateWindowAsChild(0, 0, 0, 0, WM_GetFirstChild(_ahFrameWin[0]), WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0);
-	_ahInfoWin[0] = WM_CreateWindowAsChild(xPos, yPos-20, xSize, ySize-20, WM_GetFirstChild(_ahFrameWin[0]), WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0);
+    _ahInfoWin[0] = WM_CreateWindowAsChild(0, 0, 30, 50, WM_GetFirstChild(_ahFrameWin[0]), WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0);
+	///_ahInfoWin[0] = WM_CreateWindowAsChild(xPos, yPos-20, xSize, ySize-20, WM_GetFirstChild(_ahFrameWin[0]), WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0);
 
+	///WM_SetCallback(_ahFrameWin[0], _cbFrameWin);
+	
     WM_ExecIdle();
 
-	GUI_Delay(300);
+	GUI_Delay(1000);
     ///_UpdateCmdWin();
 	///_UpdateCmdWin(WM_GetFirstChild(_ahFrameWin[0]));
 	_UpdateCmdWin(_ahFrameWin[0]);
