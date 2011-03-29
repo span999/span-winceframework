@@ -32,6 +32,7 @@ void FrameCenter( void );
 void StartWindow( int iOption );
 void SecondWindow( int iOption );
 void BootWindow( int iOption );
+void SimpleWindow( int iOption );
 void ListboxWindow( int iOption );
 
 
@@ -49,8 +50,9 @@ void spSetDefaultEffect ( void )
 	///WIDGET_SetDefaultEffect(&WIDGET_Effect_3D);
 	WIDGET_SetDefaultEffect(&WIDGET_Effect_Simple);
 	///WIDGET_SetDefaultEffect(&WIDGET_Effect_None);
+
 	
-	FRAMEWIN_SetDefaultBorderSize( 1 );
+	FRAMEWIN_SetDefaultBorderSize( 2 );
 
 
 }
@@ -580,6 +582,352 @@ void FontWindow( int iOption )
 
 }
 
+
+#if (GUI_WINSUPPORT)
+void cbRoundWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int radius, int pensize )
+{
+	GUI_RECT rtTemp;
+	GUI_COLOR clTemp;
+	
+	if( !pMsg || (WM_PAINT != pMsg->MsgId && WM_DELETE != pMsg->MsgId) )
+		return;
+	
+	WM_GetClientRectEx( pMsg->hWin, &rtTemp );
+	
+	if( WM_DELETE == pMsg->MsgId )
+	{
+		GUI_ClearRect( rtTemp.x0, rtTemp.y0, rtTemp.x1, rtTemp.y0);
+		return;
+	}
+	
+	clTemp = GUI_GetColor();
+	GUI_SetColor( color );
+	///GUI_SetPenSize( 1 );
+	if( pensize > 1 )
+	{
+		GUI_FillRect( rtTemp.x0+radius, rtTemp.y0, rtTemp.x1-radius, rtTemp.y0+(pensize-1));
+		GUI_FillRect( rtTemp.x0+radius, rtTemp.y1-(pensize-1), rtTemp.x1-radius, rtTemp.y1);
+		GUI_FillRect( rtTemp.x0, rtTemp.y0+radius, rtTemp.x0+pensize, rtTemp.y1-radius);
+		GUI_FillRect( rtTemp.x1-pensize, rtTemp.y0+radius, rtTemp.x1, rtTemp.y1-radius);
+	}
+	else
+	{
+		GUI_DrawHLine( rtTemp.y0, rtTemp.x0+radius, rtTemp.x1-radius );
+		GUI_DrawHLine( rtTemp.y1, rtTemp.x0+radius, rtTemp.x1-radius ); 
+		GUI_DrawVLine( rtTemp.x0, rtTemp.y0+radius, rtTemp.y1-radius ); 
+		GUI_DrawVLine( rtTemp.x1, rtTemp.y0+radius, rtTemp.y1-radius );
+	}
+	if( radius > 0 )
+	{
+		///GUI_SetPenSize( 1 );
+		GUI_DrawArc( rtTemp.x0+radius, rtTemp.y0+radius, radius, radius, 90, 180 );
+		GUI_DrawArc( rtTemp.x0+radius, rtTemp.y1-radius, radius, radius, 180, 270 );
+		GUI_DrawArc( rtTemp.x1-radius, rtTemp.y1-radius, radius, radius, -90, 0 );
+		GUI_DrawArc( rtTemp.x1-radius, rtTemp.y0+radius, radius, radius, 0, 90 );
+	}
+	GUI_SetColor( clTemp );
+}
+
+
+static void cbSimpleWindow(WM_MESSAGE* pMsg)
+{
+static int _iTest, _iTestMinor;
+	int Key = 0;
+
+	printf("cbSimpleWindow() ==> %d \n", pMsg->MsgId);
+	switch (pMsg->MsgId) {
+		case WM_CREATE:
+			printf("cbSimpleWindow() WM_CREATE!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_MOVE:
+			printf("cbSimpleWindow() WM_MOVE!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_SIZE:
+			printf("cbSimpleWindow() WM_SIZE!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+			break;
+
+		case WM_TOUCH:
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_NOTIFY_PARENT:
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_KEY:
+			printf("cbSimpleWindow() WM_KEY!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+		#if 0
+			if (((WM_KEY_INFO*)(pMsg->Data.p))->PressedCnt > 0) {
+				Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+					if (Key == GUI_KEY_INSERT) {
+						WM_HWIN hWin;
+						hWin = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_OVERWRITE);
+						_Overwrite ^= 1;
+						_SetButtonState(hWin, _Overwrite);
+					}
+			}
+		#else
+			if (((WM_KEY_INFO*)(pMsg->Data.p))->Key > 0) {
+				Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+				printf("_cbFrameWin() WM_KEY=%d[%c]\n", Key, Key);
+				
+				if( 'u' == Key ) 
+					GUI_DispStringAt("-exit key-", 0, 80);
+				else	
+				if( 'y' == Key ) 
+					GUI_DispStringAt("-exit key-hold", 0, 80);
+				else	
+				if( 'i' == Key ) 
+					GUI_DispStringAt("-up key-", 0, 80);
+				else	
+				if( 'o' == Key ) 
+					GUI_DispStringAt("-up key-hold", 0, 80);
+				else	
+				if( 'j' == Key ) 
+					GUI_DispStringAt("-enter key-", 0, 80);
+				else	
+				if( 'h' == Key ) 
+					GUI_DispStringAt("-enter key-hold", 0, 80);
+				else	
+				if( 'k' == Key ) 
+					GUI_DispStringAt("-down key-", 0, 80);
+				else	
+				if( 'l' == Key ) 
+					GUI_DispStringAt("-down key-hold", 0, 80);
+				
+				if( ghTEXT != 0 )
+				{
+					if( 'u' == Key ) 
+						TEXT_SetText( ghTEXT, "-exit key-");
+					else	
+					if( 'y' == Key ) 
+						TEXT_SetText( ghTEXT, "-exit key-hold");
+					else	
+					if( 'i' == Key ) 
+						TEXT_SetText( ghTEXT, "-up key-");
+					else	
+					if( 'o' == Key ) 
+						TEXT_SetText( ghTEXT, "-up key-hold");
+					else	
+					if( 'j' == Key ) 
+						TEXT_SetText( ghTEXT, "-enter key-");
+					else	
+					if( 'h' == Key ) 
+						TEXT_SetText( ghTEXT, "-enter key-hold");
+					else	
+					if( 'k' == Key ) 
+						TEXT_SetText( ghTEXT, "-down key-");
+					else	
+					if( 'l' == Key ) 
+						TEXT_SetText( ghTEXT, "-down key-hold");
+				}
+				
+			}
+		#endif
+			
+			break;
+		case WM_GET_ID:
+			WM_DefaultProc(pMsg);
+			break;
+	#if 1	
+		case WM_DELETE:
+			printf("cbSimpleWindow() WM_DELETE!!!!!!!!!!!!!!!!!\n");
+			cbRoundWinExt( pMsg, GUI_BLUE, 0, 1 );
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_PAINT:
+			printf("cbSimpleWindow() WM_PAINT!!!!!!!!!!!!!!!!!\n");
+			///WM_DefaultProc(pMsg);
+			/* Update info in command window */
+			cbRoundWinExt( pMsg, GUI_BLUE, 0, 1 );
+			WM_DefaultProc(pMsg);
+			break;
+	#endif		
+		default:
+			WM_DefaultProc(pMsg);
+	}
+}
+
+
+
+static void cbSimpleRoundWindow(WM_MESSAGE* pMsg)
+{
+static int _iTest, _iTestMinor;
+	int Key = 0;
+
+	printf("cbSimpleWindow() ==> %d \n", pMsg->MsgId);
+	switch (pMsg->MsgId) {
+		case WM_CREATE:
+			printf("cbSimpleWindow() WM_CREATE!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_MOVE:
+			printf("cbSimpleWindow() WM_MOVE!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_SIZE:
+			printf("cbSimpleWindow() WM_SIZE!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+			break;
+
+		case WM_TOUCH:
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_NOTIFY_PARENT:
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_KEY:
+			printf("cbSimpleWindow() WM_KEY!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+		#if 0
+			if (((WM_KEY_INFO*)(pMsg->Data.p))->PressedCnt > 0) {
+				Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+					if (Key == GUI_KEY_INSERT) {
+						WM_HWIN hWin;
+						hWin = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_OVERWRITE);
+						_Overwrite ^= 1;
+						_SetButtonState(hWin, _Overwrite);
+					}
+			}
+		#else
+			if (((WM_KEY_INFO*)(pMsg->Data.p))->Key > 0) {
+				Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+				printf("_cbFrameWin() WM_KEY=%d[%c]\n", Key, Key);
+				
+				if( 'u' == Key ) 
+					GUI_DispStringAt("-exit key-", 0, 80);
+				else	
+				if( 'y' == Key ) 
+					GUI_DispStringAt("-exit key-hold", 0, 80);
+				else	
+				if( 'i' == Key ) 
+					GUI_DispStringAt("-up key-", 0, 80);
+				else	
+				if( 'o' == Key ) 
+					GUI_DispStringAt("-up key-hold", 0, 80);
+				else	
+				if( 'j' == Key ) 
+					GUI_DispStringAt("-enter key-", 0, 80);
+				else	
+				if( 'h' == Key ) 
+					GUI_DispStringAt("-enter key-hold", 0, 80);
+				else	
+				if( 'k' == Key ) 
+					GUI_DispStringAt("-down key-", 0, 80);
+				else	
+				if( 'l' == Key ) 
+					GUI_DispStringAt("-down key-hold", 0, 80);
+				
+				if( ghTEXT != 0 )
+				{
+					if( 'u' == Key ) 
+						TEXT_SetText( ghTEXT, "-exit key-");
+					else	
+					if( 'y' == Key ) 
+						TEXT_SetText( ghTEXT, "-exit key-hold");
+					else	
+					if( 'i' == Key ) 
+						TEXT_SetText( ghTEXT, "-up key-");
+					else	
+					if( 'o' == Key ) 
+						TEXT_SetText( ghTEXT, "-up key-hold");
+					else	
+					if( 'j' == Key ) 
+						TEXT_SetText( ghTEXT, "-enter key-");
+					else	
+					if( 'h' == Key ) 
+						TEXT_SetText( ghTEXT, "-enter key-hold");
+					else	
+					if( 'k' == Key ) 
+						TEXT_SetText( ghTEXT, "-down key-");
+					else	
+					if( 'l' == Key ) 
+						TEXT_SetText( ghTEXT, "-down key-hold");
+				}
+				
+			}
+		#endif
+			
+			break;
+		case WM_GET_ID:
+			WM_DefaultProc(pMsg);
+			break;
+	#if 1	
+		case WM_DELETE:
+			printf("cbSimpleWindow() WM_DELETE!!!!!!!!!!!!!!!!!\n");
+			cbRoundWinExt( pMsg, GUI_BLUE, 13, 2 );
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_PAINT:
+			printf("cbSimpleWindow() WM_PAINT!!!!!!!!!!!!!!!!!\n");
+			///WM_DefaultProc(pMsg);
+			/* Update info in command window */
+			cbRoundWinExt( pMsg, GUI_BLUE, 13, 2 );
+			WM_DefaultProc(pMsg);
+			break;
+	#endif		
+		default:
+			WM_DefaultProc(pMsg);
+	}
+}
+#endif
+
+
+
+void SimpleWindow( int iOption )
+{
+
+	WM_HWIN hWin1 = 0;
+	WM_HWIN hWin2 = 0;
+	WM_HWIN hWin3 = 0;
+	WM_HWIN hWin4 = 0;
+	WM_HWIN hWin5 = 0;
+	WM_CALLBACK* pOldCB = NULL;
+	
+	GUI_SetColor(GUI_BLACK);
+	GUI_SetBkColor(GUI_WHITE); 
+	GUI_Clear();
+
+	///create windows
+	hWin1 = WM_CreateWindow( 0+EDGEOFFSET, 0+EDGEOFFSET, LCD_GetXSize()-(EDGEOFFSET*2), LCD_GetYSize()-(EDGEOFFSET*2), WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	///add callback
+	pOldCB = WM_SetCallback( hWin1, &cbSimpleRoundWindow );
+
+	///create windows
+	hWin2 = WM_CreateWindow( 0, 0, LCD_GetXSize(), LCD_GetYSize()/3, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	///add callback
+	pOldCB = WM_SetCallback( hWin2, &cbSimpleWindow );
+	///create windows
+	hWin3 = WM_CreateWindow( 0, 0+LCD_GetYSize()/3, LCD_GetXSize(), LCD_GetYSize()/3, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	///add callback
+	pOldCB = WM_SetCallback( hWin3, &cbSimpleWindow );
+	///create windows
+	hWin4 = WM_CreateWindow( 0, 0+2*LCD_GetYSize()/3, LCD_GetXSize()/2, LCD_GetYSize()/3, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	///add callback
+	pOldCB = WM_SetCallback( hWin4, &cbSimpleWindow );
+	///create windows
+	hWin5 = WM_CreateWindow( LCD_GetXSize()/2, 0+2*LCD_GetYSize()/3, LCD_GetXSize()/2, LCD_GetYSize()/3, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	///add callback
+	pOldCB = WM_SetCallback( hWin5, &cbSimpleWindow );
+
+	
+	WM_BringToTop( hWin1 );
+	
+	WM_ExecIdle();
+	GUI_Delay(1000);
+	
+	WM_DeleteWindow( hWin1 );
+	WM_DeleteWindow( hWin2 );
+	WM_DeleteWindow( hWin3 );
+	WM_DeleteWindow( hWin4 );
+	WM_DeleteWindow( hWin5 );
+	
+}
+
+
+
 static const GUI_ConstString _apListBox[] = {
   "English", "Deutsch", "Français", "Japanese", "Italiano", NULL
 };
@@ -589,6 +937,8 @@ void ListboxWindow( int iOption )
 	FRAMEWIN_Handle	hFrame;
 	LISTBOX_Handle	hList;
 	int				iTmp = 0;
+	
+	spSetDefaultEffect();
 	
 	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, "List Box", &_cbCmdWin);
 	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
@@ -628,31 +978,38 @@ void FrameCenter( void )
 	while( iLoop > 0 )
 	{
 		spClearScreen();
-		
+	
+	#if 0
 		GUI_SaveContext(&ContextOld);
 		BootWindow(0);
 		spClearScreen();
 		GUI_RestoreContext(&ContextOld);
-	#if 1
+	#endif
+	#if 0
 		GUI_SaveContext(&ContextOld);
 		StartWindow( iLoop );
 		spClearScreen();
 		GUI_RestoreContext(&ContextOld);
-	#endif	
+	#endif
+	#if 0
 		GUI_SaveContext(&ContextOld);
 		SecondWindow( iLoop );
 		spClearScreen();
 		GUI_RestoreContext(&ContextOld);
-		
+	#endif
+	#if 0
 		GUI_SaveContext(&ContextOld);
 		FontWindow( iLoop );
 		spClearScreen();
 		GUI_RestoreContext(&ContextOld);
-		
+	#endif
+	#if 0
 		GUI_SaveContext(&ContextOld);
 		ListboxWindow(0);
 		spClearScreen();
 		GUI_RestoreContext(&ContextOld);
+	#endif	
+		SimpleWindow(0);
 		
 		iLoop--;
 	}
