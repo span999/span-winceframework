@@ -28,6 +28,45 @@
   #include "TEXT.h"
 #endif
 
+
+#ifndef NULL
+	#define NULL (0)
+#endif
+
+
+
+/*
+	type define for fframe header and screen
+*/
+typedef void (*PFNFRAMEPAGEMAIN)(int iOption);
+typedef void (*PFNFRAMEPAGEMAINCB)(WM_MESSAGE* pMsg);
+
+
+typedef struct
+{
+    PFNFRAMEPAGEMAIN		pfnFramePageMain;     // 
+    PFNFRAMEPAGEMAINCB		pfnFramePageMainCb;    //
+	WM_CALLBACK* 			pfnOldCB;
+	int						iWaits;
+	int						iNextReady;				///1 for ready
+///	PFNBTNHANDLE		pfnBtnHandle;		// handle button event for this frame.
+///	WORD				wDrawOption;
+///    PFNDRAWCALLBACK   	pfnUpdateCallback;  // 
+///    void*				pfnFrameAdvData;    // 
+} FRAMEPAGE_HEADER;
+
+
+typedef struct
+{
+	FRAMEPAGE_HEADER*		pPrivFramePage;
+	FRAMEPAGE_HEADER*		pNextFramePage;
+	FRAMEPAGE_HEADER*		pNowFramePage;
+///	BOOL 					IsFrameCreate;
+} SCREEN_STATUS;
+
+
+
+
 void FrameCenter( void );
 void StartWindow( int iOption );
 void SecondWindow( int iOption );
@@ -35,14 +74,31 @@ void BootWindow( int iOption );
 void SimpleWindow( int iOption );
 void ListboxWindow( int iOption );
 
+FRAMEPAGE_HEADER headPoweroffWindow;
+FRAMEPAGE_HEADER headBootWindow;
+FRAMEPAGE_HEADER headDataModeWindow;
 
-#ifndef NULL
-	#define NULL (0)
-#endif
+
+static SCREEN_STATUS ScrStat;
+static SCREEN_STATUS *pScrStat = &ScrStat;
+
+#define		pCurrFramePage				ScrStat.pNowFramePage
+#define		pAfterFramePage				ScrStat.pNextFramePage
+#define		pBeforeFramePage			ScrStat.pPrivFramePage
+
+#define		pCurrFramePageMain			ScrStat.pNowFramePage->pfnFramePageMain
+#define		pCurrFramePageMainCb		ScrStat.pNowFramePage->pfnFramePageMainCb
+#define		pCurrFramePageOldCb			ScrStat.pNowFramePage->pfnOldCB
+#define		pCurrFramePageWait			ScrStat.pNowFramePage->iWaits
+#define		pCurrFramePageNextReady		ScrStat.pNowFramePage->iNextReady
+
+
+
+
+
 
 
 static TEXT_Handle		ghTEXT = 0;
-
 static WM_CALLBACK* pfnListCB = NULL;
 
 
@@ -61,6 +117,33 @@ void spSetDefaultEffect ( void )
 
 }
 
+
+void spBlankScreen( void )
+{
+	GUI_SetColor(GUI_BLACK);
+	GUI_SetBkColor(GUI_WHITE); 
+	GUI_Clear();
+}
+
+void spFramePageWait( void )
+{
+	if( pCurrFramePageWait == 0 )
+	{
+		while( 0==pCurrFramePageNextReady )
+			GUI_Delay(10);
+	}
+	else
+	{
+		int iCnt = 0;
+		iCnt = pCurrFramePageWait;
+		while( 0==pCurrFramePageNextReady && iCnt > 0)
+		{
+			GUI_Delay(10);
+			iCnt = iCnt - 10;
+		}
+	}
+	pCurrFramePageNextReady = 0;
+}
 
 
 /*
@@ -401,13 +484,83 @@ static int _iTest, _iTestMinor;
 #endif
 
 
+#if (GUI_WINSUPPORT)
+static void cbPoweroffWindow(WM_MESSAGE* pMsg)
+{
+///static int _iTest, _iTestMinor;
+	
+
+	printf("cbPoweroffWindow() ==> %d \n", pMsg->MsgId);
+
+	///hack the WM msg here
+	if( pMsg->MsgId == WM_KEY )
+	{
+		int Key = 0;
+			
+		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+		if( 'o' == Key )
+		{	/// hold up key
+			printf( "UP key hold!!!!!!!\n" );
+			///set next framepage
+			pAfterFramePage = &headBootWindow;
+			///ready for next framepage
+			pCurrFramePageNextReady = 1;
+		}		
+	}
+	else
+	if( pMsg->MsgId == WM_PAINT )
+	{
+		GUI_DispStringAt("PowerOff...", 80, 30);
+	}
+	if( pCurrFramePageOldCb )
+		pCurrFramePageOldCb( pMsg );
+	return;
+
+}
+#endif
+
+
+
+void PoweroffWindow( int iOption )
+{
+	WM_HWIN hWin1 = 0;
+	///WM_CALLBACK* pfnOldCB = NULL;
+	
+	
+	///give me a blank page
+	spBlankScreen();
+	
+	///create a window
+	///hWin1 = WM_CreateWindow( 0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	hWin1 = WM_CreateWindow( 0, 0, 10, 10, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	
+	///set callback
+	///pfnOldCB = WM_SetCallback( hWin1, &cbPoweroffWindow );
+	///pCurrFramePageOldCb = WM_SetCallback( hWin1, pCurrFramePageMainCb );
+	ScrStat.pNowFramePage->pfnOldCB = WM_SetCallback( hWin1, pCurrFramePageMainCb );
+	
+	WM_BringToTop( hWin1 );
+	WM_SetFocus( hWin1 );
+	
+	GUI_DispStringAt("PowerOff...", 45, 80);
+	
+    WM_ExecIdle();
+
+	spFramePageWait();
+	
+	WM_DeleteWindow( hWin1 );
+}
+
+
 extern GUI_CONST_STORAGE GUI_BITMAP bmStartup_Screen_1;
 void BootWindow( int iOption )
 {
-	GUI_DispStringAt("BootWindow\n", 10, 65 );
-	GUI_Delay(300);
+	GUI_DispStringAt("BootWindow\n", 45, 80 );
+	GUI_Delay(100);
 	GUI_DrawBitmap(&bmStartup_Screen_1, 0, 0);
-	GUI_Delay(300);
+	spFramePageWait();
+	///set next framepage
+	pAfterFramePage = &headDataModeWindow;
 }
 
 
@@ -1154,14 +1307,61 @@ void spClearScreen( void )
 }
 
 
+
+
+
+
+FRAMEPAGE_HEADER headPoweroffWindow = {
+	PoweroffWindow,
+	cbPoweroffWindow,
+	NULL,
+	0,
+	0,
+};
+
+FRAMEPAGE_HEADER headBootWindow = {
+	BootWindow,
+	NULL,
+	NULL,
+	100,
+	0,
+};
+
+FRAMEPAGE_HEADER headDataModeWindow = {
+	SimpleWindow,
+	NULL,
+	NULL,
+	100,
+	0,
+};
+
+
+
+
 void FrameCenter( void )
 {
 	int iLoop = 3;
     GUI_CONTEXT ContextOld;
 
+	///set the first FramePage header
+	pCurrFramePage = &headPoweroffWindow;
 
 	spClearScreen();
 
+#if 1
+	while( iLoop > 0 )
+	{
+		GUI_SaveContext(&ContextOld);
+		pCurrFramePage->pfnFramePageMain( iLoop );
+		GUI_RestoreContext(&ContextOld);
+		spClearScreen();
+		iLoop--;
+
+		pBeforeFramePage = pCurrFramePage;
+		pCurrFramePage = pAfterFramePage;
+		///pAfterFramePage =
+	}
+#else	
 	while( iLoop > 0 )
 	{
 
@@ -1206,7 +1406,7 @@ void FrameCenter( void )
 		
 		iLoop--;
 	}
-	
+#endif	
 }
 
 
