@@ -43,6 +43,10 @@ void ListboxWindow( int iOption );
 
 static TEXT_Handle		ghTEXT = 0;
 
+static WM_CALLBACK* pfnListCB = NULL;
+
+
+
 
 
 void spSetDefaultEffect ( void )
@@ -875,6 +879,176 @@ static int _iTest, _iTestMinor;
 #endif
 
 
+static const GUI_ConstString _ListBox[] = {
+  "English", "Deutsch", "Français", "Japanese", "Italiano", "English", "Deutsch", "Français", "Japanese", "Italiano", NULL
+};
+
+
+static void cbListBoxWindow(WM_MESSAGE* pMsg)
+{
+static int _iTest, _iTestMinor;
+	int Key = 0;
+
+	printf("cbListBoxWindow() ==> %d \n", pMsg->MsgId);
+	
+	if( pfnListCB )
+	{
+		if( WM_KEY == pMsg->MsgId )
+		{
+			if( ((WM_KEY_INFO*)(pMsg->Data.p))->Key > 0 )
+			{
+				Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+				///hack the key value
+				if( Key == 'i' )
+					((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+				else
+				if( Key == 'k' )
+					((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+
+			}
+			pfnListCB( pMsg );
+			return;
+		}
+		else
+		{
+			pfnListCB( pMsg );
+			return;
+		}
+	}	
+	
+	switch (pMsg->MsgId) {
+		case WM_CREATE:
+			printf("cbListBoxWindow() WM_CREATE!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_MOVE:
+			printf("cbListBoxWindow() WM_MOVE!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_SIZE:
+			printf("cbListBoxWindow() WM_SIZE!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+			break;
+
+		case WM_TOUCH:
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_NOTIFY_PARENT:
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_KEY:
+			printf("cbListBoxWindow() WM_KEY!!!!!!!!!!!!!!!!!\n");
+			WM_DefaultProc(pMsg);
+			if (((WM_KEY_INFO*)(pMsg->Data.p))->Key > 0) {
+				Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+				printf("cbListBoxWindow() WM_KEY=%d[%c]\n", Key, Key);
+				
+				if( 'u' == Key ) 
+					GUI_DispStringAt("-exit key-", 0, 80);
+				else	
+				if( 'y' == Key ) 
+					GUI_DispStringAt("-exit key-hold", 0, 80);
+				else	
+				if( 'i' == Key ) 
+					GUI_DispStringAt("-up key-", 0, 80);
+				else	
+				if( 'o' == Key ) 
+					GUI_DispStringAt("-up key-hold", 0, 80);
+				else	
+				if( 'j' == Key ) 
+					GUI_DispStringAt("-enter key-", 0, 80);
+				else	
+				if( 'h' == Key ) 
+					GUI_DispStringAt("-enter key-hold", 0, 80);
+				else	
+				if( 'k' == Key ) 
+					GUI_DispStringAt("-down key-", 0, 80);
+				else	
+				if( 'l' == Key ) 
+					GUI_DispStringAt("-down key-hold", 0, 80);
+				
+				if( ghTEXT != 0 )
+				{
+					if( 'u' == Key ) 
+						TEXT_SetText( ghTEXT, "-exit key-");
+					else	
+					if( 'y' == Key ) 
+						TEXT_SetText( ghTEXT, "-exit key-hold");
+					else	
+					if( 'i' == Key ) 
+						TEXT_SetText( ghTEXT, "-up key-");
+					else	
+					if( 'o' == Key ) 
+						TEXT_SetText( ghTEXT, "-up key-hold");
+					else	
+					if( 'j' == Key ) 
+						TEXT_SetText( ghTEXT, "-enter key-");
+					else	
+					if( 'h' == Key ) 
+						TEXT_SetText( ghTEXT, "-enter key-hold");
+					else	
+					if( 'k' == Key ) 
+						TEXT_SetText( ghTEXT, "-down key-");
+					else	
+					if( 'l' == Key ) 
+						TEXT_SetText( ghTEXT, "-down key-hold");
+				}
+
+				if( pMsg->hWin != 0 )
+				{
+					WM_MESSAGE Msg = {0};
+					///WM_SendMessage(hDialog, &Msg);
+					if( 'u' == Key ) 
+						;///TEXT_SetText( ghTEXT, "-exit key-");
+					else	
+					if( 'y' == Key ) 
+						;///TEXT_SetText( ghTEXT, "-exit key-hold");
+					else	
+					if( 'i' == Key ) 
+						LISTBOX_IncSel( pMsg->hWin );///TEXT_SetText( ghTEXT, "-up key-");
+					else	
+					if( 'o' == Key ) 
+						;///TEXT_SetText( ghTEXT, "-up key-hold");
+					else	
+					if( 'j' == Key ) 
+						;///TEXT_SetText( ghTEXT, "-enter key-");
+					else	
+					if( 'h' == Key ) 
+						;///TEXT_SetText( ghTEXT, "-enter key-hold");
+					else	
+					if( 'k' == Key ) 
+						LISTBOX_DecSel( pMsg->hWin );///TEXT_SetText( ghTEXT, "-down key-");
+					else	
+					if( 'l' == Key ) 
+						;///TEXT_SetText( ghTEXT, "-down key-hold");
+				}
+				
+			}
+			
+			break;
+		case WM_GET_ID:
+			WM_DefaultProc(pMsg);
+			break;
+	#if 1	
+		case WM_DELETE:
+			printf("cbListBoxWindow() WM_DELETE!!!!!!!!!!!!!!!!!\n");
+			///cbRoundWinExt( pMsg, GUI_BLUE, 0, 1 );
+			WM_DefaultProc(pMsg);
+			break;
+		case WM_PAINT:
+			printf("cbListBoxWindow() WM_PAINT!!!!!!!!!!!!!!!!!\n");
+			///WM_DefaultProc(pMsg);
+			/* Update info in command window */
+			WM_DefaultProc(pMsg);
+			break;
+	#endif		
+		default:
+			WM_DefaultProc(pMsg);
+	}
+}
+
+
+
 
 void SimpleWindow( int iOption )
 {
@@ -884,7 +1058,9 @@ void SimpleWindow( int iOption )
 	WM_HWIN hWin3 = 0;
 	WM_HWIN hWin4 = 0;
 	WM_HWIN hWin5 = 0;
+	LISTBOX_Handle	hList;
 	WM_CALLBACK* pOldCB = NULL;
+	///WM_CALLBACK* pfnListCB = NULL;
 	
 	GUI_SetColor(GUI_BLACK);
 	GUI_SetBkColor(GUI_WHITE); 
@@ -912,8 +1088,17 @@ void SimpleWindow( int iOption )
 	///add callback
 	pOldCB = WM_SetCallback( hWin5, &cbSimpleWindow );
 
+	///create list box
+	hList = LISTBOX_CreateEx( 0+EDGEOFFSET, 0+EDGEOFFSET+13, LCD_GetXSize()-(EDGEOFFSET*2), LCD_GetYSize()-(EDGEOFFSET*2)-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, _ListBox);
+	///add callback
+	///pOldCB = WM_SetCallback( hList, &cbListBoxWindow );
+	pfnListCB = WM_SetCallback( hList, &cbListBoxWindow );
+	
 	
 	WM_BringToTop( hWin1 );
+	WM_SetFocus( hWin1 );
+	WM_BringToTop( hList );
+	WM_SetFocus( hList );
 	
 	WM_ExecIdle();
 	GUI_Delay(1000);
@@ -923,14 +1108,16 @@ void SimpleWindow( int iOption )
 	WM_DeleteWindow( hWin3 );
 	WM_DeleteWindow( hWin4 );
 	WM_DeleteWindow( hWin5 );
+	WM_DeleteWindow( hList );
+	pfnListCB = NULL;
 	
 }
-
 
 
 static const GUI_ConstString _apListBox[] = {
   "English", "Deutsch", "Français", "Japanese", "Italiano", NULL
 };
+
 
 void ListboxWindow( int iOption )
 {
@@ -977,9 +1164,8 @@ void FrameCenter( void )
 
 	while( iLoop > 0 )
 	{
-		spClearScreen();
-	
-	#if 0
+
+	#if 1
 		GUI_SaveContext(&ContextOld);
 		BootWindow(0);
 		spClearScreen();
@@ -1005,11 +1191,18 @@ void FrameCenter( void )
 	#endif
 	#if 0
 		GUI_SaveContext(&ContextOld);
-		ListboxWindow(0);
+		ListboxWindow( iLoop );
 		spClearScreen();
 		GUI_RestoreContext(&ContextOld);
-	#endif	
-		SimpleWindow(0);
+	#endif
+	#if 1
+		GUI_SaveContext(&ContextOld);
+		SimpleWindow( iLoop );
+		spClearScreen();
+		GUI_RestoreContext(&ContextOld);
+	#endif
+	
+		spClearScreen();
 		
 		iLoop--;
 	}
