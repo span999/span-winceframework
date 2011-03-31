@@ -44,11 +44,12 @@ typedef void (*PFNFRAMEPAGEMAINCB)(WM_MESSAGE* pMsg);
 
 typedef struct
 {
-    PFNFRAMEPAGEMAIN		pfnFramePageMain;     // 
-    PFNFRAMEPAGEMAINCB		pfnFramePageMainCb;    //
+    PFNFRAMEPAGEMAIN		pfnFramePageMain;     	// 
+    PFNFRAMEPAGEMAINCB		pfnFramePageMainCb;    	//
 	WM_CALLBACK* 			pfnOldCB;
 	int						iWaits;
 	int						iNextReady;				///1 for ready
+	int						iClearFirst;			///1 for clear before draw
 ///	PFNBTNHANDLE		pfnBtnHandle;		// handle button event for this frame.
 ///	WORD				wDrawOption;
 ///    PFNDRAWCALLBACK   	pfnUpdateCallback;  // 
@@ -77,6 +78,7 @@ void ListboxWindow( int iOption );
 FRAMEPAGE_HEADER headPoweroffWindow;
 FRAMEPAGE_HEADER headBootWindow;
 FRAMEPAGE_HEADER headDataModeWindow;
+FRAMEPAGE_HEADER headPopupWindow;
 
 
 static SCREEN_STATUS ScrStat;
@@ -91,6 +93,7 @@ static SCREEN_STATUS *pScrStat = &ScrStat;
 #define		pCurrFramePageOldCb			ScrStat.pNowFramePage->pfnOldCB
 #define		pCurrFramePageWait			ScrStat.pNowFramePage->iWaits
 #define		pCurrFramePageNextReady		ScrStat.pNowFramePage->iNextReady
+#define		pCurrFramePageClearFirst	ScrStat.pNowFramePage->iClearFirst
 
 
 
@@ -107,15 +110,27 @@ static WM_CALLBACK* pfnListCB = NULL;
 
 void spSetDefaultEffect ( void )
 {
+	
 	///WIDGET_SetDefaultEffect(&WIDGET_Effect_3D);
-	WIDGET_SetDefaultEffect(&WIDGET_Effect_Simple);
-	///WIDGET_SetDefaultEffect(&WIDGET_Effect_None);
-
+	///WIDGET_SetDefaultEffect(&WIDGET_Effect_Simple);
+	WIDGET_SetDefaultEffect(&WIDGET_Effect_None);
 	
 	FRAMEWIN_SetDefaultBorderSize( 2 );
 
+	GUI_SetColor(GUI_BLACK);
+	GUI_SetBkColor(GUI_WHITE); 
 
 }
+
+
+void spClearScreen( void )
+{
+	GUI_SetColor(GUI_BLACK);
+	GUI_SetBkColor(GUI_GRAY);
+	GUI_Clear();
+	///GUI_Delay(100);
+}
+
 
 
 void spBlankScreen( void )
@@ -125,8 +140,84 @@ void spBlankScreen( void )
 	GUI_Clear();
 }
 
+void spBlankRect( int x, int y, int xsize, int ysize )
+{
+	GUI_RECT 	rtTemp;
+	GUI_COLOR	colorTemp;
+	
+	rtTemp.x0 = x;
+	rtTemp.y0 = y;
+	rtTemp.x1 = x+xsize;
+	rtTemp.y1 = y+ysize;
+
+#if 1
+	colorTemp = GUI_GetColor();
+	GUI_SetColor(GUI_WHITE);
+	GUI_FillRect( rtTemp.x0, rtTemp.y0, rtTemp.x1, rtTemp.y1 );
+	GUI_SetColor(colorTemp);
+#else
+	GUI_ClearRect( rtTemp.x0, rtTemp.y0, rtTemp.x1, rtTemp.y1 );
+#endif
+}
+
+
+void spcbRoundWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int radius, int pensize, int iFill )
+{
+	GUI_RECT rtTemp;
+	GUI_COLOR clTemp;
+	
+	if( !pMsg || (WM_PAINT != pMsg->MsgId && WM_DELETE != pMsg->MsgId) )
+		return;
+	
+	WM_GetClientRectEx( pMsg->hWin, &rtTemp );
+	
+	if( WM_DELETE == pMsg->MsgId )
+	{
+		GUI_ClearRect( rtTemp.x0, rtTemp.y0, rtTemp.x1, rtTemp.y1);
+		return;
+	}
+	
+	if( iFill > 0 )
+	{
+		///GUI_ClearRect( rtTemp.x0-radius, rtTemp.y0-radius, rtTemp.x1+radius, rtTemp.y1+radius);
+		spBlankRect( rtTemp.x0-radius, rtTemp.y0-radius, (rtTemp.x1-rtTemp.x0)+(2*radius), (rtTemp.y1-rtTemp.y0)+(2*radius) );
+	}
+	
+	clTemp = GUI_GetColor();
+	GUI_SetColor( color );
+	///GUI_SetPenSize( 1 );
+	if( pensize > 1 )
+	{
+		GUI_FillRect( rtTemp.x0+radius, rtTemp.y0, rtTemp.x1-radius, rtTemp.y0+(pensize-1));
+		GUI_FillRect( rtTemp.x0+radius, rtTemp.y1-(pensize-1), rtTemp.x1-radius, rtTemp.y1);
+		GUI_FillRect( rtTemp.x0, rtTemp.y0+radius, rtTemp.x0+pensize, rtTemp.y1-radius);
+		GUI_FillRect( rtTemp.x1-pensize, rtTemp.y0+radius, rtTemp.x1, rtTemp.y1-radius);
+	}
+	else
+	{
+		GUI_DrawHLine( rtTemp.y0, rtTemp.x0+radius, rtTemp.x1-radius );
+		GUI_DrawHLine( rtTemp.y1, rtTemp.x0+radius, rtTemp.x1-radius ); 
+		GUI_DrawVLine( rtTemp.x0, rtTemp.y0+radius, rtTemp.y1-radius ); 
+		GUI_DrawVLine( rtTemp.x1, rtTemp.y0+radius, rtTemp.y1-radius );
+	}
+	if( radius > 0 )
+	{
+		///GUI_SetPenSize( 1 );
+		GUI_DrawArc( rtTemp.x0+radius, rtTemp.y0+radius, radius, radius, 90, 180 );
+		GUI_DrawArc( rtTemp.x0+radius, rtTemp.y1-radius, radius, radius, 180, 270 );
+		GUI_DrawArc( rtTemp.x1-radius, rtTemp.y1-radius, radius, radius, -90, 0 );
+		GUI_DrawArc( rtTemp.x1-radius, rtTemp.y0+radius, radius, radius, 0, 90 );
+	}
+	GUI_SetColor( clTemp );
+}
+
+
+
+
+
 void spFramePageWait( void )
 {
+	///we should replace this with event wait instead of polling.
 	if( pCurrFramePageWait == 0 )
 	{
 		while( 0==pCurrFramePageNextReady )
@@ -144,6 +235,19 @@ void spFramePageWait( void )
 	}
 	pCurrFramePageNextReady = 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*
@@ -528,7 +632,8 @@ void PoweroffWindow( int iOption )
 	
 	
 	///give me a blank page
-	spBlankScreen();
+	if( pCurrFramePageClearFirst > 0 )
+		spBlankScreen();
 	
 	///create a window
 	///hWin1 = WM_CreateWindow( 0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
@@ -536,8 +641,8 @@ void PoweroffWindow( int iOption )
 	
 	///set callback
 	///pfnOldCB = WM_SetCallback( hWin1, &cbPoweroffWindow );
-	///pCurrFramePageOldCb = WM_SetCallback( hWin1, pCurrFramePageMainCb );
-	ScrStat.pNowFramePage->pfnOldCB = WM_SetCallback( hWin1, pCurrFramePageMainCb );
+	pCurrFramePageOldCb = WM_SetCallback( hWin1, pCurrFramePageMainCb );
+	///ScrStat.pNowFramePage->pfnOldCB = WM_SetCallback( hWin1, pCurrFramePageMainCb );
 	
 	WM_BringToTop( hWin1 );
 	WM_SetFocus( hWin1 );
@@ -741,51 +846,6 @@ void FontWindow( int iOption )
 
 
 #if (GUI_WINSUPPORT)
-void cbRoundWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int radius, int pensize )
-{
-	GUI_RECT rtTemp;
-	GUI_COLOR clTemp;
-	
-	if( !pMsg || (WM_PAINT != pMsg->MsgId && WM_DELETE != pMsg->MsgId) )
-		return;
-	
-	WM_GetClientRectEx( pMsg->hWin, &rtTemp );
-	
-	if( WM_DELETE == pMsg->MsgId )
-	{
-		GUI_ClearRect( rtTemp.x0, rtTemp.y0, rtTemp.x1, rtTemp.y0);
-		return;
-	}
-	
-	clTemp = GUI_GetColor();
-	GUI_SetColor( color );
-	///GUI_SetPenSize( 1 );
-	if( pensize > 1 )
-	{
-		GUI_FillRect( rtTemp.x0+radius, rtTemp.y0, rtTemp.x1-radius, rtTemp.y0+(pensize-1));
-		GUI_FillRect( rtTemp.x0+radius, rtTemp.y1-(pensize-1), rtTemp.x1-radius, rtTemp.y1);
-		GUI_FillRect( rtTemp.x0, rtTemp.y0+radius, rtTemp.x0+pensize, rtTemp.y1-radius);
-		GUI_FillRect( rtTemp.x1-pensize, rtTemp.y0+radius, rtTemp.x1, rtTemp.y1-radius);
-	}
-	else
-	{
-		GUI_DrawHLine( rtTemp.y0, rtTemp.x0+radius, rtTemp.x1-radius );
-		GUI_DrawHLine( rtTemp.y1, rtTemp.x0+radius, rtTemp.x1-radius ); 
-		GUI_DrawVLine( rtTemp.x0, rtTemp.y0+radius, rtTemp.y1-radius ); 
-		GUI_DrawVLine( rtTemp.x1, rtTemp.y0+radius, rtTemp.y1-radius );
-	}
-	if( radius > 0 )
-	{
-		///GUI_SetPenSize( 1 );
-		GUI_DrawArc( rtTemp.x0+radius, rtTemp.y0+radius, radius, radius, 90, 180 );
-		GUI_DrawArc( rtTemp.x0+radius, rtTemp.y1-radius, radius, radius, 180, 270 );
-		GUI_DrawArc( rtTemp.x1-radius, rtTemp.y1-radius, radius, radius, -90, 0 );
-		GUI_DrawArc( rtTemp.x1-radius, rtTemp.y0+radius, radius, radius, 0, 90 );
-	}
-	GUI_SetColor( clTemp );
-}
-
-
 static void cbSimpleWindow(WM_MESSAGE* pMsg)
 {
 static int _iTest, _iTestMinor;
@@ -891,14 +951,14 @@ static int _iTest, _iTestMinor;
 	#if 1	
 		case WM_DELETE:
 			printf("cbSimpleWindow() WM_DELETE!!!!!!!!!!!!!!!!!\n");
-			cbRoundWinExt( pMsg, GUI_BLUE, 0, 1 );
+			spcbRoundWinExt( pMsg, GUI_BLUE, 0, 1, 1 );
 			WM_DefaultProc(pMsg);
 			break;
 		case WM_PAINT:
 			printf("cbSimpleWindow() WM_PAINT!!!!!!!!!!!!!!!!!\n");
 			///WM_DefaultProc(pMsg);
 			/* Update info in command window */
-			cbRoundWinExt( pMsg, GUI_BLUE, 0, 1 );
+			spcbRoundWinExt( pMsg, GUI_BLUE, 0, 1, 1 );
 			WM_DefaultProc(pMsg);
 			break;
 	#endif		
@@ -1014,14 +1074,14 @@ static int _iTest, _iTestMinor;
 	#if 1	
 		case WM_DELETE:
 			printf("cbSimpleWindow() WM_DELETE!!!!!!!!!!!!!!!!!\n");
-			cbRoundWinExt( pMsg, GUI_BLUE, 13, 2 );
+			spcbRoundWinExt( pMsg, GUI_BLUE, 13, 2, 1 );
 			WM_DefaultProc(pMsg);
 			break;
 		case WM_PAINT:
 			printf("cbSimpleWindow() WM_PAINT!!!!!!!!!!!!!!!!!\n");
 			///WM_DefaultProc(pMsg);
 			/* Update info in command window */
-			cbRoundWinExt( pMsg, GUI_BLUE, 13, 2 );
+			spcbRoundWinExt( pMsg, GUI_BLUE, 13, 2, 1 );
 			WM_DefaultProc(pMsg);
 			break;
 	#endif		
@@ -1267,6 +1327,211 @@ void SimpleWindow( int iOption )
 }
 
 
+
+#if (GUI_WINSUPPORT)
+static void cbDataModeWindow(WM_MESSAGE* pMsg)
+{
+
+	printf("cbDataModeWindow() ==> %d \n", pMsg->MsgId);
+
+	///hack the WM msg here
+	if( pMsg->MsgId == WM_KEY )
+	{
+		int Key = 0;
+			
+		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+		if( 'o' == Key )
+		{	/// hold up key
+			printf( "UP key hold!!!!!!!\n" );
+			///set next framepage
+			pAfterFramePage = &headPopupWindow;
+			///ready for next framepage
+			pCurrFramePageNextReady = 1;
+		}
+		else		
+		if( 'l' == Key )
+		{	/// hold down key
+			printf( "DOWN key hold!!!!!!!\n" );
+			///set next framepage
+			pAfterFramePage = &headPopupWindow;
+			///ready for next framepage
+			pCurrFramePageNextReady = 1;
+		}
+
+	}
+	else
+	if( pMsg->MsgId == WM_PAINT )
+	{
+		spcbRoundWinExt( pMsg, GUI_BLUE, 0, 1, 1 );
+	}
+	if( pCurrFramePageOldCb )
+		pCurrFramePageOldCb( pMsg );
+	return;
+
+}
+#endif
+
+void DataModeWindow( int iOption )
+{
+	///WM_HWIN hWin1 = 0;
+	WM_HWIN hWin2 = 0;
+	WM_HWIN hWin3 = 0;
+	WM_HWIN hWin4 = 0;
+	WM_HWIN hWin5 = 0;
+	///LISTBOX_Handle	hList;
+	///WM_CALLBACK* pOldCB = NULL;
+
+
+	if( pCurrFramePageClearFirst > 0 )
+		spBlankScreen();
+
+	///create windows
+	hWin2 = WM_CreateWindow( 0, 0, LCD_GetXSize(), LCD_GetYSize()/3, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	///add callback
+	pCurrFramePageOldCb = WM_SetCallback( hWin2, pCurrFramePageMainCb );
+	///create windows
+	hWin3 = WM_CreateWindow( 0, 0+LCD_GetYSize()/3, LCD_GetXSize(), LCD_GetYSize()/3, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	///add callback
+	pCurrFramePageOldCb = WM_SetCallback( hWin3, pCurrFramePageMainCb );
+	///create windows
+	hWin4 = WM_CreateWindow( 0, 0+2*LCD_GetYSize()/3, LCD_GetXSize()/2, LCD_GetYSize()/3, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	///add callback
+	pCurrFramePageOldCb = WM_SetCallback( hWin4, pCurrFramePageMainCb );
+	///create windows
+	hWin5 = WM_CreateWindow( LCD_GetXSize()/2, 0+2*LCD_GetYSize()/3, LCD_GetXSize()/2, LCD_GetYSize()/3, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	///add callback
+	pCurrFramePageOldCb = WM_SetCallback( hWin5, pCurrFramePageMainCb );
+
+	
+	WM_BringToTop( hWin2 );
+	WM_SetFocus( hWin2 );
+	
+	WM_ExecIdle();
+	spFramePageWait();
+	
+	WM_DeleteWindow( hWin2 );
+	WM_DeleteWindow( hWin3 );
+	WM_DeleteWindow( hWin4 );
+	WM_DeleteWindow( hWin5 );
+	
+}
+
+
+
+#if (GUI_WINSUPPORT)
+static void cbPopupWindow(WM_MESSAGE* pMsg)
+{
+	printf("cbPopupWindow() ==> %d \n", pMsg->MsgId);
+
+	if( pMsg->MsgId == WM_PAINT )
+	{
+		/* Update info in command window */
+		spcbRoundWinExt( pMsg, GUI_BLACK, 13, 2, 1 );
+		WM_DefaultProc(pMsg);
+	}
+	return;
+
+}
+
+static void cbPopupWindowList(WM_MESSAGE* pMsg)
+{
+	printf("cbPopupWindowList() ==> %d \n", pMsg->MsgId);
+	
+	if( pCurrFramePageOldCb )
+	{
+		if( WM_KEY == pMsg->MsgId )
+		{
+			int Key = 0;
+			if( ((WM_KEY_INFO*)(pMsg->Data.p))->Key > 0 )
+			{
+				Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+				///hack the key value
+				if( Key == 'i' )	///up
+					((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+				else
+				if( Key == 'k' )	///down
+					((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+				else
+				if( Key == 'j' )	///enter
+				{
+					///pBeforeFramePage = pCurrFramePage;
+					///pCurrFramePage = pAfterFramePage;
+					pAfterFramePage = pBeforeFramePage;
+					pCurrFramePageNextReady = 1;
+				}
+				else
+				if( Key == 'u' )	///back
+				{
+					pAfterFramePage = pBeforeFramePage;
+					pCurrFramePageNextReady = 1;
+				}
+					
+			}
+			if( pCurrFramePageOldCb )
+				pCurrFramePageOldCb( pMsg );
+			return;
+		}
+		else
+		{
+			if( pCurrFramePageOldCb )
+				pCurrFramePageOldCb( pMsg );
+			return;
+		}
+	}	
+}
+#endif
+
+
+static const GUI_ConstString _PopupListBox[] = {
+  "Activity", "Navigation", "Settings", "History", NULL
+};
+
+
+
+void PopupWindow( int iOption )
+{
+	WM_HWIN hWin1 = 0;
+	LISTBOX_Handle	hList;
+	WM_CALLBACK* pOldCB = NULL;
+
+	
+	if( pCurrFramePageClearFirst > 0 )
+		spBlankScreen();
+
+	spSetDefaultEffect();
+	
+	///spBlankRect( 0+EDGEOFFSET, 0+EDGEOFFSET, LCD_GetXSize()-(EDGEOFFSET*2), LCD_GetYSize()-(EDGEOFFSET*2) );
+	
+	///create windows for popup outline
+	hWin1 = WM_CreateWindow( 0+EDGEOFFSET, 0+EDGEOFFSET, LCD_GetXSize()-(EDGEOFFSET*2), LCD_GetYSize()-(EDGEOFFSET*2), WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	///add callback
+	pOldCB = WM_SetCallback( hWin1, &cbPopupWindow );
+
+
+	///create list box
+	hList = LISTBOX_CreateEx( 0+EDGEOFFSET+2, 0+EDGEOFFSET+13, LCD_GetXSize()-(EDGEOFFSET*2)-4, LCD_GetYSize()-(EDGEOFFSET*2)-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, _PopupListBox);
+	///add callback
+	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
+	
+	
+	WM_BringToTop( hWin1 );
+	WM_SetFocus( hWin1 );
+	WM_BringToTop( hList );
+	WM_SetFocus( hList );
+	
+	WM_ExecIdle();
+	GUI_Delay(1000);
+	
+	WM_DeleteWindow( hWin1 );
+	WM_DeleteWindow( hList );
+	///pfnListCB = NULL;
+	
+}
+
+
+
+
+
 static const GUI_ConstString _apListBox[] = {
   "English", "Deutsch", "Français", "Japanese", "Italiano", NULL
 };
@@ -1299,12 +1564,6 @@ void ListboxWindow( int iOption )
 
 
 
-void spClearScreen( void )
-{
-	GUI_SetBkColor(GUI_GRAY);
-	GUI_Clear();
-	GUI_Delay(100);
-}
 
 
 
@@ -1317,6 +1576,7 @@ FRAMEPAGE_HEADER headPoweroffWindow = {
 	NULL,
 	0,
 	0,
+	1,
 };
 
 FRAMEPAGE_HEADER headBootWindow = {
@@ -1325,13 +1585,24 @@ FRAMEPAGE_HEADER headBootWindow = {
 	NULL,
 	100,
 	0,
+	1,
 };
 
 FRAMEPAGE_HEADER headDataModeWindow = {
-	SimpleWindow,
+	DataModeWindow,
+	cbDataModeWindow,
 	NULL,
+	0,
+	0,
+	1,
+};
+
+FRAMEPAGE_HEADER headPopupWindow = {
+	PopupWindow,
+	cbPopupWindowList,
 	NULL,
-	100,
+	0,
+	0,
 	0,
 };
 
@@ -1340,7 +1611,7 @@ FRAMEPAGE_HEADER headDataModeWindow = {
 
 void FrameCenter( void )
 {
-	int iLoop = 3;
+	int iLoop = 5;
     GUI_CONTEXT ContextOld;
 
 	///set the first FramePage header
@@ -1354,7 +1625,7 @@ void FrameCenter( void )
 		GUI_SaveContext(&ContextOld);
 		pCurrFramePage->pfnFramePageMain( iLoop );
 		GUI_RestoreContext(&ContextOld);
-		spClearScreen();
+		///spClearScreen();
 		iLoop--;
 
 		pBeforeFramePage = pCurrFramePage;
