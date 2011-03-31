@@ -87,14 +87,14 @@ typedef struct
 typedef struct
 {
 	int						iListNum;
+	const GUI_ConstString	sListTitle;
 	const GUI_ConstString*	sListName;
 	FRAMEPAGE_HEADER** 		pListFrame;
-} FP_POPUPLIST_HEADER;
+} FP_POPUPLIST_HEADER, FP_LISTMENU_HEADER;
 
 
 
-
-
+int IsSamekey( int iSrc, int iTar );
 
 
 
@@ -115,6 +115,7 @@ FRAMEPAGE_HEADER headNavigationWindow;
 FRAMEPAGE_HEADER headSettingsWindow;
 FRAMEPAGE_HEADER headHistoryWindow;
 FRAMEPAGE_HEADER headWatchWindow;
+FRAMEPAGE_HEADER headUnderConstructionWindow;
 
 
 static SCREEN_STATUS ScrStat;
@@ -135,6 +136,14 @@ static SCREEN_STATUS *pScrStat = &ScrStat;
 
 
 
+#define		IsUP_press(x)		IsSamekey( x, 'i' )
+#define		IsUP_hold(x)		IsSamekey( x, 'o' )
+#define		IsDOWN_press(x)		IsSamekey( x, 'k' )
+#define		IsDOWN_hold(x)		IsSamekey( x, 'l' )
+#define		IsBACK_press(x)		IsSamekey( x, 'u' )
+#define		IsBACK_hold(x)		IsSamekey( x, 'y' )
+#define		IsENTER_press(x)	IsSamekey( x, 'j' )
+#define		IsENTER_hold(x)		IsSamekey( x, 'h' )
 
 
 
@@ -201,6 +210,36 @@ void spBlankRect( int x, int y, int xsize, int ysize )
 #endif
 }
 
+int IsSamekey( int iSrc, int iTar )
+{
+	if( iSrc == 'o' )
+		printf("  UP key hold~~\n");
+	else
+	if( iSrc == 'i' )
+		printf("  UP key press~~\n");
+	else
+	if( iSrc == 'l' )
+		printf("  DOWN key hold~~\n");
+	else
+	if( iSrc == 'k' )
+		printf("  DOWN key press~~\n");
+	else
+	if( iSrc == 'y' )
+		printf("  BACK key hold~~\n");
+	else
+	if( iSrc == 'u' )
+		printf("  BACK key press~~\n");
+	else
+	if( iSrc == 'h' )
+		printf("  ENTER key hold~~\n");
+	else
+	if( iSrc == 'j' )
+		printf("  ENTER key press~~\n");
+	else
+		printf("  unknow key press~~!!\n");
+	
+	return (iSrc == iTar)?1:0;		
+} 
 
 void spcbRoundWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int radius, int pensize, int iFill )
 {
@@ -1699,9 +1738,9 @@ void NavigationWindow( int iOption )
 
 
 #if (GUI_WINSUPPORT)
-static void cbSettingsWindow(WM_MESSAGE* pMsg)
+static void cbListMenuWindow(WM_MESSAGE* pMsg)
 {
-	printf("cbSettingsWindow() ==> %d \n", pMsg->MsgId);
+	printf("cbListMenuWindow() ==> %d \n", pMsg->MsgId);
 	
 	///hack the WM msg here
 	if( pMsg->MsgId == WM_KEY )
@@ -1709,28 +1748,74 @@ static void cbSettingsWindow(WM_MESSAGE* pMsg)
 		int Key = 0;
 			
 		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
-		if( Key == 'i' )	///up
+		if( IsUP_press(Key) )	///up
 			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
 		else
-		if( Key == 'k' )	///down
+		if( IsDOWN_press(Key) )	///down
 			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
 		else
-		if( 'o' == Key )
+		if( IsUP_hold(Key) )
 		{	/// hold up key
-			printf( "UP key hold!!!!!!!\n" );
 			///set next framepage
 			pAfterFramePage = &headPopupListWindow_DeviceModeFitness;
 			///ready for next framepage
 			pCurrFramePageNextReady = 1;
 		}
 		else		
-		if( 'l' == Key )
+		if( IsDOWN_hold(Key) )
 		{	/// hold down key
-			printf( "DOWN key hold!!!!!!!\n" );
 			///set next framepage
 			pAfterFramePage = &headPopupListWindow_Fitness;
 			///ready for next framepage
 			pCurrFramePageNextReady = 1;
+		}
+		else
+		if( IsBACK_press(Key) )
+		{	/// back key
+			///set next framepage
+			pAfterFramePage = &headDataModeWindow;
+			///ready for next framepage
+			pCurrFramePageNextReady = 1;
+		}
+		else		
+		if( IsENTER_press(Key) )
+		{	/// enter key
+			///set next framepage
+			///pAfterFramePage = &headPopupListWindow_Fitness;
+			///ready for next framepage
+			///pCurrFramePageNextReady = 1;
+			FP_LISTMENU_HEADER*	pListMenu = NULL;
+			FRAMEPAGE_HEADER*	pNextFrame = NULL;
+			int iSelet = -1;
+			///pBeforeFramePage = pCurrFramePage;
+			///pCurrFramePage = pAfterFramePage;
+				
+			if( FRAMEPAGE_LISTMENU == pCurrFramePageType )
+			{
+				pListMenu = pCurrFramePageFrameData;
+				if( NULL == pListMenu )
+				{
+					printf("!!!!Error, there should popup list data here!! abort!!\n");
+					return;
+				}
+			}
+
+			///check what you selected
+			iSelet = LISTBOX_GetSel(pMsg->hWin);
+
+			if( iSelet < pListMenu->iListNum )
+			{
+				///jump to what you selected
+				pNextFrame = pListMenu->pListFrame[iSelet];
+				pAfterFramePage = pNextFrame;
+				pCurrFramePageNextReady = 1;
+			}
+			else
+			{
+				printf( "!!!!!LISTBOX_GetSel=%d\n", iSelet );
+				pAfterFramePage = pBeforeFramePage;
+				pCurrFramePageNextReady = 1;
+			}	
 		}
 
 	}
@@ -1746,17 +1831,11 @@ static void cbSettingsWindow(WM_MESSAGE* pMsg)
 }
 #endif
 
-
-static const GUI_ConstString _SettingListBox[] = {
-  "GPS Settings", "Device Settings", "Activity Profiles", "User Information", "Device Information", NULL
-};
-
-
-
-void SettingsWindow( int iOption )
+void ListMenuWindow( int iOption )
 {
 	FRAMEWIN_Handle	hFrame;
 	LISTBOX_Handle	hList;
+	FP_LISTMENU_HEADER* pListMenu = NULL;
 	int iTmp = 0;
 
 	
@@ -1765,13 +1844,23 @@ void SettingsWindow( int iOption )
 
 	spSetDefaultEffect();
 
+	if( FRAMEPAGE_LISTMENU == pCurrFramePageType )
+	{
+		pListMenu = pCurrFramePageFrameData;
+		if( NULL == pListMenu )
+		{
+			printf("!!!!Error, there should list menu data here!! abort!!\n");
+			return;
+		}
+	}
+	
 	///create frame title
-	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, "Settings", NULL);
+	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pListMenu->sListTitle, NULL);
 	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
 
 
 	///create list menu
-	hList = LISTBOX_CreateEx(0, iTmp, LCD_GetXSize(), LCD_GetYSize()-iTmp, (WM_HWIN)hFrame, WM_CF_SHOW, 0, 0, _SettingListBox);
+	hList = LISTBOX_CreateEx(0, iTmp, LCD_GetXSize(), LCD_GetYSize()-iTmp, (WM_HWIN)hFrame, WM_CF_SHOW, 0, 0, pListMenu->sListName);
 	///add callback
 	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
 	
@@ -1787,93 +1876,9 @@ void SettingsWindow( int iOption )
 }
 
 
-#if (GUI_WINSUPPORT)
-static void cbHistoryWindow(WM_MESSAGE* pMsg)
-{
-	printf("cbSettingsWindow() ==> %d \n", pMsg->MsgId);
-	
-	///hack the WM msg here
-	if( pMsg->MsgId == WM_KEY )
-	{
-		int Key = 0;
-			
-		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
-		if( Key == 'i' )	///up
-			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
-		else
-		if( Key == 'k' )	///down
-			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
-		else
-		if( 'o' == Key )
-		{	/// hold up key
-			printf( "UP key hold!!!!!!!\n" );
-			///set next framepage
-			pAfterFramePage = &headPopupListWindow_DeviceModeFitness;
-			///ready for next framepage
-			pCurrFramePageNextReady = 1;
-		}
-		else		
-		if( 'l' == Key )
-		{	/// hold down key
-			printf( "DOWN key hold!!!!!!!\n" );
-			///set next framepage
-			pAfterFramePage = &headPopupListWindow_Fitness;
-			///ready for next framepage
-			pCurrFramePageNextReady = 1;
-		}
-
-	}
-	else
-	if( pMsg->MsgId == WM_PAINT )
-	{
-		///spcbRoundWinExt( pMsg, GUI_BLUE, 0, 1, 1 );
-	}
-	if( pCurrFramePageOldCb )
-		pCurrFramePageOldCb( pMsg );
-	return;
-
-}
-#endif
-
-
-static const GUI_ConstString _HistoryListBox[] = {
-  "Activity History", "Activity Totals", "Location History", NULL
-};
 
 
 
-void HistoryWindow( int iOption )
-{
-	FRAMEWIN_Handle	hFrame;
-	LISTBOX_Handle	hList;
-	int iTmp = 0;
-
-	
-	if( pCurrFramePageClearFirst > 0 )
-		spBlankScreen();
-
-	spSetDefaultEffect();
-
-	///create frame title
-	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, "History", NULL);
-	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
-
-
-	///create list menu
-	hList = LISTBOX_CreateEx(0, iTmp, LCD_GetXSize(), LCD_GetYSize()-iTmp, (WM_HWIN)hFrame, WM_CF_SHOW, 0, 0, _HistoryListBox);
-	///add callback
-	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
-	
-	WM_BringToTop( hList );
-	WM_SetFocus( hList );
-
-	
-	WM_ExecIdle();
-	spFramePageWait();
-
-	WM_DeleteWindow( hList );	
-	WM_DeleteWindow( hFrame );
-}
 
 
 #if (GUI_WINSUPPORT)
@@ -1943,6 +1948,32 @@ void WatchWindow( int iOption )
 }
 
 
+void UnderConstructionWindow( int iOption )
+{
+	WM_HWIN hWin1 = 0;
+	
+	///give me a blank page
+	if( pCurrFramePageClearFirst > 0 )
+		spBlankScreen();
+	
+	///create a window
+	hWin1 = WM_CreateWindow( 0, 0, 10, 10, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	
+	///set callback
+	///pCurrFramePageOldCb = WM_SetCallback( hWin1, pCurrFramePageMainCb );
+	
+	WM_BringToTop( hWin1 );
+	WM_SetFocus( hWin1 );
+	
+	GUI_DispStringAt("Under Construction...", 10, 80);
+	
+    WM_ExecIdle();
+	spFramePageWait();
+	
+	WM_DeleteWindow( hWin1 );
+	pAfterFramePage = pBeforeFramePage;
+}
+
 
 
 
@@ -1984,7 +2015,8 @@ void ListboxWindow( int iOption )
 
 
 
-
+/*
+*/
 FRAMEPAGE_HEADER headPoweroffWindow = {
 	FRAMEPAGE_COMMON,
 	PoweroffWindow,
@@ -1996,6 +2028,8 @@ FRAMEPAGE_HEADER headPoweroffWindow = {
 	NULL,
 };
 
+/*
+*/
 FRAMEPAGE_HEADER headBootWindow = {
 	FRAMEPAGE_COMMON,
 	BootWindow,
@@ -2020,6 +2054,7 @@ FRAMEPAGE_HEADER headDataModeWindow = {
 
 FP_POPUPLIST_HEADER fpPopupListData_Fitness = {
 	4,
+	NULL,
 	_PopupListBox_Fitness,
 	_PopupListFrame_Fitness,
 };
@@ -2039,6 +2074,7 @@ FRAMEPAGE_HEADER headPopupListWindow_Fitness = {
 
 FP_POPUPLIST_HEADER fpPopupListData_DeviceModeFitness = {
 	2,
+	NULL,
 	_PopupListBox_DeviceModeFitness,
 	_PopupListFrame_DeviceModeFitness,
 };
@@ -2077,28 +2113,67 @@ FRAMEPAGE_HEADER headNavigationWindow = {
 	NULL,
 };
 
+
+/*
+*/
+static const GUI_ConstString _SettingListBox[] = {
+  "GPS Settings", "Device Settings", "Activity Profiles", "User Information", "Device Information", NULL
+};
+
+static FRAMEPAGE_HEADER* _SettingListFrame[] = {
+	&headUnderConstructionWindow, &headUnderConstructionWindow, &headUnderConstructionWindow, &headUnderConstructionWindow, &headUnderConstructionWindow
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SettingsWindow = {
+	5,
+	"Settings",
+	_SettingListBox,
+	_SettingListFrame,
+};
+
 FRAMEPAGE_HEADER headSettingsWindow = {
 	FRAMEPAGE_LISTMENU,
-	SettingsWindow,
-	cbSettingsWindow,
+	ListMenuWindow,
+	cbListMenuWindow,
 	NULL,
 	0,
 	0,
 	1,
-	NULL,
+	(void*)&fpListMenuData_SettingsWindow,
+};
+
+
+/*
+*/
+static const GUI_ConstString _HistoryListBox[] = {
+  "Activity History", "Activity Totals", "Location History", NULL
+};
+
+static FRAMEPAGE_HEADER* _HistoryListFrame[] = {
+	&headUnderConstructionWindow, &headUnderConstructionWindow, &headUnderConstructionWindow
+};
+
+FP_LISTMENU_HEADER fpListMenuData_HistoryWindow = {
+	3,
+	"History",
+	_HistoryListBox,
+	_HistoryListFrame,
 };
 
 FRAMEPAGE_HEADER headHistoryWindow = {
 	FRAMEPAGE_LISTMENU,
-	HistoryWindow,
-	cbHistoryWindow,
+	ListMenuWindow,
+	cbListMenuWindow,
 	NULL,
 	0,
 	0,
 	1,
-	NULL,
+	(void*)&fpListMenuData_HistoryWindow,
 };
 
+
+/*
+*/
 FRAMEPAGE_HEADER headWatchWindow = {
 	FRAMEPAGE_COMMON,
 	WatchWindow,
@@ -2110,7 +2185,16 @@ FRAMEPAGE_HEADER headWatchWindow = {
 	NULL,
 };
 
-
+FRAMEPAGE_HEADER headUnderConstructionWindow = {
+	FRAMEPAGE_COMMON,
+	UnderConstructionWindow,
+	NULL,
+	NULL,
+	100,
+	0,
+	1,
+	NULL,
+};
 
 
 void FrameCenter( void )
