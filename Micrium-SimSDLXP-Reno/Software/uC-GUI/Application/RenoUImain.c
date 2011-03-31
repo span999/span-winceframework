@@ -36,20 +36,38 @@
 
 
 /*
-	type define for fframe header and screen
+	type define for frame header and screen
 */
 typedef void (*PFNFRAMEPAGEMAIN)(int iOption);
 typedef void (*PFNFRAMEPAGEMAINCB)(WM_MESSAGE* pMsg);
 
 
+typedef enum
+{
+	FRAMEPAGE_COMMON = 0,
+    FRAMEPAGE_ACTIVITY,
+    FRAMEPAGE_TITLED,
+    FRAMEPAGE_LISTMENU,
+	FRAMEPAGE_POPUP_NOTIFY,
+	FRAMEPAGE_POPUP_OPTION,
+	FRAMEPAGE_POPUP_CONFIRM,
+	
+} FRAMEPAGE_TYPE;
+
+
+
+
+
 typedef struct
 {
+	FRAMEPAGE_TYPE			frametype;
     PFNFRAMEPAGEMAIN		pfnFramePageMain;     	// 
     PFNFRAMEPAGEMAINCB		pfnFramePageMainCb;    	//
 	WM_CALLBACK* 			pfnOldCB;
 	int						iWaits;
 	int						iNextReady;				///1 for ready
 	int						iClearFirst;			///1 for clear before draw
+	void*					pFrameData;				///frame data if needed
 ///	PFNBTNHANDLE		pfnBtnHandle;		// handle button event for this frame.
 ///	WORD				wDrawOption;
 ///    PFNDRAWCALLBACK   	pfnUpdateCallback;  // 
@@ -66,6 +84,18 @@ typedef struct
 } SCREEN_STATUS;
 
 
+typedef struct
+{
+	int						iListNum;
+	const GUI_ConstString*	sListName;
+	FRAMEPAGE_HEADER** 		pListFrame;
+} FP_POPUPLIST_HEADER;
+
+
+
+
+
+
 
 
 void FrameCenter( void );
@@ -78,7 +108,13 @@ void ListboxWindow( int iOption );
 FRAMEPAGE_HEADER headPoweroffWindow;
 FRAMEPAGE_HEADER headBootWindow;
 FRAMEPAGE_HEADER headDataModeWindow;
-FRAMEPAGE_HEADER headPopupWindow;
+FRAMEPAGE_HEADER headPopupListWindow;
+FRAMEPAGE_HEADER headPopupListWindow_Fitness;
+FRAMEPAGE_HEADER headPopupListWindow_DeviceModeFitness;
+FRAMEPAGE_HEADER headNavigationWindow;
+FRAMEPAGE_HEADER headSettingsWindow;
+FRAMEPAGE_HEADER headHistoryWindow;
+FRAMEPAGE_HEADER headWatchWindow;
 
 
 static SCREEN_STATUS ScrStat;
@@ -88,13 +124,14 @@ static SCREEN_STATUS *pScrStat = &ScrStat;
 #define		pAfterFramePage				ScrStat.pNextFramePage
 #define		pBeforeFramePage			ScrStat.pPrivFramePage
 
+#define		pCurrFramePageType			ScrStat.pNowFramePage->frametype
 #define		pCurrFramePageMain			ScrStat.pNowFramePage->pfnFramePageMain
 #define		pCurrFramePageMainCb		ScrStat.pNowFramePage->pfnFramePageMainCb
 #define		pCurrFramePageOldCb			ScrStat.pNowFramePage->pfnOldCB
 #define		pCurrFramePageWait			ScrStat.pNowFramePage->iWaits
 #define		pCurrFramePageNextReady		ScrStat.pNowFramePage->iNextReady
 #define		pCurrFramePageClearFirst	ScrStat.pNowFramePage->iClearFirst
-
+#define		pCurrFramePageFrameData		ScrStat.pNowFramePage->pFrameData
 
 
 
@@ -115,7 +152,11 @@ void spSetDefaultEffect ( void )
 	///WIDGET_SetDefaultEffect(&WIDGET_Effect_Simple);
 	WIDGET_SetDefaultEffect(&WIDGET_Effect_None);
 	
-	FRAMEWIN_SetDefaultBorderSize( 2 );
+	FRAMEWIN_SetDefaultBorderSize( 0 );
+	FRAMEWIN_SetDefaultClientColor( GUI_WHITE );
+	FRAMEWIN_SetDefaultBarColor( 1, GUI_BLACK );
+	FRAMEWIN_SetDefaultTextColor( 1, GUI_WHITE );
+	FRAMEWIN_SetDefaultFont( &GUI_Font16B_ASCII );
 
 	GUI_SetColor(GUI_BLACK);
 	GUI_SetBkColor(GUI_WHITE); 
@@ -591,8 +632,6 @@ static int _iTest, _iTestMinor;
 #if (GUI_WINSUPPORT)
 static void cbPoweroffWindow(WM_MESSAGE* pMsg)
 {
-///static int _iTest, _iTestMinor;
-	
 
 	printf("cbPoweroffWindow() ==> %d \n", pMsg->MsgId);
 
@@ -1344,7 +1383,7 @@ static void cbDataModeWindow(WM_MESSAGE* pMsg)
 		{	/// hold up key
 			printf( "UP key hold!!!!!!!\n" );
 			///set next framepage
-			pAfterFramePage = &headPopupWindow;
+			pAfterFramePage = &headPopupListWindow_DeviceModeFitness;
 			///ready for next framepage
 			pCurrFramePageNextReady = 1;
 		}
@@ -1353,7 +1392,7 @@ static void cbDataModeWindow(WM_MESSAGE* pMsg)
 		{	/// hold down key
 			printf( "DOWN key hold!!!!!!!\n" );
 			///set next framepage
-			pAfterFramePage = &headPopupWindow;
+			pAfterFramePage = &headPopupListWindow_Fitness;
 			///ready for next framepage
 			pCurrFramePageNextReady = 1;
 		}
@@ -1454,10 +1493,38 @@ static void cbPopupWindowList(WM_MESSAGE* pMsg)
 				else
 				if( Key == 'j' )	///enter
 				{
+					FP_POPUPLIST_HEADER*	pPopList = NULL;
+					FRAMEPAGE_HEADER*		pNextFrame = NULL;
+					int iSelet = -1;
 					///pBeforeFramePage = pCurrFramePage;
 					///pCurrFramePage = pAfterFramePage;
-					pAfterFramePage = pBeforeFramePage;
-					pCurrFramePageNextReady = 1;
+				
+					if( FRAMEPAGE_POPUP_OPTION == pCurrFramePageType )
+					{
+						pPopList = pCurrFramePageFrameData;
+						if( NULL == pPopList )
+						{
+							printf("!!!!Error, there should popup list data here!! abort!!\n");
+							return;
+						}
+					}
+
+					///check what you selected
+					iSelet = LISTBOX_GetSel(pMsg->hWin);
+
+					if( iSelet < pPopList->iListNum )
+					{
+						///jump to what you selected
+						pNextFrame = pPopList->pListFrame[iSelet];
+						pAfterFramePage = pNextFrame;
+						pCurrFramePageNextReady = 1;
+					}
+					else
+					{
+						printf( "!!!!!LISTBOX_GetSel=%d\n", iSelet );
+						pAfterFramePage = pBeforeFramePage;
+						pCurrFramePageNextReady = 1;
+					}	
 				}
 				else
 				if( Key == 'u' )	///back
@@ -1482,17 +1549,31 @@ static void cbPopupWindowList(WM_MESSAGE* pMsg)
 #endif
 
 
-static const GUI_ConstString _PopupListBox[] = {
+static const GUI_ConstString _PopupListBox_Fitness[] = {
   "Activity", "Navigation", "Settings", "History", NULL
+};
+
+static FRAMEPAGE_HEADER* _PopupListFrame_Fitness[] = {
+	&headDataModeWindow, &headNavigationWindow, &headSettingsWindow, &headHistoryWindow
+};
+
+
+static const GUI_ConstString _PopupListBox_DeviceModeFitness[] = {
+  "Watch mode", "Power down", NULL
+};
+
+static FRAMEPAGE_HEADER* _PopupListFrame_DeviceModeFitness[] = {
+	&headWatchWindow, &headPoweroffWindow
 };
 
 
 
-void PopupWindow( int iOption )
+void PopupWindowList( int iOption )
 {
 	WM_HWIN hWin1 = 0;
 	LISTBOX_Handle	hList;
 	WM_CALLBACK* pOldCB = NULL;
+	FP_POPUPLIST_HEADER* pPopList = NULL;
 
 	
 	if( pCurrFramePageClearFirst > 0 )
@@ -1500,7 +1581,21 @@ void PopupWindow( int iOption )
 
 	spSetDefaultEffect();
 	
+	//need a blank space ???
 	///spBlankRect( 0+EDGEOFFSET, 0+EDGEOFFSET, LCD_GetXSize()-(EDGEOFFSET*2), LCD_GetYSize()-(EDGEOFFSET*2) );
+	
+	if( FRAMEPAGE_POPUP_OPTION == pCurrFramePageType )
+	{
+		pPopList = pCurrFramePageFrameData;
+		if( NULL == pPopList )
+		{
+			printf("!!!!Error, there should popup list data here!! abort!!\n");
+			return;
+		}
+	}
+		
+	
+	
 	
 	///create windows for popup outline
 	hWin1 = WM_CreateWindow( 0+EDGEOFFSET, 0+EDGEOFFSET, LCD_GetXSize()-(EDGEOFFSET*2), LCD_GetYSize()-(EDGEOFFSET*2), WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
@@ -1509,7 +1604,9 @@ void PopupWindow( int iOption )
 
 
 	///create list box
-	hList = LISTBOX_CreateEx( 0+EDGEOFFSET+2, 0+EDGEOFFSET+13, LCD_GetXSize()-(EDGEOFFSET*2)-4, LCD_GetYSize()-(EDGEOFFSET*2)-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, _PopupListBox);
+	///hList = LISTBOX_CreateEx( 0+EDGEOFFSET+2, 0+EDGEOFFSET+13, LCD_GetXSize()-(EDGEOFFSET*2)-4, LCD_GetYSize()-(EDGEOFFSET*2)-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, _PopupListBox);
+	if( FRAMEPAGE_POPUP_OPTION == pCurrFramePageType )
+		hList = LISTBOX_CreateEx( 0+EDGEOFFSET+2, 0+EDGEOFFSET+13, LCD_GetXSize()-(EDGEOFFSET*2)-4, LCD_GetYSize()-(EDGEOFFSET*2)-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pPopList->sListName);
 	///add callback
 	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
 	
@@ -1520,13 +1617,331 @@ void PopupWindow( int iOption )
 	WM_SetFocus( hList );
 	
 	WM_ExecIdle();
-	GUI_Delay(1000);
+	spFramePageWait();
 	
 	WM_DeleteWindow( hWin1 );
 	WM_DeleteWindow( hList );
 	///pfnListCB = NULL;
 	
 }
+
+
+#if (GUI_WINSUPPORT)
+static void cbNavigationWindow(WM_MESSAGE* pMsg)
+{
+	printf("cbNavigationWindow() ==> %d \n", pMsg->MsgId);
+	
+	///hack the WM msg here
+	if( pMsg->MsgId == WM_KEY )
+	{
+		int Key = 0;
+			
+		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+		if( 'o' == Key )
+		{	/// hold up key
+			printf( "UP key hold!!!!!!!\n" );
+			///set next framepage
+			pAfterFramePage = &headPopupListWindow_DeviceModeFitness;
+			///ready for next framepage
+			pCurrFramePageNextReady = 1;
+		}
+		else		
+		if( 'l' == Key )
+		{	/// hold down key
+			printf( "DOWN key hold!!!!!!!\n" );
+			///set next framepage
+			pAfterFramePage = &headPopupListWindow_Fitness;
+			///ready for next framepage
+			pCurrFramePageNextReady = 1;
+		}
+
+	}
+	else
+	if( pMsg->MsgId == WM_PAINT )
+	{
+		///spcbRoundWinExt( pMsg, GUI_BLUE, 0, 1, 1 );
+	}
+	if( pCurrFramePageOldCb )
+		pCurrFramePageOldCb( pMsg );
+	return;
+
+}
+#endif
+
+
+void NavigationWindow( int iOption )
+{
+	FRAMEWIN_Handle	hFrame;
+	int iTmp = 0;
+
+	
+	if( pCurrFramePageClearFirst > 0 )
+		spBlankScreen();
+
+	spSetDefaultEffect();
+
+	///create frame title
+	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, "Navigation", NULL);
+	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
+	///add callback
+	pCurrFramePageOldCb = WM_SetCallback( hFrame, pCurrFramePageMainCb );
+	
+	WM_BringToTop( hFrame );
+	WM_SetFocus( hFrame );
+
+	
+	WM_ExecIdle();
+	spFramePageWait();
+	
+	WM_DeleteWindow( hFrame );
+	
+}
+
+
+#if (GUI_WINSUPPORT)
+static void cbSettingsWindow(WM_MESSAGE* pMsg)
+{
+	printf("cbSettingsWindow() ==> %d \n", pMsg->MsgId);
+	
+	///hack the WM msg here
+	if( pMsg->MsgId == WM_KEY )
+	{
+		int Key = 0;
+			
+		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+		if( Key == 'i' )	///up
+			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+		else
+		if( Key == 'k' )	///down
+			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+		else
+		if( 'o' == Key )
+		{	/// hold up key
+			printf( "UP key hold!!!!!!!\n" );
+			///set next framepage
+			pAfterFramePage = &headPopupListWindow_DeviceModeFitness;
+			///ready for next framepage
+			pCurrFramePageNextReady = 1;
+		}
+		else		
+		if( 'l' == Key )
+		{	/// hold down key
+			printf( "DOWN key hold!!!!!!!\n" );
+			///set next framepage
+			pAfterFramePage = &headPopupListWindow_Fitness;
+			///ready for next framepage
+			pCurrFramePageNextReady = 1;
+		}
+
+	}
+	else
+	if( pMsg->MsgId == WM_PAINT )
+	{
+		///spcbRoundWinExt( pMsg, GUI_BLUE, 0, 1, 1 );
+	}
+	if( pCurrFramePageOldCb )
+		pCurrFramePageOldCb( pMsg );
+	return;
+
+}
+#endif
+
+
+static const GUI_ConstString _SettingListBox[] = {
+  "GPS Settings", "Device Settings", "Activity Profiles", "User Information", "Device Information", NULL
+};
+
+
+
+void SettingsWindow( int iOption )
+{
+	FRAMEWIN_Handle	hFrame;
+	LISTBOX_Handle	hList;
+	int iTmp = 0;
+
+	
+	if( pCurrFramePageClearFirst > 0 )
+		spBlankScreen();
+
+	spSetDefaultEffect();
+
+	///create frame title
+	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, "Settings", NULL);
+	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
+
+
+	///create list menu
+	hList = LISTBOX_CreateEx(0, iTmp, LCD_GetXSize(), LCD_GetYSize()-iTmp, (WM_HWIN)hFrame, WM_CF_SHOW, 0, 0, _SettingListBox);
+	///add callback
+	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
+	
+	WM_BringToTop( hList );
+	WM_SetFocus( hList );
+
+	
+	WM_ExecIdle();
+	spFramePageWait();
+
+	WM_DeleteWindow( hList );	
+	WM_DeleteWindow( hFrame );
+}
+
+
+#if (GUI_WINSUPPORT)
+static void cbHistoryWindow(WM_MESSAGE* pMsg)
+{
+	printf("cbSettingsWindow() ==> %d \n", pMsg->MsgId);
+	
+	///hack the WM msg here
+	if( pMsg->MsgId == WM_KEY )
+	{
+		int Key = 0;
+			
+		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+		if( Key == 'i' )	///up
+			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+		else
+		if( Key == 'k' )	///down
+			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+		else
+		if( 'o' == Key )
+		{	/// hold up key
+			printf( "UP key hold!!!!!!!\n" );
+			///set next framepage
+			pAfterFramePage = &headPopupListWindow_DeviceModeFitness;
+			///ready for next framepage
+			pCurrFramePageNextReady = 1;
+		}
+		else		
+		if( 'l' == Key )
+		{	/// hold down key
+			printf( "DOWN key hold!!!!!!!\n" );
+			///set next framepage
+			pAfterFramePage = &headPopupListWindow_Fitness;
+			///ready for next framepage
+			pCurrFramePageNextReady = 1;
+		}
+
+	}
+	else
+	if( pMsg->MsgId == WM_PAINT )
+	{
+		///spcbRoundWinExt( pMsg, GUI_BLUE, 0, 1, 1 );
+	}
+	if( pCurrFramePageOldCb )
+		pCurrFramePageOldCb( pMsg );
+	return;
+
+}
+#endif
+
+
+static const GUI_ConstString _HistoryListBox[] = {
+  "Activity History", "Activity Totals", "Location History", NULL
+};
+
+
+
+void HistoryWindow( int iOption )
+{
+	FRAMEWIN_Handle	hFrame;
+	LISTBOX_Handle	hList;
+	int iTmp = 0;
+
+	
+	if( pCurrFramePageClearFirst > 0 )
+		spBlankScreen();
+
+	spSetDefaultEffect();
+
+	///create frame title
+	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, "History", NULL);
+	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
+
+
+	///create list menu
+	hList = LISTBOX_CreateEx(0, iTmp, LCD_GetXSize(), LCD_GetYSize()-iTmp, (WM_HWIN)hFrame, WM_CF_SHOW, 0, 0, _HistoryListBox);
+	///add callback
+	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
+	
+	WM_BringToTop( hList );
+	WM_SetFocus( hList );
+
+	
+	WM_ExecIdle();
+	spFramePageWait();
+
+	WM_DeleteWindow( hList );	
+	WM_DeleteWindow( hFrame );
+}
+
+
+#if (GUI_WINSUPPORT)
+static void cbWatchWindow(WM_MESSAGE* pMsg)
+{
+
+	printf("cbPoweroffWindow() ==> %d \n", pMsg->MsgId);
+
+	///hack the WM msg here
+	if( pMsg->MsgId == WM_KEY )
+	{
+		int Key = 0;
+			
+		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+		if( 'o' == Key )
+		{	/// hold up key
+			printf( "UP key hold!!!!!!!\n" );
+			///set next framepage
+			pAfterFramePage = &headPopupListWindow_DeviceModeFitness;
+			///ready for next framepage
+			pCurrFramePageNextReady = 1;
+		}		
+	}
+	else
+	if( pMsg->MsgId == WM_PAINT )
+	{
+		GUI_DispStringAt("Watch Mode...", 80, 30);
+	}
+	if( pCurrFramePageOldCb )
+		pCurrFramePageOldCb( pMsg );
+	return;
+
+}
+#endif
+
+
+
+void WatchWindow( int iOption )
+{
+	WM_HWIN hWin1 = 0;
+	///WM_CALLBACK* pfnOldCB = NULL;
+	
+	
+	///give me a blank page
+	if( pCurrFramePageClearFirst > 0 )
+		spBlankScreen();
+	
+	///create a window
+	///hWin1 = WM_CreateWindow( 0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	hWin1 = WM_CreateWindow( 0, 0, 10, 10, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	
+	///set callback
+	///pfnOldCB = WM_SetCallback( hWin1, &cbPoweroffWindow );
+	pCurrFramePageOldCb = WM_SetCallback( hWin1, pCurrFramePageMainCb );
+	///ScrStat.pNowFramePage->pfnOldCB = WM_SetCallback( hWin1, pCurrFramePageMainCb );
+	
+	WM_BringToTop( hWin1 );
+	WM_SetFocus( hWin1 );
+	
+	GUI_DispStringAt("Watch Mode...", 45, 80);
+	
+    WM_ExecIdle();
+
+	spFramePageWait();
+	
+	WM_DeleteWindow( hWin1 );
+}
+
 
 
 
@@ -1571,39 +1986,128 @@ void ListboxWindow( int iOption )
 
 
 FRAMEPAGE_HEADER headPoweroffWindow = {
+	FRAMEPAGE_COMMON,
 	PoweroffWindow,
 	cbPoweroffWindow,
 	NULL,
 	0,
 	0,
 	1,
+	NULL,
 };
 
 FRAMEPAGE_HEADER headBootWindow = {
+	FRAMEPAGE_COMMON,
 	BootWindow,
 	NULL,
 	NULL,
 	100,
 	0,
 	1,
+	NULL,
 };
 
 FRAMEPAGE_HEADER headDataModeWindow = {
+	FRAMEPAGE_ACTIVITY,
 	DataModeWindow,
 	cbDataModeWindow,
 	NULL,
 	0,
 	0,
 	1,
+	NULL,
 };
 
-FRAMEPAGE_HEADER headPopupWindow = {
-	PopupWindow,
+FP_POPUPLIST_HEADER fpPopupListData_Fitness = {
+	4,
+	_PopupListBox_Fitness,
+	_PopupListFrame_Fitness,
+};
+
+FRAMEPAGE_HEADER headPopupListWindow_Fitness = {
+	FRAMEPAGE_POPUP_OPTION,
+	PopupWindowList,
 	cbPopupWindowList,
 	NULL,
 	0,
 	0,
 	0,
+	(void*)&fpPopupListData_Fitness,
+};
+
+
+
+FP_POPUPLIST_HEADER fpPopupListData_DeviceModeFitness = {
+	2,
+	_PopupListBox_DeviceModeFitness,
+	_PopupListFrame_DeviceModeFitness,
+};
+
+FRAMEPAGE_HEADER headPopupListWindow_DeviceModeFitness = {
+	FRAMEPAGE_POPUP_OPTION,
+	PopupWindowList,
+	cbPopupWindowList,
+	NULL,
+	0,
+	0,
+	0,
+	(void*)&fpPopupListData_DeviceModeFitness,
+};
+
+
+FRAMEPAGE_HEADER headPopupListWindow = {
+	FRAMEPAGE_POPUP_OPTION,
+	PopupWindowList,
+	cbPopupWindowList,
+	NULL,
+	0,
+	0,
+	0,
+	NULL,
+};
+
+FRAMEPAGE_HEADER headNavigationWindow = {
+	FRAMEPAGE_TITLED,
+	NavigationWindow,
+	cbNavigationWindow,
+	NULL,
+	0,
+	0,
+	1,
+	NULL,
+};
+
+FRAMEPAGE_HEADER headSettingsWindow = {
+	FRAMEPAGE_LISTMENU,
+	SettingsWindow,
+	cbSettingsWindow,
+	NULL,
+	0,
+	0,
+	1,
+	NULL,
+};
+
+FRAMEPAGE_HEADER headHistoryWindow = {
+	FRAMEPAGE_LISTMENU,
+	HistoryWindow,
+	cbHistoryWindow,
+	NULL,
+	0,
+	0,
+	1,
+	NULL,
+};
+
+FRAMEPAGE_HEADER headWatchWindow = {
+	FRAMEPAGE_COMMON,
+	WatchWindow,
+	cbWatchWindow,
+	NULL,
+	0,
+	0,
+	1,
+	NULL,
 };
 
 
@@ -1611,7 +2115,7 @@ FRAMEPAGE_HEADER headPopupWindow = {
 
 void FrameCenter( void )
 {
-	int iLoop = 5;
+	int iLoop = 15;
     GUI_CONTEXT ContextOld;
 
 	///set the first FramePage header
@@ -1623,7 +2127,8 @@ void FrameCenter( void )
 	while( iLoop > 0 )
 	{
 		GUI_SaveContext(&ContextOld);
-		pCurrFramePage->pfnFramePageMain( iLoop );
+		///pCurrFramePage->pfnFramePageMain( iLoop );
+		pCurrFramePageMain( iLoop );
 		GUI_RestoreContext(&ContextOld);
 		///spClearScreen();
 		iLoop--;
