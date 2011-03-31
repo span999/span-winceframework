@@ -291,8 +291,8 @@ void Unlock(SDL_Surface *screen)
 }
 
 /* LCD resolution set in LCDConf.h */
-#define GetMaxX()   (LCD_XSIZE - 1)
-#define GetMaxY()   (LCD_YSIZE - 1)
+#define GetMaxX()   (LCD_XSIZE)
+#define GetMaxY()   (LCD_YSIZE)
 
 
 // global surface - screen
@@ -300,7 +300,7 @@ SDL_Surface *screen = NULL;
 
 void Init_SDL_ScreenSurface(void)
 {
-	screen = SDL_SetVideoMode(GetMaxX()+1, GetMaxY()+1, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	screen = SDL_SetVideoMode(GetMaxX(), GetMaxY(), 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
 	///screen = SDL_SetVideoMode(GetMaxX()+1, GetMaxY()+1, 8, SDL_HWSURFACE | SDL_DOUBLEBUF);
 }
 
