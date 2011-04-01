@@ -1513,7 +1513,7 @@ static void cbPopupWindow(WM_MESSAGE* pMsg)
 
 static void cbPopupWindowList(WM_MESSAGE* pMsg)
 {
-	printf("cbPopupWindowList() ==> %d \n", pMsg->MsgId);
+	///printf("cbPopupWindowList() ==> %d \n", pMsg->MsgId);
 	
 	if( pCurrFramePageOldCb )
 	{
@@ -1738,9 +1738,45 @@ void NavigationWindow( int iOption )
 
 
 #if (GUI_WINSUPPORT)
+static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
+{
+	int iRet = 0;
+	
+	printf("spListBoxOwnerDraw x=%d y=%d idx=%d\n", pDrawItemInfo->x0, pDrawItemInfo->x0, pDrawItemInfo->ItemIndex);
+	switch (pDrawItemInfo->Cmd) {
+		case WIDGET_ITEM_GET_XSIZE:
+			///printf("spListBoxOwnerDraw: WIDGET_ITEM_GET_XSIZE\n");
+			iRet = LISTBOX_OwnerDraw(pDrawItemInfo) + 100; /* Returns the default xsize+10 */
+			return iRet;
+			break;
+		case WIDGET_ITEM_GET_YSIZE:
+			///printf("spListBoxOwnerDraw: WIDGET_ITEM_GET_YSIZE\n");
+			iRet = LISTBOX_OwnerDraw(pDrawItemInfo) - 0; /* Returns the default ysize+10 */
+			return iRet;
+			break;
+		case WIDGET_ITEM_DRAW:
+			/* Your code to be added to draw the LISTBOX item */
+			printf("spListBoxOwnerDraw: WIDGET_ITEM_DRAW\n");
+			{
+				GUI_RECT rtTemp;
+				rtTemp.x0 = 110;
+				rtTemp.y0 = 0;
+				rtTemp.x1 = 140;
+				rtTemp.y1 = 160;
+				
+				GUI_FillRect(rtTemp.x0, rtTemp.y0, rtTemp.x1, rtTemp.y1);
+			}
+			///iRet = LISTBOX_OwnerDraw(pDrawItemInfo);
+			return iRet;
+			break;
+	}
+	///return LISTBOX_OwnerDraw(pDrawItemInfo); /* Def. function for unhandled cmds */
+	return iRet;
+}
+
 static void cbListMenuWindow(WM_MESSAGE* pMsg)
 {
-	printf("cbListMenuWindow() ==> %d \n", pMsg->MsgId);
+	///printf("cbListMenuWindow() ==> %d \n", pMsg->MsgId);
 	
 	///hack the WM msg here
 	if( pMsg->MsgId == WM_KEY )
@@ -1858,11 +1894,14 @@ void ListMenuWindow( int iOption )
 	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pListMenu->sListTitle, NULL);
 	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
 
-
 	///create list menu
 	hList = LISTBOX_CreateEx(0, iTmp, LCD_GetXSize(), LCD_GetYSize()-iTmp, (WM_HWIN)hFrame, WM_CF_SHOW, 0, 0, pListMenu->sListName);
 	///add callback
 	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
+	
+	LISTBOX_SetOwnerDraw( hList, spListBoxOwnerDraw );
+	///LISTBOX_InvalidateItem( hList, 2 );
+	
 	
 	WM_BringToTop( hList );
 	WM_SetFocus( hList );
@@ -1900,7 +1939,7 @@ static void cbWatchWindow(WM_MESSAGE* pMsg)
 			pAfterFramePage = &headPopupListWindow_DeviceModeFitness;
 			///ready for next framepage
 			pCurrFramePageNextReady = 1;
-		}		
+		}
 	}
 	else
 	if( pMsg->MsgId == WM_PAINT )

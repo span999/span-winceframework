@@ -59,7 +59,7 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
     //
     //return(WidgetMessageQueueAdd(WIDGET_ROOT, ulMessage, lX, lY, 1, 1));
 	
-	printf("\nIn TransIOMsg\n");
+	///printf("\nIn TransIOMsg\n");
 
 #if 1
 	if( WIDGET_MSG_PTR_DOWN == ulMessage )
@@ -96,7 +96,7 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 		
 		kbscan = (lY&0xFFFF);
 		kbstat = ((lY>>16)&0xFFFF);
-		printf("  keybd down: ID=%d kbscan=%d kbstat=0x%x\n", lX, kbscan, kbstat );
+		///printf("  keybd down: ID=%d kbscan=%d kbstat=0x%x\n", lX, kbscan, kbstat );
 	#if 0	
 		ioMsg.type = TYPE_KEYBOARD;
 		ioMsg.uiEvent = EVENT_KEYSCAN;
@@ -108,14 +108,14 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 		{	/*simulate the "BACK" key repeased*/
 			ioMsg.param1 = ID_BUTTON_BACK;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
-			printf("  keybd down: simulate BACK key\n");
+			///printf("  keybd down: simulate BACK key\n");
 		}
 		else
 		if( KB_KEY_2 == ioMsg.param2 )
 		{	/*simulate the "NEXT" key repeased*/
 			ioMsg.param1 = ID_BUTTON_NEXT;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
-			printf("  keybd down: simulate NEXT key\n");
+			///printf("  keybd down: simulate NEXT key\n");
 		}
 		else
 		if( KB_KEY_I == ioMsg.param2 )
@@ -125,14 +125,14 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 			else
 				ioMsg.param1 = ID_BTN_UP;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
-			printf("  keybd down: simulate UP key\n");
+			///printf("  keybd down: simulate UP key\n");
 		}
 		else
 		if( KB_KEY_O == ioMsg.param2 )
 		{	/*simulate the "UP" key hold*/
 			ioMsg.param1 = ID_BTN_UP_HOLD;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
-			printf("  keybd down: simulate UP_HOLD key\n");
+			///printf("  keybd down: simulate UP_HOLD key\n");
 		}
 		else
 		if( KB_KEY_K == ioMsg.param2 )
@@ -142,14 +142,14 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 			else
 				ioMsg.param1 = ID_BTN_DOWN;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
-			printf("  keybd down: simulate DOWN key\n");
+			///printf("  keybd down: simulate DOWN key\n");
 		}
 		else
 		if( KB_KEY_L == ioMsg.param2 )
 		{	/*simulate the "DOWN" key hold*/
 			ioMsg.param1 = ID_BTN_DOWN_HOLD;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
-			printf("  keybd down: simulate DOWN_HOLD key\n");
+			///printf("  keybd down: simulate DOWN_HOLD key\n");
 		}
 		else
 		if( KB_KEY_U == ioMsg.param2 )
@@ -159,14 +159,14 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 			else
 				ioMsg.param1 = ID_BTN_EXIT;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
-			printf("  keybd down: simulate EXIT key\n");
+			///printf("  keybd down: simulate EXIT key\n");
 		}
 		else
 		if( KB_KEY_Y == ioMsg.param2 )
 		{	/*simulate the "EXIT" key hold*/
 			ioMsg.param1 = ID_BTN_EXIT_HOLD;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
-			printf("  keybd down: simulate EXIT_HOLD key\n");
+			///printf("  keybd down: simulate EXIT_HOLD key\n");
 		}
 		else
 		if( KB_KEY_J == ioMsg.param2 )
@@ -176,19 +176,20 @@ void TransIOMsg(unsigned long ulMessage, long lX, long lY)
 			else
 				ioMsg.param1 = ID_BTN_ENTER;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
-			printf("  keybd down: simulate ENTER key\n");
+			///printf("  keybd down: simulate ENTER key\n");
 		}
 		else
 		if( KB_KEY_H == ioMsg.param2 )
 		{	/*simulate the "ENTER" key hold*/
 			ioMsg.param1 = ID_BTN_ENTER_HOLD;
 			ioMsg.param2 = SCAN_CRA_RELEASED;
-			printf("  keybd down: simulate ENTER_HOLD key\n");
+			///printf("  keybd down: simulate ENTER_HOLD key\n");
 		}
 		else
 			ioMsg.param1 = 0;
 
-	#endif				
+	#endif
+		///tell GUI the key message
 		///GUI_SendKeyMsg(int Key, int Pressed);
 		GUI_SendKeyMsg(kbscan, (WIDGET_MSG_KEY_DOWN == ulMessage)?1:0 );
 
