@@ -84,6 +84,7 @@ typedef struct
 	int						iListNum;
 	const GUI_ConstString	sListTitle;
 	const GUI_ConstString*	sListName;
+	FRAMEPAGE_HEADER*		pUplevelFrame;
 	FRAMEPAGE_HEADER** 		pListFrame;
 } FP_POPUPLIST_HEADER, FP_LISTMENU_HEADER;
 
@@ -109,6 +110,7 @@ FRAMEPAGE_HEADER headPopupListWindow_DeviceModeFitness;
 FRAMEPAGE_HEADER headNavigationWindow;
 FRAMEPAGE_HEADER headSettingsWindow;
 FRAMEPAGE_HEADER headSDSWindow;
+FRAMEPAGE_HEADER headSDSLWindow;
 FRAMEPAGE_HEADER headHistoryWindow;
 FRAMEPAGE_HEADER headWatchWindow;
 FRAMEPAGE_HEADER headUnderConstructionWindow;
@@ -1738,7 +1740,7 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
 	int iRet = 0;
 	
-	printf("spListBoxOwnerDraw x=%d y=%d idx=%d\n", pDrawItemInfo->x0, pDrawItemInfo->x0, pDrawItemInfo->ItemIndex);
+	///printf("spListBoxOwnerDraw x=%d y=%d idx=%d\n", pDrawItemInfo->x0, pDrawItemInfo->x0, pDrawItemInfo->ItemIndex);
 	switch (pDrawItemInfo->Cmd) {
 		case WIDGET_ITEM_GET_XSIZE:
 			///printf("spListBoxOwnerDraw: WIDGET_ITEM_GET_XSIZE\n");
@@ -1752,7 +1754,7 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 			break;
 		case WIDGET_ITEM_DRAW:
 			/* Your code to be added to draw the LISTBOX item */
-			printf("spListBoxOwnerDraw: WIDGET_ITEM_DRAW\n");
+			///printf("spListBoxOwnerDraw: WIDGET_ITEM_DRAW\n");
 			iRet = LISTBOX_OwnerDraw(pDrawItemInfo);
 			{
 				FP_LISTMENU_HEADER* pListMenu = NULL;
@@ -1821,10 +1823,26 @@ static void cbListMenuWindow(WM_MESSAGE* pMsg)
 		if( IsBACK_press(Key) )
 		{	/// back key
 			///set next framepage
-			if( &headSettingsWindow == pCurrFramePage )
-				pAfterFramePage = &headDataModeWindow;
-			else
+			FP_LISTMENU_HEADER*	pListMenu = NULL;
+			FRAMEPAGE_HEADER*	pNextFrame = NULL;
+			int iSelet = -1;
+			///pBeforeFramePage = pCurrFramePage;
+			///pCurrFramePage = pAfterFramePage;
+				
+			if( FRAMEPAGE_LISTMENU == pCurrFramePageType )
+			{
+				pListMenu = pCurrFramePageFrameData;
+				if( NULL == pListMenu )
+				{
+					printf("!!!!Error, there should popup list data here!! abort!!\n");
+					return;
+				}
+			}
+			
+			if( NULL == pListMenu->pUplevelFrame )
 				pAfterFramePage = pBeforeFramePage;
+			else
+				pAfterFramePage = pListMenu->pUplevelFrame;
 				
 			///ready for next framepage
 			pCurrFramePageNextReady = 1;
@@ -2111,6 +2129,7 @@ FP_POPUPLIST_HEADER fpPopupListData_Fitness = {
 	4,
 	NULL,
 	_PopupListBox_Fitness,
+	NULL,
 	_PopupListFrame_Fitness,
 };
 
@@ -2131,6 +2150,7 @@ FP_POPUPLIST_HEADER fpPopupListData_DeviceModeFitness = {
 	2,
 	NULL,
 	_PopupListBox_DeviceModeFitness,
+	NULL,
 	_PopupListFrame_DeviceModeFitness,
 };
 
@@ -2193,6 +2213,7 @@ FP_LISTMENU_HEADER fpListMenuData_SettingsWindow = {
 	5,
 	"Settings",
 	_SettingListBox,
+	NULL,
 	_SettingListFrame,
 };
 
@@ -2222,7 +2243,7 @@ static const GUI_ConstString _SDSListBox[] = {
 };
 
 static FRAMEPAGE_HEADER* _SDSListFrame[] = {
-	&headUnderConstructionWindow,
+	&headSDSLWindow,
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow,
@@ -2234,6 +2255,7 @@ FP_LISTMENU_HEADER fpListMenuData_SDSWindow = {
 	6,
 	"Device Settings",
 	_SDSListBox,
+	&headSettingsWindow,
 	_SDSListFrame,
 };
 
@@ -2246,6 +2268,56 @@ FRAMEPAGE_HEADER headSDSWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSWindow,
+};
+
+
+/*
+	Settings / Device Settings / Language
+*/
+static const GUI_ConstString _SDSLListBox[] = {
+  "English",
+  "Spanish",
+  "French",
+  "Italian",
+  "Portuguese",
+  "Dutch",
+  "German",
+  "Danish",
+  "Greek",
+  "Nordic",
+  NULL
+};
+
+static FRAMEPAGE_HEADER* _SDSLListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SDSLWindow = {
+	10,
+	"Language",
+	_SDSLListBox,
+	&headSDSWindow,
+	_SDSLListFrame,
+};
+
+FRAMEPAGE_HEADER headSDSLWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SDSLWindow,
 };
 
 
@@ -2264,6 +2336,7 @@ FP_LISTMENU_HEADER fpListMenuData_HistoryWindow = {
 	3,
 	"History",
 	_HistoryListBox,
+	NULL,
 	_HistoryListFrame,
 };
 
