@@ -366,7 +366,7 @@ static  void  AppTaskKbd (void *p_arg)
 		{
 		    ///GPIO_SetBits(GPIOD,GPIO_Pin_8);
 			///GPIO_ResetBits(GPIOD,GPIO_Pin_11);
-			OS_Printf("\nAppTaskKbd !!");
+			OS_Printf("\nAppTaskKbd !!\n");
 		}
 		else
 		{

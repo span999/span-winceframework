@@ -824,7 +824,7 @@ bool SDLProcessEventWIN32(void)
 						case SDLK_l:
 						case SDLK_RSHIFT:
 						case SDLK_LSHIFT:
-							printf("  Number key %d %d\n", event.key.keysym.sym-KB_KEY_0, event.key.keysym.sym);
+							///printf("  Number key %d %d\n", event.key.keysym.sym-KB_KEY_0, event.key.keysym.sym);
 							if(g_pfnTSHandler)
 							{
 								long kbdinfo = ((event.key.keysym.mod << 16)&KB_MOD_MASK)|(event.key.keysym.sym&KB_CODE_MASK);
