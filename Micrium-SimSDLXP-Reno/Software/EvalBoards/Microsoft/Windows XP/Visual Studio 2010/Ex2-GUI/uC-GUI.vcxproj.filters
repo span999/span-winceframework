@@ -1987,6 +1987,9 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\Startup_Screen_1.c">
       <Filter>uC-GUI\Application\res</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\GPS_1.c">
+      <Filter>uC-GUI\Application\res</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_cfg.h">
