@@ -68,10 +68,6 @@ typedef struct
 	int						iNextReady;				///1 for ready
 	int						iClearFirst;			///1 for clear before draw
 	void*					pFrameData;				///frame data if needed
-///	PFNBTNHANDLE		pfnBtnHandle;		// handle button event for this frame.
-///	WORD				wDrawOption;
-///    PFNDRAWCALLBACK   	pfnUpdateCallback;  // 
-///    void*				pfnFrameAdvData;    // 
 } FRAMEPAGE_HEADER;
 
 
@@ -80,7 +76,6 @@ typedef struct
 	FRAMEPAGE_HEADER*		pPrivFramePage;
 	FRAMEPAGE_HEADER*		pNextFramePage;
 	FRAMEPAGE_HEADER*		pNowFramePage;
-///	BOOL 					IsFrameCreate;
 } SCREEN_STATUS;
 
 
@@ -113,6 +108,7 @@ FRAMEPAGE_HEADER headPopupListWindow_Fitness;
 FRAMEPAGE_HEADER headPopupListWindow_DeviceModeFitness;
 FRAMEPAGE_HEADER headNavigationWindow;
 FRAMEPAGE_HEADER headSettingsWindow;
+FRAMEPAGE_HEADER headSDSWindow;
 FRAMEPAGE_HEADER headHistoryWindow;
 FRAMEPAGE_HEADER headWatchWindow;
 FRAMEPAGE_HEADER headUnderConstructionWindow;
@@ -1746,32 +1742,48 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 	switch (pDrawItemInfo->Cmd) {
 		case WIDGET_ITEM_GET_XSIZE:
 			///printf("spListBoxOwnerDraw: WIDGET_ITEM_GET_XSIZE\n");
-			iRet = LISTBOX_OwnerDraw(pDrawItemInfo) + 100; /* Returns the default xsize+10 */
-			return iRet;
+			///iRet = LISTBOX_OwnerDraw(pDrawItemInfo) + 100; /* Returns the default xsize+10 */
+			///return iRet;
 			break;
 		case WIDGET_ITEM_GET_YSIZE:
 			///printf("spListBoxOwnerDraw: WIDGET_ITEM_GET_YSIZE\n");
-			iRet = LISTBOX_OwnerDraw(pDrawItemInfo) - 0; /* Returns the default ysize+10 */
-			return iRet;
+			///iRet = LISTBOX_OwnerDraw(pDrawItemInfo) - 0; /* Returns the default ysize+10 */
+			///return iRet;
 			break;
 		case WIDGET_ITEM_DRAW:
 			/* Your code to be added to draw the LISTBOX item */
 			printf("spListBoxOwnerDraw: WIDGET_ITEM_DRAW\n");
+			iRet = LISTBOX_OwnerDraw(pDrawItemInfo);
 			{
+				FP_LISTMENU_HEADER* pListMenu = NULL;
+	
+				if( FRAMEPAGE_LISTMENU == pCurrFramePageType )
+				{
+					pListMenu = pCurrFramePageFrameData;
+					if( NULL == pListMenu )
+					{
+						printf("!!!!Error, there should list menu data here!! abort!!\n");
+						return iRet;
+					}
+				}
+				/*
 				GUI_RECT rtTemp;
 				rtTemp.x0 = 110;
 				rtTemp.y0 = 0;
 				rtTemp.x1 = 140;
 				rtTemp.y1 = 160;
-				
 				GUI_FillRect(rtTemp.x0, rtTemp.y0, rtTemp.x1, rtTemp.y1);
+				*/
+				if( NULL != pListMenu->pListFrame[pDrawItemInfo->ItemIndex] )
+					if( FRAMEPAGE_LISTMENU == pListMenu->pListFrame[pDrawItemInfo->ItemIndex]->frametype )
+						GUI_DispStringAt("->", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
 			}
 			///iRet = LISTBOX_OwnerDraw(pDrawItemInfo);
 			return iRet;
 			break;
 	}
-	///return LISTBOX_OwnerDraw(pDrawItemInfo); /* Def. function for unhandled cmds */
-	return iRet;
+	return LISTBOX_OwnerDraw(pDrawItemInfo); /* Def. function for unhandled cmds */
+	///return iRet;
 }
 
 static void cbListMenuWindow(WM_MESSAGE* pMsg)
@@ -1809,7 +1821,11 @@ static void cbListMenuWindow(WM_MESSAGE* pMsg)
 		if( IsBACK_press(Key) )
 		{	/// back key
 			///set next framepage
-			pAfterFramePage = &headDataModeWindow;
+			if( &headSettingsWindow == pCurrFramePage )
+				pAfterFramePage = &headDataModeWindow;
+			else
+				pAfterFramePage = pBeforeFramePage;
+				
 			///ready for next framepage
 			pCurrFramePageNextReady = 1;
 		}
@@ -2154,13 +2170,23 @@ FRAMEPAGE_HEADER headNavigationWindow = {
 
 
 /*
+	Settings 
 */
 static const GUI_ConstString _SettingListBox[] = {
-  "GPS Settings", "Device Settings", "Activity Profiles", "User Information", "Device Information", NULL
+  "GPS Settings",
+  "Device Settings",
+  "Activity Profiles",
+  "User Information",
+  "Device Information",
+  NULL
 };
 
 static FRAMEPAGE_HEADER* _SettingListFrame[] = {
-	&headUnderConstructionWindow, &headUnderConstructionWindow, &headUnderConstructionWindow, &headUnderConstructionWindow, &headUnderConstructionWindow
+	&headUnderConstructionWindow,
+	&headSDSWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow
 };
 
 FP_LISTMENU_HEADER fpListMenuData_SettingsWindow = {
@@ -2180,6 +2206,48 @@ FRAMEPAGE_HEADER headSettingsWindow = {
 	1,
 	(void*)&fpListMenuData_SettingsWindow,
 };
+
+
+/*
+	Settings / Device Settings
+*/
+static const GUI_ConstString _SDSListBox[] = {
+  "Language",
+  "Date & Time",
+  "Units of Measurement",
+  "Activity Recording",
+  "Feedback",
+  "Equipment",
+  NULL
+};
+
+static FRAMEPAGE_HEADER* _SDSListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SDSWindow = {
+	6,
+	"Device Settings",
+	_SDSListBox,
+	_SDSListFrame,
+};
+
+FRAMEPAGE_HEADER headSDSWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SDSWindow,
+};
+
 
 
 /*
