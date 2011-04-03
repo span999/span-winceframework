@@ -355,6 +355,97 @@ void spcbRoundWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int radius, int pensize
 	GUI_SetColor( clTemp );
 }
 
+
+void spcPopupNumberWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int pensize, int iFill )
+{
+	GUI_RECT rtTemp;
+	GUI_COLOR clTemp;
+	GUI_POINT pPoint1[] = {
+		{ 0, 0},
+		{24, 0},
+		{12,20},
+	};
+	GUI_POINT pPoint2[] = {
+		{ 0, 0},
+		{24, 0},
+		{12,-20},
+	};
+	
+	if( !pMsg || (WM_PAINT != pMsg->MsgId && WM_DELETE != pMsg->MsgId && WM_KEY != pMsg->MsgId ) )
+		return;
+	
+	WM_GetClientRectEx( pMsg->hWin, &rtTemp );
+	
+	if( WM_DELETE == pMsg->MsgId )
+	{
+		GUI_ClearRect( rtTemp.x0, rtTemp.y0, rtTemp.x1, rtTemp.y1);
+		return;
+	}
+	
+	clTemp = GUI_GetColor();
+	GUI_SetColor( color );
+	///GUI_SetPenSize( 1 );
+	if( pensize > 1 )
+	{
+		GUI_FillRect( (rtTemp.x0+rtTemp.x1)/2, (rtTemp.y0+rtTemp.y1)/2, rtTemp.x1, (rtTemp.y0+rtTemp.y1)/2+(pensize-1));
+		///GUI_FillRect( rtTemp.x0+radius, rtTemp.y1-(pensize-1), rtTemp.x1-radius, rtTemp.y1);
+		GUI_FillRect( (rtTemp.x0+rtTemp.x1)/2, rtTemp.y0, ((rtTemp.x0+rtTemp.x1)/2)+(pensize-1), rtTemp.y1);
+		///GUI_FillRect( rtTemp.x1-pensize, rtTemp.y0+radius, rtTemp.x1, rtTemp.y1-radius);
+	}
+	else
+	{
+		GUI_DrawHLine( (rtTemp.y0+rtTemp.y1)/2, (rtTemp.x0+rtTemp.x1)/2, rtTemp.x1 );
+		///GUI_DrawHLine( rtTemp.y1, rtTemp.x0+radius, rtTemp.x1-radius ); 
+		GUI_DrawVLine( (rtTemp.x0+rtTemp.x1)/2, rtTemp.y0, rtTemp.y1 ); 
+		///GUI_DrawVLine( rtTemp.x1, rtTemp.y0+radius, rtTemp.y1-radius );
+	}
+
+	if( WM_KEY == pMsg->MsgId )
+	{
+		int Key = 0;
+		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+
+		///hack the key value
+		if( IsUP_press(Key) )	///up
+		{
+			///((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+			GUI_DrawPolygon( pPoint2, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)-4 );
+			printf("popup number dup!!!!!!!!!\n");
+		}
+		else
+		if( IsDOWN_press(Key) )	///down
+		{
+			///((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+			GUI_DrawPolygon( pPoint1, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)+4 );
+			printf("popup number down!!!!!!!!!\n");
+		}
+	}
+	else
+	if( WM_PAINT == pMsg->MsgId )
+	{
+
+		
+		if( iFill )
+		{
+			///down arrow
+			GUI_FillPolygon( pPoint1, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)+4 );
+			///up arrow
+			GUI_FillPolygon( pPoint2, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)-4 );
+		}
+		else
+		{
+			///down arrow
+			GUI_DrawPolygon( pPoint1, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)+4 );
+			///up arrow
+			GUI_DrawPolygon( pPoint2, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)-4 );
+		}
+		
+	}
+	GUI_SetColor( clTemp );
+
+}
+
+
 void spFramePageWait( void )
 {
 	///we should replace this with event wait instead of polling.
@@ -635,6 +726,17 @@ static void cbPopupWindow(WM_MESSAGE* pMsg)
 	{
 		/* Update info in command window */
 		spcbRoundWinExt( pMsg, GUI_BLACK, 13, 2, 1 );
+		if( FRAMEPAGE_POPUP_NUMBERS == pCurrFramePageType )
+			spcPopupNumberWinExt( pMsg, GUI_BLACK, 2, 1 );
+		
+		WM_DefaultProc(pMsg);
+	}
+	else
+	if( pMsg->MsgId == WM_KEY )
+	{
+		if( FRAMEPAGE_POPUP_NUMBERS == pCurrFramePageType )
+			spcPopupNumberWinExt( pMsg, GUI_BLACK, 2, 1 );
+		
 		WM_DefaultProc(pMsg);
 	}
 	return;
@@ -645,74 +747,63 @@ static void cbPopupWindowList(WM_MESSAGE* pMsg)
 {
 	///printf("cbPopupWindowList() ==> %d \n", pMsg->MsgId);
 	
-	if( pCurrFramePageOldCb )
+	if( WM_KEY == pMsg->MsgId )
 	{
-		if( WM_KEY == pMsg->MsgId )
+		int Key = 0;
+		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+
+		///hack the key value
+		if( IsUP_press(Key) )	///up
+			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+		else
+		if( IsDOWN_press(Key) )	///down
+			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+		else
+		if( IsENTER_press(Key) )	///enter
 		{
-			int Key = 0;
-			if( ((WM_KEY_INFO*)(pMsg->Data.p))->Key > 0 )
+			FP_POPUPLIST_HEADER*	pPopList = NULL;
+			int iSelet = -1;
+			///pBeforeFramePage = pCurrFramePage;
+			///pCurrFramePage = pAfterFramePage;
+		
+			if( 
+				FRAMEPAGE_POPUP_OPTION != pCurrFramePageType ||
+				NULL == pCurrFramePageFrameData
+			)
 			{
-				Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
-				///hack the key value
-				if( IsUP_press(Key) )	///up
-					((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
-				else
-				if( IsDOWN_press(Key) )	///down
-					((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
-				else
-				if( IsENTER_press(Key) )	///enter
-				{
-					FP_POPUPLIST_HEADER*	pPopList = NULL;
-					FRAMEPAGE_HEADER*		pNextFrame = NULL;
-					int iSelet = -1;
-					///pBeforeFramePage = pCurrFramePage;
-					///pCurrFramePage = pAfterFramePage;
-				
-					if( FRAMEPAGE_POPUP_OPTION == pCurrFramePageType )
-					{
-						pPopList = pCurrFramePageFrameData;
-						if( NULL == pPopList )
-						{
-							printf("!!!!Error, there should popup list data here!! abort!!\n");
-							return;
-						}
-					}
-
-					///check what you selected
-					iSelet = LISTBOX_GetSel(pMsg->hWin);
-
-					if( iSelet < pPopList->iListNum )
-					{
-						///jump to what you selected
-						pNextFrame = pPopList->pListFrame[iSelet];
-						pAfterFramePage = pNextFrame;
-						pCurrFramePageNextReady = 1;
-					}
-					else
-					{
-						printf( "!!!!!LISTBOX_GetSel=%d\n", iSelet );
-						pAfterFramePage = pBeforeFramePage;
-						pCurrFramePageNextReady = 1;
-					}	
-				}
-				else
-				if( IsBACK_press(Key) )	///back
-				{
-					pAfterFramePage = pBeforeFramePage;
-					pCurrFramePageNextReady = 1;
-				}
-					
+				printf("!!!!Error, there should popup list data here!! abort!!\n");
+				return;
 			}
-			if( pCurrFramePageOldCb )
-				pCurrFramePageOldCb( pMsg );
-			return;
+			
+			pPopList = pCurrFramePageFrameData;
+			///check what you selected
+			iSelet = LISTBOX_GetSel(pMsg->hWin);
+			if( iSelet < pPopList->iListNum )
+			{
+				FRAMEPAGE_HEADER*		pNextFrame = NULL;
+				///jump to what you selected
+				pNextFrame = pPopList->pListFrame[iSelet];
+				spGoAfterFramePage( pNextFrame );
+			}
+			else
+			{
+				printf( "!!!!!Error!! LISTBOX_GetSel=%d\n", iSelet );
+				spGoAfterFramePage( pBeforeFramePage );
+			}	
 		}
 		else
+		if( IsBACK_press(Key) )	///back
 		{
-			if( pCurrFramePageOldCb )
-				pCurrFramePageOldCb( pMsg );
-			return;
+			spGoAfterFramePage( pBeforeFramePage );
 		}
+
+		if( pCurrFramePageOldCb )
+			pCurrFramePageOldCb( pMsg );
+	}
+	else
+	{
+		if( pCurrFramePageOldCb )
+			pCurrFramePageOldCb( pMsg );
 	}	
 }
 #endif
@@ -735,24 +826,21 @@ void PopupWindowList( int iOption )
 	//need a blank space ???
 	///spBlankRect( 0+EDGEOFFSET, 0+EDGEOFFSET, LCD_GetXSize()-(EDGEOFFSET*2), LCD_GetYSize()-(EDGEOFFSET*2) );
 	
-	if( FRAMEPAGE_POPUP_OPTION == pCurrFramePageType )
+	if( 
+		FRAMEPAGE_POPUP_OPTION != pCurrFramePageType ||
+		NULL == pCurrFramePageFrameData
+	)
 	{
-		pPopList = pCurrFramePageFrameData;
-		if( NULL == pPopList )
-		{
-			printf("!!!!Error, there should popup list data here!! abort!!\n");
-			return;
-		}
+		printf("!!!!Error, there should popup list data here!! abort!!\n");
+		return;
 	}
-		
-	
+	pPopList = pCurrFramePageFrameData;
 	
 	
 	///create windows for popup outline
 	hWin1 = WM_CreateWindow( 0+EDGEOFFSET, 0+EDGEOFFSET, LCD_GetXSize()-(EDGEOFFSET*2), LCD_GetYSize()-(EDGEOFFSET*2), WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
 	///add callback
 	pOldCB = WM_SetCallback( hWin1, &cbPopupWindow );
-
 
 	///create list box
 	///hList = LISTBOX_CreateEx( 0+EDGEOFFSET+2, 0+EDGEOFFSET+13, LCD_GetXSize()-(EDGEOFFSET*2)-4, LCD_GetYSize()-(EDGEOFFSET*2)-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, _PopupListBox);
@@ -772,8 +860,7 @@ void PopupWindowList( int iOption )
 	
 	WM_DeleteWindow( hWin1 );
 	WM_DeleteWindow( hList );
-	///pfnListCB = NULL;
-	
+
 }
 
 
@@ -781,77 +868,66 @@ void PopupWindowList( int iOption )
 #if (GUI_WINSUPPORT)
 static void cbPopupWindowNumbers(WM_MESSAGE* pMsg)
 {
-	///printf("cbPopupWindowList() ==> %d \n", pMsg->MsgId);
+	printf("cbPopupWindowNumbers() ==> %d \n", pMsg->MsgId);
 	
-	if( pCurrFramePageOldCb )
+	if( WM_KEY == pMsg->MsgId )
 	{
-		if( WM_KEY == pMsg->MsgId )
+		int Key = 0;
+		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+
+		///hack the key value
+		if( IsUP_press(Key) )	///up
+			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+		else
+		if( IsDOWN_press(Key) )	///down
+			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+		else
+		if( IsENTER_press(Key) )	///enter
 		{
-			int Key = 0;
-			if( ((WM_KEY_INFO*)(pMsg->Data.p))->Key > 0 )
+			FP_POPUPLIST_HEADER*	pPopList = NULL;
+			int iSelet = -1;
+			///pBeforeFramePage = pCurrFramePage;
+			///pCurrFramePage = pAfterFramePage;
+		
+			if( 
+				FRAMEPAGE_POPUP_NUMBERS != pCurrFramePageType ||
+				NULL == pCurrFramePageFrameData
+			)
 			{
-				Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
-				///hack the key value
-				if( IsUP_press(Key) )	///up
-					((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
-				else
-				if( IsDOWN_press(Key) )	///down
-					((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
-				else
-				if( IsENTER_press(Key) )	///enter
-				{
-					FP_POPUPLIST_HEADER*	pPopList = NULL;
-					FRAMEPAGE_HEADER*		pNextFrame = NULL;
-					int iSelet = -1;
-					///pBeforeFramePage = pCurrFramePage;
-					///pCurrFramePage = pAfterFramePage;
-				
-					if( FRAMEPAGE_POPUP_OPTION == pCurrFramePageType )
-					{
-						pPopList = pCurrFramePageFrameData;
-						if( NULL == pPopList )
-						{
-							printf("!!!!Error, there should popup list data here!! abort!!\n");
-							return;
-						}
-					}
-
-					///check what you selected
-					iSelet = LISTBOX_GetSel(pMsg->hWin);
-
-					if( iSelet < pPopList->iListNum )
-					{
-						///jump to what you selected
-						pNextFrame = pPopList->pListFrame[iSelet];
-						pAfterFramePage = pNextFrame;
-						pCurrFramePageNextReady = 1;
-					}
-					else
-					{
-						printf( "!!!!!LISTBOX_GetSel=%d\n", iSelet );
-						pAfterFramePage = pBeforeFramePage;
-						pCurrFramePageNextReady = 1;
-					}	
-				}
-				else
-				if( IsBACK_press(Key) )	///back
-				{
-					pAfterFramePage = pBeforeFramePage;
-					pCurrFramePageNextReady = 1;
-				}
-					
+				printf("!!!!Error, there should popup list data here!! abort!!\n");
+				return;
 			}
-			if( pCurrFramePageOldCb )
-				pCurrFramePageOldCb( pMsg );
-			return;
+			
+			pPopList = pCurrFramePageFrameData;
+			///check what you selected
+			iSelet = LISTBOX_GetSel(pMsg->hWin);
+			if( iSelet < pPopList->iListNum )
+			{
+				FRAMEPAGE_HEADER*		pNextFrame = NULL;
+				///jump to what you selected
+				pNextFrame = pPopList->pListFrame[iSelet];
+				spGoAfterFramePage( pNextFrame );
+			}
+			else
+			{
+				printf( "!!!!!Error!! LISTBOX_GetSel=%d\n", iSelet );
+				spGoAfterFramePage( pBeforeFramePage );
+			}	
 		}
 		else
+		if( IsBACK_press(Key) )	///back
 		{
-			if( pCurrFramePageOldCb )
-				pCurrFramePageOldCb( pMsg );
-			return;
+			spGoAfterFramePage( pBeforeFramePage );
 		}
-	}	
+
+		if( pCurrFramePageOldCb )
+			pCurrFramePageOldCb( pMsg );
+	}
+	else
+	{
+		if( pCurrFramePageOldCb )
+			pCurrFramePageOldCb( pMsg );
+	}
 }
 #endif
 
@@ -865,10 +941,10 @@ void PopupWindowNumbers( int iOption )
 	
 	int x, y, xsize, ysize;
 
-	x = 60;
-	y = 60;
-	xsize = 30;
-	ysize = 40;
+	x = 40;
+	y = 56;
+	xsize = 64;
+	ysize = 56;
 	
 	//need a blank space ???
 	if( pCurrFramePageClearFirst > 0 )
@@ -876,16 +952,16 @@ void PopupWindowNumbers( int iOption )
 
 	spSetDefaultEffect();
 	
-	if( FRAMEPAGE_POPUP_NUMBERS == pCurrFramePageType )
+	if( 
+		FRAMEPAGE_POPUP_NUMBERS != pCurrFramePageType ||
+		NULL == pCurrFramePageFrameData
+	)
 	{
-		pPopList = pCurrFramePageFrameData;
-		if( NULL == pPopList )
-		{
-			printf("!!!!Error, there should popup list data here!! abort!!\n");
-			return;
-		}
+		printf("!!!!Error, there should popup list data here!! abort!!\n");
+		return;
 	}
-
+	
+	pPopList = pCurrFramePageFrameData;
 	///create windows for popup outline
 	hWin1 = WM_CreateWindow( x, y, xsize, ysize, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
 	///add callback
@@ -895,7 +971,8 @@ void PopupWindowNumbers( int iOption )
 	///create list box
 	///hList = LISTBOX_CreateEx( 0+EDGEOFFSET+2, 0+EDGEOFFSET+13, LCD_GetXSize()-(EDGEOFFSET*2)-4, LCD_GetYSize()-(EDGEOFFSET*2)-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, _PopupListBox);
 	if( FRAMEPAGE_POPUP_NUMBERS == pCurrFramePageType )
-		hList = LISTBOX_CreateEx( x+2, y+13, xsize-4, ysize-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pPopList->sListName);
+		///hList = LISTBOX_CreateEx( x+2, y+13, xsize-4, ysize-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pPopList->sListName);
+		hList = LISTBOX_CreateEx( x+3, y+13+((ysize-(13*2))/4), (xsize/2)-4, (ysize-(13*2))/2, WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pPopList->sListName);
 	///add callback
 	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
 	
@@ -912,11 +989,8 @@ void PopupWindowNumbers( int iOption )
 	
 	WM_DeleteWindow( hWin1 );
 	WM_DeleteWindow( hList );
-	///pfnListCB = NULL;
-	
+
 }
-
-
 
 
 #if (GUI_WINSUPPORT)
