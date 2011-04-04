@@ -58,6 +58,7 @@ typedef enum
     FRAMEPAGE_ACTIVITY,
     FRAMEPAGE_TITLED,
     FRAMEPAGE_LISTMENU,
+	FRAMEPAGE_LISTMENU_BOOLOPTION,
 	FRAMEPAGE_POPUP_NOTIFY,
 	FRAMEPAGE_POPUP_OPTION,
 	FRAMEPAGE_POPUP_CONFIRM,
@@ -133,6 +134,8 @@ FRAMEPAGE_HEADER headNavigationWindow;
 FRAMEPAGE_HEADER headSettingsWindow;
 FRAMEPAGE_HEADER headSDSWindow;
 FRAMEPAGE_HEADER headSDSLWindow;
+FRAMEPAGE_HEADER headSDSUMWindow;
+FRAMEPAGE_HEADER headSDSUMCMSWindow;
 FRAMEPAGE_HEADER headHistoryWindow;
 FRAMEPAGE_HEADER headWatchWindow;
 FRAMEPAGE_HEADER headUnderConstructionWindow;
@@ -182,6 +185,10 @@ static SCREEN_STATUS *pScrStat = &ScrStat;
 #define		IsMSGBACK_hold(x)	IsMsgKeyStatus( x, 'y' )
 #define		IsMSGENTER_press(x)	IsMsgKeyStatus( x, 'j' )
 #define		IsMSGENTER_hold(x)	IsMsgKeyStatus( x, 'h' )
+
+
+#define IsNotCurrFPListMenuLike		((FRAMEPAGE_LISTMENU != pCurrFramePageType) && (FRAMEPAGE_LISTMENU_BOOLOPTION != pCurrFramePageType))
+
 
 
 
@@ -1089,15 +1096,16 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 			{
 				FP_LISTMENU_HEADER* pListMenu = NULL;
 	
-				if( FRAMEPAGE_LISTMENU == pCurrFramePageType )
+				if( 
+					IsNotCurrFPListMenuLike ||
+					NULL == pCurrFramePageFrameData
+				)	
 				{
-					pListMenu = pCurrFramePageFrameData;
-					if( NULL == pListMenu )
-					{
-						printf("!!!!Error, there should list menu data here!! abort!!\n");
-						return iRet;
-					}
+					printf("!!!!Error, there should list menu data here!! abort!!\n");
+					return iRet;
 				}
+				
+				pListMenu = pCurrFramePageFrameData;
 				/*
 				GUI_RECT rtTemp;
 				rtTemp.x0 = 110;
@@ -1106,9 +1114,19 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 				rtTemp.y1 = 160;
 				GUI_FillRect(rtTemp.x0, rtTemp.y0, rtTemp.x1, rtTemp.y1);
 				*/
+				if( FRAMEPAGE_LISTMENU_BOOLOPTION == pCurrFramePageType )
+				{
+					GUI_DispStringAt("|v|", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+				}
+				else
 				if( NULL != pListMenu->pListFrame[pDrawItemInfo->ItemIndex] )
+				{
 					if( FRAMEPAGE_LISTMENU == pListMenu->pListFrame[pDrawItemInfo->ItemIndex]->frametype )
 						GUI_DispStringAt("->", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+					else
+					if( FRAMEPAGE_LISTMENU_BOOLOPTION == pListMenu->pListFrame[pDrawItemInfo->ItemIndex]->frametype )
+						GUI_DispStringAt("->", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+				}
 			}
 			///iRet = LISTBOX_OwnerDraw(pDrawItemInfo);
 			return iRet;
@@ -1159,16 +1177,16 @@ static void cbListMenuWindow(WM_MESSAGE* pMsg)
 			///pBeforeFramePage = pCurrFramePage;
 			///pCurrFramePage = pAfterFramePage;
 				
-			if( FRAMEPAGE_LISTMENU == pCurrFramePageType )
+			if( 
+				IsNotCurrFPListMenuLike ||
+				NULL == pCurrFramePageType
+			)
 			{
-				pListMenu = pCurrFramePageFrameData;
-				if( NULL == pListMenu )
-				{
 					printf("!!!!Error, there should popup list data here!! abort!!\n");
 					return;
-				}
 			}
 			
+			pListMenu = pCurrFramePageFrameData;
 			if( NULL == pListMenu->pUplevelFrame )
 			{
 				///handle the exeption of BACK key
@@ -1240,6 +1258,8 @@ static void cbListMenuWindow(WM_MESSAGE* pMsg)
 }
 #endif
 
+
+
 void ListMenuWindow( int iOption )
 {
 	FRAMEWIN_Handle	hFrame;
@@ -1253,16 +1273,16 @@ void ListMenuWindow( int iOption )
 
 	spSetDefaultEffect();
 
-	if( FRAMEPAGE_LISTMENU == pCurrFramePageType )
+	if( 
+		IsNotCurrFPListMenuLike ||
+		NULL == pCurrFramePageFrameData
+	)
 	{
-		pListMenu = pCurrFramePageFrameData;
-		if( NULL == pListMenu )
-		{
-			printf("!!!!Error, there should list menu data here!! abort!!\n");
-			return;
-		}
+		printf("!!!!Error, there should list menu data here!! abort!!\n");
+		return;
 	}
 	
+	pListMenu = pCurrFramePageFrameData;
 	///create frame title
 	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pListMenu->sListTitle, NULL);
 	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
@@ -1619,7 +1639,7 @@ static const GUI_ConstString _SDSListBox[] = {
 static FRAMEPAGE_HEADER* _SDSListFrame[] = {
 	&headSDSLWindow,
 	&headUnderConstructionWindow,
-	&headUnderConstructionWindow,
+	&headSDSUMWindow,
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow
@@ -1693,6 +1713,87 @@ FRAMEPAGE_HEADER headSDSLWindow = {
 	1,
 	(void*)&fpListMenuData_SDSLWindow,
 };
+
+
+/*
+	Settings / Device Settings / Units of Measurement
+*/
+static const GUI_ConstString _SDSUMListBox[] = {
+  "Coordinates: <value>",
+  "Speed/Distance: <value>",
+  "Elevation: <value>",
+  "Height/Weight: <value>",
+  "Temperature: <value>",
+  "Heart Rate: <value>",
+  "Power: <value>",
+  NULL
+};
+
+static FRAMEPAGE_HEADER* _SDSUMListFrame[] = {
+	&headSDSUMCMSWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SDSUMWindow = {
+	7,
+	"Units of Measurement",
+	_SDSUMListBox,
+	&headSDSWindow,
+	_SDSUMListFrame,
+};
+
+FRAMEPAGE_HEADER headSDSUMWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SDSUMWindow,
+};
+
+
+/*
+	Settings / Device Settings / Units of Measurement / Coordinates Measurement System
+*/
+static const GUI_ConstString _SDSUMCMSListBox[] = {
+	"Decimal Degrees",
+	"Degrees Minutes",
+	"Degrees Minutes Seconds",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SDSUMCMSListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SDSUMCMSWindow = {
+	3,
+	"Coordinates Measurement System",
+	_SDSUMCMSListBox,
+	&headSDSUMWindow,
+	_SDSUMCMSListFrame,
+};
+
+FRAMEPAGE_HEADER headSDSUMCMSWindow = {
+	FRAMEPAGE_LISTMENU_BOOLOPTION,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SDSUMCMSWindow,
+};
+
 
 
 /*
