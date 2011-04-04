@@ -100,6 +100,7 @@ typedef struct
 	const GUI_ConstString*	sListName;
 	FRAMEPAGE_HEADER*		pUplevelFrame;
 	FRAMEPAGE_HEADER** 		pListFrame;
+	int*					pListParam;
 } FP_POPUPLIST_HEADER, FP_LISTMENU_HEADER;
 
 
@@ -1116,7 +1117,10 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 				*/
 				if( FRAMEPAGE_LISTMENU_BOOLOPTION == pCurrFramePageType )
 				{
-					GUI_DispStringAt("|v|", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+					if( 1 == pListMenu->pListParam[pDrawItemInfo->ItemIndex] )
+						GUI_DispStringAt("|v|", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+					else
+						GUI_DispStringAt("| |", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
 				}
 				else
 				if( NULL != pListMenu->pListFrame[pDrawItemInfo->ItemIndex] )
@@ -1207,10 +1211,6 @@ static void cbListMenuWindow(WM_MESSAGE* pMsg)
 		else		
 		if( IsENTER_press(Key) )
 		{	/// enter key
-			///set next framepage
-			///pAfterFramePage = &headPopupListWindow_Fitness;
-			///ready for next framepage
-			///pCurrFramePageNextReady = 1;
 			FP_LISTMENU_HEADER*	pListMenu = NULL;
 			FRAMEPAGE_HEADER*	pNextFrame = NULL;
 			int iSelet = -1;
@@ -1470,12 +1470,17 @@ static FRAMEPAGE_HEADER* _PopupListFrame_Fitness[] = {
 	&headDataModeWindow, &headNavigationWindow, &headSettingsWindow, &headHistoryWindow
 };
 
+static int _PopupListParam_Fitness[] = {
+	0, 0, 0, 0
+};
+
 FP_POPUPLIST_HEADER fpPopupListData_Fitness = {
 	4,
 	NULL,
 	_PopupListBox_Fitness,
 	NULL,
 	_PopupListFrame_Fitness,
+	_PopupListParam_Fitness,
 };
 
 FRAMEPAGE_HEADER headPopupListWindow_Fitness = {
@@ -1501,6 +1506,9 @@ static FRAMEPAGE_HEADER* _PopupListFrame_DeviceModeFitness[] = {
 	&headWatchWindow, &headPoweroffWindow
 };
 
+static int _PopupListParam_DeviceModeFitness[] = {
+	0, 0
+};
 
 FP_POPUPLIST_HEADER fpPopupListData_DeviceModeFitness = {
 	2,
@@ -1508,6 +1516,7 @@ FP_POPUPLIST_HEADER fpPopupListData_DeviceModeFitness = {
 	_PopupListBox_DeviceModeFitness,
 	NULL,
 	_PopupListFrame_DeviceModeFitness,
+	_PopupListParam_DeviceModeFitness,
 };
 
 FRAMEPAGE_HEADER headPopupListWindow_DeviceModeFitness = {
@@ -1533,6 +1542,9 @@ static FRAMEPAGE_HEADER* _PopupListFrame_NumberEntry[] = {
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
 
+static int _PopupListParam_NumberEntry[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
 
 FP_POPUPLIST_HEADER fpPopupListData_NumberEntry = {
 	10,
@@ -1540,6 +1552,7 @@ FP_POPUPLIST_HEADER fpPopupListData_NumberEntry = {
 	_PopupListBox_NumberEntry,
 	NULL,
 	_PopupListFrame_NumberEntry,
+	_PopupListParam_NumberEntry,
 };
 
 FRAMEPAGE_HEADER headPopupListWindow_NumberEntry = {
@@ -1603,12 +1616,17 @@ static FRAMEPAGE_HEADER* _SettingListFrame[] = {
 	&headUnderConstructionWindow
 };
 
+static int _SettingListParam[] = {
+	0, 0, 0, 0, 0
+};
+
 FP_LISTMENU_HEADER fpListMenuData_SettingsWindow = {
 	5,
 	"Settings",
 	_SettingListBox,
 	NULL,
 	_SettingListFrame,
+	_SettingListParam,
 };
 
 FRAMEPAGE_HEADER headSettingsWindow = {
@@ -1645,12 +1663,17 @@ static FRAMEPAGE_HEADER* _SDSListFrame[] = {
 	&headUnderConstructionWindow
 };
 
+static int _SDSListParam[] = {
+	0, 0, 0, 0, 0, 0
+};
+
 FP_LISTMENU_HEADER fpListMenuData_SDSWindow = {
 	6,
 	"Device Settings",
 	_SDSListBox,
 	&headSettingsWindow,
 	_SDSListFrame,
+	_SDSListParam,
 };
 
 FRAMEPAGE_HEADER headSDSWindow = {
@@ -1695,12 +1718,18 @@ static FRAMEPAGE_HEADER* _SDSLListFrame[] = {
 	&headUnderConstructionWindow
 };
 
+static int _SDSLListParam[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+
+
 FP_LISTMENU_HEADER fpListMenuData_SDSLWindow = {
 	10,
 	"Language",
 	_SDSLListBox,
 	&headSDSWindow,
 	_SDSLListFrame,
+	_SDSLListParam,
 };
 
 FRAMEPAGE_HEADER headSDSLWindow = {
@@ -1739,12 +1768,18 @@ static FRAMEPAGE_HEADER* _SDSUMListFrame[] = {
 	&headUnderConstructionWindow,
 };
 
+static int _SDSUMListParam[] = {
+	0, 0, 0, 0, 0, 0, 0
+};
+
+
 FP_LISTMENU_HEADER fpListMenuData_SDSUMWindow = {
 	7,
 	"Units of Measurement",
 	_SDSUMListBox,
 	&headSDSWindow,
 	_SDSUMListFrame,
+	_SDSUMListParam,
 };
 
 FRAMEPAGE_HEADER headSDSUMWindow = {
@@ -1775,12 +1810,17 @@ static FRAMEPAGE_HEADER* _SDSUMCMSListFrame[] = {
 	&headUnderConstructionWindow,
 };
 
+static int _SDSUMCMSListParam[] = {
+	1, 0, 0
+};
+
 FP_LISTMENU_HEADER fpListMenuData_SDSUMCMSWindow = {
 	3,
 	"Coordinates Measurement System",
 	_SDSUMCMSListBox,
 	&headSDSUMWindow,
 	_SDSUMCMSListFrame,
+	_SDSUMCMSListParam,
 };
 
 FRAMEPAGE_HEADER headSDSUMCMSWindow = {
@@ -1807,12 +1847,17 @@ static FRAMEPAGE_HEADER* _HistoryListFrame[] = {
 	&headUnderConstructionWindow, &headUnderConstructionWindow, &headUnderConstructionWindow
 };
 
+static int _HistoryListParam[] = {
+	0, 0, 0
+};
+
 FP_LISTMENU_HEADER fpListMenuData_HistoryWindow = {
 	3,
 	"History",
 	_HistoryListBox,
 	NULL,
 	_HistoryListFrame,
+	_HistoryListParam,
 };
 
 FRAMEPAGE_HEADER headHistoryWindow = {
@@ -1828,6 +1873,7 @@ FRAMEPAGE_HEADER headHistoryWindow = {
 
 
 /*
+	Watch mode
 */
 FRAMEPAGE_HEADER headWatchWindow = {
 	FRAMEPAGE_COMMON,
@@ -1842,6 +1888,7 @@ FRAMEPAGE_HEADER headWatchWindow = {
 
 
 /*
+	underconstruction
 */
 FRAMEPAGE_HEADER headUnderConstructionWindow = {
 	FRAMEPAGE_COMMON,
