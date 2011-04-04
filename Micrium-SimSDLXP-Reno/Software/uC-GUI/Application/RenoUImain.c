@@ -137,6 +137,7 @@ FRAMEPAGE_HEADER headSDSWindow;
 FRAMEPAGE_HEADER headSDSLWindow;
 FRAMEPAGE_HEADER headSDSUMWindow;
 FRAMEPAGE_HEADER headSDSUMCMSWindow;
+FRAMEPAGE_HEADER headSDSUMCSDMSWindow;
 FRAMEPAGE_HEADER headHistoryWindow;
 FRAMEPAGE_HEADER headWatchWindow;
 FRAMEPAGE_HEADER headUnderConstructionWindow;
@@ -1120,7 +1121,7 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 					if( 1 == pListMenu->pListParam[pDrawItemInfo->ItemIndex] )
 						GUI_DispStringAt("|v|", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
 					else
-						GUI_DispStringAt("| |", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+						GUI_DispStringAt("|_|", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
 				}
 				else
 				if( NULL != pListMenu->pListFrame[pDrawItemInfo->ItemIndex] )
@@ -1760,7 +1761,7 @@ static const GUI_ConstString _SDSUMListBox[] = {
 
 static FRAMEPAGE_HEADER* _SDSUMListFrame[] = {
 	&headSDSUMCMSWindow,
-	&headUnderConstructionWindow,
+	&headSDSUMCSDMSWindow,
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow,
@@ -1832,6 +1833,45 @@ FRAMEPAGE_HEADER headSDSUMCMSWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSUMCMSWindow,
+};
+
+
+/*
+	Settings / Device Settings / Units of Measurement / Speed Distance Measurement System
+*/
+static const GUI_ConstString _SDSUMSDMSListBox[] = {
+	"Metric",
+	"Statute",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SDSUMSDMSListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+};
+
+static int _SDSUMSDMSListParam[] = {
+	1, 0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SDSUMSDMSWindow = {
+	2,
+	"Speed Distance Measurement System",
+	_SDSUMSDMSListBox,
+	&headSDSUMWindow,
+	_SDSUMSDMSListFrame,
+	_SDSUMSDMSListParam,
+};
+
+FRAMEPAGE_HEADER headSDSUMCSDMSWindow = {
+	FRAMEPAGE_LISTMENU_BOOLOPTION,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SDSUMSDMSWindow,
 };
 
 
