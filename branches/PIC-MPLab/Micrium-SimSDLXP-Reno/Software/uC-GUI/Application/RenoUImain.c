@@ -1118,19 +1118,56 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 				*/
 				if( FRAMEPAGE_LISTMENU_BOOLOPTION == pCurrFramePageType )
 				{
+					GUI_POINT pPoint1[] = {
+									{ 0+0, 0+2},
+									{ 0+0, 8+2},
+									{ 8+0, 8+2},
+									{ 8+0, 0+2},
+								};
+					GUI_POINT pPoint2[] = {
+									{ 0+0+2, 0+2+2},
+									{ 0+0+5, 0+2+7},
+									{ 0+0+12, 0+2},
+									{ 0+0+5, 0+2+5},
+								};
+
 					if( 1 == pListMenu->pListParam[pDrawItemInfo->ItemIndex] )
-						GUI_DispStringAt("|v|", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+					{
+						///draw the square
+						///GUI_DispStringAt("|v|", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+						GUI_DrawPolygon( pPoint1, 4, pDrawItemInfo->x0 + 130, pDrawItemInfo->y0 );
+						///mark the check
+						///GUI_DrawLine(130+2,4,130+5,9);
+						///GUI_DrawLine(130+5,9,130+12,2);
+						GUI_FillPolygon( pPoint2, 4, pDrawItemInfo->x0 + 130, pDrawItemInfo->y0 );
+					}
 					else
-						GUI_DispStringAt("|_|", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+					{
+						///draw the square
+						///GUI_DispStringAt("|_|", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+						GUI_DrawPolygon( pPoint1, 4, pDrawItemInfo->x0 + 130, pDrawItemInfo->y0 );
+					}
 				}
 				else
 				if( NULL != pListMenu->pListFrame[pDrawItemInfo->ItemIndex] )
 				{
+					GUI_POINT pPoint1[] = {
+									{ 0, 0+1},
+									{ 0, 10+1},
+									{ 7, 5+1},
+								};
+								
 					if( FRAMEPAGE_LISTMENU == pListMenu->pListFrame[pDrawItemInfo->ItemIndex]->frametype )
-						GUI_DispStringAt("->", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+					{
+						///GUI_DispStringAt("->", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+						GUI_FillPolygon( pPoint1, 3, pDrawItemInfo->x0 + 135, pDrawItemInfo->y0 );
+					}
 					else
 					if( FRAMEPAGE_LISTMENU_BOOLOPTION == pListMenu->pListFrame[pDrawItemInfo->ItemIndex]->frametype )
-						GUI_DispStringAt("->", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+					{
+						///GUI_DispStringAt("->", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+						GUI_FillPolygon( pPoint1, 3, pDrawItemInfo->x0 + 135, pDrawItemInfo->y0 );
+					}
 				}
 			}
 			///iRet = LISTBOX_OwnerDraw(pDrawItemInfo);
