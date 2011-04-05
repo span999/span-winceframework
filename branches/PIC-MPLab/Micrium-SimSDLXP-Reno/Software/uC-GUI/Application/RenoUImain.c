@@ -170,6 +170,10 @@ FRAMEPAGE_HEADER headSDSLWindow;
 FRAMEPAGE_HEADER headSDSUMWindow;
 FRAMEPAGE_HEADER headSDSUMCMSWindow;
 FRAMEPAGE_HEADER headSDSUMCSDMSWindow;
+FRAMEPAGE_HEADER headSAPWindow;
+FRAMEPAGE_HEADER headSAPDPWindow;
+FRAMEPAGE_HEADER headSAPDPADSWindow;
+FRAMEPAGE_HEADER headSAPDPADSASWindow;
 FRAMEPAGE_HEADER headHistoryWindow;
 FRAMEPAGE_HEADER headWatchWindow;
 FRAMEPAGE_HEADER headUnderConstructionWindow;
@@ -2617,7 +2621,7 @@ static const GUI_ConstString _SettingListBox[] = {
 static FRAMEPAGE_HEADER* _SettingListFrame[] = {
 	&headUnderConstructionWindow,
 	&headSDSWindow,
-	&headUnderConstructionWindow,
+	&headSAPWindow,
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow
 };
@@ -2879,6 +2883,177 @@ FRAMEPAGE_HEADER headSDSUMCSDMSWindow = {
 	(void*)&fpListMenuData_SDSUMSDMSWindow,
 };
 
+
+/*
+	Settings / Activity Profiles
+*/
+static const GUI_ConstString _SAPListBox[] = {
+  "Enabled:",
+  "Name:",
+  "Activity Type:",
+  "Display Preferences",
+  "Recording Preferences",
+  "Training Zones",
+  "Train Alerts",
+  "Equipment",
+  "Copy Settings From",
+  NULL
+};
+
+static FRAMEPAGE_HEADER* _SAPListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headSAPDPWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow
+};
+
+static int _SAPListParam[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SAPWindow = {
+	9,
+	"Activity Profile Setting",
+	_SAPListBox,
+	&headSettingsWindow,
+	_SAPListFrame,
+	_SAPListParam,
+};
+
+FRAMEPAGE_HEADER headSAPWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SAPWindow,
+};
+
+
+/*
+	Settings / Activity Profiles / Display Preferences 
+*/
+static const GUI_ConstString _SAPDPListBox[] = {
+  "Activity Data Screen",
+  "Activity Pacer",
+  "Auto Scroll:",
+  "Scroll Speed: <value>",
+  NULL
+};
+
+static FRAMEPAGE_HEADER* _SAPDPListFrame[] = {
+	&headSAPDPADSWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow
+};
+
+static int _SAPDPListParam[] = {
+	0, 0, 0, 0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SAPDPWindow = {
+	4,
+	"Display Preferences",
+	_SAPDPListBox,
+	&headSAPWindow,
+	_SAPDPListFrame,
+	_SAPDPListParam,
+};
+
+FRAMEPAGE_HEADER headSAPDPWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SAPDPWindow,
+};
+
+
+/*
+	Settings / Activity Profiles / Display Preferences / Activity Data Screen
+*/
+static const GUI_ConstString _SAPDPADSListBox[] = {
+  "Add Screen",
+  NULL
+};
+
+static FRAMEPAGE_HEADER* _SAPDPADSListFrame[] = {
+	&headSAPDPADSASWindow
+};
+
+static int _SAPDPADSListParam[] = {
+	0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SAPDPADSWindow = {
+	1,
+	"Activity Data Screens",
+	_SAPDPADSListBox,
+	&headSAPDPWindow,
+	_SAPDPADSListFrame,
+	_SAPDPADSListParam,
+};
+
+FRAMEPAGE_HEADER headSAPDPADSWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SAPDPADSWindow,
+};
+
+
+/*
+	Settings / Activity Profiles / Display Preferences / Activity Data Screen / Add Screen
+*/
+static const GUI_ConstString _SAPDPADSASListBox[] = {
+  "New Screen",
+  "Copy Last Screen",
+  NULL
+};
+
+static FRAMEPAGE_HEADER* _SAPDPADSASListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow
+};
+
+static int _SAPDPADSASListParam[] = {
+	0, 0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SAPDPADSASWindow = {
+	2,
+	"Add Screen",
+	_SAPDPADSASListBox,
+	&headSAPDPADSWindow,
+	_SAPDPADSASListFrame,
+	_SAPDPADSASListParam,
+};
+
+FRAMEPAGE_HEADER headSAPDPADSASWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SAPDPADSASWindow,
+};
 
 
 /*
