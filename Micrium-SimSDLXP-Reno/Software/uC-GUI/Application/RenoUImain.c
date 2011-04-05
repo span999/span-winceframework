@@ -56,6 +56,7 @@ typedef enum
 {
 	FRAMEPAGE_COMMON = 0,
     FRAMEPAGE_ACTIVITY,
+	FRAMEPAGE_DATAMODE,
     FRAMEPAGE_TITLED,
     FRAMEPAGE_LISTMENU,
 	FRAMEPAGE_LISTMENU_BOOLOPTION,
@@ -108,6 +109,7 @@ typedef struct
 */
 typedef struct
 {
+	int						iIndex;
 	const GUI_ConstString	sDataName;
 	const GUI_ConstString	sDataUnit;
 	const GUI_ConstString	sDataValue;
@@ -116,15 +118,18 @@ typedef struct
 typedef struct
 {
 	int						iDataSetNum;
-///	const GUI_ConstString	sListTitle;
-///	const GUI_ConstString*	sListName;
 	FRAMEPAGE_HEADER*		pUplevelFrame;
-	DATASET_HEADER**		pDataSets;
+	DATASET_HEADER*			pDataSets;
 	FRAMEPAGE_HEADER** 		pDataFrame;
 	int*					pDataParam;
 } FP_DATASETS_HEADER;
 
-
+typedef struct
+{
+	int 					iTotal;
+	int						iCurrIdx;
+	FRAMEPAGE_HEADER**		pDataSetFrame;
+} DATASETS_FRAME_LIST;
 /*
 	toolhelp routin
 */
@@ -148,6 +153,12 @@ void ListboxWindow( int iOption );
 FRAMEPAGE_HEADER headPoweroffWindow;
 FRAMEPAGE_HEADER headBootWindow;
 FRAMEPAGE_HEADER headDataModeWindow;
+FRAMEPAGE_HEADER headDataMode1Window;
+FRAMEPAGE_HEADER headDataMode2Window;
+FRAMEPAGE_HEADER headDataMode3Window;
+FRAMEPAGE_HEADER headDataMode4Window;
+FRAMEPAGE_HEADER headDataMode5Window;
+FRAMEPAGE_HEADER headDataMode6Window;
 FRAMEPAGE_HEADER headPopupListWindow;
 FRAMEPAGE_HEADER headPopupListWindow_Fitness;
 FRAMEPAGE_HEADER headPopupListWindow_DeviceModeFitness;
@@ -663,11 +674,13 @@ void BootWindow( int iOption )
 	
 	spFramePageWait();
 	///set next framepage
-	pAfterFramePage = &headDataModeWindow;
+	///pAfterFramePage = &headDataModeWindow;
+	pAfterFramePage = &headDataMode1Window;
+
 }
 
 
-
+#if 0
 #if (GUI_WINSUPPORT)
 static void cbDataModeWindow(WM_MESSAGE* pMsg)
 {
@@ -744,6 +757,670 @@ void DataModeWindow( int iOption )
 	WM_DeleteWindow( hWin5 );
 	
 }
+#else
+
+int spGetDataFrameX( int iFrameOlder, int iFrameTotal )
+{
+	int iRet = 0;
+	
+	switch( iFrameTotal )
+	{
+		case 1:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = 0;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+			break;
+		case 2:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = 0;
+					break;
+				case 1:
+					iRet = 0;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+
+			break;
+		case 3:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = 0;
+					break;
+				case 1:
+					iRet = 0;
+					break;
+				case 2:
+					iRet = 0;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+			break;
+		case 4:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = 0;
+					break;
+				case 1:
+					iRet = 0;
+					break;
+				case 2:
+					iRet = 0;
+					break;
+				case 3:
+					iRet = LCD_GetXSize()/2;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+			break;
+		case 5:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = 0;
+					break;
+				case 1:
+					iRet = 0;
+					break;
+				case 2:
+					iRet = 0;
+					break;
+				case 3:
+					iRet = LCD_GetXSize()/2;
+					break;
+				case 4:
+					iRet = LCD_GetXSize()/2;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+			break;
+		case 6:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = 0;
+					break;
+				case 1:
+					iRet = 0;
+					break;
+				case 2:
+					iRet = 0;
+					break;
+				case 3:
+					iRet = LCD_GetXSize()/2;
+					break;
+				case 4:
+					iRet = LCD_GetXSize()/2;
+					break;
+				case 5:
+					iRet = LCD_GetXSize()/2;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+			break;
+		default:
+			break;
+	}
+	
+	return iRet;
+}
+
+int spGetDataFrameY( int iFrameOlder, int iFrameTotal )
+{
+	int iRet = 0;
+	
+	switch( iFrameTotal )
+	{
+		case 1:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = 0;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+			break;
+		case 2:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = 0;
+					break;
+				case 1:
+					iRet = LCD_GetYSize()/2;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+
+			break;
+		case 3:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = 0;
+					break;
+				case 1:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 2:
+					iRet = (LCD_GetYSize()*2)/3;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+			break;
+		case 4:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = 0;
+					break;
+				case 1:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 2:
+					iRet = (LCD_GetYSize()*2)/3;
+					break;
+				case 3:
+					iRet = (LCD_GetYSize()*2)/3;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+			break;
+		case 5:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = 0;
+					break;
+				case 1:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 2:
+					iRet = (LCD_GetYSize()*2)/3;
+					break;
+				case 3:
+					iRet = (LCD_GetYSize()*2)/3;
+					break;
+				case 4:
+					iRet = LCD_GetYSize()/3;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+			break;
+		case 6:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = 0;
+					break;
+				case 1:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 2:
+					iRet = (LCD_GetYSize()*2)/3;
+					break;;
+				case 3:
+					iRet = (LCD_GetYSize()*2)/3;
+					break;
+				case 4:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 5:
+					iRet = 0;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+			break;
+		default:
+			break;
+	}
+	
+	return iRet;
+}
+
+int spGetDataFrameXsize( int iFrameOlder, int iFrameTotal )
+{
+	int iRet = 0;
+	
+	switch( iFrameTotal )
+	{
+		case 1:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = LCD_GetXSize();
+					break;
+				default:
+					iRet = LCD_GetXSize();
+					break;
+			}
+			break;
+		case 2:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = LCD_GetXSize();
+					break;
+				case 1:
+					iRet = LCD_GetXSize();
+					break;
+				default:
+					iRet = LCD_GetXSize();
+					break;
+			}
+			break;
+		case 3:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = LCD_GetXSize();
+					break;
+				case 1:
+					iRet = LCD_GetXSize();
+					break;
+				case 2:
+					iRet = LCD_GetXSize();
+					break;
+				default:
+					iRet = LCD_GetXSize();
+					break;
+			}
+			break;
+		case 4:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = LCD_GetXSize();
+					break;
+				case 1:
+					iRet = LCD_GetXSize();
+					break;
+				case 2:
+					iRet = LCD_GetXSize()/2;
+					break;
+				case 3:
+					iRet = LCD_GetXSize()/2;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+			break;
+		case 5:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = LCD_GetXSize();
+					break;
+				case 1:
+					iRet = LCD_GetXSize()/2;
+					break;
+				case 2:
+					iRet = LCD_GetXSize()/2;
+					break;
+				case 3:
+					iRet = LCD_GetXSize()/2;
+					break;
+				case 4:
+					iRet = LCD_GetXSize()/2;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+			break;
+		case 6:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = LCD_GetXSize()/2;
+					break;
+				case 1:
+					iRet = LCD_GetXSize()/2;
+					break;
+				case 2:
+					iRet = LCD_GetXSize()/2;
+					break;
+				case 3:
+					iRet = LCD_GetXSize()/2;
+					break;
+				case 4:
+					iRet = LCD_GetXSize()/2;
+					break;
+				case 5:
+					iRet = LCD_GetXSize()/2;
+					break;
+				default:
+					iRet = 0;
+					break;
+			}
+			break;
+		default:
+			break;
+	}
+	
+	return iRet;
+}
+
+int spGetDataFrameYsize( int iFrameOlder, int iFrameTotal )
+{
+	int iRet = 0;
+
+	switch( iFrameTotal )
+	{
+		case 1:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = LCD_GetYSize();
+					break;
+				default:
+					iRet = LCD_GetYSize();
+					break;
+			}
+			break;
+		case 2:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = LCD_GetYSize()/2;
+					break;
+				case 1:
+					iRet = LCD_GetYSize()/2;
+					break;
+				default:
+					iRet = LCD_GetYSize()/2;
+					break;
+			}
+
+			break;
+		case 3:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 1:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 2:
+					iRet = LCD_GetYSize()/3;
+					break;
+				default:
+					iRet = LCD_GetYSize()/3;
+					break;
+			}
+			break;
+		case 4:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 1:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 2:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 3:
+					iRet = LCD_GetYSize()/3;
+					break;
+				default:
+					iRet = LCD_GetYSize()/3;
+					break;
+			}
+			break;
+		case 5:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 1:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 2:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 3:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 4:
+					iRet = LCD_GetYSize()/3;
+					break;
+				default:
+					iRet = LCD_GetYSize()/3;
+					break;
+			}
+			break;
+		case 6:
+			switch( iFrameOlder )
+			{
+				case 0:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 1:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 2:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 3:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 4:
+					iRet = LCD_GetYSize()/3;
+					break;
+				case 5:
+					iRet = LCD_GetYSize()/3;
+					break;
+				default:
+					iRet = LCD_GetYSize()/3;
+					break;
+			}
+			break;
+		default:
+			break;
+	}
+
+	return iRet;
+}
+
+void spcbDataModeVal( WM_MESSAGE* pMsg, GUI_COLOR color )
+{
+	GUI_RECT 	rtTemp;
+	GUI_COLOR 	clTemp[2];
+	int			iIndex = 0;
+	FP_DATASETS_HEADER* pDataModeData = NULL;
+	
+	
+	if( !pMsg || (WM_PAINT != pMsg->MsgId) )
+		return;
+		
+	if( 
+		FRAMEPAGE_DATAMODE != pCurrFramePageType ||
+		NULL == pCurrFramePageFrameData
+	)
+	{
+		printf("!!!!Error, there should activity data mode data here!! abort!!\n");
+		return;
+	}
+	pDataModeData = pCurrFramePageFrameData;
+	
+	WM_GetClientRectEx( pMsg->hWin, &rtTemp );
+	WM_GetUserData( pMsg->hWin, &iIndex, sizeof(int) );
+		
+	clTemp[0] = GUI_GetColor();
+	clTemp[1] = GUI_GetBkColor();
+	GUI_SetColor( color );
+	GUI_SetBkColor( GUI_WHITE );
+	
+	///draw data name
+	GUI_DispStringAt( pDataModeData->pDataSets[iIndex].sDataName, rtTemp.x0+3, rtTemp.y0+3 );
+	///draw data unit
+	GUI_DispStringAt( pDataModeData->pDataSets[iIndex].sDataUnit, rtTemp.x1-23, rtTemp.y1-13 );
+	///draw data value
+	GUI_DispStringAt( pDataModeData->pDataSets[iIndex].sDataValue, rtTemp.x0+13, (rtTemp.y0+rtTemp.y1)/2-3 );
+	
+	GUI_SetColor( clTemp[0] );
+	GUI_SetBkColor( clTemp[1] );
+
+}
+
+
+static FRAMEPAGE_HEADER* DataSetFrameList[] = {
+	&headDataMode1Window,
+	&headDataMode2Window,
+	&headDataMode3Window,
+	&headDataMode4Window,
+	&headDataMode5Window,
+	&headDataMode6Window
+};
+
+static DATASETS_FRAME_LIST		DataSetsList = {
+	6,
+	1,
+	DataSetFrameList,
+};
+
+
+#if (GUI_WINSUPPORT)
+static void cbDataModeWindow(WM_MESSAGE* pMsg)
+{
+	int iTmp = 0;
+	
+	WM_GetUserData( pMsg->hWin, &iTmp, sizeof(int) );
+	printf("cbDataModeWindow() ==> %d user=%d\n", pMsg->MsgId, iTmp);
+
+	///hack the WM msg here
+	if( pMsg->MsgId == WM_KEY )
+	{
+		int Key = 0;			
+		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+		
+		if( IsUP_hold(Key) )	/// hold up key
+			spGoAfterFramePage( &headPopupListWindow_DeviceModeFitness );
+		else		
+		if( IsDOWN_hold(Key) )	/// hold down key
+			spGoAfterFramePage( &headPopupListWindow_Fitness );
+		else
+		if( IsUP_press(Key) )
+		{
+			if( DataSetsList.iCurrIdx == DataSetsList.iTotal )
+				DataSetsList.iCurrIdx = 1;
+			else
+				DataSetsList.iCurrIdx++;
+			
+			spGoAfterFramePage( DataSetsList.pDataSetFrame[DataSetsList.iCurrIdx-1] );
+		}
+		else
+		if( IsDOWN_press(Key) )
+		{
+			if( DataSetsList.iCurrIdx == 1 )
+				DataSetsList.iCurrIdx = DataSetsList.iTotal;
+			else
+				DataSetsList.iCurrIdx--;
+			
+			spGoAfterFramePage( DataSetsList.pDataSetFrame[DataSetsList.iCurrIdx-1] );
+		}		
+///		if( IsUP_press(Key) || IsDOWN_press(Key) )
+///			spGoAfterFramePage( &headPopupListWindow_NumberEntry );
+	}
+	else
+	if( pMsg->MsgId == WM_PAINT )
+	{
+		spcbRoundWinExt( pMsg, GUI_BLUE, 0, 1, 1 );
+		spcbDataModeVal( pMsg, GUI_BLUE );
+	}
+	
+	if( pCurrFramePageOldCb )
+		pCurrFramePageOldCb( pMsg );
+}
+#endif
+
+void DataModeWindow( int iOption )
+{
+	int iLoop = 0;
+	WM_HWIN hDataWin[6];
+	FP_DATASETS_HEADER* pDataModeData = NULL;
+	///LISTBOX_Handle	hList;
+	///WM_CALLBACK* pOldCB = NULL;
+
+	if( pCurrFramePageClearFirst > 0 )
+		spBlankScreen();
+
+	if( 
+		FRAMEPAGE_DATAMODE != pCurrFramePageType ||
+		NULL == pCurrFramePageFrameData
+	)
+	{
+		printf("!!!!Error, there should activity data mode data here!! abort!!\n");
+		return;
+	}
+	
+	pDataModeData = pCurrFramePageFrameData;
+	
+	for( iLoop=0; iLoop<pDataModeData->iDataSetNum; iLoop++ )
+	{
+		///create windows
+		hDataWin[iLoop] = WM_CreateWindow(  
+							spGetDataFrameX( iLoop, pDataModeData->iDataSetNum ),
+							spGetDataFrameY( iLoop, pDataModeData->iDataSetNum ),
+							spGetDataFrameXsize( iLoop, pDataModeData->iDataSetNum ),
+							spGetDataFrameYsize( iLoop, pDataModeData->iDataSetNum ),
+							WM_CF_SHOW|WM_CF_STAYONTOP,
+							NULL,
+							sizeof(int) );
+			
+		///add callback
+		pCurrFramePageOldCb = WM_SetCallback( hDataWin[iLoop], pCurrFramePageMainCb );
+		
+		WM_SetUserData( hDataWin[iLoop], &(pDataModeData->pDataSets[iLoop].iIndex), sizeof(int) );
+	}
+
+	WM_BringToTop( hDataWin[0] );
+	WM_SetFocus( hDataWin[0] );
+	
+	WM_ExecIdle();
+	spFramePageWait();
+
+	for( iLoop=0; iLoop<pDataModeData->iDataSetNum; iLoop++ )
+		WM_DeleteWindow( hDataWin[iLoop] );
+
+}
+#endif
 
 
 
@@ -1519,6 +2196,276 @@ FRAMEPAGE_HEADER headDataModeWindow = {
 
 
 /*
+	Data mode with 1 Data(Activity) set
+*/
+DATASET_HEADER _DataModeContent_1Window[] = {
+	{ 0, "distance", "/mi", "10.01" },
+	{ 1, "time", "", "21:45" },
+	{ 2, "avg pace", "/mi", "7:15" },
+	{ 3, "elevation", "/ft", "155" },
+	{ 4, "lap avg hr", "bpm", "118" },
+	{ 5, "power", "w", "1025" },
+};
+
+static FRAMEPAGE_HEADER* _DataModeFrame_1Window[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+static int _DataModeParam_1Window[] = {
+	0, 0, 0, 0, 0, 0
+};
+
+FP_DATASETS_HEADER fpDataModeData_1Window = {
+	1,
+	NULL,
+	_DataModeContent_1Window,
+	_DataModeFrame_1Window,
+	_DataModeParam_1Window,
+};
+
+FRAMEPAGE_HEADER headDataMode1Window = {
+	FRAMEPAGE_DATAMODE,
+	DataModeWindow,
+	cbDataModeWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpDataModeData_1Window,
+};
+
+
+/*
+	Data mode with 2 Data(Activity) set
+*/
+DATASET_HEADER _DataModeContent_2Window[] = {
+	{ 0, "distance", "/mi", "10.01" },
+	{ 1, "time", "", "21:45" },
+	{ 2, "avg pace", "/mi", "7:15" },
+	{ 3, "elevation", "/ft", "155" },
+	{ 4, "lap avg hr", "bpm", "118" },
+	{ 5, "power", "w", "1025" },
+};
+
+static FRAMEPAGE_HEADER* _DataModeFrame_2Window[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+static int _DataModeParam_2Window[] = {
+	0, 0, 0, 0, 0, 0
+};
+
+FP_DATASETS_HEADER fpDataModeData_2Window = {
+	2,
+	NULL,
+	_DataModeContent_2Window,
+	_DataModeFrame_2Window,
+	_DataModeParam_2Window,
+};
+
+FRAMEPAGE_HEADER headDataMode2Window = {
+	FRAMEPAGE_DATAMODE,
+	DataModeWindow,
+	cbDataModeWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpDataModeData_2Window,
+};
+
+
+/*
+	Data mode with 3 Data(Activity) set
+*/
+DATASET_HEADER _DataModeContent_3Window[] = {
+	{ 0, "distance", "/mi", "10.01" },
+	{ 1, "time", "", "21:45" },
+	{ 2, "avg pace", "/mi", "7:15" },
+	{ 3, "elevation", "/ft", "155" },
+	{ 4, "lap avg hr", "bpm", "118" },
+	{ 5, "power", "w", "1025" },
+};
+
+static FRAMEPAGE_HEADER* _DataModeFrame_3Window[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+static int _DataModeParam_3Window[] = {
+	0, 0, 0, 0, 0, 0
+};
+
+FP_DATASETS_HEADER fpDataModeData_3Window = {
+	3,
+	NULL,
+	_DataModeContent_3Window,
+	_DataModeFrame_3Window,
+	_DataModeParam_3Window,
+};
+
+FRAMEPAGE_HEADER headDataMode3Window = {
+	FRAMEPAGE_DATAMODE,
+	DataModeWindow,
+	cbDataModeWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpDataModeData_3Window,
+};
+
+
+/*
+	Data mode with 4 Data(Activity) set
+*/
+DATASET_HEADER _DataModeContent_4Window[] = {
+	{ 0, "distance", "/mi", "10.01" },
+	{ 1, "time", "", "21:45" },
+	{ 2, "avg pace", "/mi", "7:15" },
+	{ 3, "elevation", "/ft", "155" },
+	{ 4, "lap avg hr", "bpm", "118" },
+	{ 5, "power", "w", "1025" },
+};
+
+static FRAMEPAGE_HEADER* _DataModeFrame_4Window[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+static int _DataModeParam_4Window[] = {
+	0, 0, 0, 0, 0, 0
+};
+
+FP_DATASETS_HEADER fpDataModeData_4Window = {
+	4,
+	NULL,
+	_DataModeContent_4Window,
+	_DataModeFrame_4Window,
+	_DataModeParam_4Window,
+};
+
+FRAMEPAGE_HEADER headDataMode4Window = {
+	FRAMEPAGE_DATAMODE,
+	DataModeWindow,
+	cbDataModeWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpDataModeData_4Window,
+};
+
+
+/*
+	Data mode with 5 Data(Activity) set
+*/
+DATASET_HEADER _DataModeContent_5Window[] = {
+	{ 0, "distance", "/mi", "10.01" },
+	{ 1, "time", "", "21:45" },
+	{ 2, "avg pace", "/mi", "7:15" },
+	{ 3, "elevation", "/ft", "155" },
+	{ 4, "lap avg hr", "bpm", "118" },
+	{ 5, "power", "w", "1025" },
+};
+
+static FRAMEPAGE_HEADER* _DataModeFrame_5Window[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+static int _DataModeParam_5Window[] = {
+	0, 0, 0, 0, 0, 0
+};
+
+FP_DATASETS_HEADER fpDataModeData_5Window = {
+	5,
+	NULL,
+	_DataModeContent_5Window,
+	_DataModeFrame_5Window,
+	_DataModeParam_5Window,
+};
+
+FRAMEPAGE_HEADER headDataMode5Window = {
+	FRAMEPAGE_DATAMODE,
+	DataModeWindow,
+	cbDataModeWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpDataModeData_5Window,
+};
+
+
+/*
+	Data mode with 6 Data(Activity) set
+*/
+DATASET_HEADER _DataModeContent_6Window[] = {
+	{ 0, "distance", "/mi", "10.01" },
+	{ 1, "time", "", "21:45" },
+	{ 2, "avg pace", "/mi", "7:15" },
+	{ 3, "elevation", "/ft", "155" },
+	{ 4, "lap avg hr", "bpm", "118" },
+	{ 5, "power", "w", "1025" },
+};
+
+static FRAMEPAGE_HEADER* _DataModeFrame_6Window[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+static int _DataModeParam_6Window[] = {
+	0, 0, 0, 0, 0, 0
+};
+
+FP_DATASETS_HEADER fpDataModeData_6Window = {
+	6,
+	NULL,
+	_DataModeContent_6Window,
+	_DataModeFrame_6Window,
+	_DataModeParam_6Window,
+};
+
+FRAMEPAGE_HEADER headDataMode6Window = {
+	FRAMEPAGE_DATAMODE,
+	DataModeWindow,
+	cbDataModeWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpDataModeData_6Window,
+};
+
+
+/*
 	Popup Fitness
 */
 static const GUI_ConstString _PopupListBox_Fitness[] = {
@@ -2002,7 +2949,7 @@ FRAMEPAGE_HEADER headUnderConstructionWindow = {
 
 void FrameCenter( void )
 {
-	int iLoop = 15;
+	int iLoop = 25;
     GUI_CONTEXT ContextOld;
 
 	///set the first FramePage header
