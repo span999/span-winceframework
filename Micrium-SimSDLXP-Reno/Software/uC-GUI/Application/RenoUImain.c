@@ -103,6 +103,27 @@ typedef struct
 	int*					pListParam;
 } FP_POPUPLIST_HEADER, FP_LISTMENU_HEADER;
 
+/*
+	frame page data of activity data set
+*/
+typedef struct
+{
+	const GUI_ConstString	sDataName;
+	const GUI_ConstString	sDataUnit;
+	const GUI_ConstString	sDataValue;
+} DATASET_HEADER;
+
+typedef struct
+{
+	int						iDataSetNum;
+///	const GUI_ConstString	sListTitle;
+///	const GUI_ConstString*	sListName;
+	FRAMEPAGE_HEADER*		pUplevelFrame;
+	DATASET_HEADER**		pDataSets;
+	FRAMEPAGE_HEADER** 		pDataFrame;
+	int*					pDataParam;
+} FP_DATASETS_HEADER;
+
 
 /*
 	toolhelp routin
@@ -1221,17 +1242,17 @@ static void cbListMenuWindow(WM_MESSAGE* pMsg)
 				
 			if( 
 				IsNotCurrFPListMenuLike ||
-				NULL == pCurrFramePageType
+				NULL == pCurrFramePageFrameData
 			)
 			{
-					printf("!!!!Error, there should popup list data here!! abort!!\n");
-					return;
+				printf("!!!!Error, there should list menu data here!! abort!!\n");
+				return;
 			}
 			
 			pListMenu = pCurrFramePageFrameData;
 			if( NULL == pListMenu->pUplevelFrame )
 			{
-				///handle the exeption of BACK key
+				///handle the exception of BACK key in menu list
 				if( 
 					&headSettingsWindow == pCurrFramePage ||					
 					&headHistoryWindow == pCurrFramePage
@@ -1254,17 +1275,17 @@ static void cbListMenuWindow(WM_MESSAGE* pMsg)
 			int iSelet = -1;
 			///pBeforeFramePage = pCurrFramePage;
 			///pCurrFramePage = pAfterFramePage;
-				
-			if( FRAMEPAGE_LISTMENU == pCurrFramePageType )
-			{
-				pListMenu = pCurrFramePageFrameData;
-				if( NULL == pListMenu )
-				{
-					printf("!!!!Error, there should popup list data here!! abort!!\n");
-					return;
-				}
-			}
 
+			if( 
+				IsNotCurrFPListMenuLike ||
+				NULL == pCurrFramePageFrameData
+			)
+			{
+				printf("!!!!Error, there should list menu data here!! abort!!\n");
+				return;
+			}
+			
+			pListMenu = pCurrFramePageFrameData;
 			///check what you selected
 			iSelet = LISTBOX_GetSel(pMsg->hWin);
 
