@@ -111,7 +111,7 @@ typedef struct
 } SCREEN_STATUS;
 
 /*
-	frame page data of popup list, menu list
+	frame page data of menu list
 */
 typedef struct
 {
@@ -121,7 +121,24 @@ typedef struct
 	FRAMEPAGE_HEADER*		pUplevelFrame;
 	FRAMEPAGE_HEADER** 		pListFrame;
 	int*					pListParam;
-} FP_POPUPLIST_HEADER, FP_LISTMENU_HEADER;
+} FP_LISTMENU_HEADER;
+
+
+/*
+	frame page data of popup list
+*/
+typedef struct
+{
+	int						iListNum;
+	int						iListSel;
+	const GUI_ConstString	sListTitle;
+	const GUI_ConstString*	sListName;
+	FRAMEPAGE_HEADER*		pUplevelFrame;
+	FRAMEPAGE_HEADER** 		pListFrame;
+	int*					pListParam;
+	WM_HWIN					hWinFrame;
+} FP_POPUPLIST_HEADER;
+
 
 /*
 	frame page data of activity data set
@@ -461,6 +478,7 @@ void spcbRoundWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int radius, int pensize
 		GUI_DrawVLine( rtTemp.x0, rtTemp.y0+radius, rtTemp.y1-radius ); 
 		GUI_DrawVLine( rtTemp.x1, rtTemp.y0+radius, rtTemp.y1-radius );
 	}
+	
 	if( radius > 0 )
 	{
 		///GUI_SetPenSize( 1 );
@@ -473,7 +491,7 @@ void spcbRoundWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int radius, int pensize
 }
 
 
-void spcPopupNumberWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int pensize, int iFill )
+void spcbPopupNumberWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int pensize, int iFill )
 {
 	GUI_RECT rtTemp;
 	GUI_COLOR clTemp;
@@ -516,7 +534,7 @@ void spcPopupNumberWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int pensize, int i
 		GUI_DrawVLine( (rtTemp.x0+rtTemp.x1)/2, rtTemp.y0, rtTemp.y1 ); 
 		///GUI_DrawVLine( rtTemp.x1, rtTemp.y0+radius, rtTemp.y1-radius );
 	}
-
+#if 0
 	if( WM_KEY == pMsg->MsgId )
 	{
 		int Key = 0;
@@ -527,7 +545,7 @@ void spcPopupNumberWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int pensize, int i
 		{
 			///((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
 			GUI_DrawPolygon( pPoint2, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)-4 );
-			printf("popup number dup!!!!!!!!!\n");
+			printf("popup number up!!!!!!!!!\n");
 		}
 		else
 		if( IsDOWN_press(Key) )	///down
@@ -538,28 +556,56 @@ void spcPopupNumberWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int pensize, int i
 		}
 	}
 	else
+#endif
 	if( WM_PAINT == pMsg->MsgId )
 	{
+		FP_POPUPLIST_HEADER*	pPopList = NULL;
 
-		
-		if( iFill )
+		if( 
+			FRAMEPAGE_POPUP_NUMBERS != pCurrFramePageType ||
+			NULL == pCurrFramePageFrameData
+		)
 		{
+			printf("!!!!Error, there should popup list data here!! abort!!\n");
+			return;
+		}
+	
+		pPopList = pCurrFramePageFrameData;
+		///in case we reach the top or bottom
+		if( pPopList->iListSel == pPopList->iListNum-1 )
+		{	///top
 			///down arrow
 			GUI_FillPolygon( pPoint1, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)+4 );
+			///up arrow
+			GUI_DrawPolygon( pPoint2, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)-4 );
+		}
+		else
+		if( pPopList->iListSel == 0 )
+		{	///bottom
+			///down arrow
+			GUI_DrawPolygon( pPoint1, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)+4 );
 			///up arrow
 			GUI_FillPolygon( pPoint2, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)-4 );
 		}
 		else
 		{
-			///down arrow
-			GUI_DrawPolygon( pPoint1, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)+4 );
-			///up arrow
-			GUI_DrawPolygon( pPoint2, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)-4 );
+			if( iFill )
+			{
+				///down arrow
+				GUI_FillPolygon( pPoint1, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)+4 );
+				///up arrow
+				GUI_FillPolygon( pPoint2, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)-4 );
+			}
+			else
+			{
+				///down arrow
+				GUI_DrawPolygon( pPoint1, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)+4 );
+				///up arrow
+				GUI_DrawPolygon( pPoint2, 3, ((rtTemp.x0+rtTemp.x1)/2)+4, ((rtTemp.y0+rtTemp.y1)/2)-4 );
+			}
 		}
-		
 	}
 	GUI_SetColor( clTemp );
-
 }
 
 
@@ -1533,18 +1579,20 @@ static void cbPopupWindow(WM_MESSAGE* pMsg)
 		/* Update info in command window */
 		spcbRoundWinExt( pMsg, GUI_BLACK, 13, 2, 1 );
 		if( FRAMEPAGE_POPUP_NUMBERS == pCurrFramePageType )
-			spcPopupNumberWinExt( pMsg, GUI_BLACK, 2, 1 );
+			spcbPopupNumberWinExt( pMsg, GUI_BLACK, 2, 1 );
 		
 		WM_DefaultProc(pMsg);
 	}
+/*	
 	else
 	if( pMsg->MsgId == WM_KEY )
 	{
 		if( FRAMEPAGE_POPUP_NUMBERS == pCurrFramePageType )
-			spcPopupNumberWinExt( pMsg, GUI_BLACK, 2, 1 );
+			spcbPopupNumberWinExt( pMsg, GUI_BLACK, 2, 1 );
 		
 		WM_DefaultProc(pMsg);
 	}
+*/
 	return;
 
 }
@@ -1647,6 +1695,7 @@ void PopupWindowList( int iOption )
 	hWin1 = WM_CreateWindow( 0+EDGEOFFSET, 0+EDGEOFFSET, LCD_GetXSize()-(EDGEOFFSET*2), LCD_GetYSize()-(EDGEOFFSET*2), WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
 	///add callback
 	pOldCB = WM_SetCallback( hWin1, &cbPopupWindow );
+	pPopList->hWinFrame = hWin1;
 
 	///create list box
 	///hList = LISTBOX_CreateEx( 0+EDGEOFFSET+2, 0+EDGEOFFSET+13, LCD_GetXSize()-(EDGEOFFSET*2)-4, LCD_GetYSize()-(EDGEOFFSET*2)-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, _PopupListBox);
@@ -1672,6 +1721,41 @@ void PopupWindowList( int iOption )
 
 
 #if (GUI_WINSUPPORT)
+static void spcbPopupWindowNumbersSelect(WM_MESSAGE* pMsg)
+{
+	FP_POPUPLIST_HEADER*	pPopList = NULL;
+	int iSelet = -1;
+	///pBeforeFramePage = pCurrFramePage;
+	///pCurrFramePage = pAfterFramePage;
+		
+	if( 
+		FRAMEPAGE_POPUP_NUMBERS != pCurrFramePageType ||
+		NULL == pCurrFramePageFrameData
+	)
+	{
+		printf("!!!!Error, there should popup list data here!! abort!!\n");
+		return;
+	}
+	
+	pPopList = pCurrFramePageFrameData;
+	///check what you selected
+	iSelet = LISTBOX_GetSel(pMsg->hWin);
+	if( iSelet < pPopList->iListNum )
+	{
+		FRAMEPAGE_HEADER*		pNextFrame = NULL;
+		///jump to what you selected
+		pNextFrame = pPopList->pListFrame[iSelet];
+		///store the selection for next
+		pPopList->iListSel = iSelet;
+		spGoAfterFramePage( pNextFrame );
+	}
+	else
+	{
+		printf( "!!!!!Error!! LISTBOX_GetSel=%d\n", iSelet );
+		spGoAfterFramePage( pBeforeFramePage );
+	}
+}
+
 static void cbPopupWindowNumbers(WM_MESSAGE* pMsg)
 {
 	printf("cbPopupWindowNumbers() ==> %d \n", pMsg->MsgId);
@@ -1695,36 +1779,60 @@ static void cbPopupWindowNumbers(WM_MESSAGE* pMsg)
 		}
 		else
 		if( IsENTER_press(Key) )	///enter
+		{	
+			spcbPopupWindowNumbersSelect(pMsg);
+		}
+		else
+		if( IsBACK_press(Key) )	///back
 		{
-			FP_POPUPLIST_HEADER*	pPopList = NULL;
-			int iSelet = -1;
-			///pBeforeFramePage = pCurrFramePage;
-			///pCurrFramePage = pAfterFramePage;
-		
-			if( 
-				FRAMEPAGE_POPUP_NUMBERS != pCurrFramePageType ||
-				NULL == pCurrFramePageFrameData
-			)
-			{
-				printf("!!!!Error, there should popup list data here!! abort!!\n");
-				return;
-			}
-			
-			pPopList = pCurrFramePageFrameData;
-			///check what you selected
-			iSelet = LISTBOX_GetSel(pMsg->hWin);
-			if( iSelet < pPopList->iListNum )
-			{
-				FRAMEPAGE_HEADER*		pNextFrame = NULL;
-				///jump to what you selected
-				pNextFrame = pPopList->pListFrame[iSelet];
-				spGoAfterFramePage( pNextFrame );
-			}
-			else
-			{
-				printf( "!!!!!Error!! LISTBOX_GetSel=%d\n", iSelet );
-				spGoAfterFramePage( pBeforeFramePage );
-			}	
+			spGoAfterFramePage( pBeforeFramePage );
+		}
+
+		if( pCurrFramePageOldCb )
+			pCurrFramePageOldCb( pMsg );
+	}
+	else
+	{
+		if( pCurrFramePageOldCb )
+			pCurrFramePageOldCb( pMsg );
+	}
+}
+
+static void cbSAPDPADSASNSPopupWindowNumbers(WM_MESSAGE* pMsg)
+{
+	printf("cbSAPDPADSASNSPopupWindowNumbers() ==> %d \n", pMsg->MsgId);
+	
+	if( WM_KEY == pMsg->MsgId )
+	{
+		int Key = 0;
+		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+
+		///hack the key value
+		if( IsUP_press(Key) )	///up
+		{	///doing trick
+			///((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+			///special handling
+			if( pCurrFramePageOldCb )
+				pCurrFramePageOldCb( pMsg );
+			spcbPopupWindowNumbersSelect(pMsg);
+			return;
+		}
+		else
+		if( IsDOWN_press(Key) )	///down
+		{	///doing trick
+			///((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+			///special handling
+			if( pCurrFramePageOldCb )
+				pCurrFramePageOldCb( pMsg );
+			spcbPopupWindowNumbersSelect(pMsg);
+			return;
+		}
+		else
+		if( IsENTER_press(Key) )	///enter
+		{
+			spcbPopupWindowNumbersSelect(pMsg);
 		}
 		else
 		if( IsBACK_press(Key) )	///back
@@ -1778,11 +1886,11 @@ void PopupWindowNumbers( int iOption )
 	hWin1 = WM_CreateWindow( x, y, xsize, ysize, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
 	///add callback
 	pOldCB = WM_SetCallback( hWin1, &cbPopupWindow );
-
+	pPopList->hWinFrame = hWin1;
 
 	///create list box
 	///hList = LISTBOX_CreateEx( 0+EDGEOFFSET+2, 0+EDGEOFFSET+13, LCD_GetXSize()-(EDGEOFFSET*2)-4, LCD_GetYSize()-(EDGEOFFSET*2)-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, _PopupListBox);
-	if( FRAMEPAGE_POPUP_NUMBERS == pCurrFramePageType )
+	///if( FRAMEPAGE_POPUP_NUMBERS == pCurrFramePageType )
 		///hList = LISTBOX_CreateEx( x+2, y+13, xsize-4, ysize-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pPopList->sListName);
 		hList = LISTBOX_CreateEx( x+3, y+13+((ysize-(13*2))/4), (xsize/2)-4, (ysize-(13*2))/2, WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pPopList->sListName);
 	///add callback
@@ -1790,8 +1898,8 @@ void PopupWindowNumbers( int iOption )
 	
 	///LISTBOX_SetTextAlign( hList, GUI_TA_HCENTER|GUI_TA_VCENTER );
 	LISTBOX_SetFont( hList , &GUI_Font16B_ASCII );
-	///set to last
-	///LISTBOX_SetSel( hList , pPopList->iListNum - 1 );
+	///set to default
+	LISTBOX_SetSel( hList , pPopList->iListSel );
 	
 	WM_BringToTop( hWin1 );
 	WM_SetFocus( hWin1 );
@@ -2660,7 +2768,7 @@ static const GUI_ConstString _PopupListBox_Fitness[] = {
 };
 
 static FRAMEPAGE_HEADER* _PopupListFrame_Fitness[] = {
-	&headDataModeWindow, &headNavigationWindow, &headSettingsWindow, &headHistoryWindow
+	&headDataMode1Window, &headNavigationWindow, &headSettingsWindow, &headHistoryWindow
 };
 
 static int _PopupListParam_Fitness[] = {
@@ -2669,11 +2777,13 @@ static int _PopupListParam_Fitness[] = {
 
 FP_POPUPLIST_HEADER fpPopupListData_Fitness = {
 	4,
+	0,
 	NULL,
 	_PopupListBox_Fitness,
 	NULL,
 	_PopupListFrame_Fitness,
 	_PopupListParam_Fitness,
+	0,
 };
 
 FRAMEPAGE_HEADER headPopupListWindow_Fitness = {
@@ -2706,11 +2816,13 @@ static int _PopupListParam_DeviceModeFitness[] = {
 
 FP_POPUPLIST_HEADER fpPopupListData_DeviceModeFitness = {
 	2,
+	0,
 	NULL,
 	_PopupListBox_DeviceModeFitness,
 	NULL,
 	_PopupListFrame_DeviceModeFitness,
 	_PopupListParam_DeviceModeFitness,
+	0,
 };
 
 FRAMEPAGE_HEADER headPopupListWindow_DeviceModeFitness = {
@@ -2743,11 +2855,13 @@ static int _PopupListParam_NumberEntry[] = {
 
 FP_POPUPLIST_HEADER fpPopupListData_NumberEntry = {
 	10,
+	0,
 	NULL,
 	_PopupListBox_NumberEntry,
 	NULL,
 	_PopupListFrame_NumberEntry,
 	_PopupListParam_NumberEntry,
+	0,
 };
 
 FRAMEPAGE_HEADER headPopupListWindow_NumberEntry = {
@@ -3740,7 +3854,12 @@ static const GUI_ConstString _PopupListBox_SAPDPADSASNSNumberEntry[] = {
 
 /* */
 static FRAMEPAGE_HEADER* _PopupListFrame_SAPDPADSASNSNumberEntry[] = {
-	NULL, NULL, NULL, NULL, NULL, NULL
+	&headSAPDPADSASNS1Window, 
+	&headSAPDPADSASNS2Window, 
+	&headSAPDPADSASNS3Window, 
+	&headSAPDPADSASNS4Window, 
+	&headSAPDPADSASNS5Window, 
+	&headSAPDPADSASNS6Window
 };
 
 static int _PopupListParam_SAPDPADSASNSNumberEntry[] = {
@@ -3749,17 +3868,19 @@ static int _PopupListParam_SAPDPADSASNSNumberEntry[] = {
 
 FP_POPUPLIST_HEADER fpPopupListData_SAPDPADSASNSNumberEntry = {
 	6,
+	0,
 	NULL,
 	_PopupListBox_SAPDPADSASNSNumberEntry,
 	NULL,
 	_PopupListFrame_SAPDPADSASNSNumberEntry,
 	_PopupListParam_SAPDPADSASNSNumberEntry,
+	0,
 };
 
 FRAMEPAGE_HEADER headSAPDPADSASNSWindow_NumberEntry = {
 	FRAMEPAGE_POPUP_NUMBERS,
 	PopupWindowNumbers,
-	cbPopupWindowNumbers,
+	cbSAPDPADSASNSPopupWindowNumbers,	///special handling
 	NULL,
 	0,
 	0,
