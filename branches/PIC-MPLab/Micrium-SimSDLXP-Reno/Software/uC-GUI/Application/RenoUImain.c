@@ -457,8 +457,20 @@ void spcbRoundWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int radius, int pensize
 	
 	if( iFill > 0 )
 	{
+	#if 0
 		///GUI_ClearRect( rtTemp.x0-radius, rtTemp.y0-radius, rtTemp.x1+radius, rtTemp.y1+radius);
 		spBlankRect( rtTemp.x0-radius, rtTemp.y0-radius, (rtTemp.x1-rtTemp.x0)+(2*radius), (rtTemp.y1-rtTemp.y0)+(2*radius) );
+	#else
+		spBlankRect( rtTemp.x0+radius, rtTemp.y0, (rtTemp.x1-rtTemp.x0)-(2*radius), (rtTemp.y1-rtTemp.y0) );
+		spBlankRect( rtTemp.x0, rtTemp.y0+radius, (rtTemp.x1-rtTemp.x0), (rtTemp.y1-rtTemp.y0)-(2*radius) );
+		if( radius > 0 )
+		{
+			GUI_FillEllipse( rtTemp.x0+radius, rtTemp.y0+radius, radius, radius );
+			GUI_FillEllipse( rtTemp.x1-radius, rtTemp.y0+radius, radius, radius );
+			GUI_FillEllipse( rtTemp.x1-radius, rtTemp.y1-radius, radius, radius );
+			GUI_FillEllipse( rtTemp.x0+radius, rtTemp.y1-radius, radius, radius );
+		}
+	#endif
 	}
 	
 	clTemp = GUI_GetColor();
@@ -1862,9 +1874,9 @@ void PopupWindowNumbers( int iOption )
 	int x, y, xsize, ysize;
 
 	x = 40;
-	y = 56;
+	y = 56-4;
 	xsize = 64;
-	ysize = 56;
+	ysize = 56+8;
 	
 	//need a blank space ???
 	if( pCurrFramePageClearFirst > 0 )
