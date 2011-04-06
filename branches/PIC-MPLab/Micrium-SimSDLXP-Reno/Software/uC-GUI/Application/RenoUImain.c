@@ -69,17 +69,36 @@ typedef enum
 /*
 	frame page header
 */
+#if 0
 typedef struct
 {
-	FRAMEPAGE_TYPE			frametype;
-    PFNFRAMEPAGEMAIN		pfnFramePageMain;     	// 
-    PFNFRAMEPAGEMAINCB		pfnFramePageMainCb;    	//
-	WM_CALLBACK* 			pfnOldCB;
-	int						iWaits;
-	int						iNextReady;				///1 for ready
-	int						iClearFirst;			///1 for clear before draw
-	void*					pFrameData;				///frame data if needed
+	FRAMEPAGE_TYPE				frametype;
+    PFNFRAMEPAGEMAIN			pfnFramePageMain;     	// 
+    PFNFRAMEPAGEMAINCB			pfnFramePageMainCb;    	//
+	WM_CALLBACK* 				pfnOldCB;
+	int							iWaits;
+	int							iNextReady;				///1 for ready
+	int							iClearFirst;			///1 for clear before draw
+	void*						pFrameData;				///frame data if needed
+	struct FRAMEPAGE_HEADER*	pTimeoutFrame;			///frame to go if timeout
 } FRAMEPAGE_HEADER;
+#else
+struct H_FRAMEPAGE_HEADER
+{
+	FRAMEPAGE_TYPE				frametype;
+    PFNFRAMEPAGEMAIN			pfnFramePageMain;     	// 
+    PFNFRAMEPAGEMAINCB			pfnFramePageMainCb;    	//
+	WM_CALLBACK* 				pfnOldCB;
+	int							iWaits;
+	int							iNextReady;				///1 for ready
+	int							iClearFirst;			///1 for clear before draw
+	void*						pFrameData;				///frame data if needed
+	struct H_FRAMEPAGE_HEADER*	pTimeoutFrame;			///frame to go if timeout
+};
+
+typedef struct H_FRAMEPAGE_HEADER FRAMEPAGE_HEADER;
+
+#endif
 
 /*
 	screen status record
@@ -200,6 +219,13 @@ FRAMEPAGE_HEADER headSAPDPSPWindow;
 FRAMEPAGE_HEADER headSAPDPSSWindow;
 FRAMEPAGE_HEADER headSAPDPADSWindow;
 FRAMEPAGE_HEADER headSAPDPADSASWindow;
+FRAMEPAGE_HEADER headSAPDPADSASNS1Window;
+FRAMEPAGE_HEADER headSAPDPADSASNS2Window;
+FRAMEPAGE_HEADER headSAPDPADSASNS3Window;
+FRAMEPAGE_HEADER headSAPDPADSASNS4Window;
+FRAMEPAGE_HEADER headSAPDPADSASNS5Window;
+FRAMEPAGE_HEADER headSAPDPADSASNS6Window;
+FRAMEPAGE_HEADER headSAPDPADSASNSWindow_NumberEntry;
 FRAMEPAGE_HEADER headHistoryWindow;
 FRAMEPAGE_HEADER headWatchWindow;
 FRAMEPAGE_HEADER headUnderConstructionWindow;
@@ -217,18 +243,19 @@ static SCREEN_STATUS *pScrStat = &ScrStat;
 /*
 	shortcut declare
 */
-#define		pCurrFramePage				ScrStat.pNowFramePage
-#define		pAfterFramePage				ScrStat.pNextFramePage
-#define		pBeforeFramePage			ScrStat.pPrivFramePage
+#define		pCurrFramePage					ScrStat.pNowFramePage
+#define		pAfterFramePage					ScrStat.pNextFramePage
+#define		pBeforeFramePage				ScrStat.pPrivFramePage
 
-#define		pCurrFramePageType			ScrStat.pNowFramePage->frametype
-#define		pCurrFramePageMain			ScrStat.pNowFramePage->pfnFramePageMain
-#define		pCurrFramePageMainCb		ScrStat.pNowFramePage->pfnFramePageMainCb
-#define		pCurrFramePageOldCb			ScrStat.pNowFramePage->pfnOldCB
-#define		pCurrFramePageWait			ScrStat.pNowFramePage->iWaits
-#define		pCurrFramePageNextReady		ScrStat.pNowFramePage->iNextReady
-#define		pCurrFramePageClearFirst	ScrStat.pNowFramePage->iClearFirst
-#define		pCurrFramePageFrameData		ScrStat.pNowFramePage->pFrameData
+#define		pCurrFramePageType				ScrStat.pNowFramePage->frametype
+#define		pCurrFramePageMain				ScrStat.pNowFramePage->pfnFramePageMain
+#define		pCurrFramePageMainCb			ScrStat.pNowFramePage->pfnFramePageMainCb
+#define		pCurrFramePageOldCb				ScrStat.pNowFramePage->pfnOldCB
+#define		pCurrFramePageWait				ScrStat.pNowFramePage->iWaits
+#define		pCurrFramePageNextReady			ScrStat.pNowFramePage->iNextReady
+#define		pCurrFramePageClearFirst		ScrStat.pNowFramePage->iClearFirst
+#define		pCurrFramePageFrameData			ScrStat.pNowFramePage->pFrameData
+#define		pCurrFramePageTimeoutFrame		ScrStat.pNowFramePage->pTimeoutFrame
 
 
 
@@ -536,8 +563,10 @@ void spcPopupNumberWinExt( WM_MESSAGE* pMsg, GUI_COLOR color, int pensize, int i
 }
 
 
-void spFramePageWait( void )
+int spFramePageWait( void )
 {
+	int iRet = 0;
+
 	///we should replace this with event wait instead of polling.
 	if( pCurrFramePageWait == 0 )
 	{
@@ -553,8 +582,12 @@ void spFramePageWait( void )
 			GUI_Delay(10);
 			iCnt = iCnt - 10;
 		}
+		if( iCnt <= 0 )
+			iRet = 1;	///it's a timeout
 	}
 	pCurrFramePageNextReady = 0;
+	
+	return iRet;
 }
 
 
@@ -1364,6 +1397,21 @@ static DATASETS_FRAME_LIST		DataSetsList = {
 	DataSetFrameList,
 };
 
+static FRAMEPAGE_HEADER* SAPDPADSASNSDataSetFrameList[] = {
+	&headSAPDPADSASNS1Window,
+	&headSAPDPADSASNS2Window,
+	&headSAPDPADSASNS3Window,
+	&headSAPDPADSASNS4Window,
+	&headSAPDPADSASNS5Window,
+	&headSAPDPADSASNS6Window
+};
+
+static DATASETS_FRAME_LIST		SAPDPADSASNSDataSetsList = {
+	6,
+	1,
+	SAPDPADSASNSDataSetFrameList,
+};
+
 
 #if (GUI_WINSUPPORT)
 static void cbDataModeWindow(WM_MESSAGE* pMsg)
@@ -1422,6 +1470,7 @@ static void cbDataModeWindow(WM_MESSAGE* pMsg)
 void DataModeWindow( int iOption )
 {
 	int iLoop = 0;
+	int iTO = 0;
 	WM_HWIN hDataWin[6];
 	FP_DATASETS_HEADER* pDataModeData = NULL;
 	///LISTBOX_Handle	hList;
@@ -1463,15 +1512,16 @@ void DataModeWindow( int iOption )
 	WM_SetFocus( hDataWin[0] );
 	
 	WM_ExecIdle();
-	spFramePageWait();
+	iTO = spFramePageWait();
 
 	for( iLoop=0; iLoop<pDataModeData->iDataSetNum; iLoop++ )
 		WM_DeleteWindow( hDataWin[iLoop] );
-
+	
+	///go timeout frame if we were timeout
+	if( 0 != pCurrFramePageWait && 1 == iTO && NULL != pCurrFramePageTimeoutFrame )
+		spGoAfterFramePage( pCurrFramePageTimeoutFrame );
 }
 #endif
-
-
 
 #if (GUI_WINSUPPORT)
 static void cbPopupWindow(WM_MESSAGE* pMsg)
@@ -1633,10 +1683,16 @@ static void cbPopupWindowNumbers(WM_MESSAGE* pMsg)
 
 		///hack the key value
 		if( IsUP_press(Key) )	///up
-			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+		{	///doing trick
+			///((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+		}
 		else
 		if( IsDOWN_press(Key) )	///down
-			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+		{	///doing trick
+			///((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+		}
 		else
 		if( IsENTER_press(Key) )	///enter
 		{
@@ -1734,6 +1790,8 @@ void PopupWindowNumbers( int iOption )
 	
 	///LISTBOX_SetTextAlign( hList, GUI_TA_HCENTER|GUI_TA_VCENTER );
 	LISTBOX_SetFont( hList , &GUI_Font16B_ASCII );
+	///set to last
+	///LISTBOX_SetSel( hList , pPopList->iListNum - 1 );
 	
 	WM_BringToTop( hWin1 );
 	WM_SetFocus( hWin1 );
@@ -2288,6 +2346,7 @@ FRAMEPAGE_HEADER headPoweroffWindow = {
 	0,
 	1,
 	NULL,
+	NULL,
 };
 
 /*
@@ -2301,6 +2360,7 @@ FRAMEPAGE_HEADER headBootWindow = {
 	0,
 	1,
 	NULL,
+	NULL,
 };
 
 FRAMEPAGE_HEADER headDataModeWindow = {
@@ -2311,6 +2371,7 @@ FRAMEPAGE_HEADER headDataModeWindow = {
 	0,
 	0,
 	1,
+	NULL,
 	NULL,
 };
 
@@ -2357,6 +2418,7 @@ FRAMEPAGE_HEADER headDataMode1Window = {
 	0,
 	1,
 	(void*)&fpDataModeData_1Window,
+	NULL,
 };
 
 
@@ -2402,6 +2464,7 @@ FRAMEPAGE_HEADER headDataMode2Window = {
 	0,
 	1,
 	(void*)&fpDataModeData_2Window,
+	NULL,
 };
 
 
@@ -2447,6 +2510,7 @@ FRAMEPAGE_HEADER headDataMode3Window = {
 	0,
 	1,
 	(void*)&fpDataModeData_3Window,
+	NULL,
 };
 
 
@@ -2492,6 +2556,7 @@ FRAMEPAGE_HEADER headDataMode4Window = {
 	0,
 	1,
 	(void*)&fpDataModeData_4Window,
+	NULL,
 };
 
 
@@ -2537,6 +2602,7 @@ FRAMEPAGE_HEADER headDataMode5Window = {
 	0,
 	1,
 	(void*)&fpDataModeData_5Window,
+	NULL,
 };
 
 
@@ -2582,6 +2648,7 @@ FRAMEPAGE_HEADER headDataMode6Window = {
 	0,
 	1,
 	(void*)&fpDataModeData_6Window,
+	NULL,
 };
 
 
@@ -2618,6 +2685,7 @@ FRAMEPAGE_HEADER headPopupListWindow_Fitness = {
 	0,
 	0,
 	(void*)&fpPopupListData_Fitness,
+	NULL,
 };
 
 
@@ -2654,6 +2722,7 @@ FRAMEPAGE_HEADER headPopupListWindow_DeviceModeFitness = {
 	0,
 	0,
 	(void*)&fpPopupListData_DeviceModeFitness,
+	NULL,
 };
 
 
@@ -2690,6 +2759,7 @@ FRAMEPAGE_HEADER headPopupListWindow_NumberEntry = {
 	0,
 	0,
 	(void*)&fpPopupListData_NumberEntry,
+	NULL,
 };
 
 
@@ -2703,6 +2773,7 @@ FRAMEPAGE_HEADER headPopupListWindow = {
 	0,
 	0,
 	0,
+	NULL,
 	NULL,
 };
 
@@ -2718,6 +2789,7 @@ FRAMEPAGE_HEADER headNavigationWindow = {
 	0,
 	0,
 	1,
+	NULL,
 	NULL,
 };
 
@@ -2764,6 +2836,7 @@ FRAMEPAGE_HEADER headSettingsWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SettingsWindow,
+	NULL,
 };
 
 
@@ -2805,6 +2878,7 @@ FRAMEPAGE_HEADER headSUIWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SUIWindow,
+	NULL,
 };
 
 
@@ -2850,6 +2924,7 @@ FRAMEPAGE_HEADER headSUIPIWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SUIPIWindow,
+	NULL,
 };
 
 
@@ -2898,6 +2973,7 @@ FRAMEPAGE_HEADER headSDSWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSWindow,
+	NULL,
 };
 
 
@@ -2954,6 +3030,7 @@ FRAMEPAGE_HEADER headSDSLWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSLWindow,
+	NULL,
 };
 
 
@@ -3004,6 +3081,7 @@ FRAMEPAGE_HEADER headSDSUMWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSUMWindow,
+	NULL,
 };
 
 
@@ -3047,6 +3125,7 @@ FRAMEPAGE_HEADER headSDSUMCWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSUMCWindow,
+	NULL,
 };
 
 
@@ -3087,6 +3166,7 @@ FRAMEPAGE_HEADER headSDSUMSDWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSUMSDWindow,
+	NULL,
 };
 
 
@@ -3127,6 +3207,7 @@ FRAMEPAGE_HEADER headSDSUMEWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSUMEWindow,
+	NULL,
 };
 
 
@@ -3167,6 +3248,7 @@ FRAMEPAGE_HEADER headSDSUMHWWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSUMHWWindow,
+	NULL,
 };
 
 
@@ -3207,6 +3289,7 @@ FRAMEPAGE_HEADER headSDSUMTWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSUMTWindow,
+	NULL,
 };
 
 
@@ -3253,6 +3336,7 @@ FRAMEPAGE_HEADER headSDSUMHRWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSUMHRWindow,
+	NULL,
 };
 
 
@@ -3299,6 +3383,7 @@ FRAMEPAGE_HEADER headSDSUMPWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSUMPWindow,
+	NULL,
 };
 
 
@@ -3352,6 +3437,7 @@ FRAMEPAGE_HEADER headSAPWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SAPWindow,
+	NULL,
 };
 
 
@@ -3401,6 +3487,7 @@ FRAMEPAGE_HEADER headSAPDPWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SAPDPWindow,
+	NULL,
 };
 
 
@@ -3441,6 +3528,7 @@ FRAMEPAGE_HEADER headSAPDPSPWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SAPDPSPWindow,
+	NULL,
 };
 
 
@@ -3484,6 +3572,7 @@ FRAMEPAGE_HEADER headSAPDPSSWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SAPDPSSWindow,
+	NULL,
 };
 
 
@@ -3521,6 +3610,7 @@ FRAMEPAGE_HEADER headSAPDPADSWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SAPDPADSWindow,
+	NULL,
 };
 
 
@@ -3534,7 +3624,7 @@ static const GUI_ConstString _SAPDPADSASListBox[] = {
 };
 
 static FRAMEPAGE_HEADER* _SAPDPADSASListFrame[] = {
-	&headUnderConstructionWindow,
+	&headSAPDPADSASNS1Window,
 	&headUnderConstructionWindow
 };
 
@@ -3560,7 +3650,128 @@ FRAMEPAGE_HEADER headSAPDPADSASWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SAPDPADSASWindow,
+	NULL,
 };
+
+
+/*
+	Settings / Activity Profiles / Display Preferences / Activity Data Screen / Add Screen / New Screen
+*/
+/// we will re-use old data struct from above
+FRAMEPAGE_HEADER headSAPDPADSASNS1Window = {
+	FRAMEPAGE_DATAMODE,
+	DataModeWindow,
+	cbDataModeWindow,
+	NULL,
+	2,
+	0,
+	1,
+	(void*)&fpDataModeData_1Window,
+	&headSAPDPADSASNSWindow_NumberEntry,
+};
+
+FRAMEPAGE_HEADER headSAPDPADSASNS2Window = {
+	FRAMEPAGE_DATAMODE,
+	DataModeWindow,
+	cbDataModeWindow,
+	NULL,
+	2,
+	0,
+	1,
+	(void*)&fpDataModeData_2Window,
+	&headSAPDPADSASNSWindow_NumberEntry,
+};
+
+FRAMEPAGE_HEADER headSAPDPADSASNS3Window = {
+	FRAMEPAGE_DATAMODE,
+	DataModeWindow,
+	cbDataModeWindow,
+	NULL,
+	2,
+	0,
+	1,
+	(void*)&fpDataModeData_3Window,
+	&headSAPDPADSASNSWindow_NumberEntry,
+};
+
+FRAMEPAGE_HEADER headSAPDPADSASNS4Window = {
+	FRAMEPAGE_DATAMODE,
+	DataModeWindow,
+	cbDataModeWindow,
+	NULL,
+	2,
+	0,
+	1,
+	(void*)&fpDataModeData_4Window,
+	&headSAPDPADSASNSWindow_NumberEntry,
+};
+
+FRAMEPAGE_HEADER headSAPDPADSASNS5Window = {
+	FRAMEPAGE_DATAMODE,
+	DataModeWindow,
+	cbDataModeWindow,
+	NULL,
+	2,
+	0,
+	1,
+	(void*)&fpDataModeData_5Window,
+	&headSAPDPADSASNSWindow_NumberEntry,
+};
+
+FRAMEPAGE_HEADER headSAPDPADSASNS6Window = {
+	FRAMEPAGE_DATAMODE,
+	DataModeWindow,
+	cbDataModeWindow,
+	NULL,
+	2,
+	0,
+	1,
+	(void*)&fpDataModeData_6Window,
+	&headSAPDPADSASNSWindow_NumberEntry,
+};
+
+/*
+	Popup Number entry for
+	Settings / Activity Profiles / Display Preferences / Activity Data Screen / Add Screen / New Screen
+*/
+static const GUI_ConstString _PopupListBox_SAPDPADSASNSNumberEntry[] = {
+  "1", "2", "3", "4", "5", "6", NULL
+};
+
+/* */
+static FRAMEPAGE_HEADER* _PopupListFrame_SAPDPADSASNSNumberEntry[] = {
+	NULL, NULL, NULL, NULL, NULL, NULL
+};
+
+static int _PopupListParam_SAPDPADSASNSNumberEntry[] = {
+	0, 0, 0, 0, 0, 0
+};
+
+FP_POPUPLIST_HEADER fpPopupListData_SAPDPADSASNSNumberEntry = {
+	6,
+	NULL,
+	_PopupListBox_SAPDPADSASNSNumberEntry,
+	NULL,
+	_PopupListFrame_SAPDPADSASNSNumberEntry,
+	_PopupListParam_SAPDPADSASNSNumberEntry,
+};
+
+FRAMEPAGE_HEADER headSAPDPADSASNSWindow_NumberEntry = {
+	FRAMEPAGE_POPUP_NUMBERS,
+	PopupWindowNumbers,
+	cbPopupWindowNumbers,
+	NULL,
+	0,
+	0,
+	0,
+	(void*)&fpPopupListData_SAPDPADSASNSNumberEntry,
+	NULL,
+};
+
+
+
+
+
 
 
 /*
