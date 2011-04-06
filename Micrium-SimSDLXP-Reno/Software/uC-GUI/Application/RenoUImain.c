@@ -182,11 +182,18 @@ FRAMEPAGE_HEADER headPopupListWindow_DeviceModeFitness;
 FRAMEPAGE_HEADER headPopupListWindow_NumberEntry;
 FRAMEPAGE_HEADER headNavigationWindow;
 FRAMEPAGE_HEADER headSettingsWindow;
+FRAMEPAGE_HEADER headSUIWindow;
+FRAMEPAGE_HEADER headSUIPIWindow;
 FRAMEPAGE_HEADER headSDSWindow;
 FRAMEPAGE_HEADER headSDSLWindow;
 FRAMEPAGE_HEADER headSDSUMWindow;
-FRAMEPAGE_HEADER headSDSUMCMSWindow;
-FRAMEPAGE_HEADER headSDSUMCSDMSWindow;
+FRAMEPAGE_HEADER headSDSUMCWindow;
+FRAMEPAGE_HEADER headSDSUMSDWindow;
+FRAMEPAGE_HEADER headSDSUMEWindow;
+FRAMEPAGE_HEADER headSDSUMHWWindow;
+FRAMEPAGE_HEADER headSDSUMTWindow;
+FRAMEPAGE_HEADER headSDSUMHRWindow;
+FRAMEPAGE_HEADER headSDSUMPWindow;
 FRAMEPAGE_HEADER headSAPWindow;
 FRAMEPAGE_HEADER headSAPDPWindow;
 FRAMEPAGE_HEADER headSAPDPSPWindow;
@@ -1954,7 +1961,13 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 						}
 						///show option selected in next level menu list
 						///GUI_DispStringAt("<value>", pDrawItemInfo->x0 + 130 - 60, pDrawItemInfo->y0);
-						GUI_DispStringAt(pNextList->sListName[iLoop], pDrawItemInfo->x0 + 130 - 60, pDrawItemInfo->y0);
+						///GUI_DispStringAt(pNextList->sListName[iLoop], pDrawItemInfo->x0 + 130 - 60, pDrawItemInfo->y0);
+						///GUI_GetStringDistX( pListMenu->sListName[pDrawItemInfo->ItemIndex] );
+						///GUI_DispStringLen
+						GUI_DispStringAt(	
+									pNextList->sListName[iLoop], 
+									pDrawItemInfo->x0 + GUI_GetStringDistX( pListMenu->sListName[pDrawItemInfo->ItemIndex] ), 
+									pDrawItemInfo->y0);
 					}
 				}
 			}
@@ -2131,37 +2144,7 @@ void ListMenuWindow( int iOption )
 	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
 
 	///create list menu
-#if 1	
 	hList = LISTBOX_CreateEx(0, iTmp, LCD_GetXSize(), LCD_GetYSize()-iTmp, (WM_HWIN)hFrame, WM_CF_SHOW, 0, 0, pListMenu->sListName);
-#else
-	hList = LISTBOX_CreateEx(0, iTmp, LCD_GetXSize(), LCD_GetYSize()-iTmp, (WM_HWIN)hFrame, WM_CF_SHOW, 0, 0, NULL);
-	
-	for( iTmp=0; iTmp<pListMenu->iListNum; iTmp++ )
-	{
-		if( FRAMEPAGE_LISTMENU_BOOLOPTION == pListMenu->pListFrame[iTmp]->frametype )
-		{	///find the name of next boolean value for display
-			int iLoop = 0;
-			FP_LISTMENU_HEADER* pNextList = NULL;
-			///char NewName[]
-			
-			pNextList = pListMenu->pListFrame[iTmp]->pFrameData;
-			for( iLoop=0; iLoop<pNextList->iListNum; iLoop++ )
-			{
-				if( 
-					BOOLEAN_OPTION_FIELD == spGetListParamType( *pNextList->pListParam ) &&
-					1 == spGetListParamValue( *pNextList->pListParam )
-				)
-					break;
-			}
-			
-			LISTBOX_AddString( hList, pNextList->sListName[iLoop] );
-		}
-		else
-		{
-			LISTBOX_AddString( hList, pListMenu->sListName[iTmp] );
-		}
-	}
-#endif
 	///add callback
 	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
 	
@@ -2755,7 +2738,7 @@ static FRAMEPAGE_HEADER* _SettingListFrame[] = {
 	&headUnderConstructionWindow,
 	&headSDSWindow,
 	&headSAPWindow,
-	&headUnderConstructionWindow,
+	&headSUIWindow,
 	&headUnderConstructionWindow
 };
 
@@ -2782,6 +2765,93 @@ FRAMEPAGE_HEADER headSettingsWindow = {
 	1,
 	(void*)&fpListMenuData_SettingsWindow,
 };
+
+
+/*
+	Settings / User Information
+*/
+static const GUI_ConstString _SUIListBox[] = {
+	"Physical Information",
+	"Contact Information",
+	"Emergency Information",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SUIListFrame[] = {
+	&headSUIPIWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow
+};
+
+static int _SUIListParam[] = {
+	0, 0, 0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SUIWindow = {
+	3,
+	"User Information",
+	_SUIListBox,
+	&headSettingsWindow,
+	_SUIListFrame,
+	_SUIListParam,
+};
+
+FRAMEPAGE_HEADER headSUIWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SUIWindow,
+};
+
+
+/*
+	Settings / User Information / Physical Information
+*/
+static const GUI_ConstString _SUIPIListBox[] = {
+	"Age",
+	"Gender",
+	"Height",
+	"Weight",
+	"Resting Heart Rate",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SUIPIListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow
+};
+
+static int _SUIPIListParam[] = {
+	0, 0, 0, 0, 0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SUIPIWindow = {
+	5,
+	"Physical Information",
+	_SUIPIListBox,
+	&headSUIWindow,
+	_SUIPIListFrame,
+	_SUIPIListParam,
+};
+
+FRAMEPAGE_HEADER headSUIPIWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SUIPIWindow,
+};
+
 
 
 /*
@@ -2891,24 +2961,24 @@ FRAMEPAGE_HEADER headSDSLWindow = {
 	Settings / Device Settings / Units of Measurement
 */
 static const GUI_ConstString _SDSUMListBox[] = {
-  "Coordinates: <value>",
-  "Speed/Distance: <value>",
-  "Elevation: <value>",
-  "Height/Weight: <value>",
-  "Temperature: <value>",
-  "Heart Rate: <value>",
-  "Power: <value>",
+  "Coordinates: ",
+  "Speed/Distance: ",
+  "Elevation: ",
+  "Height/Weight: ",
+  "Temperature: ",
+  "Heart Rate: ",
+  "Power: ",
   NULL
 };
 
 static FRAMEPAGE_HEADER* _SDSUMListFrame[] = {
-	&headSDSUMCMSWindow,
-	&headSDSUMCSDMSWindow,
-	&headUnderConstructionWindow,
-	&headUnderConstructionWindow,
-	&headUnderConstructionWindow,
-	&headUnderConstructionWindow,
-	&headUnderConstructionWindow,
+	&headSDSUMCWindow,
+	&headSDSUMSDWindow,
+	&headSDSUMEWindow,
+	&headSDSUMHWWindow,
+	&headSDSUMTWindow,
+	&headSDSUMHRWindow,
+	&headSDSUMPWindow,
 };
 
 static int _SDSUMListParam[] = {
@@ -2938,35 +3008,37 @@ FRAMEPAGE_HEADER headSDSUMWindow = {
 
 
 /*
-	Settings / Device Settings / Units of Measurement / Coordinates Measurement System
+	Settings / Device Settings / Units of Measurement / Coordinates
 */
-static const GUI_ConstString _SDSUMCMSListBox[] = {
+static const GUI_ConstString _SDSUMCListBox[] = {
 	"Decimal Degrees",
 	"Degrees Minutes",
 	"Degrees Minutes Seconds",
 	NULL
 };
 
-static FRAMEPAGE_HEADER* _SDSUMCMSListFrame[] = {
+static FRAMEPAGE_HEADER* _SDSUMCListFrame[] = {
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow,
 };
 
-static int _SDSUMCMSListParam[] = {
-	1, 0, 0
+static int _SDSUMCListParam[] = {
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0
 };
 
-FP_LISTMENU_HEADER fpListMenuData_SDSUMCMSWindow = {
+FP_LISTMENU_HEADER fpListMenuData_SDSUMCWindow = {
 	3,
-	"Coordinates Measurement System",
-	_SDSUMCMSListBox,
+	"Coordinates",
+	_SDSUMCListBox,
 	&headSDSUMWindow,
-	_SDSUMCMSListFrame,
-	_SDSUMCMSListParam,
+	_SDSUMCListFrame,
+	_SDSUMCListParam,
 };
 
-FRAMEPAGE_HEADER headSDSUMCMSWindow = {
+FRAMEPAGE_HEADER headSDSUMCWindow = {
 	FRAMEPAGE_LISTMENU_BOOLOPTION,
 	ListMenuWindow,
 	cbListMenuWindow,
@@ -2974,38 +3046,39 @@ FRAMEPAGE_HEADER headSDSUMCMSWindow = {
 	0,
 	0,
 	1,
-	(void*)&fpListMenuData_SDSUMCMSWindow,
+	(void*)&fpListMenuData_SDSUMCWindow,
 };
 
 
 /*
-	Settings / Device Settings / Units of Measurement / Speed Distance Measurement System
+	Settings / Device Settings / Units of Measurement / Speed/Distance
 */
-static const GUI_ConstString _SDSUMSDMSListBox[] = {
+static const GUI_ConstString _SDSUMSDListBox[] = {
 	"Metric",
 	"Statute",
 	NULL
 };
 
-static FRAMEPAGE_HEADER* _SDSUMSDMSListFrame[] = {
+static FRAMEPAGE_HEADER* _SDSUMSDListFrame[] = {
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow,
 };
 
-static int _SDSUMSDMSListParam[] = {
-	1, 0
+static int _SDSUMSDListParam[] = {
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0
 };
 
-FP_LISTMENU_HEADER fpListMenuData_SDSUMSDMSWindow = {
+FP_LISTMENU_HEADER fpListMenuData_SDSUMSDWindow = {
 	2,
-	"Speed Distance Measurement System",
-	_SDSUMSDMSListBox,
+	"Speed/Distance",
+	_SDSUMSDListBox,
 	&headSDSUMWindow,
-	_SDSUMSDMSListFrame,
-	_SDSUMSDMSListParam,
+	_SDSUMSDListFrame,
+	_SDSUMSDListParam,
 };
 
-FRAMEPAGE_HEADER headSDSUMCSDMSWindow = {
+FRAMEPAGE_HEADER headSDSUMSDWindow = {
 	FRAMEPAGE_LISTMENU_BOOLOPTION,
 	ListMenuWindow,
 	cbListMenuWindow,
@@ -3013,7 +3086,219 @@ FRAMEPAGE_HEADER headSDSUMCSDMSWindow = {
 	0,
 	0,
 	1,
-	(void*)&fpListMenuData_SDSUMSDMSWindow,
+	(void*)&fpListMenuData_SDSUMSDWindow,
+};
+
+
+/*
+	Settings / Device Settings / Units of Measurement / Elevation
+*/
+static const GUI_ConstString _SDSUMEListBox[] = {
+	"Metric",
+	"Statute",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SDSUMEListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+};
+
+static int _SDSUMEListParam[] = {
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SDSUMEWindow = {
+	2,
+	"Elevation",
+	_SDSUMEListBox,
+	&headSDSUMWindow,
+	_SDSUMEListFrame,
+	_SDSUMEListParam,
+};
+
+FRAMEPAGE_HEADER headSDSUMEWindow = {
+	FRAMEPAGE_LISTMENU_BOOLOPTION,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SDSUMEWindow,
+};
+
+
+/*
+	Settings / Device Settings / Units of Measurement / Height/Weight
+*/
+static const GUI_ConstString _SDSUMHWListBox[] = {
+	"Metric",
+	"Statute",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SDSUMHWListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+};
+
+static int _SDSUMHWListParam[] = {
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SDSUMHWWindow = {
+	2,
+	"Height/Weight",
+	_SDSUMHWListBox,
+	&headSDSUMWindow,
+	_SDSUMHWListFrame,
+	_SDSUMHWListParam,
+};
+
+FRAMEPAGE_HEADER headSDSUMHWWindow = {
+	FRAMEPAGE_LISTMENU_BOOLOPTION,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SDSUMHWWindow,
+};
+
+
+/*
+	Settings / Device Settings / Units of Measurement / Temperature
+*/
+static const GUI_ConstString _SDSUMTListBox[] = {
+	"Metric",
+	"Statute",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SDSUMTListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+};
+
+static int _SDSUMTListParam[] = {
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SDSUMTWindow = {
+	2,
+	"Temperature",
+	_SDSUMTListBox,
+	&headSDSUMWindow,
+	_SDSUMTListFrame,
+	_SDSUMTListParam,
+};
+
+FRAMEPAGE_HEADER headSDSUMTWindow = {
+	FRAMEPAGE_LISTMENU_BOOLOPTION,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SDSUMTWindow,
+};
+
+
+/*
+	Settings / Device Settings / Units of Measurement / Heart Rate
+*/
+static const GUI_ConstString _SDSUMHRListBox[] = {
+	"BPM",
+	"%MHR",
+	"%HRR",
+	"Zone",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SDSUMHRListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+};
+
+static int _SDSUMHRListParam[] = {
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0,
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0,
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SDSUMHRWindow = {
+	4,
+	"Heart Rate",
+	_SDSUMHRListBox,
+	&headSDSUMWindow,
+	_SDSUMHRListFrame,
+	_SDSUMHRListParam,
+};
+
+FRAMEPAGE_HEADER headSDSUMHRWindow = {
+	FRAMEPAGE_LISTMENU_BOOLOPTION,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SDSUMHRWindow,
+};
+
+
+/*
+	Settings / Device Settings / Units of Measurement / Power
+*/
+static const GUI_ConstString _SDSUMPListBox[] = {
+	"Watts",
+	"%FTP",
+	"kJ",
+	"Zone",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SDSUMPListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+};
+
+static int _SDSUMPListParam[] = {
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0,
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0,
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SDSUMPWindow = {
+	4,
+	"Power",
+	_SDSUMPListBox,
+	&headSDSUMWindow,
+	_SDSUMPListFrame,
+	_SDSUMPListParam,
+};
+
+FRAMEPAGE_HEADER headSDSUMPWindow = {
+	FRAMEPAGE_LISTMENU_BOOLOPTION,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SDSUMPWindow,
 };
 
 
