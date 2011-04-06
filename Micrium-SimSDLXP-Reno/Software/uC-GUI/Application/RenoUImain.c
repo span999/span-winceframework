@@ -130,6 +130,23 @@ typedef struct
 	int						iCurrIdx;
 	FRAMEPAGE_HEADER**		pDataSetFrame;
 } DATASETS_FRAME_LIST;
+
+
+/*
+	elements type define
+*/
+
+#define		ELEMENT_FIELD_MASK				0xFFFF0000
+#define		ELEMENT_FIELD_OFFSET			16
+#define		COMMON_FIELD					0x0000
+#define		BOOLEAN_OPTION_FIELD			0x0001
+
+#define		ELEMENT_VALUE_MASK				0x0000FFFF
+
+
+
+
+
 /*
 	toolhelp routin
 */
@@ -172,6 +189,8 @@ FRAMEPAGE_HEADER headSDSUMCMSWindow;
 FRAMEPAGE_HEADER headSDSUMCSDMSWindow;
 FRAMEPAGE_HEADER headSAPWindow;
 FRAMEPAGE_HEADER headSAPDPWindow;
+FRAMEPAGE_HEADER headSAPDPSPWindow;
+FRAMEPAGE_HEADER headSAPDPSSWindow;
 FRAMEPAGE_HEADER headSAPDPADSWindow;
 FRAMEPAGE_HEADER headSAPDPADSASWindow;
 FRAMEPAGE_HEADER headHistoryWindow;
@@ -334,6 +353,25 @@ int IsSamekey( int iSrc, int iTar )
 	
 	return (iSrc == iTar)?1:0;		
 } 
+
+int spGetListParamType( int ListParam )
+{
+	int iRet = 0;
+	
+	iRet = (ListParam&ELEMENT_FIELD_MASK)>>ELEMENT_FIELD_OFFSET;
+	
+	return iRet;
+}
+
+int spGetListParamValue( int ListParam )
+{
+	int iRet = 0;
+	
+	iRet = (ListParam&ELEMENT_VALUE_MASK);
+	
+	return iRet;
+
+}
 
 int IsMsgKeyStatus( WM_MESSAGE* pMsg, int iTar )
 {
@@ -1819,7 +1857,7 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 				GUI_FillRect(rtTemp.x0, rtTemp.y0, rtTemp.x1, rtTemp.y1);
 				*/
 				if( FRAMEPAGE_LISTMENU_BOOLOPTION == pCurrFramePageType )
-				{
+				{	///handle the frame page with all boolean option in it!! 
 					GUI_POINT pPoint1[] = {
 									{ 0+0, 0+2},
 									{ 0+0, 8+2},
@@ -1833,7 +1871,7 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 									{ 0+0+5, 0+2+5},
 								};
 
-					if( 1 == pListMenu->pListParam[pDrawItemInfo->ItemIndex] )
+					if( 1 == spGetListParamValue( pListMenu->pListParam[pDrawItemInfo->ItemIndex] ) )
 					{
 						///draw the square
 						///GUI_DispStringAt("|v|", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
@@ -1851,8 +1889,38 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 					}
 				}
 				else
+				if( BOOLEAN_OPTION_FIELD == spGetListParamType( pListMenu->pListParam[pDrawItemInfo->ItemIndex] ) )
+				{	///handle the single element with boolean option
+					GUI_POINT pPoint1[] = {
+									{ 0+0, 0+2},
+									{ 0+0, 8+2},
+									{ 8+0, 8+2},
+									{ 8+0, 0+2},
+								};
+					GUI_POINT pPoint2[] = {
+									{ 0+0+2, 0+2+2},
+									{ 0+0+5, 0+2+7},
+									{ 0+0+12, 0+2},
+									{ 0+0+5, 0+2+5},
+								};
+					if( 1 == spGetListParamValue( pListMenu->pListParam[pDrawItemInfo->ItemIndex] ) )
+					{
+						///draw the square
+						///GUI_DispStringAt("|v|", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+						GUI_DrawPolygon( pPoint1, 4, pDrawItemInfo->x0 + 130, pDrawItemInfo->y0 );
+						///mark the check
+						GUI_FillPolygon( pPoint2, 4, pDrawItemInfo->x0 + 130, pDrawItemInfo->y0 );					
+					}
+					else
+					{
+						///draw the square
+						///GUI_DispStringAt("|_|", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
+						GUI_DrawPolygon( pPoint1, 4, pDrawItemInfo->x0 + 130, pDrawItemInfo->y0 );					
+					}
+				}
+				else
 				if( NULL != pListMenu->pListFrame[pDrawItemInfo->ItemIndex] )
-				{
+				{	/// show -> if there is next level menu
 					GUI_POINT pPoint1[] = {
 									{ 0, 0+1},
 									{ 0, 10+1},
@@ -1862,13 +1930,31 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 					if( FRAMEPAGE_LISTMENU == pListMenu->pListFrame[pDrawItemInfo->ItemIndex]->frametype )
 					{
 						///GUI_DispStringAt("->", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
-						GUI_FillPolygon( pPoint1, 3, pDrawItemInfo->x0 + 135, pDrawItemInfo->y0 );
+						GUI_FillPolygon( pPoint1, 3, pDrawItemInfo->x0 + 130, pDrawItemInfo->y0 );
 					}
 					else
 					if( FRAMEPAGE_LISTMENU_BOOLOPTION == pListMenu->pListFrame[pDrawItemInfo->ItemIndex]->frametype )
 					{
+						int iLoop = 0;
+						FP_LISTMENU_HEADER* pNextList = NULL;
+						
 						///GUI_DispStringAt("->", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
-						GUI_FillPolygon( pPoint1, 3, pDrawItemInfo->x0 + 135, pDrawItemInfo->y0 );
+						GUI_FillPolygon( pPoint1, 3, pDrawItemInfo->x0 + 130, pDrawItemInfo->y0 );
+						
+						
+						///find the name of next boolean value for display
+						pNextList = pListMenu->pListFrame[pDrawItemInfo->ItemIndex]->pFrameData;
+						for( iLoop=0; iLoop<pNextList->iListNum; iLoop++ )
+						{
+							if( 
+								BOOLEAN_OPTION_FIELD == spGetListParamType( pNextList->pListParam[iLoop] ) &&
+								1 == spGetListParamValue( pNextList->pListParam[iLoop] )
+							)
+								break;
+						}
+						///show option selected in next level menu list
+						///GUI_DispStringAt("<value>", pDrawItemInfo->x0 + 130 - 60, pDrawItemInfo->y0);
+						GUI_DispStringAt(pNextList->sListName[iLoop], pDrawItemInfo->x0 + 130 - 60, pDrawItemInfo->y0);
 					}
 				}
 			}
@@ -1970,6 +2056,23 @@ static void cbListMenuWindow(WM_MESSAGE* pMsg)
 			///check what you selected
 			iSelet = LISTBOX_GetSel(pMsg->hWin);
 
+			if( FRAMEPAGE_LISTMENU_BOOLOPTION == pCurrFramePageType )
+			{
+				///if the selected was NOT enabled...
+				if( 0 == spGetListParamValue( pListMenu->pListParam[iSelet] ) )
+				{
+					int iTmp = 0;
+					///clean all
+					for( iTmp=0; iTmp<pListMenu->iListNum; iTmp++ )
+						pListMenu->pListParam[iTmp] = (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0;
+						
+					///set selected enable
+					pListMenu->pListParam[iSelet] = (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1;
+				}
+				
+				spGoAfterFramePage( pListMenu->pUplevelFrame );
+			}
+			else
 			if( iSelet < pListMenu->iListNum )
 			{
 				///jump to what you selected
@@ -2028,7 +2131,37 @@ void ListMenuWindow( int iOption )
 	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
 
 	///create list menu
+#if 1	
 	hList = LISTBOX_CreateEx(0, iTmp, LCD_GetXSize(), LCD_GetYSize()-iTmp, (WM_HWIN)hFrame, WM_CF_SHOW, 0, 0, pListMenu->sListName);
+#else
+	hList = LISTBOX_CreateEx(0, iTmp, LCD_GetXSize(), LCD_GetYSize()-iTmp, (WM_HWIN)hFrame, WM_CF_SHOW, 0, 0, NULL);
+	
+	for( iTmp=0; iTmp<pListMenu->iListNum; iTmp++ )
+	{
+		if( FRAMEPAGE_LISTMENU_BOOLOPTION == pListMenu->pListFrame[iTmp]->frametype )
+		{	///find the name of next boolean value for display
+			int iLoop = 0;
+			FP_LISTMENU_HEADER* pNextList = NULL;
+			///char NewName[]
+			
+			pNextList = pListMenu->pListFrame[iTmp]->pFrameData;
+			for( iLoop=0; iLoop<pNextList->iListNum; iLoop++ )
+			{
+				if( 
+					BOOLEAN_OPTION_FIELD == spGetListParamType( *pNextList->pListParam ) &&
+					1 == spGetListParamValue( *pNextList->pListParam )
+				)
+					break;
+			}
+			
+			LISTBOX_AddString( hList, pNextList->sListName[iLoop] );
+		}
+		else
+		{
+			LISTBOX_AddString( hList, pListMenu->sListName[iTmp] );
+		}
+	}
+#endif
 	///add callback
 	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
 	
@@ -2913,7 +3046,7 @@ static FRAMEPAGE_HEADER* _SAPListFrame[] = {
 };
 
 static int _SAPListParam[] = {
-	0, 0, 0, 0, 0, 0, 0, 0, 0
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 FP_LISTMENU_HEADER fpListMenuData_SAPWindow = {
@@ -2941,26 +3074,32 @@ FRAMEPAGE_HEADER headSAPWindow = {
 	Settings / Activity Profiles / Display Preferences 
 */
 static const GUI_ConstString _SAPDPListBox[] = {
+  "Speed/Pace: ",
   "Activity Data Screen",
   "Activity Pacer",
   "Auto Scroll:",
-  "Scroll Speed: <value>",
+  "Scroll Speed: ",
   NULL
 };
 
 static FRAMEPAGE_HEADER* _SAPDPListFrame[] = {
+	&headSAPDPSPWindow,
 	&headSAPDPADSWindow,
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow,
-	&headUnderConstructionWindow
+	&headSAPDPSSWindow
 };
 
 static int _SAPDPListParam[] = {
-	0, 0, 0, 0
+	0,
+	0, 
+	0, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 
+	0
 };
 
 FP_LISTMENU_HEADER fpListMenuData_SAPDPWindow = {
-	4,
+	5,
 	"Display Preferences",
 	_SAPDPListBox,
 	&headSAPWindow,
@@ -2977,6 +3116,89 @@ FRAMEPAGE_HEADER headSAPDPWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SAPDPWindow,
+};
+
+
+/*
+	Settings / Activity Profiles / Display Preferences / Speed/Pace
+*/
+static const GUI_ConstString _SAPDPSPListBox[] = {
+	"Speed",
+	"Pace",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SAPDPSPListFrame[] = {
+	NULL,
+	NULL
+};
+
+static int _SAPDPSPListParam[] = {
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SAPDPSPWindow = {
+	2,
+	"Speed/Pace",
+	_SAPDPSPListBox,
+	&headSAPDPWindow,
+	_SAPDPSPListFrame,
+	_SAPDPSPListParam,
+};
+
+FRAMEPAGE_HEADER headSAPDPSPWindow = {
+	FRAMEPAGE_LISTMENU_BOOLOPTION,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SAPDPSPWindow,
+};
+
+
+/*
+	Settings / Activity Profiles / Display Preferences / Scroll Speed
+*/
+static const GUI_ConstString _SAPDPSSListBox[] = {
+	"Slow",
+	"Medium",
+	"Fast",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SAPDPSSListFrame[] = {
+	NULL,
+	NULL,
+	NULL
+};
+
+static int _SAPDPSSListParam[] = {
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SAPDPSSWindow = {
+	3,
+	"Scroll Speed",
+	_SAPDPSSListBox,
+	&headSAPDPWindow,
+	_SAPDPSSListFrame,
+	_SAPDPSSListParam,
+};
+
+FRAMEPAGE_HEADER headSAPDPSSWindow = {
+	FRAMEPAGE_LISTMENU_BOOLOPTION,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SAPDPSSWindow,
 };
 
 
@@ -3124,7 +3346,7 @@ FRAMEPAGE_HEADER headUnderConstructionWindow = {
 
 void FrameCenter( void )
 {
-	int iLoop = 25;
+	int iLoop = 45;
     GUI_CONTEXT ContextOld;
 
 	///set the first FramePage header
