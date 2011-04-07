@@ -72,8 +72,8 @@ typedef enum
 #if 0
 typedef struct
 {
-	FRAMEPAGE_TYPE				frametype;
-    PFNFRAMEPAGEMAIN			pfnFramePageMain;     	// 
+	FRAMEPAGE_TYPE				frametype;			///frame page type index
+    PFNFRAMEPAGEMAIN			pfnFramePageMain;     	///
     PFNFRAMEPAGEMAINCB			pfnFramePageMainCb;    	//
 	WM_CALLBACK* 				pfnOldCB;
 	int							iWaits;
@@ -85,14 +85,14 @@ typedef struct
 #else
 struct H_FRAMEPAGE_HEADER
 {
-	FRAMEPAGE_TYPE				frametype;
-    PFNFRAMEPAGEMAIN			pfnFramePageMain;     	// 
-    PFNFRAMEPAGEMAINCB			pfnFramePageMainCb;    	//
-	WM_CALLBACK* 				pfnOldCB;
-	int							iWaits;
-	int							iNextReady;				///1 for ready
-	int							iClearFirst;			///1 for clear before draw
-	void*						pFrameData;				///frame data if needed
+	FRAMEPAGE_TYPE				frametype;			///frame page type index
+    PFNFRAMEPAGEMAIN			pfnFramePageMain;     	///address of main routine 
+    PFNFRAMEPAGEMAINCB			pfnFramePageMainCb;    	///address of user callback
+	WM_CALLBACK* 				pfnOldCB;				///old callback address store
+	int							iWaits;			///frame page timeout
+	int							iNextReady;		///flag for frame page done, 1 for ready
+	int							iClearFirst;		///flag for clear before draw, 1 for action
+	void*						pFrameData;		///frame data if needed, context info
 	struct H_FRAMEPAGE_HEADER*	pTimeoutFrame;			///frame to go if timeout
 };
 
@@ -809,7 +809,10 @@ extern GUI_CONST_STORAGE GUI_BITMAP bmStartup_Screen_1;
 void BootWindow( int iOption )
 {
 	int iTO = 0;
-	
+
+	if( pCurrFramePageClearFirst > 0 )
+		spBlankScreen();
+
 	GUI_DispStringAt("Trisl version,\n", 35, 80 );
 	GUI_DispStringAt("Disable after \n", 35, 100 );
 	GUI_DispStringAt("a few actions!\n", 35, 120 );
@@ -3948,6 +3951,7 @@ FRAMEPAGE_HEADER headHistoryWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_HistoryWindow,
+	NULL,
 };
 
 
@@ -3963,6 +3967,7 @@ FRAMEPAGE_HEADER headWatchWindow = {
 	0,
 	1,
 	NULL,
+	NULL,
 };
 
 
@@ -3977,6 +3982,7 @@ FRAMEPAGE_HEADER headUnderConstructionWindow = {
 	100,
 	0,
 	1,
+	NULL,
 	NULL,
 };
 
