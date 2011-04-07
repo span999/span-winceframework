@@ -808,15 +808,23 @@ void PoweroffWindow( int iOption )
 extern GUI_CONST_STORAGE GUI_BITMAP bmStartup_Screen_1;
 void BootWindow( int iOption )
 {
-	GUI_DispStringAt("BootWindow\n", 45, 80 );
-	GUI_Delay(100);
+	int iTO = 0;
+	
+	GUI_DispStringAt("Trisl version,\n", 35, 80 );
+	GUI_DispStringAt("Disable after \n", 35, 100 );
+	GUI_DispStringAt("a few actions!\n", 35, 120 );
+	GUI_Delay(300);
 	GUI_DrawBitmap(&bmStartup_Screen_1, 0, 0);
 	
-	spFramePageWait();
+	iTO = spFramePageWait();
+	
 	///set next framepage
 	///pAfterFramePage = &headDataModeWindow;
-	pAfterFramePage = &headDataMode1Window;
-
+	///pAfterFramePage = &headDataMode1Window;
+	
+	///go timeout frame if we were timeout
+	if( 0 != pCurrFramePageWait && 1 == iTO && NULL != pCurrFramePageTimeoutFrame )
+		spGoAfterFramePage( pCurrFramePageTimeoutFrame );
 }
 
 
@@ -2480,7 +2488,7 @@ FRAMEPAGE_HEADER headBootWindow = {
 	0,
 	1,
 	NULL,
-	NULL,
+	&headDataMode1Window,
 };
 
 FRAMEPAGE_HEADER headDataModeWindow = {
@@ -3975,7 +3983,7 @@ FRAMEPAGE_HEADER headUnderConstructionWindow = {
 
 void FrameCenter( void )
 {
-	int iLoop = 45;
+	int iLoop = 25;
     GUI_CONTEXT ContextOld;
 
 	///set the first FramePage header
@@ -3996,6 +4004,9 @@ void FrameCenter( void )
 		pBeforeFramePage = pCurrFramePage;
 		pCurrFramePage = pAfterFramePage;
 		///pAfterFramePage =
+		
+		if( 1 == iLoop)
+			pCurrFramePage = &headUnderConstructionWindow;
 	}
 #else	
 	while( iLoop > 0 )
