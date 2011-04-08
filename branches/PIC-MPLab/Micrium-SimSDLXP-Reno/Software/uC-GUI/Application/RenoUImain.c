@@ -206,6 +206,10 @@ FRAMEPAGE_HEADER headNavigationWindow;
 FRAMEPAGE_HEADER headSettingsWindow;
 FRAMEPAGE_HEADER headSUIWindow;
 FRAMEPAGE_HEADER headSUIPIWindow;
+FRAMEPAGE_HEADER headSUICIWindow;
+FRAMEPAGE_HEADER headSUICIPWindow;
+FRAMEPAGE_HEADER headSUICIEWindow;
+FRAMEPAGE_HEADER headSUICIAWindow;
 FRAMEPAGE_HEADER headSDSWindow;
 FRAMEPAGE_HEADER headSDSLWindow;
 FRAMEPAGE_HEADER headSDSUMWindow;
@@ -2334,7 +2338,360 @@ void ListMenuWindow( int iOption )
 
 
 
+#if (GUI_WINSUPPORT)
 
+/*
+	TextEntry list mode types 
+*/
+typedef enum
+{
+	TE_LIST_INIT = 0,
+    TE_LIST_SUMMARY,
+	TE_LIST_SINGLE,
+} TE_LIST_TYPE;
+
+static TEXT_Handle hText = NULL;
+static unsigned iShowCnt = 0;
+static char sShow[] = "               \0";
+
+
+static void spTextEntrySummary( LISTBOX_Handle hList )
+{
+	if( hList )
+	{
+		LISTBOX_AddString( hList, "<-Bak" );
+		LISTBOX_AddString( hList, "A/B/C" );
+		LISTBOX_AddString( hList, "D/E/F" );
+		LISTBOX_AddString( hList, "G/H/I" );
+		LISTBOX_AddString( hList, "J/K/L" );
+		LISTBOX_AddString( hList, "M/N/O" );
+		LISTBOX_AddString( hList, "P/Q/R" );
+		LISTBOX_AddString( hList, "S/T/U" );
+		LISTBOX_AddString( hList, "V/W/X" );
+		LISTBOX_AddString( hList, "Y/Z/ " );
+		LISTBOX_AddString( hList, ",/./:" );
+		LISTBOX_AddString( hList, "!/@/-" );
+		LISTBOX_AddString( hList, "(/)/0" );
+		LISTBOX_AddString( hList, "1/2/3" );
+		LISTBOX_AddString( hList, "4/5/6" );
+		LISTBOX_AddString( hList, "7/8/9" );
+	}
+}
+
+static void spTextEntrySingle( LISTBOX_Handle hList, int iIndex )
+{
+	if( hList )
+	{
+		LISTBOX_AddString( hList, "<-Bak" );
+		
+		switch( iIndex )
+		{
+			case 1:
+				LISTBOX_AddString( hList, "A" );
+				LISTBOX_AddString( hList, "B" );
+				LISTBOX_AddString( hList, "C" );
+				break;
+			case 2:
+				LISTBOX_AddString( hList, "D" );
+				LISTBOX_AddString( hList, "E" );
+				LISTBOX_AddString( hList, "F" );
+				break;
+			case 3:
+				LISTBOX_AddString( hList, "G" );
+				LISTBOX_AddString( hList, "H" );
+				LISTBOX_AddString( hList, "I" );
+				break;
+			case 4:
+				LISTBOX_AddString( hList, "J" );
+				LISTBOX_AddString( hList, "K" );
+				LISTBOX_AddString( hList, "L" );
+				break;
+			case 5:
+				LISTBOX_AddString( hList, "M" );
+				LISTBOX_AddString( hList, "N" );
+				LISTBOX_AddString( hList, "O" );
+				break;
+			case 6:
+				LISTBOX_AddString( hList, "P" );
+				LISTBOX_AddString( hList, "Q" );
+				LISTBOX_AddString( hList, "R" );
+				break;
+			case 7:
+				LISTBOX_AddString( hList, "S" );
+				LISTBOX_AddString( hList, "T" );
+				LISTBOX_AddString( hList, "U" );
+				break;
+			case 8:
+				LISTBOX_AddString( hList, "V" );
+				LISTBOX_AddString( hList, "W" );
+				LISTBOX_AddString( hList, "X" );
+				break;
+			case 9:
+				LISTBOX_AddString( hList, "Y" );
+				LISTBOX_AddString( hList, "Z" );
+				LISTBOX_AddString( hList, " " );
+				break;
+			case 10:
+				LISTBOX_AddString( hList, "," );
+				LISTBOX_AddString( hList, "." );
+				LISTBOX_AddString( hList, ":" );
+				break;
+			case 11:
+				LISTBOX_AddString( hList, "!" );
+				LISTBOX_AddString( hList, "@" );
+				LISTBOX_AddString( hList, "-" );
+				break;
+			case 12:
+				LISTBOX_AddString( hList, "(" );
+				LISTBOX_AddString( hList, ")" );
+				LISTBOX_AddString( hList, "0" );
+				break;
+			case 13:
+				LISTBOX_AddString( hList, "1" );
+				LISTBOX_AddString( hList, "2" );
+				LISTBOX_AddString( hList, "3" );
+				break;
+			case 14:
+				LISTBOX_AddString( hList, "4" );
+				LISTBOX_AddString( hList, "5" );
+				LISTBOX_AddString( hList, "6" );
+				break;
+			case 15:
+				LISTBOX_AddString( hList, "7" );
+				LISTBOX_AddString( hList, "8" );
+				LISTBOX_AddString( hList, "9" );
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+
+static void spcbTextEntryWindowTextSelect(WM_MESSAGE* pMsg, int Key)
+{
+	static TE_LIST_TYPE status = TE_LIST_INIT;
+	FP_LISTMENU_HEADER*	pListMenu = NULL;
+	int iSelet = -1;
+		
+	if( 
+		IsNotCurrFPListMenuLike ||
+		NULL == pCurrFramePageFrameData
+	)
+	{
+		printf("!!!!Error, there should menu list data here!! abort!!\n");
+		return;
+	}
+	
+	if( TE_LIST_INIT == status )
+		status = TE_LIST_SUMMARY;		///it's in summary mode, by default
+	
+	pListMenu = pCurrFramePageFrameData;
+	///check what you just selected
+	iSelet = LISTBOX_GetSel(pMsg->hWin);
+	if( iSelet < pListMenu->iListNum )
+	{
+		unsigned iTmp = 0;
+		char sOut[] = "a     \0";
+
+		LISTBOX_GetItemText( pMsg->hWin, iSelet, sOut, 6 );
+		
+		///clean all
+		iTmp = LISTBOX_GetNumItems(pMsg->hWin);
+		for( ; 0<iTmp; iTmp-- )
+			LISTBOX_DeleteItem( pMsg->hWin, 0 );
+
+		///add new
+		switch( iSelet )
+		{
+			case 0:
+				///send backspace message
+				if( iShowCnt > 0 )
+				{
+					iShowCnt--;
+					sShow[iShowCnt] = ' ';
+				}
+				TEXT_SetText(hText, sShow);
+				spTextEntrySummary( pMsg->hWin );
+				status = TE_LIST_INIT;
+				break;
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+			case 9:
+			case 10:
+			case 11:
+			case 12:
+			case 13:
+			case 14:
+			case 15:
+				if( TE_LIST_SUMMARY == status )
+				{
+					if( IsENTER_press(Key) )	///enter 
+					{
+						spTextEntrySingle( pMsg->hWin, iSelet );
+						status = TE_LIST_SINGLE;
+					}
+					else
+					if( IsBACK_press(Key) )	///back
+					{
+						spGoAfterFramePage( pListMenu->pUplevelFrame );
+						status = TE_LIST_INIT;
+					}
+				}
+				else
+				if( TE_LIST_SINGLE == status )
+				{
+					if( IsENTER_press(Key) )	///enter 
+					{
+						printf("Get text entry ==> %s\n", sOut);
+						///GUI_DispStringAt(sOut, 5, 10);
+						if( iShowCnt < 15 )
+						{
+							sShow[iShowCnt] = sOut[0];
+							iShowCnt++;
+						}
+						///send message to another window
+						///TEXT_SetText(hText, sOut);
+						TEXT_SetText(hText, sShow);
+						
+						spTextEntrySummary( pMsg->hWin );
+						status = TE_LIST_INIT;
+					}
+					else
+					if( IsBACK_press(Key) )	///back
+					{
+						spTextEntrySummary( pMsg->hWin );
+						status = TE_LIST_SUMMARY;
+					}		
+				}
+				break;
+		
+			
+		}
+
+	}
+	else
+	{
+		printf( "!!!!!Error!! LISTBOX_GetSel=%d\n", iSelet );
+		spGoAfterFramePage( pBeforeFramePage );
+	}
+}
+
+static void cbTextEntryWindow(WM_MESSAGE* pMsg)
+{
+	///printf("cbTextEntryWindow() ==> %d \n", pMsg->MsgId);
+	
+	if( WM_KEY == pMsg->MsgId )
+	{
+		int Key = 0;
+		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+
+		///hack the key value
+		if( IsUP_press(Key) )	///up
+		{	///doing trick
+			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+			///((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+		}
+		else
+		if( IsDOWN_press(Key) )	///down
+		{	///doing trick
+			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+			///((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+		}
+		else
+		if( IsENTER_press(Key) )	///enter
+		{	
+			spcbTextEntryWindowTextSelect(pMsg, Key);
+		}
+		else
+		if( IsBACK_press(Key) )	///back
+		{
+			///spGoAfterFramePage( pBeforeFramePage );
+			spcbTextEntryWindowTextSelect(pMsg, Key);
+		}
+
+		if( pCurrFramePageOldCb )
+			pCurrFramePageOldCb( pMsg );
+	}
+	else
+	{
+		if( pCurrFramePageOldCb )
+			pCurrFramePageOldCb( pMsg );
+	}
+}
+#endif
+
+#define	 TEXTENTRYLIST_Y_OFFSET		15
+#define  TEXTENTRYLIST_XSIZE		40
+#define  TEXTENTRYLIST_YSIZE		(LCD_GetYSize()-TEXTENTRYLIST_Y_OFFSET-TEXTENTRYLIST_Y_OFFSET)
+#define  TEXTENTRYLIST_X			(LCD_GetXSize()-TEXTENTRYLIST_XSIZE)
+#define  TEXTENTRYLIST_Y			(0+TEXTENTRYLIST_Y_OFFSET)
+
+
+void TextEntryWindow( int iOption )
+{
+	FRAMEWIN_Handle	hFrame;
+	LISTBOX_Handle	hList;
+	FP_LISTMENU_HEADER* pListMenu = NULL;
+	///TEXT_Handle hText = NULL;
+	int iTmp = 0;
+	int iTO = 0;
+
+	spSetDefaultEffect();
+	WIDGET_SetDefaultEffect(&WIDGET_Effect_Simple);
+	
+	if( pCurrFramePageClearFirst > 0 )
+		spBlankScreen();
+
+	if( 
+		IsNotCurrFPListMenuLike ||
+		NULL == pCurrFramePageFrameData
+	)
+	{
+		printf("!!!!Error, there should list menu data here!! abort!!\n");
+		return;
+	}
+	
+	iShowCnt = 0;	///init
+	pListMenu = pCurrFramePageFrameData;
+	///create frame title
+	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pListMenu->sListTitle, NULL);
+	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
+
+	hText = TEXT_CreateEx( 10, 40, 60, 20, hFrame, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 9, "Text here");
+	
+	
+	///create list menu
+	hList = LISTBOX_CreateEx(TEXTENTRYLIST_X, TEXTENTRYLIST_Y+iTmp, TEXTENTRYLIST_XSIZE, TEXTENTRYLIST_YSIZE-iTmp, (WM_HWIN)hFrame, WM_CF_SHOW, 0, 0, pListMenu->sListName);
+	///add callback
+	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
+	
+	///LISTBOX_SetOwnerDraw( hList, spListBoxOwnerDraw );
+	///LISTBOX_InvalidateItem( hList, 2 );
+	
+	///pull window up
+	WM_BringToTop( hList );
+	WM_SetFocus( hList );
+
+	
+	WM_ExecIdle();
+	iTO = spFramePageWait();
+
+	WM_DeleteWindow( hText );
+	WM_DeleteWindow( hList );	
+	WM_DeleteWindow( hFrame );
+	
+	WIDGET_SetDefaultEffect(&WIDGET_Effect_None);
+
+	///go timeout frame if we were timeout
+	spFrameTimeoutHandling(iTO);
+}
 
 
 #if (GUI_WINSUPPORT)
@@ -2968,7 +3325,7 @@ static const GUI_ConstString _SUIListBox[] = {
 
 static FRAMEPAGE_HEADER* _SUIListFrame[] = {
 	&headSUIPIWindow,
-	&headUnderConstructionWindow,
+	&headSUICIWindow,
 	&headUnderConstructionWindow
 };
 
@@ -3040,6 +3397,166 @@ FRAMEPAGE_HEADER headSUIPIWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SUIPIWindow,
+	NULL,
+};
+
+
+/*
+	Settings / User Information / Contact Information
+*/
+static const GUI_ConstString _SUICIListBox[] = {
+	"Phone",
+	"E-mail",
+	"Address",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SUICIListFrame[] = {
+	&headSUICIPWindow,
+	&headSUICIEWindow,
+	&headSUICIAWindow
+};
+
+static int _SUICIListParam[] = {
+	0, 0, 0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SUICIWindow = {
+	3,
+	"Contact Information",
+	_SUICIListBox,
+	&headSUIWindow,
+	_SUICIListFrame,
+	_SUICIListParam,
+};
+
+FRAMEPAGE_HEADER headSUICIWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SUICIWindow,
+	NULL,
+};
+
+
+/*
+	Settings / User Information / Contact Information / Address
+*/
+static const GUI_ConstString _SUICIAListBox[] = {
+	"<-Bak",
+	"A/B/C",
+	"D/E/F",
+	"G/H/I",
+	"J/K/L",
+	"M/N/O",
+	"P/Q/R",
+	"S/T/U",
+	"V/W/X",
+	"Y/Z/ ",
+	",/./:",
+	"!/@/-",
+	"(/)/0",
+	"1/2/3",
+	"4/5/6",
+	"7/8/9",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SUICIAListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow
+};
+
+static int _SUICIAListParam[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SUICIAWindow = {
+	16,
+	"Address",
+	_SUICIAListBox,
+	&headSUICIWindow,
+	_SUICIAListFrame,
+	_SUICIAListParam,
+};
+
+FRAMEPAGE_HEADER headSUICIAWindow = {
+	FRAMEPAGE_LISTMENU,
+	TextEntryWindow,
+	cbTextEntryWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SUICIAWindow,
+	NULL,
+};
+
+
+/*
+	Settings / User Information / Contact Information / Phone
+*/
+FP_LISTMENU_HEADER fpListMenuData_SUICIPWindow = {
+	16,
+	"Phone",
+	_SUICIAListBox,
+	&headSUICIWindow,
+	_SUICIAListFrame,
+	_SUICIAListParam,
+};
+
+FRAMEPAGE_HEADER headSUICIPWindow = {
+	FRAMEPAGE_LISTMENU,
+	TextEntryWindow,
+	cbTextEntryWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SUICIPWindow,
+	NULL,
+};
+
+
+/*
+	Settings / User Information / Contact Information / Email
+*/
+FP_LISTMENU_HEADER fpListMenuData_SUICIEWindow = {
+	16,
+	"Email",
+	_SUICIAListBox,
+	&headSUICIWindow,
+	_SUICIAListFrame,
+	_SUICIAListParam,
+};
+
+FRAMEPAGE_HEADER headSUICIEWindow = {
+	FRAMEPAGE_LISTMENU,
+	TextEntryWindow,
+	cbTextEntryWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SUICIEWindow,
 	NULL,
 };
 
