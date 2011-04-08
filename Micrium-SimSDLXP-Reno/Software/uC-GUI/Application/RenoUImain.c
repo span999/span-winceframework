@@ -69,36 +69,22 @@ typedef enum
 /*
 	frame page header
 */
-#if 0
-typedef struct
-{
-	FRAMEPAGE_TYPE				frametype;			///frame page type index
-    PFNFRAMEPAGEMAIN			pfnFramePageMain;     	///
-    PFNFRAMEPAGEMAINCB			pfnFramePageMainCb;    	//
-	WM_CALLBACK* 				pfnOldCB;
-	int							iWaits;
-	int							iNextReady;				///1 for ready
-	int							iClearFirst;			///1 for clear before draw
-	void*						pFrameData;				///frame data if needed
-	struct FRAMEPAGE_HEADER*	pTimeoutFrame;			///frame to go if timeout
-} FRAMEPAGE_HEADER;
-#else
+
 struct H_FRAMEPAGE_HEADER
 {
-	FRAMEPAGE_TYPE				frametype;			///frame page type index
+	FRAMEPAGE_TYPE				frametype;				///frame page type index
     PFNFRAMEPAGEMAIN			pfnFramePageMain;     	///address of main routine 
     PFNFRAMEPAGEMAINCB			pfnFramePageMainCb;    	///address of user callback
 	WM_CALLBACK* 				pfnOldCB;				///old callback address store
-	int							iWaits;			///frame page timeout
-	int							iNextReady;		///flag for frame page done, 1 for ready
-	int							iClearFirst;		///flag for clear before draw, 1 for action
-	void*						pFrameData;		///frame data if needed, context info
+	int							iWaits;					///frame page timeout
+	int							iNextReady;				///flag for frame page done, 1 for ready
+	int							iClearFirst;			///flag for clear before draw, 1 for action
+	void*						pFrameData;				///frame data if needed, context info
 	struct H_FRAMEPAGE_HEADER*	pTimeoutFrame;			///frame to go if timeout
 };
 
 typedef struct H_FRAMEPAGE_HEADER FRAMEPAGE_HEADER;
 
-#endif
 
 /*
 	screen status record
@@ -830,102 +816,19 @@ void BootWindow( int iOption )
 	if( pCurrFramePageClearFirst > 0 )
 		spBlankScreen();
 
-	GUI_DispStringAt("Trial version,\n", 35, 80 );
-	GUI_DispStringAt("Disable after \n", 35, 100 );
-	GUI_DispStringAt("a few actions!\n", 35, 120 );
+	GUI_DispStringAt("Trial version,\n", 30, 80 );
+	GUI_DispStringAt("Disable after \n", 30, 100 );
+	GUI_DispStringAt("a few actions!\n", 30, 120 );
 	GUI_Delay(300);
 	GUI_DrawBitmap(&bmStartup_Screen_1, 0, 0);
 	
 	iTO = spFramePageWait();
-	
-	///set next framepage
-	///pAfterFramePage = &headDataModeWindow;
-	///pAfterFramePage = &headDataMode1Window;
-	
+
 	///go timeout frame if we were timeout
-	if( 0 != pCurrFramePageWait && 1 == iTO && NULL != pCurrFramePageTimeoutFrame )
-		spGoAfterFramePage( pCurrFramePageTimeoutFrame );
+	spFrameTimeoutHandling(iTO);
 }
 
 
-#if 0
-#if (GUI_WINSUPPORT)
-static void cbDataModeWindow(WM_MESSAGE* pMsg)
-{
-
-	///printf("cbDataModeWindow() ==> %d \n", pMsg->MsgId);
-
-	///hack the WM msg here
-	if( pMsg->MsgId == WM_KEY )
-	{
-		int Key = 0;			
-		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
-		
-		if( IsUP_hold(Key) )	/// hold up key
-			spGoAfterFramePage( &headPopupListWindow_DeviceModeFitness );
-		else		
-		if( IsDOWN_hold(Key) )	/// hold down key
-			spGoAfterFramePage( &headPopupListWindow_Fitness );
-		else
-		if( IsUP_press(Key) || IsDOWN_press(Key) )
-			spGoAfterFramePage( &headPopupListWindow_NumberEntry );
-	}
-	else
-	if( pMsg->MsgId == WM_PAINT )
-	{
-		spcbRoundWinExt( pMsg, GUI_BLUE, 0, 1, 1 );
-	}
-	
-	if( pCurrFramePageOldCb )
-		pCurrFramePageOldCb( pMsg );
-}
-#endif
-
-void DataModeWindow( int iOption )
-{
-	///WM_HWIN hWin1 = 0;
-	WM_HWIN hWin2 = 0;
-	WM_HWIN hWin3 = 0;
-	WM_HWIN hWin4 = 0;
-	WM_HWIN hWin5 = 0;
-	///LISTBOX_Handle	hList;
-	///WM_CALLBACK* pOldCB = NULL;
-
-
-	if( pCurrFramePageClearFirst > 0 )
-		spBlankScreen();
-
-	///create windows
-	hWin2 = WM_CreateWindow( 0, 0, LCD_GetXSize(), LCD_GetYSize()/3, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
-	///add callback
-	pCurrFramePageOldCb = WM_SetCallback( hWin2, pCurrFramePageMainCb );
-	///create windows
-	hWin3 = WM_CreateWindow( 0, 0+LCD_GetYSize()/3, LCD_GetXSize(), LCD_GetYSize()/3, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
-	///add callback
-	pCurrFramePageOldCb = WM_SetCallback( hWin3, pCurrFramePageMainCb );
-	///create windows
-	hWin4 = WM_CreateWindow( 0, 0+2*LCD_GetYSize()/3, LCD_GetXSize()/2, LCD_GetYSize()/3, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
-	///add callback
-	pCurrFramePageOldCb = WM_SetCallback( hWin4, pCurrFramePageMainCb );
-	///create windows
-	hWin5 = WM_CreateWindow( LCD_GetXSize()/2, 0+2*LCD_GetYSize()/3, LCD_GetXSize()/2, LCD_GetYSize()/3, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
-	///add callback
-	pCurrFramePageOldCb = WM_SetCallback( hWin5, pCurrFramePageMainCb );
-
-	
-	WM_BringToTop( hWin2 );
-	WM_SetFocus( hWin2 );
-	
-	WM_ExecIdle();
-	spFramePageWait();
-	
-	WM_DeleteWindow( hWin2 );
-	WM_DeleteWindow( hWin3 );
-	WM_DeleteWindow( hWin4 );
-	WM_DeleteWindow( hWin5 );
-	
-}
-#else
 
 int spGetDataFrameX( int iFrameOlder, int iFrameTotal )
 {
@@ -1426,11 +1329,52 @@ int spGetDataFrameYsize( int iFrameOlder, int iFrameTotal )
 	return iRet;
 }
 
+void spDrawDataModeContent( int* piTotal, int* piIndex, FP_DATASETS_HEADER* pDataModeData, GUI_RECT* prtTemp )
+{
+	const GUI_FONT* pFont = NULL;
+	
+	switch( *piTotal )
+	{
+		case 1:
+		case 2:
+			///draw data name
+			pFont = GUI_GetFont();
+			GUI_SetFont( &GUI_Font16B_ASCII );
+			GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataName, prtTemp->x0+3, prtTemp->y0+3 );
+			GUI_SetFont( pFont );
+			///draw data unit
+			pFont = GUI_GetFont();
+			GUI_SetFont( &GUI_Font16B_ASCII );
+			GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataUnit, prtTemp->x1-23, prtTemp->y1-18 );
+			GUI_SetFont( pFont );
+			///draw data value
+			pFont = GUI_GetFont();
+			GUI_SetFont( &GUI_Font32B_ASCII );
+			GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataValue, prtTemp->x0+13, (prtTemp->y0+prtTemp->y1)/2-12 );
+			GUI_SetFont( pFont );
+			break;
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		default:
+			///draw data name
+			GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataName, prtTemp->x0+3, prtTemp->y0+3 );
+			///draw data unit
+			GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataUnit, prtTemp->x1-23, prtTemp->y1-13 );
+			///draw data value
+			GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataValue, prtTemp->x0+13, (prtTemp->y0+prtTemp->y1)/2-3 );
+			break;
+	}
+}
+
+
 void spcbDataModeVal( WM_MESSAGE* pMsg, GUI_COLOR color )
 {
 	GUI_RECT 	rtTemp;
 	GUI_COLOR 	clTemp[2];
 	int			iIndex = 0;
+	int			iTotal = 0;
 	FP_DATASETS_HEADER* pDataModeData = NULL;
 	
 	
@@ -1449,19 +1393,24 @@ void spcbDataModeVal( WM_MESSAGE* pMsg, GUI_COLOR color )
 	
 	WM_GetClientRectEx( pMsg->hWin, &rtTemp );
 	WM_GetUserData( pMsg->hWin, &iIndex, sizeof(int) );
+	iTotal = pDataModeData->iDataSetNum;
 		
 	clTemp[0] = GUI_GetColor();
 	clTemp[1] = GUI_GetBkColor();
 	GUI_SetColor( color );
 	GUI_SetBkColor( GUI_WHITE );
-	
+
+#if 1
+	spDrawDataModeContent( &iTotal, &iIndex, pDataModeData, &rtTemp );
+#else	
 	///draw data name
 	GUI_DispStringAt( pDataModeData->pDataSets[iIndex].sDataName, rtTemp.x0+3, rtTemp.y0+3 );
 	///draw data unit
 	GUI_DispStringAt( pDataModeData->pDataSets[iIndex].sDataUnit, rtTemp.x1-23, rtTemp.y1-13 );
 	///draw data value
 	GUI_DispStringAt( pDataModeData->pDataSets[iIndex].sDataValue, rtTemp.x0+13, (rtTemp.y0+rtTemp.y1)/2-3 );
-	
+#endif
+
 	GUI_SetColor( clTemp[0] );
 	GUI_SetBkColor( clTemp[1] );
 
@@ -1544,7 +1493,9 @@ static void cbDataModeWindow(WM_MESSAGE* pMsg)
 	else
 	if( pMsg->MsgId == WM_PAINT )
 	{
+		///draw outline
 		spcbRoundWinExt( pMsg, GUI_BLUE, 0, 1, 1 );
+		///draw content
 		spcbDataModeVal( pMsg, GUI_BLUE );
 	}
 	
@@ -1607,7 +1558,7 @@ void DataModeWindow( int iOption )
 	if( 0 != pCurrFramePageWait && 1 == iTO && NULL != pCurrFramePageTimeoutFrame )
 		spGoAfterFramePage( pCurrFramePageTimeoutFrame );
 }
-#endif
+
 
 #if (GUI_WINSUPPORT)
 static void cbPopupWindow(WM_MESSAGE* pMsg)
