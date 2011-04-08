@@ -374,6 +374,23 @@ void spGoAfterFramePage( FRAMEPAGE_HEADER *pGoAfterFP )
 	}
 }
 
+int spFrameTimeoutHandling( int iTO )
+{	
+	int iRet = 0;
+	
+	if( 
+		0 != pCurrFramePageWait &&
+		1 == iTO && 
+		NULL != pCurrFramePageTimeoutFrame 
+	)
+	{
+		spGoAfterFramePage( pCurrFramePageTimeoutFrame );
+		iRet = 1;
+	}
+	return iRet;
+}
+
+
 int IsSamekey( int iSrc, int iTar )
 {
 	if( iSrc == 'o' )
@@ -813,7 +830,7 @@ void BootWindow( int iOption )
 	if( pCurrFramePageClearFirst > 0 )
 		spBlankScreen();
 
-	GUI_DispStringAt("Trisl version,\n", 35, 80 );
+	GUI_DispStringAt("Trial version,\n", 35, 80 );
 	GUI_DispStringAt("Disable after \n", 35, 100 );
 	GUI_DispStringAt("a few actions!\n", 35, 120 );
 	GUI_Delay(300);
@@ -1881,9 +1898,17 @@ void PopupWindowNumbers( int iOption )
 	LISTBOX_Handle	hList;
 	WM_CALLBACK* pOldCB = NULL;
 	FP_POPUPLIST_HEADER* pPopList = NULL;
-	
+	int iTO = 0;
+	const GUI_FONT* pFont = NULL;
 	int x, y, xsize, ysize;
 
+	///set default setting
+	spSetDefaultEffect();
+	
+	///set font for list
+	///pFont = &GUI_Font16B_ASCII;
+	pFont = &GUI_Font32B_ASCII;
+	///set popup frame size
 	x = 40;
 	y = 56-4;
 	xsize = 64;
@@ -1893,8 +1918,6 @@ void PopupWindowNumbers( int iOption )
 	if( pCurrFramePageClearFirst > 0 )
 		spBlankScreen();
 
-	spSetDefaultEffect();
-	
 	if( 
 		FRAMEPAGE_POPUP_NUMBERS != pCurrFramePageType ||
 		NULL == pCurrFramePageFrameData
@@ -1909,32 +1932,37 @@ void PopupWindowNumbers( int iOption )
 	hWin1 = WM_CreateWindow( x, y, xsize, ysize, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
 	///add callback
 	pOldCB = WM_SetCallback( hWin1, &cbPopupWindow );
+	///store header
 	pPopList->hWinFrame = hWin1;
 
 	///create list box
-	///hList = LISTBOX_CreateEx( 0+EDGEOFFSET+2, 0+EDGEOFFSET+13, LCD_GetXSize()-(EDGEOFFSET*2)-4, LCD_GetYSize()-(EDGEOFFSET*2)-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, _PopupListBox);
-	///if( FRAMEPAGE_POPUP_NUMBERS == pCurrFramePageType )
-		///hList = LISTBOX_CreateEx( x+2, y+13, xsize-4, ysize-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pPopList->sListName);
-		hList = LISTBOX_CreateEx( x+3, y+13+((ysize-(13*2))/4), (xsize/2)-4, (ysize-(13*2))/2, WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pPopList->sListName);
+	///hList = LISTBOX_CreateEx( x+3, y+13+((ysize-(13*2))/4), (xsize/2)-4, (ysize-(13*2))/2, WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pPopList->sListName);
+	hList = LISTBOX_CreateEx( x+8, y+7+((ysize-(13*2))/4), (xsize/2)-12, GUI_GetYSizeOfFont(pFont), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pPopList->sListName);
+
 	///add callback
 	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
 	
 	///LISTBOX_SetTextAlign( hList, GUI_TA_HCENTER|GUI_TA_VCENTER );
-	LISTBOX_SetFont( hList , &GUI_Font16B_ASCII );
-	///set to default
+	///set font in list
+	LISTBOX_SetFont( hList , pFont );
+	///set to default selected in list
 	LISTBOX_SetSel( hList , pPopList->iListSel );
 	
+	///pull window to top
 	WM_BringToTop( hWin1 );
 	WM_SetFocus( hWin1 );
 	WM_BringToTop( hList );
 	WM_SetFocus( hList );
 	
 	WM_ExecIdle();
-	spFramePageWait();
+	iTO = spFramePageWait();
 	
+	///kill all window
 	WM_DeleteWindow( hWin1 );
 	WM_DeleteWindow( hList );
-
+	
+	///go timeout frame if we were timeout
+	spFrameTimeoutHandling(iTO);
 }
 
 
@@ -3074,6 +3102,7 @@ static const GUI_ConstString _SDSListBox[] = {
   "Date & Time",
   "Units of Measurement",
   "Activity Recording",
+  "ANT+ Sensors",
   "Feedback",
   "Equipment",
   NULL
@@ -3085,6 +3114,7 @@ static FRAMEPAGE_HEADER* _SDSListFrame[] = {
 	&headSDSUMWindow,
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
 	&headUnderConstructionWindow
 };
 
@@ -3093,7 +3123,7 @@ static int _SDSListParam[] = {
 };
 
 FP_LISTMENU_HEADER fpListMenuData_SDSWindow = {
-	6,
+	7,
 	"Device Settings",
 	_SDSListBox,
 	&headSettingsWindow,
@@ -3989,7 +4019,7 @@ FRAMEPAGE_HEADER headUnderConstructionWindow = {
 
 void FrameCenter( void )
 {
-	int iLoop = 25;
+	int iLoop = 55;
     GUI_CONTEXT ContextOld;
 
 	///set the first FramePage header
