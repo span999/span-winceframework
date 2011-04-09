@@ -2874,6 +2874,149 @@ void WatchWindow( int iOption )
 }
 
 
+
+#define		SGSGS_TITLE_H			20
+#define		SGSGS_LIST_H			20
+#define		SGSGS_BAR_N				12
+#define 	SGSGS_BAR_W				8
+#define		SGSGS_BAR_IV			3
+#define		SGSGS_BAR_H_SCALE		10
+
+
+
+#if (GUI_WINSUPPORT)
+static void cbSGSGSWindow(WM_MESSAGE* pMsg)
+{
+	printf("cbNavigationWindow() ==> %d \n", pMsg->MsgId);
+	
+	///hack the WM msg here
+	if( pMsg->MsgId == WM_KEY )
+	{
+		int Key = 0;
+			
+		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+		if( IsUP_hold(Key) )
+		{	/// hold up key
+			printf( "UP key hold!!!!!!!\n" );
+			///set next framepage
+			pAfterFramePage = &headPopupListWindow_DeviceModeFitness;
+			///ready for next framepage
+			pCurrFramePageNextReady = 1;
+		}
+		else		
+		if( IsDOWN_hold(Key) )
+		{	/// hold down key
+			printf( "DOWN key hold!!!!!!!\n" );
+			///set next framepage
+			pAfterFramePage = &headPopupListWindow_Fitness;
+			///ready for next framepage
+			pCurrFramePageNextReady = 1;
+		}
+
+	}
+	else
+	if( pMsg->MsgId == WM_PAINT )
+	{
+		///spcbRoundWinExt( pMsg, GUI_BLUE, 0, 1, 1 );
+	}
+	if( pCurrFramePageOldCb )
+		pCurrFramePageOldCb( pMsg );
+	return;
+
+}
+#endif
+
+
+void SGSGSWindow( int iOption )
+{
+	FRAMEWIN_Handle	hFrame;
+	int iTmp = 0;
+	GUI_RECT rtTemp;
+	WM_HWIN hWin = NULL;
+	TEXT_Handle hText[2];
+/*
+	rtTemp.x0 = 10;
+	rtTemp.y0 = 40;
+	rtTemp.x1 = 10+20;
+	rtTemp.y1 = LCD_GetYSize();
+*/	
+	spSetDefaultEffect();
+	
+	if( pCurrFramePageClearFirst > 0 )
+		spBlankScreen();
+
+	///create frame title
+	///hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, "GPS Satellites", NULL);
+	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), 18, WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, "GPS Satellites", NULL);
+	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
+	///add callback
+	pCurrFramePageOldCb = WM_SetCallback( hFrame, pCurrFramePageMainCb );
+	
+	///get the client window size
+///	WM_GetClientRectEx( hFrame, &rtTemp );
+	rtTemp.x0 = 0;
+	rtTemp.y0 = 0+18;
+	rtTemp.x1 = LCD_GetXSize();
+	rtTemp.y1 = LCD_GetYSize();
+///	rtTemp.y0 = rtTemp.y0 + iTmp;
+/*	
+	hWin = WM_CreateWindow( 
+				rtTemp.x0, 
+				rtTemp.y0, 
+				(rtTemp.x1-rtTemp.x0), 
+				(rtTemp.y1-rtTemp.y0),
+				WM_CF_SHOW|WM_CF_STAYONTOP,
+				NULL,
+				0
+				);
+*/	
+	hText[1] = TEXT_CreateEx(
+				rtTemp.x0, 
+				rtTemp.y0, 
+				(rtTemp.x1-rtTemp.x0), 
+				SGSGS_TITLE_H,
+				NULL,
+				WM_CF_SHOW|WM_CF_STAYONTOP,
+				0,
+				20,
+				"Accuracy:   +/-15ft"
+	);
+	
+	hText[2] = TEXT_CreateEx(
+				rtTemp.x0, 
+				rtTemp.y1-SGSGS_LIST_H, 
+				(rtTemp.x1-rtTemp.x0), 
+				SGSGS_LIST_H,
+				NULL,
+				WM_CF_SHOW|WM_CF_STAYONTOP,
+				0,
+				21,
+				"?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??"
+	);
+	
+	WM_BringToTop( hFrame );
+	WM_SetFocus( hFrame );
+//	WM_BringToTop( hWin );
+//	WM_SetFocus( hWin );
+	WM_BringToTop( hText[1] );
+	WM_BringToTop( hText[2] );
+
+	for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
+		GUI_DrawLine(rtTemp.x0,rtTemp.y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE),rtTemp.x1,rtTemp.y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE));
+	
+	for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
+		GUI_FillRect( 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp, 60+iTmp, 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp+SGSGS_BAR_W, rtTemp.y1-SGSGS_LIST_H );
+	
+	
+	WM_ExecIdle();
+	spFramePageWait();
+
+	WM_DeleteWindow( hWin );
+	WM_DeleteWindow( hFrame );
+	
+}
+
+
 void UnderConstructionWindow( int iOption )
 {
 	WM_HWIN hWin1 = 0;
@@ -3473,6 +3616,7 @@ FRAMEPAGE_HEADER headSGSWindow = {
 /*
 	Settings / GPS Settings / GPS Satellites
 */
+/*
 static const GUI_ConstString _SGSGSListBox[] = {
 	"GPS Satellites",
 	"GPS Satellites",
@@ -3500,16 +3644,16 @@ FP_LISTMENU_HEADER fpListMenuData_SGSGSWindow = {
 	_SGSGSListFrame,
 	_SGSGSListParam,
 };
-
+*/
 FRAMEPAGE_HEADER headSGSGSWindow = {
-	FRAMEPAGE_LISTMENU,
-	ListMenuWindow,
-	cbListMenuWindow,
+	FRAMEPAGE_TITLED,
+	SGSGSWindow,
+	cbSGSGSWindow,
 	NULL,
 	0,
 	0,
 	1,
-	(void*)&fpListMenuData_SGSGSWindow,
+	NULL,
 	NULL,
 };
 
