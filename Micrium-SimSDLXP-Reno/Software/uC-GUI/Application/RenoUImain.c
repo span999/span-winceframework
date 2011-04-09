@@ -204,6 +204,9 @@ FRAMEPAGE_HEADER headPopupListWindow_DeviceModeFitness;
 FRAMEPAGE_HEADER headPopupListWindow_NumberEntry;
 FRAMEPAGE_HEADER headNavigationWindow;
 FRAMEPAGE_HEADER headSettingsWindow;
+FRAMEPAGE_HEADER headSGSWindow;
+FRAMEPAGE_HEADER headSGSGSWindow;
+FRAMEPAGE_HEADER headSGSNWindow;
 FRAMEPAGE_HEADER headSUIWindow;
 FRAMEPAGE_HEADER headSUIPIWindow;
 FRAMEPAGE_HEADER headSUICIWindow;
@@ -2260,10 +2263,35 @@ static void cbListMenuWindow(WM_MESSAGE* pMsg)
 			else
 			if( iSelet < pListMenu->iListNum )
 			{
-				///jump to what you selected
-				pNextFrame = pListMenu->pListFrame[iSelet];
-				pAfterFramePage = pNextFrame;
-				pCurrFramePageNextReady = 1;
+				int iPara = 0;
+				int iTmp = 0;
+				iPara = pListMenu->pListParam[iSelet];
+				if( 0 < (iPara & (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0) )
+				{	///it's boolean item/field
+					if( 0 < (iPara & (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1) )
+					{	///enabled boolean
+						///invert it
+						pListMenu->pListParam[iSelet] = (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0;
+					}
+					else
+					{	///disabled boolean
+						///invert it
+						pListMenu->pListParam[iSelet] = (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1;
+					}
+					
+					///iPara = iSelet+1;
+					iPara = LISTBOX_GetNumItems( pMsg->hWin );
+					for( iTmp=iSelet+1; iTmp<iPara; iTmp++ )
+						LISTBOX_SetItemDisabled( pMsg->hWin, iTmp, (pListMenu->pListParam[iSelet] == ((BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1)?0:1 ) );
+					
+				}
+				else
+				{
+					///jump to what you selected
+					pNextFrame = pListMenu->pListFrame[iSelet];
+					pAfterFramePage = pNextFrame;
+					pCurrFramePageNextReady = 1;
+				}
 			}
 			else
 			{
@@ -3280,7 +3308,7 @@ static const GUI_ConstString _SettingListBox[] = {
 };
 
 static FRAMEPAGE_HEADER* _SettingListFrame[] = {
-	&headUnderConstructionWindow,
+	&headSGSWindow,
 	&headSDSWindow,
 	&headSAPWindow,
 	&headSUIWindow,
@@ -3311,6 +3339,139 @@ FRAMEPAGE_HEADER headSettingsWindow = {
 	(void*)&fpListMenuData_SettingsWindow,
 	NULL,
 };
+
+
+/*
+	Settings / GPS Settings
+*/
+static const GUI_ConstString _SGSListBox[] = {
+	"GPS Enabled: ",
+	"GPS Satellites",
+	"Navigation",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SGSListFrame[] = {
+	&headUnderConstructionWindow,
+	&headSGSGSWindow,
+	&headSGSNWindow
+};
+
+static int _SGSListParam[] = {
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1,
+	0, 
+	0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SGSWindow = {
+	3,
+	"GPS Settings",
+	_SGSListBox,
+	&headSettingsWindow,
+	_SGSListFrame,
+	_SGSListParam,
+};
+
+FRAMEPAGE_HEADER headSGSWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SGSWindow,
+	NULL,
+};
+
+
+/*
+	Settings / GPS Settings / GPS Satellites
+*/
+static const GUI_ConstString _SGSGSListBox[] = {
+	"GPS Satellites",
+	"GPS Satellites",
+	"GPS Satellites",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SGSGSListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow
+};
+
+static int _SGSGSListParam[] = {
+	0,
+	0, 
+	0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SGSGSWindow = {
+	3,
+	"GPS Satellites",
+	_SGSGSListBox,
+	&headSGSWindow,
+	_SGSGSListFrame,
+	_SGSGSListParam,
+};
+
+FRAMEPAGE_HEADER headSGSGSWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SGSGSWindow,
+	NULL,
+};
+
+
+/*
+	Settings / GPS Settings / Navigation
+*/
+static const GUI_ConstString _SGSNListBox[] = {
+	"GPS Navigation",
+	"GPS Navigation",
+	"GPS Navigation",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SGSNListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow
+};
+
+static int _SGSNListParam[] = {
+	0,
+	0, 
+	0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SGSNWindow = {
+	3,
+	"Navigation",
+	_SGSNListBox,
+	&headSGSWindow,
+	_SGSNListFrame,
+	_SGSNListParam,
+};
+
+FRAMEPAGE_HEADER headSGSNWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SGSNWindow,
+	NULL,
+};
+
 
 
 /*
