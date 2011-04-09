@@ -59,7 +59,7 @@ typedef enum
 	FRAMEPAGE_DATAMODE,
     FRAMEPAGE_TITLED,
     FRAMEPAGE_LISTMENU,
-	FRAMEPAGE_LISTMENU_BOOLOPTION,
+	FRAMEPAGE_LISTMENU_BOOLOPTION,	///list menu with all boolean option items
 	FRAMEPAGE_POPUP_NOTIFY,
 	FRAMEPAGE_POPUP_OPTION,
 	FRAMEPAGE_POPUP_CONFIRM,
@@ -290,6 +290,7 @@ static SCREEN_STATUS *pScrStat = &ScrStat;
 
 #define IsNotCurrFPListMenuLike		((FRAMEPAGE_LISTMENU != pCurrFramePageType) && (FRAMEPAGE_LISTMENU_BOOLOPTION != pCurrFramePageType))
 
+#define LISTBOX_CI_DISABLED			3	///missing?!!
 
 
 
@@ -315,6 +316,10 @@ void spSetDefaultEffect ( void )
 	FRAMEWIN_SetDefaultBarColor( 1, GUI_BLACK );
 	FRAMEWIN_SetDefaultTextColor( 1, GUI_WHITE );
 	FRAMEWIN_SetDefaultFont( &GUI_Font16B_ASCII );
+	
+	///we don't want to see disabled items
+	LISTBOX_SetDefaultBkColor( LISTBOX_CI_DISABLED, GUI_WHITE );
+	LISTBOX_SetDefaultTextColor( LISTBOX_CI_DISABLED, GUI_WHITE );
 
 	GUI_SetColor(GUI_BLACK);
 	GUI_SetBkColor(GUI_WHITE); 
@@ -2154,6 +2159,64 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 	///return iRet;
 }
 
+/*
+	check if the item (by Index) in a list is boolean option field, and handle the rest of items
+*/
+int spListMenuOptionFieldCheck( LISTBOX_Handle hList, int iSelet, int iInit )
+{
+	int iRet = 0;
+	FP_LISTMENU_HEADER*	pListMenu = NULL;
+	int iPara = 0;
+	int iTmp = 0;
+	
+	if( 
+		IsNotCurrFPListMenuLike ||
+		NULL == pCurrFramePageFrameData
+	)
+	{
+		printf("!!!!Error, there should list menu data here!! abort!!\n");
+		return iRet;
+	}
+		
+	pListMenu = pCurrFramePageFrameData;
+
+	iPara = pListMenu->pListParam[iSelet];
+	
+	///control the items regarding if there is boolean option item
+	///usually, the boolean option item will set the disable flag of rest items
+	if( 0 == iInit && 0 < (iPara & (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0) )
+	{	///it's boolean item/field
+		if( ((BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1) == (iPara & ((BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1)) )
+		{	///enabled boolean
+			///invert it
+			pListMenu->pListParam[iSelet] = (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0;
+		}
+		else
+		{	///disabled boolean
+			///invert it
+			pListMenu->pListParam[iSelet] = (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1;
+		}
+		///iPara = pListMenu->pListParam[iSelet];	///flush the variable
+		///set the item disabled flag for new 
+//		iPara = LISTBOX_GetNumItems( hList );	///till the end ?? no other boolean option field??
+//		for( iTmp=iSelet+1; iTmp<iPara; iTmp++ )
+//			LISTBOX_SetItemDisabled( hList, iTmp, (pListMenu->pListParam[iSelet] == ((BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1)?0:1 ) );
+		
+		LISTBOX_SetItemDisabled( hList, iSelet, 1 );	///trigger redraw
+		LISTBOX_SetItemDisabled( hList, iSelet, 0 );	///trigger redraw
+		iRet = 1;
+	}
+	
+	if( 0 < (iPara & (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0) )
+	{
+		iPara = LISTBOX_GetNumItems( hList );	///till the end ?? no other boolean option field??
+		for( iTmp=iSelet+1; iTmp<iPara; iTmp++ )
+			LISTBOX_SetItemDisabled( hList, iTmp, (pListMenu->pListParam[iSelet] == ((BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1)?0:1 ) );
+	}
+	
+	return iRet;
+}
+
 static void cbListMenuWindow(WM_MESSAGE* pMsg)
 {
 	///printf("cbListMenuWindow() ==> %d \n", pMsg->MsgId);
@@ -2243,7 +2306,8 @@ static void cbListMenuWindow(WM_MESSAGE* pMsg)
 			pListMenu = pCurrFramePageFrameData;
 			///check what you selected
 			iSelet = LISTBOX_GetSel(pMsg->hWin);
-
+			
+			///if the frame is all boolean option items...
 			if( FRAMEPAGE_LISTMENU_BOOLOPTION == pCurrFramePageType )
 			{
 				///if the selected was NOT enabled...
@@ -2263,12 +2327,20 @@ static void cbListMenuWindow(WM_MESSAGE* pMsg)
 			else
 			if( iSelet < pListMenu->iListNum )
 			{
+			#if 1
+				if( spListMenuOptionFieldCheck( pMsg->hWin, iSelet, 0 ) )
+				{
+					;
+				}
+			#else	
 				int iPara = 0;
 				int iTmp = 0;
 				iPara = pListMenu->pListParam[iSelet];
+				///control the items regarding if there is boolean option item
+				///usually, the boolean option item will set the disable flag of rest items
 				if( 0 < (iPara & (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0) )
 				{	///it's boolean item/field
-					if( 0 < (iPara & (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1) )
+					if( ((BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1) == (iPara & ((BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1)) )
 					{	///enabled boolean
 						///invert it
 						pListMenu->pListParam[iSelet] = (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0;
@@ -2278,13 +2350,16 @@ static void cbListMenuWindow(WM_MESSAGE* pMsg)
 						///invert it
 						pListMenu->pListParam[iSelet] = (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1;
 					}
-					
-					///iPara = iSelet+1;
+					///iPara = pListMenu->pListParam[iSelet];	///flush the variable
+					///set the item disabled flag for new 
 					iPara = LISTBOX_GetNumItems( pMsg->hWin );
 					for( iTmp=iSelet+1; iTmp<iPara; iTmp++ )
 						LISTBOX_SetItemDisabled( pMsg->hWin, iTmp, (pListMenu->pListParam[iSelet] == ((BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1)?0:1 ) );
 					
+					LISTBOX_SetItemDisabled( pMsg->hWin, iSelet, 1 );	///trigger redraw
+					LISTBOX_SetItemDisabled( pMsg->hWin, iSelet, 0 );	///trigger redraw
 				}
+			#endif	
 				else
 				{
 					///jump to what you selected
@@ -2350,6 +2425,16 @@ void ListMenuWindow( int iOption )
 	
 	LISTBOX_SetOwnerDraw( hList, spListBoxOwnerDraw );
 	///LISTBOX_InvalidateItem( hList, 2 );
+	
+	if( FRAMEPAGE_LISTMENU_BOOLOPTION != pCurrFramePageType )
+	{	///in case we have boolean option field in the list
+		int iCnt = 0;
+		int iTmp = 0;
+		iCnt = LISTBOX_GetNumItems( hList );
+		
+		for( iTmp=0; iTmp<iCnt; iTmp++ )
+			spListMenuOptionFieldCheck( hList, iTmp, 1 );
+	}
 	
 	
 	WM_BringToTop( hList );
