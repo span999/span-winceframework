@@ -166,6 +166,20 @@ typedef struct
 #define		ELEMENT_VALUE_MASK				0x0000FFFF
 
 
+/*
+	Data enclose - GPS Satellites info
+*/
+
+typedef struct {
+	int iID,		///satellites ID
+	int iVaild;		///satellite vaild, 1 for true
+	int iSignal;	///signal level
+} _DE_GPS_SATELLITE;
+
+typedef struct {
+	int 					iTotal,			///numbers of satellites info included
+	_DE_GPS_SATELLITE		satellites[12];	///satellites info, max 12.
+} DE_GPS_SATELLITES_INFO;
 
 
 
