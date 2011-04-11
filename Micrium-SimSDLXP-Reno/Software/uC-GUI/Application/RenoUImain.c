@@ -171,13 +171,13 @@ typedef struct
 */
 
 typedef struct {
-	int iID,		///satellites ID
+	int iID;		///satellites ID
 	int iVaild;		///satellite vaild, 1 for true
 	int iSignal;	///signal level
 } _DE_GPS_SATELLITE;
 
 typedef struct {
-	int 					iTotal,			///numbers of satellites info included
+	int 					iTotal;			///numbers of satellites info included
 	_DE_GPS_SATELLITE		satellites[12];	///satellites info, max 12.
 } DE_GPS_SATELLITES_INFO;
 
@@ -3003,10 +3003,13 @@ void SGSGSWindow( int iOption )
 				SGSGS_LIST_H,
 				NULL,
 				WM_CF_SHOW|WM_CF_STAYONTOP,
-				0,
+				TEXT_CF_HCENTER|TEXT_CF_VCENTER,
 				21,
-				"?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??"
+				"01 02 03 04 05 06 07 08 09 10 11 12"
 	);
+	
+	
+	TEXT_SetFont( hText[2], &GUI_Font8_ASCII );
 	
 	WM_BringToTop( hFrame );
 	WM_SetFocus( hFrame );
@@ -3015,9 +3018,11 @@ void SGSGSWindow( int iOption )
 	WM_BringToTop( hText[1] );
 	WM_BringToTop( hText[2] );
 
+	//draw the scale
 	for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
 		GUI_DrawLine(rtTemp.x0,rtTemp.y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE),rtTemp.x1,rtTemp.y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE));
 	
+	///draw the bar of Satellites.
 	for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
 		GUI_FillRect( 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp, 60+iTmp, 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp+SGSGS_BAR_W, rtTemp.y1-SGSGS_LIST_H );
 	
