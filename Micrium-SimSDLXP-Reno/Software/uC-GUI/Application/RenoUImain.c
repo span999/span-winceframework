@@ -80,6 +80,7 @@ struct H_FRAMEPAGE_HEADER
 	int							iNextReady;				///flag for frame page done, 1 for ready
 	int							iClearFirst;			///flag for clear before draw, 1 for action
 	void*						pFrameData;				///frame data if needed, context info
+	WM_HWIN 					hWinFramePageMain;		///handle of main frame page
 	struct H_FRAMEPAGE_HEADER*	pTimeoutFrame;			///frame to go if timeout
 };
 
@@ -181,6 +182,11 @@ typedef struct {
 	_DE_GPS_SATELLITE		satellites[12];	///satellites info, max 12.
 } DE_GPS_SATELLITES_INFO;
 
+/*
+	user data message type define
+*/
+#define			WM_GPS_SATELLITE			(WM_USER+0x30)
+
 
 
 /*
@@ -279,6 +285,7 @@ static SCREEN_STATUS *pScrStat = &ScrStat;
 #define		pCurrFramePageNextReady			ScrStat.pNowFramePage->iNextReady
 #define		pCurrFramePageClearFirst		ScrStat.pNowFramePage->iClearFirst
 #define		pCurrFramePageFrameData			ScrStat.pNowFramePage->pFrameData
+#define		pCurrFramePageHandle			ScrStat.pNowFramePage->hWinFramePageMain
 #define		pCurrFramePageTimeoutFrame		ScrStat.pNowFramePage->pTimeoutFrame
 
 
@@ -312,6 +319,71 @@ static SCREEN_STATUS *pScrStat = &ScrStat;
 static TEXT_Handle		ghTEXT = 0;
 static WM_CALLBACK* pfnListCB = NULL;
 
+int spGetRandNum( int iBtm, int iTop )
+{
+	static int Sc = -1;
+	int iRet = 0;
+	
+	if( -1 == Sc )
+		Sc = iBtm;
+	if( iTop == Sc )
+		Sc = iBtm;
+
+	iRet = Sc;
+	Sc++;
+	
+	return iRet;
+}
+
+/*
+	simulate the data from user...
+*/
+void TaskUserDataHook( void * pvParameters )
+{
+	int iKey = 0;
+	
+	printf("  TaskUserDataHook:\n");
+	///iKey = GUI_WaitKey();
+	GUI_Delay(500);
+	if( pCurrFramePage == &headSGSGSWindow )
+	{	///in Settings / GPS Settings / GPS Satellites
+		///WM_SendMessage(WM_HWIN hWin, WM_MESSAGE* pMsg)
+		int iTmp = 0;
+		WM_MESSAGE  UserDataMsg;
+		_DE_GPS_SATELLITE sss = { 1, 1, 20 };
+		DE_GPS_SATELLITES_INFO	gpsSatellites = {
+						12,
+						{
+							{ 1, 1, 20 },
+							{ 2, 1, 22 },
+							{ 3, 1, 24 },
+							{ 4, 1, 26 },
+							{ 5, 1, 28 },
+							{ 6, 1, 30 },
+							{ 7, 1, 32 },
+							{ 8, 1, 34 },
+							{ 9, 1, 36 },
+							{ 10, 1, 38 },
+							{ 11, 1, 40 },
+							{ 12, 1, 42 }
+						}
+		};
+		
+		for( iTmp=0; iTmp<12; iTmp++ )
+			gpsSatellites.satellites[iTmp].iSignal = spGetRandNum( 0, 80 );
+		
+		
+		UserDataMsg.MsgId = WM_GPS_SATELLITE;
+		UserDataMsg.hWin = pCurrFramePageHandle;
+		UserDataMsg.hWinSrc = NULL;
+		UserDataMsg.Data.p = (void*)&gpsSatellites;
+		
+		if( pCurrFramePageHandle )
+			WM_SendMessage(pCurrFramePageHandle, &UserDataMsg);
+	
+	}
+	printf("  TaskUserDataHook: keycode=%d\n", iKey);
+}
 
 
 
@@ -2933,6 +3005,35 @@ static void cbSGSGSWindow(WM_MESSAGE* pMsg)
 	{
 		///spcbRoundWinExt( pMsg, GUI_BLUE, 0, 1, 1 );
 	}
+	else
+	if( pMsg->MsgId == WM_GPS_SATELLITE )
+	{
+		int iTmp = 0;
+		GUI_RECT rtTemp;
+		DE_GPS_SATELLITES_INFO* pgpsSatellites = NULL;
+		_DE_GPS_SATELLITE* pgps = NULL;
+		
+		pgpsSatellites = (DE_GPS_SATELLITES_INFO*)(pMsg->Data.p);
+		pgps = &(pgpsSatellites->satellites[0]);
+		printf( "WM_GPS_SATELLITE total=%d\n", pgpsSatellites->iTotal );
+		
+		rtTemp.x0 = 0;
+		rtTemp.y0 = 0+18;
+		rtTemp.x1 = LCD_GetXSize();
+		rtTemp.y1 = LCD_GetYSize();	
+		
+		spBlankScreen();
+		
+		//draw the scale
+		for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
+			GUI_DrawLine(rtTemp.x0,rtTemp.y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE),rtTemp.x1,rtTemp.y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE));
+	
+		///draw the bar of Satellites.
+		for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
+			GUI_FillRect( 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp, (rtTemp.y1-SGSGS_LIST_H-(pgps+iTmp)->iSignal), 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp+SGSGS_BAR_W, rtTemp.y1-SGSGS_LIST_H );
+
+	}
+	
 	if( pCurrFramePageOldCb )
 		pCurrFramePageOldCb( pMsg );
 	return;
@@ -2963,6 +3064,7 @@ void SGSGSWindow( int iOption )
 	///hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, "GPS Satellites", NULL);
 	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), 18, WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, "GPS Satellites", NULL);
 	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
+	pCurrFramePageHandle = hFrame;
 	///add callback
 	pCurrFramePageOldCb = WM_SetCallback( hFrame, pCurrFramePageMainCb );
 	
@@ -3089,6 +3191,7 @@ FRAMEPAGE_HEADER headPoweroffWindow = {
 	1,
 	NULL,
 	NULL,
+	NULL,
 };
 
 /*
@@ -3102,6 +3205,7 @@ FRAMEPAGE_HEADER headBootWindow = {
 	0,
 	1,
 	NULL,
+	NULL,
 	&headDataMode1Window,
 };
 
@@ -3113,6 +3217,7 @@ FRAMEPAGE_HEADER headDataModeWindow = {
 	0,
 	0,
 	1,
+	NULL,
 	NULL,
 	NULL,
 };
@@ -3161,6 +3266,7 @@ FRAMEPAGE_HEADER headDataMode1Window = {
 	1,
 	(void*)&fpDataModeData_1Window,
 	NULL,
+	NULL,
 };
 
 
@@ -3206,6 +3312,7 @@ FRAMEPAGE_HEADER headDataMode2Window = {
 	0,
 	1,
 	(void*)&fpDataModeData_2Window,
+	NULL,
 	NULL,
 };
 
@@ -3253,6 +3360,7 @@ FRAMEPAGE_HEADER headDataMode3Window = {
 	1,
 	(void*)&fpDataModeData_3Window,
 	NULL,
+	NULL,
 };
 
 
@@ -3298,6 +3406,7 @@ FRAMEPAGE_HEADER headDataMode4Window = {
 	0,
 	1,
 	(void*)&fpDataModeData_4Window,
+	NULL,
 	NULL,
 };
 
@@ -3345,6 +3454,7 @@ FRAMEPAGE_HEADER headDataMode5Window = {
 	1,
 	(void*)&fpDataModeData_5Window,
 	NULL,
+	NULL,
 };
 
 
@@ -3391,6 +3501,7 @@ FRAMEPAGE_HEADER headDataMode6Window = {
 	1,
 	(void*)&fpDataModeData_6Window,
 	NULL,
+	NULL,
 };
 
 
@@ -3429,6 +3540,7 @@ FRAMEPAGE_HEADER headPopupListWindow_Fitness = {
 	0,
 	0,
 	(void*)&fpPopupListData_Fitness,
+	NULL,
 	NULL,
 };
 
@@ -3469,6 +3581,7 @@ FRAMEPAGE_HEADER headPopupListWindow_DeviceModeFitness = {
 	0,
 	(void*)&fpPopupListData_DeviceModeFitness,
 	NULL,
+	NULL,
 };
 
 
@@ -3508,6 +3621,7 @@ FRAMEPAGE_HEADER headPopupListWindow_NumberEntry = {
 	0,
 	(void*)&fpPopupListData_NumberEntry,
 	NULL,
+	NULL,
 };
 
 
@@ -3521,6 +3635,7 @@ FRAMEPAGE_HEADER headPopupListWindow = {
 	0,
 	0,
 	0,
+	NULL,
 	NULL,
 	NULL,
 };
@@ -3537,6 +3652,7 @@ FRAMEPAGE_HEADER headNavigationWindow = {
 	0,
 	0,
 	1,
+	NULL,
 	NULL,
 	NULL,
 };
@@ -3585,6 +3701,7 @@ FRAMEPAGE_HEADER headSettingsWindow = {
 	1,
 	(void*)&fpListMenuData_SettingsWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -3628,6 +3745,7 @@ FRAMEPAGE_HEADER headSGSWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SGSWindow,
+	NULL,
 	NULL,
 };
 
@@ -3674,6 +3792,7 @@ FRAMEPAGE_HEADER headSGSGSWindow = {
 	1,
 	NULL,
 	NULL,
+	NULL,
 };
 
 
@@ -3718,6 +3837,7 @@ FRAMEPAGE_HEADER headSGSNWindow = {
 	1,
 	(void*)&fpListMenuData_SGSNWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -3760,6 +3880,7 @@ FRAMEPAGE_HEADER headSUIWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SUIWindow,
+	NULL,
 	NULL,
 };
 
@@ -3807,6 +3928,7 @@ FRAMEPAGE_HEADER headSUIPIWindow = {
 	1,
 	(void*)&fpListMenuData_SUIPIWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -3848,6 +3970,7 @@ FRAMEPAGE_HEADER headSUICIWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SUICIWindow,
+	NULL,
 	NULL,
 };
 
@@ -3917,6 +4040,7 @@ FRAMEPAGE_HEADER headSUICIAWindow = {
 	1,
 	(void*)&fpListMenuData_SUICIAWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -3942,6 +4066,7 @@ FRAMEPAGE_HEADER headSUICIPWindow = {
 	1,
 	(void*)&fpListMenuData_SUICIPWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -3966,6 +4091,7 @@ FRAMEPAGE_HEADER headSUICIEWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SUICIEWindow,
+	NULL,
 	NULL,
 };
 
@@ -4017,6 +4143,7 @@ FRAMEPAGE_HEADER headSDSWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSWindow,
+	NULL,
 	NULL,
 };
 
@@ -4075,6 +4202,7 @@ FRAMEPAGE_HEADER headSDSLWindow = {
 	1,
 	(void*)&fpListMenuData_SDSLWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -4126,6 +4254,7 @@ FRAMEPAGE_HEADER headSDSUMWindow = {
 	1,
 	(void*)&fpListMenuData_SDSUMWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -4170,6 +4299,7 @@ FRAMEPAGE_HEADER headSDSUMCWindow = {
 	1,
 	(void*)&fpListMenuData_SDSUMCWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -4210,6 +4340,7 @@ FRAMEPAGE_HEADER headSDSUMSDWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSUMSDWindow,
+	NULL,
 	NULL,
 };
 
@@ -4252,6 +4383,7 @@ FRAMEPAGE_HEADER headSDSUMEWindow = {
 	1,
 	(void*)&fpListMenuData_SDSUMEWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -4293,6 +4425,7 @@ FRAMEPAGE_HEADER headSDSUMHWWindow = {
 	1,
 	(void*)&fpListMenuData_SDSUMHWWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -4333,6 +4466,7 @@ FRAMEPAGE_HEADER headSDSUMTWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSUMTWindow,
+	NULL,
 	NULL,
 };
 
@@ -4381,6 +4515,7 @@ FRAMEPAGE_HEADER headSDSUMHRWindow = {
 	1,
 	(void*)&fpListMenuData_SDSUMHRWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -4427,6 +4562,7 @@ FRAMEPAGE_HEADER headSDSUMPWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSUMPWindow,
+	NULL,
 	NULL,
 };
 
@@ -4482,6 +4618,7 @@ FRAMEPAGE_HEADER headSAPWindow = {
 	1,
 	(void*)&fpListMenuData_SAPWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -4532,6 +4669,7 @@ FRAMEPAGE_HEADER headSAPDPWindow = {
 	1,
 	(void*)&fpListMenuData_SAPDPWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -4572,6 +4710,7 @@ FRAMEPAGE_HEADER headSAPDPSPWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SAPDPSPWindow,
+	NULL,
 	NULL,
 };
 
@@ -4617,6 +4756,7 @@ FRAMEPAGE_HEADER headSAPDPSSWindow = {
 	1,
 	(void*)&fpListMenuData_SAPDPSSWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -4654,6 +4794,7 @@ FRAMEPAGE_HEADER headSAPDPADSWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SAPDPADSWindow,
+	NULL,
 	NULL,
 };
 
@@ -4695,6 +4836,7 @@ FRAMEPAGE_HEADER headSAPDPADSASWindow = {
 	1,
 	(void*)&fpListMenuData_SAPDPADSASWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -4711,6 +4853,7 @@ FRAMEPAGE_HEADER headSAPDPADSASNS1Window = {
 	0,
 	1,
 	(void*)&fpDataModeData_1Window,
+	NULL,
 	&headSAPDPADSASNSWindow_NumberEntry,
 };
 
@@ -4723,6 +4866,7 @@ FRAMEPAGE_HEADER headSAPDPADSASNS2Window = {
 	0,
 	1,
 	(void*)&fpDataModeData_2Window,
+	NULL,
 	&headSAPDPADSASNSWindow_NumberEntry,
 };
 
@@ -4735,6 +4879,7 @@ FRAMEPAGE_HEADER headSAPDPADSASNS3Window = {
 	0,
 	1,
 	(void*)&fpDataModeData_3Window,
+	NULL,
 	&headSAPDPADSASNSWindow_NumberEntry,
 };
 
@@ -4747,6 +4892,7 @@ FRAMEPAGE_HEADER headSAPDPADSASNS4Window = {
 	0,
 	1,
 	(void*)&fpDataModeData_4Window,
+	NULL,
 	&headSAPDPADSASNSWindow_NumberEntry,
 };
 
@@ -4759,6 +4905,7 @@ FRAMEPAGE_HEADER headSAPDPADSASNS5Window = {
 	0,
 	1,
 	(void*)&fpDataModeData_5Window,
+	NULL,
 	&headSAPDPADSASNSWindow_NumberEntry,
 };
 
@@ -4771,6 +4918,7 @@ FRAMEPAGE_HEADER headSAPDPADSASNS6Window = {
 	0,
 	1,
 	(void*)&fpDataModeData_6Window,
+	NULL,
 	&headSAPDPADSASNSWindow_NumberEntry,
 };
 
@@ -4817,6 +4965,7 @@ FRAMEPAGE_HEADER headSAPDPADSASNSWindow_NumberEntry = {
 	0,
 	(void*)&fpPopupListData_SAPDPADSASNSNumberEntry,
 	NULL,
+	NULL,
 };
 
 
@@ -4859,6 +5008,7 @@ FRAMEPAGE_HEADER headHistoryWindow = {
 	1,
 	(void*)&fpListMenuData_HistoryWindow,
 	NULL,
+	NULL,
 };
 
 
@@ -4875,6 +5025,7 @@ FRAMEPAGE_HEADER headWatchWindow = {
 	1,
 	NULL,
 	NULL,
+	NULL,
 };
 
 
@@ -4889,6 +5040,7 @@ FRAMEPAGE_HEADER headUnderConstructionWindow = {
 	100,
 	0,
 	1,
+	NULL,
 	NULL,
 	NULL,
 };
