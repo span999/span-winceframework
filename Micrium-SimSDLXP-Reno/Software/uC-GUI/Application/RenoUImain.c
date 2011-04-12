@@ -329,6 +329,7 @@ int spGetRandNum( int iBtm, int iTop )
 	if( iTop == Sc )
 		Sc = iBtm;
 
+	Sc = rand() % iTop;
 	iRet = Sc;
 	Sc++;
 	
@@ -370,7 +371,7 @@ void TaskUserDataHook( void * pvParameters )
 		};
 		
 		for( iTmp=0; iTmp<12; iTmp++ )
-			gpsSatellites.satellites[iTmp].iSignal = spGetRandNum( 0, 80 );
+			gpsSatellites.satellites[iTmp].iSignal = spGetRandNum( 0, 40 );
 		
 		
 		UserDataMsg.MsgId = WM_GPS_SATELLITE;
@@ -2961,6 +2962,8 @@ void WatchWindow( int iOption )
 
 
 
+#ifdef 		ONE_GPS_SATELLITES
+
 #define		SGSGS_TITLE_H			20
 #define		SGSGS_LIST_H			20
 #define		SGSGS_BAR_N				12
@@ -2968,12 +2971,236 @@ void WatchWindow( int iOption )
 #define		SGSGS_BAR_IV			3
 #define		SGSGS_BAR_H_SCALE		10
 
+static void spSGSGSDraw( WM_MESSAGE* pMsg, GUI_RECT* prtDraw )
+{
+	int iTmp = 0;
+	///GUI_RECT rtTemp;
+	DE_GPS_SATELLITES_INFO* pgpsSatellites = NULL;
+	_DE_GPS_SATELLITE* pgps = NULL;
+	///TEXT_Handle hText[2];
+	
+	if( NULL != pMsg )
+	{
+		pgpsSatellites = (DE_GPS_SATELLITES_INFO*)(pMsg->Data.p);
+		pgps = &(pgpsSatellites->satellites[0]);
+		printf( "WM_GPS_SATELLITE total=%d\n", pgpsSatellites->iTotal );
+
+		///prtDraw->x0 = 0;
+		prtDraw->y0 = prtDraw->y0+SGSGS_TITLE_H;
+		///prtDraw->x1 = LCD_GetXSize();
+		prtDraw->y1 = prtDraw->y1-SGSGS_LIST_H;
+		
+		///spBlankScreen();
+		spBlankRect( prtDraw->x0, prtDraw->y0, prtDraw->x1-prtDraw->x0, prtDraw->y1-prtDraw->y0 );
+		
+		//draw the scale
+		for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
+			GUI_DrawLine(prtDraw->x0,prtDraw->y1-(iTmp*SGSGS_BAR_H_SCALE),prtDraw->x1,prtDraw->y1-(iTmp*SGSGS_BAR_H_SCALE));
+	
+		///draw the bar of Satellites.
+		for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
+			GUI_FillRect( 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp, (prtDraw->y1-(pgps+iTmp)->iSignal), 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp+SGSGS_BAR_W, prtDraw->y1 );
+	}
+	else
+	{
+		TEXT_Handle hText[2];
+		hText[0] = TEXT_CreateEx(
+				prtDraw->x0, 
+				prtDraw->y0, 
+				(prtDraw->x1-prtDraw->x0), 
+				SGSGS_TITLE_H,
+				NULL,
+				WM_CF_SHOW|WM_CF_STAYONTOP,
+				0,
+				20,
+				"Accuracy:   +/-15ft"
+			);
+	
+		hText[1] = TEXT_CreateEx(
+				prtDraw->x0, 
+				prtDraw->y1-SGSGS_LIST_H, 
+				(prtDraw->x1-prtDraw->x0), 
+				SGSGS_LIST_H,
+				NULL,
+				WM_CF_SHOW|WM_CF_STAYONTOP,
+				TEXT_CF_HCENTER|TEXT_CF_VCENTER,
+				21,
+				"01 02 03 04 05 06 07 08 09 10 11 12"
+			);	
+	
+		TEXT_SetFont( hText[1], &GUI_Font8_ASCII );		
+		//draw the scale
+		for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
+			GUI_DrawLine(prtDraw->x0,prtDraw->y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE),prtDraw->x1,prtDraw->y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE));
+	
+		///draw the bar of Satellites.
+		for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
+			GUI_FillRect( 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp, 60+iTmp, 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp+SGSGS_BAR_W, prtDraw->y1-SGSGS_LIST_H );
+			
+		WM_BringToTop( hText[0] );
+		WM_BringToTop( hText[1] );			
+	}	
+}
+
+#else	///ONE_GPS_SATELLITES
+
+#define		SGSGS_TITLE_H			20
+#define		SGSGS_LIST_H			20
+#define		SGSGS_BAR_N				12
+#define 	SGSGS_BAR_W				18
+#define 	SGSGS_BAR_H_MAX			45
+#define		SGSGS_BAR_IV			6
+#define		SGSGS_BAR_H_SCALE		10
+
+static void spSGSGSDraw( WM_MESSAGE* pMsg, GUI_RECT* prtDraw )
+{
+	int iTmp = 0;
+	///GUI_RECT rtTemp;
+	DE_GPS_SATELLITES_INFO* pgpsSatellites = NULL;
+	_DE_GPS_SATELLITE* pgps = NULL;
+	///TEXT_Handle hText[2];
+	
+	if( NULL != pMsg )
+	{
+		pgpsSatellites = (DE_GPS_SATELLITES_INFO*)(pMsg->Data.p);
+		pgps = &(pgpsSatellites->satellites[0]);
+		printf( "WM_GPS_SATELLITE total=%d\n", pgpsSatellites->iTotal );
+
+		///prtDraw->x0 = 0;
+		///prtDraw->y0 = prtDraw->y0+SGSGS_TITLE_H;
+		///prtDraw->x1 = LCD_GetXSize();
+		///prtDraw->y1 = prtDraw->y1-SGSGS_LIST_H;
+		
+		///spBlankScreen();
+		spBlankRect( prtDraw->x0, prtDraw->y0+SGSGS_TITLE_H, prtDraw->x1-prtDraw->x0, SGSGS_BAR_H_MAX );
+		spBlankRect( prtDraw->x0, prtDraw->y1-SGSGS_LIST_H-SGSGS_BAR_H_MAX, prtDraw->x1-prtDraw->x0, SGSGS_BAR_H_MAX );
+		
+		//draw the scale
+		for( iTmp=0; iTmp<5; iTmp++ )
+		{
+			GUI_DrawLine(
+					prtDraw->x0,
+					prtDraw->y0+SGSGS_TITLE_H+SGSGS_BAR_H_MAX-(iTmp*SGSGS_BAR_H_SCALE),
+					prtDraw->x1,
+					prtDraw->y0+SGSGS_TITLE_H+SGSGS_BAR_H_MAX-(iTmp*SGSGS_BAR_H_SCALE)
+				);
+			GUI_DrawLine(
+					prtDraw->x0,
+					prtDraw->y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE),
+					prtDraw->x1,
+					prtDraw->y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE)
+				);
+		}
+		
+		///draw the bar of Satellites.
+		for( iTmp=0; iTmp<(SGSGS_BAR_N/2); iTmp++ )
+		{	
+			///up
+			GUI_FillRect( (SGSGS_BAR_IV/2)+((SGSGS_BAR_W+SGSGS_BAR_IV)*iTmp), prtDraw->y0+SGSGS_TITLE_H+SGSGS_BAR_H_MAX-((pgps+iTmp)->iSignal), (SGSGS_BAR_IV/2)+((SGSGS_BAR_W+SGSGS_BAR_IV)*iTmp)+SGSGS_BAR_W, prtDraw->y0+SGSGS_TITLE_H+SGSGS_BAR_H_MAX );
+			
+			///down
+			GUI_FillRect( (SGSGS_BAR_IV/2)+((SGSGS_BAR_W+SGSGS_BAR_IV)*iTmp), prtDraw->y1-SGSGS_LIST_H-((pgps+iTmp+iTmp)->iSignal), (SGSGS_BAR_IV/2)+((SGSGS_BAR_W+SGSGS_BAR_IV)*iTmp)+SGSGS_BAR_W, prtDraw->y1-SGSGS_LIST_H );
+		}	}
+	else
+	{
+		TEXT_Handle hText[3];
+		hText[0] = TEXT_CreateEx(
+				prtDraw->x0, 
+				prtDraw->y0, 
+				(prtDraw->x1-prtDraw->x0), 
+				SGSGS_TITLE_H,
+				NULL,
+				WM_CF_SHOW|WM_CF_STAYONTOP,
+				0,
+				20,
+				"Accuracy:   +/-15ft"
+			);
+
+		hText[1] = TEXT_CreateEx(
+				prtDraw->x0, 
+				prtDraw->y0+SGSGS_TITLE_H+SGSGS_BAR_H_MAX, 
+				(prtDraw->x1-prtDraw->x0), 
+				SGSGS_LIST_H,
+				NULL,
+				WM_CF_SHOW|WM_CF_STAYONTOP,
+				TEXT_CF_HCENTER|TEXT_CF_VCENTER,
+				21,
+				"01 02 03 04 05 06"
+			);
+			
+		hText[2] = TEXT_CreateEx(
+				prtDraw->x0, 
+				prtDraw->y1-SGSGS_LIST_H, 
+				(prtDraw->x1-prtDraw->x0), 
+				SGSGS_LIST_H,
+				NULL,
+				WM_CF_SHOW|WM_CF_STAYONTOP,
+				TEXT_CF_HCENTER|TEXT_CF_VCENTER,
+				22,
+				"07 08 09 10 11 12"
+			);	
+	
+		///TEXT_SetFont( hText[1], &GUI_Font8_ASCII );
+		///TEXT_SetFont( hText[2], &GUI_Font8_ASCII );
+		
+		
+		//draw the scale
+		for( iTmp=0; iTmp<5; iTmp++ )
+		{
+			GUI_DrawLine(
+					prtDraw->x0,
+					prtDraw->y0+SGSGS_TITLE_H+SGSGS_BAR_H_MAX-(iTmp*SGSGS_BAR_H_SCALE),
+					prtDraw->x1,
+					prtDraw->y0+SGSGS_TITLE_H+SGSGS_BAR_H_MAX-(iTmp*SGSGS_BAR_H_SCALE)
+				);
+			GUI_DrawLine(
+					prtDraw->x0,
+					prtDraw->y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE),
+					prtDraw->x1,
+					prtDraw->y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE)
+				);
+		}
+		
+		///draw the bar of Satellites.
+		for( iTmp=0; iTmp<(SGSGS_BAR_N/2); iTmp++ )
+		{	
+			///up
+			///SGSGS_BAR_IV
+			GUI_FillRect( (SGSGS_BAR_IV/2)+((SGSGS_BAR_W+SGSGS_BAR_IV)*iTmp), prtDraw->y0+SGSGS_TITLE_H+SGSGS_BAR_H_MAX-(20+iTmp), (SGSGS_BAR_IV/2)+((SGSGS_BAR_W+SGSGS_BAR_IV)*iTmp)+SGSGS_BAR_W, prtDraw->y0+SGSGS_TITLE_H+SGSGS_BAR_H_MAX );
+			
+			///down
+			GUI_FillRect( (SGSGS_BAR_IV/2)+((SGSGS_BAR_W+SGSGS_BAR_IV)*iTmp), prtDraw->y1-SGSGS_LIST_H-(20+iTmp), (SGSGS_BAR_IV/2)+((SGSGS_BAR_W+SGSGS_BAR_IV)*iTmp)+SGSGS_BAR_W, prtDraw->y1-SGSGS_LIST_H );
+		}
+/*		
+		//draw the scale
+		for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
+			GUI_DrawLine(prtDraw->x0,prtDraw->y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE),prtDraw->x1,prtDraw->y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE));
+	
+		///draw the bar of Satellites.
+		for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
+			GUI_FillRect( 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp, 60+iTmp, 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp+SGSGS_BAR_W, prtDraw->y1-SGSGS_LIST_H );
+*/		
+		WM_BringToTop( hText[0] );
+		WM_BringToTop( hText[1] );		
+		WM_BringToTop( hText[2] );				
+	}	
+}
+
+#endif
+
+
+
+
+
+
+
+
 
 
 #if (GUI_WINSUPPORT)
 static void cbSGSGSWindow(WM_MESSAGE* pMsg)
 {
-	printf("cbNavigationWindow() ==> %d \n", pMsg->MsgId);
+	printf("cbSGSGSWindow() ==> %d \n", pMsg->MsgId);
 	
 	///hack the WM msg here
 	if( pMsg->MsgId == WM_KEY )
@@ -3008,30 +3235,14 @@ static void cbSGSGSWindow(WM_MESSAGE* pMsg)
 	else
 	if( pMsg->MsgId == WM_GPS_SATELLITE )
 	{
-		int iTmp = 0;
 		GUI_RECT rtTemp;
-		DE_GPS_SATELLITES_INFO* pgpsSatellites = NULL;
-		_DE_GPS_SATELLITE* pgps = NULL;
-		
-		pgpsSatellites = (DE_GPS_SATELLITES_INFO*)(pMsg->Data.p);
-		pgps = &(pgpsSatellites->satellites[0]);
-		printf( "WM_GPS_SATELLITE total=%d\n", pgpsSatellites->iTotal );
 		
 		rtTemp.x0 = 0;
 		rtTemp.y0 = 0+18;
 		rtTemp.x1 = LCD_GetXSize();
-		rtTemp.y1 = LCD_GetYSize();	
+		rtTemp.y1 = LCD_GetYSize();
 		
-		spBlankScreen();
-		
-		//draw the scale
-		for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
-			GUI_DrawLine(rtTemp.x0,rtTemp.y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE),rtTemp.x1,rtTemp.y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE));
-	
-		///draw the bar of Satellites.
-		for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
-			GUI_FillRect( 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp, (rtTemp.y1-SGSGS_LIST_H-(pgps+iTmp)->iSignal), 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp+SGSGS_BAR_W, rtTemp.y1-SGSGS_LIST_H );
-
+		spSGSGSDraw( pMsg, &rtTemp);
 	}
 	
 	if( pCurrFramePageOldCb )
@@ -3048,7 +3259,7 @@ void SGSGSWindow( int iOption )
 	int iTmp = 0;
 	GUI_RECT rtTemp;
 	WM_HWIN hWin = NULL;
-	TEXT_Handle hText[2];
+	///TEXT_Handle hText[2];
 /*
 	rtTemp.x0 = 10;
 	rtTemp.y0 = 40;
@@ -3064,70 +3275,24 @@ void SGSGSWindow( int iOption )
 	///hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, "GPS Satellites", NULL);
 	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), 18, WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, "GPS Satellites", NULL);
 	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
-	pCurrFramePageHandle = hFrame;
+	pCurrFramePageHandle = hFrame;	///store the handle of main callback window
 	///add callback
 	pCurrFramePageOldCb = WM_SetCallback( hFrame, pCurrFramePageMainCb );
 	
 	///get the client window size
-///	WM_GetClientRectEx( hFrame, &rtTemp );
+	///WM_GetClientRectEx( hFrame, &rtTemp );
+
 	rtTemp.x0 = 0;
 	rtTemp.y0 = 0+18;
 	rtTemp.x1 = LCD_GetXSize();
 	rtTemp.y1 = LCD_GetYSize();
-///	rtTemp.y0 = rtTemp.y0 + iTmp;
-/*	
-	hWin = WM_CreateWindow( 
-				rtTemp.x0, 
-				rtTemp.y0, 
-				(rtTemp.x1-rtTemp.x0), 
-				(rtTemp.y1-rtTemp.y0),
-				WM_CF_SHOW|WM_CF_STAYONTOP,
-				NULL,
-				0
-				);
-*/	
-	hText[1] = TEXT_CreateEx(
-				rtTemp.x0, 
-				rtTemp.y0, 
-				(rtTemp.x1-rtTemp.x0), 
-				SGSGS_TITLE_H,
-				NULL,
-				WM_CF_SHOW|WM_CF_STAYONTOP,
-				0,
-				20,
-				"Accuracy:   +/-15ft"
-	);
-	
-	hText[2] = TEXT_CreateEx(
-				rtTemp.x0, 
-				rtTemp.y1-SGSGS_LIST_H, 
-				(rtTemp.x1-rtTemp.x0), 
-				SGSGS_LIST_H,
-				NULL,
-				WM_CF_SHOW|WM_CF_STAYONTOP,
-				TEXT_CF_HCENTER|TEXT_CF_VCENTER,
-				21,
-				"01 02 03 04 05 06 07 08 09 10 11 12"
-	);
-	
-	
-	TEXT_SetFont( hText[2], &GUI_Font8_ASCII );
-	
+
+	spSGSGSDraw( NULL, &rtTemp );
+
 	WM_BringToTop( hFrame );
 	WM_SetFocus( hFrame );
-//	WM_BringToTop( hWin );
-//	WM_SetFocus( hWin );
-	WM_BringToTop( hText[1] );
-	WM_BringToTop( hText[2] );
-
-	//draw the scale
-	for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
-		GUI_DrawLine(rtTemp.x0,rtTemp.y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE),rtTemp.x1,rtTemp.y1-SGSGS_LIST_H-(iTmp*SGSGS_BAR_H_SCALE));
-	
-	///draw the bar of Satellites.
-	for( iTmp=0; iTmp<SGSGS_BAR_N; iTmp++ )
-		GUI_FillRect( 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp, 60+iTmp, 3+SGSGS_BAR_IV+(SGSGS_BAR_IV+SGSGS_BAR_W)*iTmp+SGSGS_BAR_W, rtTemp.y1-SGSGS_LIST_H );
-	
+///	WM_BringToTop( hText[1] );
+///	WM_BringToTop( hText[2] );
 	
 	WM_ExecIdle();
 	spFramePageWait();
