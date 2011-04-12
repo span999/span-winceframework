@@ -3206,34 +3206,20 @@ static void cbSGSGSWindow(WM_MESSAGE* pMsg)
 	if( pMsg->MsgId == WM_KEY )
 	{
 		int Key = 0;
-			
 		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
-		if( IsUP_hold(Key) )
-		{	/// hold up key
-			printf( "UP key hold!!!!!!!\n" );
-			///set next framepage
-			pAfterFramePage = &headPopupListWindow_DeviceModeFitness;
-			///ready for next framepage
-			pCurrFramePageNextReady = 1;
-		}
-		else		
-		if( IsDOWN_hold(Key) )
-		{	/// hold down key
-			printf( "DOWN key hold!!!!!!!\n" );
-			///set next framepage
-			pAfterFramePage = &headPopupListWindow_Fitness;
-			///ready for next framepage
-			pCurrFramePageNextReady = 1;
+		if( IsBACK_press(Key) )	///back
+		{
+			spGoAfterFramePage( pBeforeFramePage );
 		}
 
 	}
 	else
 	if( pMsg->MsgId == WM_PAINT )
 	{
-		///spcbRoundWinExt( pMsg, GUI_BLUE, 0, 1, 1 );
+		;
 	}
 	else
-	if( pMsg->MsgId == WM_GPS_SATELLITE )
+	if( pMsg->MsgId == WM_GPS_SATELLITE )	///data input
 	{
 		GUI_RECT rtTemp;
 		
