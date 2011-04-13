@@ -1999,6 +1999,21 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\example\XEye.c">
       <Filter>uC-GUI\Application\example</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUItoolhelp.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUIcommon.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUICcomm.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUICdatamode.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUIframepage.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_cfg.h">
