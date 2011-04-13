@@ -40,12 +40,6 @@
     <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_time.c">
       <Filter>uCOS-II</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo_1bpp.c">
-      <Filter>uC-GUI\Application</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MicriumLogo.C">
-      <Filter>uC-GUI\Application</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FD80.c">
       <Filter>uC-GUI\GUI\Font</Filter>
     </ClCompile>
@@ -1855,9 +1849,6 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MultiLayer\LCD_4.c">
       <Filter>uC-GUI\GUI\MultiLayer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\XEye.c">
-      <Filter>uC-GUI\Application</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAArc.c">
       <Filter>uC-GUI\GUI\AntiAlias</Filter>
     </ClCompile>
@@ -1885,14 +1876,8 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAPolyOut.c">
       <Filter>uC-GUI\GUI\AntiAlias</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\MainTask.c">
-      <Filter>uC-GUI\Application</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\Main.c">
       <Filter>uC-GUI\System\Simulation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\WIDGET_Multiedit.c">
-      <Filter>uC-GUI\Application</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO.c">
       <Filter>uC-GUI\Application\GUIDemo</Filter>
@@ -1963,9 +1948,6 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\SeggerLogoBlue.c">
       <Filter>uC-GUI\Application\GUIDemo</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\Dashboard.c">
-      <Filter>uC-GUI\Application</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\GUI_X_set.c">
       <Filter>uC-GUI\System\Simulation</Filter>
     </ClCompile>
@@ -1998,6 +1980,24 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\magellan0409-bmp\Reno_Icon_20_GPS_Off.c">
       <Filter>uC-GUI\Application\res\magellan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\example\Dashboard.c">
+      <Filter>uC-GUI\Application\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\example\MainTask.c">
+      <Filter>uC-GUI\Application\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\example\MicriumLogo.C">
+      <Filter>uC-GUI\Application\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\example\MicriumLogo_1bpp.c">
+      <Filter>uC-GUI\Application\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\example\WIDGET_Multiedit.c">
+      <Filter>uC-GUI\Application\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\example\XEye.c">
+      <Filter>uC-GUI\Application\example</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2149,6 +2149,9 @@
     </Filter>
     <Filter Include="uC-GUI\Application\res\magellan">
       <UniqueIdentifier>{a4a1a40b-fbc7-41e4-9524-2171dbc01c81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\Application\example">
+      <UniqueIdentifier>{d4a9edb0-9e09-4cc6-af78-d9d2237374e7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
