@@ -80,7 +80,7 @@ struct H_FRAMEPAGE_HEADER
 	int							iNextReady;				///flag for frame page done, 1 for ready
 	int							iClearFirst;			///flag for clear before draw, 1 for action
 	void*						pFrameData;				///frame data if needed, context info
-	WM_HWIN 					hWinFramePageMain;		///handle of main frame page
+	WM_HWIN 					hWinFramePageMain;		///handle of main frame page, callback hook on
 	struct H_FRAMEPAGE_HEADER*	pTimeoutFrame;			///frame to go if timeout
 };
 
@@ -123,8 +123,21 @@ typedef struct
 	FRAMEPAGE_HEADER*		pUplevelFrame;
 	FRAMEPAGE_HEADER** 		pListFrame;
 	int*					pListParam;
-	WM_HWIN					hWinFrame;
+	WM_HWIN					hWinFrame;	///outline frame
 } FP_POPUPLIST_HEADER;
+
+
+/*
+	frame page data of popup notify
+*/
+typedef struct {
+	const GUI_ConstString	sTitle;
+	const GUI_BITMAP*		pBitmap;
+	FRAMEPAGE_HEADER*		pUplevelFrame;
+	FRAMEPAGE_HEADER* 		pNextFrame;
+///	int*					pListParam;
+	WM_HWIN					hWinFrame;	///outline frame
+} FP_POPUPNOTIFY_HEADER;
 
 
 /*
@@ -156,7 +169,7 @@ typedef struct
 
 
 /*
-	elements type define
+	list menu elements type define
 */
 
 #define		ELEMENT_FIELD_MASK				0xFFFF0000
@@ -209,6 +222,10 @@ void ListboxWindow( int iOption );
 /*
 	frame page declare
 */
+FRAMEPAGE_HEADER headPopupNotifyWindow;
+FRAMEPAGE_HEADER headPopupNotifyGPSSearchWindow;
+FRAMEPAGE_HEADER headPopupNotifyGPSOffWindow;
+FRAMEPAGE_HEADER headPopupNotifyGPSLockWindow;
 FRAMEPAGE_HEADER headPoweroffWindow;
 FRAMEPAGE_HEADER headBootWindow;
 FRAMEPAGE_HEADER headDataModeWindow;
@@ -447,6 +464,20 @@ void spBlankRect( int x, int y, int xsize, int ysize )
 	GUI_ClearRect( rtTemp.x0, rtTemp.y0, rtTemp.x1, rtTemp.y1 );
 #endif
 }
+
+void spBlankRectEx( GUI_RECT* prtTemp )
+{
+	GUI_COLOR	colorTemp;
+	
+	if( prtTemp )
+	{
+		colorTemp = GUI_GetColor();
+		GUI_SetColor(GUI_WHITE);
+		GUI_FillRect( prtTemp->x0, prtTemp->y0, prtTemp->x1, prtTemp->y1 );
+		GUI_SetColor(colorTemp);
+	}
+}
+
 
 void spGoAfterFramePage( FRAMEPAGE_HEADER *pGoAfterFP )
 {
@@ -1807,6 +1838,127 @@ void PopupWindowList( int iOption )
 	WM_DeleteWindow( hList );
 
 }
+
+///extern GUI_CONST_STORAGE GUI_BITMAP bmReno_Icon_20_GPS_Search;
+#if (GUI_WINSUPPORT)
+static void cbPopupWindowNotify(WM_MESSAGE* pMsg)
+{
+	printf("cbPopupWindowNotify() ==> %d \n", pMsg->MsgId);
+	
+	if( WM_KEY == pMsg->MsgId )
+	{
+		int Key = 0;
+		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
+
+		///hack the key value
+		if( IsUP_press(Key) )	///up
+		{
+			spGoAfterFramePage( pBeforeFramePage );
+		}
+		else
+		if( IsDOWN_press(Key) )	///down
+		{
+			spGoAfterFramePage( pBeforeFramePage );
+		}
+		else
+		if( IsENTER_press(Key) )	///enter
+		{
+			spGoAfterFramePage( pBeforeFramePage );
+		}
+		else
+		if( IsBACK_press(Key) )	///back
+		{
+			spGoAfterFramePage( pBeforeFramePage );
+		}
+
+		if( pCurrFramePageOldCb )
+			pCurrFramePageOldCb( pMsg );
+	}
+	else
+	if( WM_PAINT == pMsg->MsgId )
+	{
+		FP_POPUPNOTIFY_HEADER* pPopNoty = NULL;
+		GUI_RECT rtTmp;
+		
+		pPopNoty = pCurrFramePageFrameData;
+		WM_GetClientRectEx( pCurrFramePageHandle, &rtTmp );
+		spBlankRectEx( &rtTmp );
+
+		GUI_SetColor(GUI_BLACK);
+		GUI_SetBkColor(GUI_WHITE); 
+		
+		GUI_DrawBitmap( pPopNoty->pBitmap, (rtTmp.x1-rtTmp.x0)/2-10, 15 );
+		
+		///GUI_DispStringAt( pPopNoty->sTitle, (rtTmp.x1-rtTmp.x0)/2-, 30 );
+		rtTmp.y0 = rtTmp.y0 + 40;
+		GUI_SetFont( &GUI_Font16B_ASCII );
+		GUI_DispStringInRect( pPopNoty->sTitle, &rtTmp, GUI_TA_HCENTER|GUI_TA_VCENTER );
+	}
+	else
+	{
+		if( pCurrFramePageOldCb )
+			pCurrFramePageOldCb( pMsg );
+	}	
+}
+#endif
+
+///#define		EDGEOFFSET	20
+
+void PopupWindowNotify( int iOption )
+{
+	WM_CALLBACK* pOldCB = NULL;
+	FP_POPUPNOTIFY_HEADER* pPopNoty = NULL;
+	int x, y, xsize, ysize;
+	int iTO = 0;
+	
+	x = 0+EDGEOFFSET;
+	y = 0+EDGEOFFSET;
+	xsize = LCD_GetXSize()-(EDGEOFFSET*2);
+	ysize = LCD_GetYSize()-(EDGEOFFSET*2);
+	
+	spSetDefaultEffect();
+	
+	if( pCurrFramePageClearFirst > 0 )
+		spBlankScreen();
+	
+	//need a blank space ???
+	///spBlankRect( 0+EDGEOFFSET, 0+EDGEOFFSET, LCD_GetXSize()-(EDGEOFFSET*2), LCD_GetYSize()-(EDGEOFFSET*2) );
+	
+	if( 
+		FRAMEPAGE_POPUP_NOTIFY != pCurrFramePageType ||
+		NULL == pCurrFramePageFrameData
+	)
+	{
+		printf("!!!!Error, there should popup notify data here!! abort!!\n");
+		return;
+	}
+	pPopNoty = pCurrFramePageFrameData;
+	
+	///create windows for popup outline
+	pPopNoty->hWinFrame = WM_CreateWindow( x, y, xsize, ysize, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	///add callback
+	pOldCB = WM_SetCallback( pPopNoty->hWinFrame, &cbPopupWindow );
+
+	///create window for notify content
+	pCurrFramePageHandle = WM_CreateWindow( x+13, y+13, xsize-26, ysize-26, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	///add callback for main frame
+	pCurrFramePageOldCb = WM_SetCallback( pCurrFramePageHandle, pCurrFramePageMainCb );
+	
+	WM_BringToTop( pPopNoty->hWinFrame );
+	WM_SetFocus( pPopNoty->hWinFrame );
+	WM_BringToTop( pCurrFramePageHandle );
+	WM_SetFocus( pCurrFramePageHandle );
+	
+	WM_ExecIdle();
+	iTO = spFramePageWait();
+	
+	WM_DeleteWindow( pPopNoty->hWinFrame );
+	WM_DeleteWindow( pCurrFramePageHandle );
+	
+	///go timeout frame if we were timeout
+	spFrameTimeoutHandling(iTO);
+}
+
 
 
 
@@ -3211,6 +3363,16 @@ static void cbSGSGSWindow(WM_MESSAGE* pMsg)
 		{
 			spGoAfterFramePage( pBeforeFramePage );
 		}
+		else
+		if( IsDOWN_press(Key) )	///down
+		{	///test
+			spGoAfterFramePage( &headPopupNotifyGPSOffWindow );
+		}
+		else
+		if( IsUP_press(Key) )	///up
+		{	///test
+			spGoAfterFramePage( &headPopupNotifyGPSLockWindow );
+		}
 
 	}
 	else
@@ -3369,6 +3531,101 @@ FRAMEPAGE_HEADER headDataModeWindow = {
 	0,
 	1,
 	NULL,
+	NULL,
+	NULL,
+};
+
+
+/*
+	Popup notify
+*/
+extern GUI_CONST_STORAGE GUI_BITMAP bmReno_Icon_20_GPS_Search;
+extern GUI_CONST_STORAGE GUI_BITMAP bmReno_Icon_20_GPS_Off;
+extern GUI_CONST_STORAGE GUI_BITMAP bmReno_Icon_20_GPS_Lock;
+
+FP_POPUPNOTIFY_HEADER fpPopupNotify_Windows[] = {
+	"GPS signal\n\r searching ...",
+	&bmReno_Icon_20_GPS_Search,
+	NULL,
+	NULL,
+	NULL
+};
+
+FRAMEPAGE_HEADER headPopupNotifyWindow = {
+	FRAMEPAGE_POPUP_NOTIFY,
+	PopupWindowNotify,
+	cbPopupWindowNotify,
+	NULL,
+	0,
+	0,
+	0,
+	(void*)&fpPopupNotify_Windows,
+	NULL,
+	NULL,
+};
+
+/* GPS Search */
+FP_POPUPNOTIFY_HEADER fpPopupNotifyGPSSearch_Windows[] = {
+	"GPS signal\n\r searching ...",
+	&bmReno_Icon_20_GPS_Search,
+	NULL,
+	NULL,
+	NULL
+};
+
+FRAMEPAGE_HEADER headPopupNotifyGPSSearchWindow = {
+	FRAMEPAGE_POPUP_NOTIFY,
+	PopupWindowNotify,
+	cbPopupWindowNotify,
+	NULL,
+	0,
+	0,
+	0,
+	(void*)&fpPopupNotifyGPSSearch_Windows,
+	NULL,
+	NULL,
+};
+
+/* GPS Off */
+FP_POPUPNOTIFY_HEADER fpPopupNotifyGPSOff_Windows[] = {
+	"GPS signal\n\r Off ...",
+	&bmReno_Icon_20_GPS_Off,
+	NULL,
+	NULL,
+	NULL
+};
+
+FRAMEPAGE_HEADER headPopupNotifyGPSOffWindow = {
+	FRAMEPAGE_POPUP_NOTIFY,
+	PopupWindowNotify,
+	cbPopupWindowNotify,
+	NULL,
+	0,
+	0,
+	0,
+	(void*)&fpPopupNotifyGPSOff_Windows,
+	NULL,
+	NULL,
+};
+
+/* GPS Lock */
+FP_POPUPNOTIFY_HEADER fpPopupNotifyGPSLock_Windows[] = {
+	"GPS signal\n\r Lock ...",
+	&bmReno_Icon_20_GPS_Lock,
+	NULL,
+	NULL,
+	NULL
+};
+
+FRAMEPAGE_HEADER headPopupNotifyGPSLockWindow = {
+	FRAMEPAGE_POPUP_NOTIFY,
+	PopupWindowNotify,
+	cbPopupWindowNotify,
+	NULL,
+	0,
+	0,
+	0,
+	(void*)&fpPopupNotifyGPSLock_Windows,
 	NULL,
 	NULL,
 };
