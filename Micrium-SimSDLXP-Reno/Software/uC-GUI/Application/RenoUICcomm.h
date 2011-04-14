@@ -8,7 +8,7 @@
 
 #include "RenoGUI.h"
 #include "RenoUIframe.h"
-
+#include "RenoActivityDataType.h"
 
 
 #define LISTBOX_CI_DISABLED			3	///missing?!!
@@ -98,10 +98,7 @@ typedef struct {
 	_DE_ACTIVITY			activity[6];	///activity data info, max 6 per page.
 } DE_ACTIVITY_DATA;
 
-#define			ACTDATA_ID_BASE				0x0020
-#define			ACTDATA_ID_NONE				(ACTDATA_ID_BASE - 1)
-#define			ACTDATA_ID_DISTANCE			(ACTDATA_ID_BASE + 1)
-#define			ACTDATA_ID_TIME				(ACTDATA_ID_BASE + 2)
+
 
 
 

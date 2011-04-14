@@ -16,6 +16,124 @@
 #include "RenoUICdatamode.h"
 
 
+/*
+	Activity data frame element location defination
+*/
+typedef struct
+{
+	int						framex;
+	int						framey;
+	int						framexsize;
+	int						frameysize;
+	int						namex;
+	int						namey;
+	const GUI_FONT* 		pnameFont;
+	int						unitx;
+	int						unity;
+	const GUI_FONT* 		punitFont;
+	int						valuex;
+	int						valuey;
+	int						valuexsize;
+	int						valueysize;
+	const GUI_FONT* 		pvalueFont;
+} _DATASET_FRAME;
+
+
+ACTDATA_SYS		ActivityDataSys[] = 
+{
+	{ ACTDATA_ID_CADENCE, 		"cadence", 		"rpm" 	},
+	{ ACTDATA_ID_CALORIES, 		"calories", 	"C" 	},
+	{ ACTDATA_ID_DISTANCE, 		"distance", 	"mi" 	},
+	{ ACTDATA_ID_ELEVATION, 	"elevation", 	"mi" 	},
+	{ ACTDATA_ID_GRADE, 		"grade", 		"%" 	},
+	{ ACTDATA_ID_HEARTRATE, 	"heart rate", 	"bpm" 	},
+	{ ACTDATA_ID_POWER, 		"power", 		"w" 	},
+	{ ACTDATA_ID_TEMPERATURE, 	"temperature", 	"°F" 	},
+	{ ACTDATA_ID_TIME, 			"time", 		"" 	}
+};
+
+/*
+	data set [total]x[older]	related coordination
+*/	
+static const _DATASET_FRAME	ActivityDataFrame[6][6] = {
+	///total 1 dataset
+	{
+		{	0,	0,	LCD_XSIZE,	LCD_YSIZE,	3,	3,	&GUI_Font16B_ASCII, 	LCD_XSIZE-23,	LCD_YSIZE-18,	&GUI_Font16B_ASCII,	25,	LCD_YSIZE/2-12,	100,	35, &GUI_Font32B_ASCII	},
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+	},
+	///total 2 dataset
+	{
+		{	0,	0,				LCD_XSIZE,	LCD_YSIZE/2,	3,	3,	&GUI_Font16B_ASCII, 	LCD_XSIZE-23,	LCD_YSIZE/2-18,	&GUI_Font16B_ASCII,	25,	LCD_YSIZE/2/2-12,	100,	35, 	&GUI_Font32B_ASCII	},
+		{	0,	LCD_YSIZE/2,	LCD_XSIZE,	LCD_YSIZE/2,	3,	3,	&GUI_Font16B_ASCII, 	LCD_XSIZE-23,	LCD_YSIZE/2-18,	&GUI_Font16B_ASCII, 25,	LCD_YSIZE/2/2-12,	100,	35, 	&GUI_Font32B_ASCII	},
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+	},
+	///total 3 dataset
+	{
+		{	0,	0,					LCD_XSIZE,	LCD_YSIZE/3,	3,	3,	&GUI_Font16B_ASCII, 	LCD_XSIZE-23,	LCD_YSIZE/3-18,	&GUI_Font16B_ASCII,	25,	LCD_YSIZE/3/2-12,	100,	35, 	&GUI_Font32B_ASCII	},
+		{	0,	LCD_YSIZE/3,		LCD_XSIZE,	LCD_YSIZE/3,	3,	3,	&GUI_Font16B_ASCII, 	LCD_XSIZE-23,	LCD_YSIZE/3-18,	&GUI_Font16B_ASCII, 25,	LCD_YSIZE/3/2-12,	100,	35, 	&GUI_Font32B_ASCII	},
+		{	0,	(LCD_YSIZE*2)/3,	LCD_XSIZE,	LCD_YSIZE/3,	3,	3,	&GUI_Font16B_ASCII, 	LCD_XSIZE-23,	LCD_YSIZE/3-18,	&GUI_Font16B_ASCII, 25,	LCD_YSIZE/3/2-12,	100,	35, 	&GUI_Font32B_ASCII	},
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+	},
+	///total 4 dataset
+	{
+		{	0,				0,					LCD_XSIZE,		LCD_YSIZE/3,	3,	3,	&GUI_Font16B_ASCII, 	LCD_XSIZE-23,	LCD_YSIZE/3-18,	&GUI_Font16B_ASCII,	25,	LCD_YSIZE/3/2-12,	100,	35, 	&GUI_Font32B_ASCII	},
+		{	0,				LCD_YSIZE/3,		LCD_XSIZE,		LCD_YSIZE/3,	3,	3,	&GUI_Font16B_ASCII, 	LCD_XSIZE-23,	LCD_YSIZE/3-18,	&GUI_Font16B_ASCII, 25,	LCD_YSIZE/3/2-12,	100,	35, 	&GUI_Font32B_ASCII	},
+		{	0,				(LCD_YSIZE*2)/3,	LCD_XSIZE/2,	LCD_YSIZE/3,	3,	3,	&GUI_Font13B_ASCII, 	LCD_XSIZE/2-23,	LCD_YSIZE/3-18,	&GUI_Font13B_ASCII, 13,	LCD_YSIZE/3/2-12,	60,		30, 	&GUI_Font24B_ASCII	},
+		{	LCD_XSIZE/2,	(LCD_YSIZE*2)/3,	LCD_XSIZE/2,	LCD_YSIZE/3,	3,	3,	&GUI_Font13B_ASCII, 	LCD_XSIZE/2-23,	LCD_YSIZE/3-18,	&GUI_Font13B_ASCII, 13,	LCD_YSIZE/3/2-12,	60,		30, 	&GUI_Font24B_ASCII	},
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+	},
+	///total 5 dataset
+	{
+		{	0,				0,					LCD_XSIZE,		LCD_YSIZE/3,	3,	3,	&GUI_Font16B_ASCII, 	LCD_XSIZE-23,	LCD_YSIZE/3-18,	&GUI_Font16B_ASCII,	25,	LCD_YSIZE/3/2-12,	100,	35, 	&GUI_Font32B_ASCII	},
+		{	0,				LCD_YSIZE/3,		LCD_XSIZE/2,	LCD_YSIZE/3,	3,	3,	&GUI_Font13B_ASCII, 	LCD_XSIZE/2-23,	LCD_YSIZE/3-18,	&GUI_Font13B_ASCII, 13,	LCD_YSIZE/3/2-12,	60,		30, 	&GUI_Font24B_ASCII	},
+		{	LCD_XSIZE/2,	LCD_YSIZE/3,		LCD_XSIZE/2,	LCD_YSIZE/3,	3,	3,	&GUI_Font13B_ASCII, 	LCD_XSIZE/2-23,	LCD_YSIZE/3-18,	&GUI_Font13B_ASCII, 13,	LCD_YSIZE/3/2-12,	60,		30, 	&GUI_Font24B_ASCII	},
+		{	0,				(LCD_YSIZE*2)/3,	LCD_XSIZE/2,	LCD_YSIZE/3,	3,	3,	&GUI_Font13B_ASCII, 	LCD_XSIZE/2-23,	LCD_YSIZE/3-18,	&GUI_Font13B_ASCII, 13,	LCD_YSIZE/3/2-12,	60,		30, 	&GUI_Font24B_ASCII	},
+		{	LCD_XSIZE/2,	(LCD_YSIZE*2)/3,	LCD_XSIZE/2,	LCD_YSIZE/3,	3,	3,	&GUI_Font13B_ASCII, 	LCD_XSIZE/2-23,	LCD_YSIZE/3-18,	&GUI_Font13B_ASCII, 13,	LCD_YSIZE/3/2-12,	60,		30, 	&GUI_Font24B_ASCII	},		
+		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
+
+	},
+	///total 6 dataset
+	{
+		{	0,				0,					LCD_XSIZE/2,	LCD_YSIZE/3,	3,	3,	&GUI_Font13B_ASCII, 	LCD_XSIZE/2-23,	LCD_YSIZE/3-18,	&GUI_Font13B_ASCII,	13,	LCD_YSIZE/3/2-12,	60,	30, 	&GUI_Font24B_ASCII	},
+		{	LCD_XSIZE/2,	0,					LCD_XSIZE/2,	LCD_YSIZE/3,	3,	3,	&GUI_Font13B_ASCII, 	LCD_XSIZE/2-23,	LCD_YSIZE/3-18,	&GUI_Font13B_ASCII,	13,	LCD_YSIZE/3/2-12,	60,	30, 	&GUI_Font24B_ASCII	},
+		{	0,				LCD_YSIZE/3,		LCD_XSIZE/2,	LCD_YSIZE/3,	3,	3,	&GUI_Font13B_ASCII, 	LCD_XSIZE/2-23,	LCD_YSIZE/3-18,	&GUI_Font13B_ASCII, 13,	LCD_YSIZE/3/2-12,	60,	30, 	&GUI_Font24B_ASCII	},
+		{	LCD_XSIZE/2,	LCD_YSIZE/3,		LCD_XSIZE/2,	LCD_YSIZE/3,	3,	3,	&GUI_Font13B_ASCII, 	LCD_XSIZE/2-23,	LCD_YSIZE/3-18,	&GUI_Font13B_ASCII, 13,	LCD_YSIZE/3/2-12,	60,	30, 	&GUI_Font24B_ASCII	},
+		{	0,				(LCD_YSIZE*2)/3,	LCD_XSIZE/2,	LCD_YSIZE/3,	3,	3,	&GUI_Font13B_ASCII, 	LCD_XSIZE/2-23,	LCD_YSIZE/3-18,	&GUI_Font13B_ASCII, 13,	LCD_YSIZE/3/2-12,	60,	30, 	&GUI_Font24B_ASCII	},
+		{	LCD_XSIZE/2,	(LCD_YSIZE*2)/3,	LCD_XSIZE/2,	LCD_YSIZE/3,	3,	3,	&GUI_Font13B_ASCII, 	LCD_XSIZE/2-23,	LCD_YSIZE/3-18,	&GUI_Font13B_ASCII, 13,	LCD_YSIZE/3/2-12,	60,	30, 	&GUI_Font24B_ASCII	},		
+	}
+};
+
+
+#define		framex(t,i)					ActivityDataFrame[t][i].framex
+#define		framey(t,i)					ActivityDataFrame[t][i].framey
+#define		framexsize(t,i)				ActivityDataFrame[t][i].framexsize
+#define		frameysize(t,i)				ActivityDataFrame[t][i].frameysize
+#define		namex(t,i)					ActivityDataFrame[t][i].namex
+#define		namey(t,i)					ActivityDataFrame[t][i].namey
+#define		pnameFont(t,i)				ActivityDataFrame[t][i].pnameFont
+#define		unitx(t,i)					ActivityDataFrame[t][i].unitx
+#define		unity(t,i)					ActivityDataFrame[t][i].unity
+#define		punitFont(t,i)				ActivityDataFrame[t][i].punitFont
+#define		valuex(t,i)					ActivityDataFrame[t][i].valuex
+#define		valuey(t,i)					ActivityDataFrame[t][i].valuey
+#define		valuexsize(t,i)				ActivityDataFrame[t][i].valuexsize
+#define		valueysize(t,i)				ActivityDataFrame[t][i].valueysize
+#define		pvalueFont(t,i)				ActivityDataFrame[t][i].pvalueFont
+
+
+
+
+
 
 
 static int spGetDataFrameX( int iFrameOlder, int iFrameTotal )
@@ -547,6 +665,19 @@ static void spDrawDataModeContent( int* piTotal, int* piIndex, FP_DATASETS_HEADE
 	
 	if( NULL == pDataModeData->phText[*piIndex] )
 	{
+#if 1
+		pDataModeData->phText[*piIndex] = TEXT_CreateEx(
+												valuex(*piTotal-1,*piIndex), 
+												valuey(*piTotal-1,*piIndex), 
+												valuexsize(*piTotal-1,*piIndex), 
+												valueysize(*piTotal-1,*piIndex),
+												pDataModeData->phWin[*piIndex],
+												WM_CF_SHOW|WM_CF_STAYONTOP,
+												0,
+												20+*piIndex,
+												"Text"
+											);
+#else	
 		pDataModeData->phText[*piIndex] = TEXT_CreateEx(
 												prtTemp->x0+13, 
 												(prtTemp->y0+prtTemp->y1)/2-12, 
@@ -558,9 +689,29 @@ static void spDrawDataModeContent( int* piTotal, int* piIndex, FP_DATASETS_HEADE
 												20+*piIndex,
 												"Text"
 											);
+#endif
 	}
 
+#if 1
+			///draw data name
+			pFont = GUI_GetFont();
+			GUI_SetFont( pnameFont(*piTotal-1,*piIndex) );
+			GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataName, namex(*piTotal-1,*piIndex), namey(*piTotal-1,*piIndex) );
+			GUI_SetFont( pFont );
+			///draw data unit
+			pFont = GUI_GetFont();
+			GUI_SetFont( punitFont(*piTotal-1,*piIndex) );
+			GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataUnit, unitx(*piTotal-1,*piIndex), unity(*piTotal-1,*piIndex) );
+			GUI_SetFont( pFont );
+			///draw data value
+			//pFont = GUI_GetFont();
+			//GUI_SetFont( &GUI_Font32B_ASCII );
+			//GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataValue, prtTemp->x0+13, (prtTemp->y0+prtTemp->y1)/2-12 );
+			//GUI_SetFont( pFont );
 			
+			TEXT_SetFont( pDataModeData->phText[*piIndex], pvalueFont(*piTotal-1,*piIndex) );
+			TEXT_SetText( pDataModeData->phText[*piIndex], pDataModeData->pDataSets[*piIndex].sDataValue );
+#else
 	switch( *piTotal )
 	{
 		case 1:
@@ -586,6 +737,25 @@ static void spDrawDataModeContent( int* piTotal, int* piIndex, FP_DATASETS_HEADE
 			
 			break;
 		case 3:
+			///draw data name
+			pFont = GUI_GetFont();
+			GUI_SetFont( &GUI_Font16B_ASCII );
+			GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataName, prtTemp->x0+3, prtTemp->y0+3 );
+			GUI_SetFont( pFont );
+			///draw data unit
+			pFont = GUI_GetFont();
+			GUI_SetFont( &GUI_Font16B_ASCII );
+			GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataUnit, prtTemp->x1-23, prtTemp->y1-18 );
+			GUI_SetFont( pFont );
+			///draw data value
+			//pFont = GUI_GetFont();
+			//GUI_SetFont( &GUI_Font32B_ASCII );
+			//GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataValue, prtTemp->x0+13, (prtTemp->y0+prtTemp->y1)/2-12 );
+			//GUI_SetFont( pFont );
+			
+			TEXT_SetFont( pDataModeData->phText[*piIndex], &GUI_Font32B_ASCII );
+			TEXT_SetText( pDataModeData->phText[*piIndex], pDataModeData->pDataSets[*piIndex].sDataValue );
+			break;
 		case 4:
 		case 5:
 		case 6:
@@ -601,6 +771,7 @@ static void spDrawDataModeContent( int* piTotal, int* piIndex, FP_DATASETS_HEADE
 			TEXT_SetText( pDataModeData->phText[*piIndex], pDataModeData->pDataSets[*piIndex].sDataValue );
 			break;
 	}
+#endif
 }
 
 

@@ -106,24 +106,27 @@ void TaskUserDataHook( void * pvParameters )
 	if( 
 		(pCurrFramePage == &headDataMode1Window) ||
 		(pCurrFramePage == &headDataMode2Window) ||
-		(pCurrFramePage == &headDataMode3Window)
+		(pCurrFramePage == &headDataMode3Window) ||
+		(pCurrFramePage == &headDataMode4Window) ||
+		(pCurrFramePage == &headDataMode5Window) ||
+		(pCurrFramePage == &headDataMode6Window)
 	)
 	{
 		DE_ACTIVITY_DATA activitydatas = {
-									2,
+									4,
 									{
-										{ ACTDATA_ID_DISTANCE, "1.23" },
+										{ ACTDATA_ID_DISTANCE, "1.23 " },
 										{ ACTDATA_ID_TIME, "12:12" },
-										{ 0, "0.00" },
-										{ 0, "0.00" },
+										{ ACTDATA_ID_ELEVATION, "234" },
+										{ ACTDATA_ID_POWER, "999" },
 										{ 0, "0.00" },
 										{ 0, "0.00" }
 									}
 								};
 								
 		///create random data						
-		activitydatas.activity[0].sDataStr = "3.33";
-		activitydatas.activity[1].sDataStr = "13.13";
+		activitydatas.activity[0].sDataStr = "3.33 ";
+		activitydatas.activity[1].sDataStr = "13:13";
 		
 		///fill message struct
 		UserDataMsg.MsgId = WM_ACTIVITY_DATA;
