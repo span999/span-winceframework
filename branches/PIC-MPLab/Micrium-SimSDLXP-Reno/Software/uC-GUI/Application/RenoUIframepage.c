@@ -169,9 +169,9 @@ DATASET_HEADER _DataModeContent_1Window[] = {
 	{ 0, ACTDATA_ID_DISTANCE, "distance", "/mi", "10.01" },
 	{ 1, ACTDATA_ID_TIME, "time", "", "21:45" },
 	{ 2, ACTDATA_ID_NONE, "avg pace", "/mi", "7:15" },
-	{ 3, ACTDATA_ID_NONE, "elevation", "/ft", "155" },
+	{ 3, ACTDATA_ID_ELEVATION, "elevation", "/ft", "155" },
 	{ 4, ACTDATA_ID_NONE, "lap avg hr", "bpm", "118" },
-	{ 5, ACTDATA_ID_NONE, "power", "w", "1025" },
+	{ 5, ACTDATA_ID_POWER, "power", "w", "1025" },
 };
 
 static TEXT_Handle _DataModeText_1Window[] = {
@@ -236,9 +236,9 @@ DATASET_HEADER _DataModeContent_2Window[] = {
 	{ 0, ACTDATA_ID_DISTANCE, "distance", "/mi", "10.01" },
 	{ 1, ACTDATA_ID_TIME, "time", "", "21:45" },
 	{ 2, ACTDATA_ID_NONE, "avg pace", "/mi", "7:15" },
-	{ 3, ACTDATA_ID_NONE, "elevation", "/ft", "155" },
+	{ 3, ACTDATA_ID_ELEVATION, "elevation", "/ft", "155" },
 	{ 4, ACTDATA_ID_NONE, "lap avg hr", "bpm", "118" },
-	{ 5, ACTDATA_ID_NONE, "power", "w", "1025" },
+	{ 5, ACTDATA_ID_POWER, "power", "w", "1025" },
 };
 
 static FRAMEPAGE_HEADER* _DataModeFrame_2Window[] = {
@@ -285,9 +285,9 @@ DATASET_HEADER _DataModeContent_3Window[] = {
 	{ 0, ACTDATA_ID_DISTANCE, "distance", "/mi", "10.01" },
 	{ 1, ACTDATA_ID_TIME, "time", "", "21:45" },
 	{ 2, ACTDATA_ID_NONE, "avg pace", "/mi", "7:15" },
-	{ 3, ACTDATA_ID_NONE, "elevation", "/ft", "155" },
+	{ 3, ACTDATA_ID_ELEVATION, "elevation", "/ft", "155" },
 	{ 4, ACTDATA_ID_NONE, "lap avg hr", "bpm", "118" },
-	{ 5, ACTDATA_ID_NONE, "power", "w", "1025" },
+	{ 5, ACTDATA_ID_POWER, "power", "w", "1025" },
 };
 
 static FRAMEPAGE_HEADER* _DataModeFrame_3Window[] = {
@@ -334,9 +334,9 @@ DATASET_HEADER _DataModeContent_4Window[] = {
 	{ 0, ACTDATA_ID_DISTANCE, "distance", "/mi", "10.01" },
 	{ 1, ACTDATA_ID_TIME, "time", "", "21:45" },
 	{ 2, ACTDATA_ID_NONE, "avg pace", "/mi", "7:15" },
-	{ 3, ACTDATA_ID_NONE, "elevation", "/ft", "155" },
+	{ 3, ACTDATA_ID_ELEVATION, "elevation", "/ft", "155" },
 	{ 4, ACTDATA_ID_NONE, "lap avg hr", "bpm", "118" },
-	{ 5, ACTDATA_ID_NONE, "power", "w", "1025" },
+	{ 5, ACTDATA_ID_POWER, "power", "w", "1025" },
 };
 
 static FRAMEPAGE_HEADER* _DataModeFrame_4Window[] = {
@@ -383,9 +383,9 @@ DATASET_HEADER _DataModeContent_5Window[] = {
 	{ 0, ACTDATA_ID_DISTANCE, "distance", "/mi", "10.01" },
 	{ 1, ACTDATA_ID_TIME, "time", "", "21:45" },
 	{ 2, ACTDATA_ID_NONE, "avg pace", "/mi", "7:15" },
-	{ 3, ACTDATA_ID_NONE, "elevation", "/ft", "155" },
+	{ 3, ACTDATA_ID_ELEVATION, "elevation", "/ft", "155" },
 	{ 4, ACTDATA_ID_NONE, "lap avg hr", "bpm", "118" },
-	{ 5, ACTDATA_ID_NONE, "power", "w", "1025" },
+	{ 5, ACTDATA_ID_POWER, "power", "w", "1025" },
 };
 
 static FRAMEPAGE_HEADER* _DataModeFrame_5Window[] = {
@@ -432,9 +432,9 @@ DATASET_HEADER _DataModeContent_6Window[] = {
 	{ 0, ACTDATA_ID_DISTANCE, "distance", "/mi", "10.01" },
 	{ 1, ACTDATA_ID_TIME, "time", "", "21:45" },
 	{ 2, ACTDATA_ID_NONE, "avg pace", "/mi", "7:15" },
-	{ 3, ACTDATA_ID_NONE, "elevation", "/ft", "155" },
+	{ 3, ACTDATA_ID_ELEVATION, "elevation", "/ft", "155" },
 	{ 4, ACTDATA_ID_NONE, "lap avg hr", "bpm", "118" },
-	{ 5, ACTDATA_ID_NONE, "power", "w", "1025" },
+	{ 5, ACTDATA_ID_POWER, "power", "w", "1025" },
 };
 
 static FRAMEPAGE_HEADER* _DataModeFrame_6Window[] = {
