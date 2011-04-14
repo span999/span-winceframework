@@ -105,7 +105,8 @@ void TaskUserDataHook( void * pvParameters )
 	else
 	if( 
 		(pCurrFramePage == &headDataMode1Window) ||
-		(pCurrFramePage == &headDataMode2Window)
+		(pCurrFramePage == &headDataMode2Window) ||
+		(pCurrFramePage == &headDataMode3Window)
 	)
 	{
 		DE_ACTIVITY_DATA activitydatas = {
@@ -122,6 +123,7 @@ void TaskUserDataHook( void * pvParameters )
 								
 		///create random data						
 		activitydatas.activity[0].sDataStr = "3.33";
+		activitydatas.activity[1].sDataStr = "13.13";
 		
 		///fill message struct
 		UserDataMsg.MsgId = WM_ACTIVITY_DATA;
@@ -133,9 +135,10 @@ void TaskUserDataHook( void * pvParameters )
 		if( pCurrFramePageHandle )
 		{
 			WM_SendMessage(pCurrFramePageHandle, &UserDataMsg);
-			WM_Paint( pCurrFramePageHandle );
+			///WM_Paint( pCurrFramePageHandle );
+			spUpdateDataModeWindow();
 		}
-		
+
 		SPPRINTF("  TaskUserDataHook:  WM_ACTIVITY_DATA\n");
 	}
 	
