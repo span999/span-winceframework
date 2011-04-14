@@ -520,7 +520,47 @@ static int spGetDataFrameYsize( int iFrameOlder, int iFrameTotal )
 static void spDrawDataModeContent( int* piTotal, int* piIndex, FP_DATASETS_HEADER* pDataModeData, GUI_RECT* prtTemp )
 {
 	const GUI_FONT* pFont = NULL;
+	int 			iWidth = 0;
+
 	
+	if( 1 == *piTotal || 2 == *piTotal || 3 == *piTotal )
+		iWidth = 100;
+	else
+	{
+		if( 4 == *piTotal )
+		{
+			if( 1 == *piIndex || 2 == *piIndex )
+				iWidth = 100;
+			else
+				iWidth = 60;
+		}
+		if( 5 == *piTotal )
+		{
+			if( 1 == *piIndex )
+				iWidth = 100;
+			else
+				iWidth = 60;
+		}
+		else
+			iWidth = 60;
+	}
+	
+	if( NULL == pDataModeData->phText[*piIndex] )
+	{
+		pDataModeData->phText[*piIndex] = TEXT_CreateEx(
+												prtTemp->x0+13, 
+												(prtTemp->y0+prtTemp->y1)/2-12, 
+												iWidth, ///60, 
+												35,
+												pDataModeData->phWin[*piIndex],
+												WM_CF_SHOW|WM_CF_STAYONTOP,
+												0,
+												20+*piIndex,
+												"Text"
+											);
+	}
+
+			
 	switch( *piTotal )
 	{
 		case 1:
@@ -536,10 +576,14 @@ static void spDrawDataModeContent( int* piTotal, int* piIndex, FP_DATASETS_HEADE
 			GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataUnit, prtTemp->x1-23, prtTemp->y1-18 );
 			GUI_SetFont( pFont );
 			///draw data value
-			pFont = GUI_GetFont();
-			GUI_SetFont( &GUI_Font32B_ASCII );
-			GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataValue, prtTemp->x0+13, (prtTemp->y0+prtTemp->y1)/2-12 );
-			GUI_SetFont( pFont );
+			//pFont = GUI_GetFont();
+			//GUI_SetFont( &GUI_Font32B_ASCII );
+			//GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataValue, prtTemp->x0+13, (prtTemp->y0+prtTemp->y1)/2-12 );
+			//GUI_SetFont( pFont );
+			
+			TEXT_SetFont( pDataModeData->phText[*piIndex], &GUI_Font32B_ASCII );
+			TEXT_SetText( pDataModeData->phText[*piIndex], pDataModeData->pDataSets[*piIndex].sDataValue );
+			
 			break;
 		case 3:
 		case 4:
@@ -551,7 +595,10 @@ static void spDrawDataModeContent( int* piTotal, int* piIndex, FP_DATASETS_HEADE
 			///draw data unit
 			GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataUnit, prtTemp->x1-23, prtTemp->y1-13 );
 			///draw data value
-			GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataValue, prtTemp->x0+13, (prtTemp->y0+prtTemp->y1)/2-3 );
+			///GUI_DispStringAt( pDataModeData->pDataSets[*piIndex].sDataValue, prtTemp->x0+13, (prtTemp->y0+prtTemp->y1)/2-3 );
+
+			///TEXT_SetFont( pDataModeData->phText[*piIndex], &GUI_Font32B_ASCII );
+			TEXT_SetText( pDataModeData->phText[*piIndex], pDataModeData->pDataSets[*piIndex].sDataValue );
 			break;
 	}
 }
@@ -686,6 +733,22 @@ void cbDataModeWindow(WM_MESSAGE* pMsg)
 		spcbDataModeVal( pMsg, GUI_BLUE );
 	}
 	else
+	if( pMsg->MsgId == WM_DELETE )
+	{
+		FP_DATASETS_HEADER* pDataModeData = NULL;
+		int 				iLoop = 0;
+		
+		if( spFramePageValid( FRAMEPAGE_DATAMODE ) )
+			return;
+	
+		pDataModeData = pCurrFramePageFrameData;
+		
+		for( iLoop=0; iLoop<pDataModeData->iDataSetNum; iLoop++)
+			pDataModeData->phText[iLoop] = NULL;
+		
+		SPPRINTF("cbDataModeWindow() ===> %d user=%d\n", pMsg->MsgId, iTmp);
+	}
+	else
 	if( pMsg->MsgId == WM_ACTIVITY_DATA )	///data input
 	{
 		///draw content
@@ -732,18 +795,8 @@ void DataModeWindow( int iOption )
 		///each data set
 		WM_SetUserData( hDataWin[iLoop], &(pDataModeData->pDataSets[iLoop].iIndex), sizeof(int) );
 		
-		
-		pDataModeData->phText[iLoop] = TEXT_CreateEx(
-				20, 
-				20, 
-				60, 
-				20,
-				hDataWin[iLoop],
-				WM_CF_SHOW|WM_CF_STAYONTOP,
-				0,
-				20+iLoop,
-				"Text"
-			);
+		///save window handle
+		pDataModeData->phWin[iLoop] = hDataWin[iLoop];
 	}
 
 	pCurrFramePageHandle = hDataWin[0];
@@ -759,6 +812,26 @@ void DataModeWindow( int iOption )
 	///go timeout frame if we were timeout
 	spFrameTimeoutHandling( iTO );
 }
+
+
+void spUpdateDataModeWindow( void )
+{
+	FP_DATASETS_HEADER* pDataModeData = NULL;
+	int iLoop = 0;
+		
+	if( spFramePageValid( FRAMEPAGE_DATAMODE ) )
+		return;
+		
+	pDataModeData = pCurrFramePageFrameData;
+		
+	for( iLoop=0; iLoop<pDataModeData->iDataSetNum; iLoop++ )
+		WM_Paint( pDataModeData->phWin[iLoop] );
+}
+
+
+
+
+
 
 
 

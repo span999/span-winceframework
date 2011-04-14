@@ -28,6 +28,7 @@ typedef struct
 	FRAMEPAGE_HEADER*		pUplevelFrame;
 	DATASET_HEADER*			pDataSets;
 	TEXT_Handle* 			phText;
+	WM_HWIN*				phWin;
 	FRAMEPAGE_HEADER** 		pDataFrame;
 	int*					pDataParam;
 } FP_DATASETS_HEADER;
@@ -42,6 +43,7 @@ typedef struct
 
 void cbDataModeWindow(WM_MESSAGE* pMsg);
 void DataModeWindow( int iOption );
+void spUpdateDataModeWindow( void );
 
 
 
