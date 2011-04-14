@@ -731,6 +731,19 @@ void DataModeWindow( int iOption )
 		pCurrFramePageOldCb = WM_SetCallback( hDataWin[iLoop], pCurrFramePageMainCb );
 		///each data set
 		WM_SetUserData( hDataWin[iLoop], &(pDataModeData->pDataSets[iLoop].iIndex), sizeof(int) );
+		
+		
+		pDataModeData->phText[iLoop] = TEXT_CreateEx(
+				20, 
+				20, 
+				60, 
+				20,
+				hDataWin[iLoop],
+				WM_CF_SHOW|WM_CF_STAYONTOP,
+				0,
+				20+iLoop,
+				"Text"
+			);
 	}
 
 	pCurrFramePageHandle = hDataWin[0];
