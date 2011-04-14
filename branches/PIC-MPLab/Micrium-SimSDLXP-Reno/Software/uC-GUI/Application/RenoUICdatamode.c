@@ -566,38 +566,52 @@ static void spcbDataModeVal( WM_MESSAGE* pMsg, GUI_COLOR color )
 	FP_DATASETS_HEADER* pDataModeData = NULL;
 	
 	
-	if( !pMsg || (WM_PAINT != pMsg->MsgId) )
+	if( !pMsg || ((WM_PAINT != pMsg->MsgId) && (WM_ACTIVITY_DATA != pMsg->MsgId)) )
 		return;
 		
-	if( 
-		FRAMEPAGE_DATAMODE != pCurrFramePageType ||
-		NULL == pCurrFramePageFrameData
-	)
-	{
-		SPPRINTF("!!!!Error, there should activity data mode data here!! abort!!\n");
+	if( spFramePageValid( FRAMEPAGE_DATAMODE ) )
 		return;
-	}
+
 	pDataModeData = pCurrFramePageFrameData;
 	
 	WM_GetClientRectEx( pMsg->hWin, &rtTemp );
 	WM_GetUserData( pMsg->hWin, &iIndex, sizeof(int) );
 	iTotal = pDataModeData->iDataSetNum;
+
+	///override data if needed
+	if( WM_ACTIVITY_DATA == pMsg->MsgId )
+	{
+		int iD, iS;
+		DE_ACTIVITY_DATA*	pActdatas = NULL;
+		_DE_ACTIVITY*		pAct = NULL;
 		
+		pActdatas = (DE_ACTIVITY_DATA*)(pMsg->Data.p);
+		pAct = &(pActdatas->activity[0]);
+
+		for( iD=0; iD<pActdatas->iTotal; iD++ )
+		{
+			for( iS=0; iS<iTotal; iS++ )
+			{
+				if( (pAct+iD)->iID == pDataModeData->pDataSets[iS].iActivityType )
+				{
+					SPPRINTF("spcbDataModeVal() found match %d=%d\n", iD, iS);
+					///memcpy( (pAct+iD)->sDataStr, pDataModeData->pDataSets[iS].sDataValue, 4 );
+					///pDataModeData->pDataSets[iS].sDataValue = "1.11";
+					pDataModeData->pDataSets[iS].sDataValue = (pAct+iD)->sDataStr;
+				}
+			}
+		}
+		
+	}
+	
+	///changes color if needed
 	clTemp[0] = GUI_GetColor();
 	clTemp[1] = GUI_GetBkColor();
+	
 	GUI_SetColor( color );
 	GUI_SetBkColor( GUI_WHITE );
 
-#if 1
 	spDrawDataModeContent( &iTotal, &iIndex, pDataModeData, &rtTemp );
-#else	
-	///draw data name
-	GUI_DispStringAt( pDataModeData->pDataSets[iIndex].sDataName, rtTemp.x0+3, rtTemp.y0+3 );
-	///draw data unit
-	GUI_DispStringAt( pDataModeData->pDataSets[iIndex].sDataUnit, rtTemp.x1-23, rtTemp.y1-13 );
-	///draw data value
-	GUI_DispStringAt( pDataModeData->pDataSets[iIndex].sDataValue, rtTemp.x0+13, (rtTemp.y0+rtTemp.y1)/2-3 );
-#endif
 
 	GUI_SetColor( clTemp[0] );
 	GUI_SetBkColor( clTemp[1] );
@@ -629,7 +643,7 @@ void cbDataModeWindow(WM_MESSAGE* pMsg)
 	int iTmp = 0;
 	
 	WM_GetUserData( pMsg->hWin, &iTmp, sizeof(int) );
-	SPPRINTF("cbDataModeWindow() ==> %d user=%d\n", pMsg->MsgId, iTmp);
+	///SPPRINTF("cbDataModeWindow() ==> %d user=%d\n", pMsg->MsgId, iTmp);
 
 	///hack the WM msg here
 	if( pMsg->MsgId == WM_KEY )
@@ -661,9 +675,7 @@ void cbDataModeWindow(WM_MESSAGE* pMsg)
 				DataSetsList.iCurrIdx--;
 			
 			spGoAfterFramePage( DataSetsList.pDataSetFrame[DataSetsList.iCurrIdx-1] );
-		}		
-///		if( IsUP_press(Key) || IsDOWN_press(Key) )
-///			spGoAfterFramePage( &headPopupListWindow_NumberEntry );
+		}
 	}
 	else
 	if( pMsg->MsgId == WM_PAINT )
@@ -673,11 +685,19 @@ void cbDataModeWindow(WM_MESSAGE* pMsg)
 		///draw content
 		spcbDataModeVal( pMsg, GUI_BLUE );
 	}
+	else
+	if( pMsg->MsgId == WM_ACTIVITY_DATA )	///data input
+	{
+		///draw content
+		spcbDataModeVal( pMsg, GUI_BLUE );
+		SPPRINTF("cbDataModeWindow() ==> %d user=%d\n", pMsg->MsgId, iTmp);
+	}
 	
 	if( pCurrFramePageOldCb )
 		pCurrFramePageOldCb( pMsg );
 }
 #endif
+
 
 void DataModeWindow( int iOption )
 {
@@ -685,20 +705,13 @@ void DataModeWindow( int iOption )
 	int iTO = 0;
 	WM_HWIN hDataWin[6];
 	FP_DATASETS_HEADER* pDataModeData = NULL;
-	///LISTBOX_Handle	hList;
-	///WM_CALLBACK* pOldCB = NULL;
+
 
 	if( pCurrFramePageClearFirst > 0 )
 		spBlankScreen();
 
-	if( 
-		FRAMEPAGE_DATAMODE != pCurrFramePageType ||
-		NULL == pCurrFramePageFrameData
-	)
-	{
-		SPPRINTF("!!!!Error, there should activity data mode data here!! abort!!\n");
+	if( spFramePageValid( FRAMEPAGE_DATAMODE ) )
 		return;
-	}
 	
 	pDataModeData = pCurrFramePageFrameData;
 	
@@ -716,10 +729,11 @@ void DataModeWindow( int iOption )
 			
 		///add callback
 		pCurrFramePageOldCb = WM_SetCallback( hDataWin[iLoop], pCurrFramePageMainCb );
-		
+		///each data set
 		WM_SetUserData( hDataWin[iLoop], &(pDataModeData->pDataSets[iLoop].iIndex), sizeof(int) );
 	}
 
+	pCurrFramePageHandle = hDataWin[0];
 	WM_BringToTop( hDataWin[0] );
 	WM_SetFocus( hDataWin[0] );
 	
@@ -730,8 +744,7 @@ void DataModeWindow( int iOption )
 		WM_DeleteWindow( hDataWin[iLoop] );
 	
 	///go timeout frame if we were timeout
-	if( 0 != pCurrFramePageWait && 1 == iTO && NULL != pCurrFramePageTimeoutFrame )
-		spGoAfterFramePage( pCurrFramePageTimeoutFrame );
+	spFrameTimeoutHandling( iTO );
 }
 
 

@@ -69,10 +69,10 @@ typedef struct {
 #define IsNotCurrFPListMenuLike		((FRAMEPAGE_LISTMENU != pCurrFramePageType) && (FRAMEPAGE_LISTMENU_BOOLOPTION != pCurrFramePageType))
 
 
+
 /*
 	Data enclose - GPS Satellites info
 */
-
 typedef struct {
 	int iID;		///satellites ID
 	int iVaild;		///satellite vaild, 1 for true
@@ -84,10 +84,33 @@ typedef struct {
 	_DE_GPS_SATELLITE		satellites[12];	///satellites info, max 12.
 } DE_GPS_SATELLITES_INFO;
 
+
+/*
+	Data enclose - activity data 
+*/
+typedef struct {
+	int 				iID;		///activity ID
+	char*			 	sDataStr;	///activity data string
+} _DE_ACTIVITY;
+
+typedef struct {
+	int 					iTotal;			///numbers of activity data included
+	_DE_ACTIVITY			activity[6];	///activity data info, max 6 per page.
+} DE_ACTIVITY_DATA;
+
+#define			ACTDATA_ID_BASE				0x0020
+#define			ACTDATA_ID_NONE				(ACTDATA_ID_BASE - 1)
+#define			ACTDATA_ID_DISTANCE			(ACTDATA_ID_BASE + 1)
+#define			ACTDATA_ID_TIME				(ACTDATA_ID_BASE + 2)
+
+
+
+
 /*
 	user data message type define
 */
 #define			WM_GPS_SATELLITE			(WM_USER+0x30)
+#define			WM_ACTIVITY_DATA			(WM_USER+0x30)+1
 
 
 

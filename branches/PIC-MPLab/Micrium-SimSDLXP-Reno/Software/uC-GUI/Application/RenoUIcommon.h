@@ -1,6 +1,6 @@
 
 /*
-	header of UI common functions
+	header of UI common help functions
 */
 
 #ifndef _RENOUICOMMON_H_
@@ -19,6 +19,7 @@ void spBlankScreen( void );
 void spBlankRect( int x, int y, int xsize, int ysize );
 void spBlankRectEx( GUI_RECT* prtTemp );
 
+int spFramePageValid( FRAMEPAGE_TYPE type );
 void spGoAfterFramePage( FRAMEPAGE_HEADER *pGoAfterFP );
 int spFrameTimeoutHandling( int iTO );
 int spFramePageWait( void );

@@ -53,15 +53,19 @@ void ListboxWindow( int iOption );
 void TaskUserDataHook( void * pvParameters )
 {
 	int iKey = 0;
+	WM_MESSAGE  UserDataMsg;
 	
 	SPPRINTF("  TaskUserDataHook:\n");
+	
 	///iKey = GUI_WaitKey();
 	GUI_Delay(500);
+	
+	
 	if( pCurrFramePage == &headSGSGSWindow )
 	{	///in Settings / GPS Settings / GPS Satellites
 		///WM_SendMessage(WM_HWIN hWin, WM_MESSAGE* pMsg)
 		int iTmp = 0;
-		WM_MESSAGE  UserDataMsg;
+		
 		_DE_GPS_SATELLITE sss = { 1, 1, 20 };
 		DE_GPS_SATELLITES_INFO	gpsSatellites = {
 						12,
@@ -81,19 +85,62 @@ void TaskUserDataHook( void * pvParameters )
 						}
 		};
 		
+		///create random data
 		for( iTmp=0; iTmp<12; iTmp++ )
 			gpsSatellites.satellites[iTmp].iSignal = spGetRandNum( 0, 40 );
 		
-		
+		///fill message struct
 		UserDataMsg.MsgId = WM_GPS_SATELLITE;
 		UserDataMsg.hWin = pCurrFramePageHandle;
 		UserDataMsg.hWinSrc = NULL;
 		UserDataMsg.Data.p = (void*)&gpsSatellites;
 		
+		///send to current frame page
 		if( pCurrFramePageHandle )
 			WM_SendMessage(pCurrFramePageHandle, &UserDataMsg);
+			
+		SPPRINTF("  TaskUserDataHook:  WM_GPS_SATELLITE\n");	
 	
 	}
+	else
+	if( 
+		(pCurrFramePage == &headDataMode1Window) ||
+		(pCurrFramePage == &headDataMode2Window)
+	)
+	{
+		DE_ACTIVITY_DATA activitydatas = {
+									2,
+									{
+										{ ACTDATA_ID_DISTANCE, "1.23" },
+										{ ACTDATA_ID_TIME, "12:12" },
+										{ 0, "0.00" },
+										{ 0, "0.00" },
+										{ 0, "0.00" },
+										{ 0, "0.00" }
+									}
+								};
+								
+		///create random data						
+		activitydatas.activity[0].sDataStr = "3.33";
+		
+		///fill message struct
+		UserDataMsg.MsgId = WM_ACTIVITY_DATA;
+		UserDataMsg.hWin = pCurrFramePageHandle;
+		UserDataMsg.hWinSrc = NULL;
+		UserDataMsg.Data.p = (void*)&activitydatas;
+		
+		///send to current frame page
+		if( pCurrFramePageHandle )
+		{
+			WM_SendMessage(pCurrFramePageHandle, &UserDataMsg);
+			WM_Paint( pCurrFramePageHandle );
+		}
+		
+		SPPRINTF("  TaskUserDataHook:  WM_ACTIVITY_DATA\n");
+	}
+	
+	
+	
 	SPPRINTF("  TaskUserDataHook: keycode=%d\n", iKey);
 }
 
