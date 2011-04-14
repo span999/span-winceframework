@@ -1,6 +1,6 @@
 
 /*
-	body of UI common functions
+	body of UI common help functions
 */
 
 #ifdef RENOUI_PROJ
@@ -81,6 +81,23 @@ void spBlankRectEx( GUI_RECT* prtTemp )
 	frame page part
 */
 
+int spFramePageValid( FRAMEPAGE_TYPE type )
+{
+	int iRet = 0;
+	
+	if( 
+		(type != pCurrFramePageType) ||
+		(NULL == pCurrFramePageFrameData)
+	)
+	{
+		SPPRINTF("!!!!Error, there should be frame page data here type=%d!! abort!!\n", type);
+		iRet = 1;
+	}
+	
+	return iRet;
+}
+
+
 void spGoAfterFramePage( FRAMEPAGE_HEADER *pGoAfterFP )
 {
 	if( pGoAfterFP )
@@ -98,9 +115,9 @@ int spFrameTimeoutHandling( int iTO )
 	int iRet = 0;
 	
 	if( 
-		0 != pCurrFramePageWait &&
-		1 == iTO && 
-		NULL != pCurrFramePageTimeoutFrame 
+		(0 != pCurrFramePageWait) &&
+		(1 == iTO) && 
+		(NULL != pCurrFramePageTimeoutFrame) 
 	)
 	{
 		spGoAfterFramePage( pCurrFramePageTimeoutFrame );

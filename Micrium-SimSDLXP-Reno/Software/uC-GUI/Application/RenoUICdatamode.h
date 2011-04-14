@@ -16,9 +16,10 @@
 typedef struct
 {
 	int						iIndex;
+	int						iActivityType;
 	const GUI_ConstString	sDataName;
 	const GUI_ConstString	sDataUnit;
-	const GUI_ConstString	sDataValue;
+	char*					sDataValue;
 } DATASET_HEADER;
 
 typedef struct
