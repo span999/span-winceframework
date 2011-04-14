@@ -174,6 +174,15 @@ DATASET_HEADER _DataModeContent_1Window[] = {
 	{ 5, ACTDATA_ID_NONE, "power", "w", "1025" },
 };
 
+static TEXT_Handle _DataModeText_1Window[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
 static FRAMEPAGE_HEADER* _DataModeFrame_1Window[] = {
 	NULL,
 	NULL,
@@ -191,6 +200,7 @@ FP_DATASETS_HEADER fpDataModeData_1Window = {
 	1,
 	NULL,
 	_DataModeContent_1Window,
+	_DataModeText_1Window,
 	_DataModeFrame_1Window,
 	_DataModeParam_1Window,
 };
@@ -238,6 +248,7 @@ FP_DATASETS_HEADER fpDataModeData_2Window = {
 	2,
 	NULL,
 	_DataModeContent_2Window,
+	_DataModeText_1Window,
 	_DataModeFrame_2Window,
 	_DataModeParam_2Window,
 };
@@ -285,6 +296,7 @@ FP_DATASETS_HEADER fpDataModeData_3Window = {
 	3,
 	NULL,
 	_DataModeContent_3Window,
+	_DataModeText_1Window,
 	_DataModeFrame_3Window,
 	_DataModeParam_3Window,
 };
@@ -332,6 +344,7 @@ FP_DATASETS_HEADER fpDataModeData_4Window = {
 	4,
 	NULL,
 	_DataModeContent_4Window,
+	_DataModeText_1Window,
 	_DataModeFrame_4Window,
 	_DataModeParam_4Window,
 };
@@ -379,6 +392,7 @@ FP_DATASETS_HEADER fpDataModeData_5Window = {
 	5,
 	NULL,
 	_DataModeContent_5Window,
+	_DataModeText_1Window,
 	_DataModeFrame_5Window,
 	_DataModeParam_5Window,
 };
@@ -426,6 +440,7 @@ FP_DATASETS_HEADER fpDataModeData_6Window = {
 	6,
 	NULL,
 	_DataModeContent_6Window,
+	_DataModeText_1Window,
 	_DataModeFrame_6Window,
 	_DataModeParam_6Window,
 };

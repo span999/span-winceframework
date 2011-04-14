@@ -27,6 +27,7 @@ typedef struct
 	int						iDataSetNum;
 	FRAMEPAGE_HEADER*		pUplevelFrame;
 	DATASET_HEADER*			pDataSets;
+	TEXT_Handle* 			phText;
 	FRAMEPAGE_HEADER** 		pDataFrame;
 	int*					pDataParam;
 } FP_DATASETS_HEADER;
