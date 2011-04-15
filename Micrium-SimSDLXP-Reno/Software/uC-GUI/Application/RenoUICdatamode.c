@@ -139,7 +139,9 @@ static const _DATASET_FRAME	ActivityDataFrame[6][6] = {
 static int spGetDataFrameX( int iFrameOlder, int iFrameTotal )
 {
 	int iRet = 0;
-	
+#if 1
+	iRet = framex(iFrameTotal-1,iFrameOlder);
+#else	
 	switch( iFrameTotal )
 	{
 		case 1:
@@ -257,14 +259,17 @@ static int spGetDataFrameX( int iFrameOlder, int iFrameTotal )
 		default:
 			break;
 	}
-	
+#endif
 	return iRet;
 }
 
 static int spGetDataFrameY( int iFrameOlder, int iFrameTotal )
 {
 	int iRet = 0;
-	
+
+#if 1
+	iRet = framey(iFrameTotal-1,iFrameOlder);
+#else	
 	switch( iFrameTotal )
 	{
 		case 1:
@@ -382,14 +387,16 @@ static int spGetDataFrameY( int iFrameOlder, int iFrameTotal )
 		default:
 			break;
 	}
-	
+#endif	
 	return iRet;
 }
 
 static int spGetDataFrameXsize( int iFrameOlder, int iFrameTotal )
 {
 	int iRet = 0;
-	
+#if 1
+	iRet = framexsize(iFrameTotal-1,iFrameOlder);
+#else
 	switch( iFrameTotal )
 	{
 		case 1:
@@ -506,14 +513,16 @@ static int spGetDataFrameXsize( int iFrameOlder, int iFrameTotal )
 		default:
 			break;
 	}
-	
+#endif	
 	return iRet;
 }
 
 static int spGetDataFrameYsize( int iFrameOlder, int iFrameTotal )
 {
 	int iRet = 0;
-
+#if 1
+	iRet = frameysize(iFrameTotal-1,iFrameOlder);
+#else
 	switch( iFrameTotal )
 	{
 		case 1:
@@ -631,13 +640,15 @@ static int spGetDataFrameYsize( int iFrameOlder, int iFrameTotal )
 		default:
 			break;
 	}
-
+#endif
 	return iRet;
 }
 
 static void spDrawDataModeContent( int* piTotal, int* piIndex, FP_DATASETS_HEADER* pDataModeData, GUI_RECT* prtTemp )
 {
 	const GUI_FONT* pFont = NULL;
+#if 1
+#else
 	int 			iWidth = 0;
 
 	
@@ -662,7 +673,7 @@ static void spDrawDataModeContent( int* piTotal, int* piIndex, FP_DATASETS_HEADE
 		else
 			iWidth = 60;
 	}
-	
+#endif	
 	if( NULL == pDataModeData->phText[*piIndex] )
 	{
 #if 1
