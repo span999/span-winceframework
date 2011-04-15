@@ -64,6 +64,8 @@ extern FRAMEPAGE_HEADER headHistoryWindow;
 extern FRAMEPAGE_HEADER headWatchWindow;
 extern FRAMEPAGE_HEADER headUnderConstructionWindow;
 
+extern FRAMEPAGE_HEADER headFloatTextEntryWindow;
+
 
 
 

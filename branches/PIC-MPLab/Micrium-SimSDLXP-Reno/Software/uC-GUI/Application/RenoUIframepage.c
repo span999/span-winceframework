@@ -11,6 +11,7 @@
 #include "RenoUICcomm.h"
 #include "RenoUICdatamode.h"
 #include "RenoUIClistmenu.h"
+#include "RenoUICftextentry.h"
 
 
 static const GUI_ConstString _apListBox[] = {
@@ -66,6 +67,45 @@ FRAMEPAGE_HEADER headDataModeWindow = {
 	NULL,
 	NULL,
 };
+
+
+/*
+	float text entry
+*/
+static const GUI_ConstString _FloatTextEntryBox[] = {
+  "A", "B", "C", "D", "E", "F",
+  "G", "H", "I", "J", "K", "L",
+  "M", "N", "O", "P", "Q", "R",
+  "S", "T", "U", "V", "W", "X",
+  "Y", "Z", 
+  NULL
+};
+
+FP_FTEXTENTRY_HEADER fpFloatTextEntry_Windows[] = {
+	26,
+	0,
+	"F Text entry",
+	_FloatTextEntryBox,
+	&headSUICIWindow,
+	NULL,
+	NULL,
+	NULL,
+	"ABCDEFG              "
+};
+
+FRAMEPAGE_HEADER headFloatTextEntryWindow = {
+	FRAMEPAGE_FLOATTEXT_ENTRY,
+	FloatTextEntryWindow,
+	cbFloatTextEntryWindow,
+	NULL,
+	0,
+	0,
+	1,
+	&fpFloatTextEntry_Windows,
+	NULL,
+	NULL,
+};
+
 
 
 /*
@@ -915,7 +955,8 @@ static const GUI_ConstString _SUICIListBox[] = {
 static FRAMEPAGE_HEADER* _SUICIListFrame[] = {
 	&headSUICIPWindow,
 	&headSUICIEWindow,
-	&headSUICIAWindow
+///	&headSUICIAWindow
+	&headFloatTextEntryWindow
 };
 
 static int _SUICIListParam[] = {
