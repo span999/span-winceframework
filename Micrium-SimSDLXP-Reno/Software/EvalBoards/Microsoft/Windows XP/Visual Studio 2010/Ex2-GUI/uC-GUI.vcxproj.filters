@@ -2014,6 +2014,9 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUIframepage.c">
       <Filter>uC-GUI\Application</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUIClistmenu.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_cfg.h">
