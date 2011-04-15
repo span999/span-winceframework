@@ -19,6 +19,7 @@ typedef struct {
 	FRAMEPAGE_HEADER* 		pNextFrame;
 	WM_HWIN					hWinTextFrame;		///text frame
 	WM_HWIN					hWinInputFrame;		///input frame
+	char*					sResult;			///text extery result
 } FP_FTEXTENTRY_HEADER;
 
 
