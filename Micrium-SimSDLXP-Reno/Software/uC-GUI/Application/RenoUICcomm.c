@@ -743,14 +743,8 @@ void PopupWindowNumbers( int iOption )
 	if( pCurrFramePageClearFirst > 0 )
 		spBlankScreen();
 
-	if( 
-		FRAMEPAGE_POPUP_NUMBERS != pCurrFramePageType ||
-		NULL == pCurrFramePageFrameData
-	)
-	{
-		SPPRINTF("!!!!Error, there should popup list data here!! abort!!\n");
+	if( spFramePageValid( FRAMEPAGE_POPUP_NUMBERS ) )
 		return;
-	}
 	
 	pPopList = pCurrFramePageFrameData;
 	///create windows for popup outline

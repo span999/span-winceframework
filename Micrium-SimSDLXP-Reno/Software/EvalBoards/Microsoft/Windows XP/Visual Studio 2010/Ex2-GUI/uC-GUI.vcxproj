@@ -118,6 +118,7 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\SeggerLogoBlue.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUICcomm.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUICdatamode.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUICftextentry.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUIClistmenu.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUIcommon.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUIframepage.c" />
