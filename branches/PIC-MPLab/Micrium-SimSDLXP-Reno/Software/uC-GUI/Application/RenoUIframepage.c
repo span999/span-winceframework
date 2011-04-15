@@ -10,6 +10,7 @@
 
 #include "RenoUICcomm.h"
 #include "RenoUICdatamode.h"
+#include "RenoUIClistmenu.h"
 
 
 static const GUI_ConstString _apListBox[] = {
