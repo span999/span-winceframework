@@ -90,7 +90,9 @@ FP_FTEXTENTRY_HEADER fpFloatTextEntry_Windows[] = {
 	NULL,
 	NULL,
 	NULL,
-	"ABCDEFG              "
+	NULL,
+	"ABCDEFG              ",
+	0
 };
 
 FRAMEPAGE_HEADER headFloatTextEntryWindow = {
