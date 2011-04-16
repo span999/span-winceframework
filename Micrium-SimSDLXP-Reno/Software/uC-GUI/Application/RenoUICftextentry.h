@@ -22,7 +22,9 @@ typedef struct {
 	FRAMEPAGE_HEADER* 		pNextFrame;
 	WM_HWIN					hWinInputFrame;		///text frame
 	LISTBOX_Handle			hWinInputList;		///input list
+	TEXT_Handle				hWinTextBoard;		///text board
 	char*					sResult;			///text extery result
+	int						iResultCnt;			///text extery result count
 } FP_FTEXTENTRY_HEADER;
 
 

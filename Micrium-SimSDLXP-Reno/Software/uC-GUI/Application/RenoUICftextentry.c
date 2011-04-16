@@ -18,17 +18,20 @@
 
 
 
-#define		FTEXTENTRY_X			20
-#define		FTEXTENTRY_Y			20
-#define		FTEXTENTRY_XSIZE		18
-#define		FTEXTENTRY_YSIZE		20
-
 #define		FTEXTFRAME_X			20
 #define		FTEXTFRAME_Y			20
-#define		FTEXTFRAME_XSIZE		60
-#define		FTEXTFRAME_YSIZE		60
+#define		FTEXTFRAME_XSIZE		20
+#define		FTEXTFRAME_YSIZE		50
 
 
+#define		FTEXTENTRY_X			1
+#define		FTEXTENTRY_Y			15
+#define		FTEXTENTRY_XSIZE		(FTEXTFRAME_XSIZE-(FTEXTENTRY_X*2))
+#define		FTEXTENTRY_YSIZE		30	///??
+
+
+static unsigned iTextCnt = 0;
+static char sTextShow[] = "                   \0";
 
 
 
@@ -61,7 +64,8 @@ static void cbFloatTextWindow(WM_MESSAGE* pMsg)
 	
 		pFTextEntry = pCurrFramePageFrameData;
 		WM_GetClientRectEx( pFTextEntry->hWinInputFrame, &rtTemp );
-		///GUI_FillRectEx(&rtTemp);
+		GUI_FillRectEx(&rtTemp);
+		spBlankRectEx(&rtTemp);	///clean
 
 		///in case we reach the top or bottom
 		if( pFTextEntry->iListSel == pFTextEntry->iListNum-1 )
@@ -113,7 +117,6 @@ static void spcbFloatTextEntryTextSelect(WM_MESSAGE* pMsg)
 	iSelet = LISTBOX_GetSel(pMsg->hWin);
 	if( iSelet < pFTextEntry->iListNum )
 	{
-
 		pFTextEntry->iListSel = iSelet;
 		WM_Paint( pFTextEntry->hWinInputFrame );
 	}
@@ -149,21 +152,47 @@ void cbFloatTextEntryWindow(WM_MESSAGE* pMsg)
 		if( IsUP_hold(Key) )
 		{	/// hold up key
 			spGoAfterFramePage( &headPopupListWindow_DeviceModeFitness );
+			return;
 		}
 		else		
 		if( IsDOWN_hold(Key) )
 		{	/// hold down key
 			spGoAfterFramePage( &headPopupListWindow_Fitness );
+			return;
 		}
 		else
 		if( IsBACK_press(Key) )
 		{	/// back key
 			spGoAfterFramePage( ((FP_FTEXTENTRY_HEADER*)pCurrFramePageFrameData)->pUplevelFrame );
+			return;
 		}
 		else		
 		if( IsENTER_press(Key) )
 		{	/// enter key
-			;
+			FP_FTEXTENTRY_HEADER* pFTextEntry = NULL;
+			GUI_RECT rtTemp;
+			char sOut[] = "a  \0";
+			
+			
+			pFTextEntry = pCurrFramePageFrameData;
+			///get the charactor
+			LISTBOX_GetItemText( pFTextEntry->hWinInputList, pFTextEntry->iListSel, sOut, 2 );
+			///add to result
+			sTextShow[iTextCnt] = sOut[0];
+			///pFTextEntry->sResult[pFTextEntry->iResultCnt] = sOut[0];
+			iTextCnt++;
+			pFTextEntry->iResultCnt++;
+			pFTextEntry->sResult = sTextShow;
+			///move the cursor
+			WM_GetClientRectEx( pFTextEntry->hWinInputFrame, &rtTemp );
+			WM_MoveWindow( pFTextEntry->hWinInputFrame, rtTemp.x0+FTEXTFRAME_XSIZE, rtTemp.y0 );
+			
+			TEXT_SetText( pFTextEntry->hWinTextBoard, pFTextEntry->sResult );
+			return;
+		}
+		else
+		{
+			return;
 		}
 	}
 	else
@@ -186,7 +215,7 @@ void cbFloatTextEntryWindow(WM_MESSAGE* pMsg)
 void FloatTextEntryWindow( int iOption )
 {
 	int iTO = 0;
-	FRAMEWIN_Handle	hFrame = NULL;
+	///FRAMEWIN_Handle	hFrame = NULL;
 	FP_FTEXTENTRY_HEADER* pFTextEntry = NULL;
 	WM_CALLBACK* pOldCB = NULL;
 	int iTmp = 0;
@@ -203,25 +232,68 @@ void FloatTextEntryWindow( int iOption )
 	
 	pFTextEntry = pCurrFramePageFrameData;
 	///create frame title
-	pCurrFramePageHandle = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pFTextEntry->sTitle, NULL);
+	pCurrFramePageHandle = FRAMEWIN_CreateEx( 
+								0, 
+								0, 
+								LCD_GetXSize(), 
+								LCD_GetYSize(), 
+								WM_HWIN_NULL, 
+								WM_CF_SHOW|WM_CF_STAYONTOP, 
+								0, 
+								0, 
+								pFTextEntry->sTitle, 
+								NULL );
 	iTmp = FRAMEWIN_GetTitleHeight( pCurrFramePageHandle );
 
 	///create windows for text frame	///GUI_GetYSizeOfFont(pFont)
-	pFTextEntry->hWinInputFrame = WM_CreateWindow( FTEXTFRAME_X, FTEXTFRAME_Y+iTmp, FTEXTFRAME_XSIZE, FTEXTFRAME_YSIZE, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
+	pFTextEntry->hWinInputFrame = WM_CreateWindow( 
+								FTEXTFRAME_X, 
+								FTEXTFRAME_Y+iTmp, 
+								FTEXTFRAME_XSIZE, 
+								FTEXTFRAME_YSIZE, 
+								WM_CF_SHOW|WM_CF_STAYONTOP, 
+								NULL, 
+								0 );
 	///pFTextEntry->hWinInputFrame = WM_CreateWindow( 0, 0+iTmp, LCD_GetXSize(), LCD_GetYSize()-iTmp, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
 	///add callback
 	pOldCB = WM_SetCallback( pFTextEntry->hWinInputFrame, &cbFloatTextWindow );
 	
+	///we don't want to see focus items in reverse
+	LISTBOX_SetDefaultBkColor( LISTBOX_CI_SELFOCUS, GUI_WHITE );
+	LISTBOX_SetDefaultTextColor( LISTBOX_CI_SELFOCUS, GUI_BLACK );
 	
 	///pFont = &GUI_Font16B_ASCII;
 	pFont = &GUI_Font24B_ASCII;
 	///create windows for input list
-	pFTextEntry->hWinInputList = LISTBOX_CreateEx( FTEXTENTRY_X, FTEXTENTRY_Y, FTEXTENTRY_XSIZE, GUI_GetYSizeOfFont(pFont), pFTextEntry->hWinInputFrame, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pFTextEntry->sListText);
+	pFTextEntry->hWinInputList = LISTBOX_CreateEx( 
+								FTEXTENTRY_X, 
+								(FTEXTFRAME_YSIZE-GUI_GetYSizeOfFont(pFont))/2, 
+								FTEXTENTRY_XSIZE, 
+								GUI_GetYSizeOfFont(pFont), 
+								pFTextEntry->hWinInputFrame, 
+								WM_CF_SHOW|WM_CF_STAYONTOP, 
+								0, 
+								0, 
+								pFTextEntry->sListText );
 	///add callback
 	pCurrFramePageOldCb = WM_SetCallback( pFTextEntry->hWinInputList, pCurrFramePageMainCb );
 	///set font in list
 	LISTBOX_SetFont( pFTextEntry->hWinInputList , pFont );
 
+	pFTextEntry->hWinTextBoard = TEXT_CreateEx(
+				FTEXTFRAME_X, 
+				FTEXTFRAME_Y, 
+				100, 
+				20,
+				pCurrFramePageHandle,
+				WM_CF_SHOW|WM_CF_STAYONTOP,
+				0,
+				30,
+				pFTextEntry->sResult
+			);
+
+			
+	
 	WM_BringToTop( pCurrFramePageHandle );
 	WM_BringToTop( pFTextEntry->hWinInputFrame );
 	WM_BringToTop( pFTextEntry->hWinInputList );
@@ -236,6 +308,10 @@ void FloatTextEntryWindow( int iOption )
 	WM_DeleteWindow( pFTextEntry->hWinInputList );
 	WM_DeleteWindow( pFTextEntry->hWinInputFrame );
 	WM_DeleteWindow( pCurrFramePageHandle );
+
+	///we don't want to see focus items in reverse
+	LISTBOX_SetDefaultBkColor( LISTBOX_CI_SELFOCUS, GUI_BLUE );
+	LISTBOX_SetDefaultTextColor( LISTBOX_CI_SELFOCUS, GUI_WHITE );			
 	
 	///go timeout frame if we were timeout
 	spFrameTimeoutHandling(iTO);
