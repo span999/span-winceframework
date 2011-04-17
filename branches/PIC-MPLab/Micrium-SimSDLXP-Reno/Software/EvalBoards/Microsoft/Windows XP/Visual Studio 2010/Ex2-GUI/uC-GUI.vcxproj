@@ -121,6 +121,7 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUICftextentry.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUIClistmenu.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUIcommon.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUICwatchmode.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUIframepage.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUImain.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUItoolhelp.c" />
