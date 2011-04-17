@@ -112,6 +112,11 @@ void TaskUserDataHook( void * pvParameters )
 		(pCurrFramePage == &headDataMode6Window)
 	)
 	{
+		char str1[8];
+		char str2[8];
+		char str3[8];
+		char str4[8];
+
 		DE_ACTIVITY_DATA activitydatas = {
 									4,
 									{
@@ -124,9 +129,16 @@ void TaskUserDataHook( void * pvParameters )
 									}
 								};
 								
-		///create random data						
-		activitydatas.activity[0].sDataStr = "3.33 ";
-		activitydatas.activity[1].sDataStr = "13:13";
+		///create random data
+		sprintf( str1, "%d.%d", spGetRandNum( 1, 99), spGetRandNum( 1, 99) );
+		sprintf( str2, "%d:%d", spGetRandNum( 1, 24), spGetRandNum( 0, 59) );
+		sprintf( str3, "%d", spGetRandNum( 1, 999) );
+		sprintf( str4, "%d", spGetRandNum( 1, 999) );
+		///activitydatas.activity[0].sDataStr = "3.33 ";
+		activitydatas.activity[0].sDataStr = str1;
+		activitydatas.activity[1].sDataStr = str2;
+		activitydatas.activity[2].sDataStr = str3;
+		activitydatas.activity[3].sDataStr = str4;
 		
 		///fill message struct
 		UserDataMsg.MsgId = WM_ACTIVITY_DATA;
