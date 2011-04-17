@@ -31,6 +31,7 @@ typedef struct {
 
 void WatchWindow( int iOption );
 void cbWatchWindow(WM_MESSAGE* pMsg);
+void spUpdateWatchModeWindow( void );
 
 
 #include "RenoUIframepage.h"
