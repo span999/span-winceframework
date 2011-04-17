@@ -12,6 +12,7 @@
 #include "RenoUICdatamode.h"
 #include "RenoUIClistmenu.h"
 #include "RenoUICftextentry.h"
+#include "RenoUICwatchmode.h"
 
 
 static const GUI_ConstString _apListBox[] = {
