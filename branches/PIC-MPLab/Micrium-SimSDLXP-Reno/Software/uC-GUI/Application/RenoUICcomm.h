@@ -9,7 +9,7 @@
 #include "RenoGUI.h"
 #include "RenoUIframe.h"
 #include "RenoActivityDataType.h"
-
+#include "RenoWatchDataType.h"
 
 
 
@@ -77,6 +77,18 @@ typedef struct {
 } DE_ACTIVITY_DATA;
 
 
+/*
+	Data enclose - watch mode data 
+*/
+typedef struct {
+	int 				iID;		///watch data ID
+	char*			 	sDataStr;	///watch data string
+} _DE_WATCHMODE;
+
+typedef struct {
+	int 					iTotal;			///numbers of watch data included
+	_DE_WATCHMODE			watchdata[5];	///Watch data info, max 5 per page.
+} DE_WATCH_DATA;
 
 
 
@@ -84,9 +96,10 @@ typedef struct {
 /*
 	user data message type define
 */
-#define			WM_GPS_SATELLITE			(WM_USER+0x30)
-#define			WM_ACTIVITY_DATA			(WM_USER+0x30)+1
-
+#define			WM_USER_RENOBASE			(WM_USER+0x30)
+#define			WM_GPS_SATELLITE			(WM_USER_RENOBASE+1)
+#define			WM_ACTIVITY_DATA			(WM_USER_RENOBASE+2)
+#define			WM_WATCH_DATA				(WM_USER_RENOBASE+3)
 
 
 void spSetDefaultEffect ( void );

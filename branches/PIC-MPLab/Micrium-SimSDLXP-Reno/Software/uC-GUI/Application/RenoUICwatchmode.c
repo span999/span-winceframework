@@ -22,7 +22,7 @@
 void cbWatchWindow(WM_MESSAGE* pMsg)
 {
 
-	SPPRINTF("cbPoweroffWindow() ==> %d \n", pMsg->MsgId);
+	SPPRINTF("cbWatchWindow() ==> %d \n", pMsg->MsgId);
 
 	///hack the WM msg here
 	if( pMsg->MsgId == WM_KEY )
@@ -34,10 +34,6 @@ void cbWatchWindow(WM_MESSAGE* pMsg)
 		{	/// hold up key
 			SPPRINTF( "UP key hold!!!!!!!\n" );
 			spGoAfterFramePage( &headPopupListWindow_DeviceModeFitness );
-///			///set next framepage
-///			pAfterFramePage = &headPopupListWindow_DeviceModeFitness;
-///			///ready for next framepage
-///			pCurrFramePageNextReady = 1;
 			return;
 		}
 	}
@@ -46,6 +42,43 @@ void cbWatchWindow(WM_MESSAGE* pMsg)
 	{
 		///GUI_DispStringAt("Watch Mode...", 80, 30);
 	}
+	else
+	if( pMsg->MsgId == WM_WATCH_DATA )
+	{
+		int iD;
+		DE_WATCH_DATA*	pWatchdatas = NULL;
+		_DE_WATCHMODE*		pWatch = NULL;
+		FP_WATCH_HEADER* pWatchData = NULL;
+		GUI_RECT rtTemp;
+		
+		pWatchdatas = (DE_WATCH_DATA*)(pMsg->Data.p);
+		pWatch = &(pWatchdatas->watchdata[0]);
+		pWatchData = pCurrFramePageFrameData;
+
+		for( iD=0; iD<pWatchdatas->iTotal; iD++ )
+		{
+			if( (pWatch+iD)->iID == WATCHDATA_ID_SECOND )
+			{
+				SPPRINTF("WM_WATCH_DATA found match %d=>%d\n", iD, WATCHDATA_ID_SECOND);
+				WM_GetWindowRectEx( pWatchData->hTextSecond, &rtTemp );
+				spBlankRectEx( &rtTemp );
+				TEXT_SetText( pWatchData->hTextSecond, (pWatch+iD)->sDataStr );
+				//if( pCurrFramePageOldCb ) pCurrFramePageOldCb( pMsg );
+			}
+			else
+			if( (pWatch+iD)->iID == WATCHDATA_ID_TIME )
+			{
+				SPPRINTF("WM_WATCH_DATA found match %d=>%d\n", iD, WATCHDATA_ID_TIME);
+				WM_GetWindowRectEx( pWatchData->hTextTime, &rtTemp );
+				spBlankRectEx( &rtTemp );
+				TEXT_SetText( pWatchData->hTextTime, (pWatch+iD)->sDataStr );
+				//if( pCurrFramePageOldCb ) pCurrFramePageOldCb( pMsg );
+			}
+		}
+		
+		return;
+	}
+	
 	if( pCurrFramePageOldCb )
 		pCurrFramePageOldCb( pMsg );
 	return;
@@ -125,7 +158,7 @@ void WatchWindow( int iOption )
 				WM_CF_SHOW|WM_CF_STAYONTOP,
 				0,
 				52,
-				"10:47");
+				"12:00");
 	
 	TEXT_SetFont( pWatchData->hTextTime, &GUI_Font32B_ASCII );
 
@@ -138,7 +171,7 @@ void WatchWindow( int iOption )
 				WM_CF_SHOW|WM_CF_STAYONTOP,
 				0,
 				53,
-				"59");
+				"00");
 	
 	TEXT_SetFont( pWatchData->hTextSecond, &GUI_Font16B_ASCII );
 
@@ -171,7 +204,20 @@ void WatchWindow( int iOption )
 }
 
 
+void spUpdateWatchModeWindow( void )
+{
+	FP_WATCH_HEADER* pWatchData = NULL;
+	int iLoop = 0;
+		
+	if( spFramePageValid( FRAMEPAGE_WATCH ) )
+		return;
+		
+	pWatchData = pCurrFramePageFrameData;
 
+	WM_Paint( pWatchData->hTextSecond );
+	WM_Paint( pWatchData->hTextTime );
+
+}
 
 
 

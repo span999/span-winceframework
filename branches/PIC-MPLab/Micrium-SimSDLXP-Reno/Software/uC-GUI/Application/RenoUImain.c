@@ -156,9 +156,60 @@ void TaskUserDataHook( void * pvParameters )
 
 		SPPRINTF("  TaskUserDataHook:  WM_ACTIVITY_DATA\n");
 	}
-	
-	
-	
+	else
+	if( pCurrFramePage == &headWatchWindow )
+	{
+		static int second = 0;
+		static int minute = 0;
+		char str1[8];
+		char str2[8];
+		DE_WATCH_DATA watchdatas = {
+									2,
+									{
+										{ WATCHDATA_ID_SECOND, "00" },
+										{ WATCHDATA_ID_TIME, "12:00" },
+										{ 0, "0.00" },
+										{ 0, "0.00" },
+										{ 0, "0.00" }
+									}
+								};
+								
+		///create random data
+		if( 59 == second )
+		{
+			second = 0;
+			minute++;
+		}
+		else
+			second++;
+			
+		if( 60 == minute )
+			minute = 0;
+			
+		sprintf( str1, "%02d", second );
+		sprintf( str2, "12:%02d", minute );
+
+		watchdatas.watchdata[0].sDataStr = str1;
+		watchdatas.watchdata[1].sDataStr = str2;
+		
+		///fill message struct
+		UserDataMsg.MsgId = WM_WATCH_DATA;
+		UserDataMsg.hWin = pCurrFramePageHandle;
+		UserDataMsg.hWinSrc = NULL;
+		UserDataMsg.Data.p = (void*)&watchdatas;
+		
+		///send to current frame page
+		if( pCurrFramePageHandle )
+		{
+			WM_SendMessage(pCurrFramePageHandle, &UserDataMsg);
+			///WM_Paint( pCurrFramePageHandle );
+			spUpdateWatchModeWindow();
+			///spUpdateDataModeWindow();
+		}
+		
+		SPPRINTF("  TaskUserDataHook:  WM_WATCH_DATA\n");
+	}
+		
 	SPPRINTF("  TaskUserDataHook: keycode=%d\n", iKey);
 }
 
