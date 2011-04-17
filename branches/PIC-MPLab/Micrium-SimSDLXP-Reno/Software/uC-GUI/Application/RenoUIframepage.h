@@ -61,6 +61,8 @@ extern FRAMEPAGE_HEADER headSAPDPADSASNS5Window;
 extern FRAMEPAGE_HEADER headSAPDPADSASNS6Window;
 extern FRAMEPAGE_HEADER headSAPDPADSASNSWindow_NumberEntry;
 extern FRAMEPAGE_HEADER headHistoryWindow;
+extern FRAMEPAGE_HEADER headHAHWindow;
+extern FRAMEPAGE_HEADER headHATWindow;
 extern FRAMEPAGE_HEADER headWatchWindow;
 extern FRAMEPAGE_HEADER headUnderConstructionWindow;
 
