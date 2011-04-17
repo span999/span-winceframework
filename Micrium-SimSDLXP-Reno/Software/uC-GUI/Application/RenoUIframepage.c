@@ -1192,7 +1192,16 @@ static FRAMEPAGE_HEADER* _SDSLListFrame[] = {
 };
 
 static int _SDSLListParam[] = {
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0
 };
 
 
@@ -1206,7 +1215,8 @@ FP_LISTMENU_HEADER fpListMenuData_SDSLWindow = {
 };
 
 FRAMEPAGE_HEADER headSDSLWindow = {
-	FRAMEPAGE_LISTMENU,
+///	FRAMEPAGE_LISTMENU,
+	FRAMEPAGE_LISTMENU_BOOLOPTION,
 	ListMenuWindow,
 	cbListMenuWindow,
 	NULL,
@@ -1991,11 +2001,16 @@ FRAMEPAGE_HEADER headSAPDPADSASNSWindow_NumberEntry = {
 	History
 */
 static const GUI_ConstString _HistoryListBox[] = {
-  "Activity History", "Activity Totals", "Location History", NULL
+	"Activity History",
+	"Activity Totals", 
+	"Location History", 
+	NULL
 };
 
 static FRAMEPAGE_HEADER* _HistoryListFrame[] = {
-	&headUnderConstructionWindow, &headUnderConstructionWindow, &headUnderConstructionWindow
+	&headHAHWindow, 
+	&headHATWindow, 
+	&headUnderConstructionWindow
 };
 
 static int _HistoryListParam[] = {
@@ -2026,17 +2041,118 @@ FRAMEPAGE_HEADER headHistoryWindow = {
 
 
 /*
+	History / Activity History
+*/
+static const GUI_ConstString _HAHListBox[] = {
+	"Activities",
+	"Totals", 
+	"Delete All Activities", 
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _HAHListFrame[] = {
+	&headUnderConstructionWindow, 
+	&headHATWindow, 
+	&headUnderConstructionWindow
+};
+
+static int _HAHListParam[] = {
+	0, 0, 0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_HAHWindow = {
+	3,
+	"Activity History",
+	_HAHListBox,
+	&headHistoryWindow,
+	_HAHListFrame,
+	_HAHListParam,
+};
+
+FRAMEPAGE_HEADER headHAHWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_HAHWindow,
+	NULL,
+	NULL,
+};
+
+
+/*
+	History / Activity Totals
+*/
+static const GUI_ConstString _HATListBox[] = {
+	"All Activities",
+	"Running", 
+	"Cycling", 
+	"Other", 
+	"Reset All Totals", 
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _HATListFrame[] = {
+	&headHAHWindow, 
+	&headUnderConstructionWindow, 
+	&headUnderConstructionWindow, 
+	&headUnderConstructionWindow, 
+	&headUnderConstructionWindow
+};
+
+static int _HATListParam[] = {
+	0, 0, 0, 0, 0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_HATWindow = {
+	5,
+	"Activity Totals",
+	_HATListBox,
+	&headHistoryWindow,
+	_HATListFrame,
+	_HATListParam,
+};
+
+FRAMEPAGE_HEADER headHATWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_HATWindow,
+	NULL,
+	NULL,
+};
+
+
+
+/*
 	Watch mode
 */
+FP_WATCH_HEADER fpWatchData_WatchWindow = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+};
+
 FRAMEPAGE_HEADER headWatchWindow = {
-	FRAMEPAGE_COMMON,
+	FRAMEPAGE_WATCH,
 	WatchWindow,
 	cbWatchWindow,
 	NULL,
 	0,
 	0,
 	1,
-	NULL,
+	&fpWatchData_WatchWindow,
 	NULL,
 	NULL,
 };
