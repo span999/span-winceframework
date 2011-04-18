@@ -13,20 +13,6 @@
 
 
 
-/*
-	frame page data of popup list
-*/
-typedef struct
-{
-	int						iListNum;
-	int						iListSel;
-	const GUI_ConstString	sListTitle;
-	const GUI_ConstString*	sListName;
-	FRAMEPAGE_HEADER*		pUplevelFrame;
-	FRAMEPAGE_HEADER** 		pListFrame;
-	int*					pListParam;
-	WM_HWIN					hWinFrame;	///outline frame
-} FP_POPUPLIST_HEADER;
 
 
 /*
@@ -112,19 +98,17 @@ void PoweroffWindow( int iOption );
 void BootWindow( int iOption );
 void cbPopupWindowNotify(WM_MESSAGE* pMsg);
 void PopupWindowNotify( int iOption );
-void cbPopupWindowList(WM_MESSAGE* pMsg);
-void PopupWindowList( int iOption );
-void cbPopupWindowNumbers(WM_MESSAGE* pMsg);
-void PopupWindowNumbers( int iOption );
+///void cbPopupWindowList(WM_MESSAGE* pMsg);
+///void PopupWindowList( int iOption );
+///void cbPopupWindowNumbers(WM_MESSAGE* pMsg);
+///void PopupWindowNumbers( int iOption );
 void cbNavigationWindow(WM_MESSAGE* pMsg);
 void NavigationWindow( int iOption );
 void cbSGSGSWindow(WM_MESSAGE* pMsg);
 void SGSGSWindow( int iOption );
 void cbTextEntryWindow(WM_MESSAGE* pMsg);
 void TextEntryWindow( int iOption );
-void cbSAPDPADSASNSPopupWindowNumbers(WM_MESSAGE* pMsg);
-///void cbWatchWindow(WM_MESSAGE* pMsg);
-///void WatchWindow( int iOption );
+///void cbSAPDPADSASNSPopupWindowNumbers(WM_MESSAGE* pMsg);
 void UnderConstructionWindow( int iOption );
 
 

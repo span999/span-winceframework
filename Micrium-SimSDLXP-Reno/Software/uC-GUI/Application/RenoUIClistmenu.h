@@ -40,10 +40,35 @@ typedef struct
 
 
 
+/*
+	frame page data of popup list
+*/
+typedef struct
+{
+	int						iListNum;
+	int						iListSel;
+	const GUI_ConstString	sListTitle;
+	const GUI_ConstString*	sListName;
+	FRAMEPAGE_HEADER*		pUplevelFrame;
+	FRAMEPAGE_HEADER** 		pListFrame;
+	int*					pListParam;
+	WM_HWIN					hWinFrame;	///outline frame
+} FP_POPUPLIST_HEADER;
+
+
+
 
 void cbListMenuWindow(WM_MESSAGE* pMsg);
 void ListMenuWindow( int iOption );
 
+void cbPopupWindow(WM_MESSAGE* pMsg);
+void cbPopupWindowList(WM_MESSAGE* pMsg);
+void PopupWindowList( int iOption );
+
+
+void cbPopupWindowNumbers(WM_MESSAGE* pMsg);
+void cbSAPDPADSASNSPopupWindowNumbers(WM_MESSAGE* pMsg);
+void PopupWindowNumbers( int iOption );
 
 
 #include "RenoUIframepage.h"

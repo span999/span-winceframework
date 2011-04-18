@@ -26,7 +26,7 @@
 
 #include "RenoUICcomm.h"
 #include "RenoUICdatamode.h"
-
+#include "RenoUICwatchmode.h"
 
 
 
