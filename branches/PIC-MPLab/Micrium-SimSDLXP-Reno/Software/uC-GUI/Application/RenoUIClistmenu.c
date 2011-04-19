@@ -429,6 +429,8 @@ void ListMenuWindow( int iOption )
 	LISTBOX_SetOwnerDraw( hList, spListBoxOwnerDraw );
 	///LISTBOX_InvalidateItem( hList, 2 );
 	
+	LISTBOX_SetItemSpacing( hList, 15);
+	
 	if( FRAMEPAGE_LISTMENU_BOOLOPTION != pCurrFramePageType )
 	{	///in case we have boolean option field in the list
 		int iCnt = 0;
