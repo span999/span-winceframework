@@ -1115,7 +1115,7 @@ FRAMEPAGE_HEADER headSUICIEWindow = {
 	Settings / Device Settings
 */
 static const GUI_ConstString _SDSListBox[] = {
-  "Language",
+  "Language: ",
   "Date & Time",
   "Units of Measurement",
   "Activity Recording",
@@ -1127,7 +1127,7 @@ static const GUI_ConstString _SDSListBox[] = {
 
 static FRAMEPAGE_HEADER* _SDSListFrame[] = {
 	&headSDSLWindow,
-	&headUnderConstructionWindow,
+	&headSDSDTWindow,
 	&headSDSUMWindow,
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow,
@@ -1228,6 +1228,107 @@ FRAMEPAGE_HEADER headSDSLWindow = {
 	NULL,
 	NULL,
 };
+
+
+/*
+	Settings / Device Settings / Date & Time
+*/
+static const GUI_ConstString _SDSDTListBox[] = {
+  "<Date> <Time>",
+  "Date Format: ",
+  "Time Format: ",
+  "Time Source: ",
+  "Time Zone: ",
+  "DST: ",
+  NULL
+};
+
+static FRAMEPAGE_HEADER* _SDSDTListFrame[] = {
+	&headUnderConstructionWindow,
+	&headSDSDTDFWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow
+};
+
+static int _SDSDTListParam[] = {
+	(COMMON_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(COMMON_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(COMMON_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(COMMON_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(COMMON_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(COMMON_FIELD<<ELEMENT_FIELD_OFFSET)|0
+};
+
+
+FP_LISTMENU_HEADER fpListMenuData_SDSDTWindow = {
+	6,
+	"Date & Time",
+	_SDSDTListBox,
+	&headSDSWindow,
+	_SDSDTListFrame,
+	_SDSDTListParam,
+};
+
+FRAMEPAGE_HEADER headSDSDTWindow = {
+	FRAMEPAGE_LISTMENU,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SDSDTWindow,
+	NULL,
+	NULL,
+};
+
+
+/*
+	Settings / Device Settings / Date & Time / Date Format
+*/
+static const GUI_ConstString _SDSDTDFListBox[] = {
+	"Year-Month-Day\r\n(YYYY-MM-DD)",
+	"Month/Day/Year\r\n(MM/DD/YYYY)",
+	"Day-Month-Year\r\n(DD-MM-YYYY)",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SDSDTDFListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+};
+
+static int _SDSDTDFListParam[] = {
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SDSDTDFWindow = {
+	3,
+	"Date Format",
+	_SDSDTDFListBox,
+	&headSDSDTWindow,
+	_SDSDTDFListFrame,
+	_SDSDTDFListParam,
+};
+
+FRAMEPAGE_HEADER headSDSDTDFWindow = {
+	FRAMEPAGE_LISTMENU_BOOLOPTION,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SDSDTDFWindow,
+	NULL,
+	NULL,
+};
+
 
 
 /*

@@ -39,6 +39,8 @@ extern FRAMEPAGE_HEADER headSUICIEWindow;
 extern FRAMEPAGE_HEADER headSUICIAWindow;
 extern FRAMEPAGE_HEADER headSDSWindow;
 extern FRAMEPAGE_HEADER headSDSLWindow;
+extern FRAMEPAGE_HEADER headSDSDTWindow;
+extern FRAMEPAGE_HEADER headSDSDTDFWindow;
 extern FRAMEPAGE_HEADER headSDSUMWindow;
 extern FRAMEPAGE_HEADER headSDSUMCWindow;
 extern FRAMEPAGE_HEADER headSDSUMSDWindow;
