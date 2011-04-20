@@ -1271,7 +1271,7 @@ static FRAMEPAGE_HEADER* _SDSDTListFrame[] = {
 	&headUnderConstructionWindow,
 	&headSDSDTDFWindow,
 	&headSDSDTTFWindow,
-	&headUnderConstructionWindow,
+	&headSDSDTTSWindow,
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow
 };
@@ -1410,6 +1410,56 @@ FRAMEPAGE_HEADER headSDSDTTFWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSDTTFWindow,
+	NULL,
+	NULL,
+};
+
+
+/*
+	Settings / Device Settings / Date & Time / Time Source
+*/
+static const GUI_ConstString _SDSDTTSListBox[] = {
+	"Automatic",
+	"Manual",
+	NULL
+};
+
+static const GUI_ConstString _SDSDTTSListShort[] = {
+	"Auto",
+	"Manual",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SDSDTTSListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+};
+
+static int _SDSDTTSListParam[] = {
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SDSDTTSWindow = {
+	2,
+	"Time Source",
+	_SDSDTTSListBox,
+	_SDSDTTSListShort,
+	&headSDSDTWindow,
+	_SDSDTTSListFrame,
+	_SDSDTTSListParam,
+	0
+};
+
+FRAMEPAGE_HEADER headSDSDTTSWindow = {
+	FRAMEPAGE_LISTMENU_BOOLOPTION,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SDSDTTSWindow,
 	NULL,
 	NULL,
 };
