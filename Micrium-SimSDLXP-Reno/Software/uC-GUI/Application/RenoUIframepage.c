@@ -700,8 +700,10 @@ FP_LISTMENU_HEADER fpListMenuData_SettingsWindow = {
 	"Settings",
 	_SettingListBox,
 	NULL,
+	NULL,
 	_SettingListFrame,
 	_SettingListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSettingsWindow = {
@@ -744,9 +746,11 @@ FP_LISTMENU_HEADER fpListMenuData_SGSWindow = {
 	3,
 	"GPS Settings",
 	_SGSListBox,
+	NULL,
 	&headSettingsWindow,
 	_SGSListFrame,
 	_SGSListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSGSWindow = {
@@ -790,9 +794,11 @@ FP_LISTMENU_HEADER fpListMenuData_SGSGSWindow = {
 	3,
 	"GPS Satellites",
 	_SGSGSListBox,
+	NULL,
 	&headSGSWindow,
 	_SGSGSListFrame,
 	_SGSGSListParam,
+	0
 };
 */
 FRAMEPAGE_HEADER headSGSGSWindow = {
@@ -835,9 +841,11 @@ FP_LISTMENU_HEADER fpListMenuData_SGSNWindow = {
 	3,
 	"Navigation",
 	_SGSNListBox,
+	NULL,
 	&headSGSWindow,
 	_SGSNListFrame,
 	_SGSNListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSGSNWindow = {
@@ -879,9 +887,11 @@ FP_LISTMENU_HEADER fpListMenuData_SUIWindow = {
 	3,
 	"User Information",
 	_SUIListBox,
+	NULL,
 	&headSettingsWindow,
 	_SUIListFrame,
 	_SUIListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSUIWindow = {
@@ -926,9 +936,11 @@ FP_LISTMENU_HEADER fpListMenuData_SUIPIWindow = {
 	5,
 	"Physical Information",
 	_SUIPIListBox,
+	NULL,
 	&headSUIWindow,
 	_SUIPIListFrame,
 	_SUIPIListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSUIPIWindow = {
@@ -970,9 +982,11 @@ FP_LISTMENU_HEADER fpListMenuData_SUICIWindow = {
 	3,
 	"Contact Information",
 	_SUICIListBox,
+	NULL,
 	&headSUIWindow,
 	_SUICIListFrame,
 	_SUICIListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSUICIWindow = {
@@ -1039,9 +1053,11 @@ FP_LISTMENU_HEADER fpListMenuData_SUICIAWindow = {
 	16,
 	"Address",
 	_SUICIAListBox,
+	NULL,
 	&headSUICIWindow,
 	_SUICIAListFrame,
 	_SUICIAListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSUICIAWindow = {
@@ -1065,9 +1081,11 @@ FP_LISTMENU_HEADER fpListMenuData_SUICIPWindow = {
 	16,
 	"Phone",
 	_SUICIAListBox,
+	NULL,
 	&headSUICIWindow,
 	_SUICIAListFrame,
 	_SUICIAListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSUICIPWindow = {
@@ -1091,9 +1109,11 @@ FP_LISTMENU_HEADER fpListMenuData_SUICIEWindow = {
 	16,
 	"Email",
 	_SUICIAListBox,
+	NULL,
 	&headSUICIWindow,
 	_SUICIAListFrame,
 	_SUICIAListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSUICIEWindow = {
@@ -1143,9 +1163,11 @@ FP_LISTMENU_HEADER fpListMenuData_SDSWindow = {
 	7,
 	"Device Settings",
 	_SDSListBox,
+	NULL,
 	&headSettingsWindow,
 	_SDSListFrame,
 	_SDSListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSDSWindow = {
@@ -1210,9 +1232,11 @@ FP_LISTMENU_HEADER fpListMenuData_SDSLWindow = {
 	10,
 	"Language",
 	_SDSLListBox,
+	NULL,
 	&headSDSWindow,
 	_SDSLListFrame,
 	_SDSLListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSDSLWindow = {
@@ -1266,9 +1290,11 @@ FP_LISTMENU_HEADER fpListMenuData_SDSDTWindow = {
 	6,
 	"Date & Time",
 	_SDSDTListBox,
+	NULL,
 	&headSDSWindow,
 	_SDSDTListFrame,
 	_SDSDTListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSDSDTWindow = {
@@ -1295,6 +1321,13 @@ static const GUI_ConstString _SDSDTDFListBox[] = {
 	NULL
 };
 
+static const GUI_ConstString _SDSDTDFListShort[] = {
+	"Y-M-D",
+	"M/D/Y",
+	"D-M-Y",
+	NULL
+};
+
 static FRAMEPAGE_HEADER* _SDSDTDFListFrame[] = {
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow,
@@ -1311,9 +1344,11 @@ FP_LISTMENU_HEADER fpListMenuData_SDSDTDFWindow = {
 	3,
 	"Date Format",
 	_SDSDTDFListBox,
+	_SDSDTDFListShort,
 	&headSDSDTWindow,
 	_SDSDTDFListFrame,
 	_SDSDTDFListParam,
+	15
 };
 
 FRAMEPAGE_HEADER headSDSDTDFWindow = {
@@ -1364,9 +1399,11 @@ FP_LISTMENU_HEADER fpListMenuData_SDSUMWindow = {
 	7,
 	"Units of Measurement",
 	_SDSUMListBox,
+	NULL,
 	&headSDSWindow,
 	_SDSUMListFrame,
 	_SDSUMListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSDSUMWindow = {
@@ -1387,9 +1424,16 @@ FRAMEPAGE_HEADER headSDSUMWindow = {
 	Settings / Device Settings / Units of Measurement / Coordinates
 */
 static const GUI_ConstString _SDSUMCListBox[] = {
-	"Decimal Degrees",
-	"Degrees Minutes",
-	"Degrees Minutes Seconds",
+	"Decimal Degrees\r\n(hddd.ddddd)",
+	"Degrees Minutes\r\n(hddd mm.mmm')",
+	"Degrees Minutes Seconds\r\n(hddd mm'ss.s\")",
+	NULL
+};
+
+static const GUI_ConstString _SDSUMCListShort[] = {
+	"Dec-Deg",
+	"Deg-Min",
+	"Deg-Min-Sec",
 	NULL
 };
 
@@ -1409,9 +1453,11 @@ FP_LISTMENU_HEADER fpListMenuData_SDSUMCWindow = {
 	3,
 	"Coordinates",
 	_SDSUMCListBox,
+	_SDSUMCListShort,
 	&headSDSUMWindow,
 	_SDSUMCListFrame,
 	_SDSUMCListParam,
+	15
 };
 
 FRAMEPAGE_HEADER headSDSUMCWindow = {
@@ -1451,9 +1497,11 @@ FP_LISTMENU_HEADER fpListMenuData_SDSUMSDWindow = {
 	2,
 	"Speed/Distance",
 	_SDSUMSDListBox,
+	NULL,
 	&headSDSUMWindow,
 	_SDSUMSDListFrame,
 	_SDSUMSDListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSDSUMSDWindow = {
@@ -1493,9 +1541,11 @@ FP_LISTMENU_HEADER fpListMenuData_SDSUMEWindow = {
 	2,
 	"Elevation",
 	_SDSUMEListBox,
+	NULL,
 	&headSDSUMWindow,
 	_SDSUMEListFrame,
 	_SDSUMEListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSDSUMEWindow = {
@@ -1535,9 +1585,11 @@ FP_LISTMENU_HEADER fpListMenuData_SDSUMHWWindow = {
 	2,
 	"Height/Weight",
 	_SDSUMHWListBox,
+	NULL,
 	&headSDSUMWindow,
 	_SDSUMHWListFrame,
 	_SDSUMHWListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSDSUMHWWindow = {
@@ -1577,9 +1629,11 @@ FP_LISTMENU_HEADER fpListMenuData_SDSUMTWindow = {
 	2,
 	"Temperature",
 	_SDSUMTListBox,
+	NULL,
 	&headSDSUMWindow,
 	_SDSUMTListFrame,
 	_SDSUMTListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSDSUMTWindow = {
@@ -1600,6 +1654,14 @@ FRAMEPAGE_HEADER headSDSUMTWindow = {
 	Settings / Device Settings / Units of Measurement / Heart Rate
 */
 static const GUI_ConstString _SDSUMHRListBox[] = {
+	"Beats Per Minute (bpm)",
+	"% of Max Heart Rate (%hrr)",
+	"% of Heart Rate Reserve (%hrm)",
+	"Heart Rate Zone (zone)",
+	NULL
+};
+
+static const GUI_ConstString _SDSUMHRListShort[] = {
 	"BPM",
 	"%MHR",
 	"%HRR",
@@ -1625,9 +1687,11 @@ FP_LISTMENU_HEADER fpListMenuData_SDSUMHRWindow = {
 	4,
 	"Heart Rate",
 	_SDSUMHRListBox,
+	_SDSUMHRListShort,
 	&headSDSUMWindow,
 	_SDSUMHRListFrame,
 	_SDSUMHRListParam,
+	15
 };
 
 FRAMEPAGE_HEADER headSDSUMHRWindow = {
@@ -1648,6 +1712,14 @@ FRAMEPAGE_HEADER headSDSUMHRWindow = {
 	Settings / Device Settings / Units of Measurement / Power
 */
 static const GUI_ConstString _SDSUMPListBox[] = {
+	"Watts (w)",
+	"% of FTP (%ftp)",
+	"kiloJoules (kj)",
+	"Power Zone (zone)",
+	NULL
+};
+
+static const GUI_ConstString _SDSUMPListShort[] = {
 	"Watts",
 	"%FTP",
 	"kJ",
@@ -1673,9 +1745,11 @@ FP_LISTMENU_HEADER fpListMenuData_SDSUMPWindow = {
 	4,
 	"Power",
 	_SDSUMPListBox,
+	_SDSUMPListShort,
 	&headSDSUMWindow,
 	_SDSUMPListFrame,
 	_SDSUMPListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSDSUMPWindow = {
@@ -1728,9 +1802,11 @@ FP_LISTMENU_HEADER fpListMenuData_SAPWindow = {
 	9,
 	"Activity Profile Setting",
 	_SAPListBox,
+	NULL,
 	&headSettingsWindow,
 	_SAPListFrame,
 	_SAPListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSAPWindow = {
@@ -1779,9 +1855,11 @@ FP_LISTMENU_HEADER fpListMenuData_SAPDPWindow = {
 	5,
 	"Display Preferences",
 	_SAPDPListBox,
+	NULL,
 	&headSAPWindow,
 	_SAPDPListFrame,
 	_SAPDPListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSAPDPWindow = {
@@ -1821,9 +1899,11 @@ FP_LISTMENU_HEADER fpListMenuData_SAPDPSPWindow = {
 	2,
 	"Speed/Pace",
 	_SAPDPSPListBox,
+	NULL,
 	&headSAPDPWindow,
 	_SAPDPSPListFrame,
 	_SAPDPSPListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSAPDPSPWindow = {
@@ -1866,9 +1946,11 @@ FP_LISTMENU_HEADER fpListMenuData_SAPDPSSWindow = {
 	3,
 	"Scroll Speed",
 	_SAPDPSSListBox,
+	NULL,
 	&headSAPDPWindow,
 	_SAPDPSSListFrame,
 	_SAPDPSSListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSAPDPSSWindow = {
@@ -1905,9 +1987,11 @@ FP_LISTMENU_HEADER fpListMenuData_SAPDPADSWindow = {
 	1,
 	"Activity Data Screens",
 	_SAPDPADSListBox,
+	NULL,
 	&headSAPDPWindow,
 	_SAPDPADSListFrame,
 	_SAPDPADSListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSAPDPADSWindow = {
@@ -1946,9 +2030,11 @@ FP_LISTMENU_HEADER fpListMenuData_SAPDPADSASWindow = {
 	2,
 	"Add Screen",
 	_SAPDPADSASListBox,
+	NULL,
 	&headSAPDPADSWindow,
 	_SAPDPADSASListFrame,
 	_SAPDPADSASListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headSAPDPADSASWindow = {
@@ -2124,8 +2210,10 @@ FP_LISTMENU_HEADER fpListMenuData_HistoryWindow = {
 	"History",
 	_HistoryListBox,
 	NULL,
+	NULL,
 	_HistoryListFrame,
 	_HistoryListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headHistoryWindow = {
@@ -2166,9 +2254,11 @@ FP_LISTMENU_HEADER fpListMenuData_HAHWindow = {
 	3,
 	"Activity History",
 	_HAHListBox,
+	NULL,
 	&headHistoryWindow,
 	_HAHListFrame,
 	_HAHListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headHAHWindow = {
@@ -2213,9 +2303,11 @@ FP_LISTMENU_HEADER fpListMenuData_HATWindow = {
 	5,
 	"Activity Totals",
 	_HATListBox,
+	NULL,
 	&headHistoryWindow,
 	_HATListFrame,
 	_HATListParam,
+	0
 };
 
 FRAMEPAGE_HEADER headHATWindow = {

@@ -33,9 +33,11 @@ typedef struct
 	int						iListNum;
 	const GUI_ConstString	sListTitle;
 	const GUI_ConstString*	sListName;
+	const GUI_ConstString*	sListShortName;
 	FRAMEPAGE_HEADER*		pUplevelFrame;
 	FRAMEPAGE_HEADER** 		pListFrame;
 	int*					pListParam;
+	unsigned int			uListItemSpacing;			
 } FP_LISTMENU_HEADER;
 
 
