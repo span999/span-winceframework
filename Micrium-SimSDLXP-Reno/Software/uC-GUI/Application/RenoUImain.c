@@ -313,19 +313,19 @@ void MainTask_RenoUItest(void) {
 
 
 
-static FRAMEPAGE_HEADER* SAPDPADSASNSDataSetFrameList[] = {
-	&headSAPDPADSASNS1Window,
-	&headSAPDPADSASNS2Window,
-	&headSAPDPADSASNS3Window,
-	&headSAPDPADSASNS4Window,
-	&headSAPDPADSASNS5Window,
-	&headSAPDPADSASNS6Window
+static FRAMEPAGE_HEADER* SAPAPSDPADSASNSDataSetFrameList[] = {
+	&headSAPAPSDPADSASNS1Window,
+	&headSAPAPSDPADSASNS2Window,
+	&headSAPAPSDPADSASNS3Window,
+	&headSAPAPSDPADSASNS4Window,
+	&headSAPAPSDPADSASNS5Window,
+	&headSAPAPSDPADSASNS6Window
 };
 
-static DATASETS_FRAME_LIST		SAPDPADSASNSDataSetsList = {
+static DATASETS_FRAME_LIST		SAPAPSDPADSASNSDataSetsList = {
 	6,
 	1,
-	SAPDPADSASNSDataSetFrameList,
+	SAPAPSDPADSASNSDataSetFrameList,
 };
 
 
