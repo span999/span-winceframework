@@ -19,7 +19,8 @@
 #define		ELEMENT_FIELD_MASK				0xFFFF0000
 #define		ELEMENT_FIELD_OFFSET			16
 #define		COMMON_FIELD					0x0000
-#define		BOOLEAN_OPTION_FIELD			0x0001
+#define		BOOLEAN_OPTION_FIELD			0x0001		///item of list menu in boolean
+#define		POPUP_SELECTOR_FIELD			0x0002		///item of popup list in selector
 
 #define		ELEMENT_VALUE_MASK				0x0000FFFF
 
