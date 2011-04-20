@@ -77,7 +77,6 @@ typedef struct
 
 
 
-
 /*
 	shortcut declare
 */
