@@ -1654,10 +1654,10 @@ FRAMEPAGE_HEADER headSDSUMTWindow = {
 	Settings / Device Settings / Units of Measurement / Heart Rate
 */
 static const GUI_ConstString _SDSUMHRListBox[] = {
-	"Beats Per Minute (bpm)",
-	"% of Max Heart Rate (%hrr)",
-	"% of Heart Rate Reserve (%hrm)",
-	"Heart Rate Zone (zone)",
+	"Beats Per Minute\r\n(bpm)",
+	"% of Max Heart Rate\r\n(%hrr)",
+	"% of Heart Rate\r\nReserve (%hrm)",
+	"Heart Rate Zone\r\n(zone)",
 	NULL
 };
 
