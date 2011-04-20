@@ -161,7 +161,9 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 						///GUI_GetStringDistX( pListMenu->sListName[pDrawItemInfo->ItemIndex] );
 						///GUI_DispStringLen
 						GUI_DispStringAt(	
-									pNextList->sListName[iLoop], 
+									///pNextList->sListName[iLoop], 
+									///pNextList->sListShortName[iLoop],
+									(NULL==pNextList->sListShortName)?(pNextList->sListName[iLoop]):(pNextList->sListShortName[iLoop]),
 									pDrawItemInfo->x0 + GUI_GetStringDistX( pListMenu->sListName[pDrawItemInfo->ItemIndex] ), 
 									pDrawItemInfo->y0);
 					}
@@ -429,7 +431,8 @@ void ListMenuWindow( int iOption )
 	LISTBOX_SetOwnerDraw( hList, spListBoxOwnerDraw );
 	///LISTBOX_InvalidateItem( hList, 2 );
 	
-	LISTBOX_SetItemSpacing( hList, 15);
+	if( pListMenu->uListItemSpacing > 0 )
+		LISTBOX_SetItemSpacing( hList, pListMenu->uListItemSpacing );
 	
 	if( FRAMEPAGE_LISTMENU_BOOLOPTION != pCurrFramePageType )
 	{	///in case we have boolean option field in the list
