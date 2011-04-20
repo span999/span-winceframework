@@ -1270,7 +1270,7 @@ static const GUI_ConstString _SDSDTListBox[] = {
 static FRAMEPAGE_HEADER* _SDSDTListFrame[] = {
 	&headUnderConstructionWindow,
 	&headSDSDTDFWindow,
-	&headUnderConstructionWindow,
+	&headSDSDTTFWindow,
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow,
 	&headUnderConstructionWindow
@@ -1360,6 +1360,56 @@ FRAMEPAGE_HEADER headSDSDTDFWindow = {
 	0,
 	1,
 	(void*)&fpListMenuData_SDSDTDFWindow,
+	NULL,
+	NULL,
+};
+
+
+/*
+	Settings / Device Settings / Date & Time / Time Format
+*/
+static const GUI_ConstString _SDSDTTFListBox[] = {
+	"12 Hour\r\n(12:00:00AM-11:59:59PM)",
+	"24 Hour\r\n(00:00:00-23:59:59)",
+	NULL
+};
+
+static const GUI_ConstString _SDSDTTFListShort[] = {
+	"12 Hour",
+	"24 Hour",
+	NULL
+};
+
+static FRAMEPAGE_HEADER* _SDSDTTFListFrame[] = {
+	&headUnderConstructionWindow,
+	&headUnderConstructionWindow,
+};
+
+static int _SDSDTTFListParam[] = {
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1, 
+	(BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0
+};
+
+FP_LISTMENU_HEADER fpListMenuData_SDSDTTFWindow = {
+	2,
+	"Time Format",
+	_SDSDTTFListBox,
+	_SDSDTTFListShort,
+	&headSDSDTWindow,
+	_SDSDTTFListFrame,
+	_SDSDTTFListParam,
+	15
+};
+
+FRAMEPAGE_HEADER headSDSDTTFWindow = {
+	FRAMEPAGE_LISTMENU_BOOLOPTION,
+	ListMenuWindow,
+	cbListMenuWindow,
+	NULL,
+	0,
+	0,
+	1,
+	(void*)&fpListMenuData_SDSDTTFWindow,
 	NULL,
 	NULL,
 };
