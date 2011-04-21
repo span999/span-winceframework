@@ -53,8 +53,11 @@ ACTDATA_SYS		ActivityDataSys[] =
 };
 
 
+extern GUI_CONST_STORAGE GUI_FONT GUI_FontArial32_20pt;
+extern GUI_CONST_STORAGE GUI_FONT GUI_FontArial22_14pt;
+extern GUI_CONST_STORAGE GUI_FONT GUI_FontMonaco93_48pt;
 
-extern GUI_CONST_STORAGE GUI_FONT GUI_FontArial14;
+
 /*
 	data set [total]x[older]	related coordination
 */	
@@ -62,7 +65,8 @@ static const _DATASET_FRAME	ActivityDataFrame[6][6] = {
 	///total 1 dataset
 	{
 ///		{	0,	0,	LCD_XSIZE,	LCD_YSIZE,	3,	3,	&GUI_Font16B_ASCII, 	LCD_XSIZE-23,	LCD_YSIZE-18,	&GUI_Font16B_ASCII,	25,	LCD_YSIZE/2-12,	100,	35, &GUI_Font32B_ASCII	},
-		{	0,	0,	LCD_XSIZE,	LCD_YSIZE,	3,	3,	&GUI_FontArial14, 	LCD_XSIZE-23,	LCD_YSIZE-18,	&GUI_Font16B_ASCII,	25,	LCD_YSIZE/2-12,	100,	35, &GUI_Font32B_ASCII	},
+///		{	0,	0,	LCD_XSIZE,	LCD_YSIZE,	3,	3,	&GUI_FontArial14, 	LCD_XSIZE-23,	LCD_YSIZE-18,	&GUI_Font16B_ASCII,	25,	LCD_YSIZE/2-12,	100,	35, &GUI_Font32B_ASCII	},
+		{	0,	0,	LCD_XSIZE,	LCD_YSIZE,	3,	3,	&GUI_FontArial22_14pt, 	LCD_XSIZE-43,	LCD_YSIZE-30,	&GUI_FontArial32_20pt,	5,	LCD_YSIZE/2-32,	140,	100, &GUI_FontMonaco93_48pt	},
 		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
 		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
 		{	0,	0,	0,	0,	0,	0,	NULL, 	0,	0,	NULL, 	0,	0,	0,	0, 	NULL	},
