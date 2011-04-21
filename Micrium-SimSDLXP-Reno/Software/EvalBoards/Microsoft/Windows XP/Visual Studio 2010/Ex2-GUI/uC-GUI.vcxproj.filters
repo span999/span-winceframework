@@ -2032,6 +2032,48 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco93_48pt.c">
       <Filter>uC-GUI\Application\res\font</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial18_12pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial14_8pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial16_10pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial17_11pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco69_36pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco45_24pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco51_26pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco53_28pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco23_12pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco27_14pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco30_16pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco34_18pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco40_20pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco42_22pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_cfg.h">
