@@ -22,6 +22,6 @@
 	#define NULL (0)
 #endif
 
-
+#include "RenoFont.h"
 
 #endif	/* _RENOGUI_H_ */

@@ -421,6 +421,7 @@ void ListMenuWindow( int iOption )
 	pListMenu = pCurrFramePageFrameData;
 	///create frame title
 	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pListMenu->sListTitle, NULL);
+	FRAMEWIN_SetDefaultFont( &GUI_FontArial17_11pt );
 	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
 
 	///create list menu
@@ -430,6 +431,7 @@ void ListMenuWindow( int iOption )
 	
 	LISTBOX_SetOwnerDraw( hList, spListBoxOwnerDraw );
 	///LISTBOX_InvalidateItem( hList, 2 );
+	LISTBOX_SetFont( hList, &GUI_FontArial16_10pt );
 	
 	if( pListMenu->uListItemSpacing > 0 )
 		LISTBOX_SetItemSpacing( hList, pListMenu->uListItemSpacing );
