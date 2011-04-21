@@ -125,6 +125,8 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUIframepage.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUImain.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUItoolhelp.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial14.c" />
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial19.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\GPS_1.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\magellan0409-bmp\Reno_Icon_20_GPS_Lock.c" />
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\magellan0409-bmp\Reno_Icon_20_GPS_Off.c" />
