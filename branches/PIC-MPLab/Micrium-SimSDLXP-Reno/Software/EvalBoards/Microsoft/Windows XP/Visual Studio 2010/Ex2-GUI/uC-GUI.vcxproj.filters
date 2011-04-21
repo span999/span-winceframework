@@ -2023,10 +2023,13 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUICwatchmode.c">
       <Filter>uC-GUI\Application</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial19.c">
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial22_14pt.c">
       <Filter>uC-GUI\Application\res\font</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial14.c">
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial32_20pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco93_48pt.c">
       <Filter>uC-GUI\Application\res\font</Filter>
     </ClCompile>
   </ItemGroup>
