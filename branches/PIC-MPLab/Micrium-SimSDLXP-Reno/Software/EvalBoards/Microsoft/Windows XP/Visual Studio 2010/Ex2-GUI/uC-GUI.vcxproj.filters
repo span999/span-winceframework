@@ -2023,6 +2023,12 @@
     <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUICwatchmode.c">
       <Filter>uC-GUI\Application</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial19.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial14.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_cfg.h">
@@ -2176,6 +2182,9 @@
     </Filter>
     <Filter Include="uC-GUI\Application\example">
       <UniqueIdentifier>{d4a9edb0-9e09-4cc6-af78-d9d2237374e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\Application\res\font">
+      <UniqueIdentifier>{234cd1ce-825a-404b-9c7b-24d40eed9e24}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

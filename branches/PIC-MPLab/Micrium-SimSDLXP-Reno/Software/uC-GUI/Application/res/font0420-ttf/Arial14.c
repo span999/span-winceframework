@@ -23671,6 +23671,7 @@ GUI_CONST_STORAGE GUI_FONT GUI_FontArial14 = {
   ,14 /* space of font y */
   ,1 /* magnification x */
   ,1 /* magnification y */
-  ,&GUI_FontArial14_Prop1
+  ,&GUI_FontArial14_Prop1,
+  13, 7, 10
 };
 
