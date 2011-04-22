@@ -130,8 +130,8 @@ void TaskUserDataHook( void * pvParameters )
 								};
 								
 		///create random data
-		sprintf( str1, "%d.%d", spGetRandNum( 1, 99), spGetRandNum( 1, 99) );
-		sprintf( str2, "%d:%d", spGetRandNum( 1, 24), spGetRandNum( 0, 59) );
+		sprintf( str1, "%02d.%02d", spGetRandNum( 1, 99), spGetRandNum( 1, 99) );
+		sprintf( str2, "%02d:%02d", spGetRandNum( 1, 24), spGetRandNum( 0, 59) );
 		sprintf( str3, "%d", spGetRandNum( 1, 999) );
 		sprintf( str4, "%d", spGetRandNum( 1, 999) );
 		///activitydatas.activity[0].sDataStr = "3.33 ";
