@@ -16,6 +16,18 @@
 #include "RenoUIClistmenu.h"
 
 
+static GUI_POINT pScrollUp[] = {
+							{ 0, 8},
+							{ 6, 0},
+							{ 12, 8},
+						};
+static GUI_POINT pScrollDown[] = {
+							{ 0, 0},
+							{ 12, 0},
+							{ 6, 8},
+						};
+
+
 
 #if (GUI_WINSUPPORT)
 static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
@@ -126,8 +138,8 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 				{	/// show -> if there is next level menu
 					GUI_POINT pPoint1[] = {
 									{ 0, 0+1},
-									{ 0, 10+1},
-									{ 7, 5+1},
+									{ 0, 12+1},
+									{ 8, 6+1},
 								};
 								
 					if( FRAMEPAGE_LISTMENU == pListMenu->pListFrame[pDrawItemInfo->ItemIndex]->frametype )
@@ -233,6 +245,15 @@ int spListMenuOptionFieldCheck( LISTBOX_Handle hList, int iSelet, int iInit )
 	}
 	
 	return iRet;
+}
+
+
+static void spcbScrollIconDraw(WM_MESSAGE* pMsg, GUI_COLOR color )
+{
+	if( pMsg->MsgId == WM_PAINT )
+	{
+		GUI_DrawPolygon( pScrollUp, 3, (LCD_GetXSize()+12)/2, -10 );
+	}
 }
 
 void cbListMenuWindow(WM_MESSAGE* pMsg)
@@ -385,11 +406,13 @@ void cbListMenuWindow(WM_MESSAGE* pMsg)
 	else
 	if( pMsg->MsgId == WM_PAINT )
 	{
-		///spcbRoundWinExt( pMsg, GUI_BLUE, 0, 1, 1 );
+		if( pCurrFramePageOldCb ) pCurrFramePageOldCb( pMsg );
+		spcbScrollIconDraw( pMsg, GUI_BLUE );
+		return;
 	}
+	
 	if( pCurrFramePageOldCb )
 		pCurrFramePageOldCb( pMsg );
-	return;
 
 }
 #endif
@@ -425,7 +448,16 @@ void ListMenuWindow( int iOption )
 	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
 
 	///create list menu
-	hList = LISTBOX_CreateEx(0, iTmp, LCD_GetXSize(), LCD_GetYSize()-iTmp, (WM_HWIN)hFrame, WM_CF_SHOW, 0, 0, pListMenu->sListName);
+	hList = LISTBOX_CreateEx(
+					0, 
+					iTmp+SCROLL_ICON_HEIGHT, 
+					LCD_GetXSize(), 
+					LCD_GetYSize()-iTmp-SCROLL_ICON_HEIGHT-SCROLL_ICON_HEIGHT, 
+					(WM_HWIN)hFrame, WM_CF_SHOW, 
+					0, 
+					0, 
+					pListMenu->sListName);
+
 	///add callback
 	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
 	
