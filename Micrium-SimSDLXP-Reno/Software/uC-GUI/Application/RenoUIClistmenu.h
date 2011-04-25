@@ -24,6 +24,8 @@
 
 #define		ELEMENT_VALUE_MASK				0x0000FFFF
 
+#define		SCROLL_ICON_HEIGHT				12
+
 
 
 /*
@@ -38,7 +40,7 @@ typedef struct
 	FRAMEPAGE_HEADER*		pUplevelFrame;
 	FRAMEPAGE_HEADER** 		pListFrame;
 	int*					pListParam;
-	unsigned int			uListItemSpacing;			
+	unsigned int			uListItemSpacing;
 } FP_LISTMENU_HEADER;
 
 
