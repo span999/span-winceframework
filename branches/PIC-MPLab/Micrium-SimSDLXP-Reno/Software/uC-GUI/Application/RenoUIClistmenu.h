@@ -24,8 +24,25 @@
 
 #define		ELEMENT_VALUE_MASK				0x0000FFFF
 
-#define		SCROLL_ICON_HEIGHT				12
+///enable the list scroll icon
+///#define		USE_LIST_SCROLL_ICON
 
+///enable the list scroll button
+#define		USE_LIST_SCROLL_BTN
+
+#ifdef 	USE_LIST_SCROLL_ICON
+	#define		SCROLL_ICON_HEIGHT				12
+#else
+	#define		SCROLL_ICON_HEIGHT				0
+#endif
+
+#ifdef 	USE_LIST_SCROLL_BTN
+	#define		SCROLL_BTN_HEIGHT				12
+	#define		SCROLL_BTN_WIDTH				144
+#else
+	#define		SCROLL_BTN_HEIGHT				0
+	#define		SCROLL_BTN_WIDTH				0
+#endif
 
 
 /*

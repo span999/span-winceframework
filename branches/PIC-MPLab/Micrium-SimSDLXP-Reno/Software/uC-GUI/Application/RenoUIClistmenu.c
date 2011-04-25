@@ -16,6 +16,8 @@
 #include "RenoUIClistmenu.h"
 
 
+
+
 static GUI_POINT pScrollUp[] = {
 							{ 0, 8},
 							{ 6, 0},
@@ -28,13 +30,96 @@ static GUI_POINT pScrollDown[] = {
 						};
 
 
+#ifdef 	USE_LIST_SCROLL_ICON
+
+static WM_HWIN 			hListScrollMain = NULL;
+static WM_CALLBACK* 	pcbListMainScroll = NULL;
+static int				iFirstIdx	= 0;
+static int				iLastIdx	= 0;
+static int				iIsTop		= 0;
+static int				iIsEnd		= 0;
+
+
+static cbListMainScroll(WM_MESSAGE* pMsg)
+{
+	int iTmp = 0;
+	GUI_RECT rtTemp;
+	SPPRINTF( "-->cbListMainScroll=%d\n", 99 );
+	if( pcbListMainScroll ) pcbListMainScroll( pMsg );
+
+	WM_GetClientRectEx( pMsg->hWin, &rtTemp );
+	iTmp = FRAMEWIN_GetTitleHeight( pMsg->hWin );
+
+	GUI_SetColor(GUI_BLACK);
+	GUI_SetBkColor(GUI_WHITE);
+	if( iIsTop )
+		GUI_DrawPolygon( pScrollUp, 3, (LCD_GetXSize()-12)/2, rtTemp.y0+1 );
+	else
+		GUI_FillPolygon( pScrollUp, 3, (LCD_GetXSize()-12)/2, rtTemp.y0+1 );
+
+	if( iIsEnd )
+		GUI_DrawPolygon( pScrollDown, 3, (LCD_GetXSize()-12)/2, rtTemp.y1-10 );
+	else
+		GUI_FillPolygon( pScrollDown, 3, (LCD_GetXSize()-12)/2, rtTemp.y1-10 );
+
+	iIsTop = 0;
+	iIsEnd = 0;
+}
+
+
+#endif
+
+#ifdef 	USE_LIST_SCROLL_BTN
+static BUTTON_Handle	hUpScroll = NULL;
+static BUTTON_Handle	hDownScroll = NULL;
+static int				iFirstIdx	= 0;
+static int				iLastIdx	= 0;
+#endif
+
+
 
 #if (GUI_WINSUPPORT)
 static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
 	int iRet = 0;
-	
-	///SPPRINTF("spListBoxOwnerDraw x=%d y=%d idx=%d\n", pDrawItemInfo->x0, pDrawItemInfo->x0, pDrawItemInfo->ItemIndex);
+
+#ifdef 	USE_LIST_SCROLL_ICON
+	if( WIDGET_ITEM_DRAW == pDrawItemInfo->Cmd )
+	{
+		if( iFirstIdx == pDrawItemInfo->ItemIndex )
+			iIsTop = 1;
+		if( iLastIdx == pDrawItemInfo->ItemIndex )
+			iIsEnd = 1;
+		///WM_Paint( hListScrollMain );
+	}
+#endif
+#ifdef 	USE_LIST_SCROLL_BTN
+	if( WIDGET_ITEM_DRAW == pDrawItemInfo->Cmd )
+	{
+		if( iFirstIdx == pDrawItemInfo->ItemIndex )
+		{
+			///iIsTop = 1;
+			BUTTON_SetText( hUpScroll, "UP" );
+		}
+		else
+		{
+			BUTTON_SetText( hUpScroll, "more UP" );
+		}	
+		if( iLastIdx == pDrawItemInfo->ItemIndex )
+		{
+			///iIsEnd = 1;
+			BUTTON_SetText( hDownScroll, "DOWN" );
+		}
+		else
+		{
+			BUTTON_SetText( hDownScroll, "more DOWN" );
+		}
+		///WM_Paint( hListScrollMain );
+	}
+#endif
+
+
+	SPPRINTF("spListBoxOwnerDraw x=%d y=%d idx=%d\n", pDrawItemInfo->x0, pDrawItemInfo->x0, pDrawItemInfo->ItemIndex);
 	switch (pDrawItemInfo->Cmd) {
 		case WIDGET_ITEM_GET_XSIZE:
 			///SPPRINTF("spListBoxOwnerDraw: WIDGET_ITEM_GET_XSIZE\n");
@@ -52,16 +137,16 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 			iRet = LISTBOX_OwnerDraw(pDrawItemInfo);
 			{
 				FP_LISTMENU_HEADER* pListMenu = NULL;
-	
-				if( 
+
+				if(
 					IsNotCurrFPListMenuLike ||
 					NULL == pCurrFramePageFrameData
-				)	
+				)
 				{
 					SPPRINTF("!!!!Error, there should list menu data here!! abort!!\n");
 					return iRet;
 				}
-				
+
 				pListMenu = pCurrFramePageFrameData;
 				/*
 				GUI_RECT rtTemp;
@@ -72,7 +157,7 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 				GUI_FillRect(rtTemp.x0, rtTemp.y0, rtTemp.x1, rtTemp.y1);
 				*/
 				if( FRAMEPAGE_LISTMENU_BOOLOPTION == pCurrFramePageType )
-				{	///handle the frame page with all boolean option in it!! 
+				{	///handle the frame page with all boolean option in it!!
 					GUI_POINT pPoint1[] = {
 									{ 0+0, 0+2},
 									{ 0+0, 8+2},
@@ -124,13 +209,13 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 						///GUI_DispStringAt("|v|", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
 						GUI_DrawPolygon( pPoint1, 4, pDrawItemInfo->x0 + 130, pDrawItemInfo->y0 );
 						///mark the check
-						GUI_FillPolygon( pPoint2, 4, pDrawItemInfo->x0 + 130, pDrawItemInfo->y0 );					
+						GUI_FillPolygon( pPoint2, 4, pDrawItemInfo->x0 + 130, pDrawItemInfo->y0 );
 					}
 					else
 					{
 						///draw the square
 						///GUI_DispStringAt("|_|", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
-						GUI_DrawPolygon( pPoint1, 4, pDrawItemInfo->x0 + 130, pDrawItemInfo->y0 );					
+						GUI_DrawPolygon( pPoint1, 4, pDrawItemInfo->x0 + 130, pDrawItemInfo->y0 );
 					}
 				}
 				else
@@ -141,7 +226,7 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 									{ 0, 12+1},
 									{ 8, 6+1},
 								};
-								
+
 					if( FRAMEPAGE_LISTMENU == pListMenu->pListFrame[pDrawItemInfo->ItemIndex]->frametype )
 					{
 						///GUI_DispStringAt("->", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
@@ -152,16 +237,16 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 					{
 						int iLoop = 0;
 						FP_LISTMENU_HEADER* pNextList = NULL;
-						
+
 						///GUI_DispStringAt("->", pDrawItemInfo->x0 + 130, pDrawItemInfo->y0);
 						GUI_FillPolygon( pPoint1, 3, pDrawItemInfo->x0 + 130, pDrawItemInfo->y0 );
-						
-						
+
+
 						///find the name of next boolean value for display
 						pNextList = pListMenu->pListFrame[pDrawItemInfo->ItemIndex]->pFrameData;
 						for( iLoop=0; iLoop<pNextList->iListNum; iLoop++ )
 						{
-							if( 
+							if(
 								BOOLEAN_OPTION_FIELD == spGetListParamType( pNextList->pListParam[iLoop] ) &&
 								1 == spGetListParamValue( pNextList->pListParam[iLoop] )
 							)
@@ -172,11 +257,11 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 						///GUI_DispStringAt(pNextList->sListName[iLoop], pDrawItemInfo->x0 + 130 - 60, pDrawItemInfo->y0);
 						///GUI_GetStringDistX( pListMenu->sListName[pDrawItemInfo->ItemIndex] );
 						///GUI_DispStringLen
-						GUI_DispStringAt(	
-									///pNextList->sListName[iLoop], 
+						GUI_DispStringAt(
+									///pNextList->sListName[iLoop],
 									///pNextList->sListShortName[iLoop],
 									(NULL==pNextList->sListShortName)?(pNextList->sListName[iLoop]):(pNextList->sListShortName[iLoop]),
-									pDrawItemInfo->x0 + GUI_GetStringDistX( pListMenu->sListName[pDrawItemInfo->ItemIndex] ), 
+									pDrawItemInfo->x0 + GUI_GetStringDistX( pListMenu->sListName[pDrawItemInfo->ItemIndex] ),
 									pDrawItemInfo->y0);
 					}
 				}
@@ -198,8 +283,8 @@ int spListMenuOptionFieldCheck( LISTBOX_Handle hList, int iSelet, int iInit )
 	FP_LISTMENU_HEADER*	pListMenu = NULL;
 	int iPara = 0;
 	int iTmp = 0;
-	
-	if( 
+
+	if(
 		IsNotCurrFPListMenuLike ||
 		NULL == pCurrFramePageFrameData
 	)
@@ -207,11 +292,11 @@ int spListMenuOptionFieldCheck( LISTBOX_Handle hList, int iSelet, int iInit )
 		SPPRINTF("!!!!Error, there should list menu data here!! abort!!\n");
 		return iRet;
 	}
-		
+
 	pListMenu = pCurrFramePageFrameData;
 
 	iPara = pListMenu->pListParam[iSelet];
-	
+
 	///control the items regarding if there is boolean option item
 	///usually, the boolean option item will set the disable flag of rest items
 	if( 0 == iInit && 0 < (iPara & (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0) )
@@ -227,23 +312,23 @@ int spListMenuOptionFieldCheck( LISTBOX_Handle hList, int iSelet, int iInit )
 			pListMenu->pListParam[iSelet] = (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1;
 		}
 		///iPara = pListMenu->pListParam[iSelet];	///flush the variable
-		///set the item disabled flag for new 
+		///set the item disabled flag for new
 //		iPara = LISTBOX_GetNumItems( hList );	///till the end ?? no other boolean option field??
 //		for( iTmp=iSelet+1; iTmp<iPara; iTmp++ )
 //			LISTBOX_SetItemDisabled( hList, iTmp, (pListMenu->pListParam[iSelet] == ((BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1)?0:1 ) );
-		
+
 		LISTBOX_SetItemDisabled( hList, iSelet, 1 );	///trigger redraw
 		LISTBOX_SetItemDisabled( hList, iSelet, 0 );	///trigger redraw
 		iRet = 1;
 	}
-	
+
 	if( 0 < (iPara & (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0) )
 	{
 		iPara = LISTBOX_GetNumItems( hList );	///till the end ?? no other boolean option field??
 		for( iTmp=iSelet+1; iTmp<iPara; iTmp++ )
 			LISTBOX_SetItemDisabled( hList, iTmp, (pListMenu->pListParam[iSelet] == ((BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1)?0:1 ) );
 	}
-	
+
 	return iRet;
 }
 
@@ -259,12 +344,12 @@ static void spcbScrollIconDraw(WM_MESSAGE* pMsg, GUI_COLOR color )
 void cbListMenuWindow(WM_MESSAGE* pMsg)
 {
 	///SPPRINTF("cbListMenuWindow() ==> %d \n", pMsg->MsgId);
-	
+
 	///hack the WM msg here
 	if( pMsg->MsgId == WM_KEY )
 	{
 		int Key = 0;
-			
+
 		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
 		if( IsUP_press(Key) )	///up
 			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
@@ -276,7 +361,7 @@ void cbListMenuWindow(WM_MESSAGE* pMsg)
 		{	/// hold up key
 			spGoAfterFramePage( &headPopupListWindow_DeviceModeFitness );
 		}
-		else		
+		else
 		if( IsDOWN_hold(Key) )
 		{	/// hold down key
 			spGoAfterFramePage( &headPopupListWindow_Fitness );
@@ -288,8 +373,8 @@ void cbListMenuWindow(WM_MESSAGE* pMsg)
 			FP_LISTMENU_HEADER*	pListMenu = NULL;
 			FRAMEPAGE_HEADER*	pNextFrame = NULL;
 			int iSelet = -1;
-				
-			if( 
+
+			if(
 				IsNotCurrFPListMenuLike ||
 				NULL == pCurrFramePageFrameData
 			)
@@ -297,13 +382,13 @@ void cbListMenuWindow(WM_MESSAGE* pMsg)
 				SPPRINTF("!!!!Error, there should list menu data here!! abort!!\n");
 				return;
 			}
-			
+
 			pListMenu = pCurrFramePageFrameData;
 			if( NULL == pListMenu->pUplevelFrame )
 			{
 				///handle the exception of BACK key in menu list
-				if( 
-					&headSettingsWindow == pCurrFramePage ||					
+				if(
+					&headSettingsWindow == pCurrFramePage ||
 					&headHistoryWindow == pCurrFramePage
 				)
 					spGoAfterFramePage( &headDataModeWindow );
@@ -313,7 +398,7 @@ void cbListMenuWindow(WM_MESSAGE* pMsg)
 			else
 				spGoAfterFramePage( pListMenu->pUplevelFrame );
 		}
-		else		
+		else
 		if( IsENTER_press(Key) )
 		{	/// enter key
 			FP_LISTMENU_HEADER*	pListMenu = NULL;
@@ -322,7 +407,7 @@ void cbListMenuWindow(WM_MESSAGE* pMsg)
 			///pBeforeFramePage = pCurrFramePage;
 			///pCurrFramePage = pAfterFramePage;
 
-			if( 
+			if(
 				IsNotCurrFPListMenuLike ||
 				NULL == pCurrFramePageFrameData
 			)
@@ -330,11 +415,11 @@ void cbListMenuWindow(WM_MESSAGE* pMsg)
 				SPPRINTF("!!!!Error, there should list menu data here!! abort!!\n");
 				return;
 			}
-			
+
 			pListMenu = pCurrFramePageFrameData;
 			///check what you selected
 			iSelet = LISTBOX_GetSel(pMsg->hWin);
-			
+
 			///if the frame is all boolean option items...
 			if( FRAMEPAGE_LISTMENU_BOOLOPTION == pCurrFramePageType )
 			{
@@ -345,11 +430,11 @@ void cbListMenuWindow(WM_MESSAGE* pMsg)
 					///clean all
 					for( iTmp=0; iTmp<pListMenu->iListNum; iTmp++ )
 						pListMenu->pListParam[iTmp] = (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|0;
-						
+
 					///set selected enable
 					pListMenu->pListParam[iSelet] = (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1;
 				}
-				
+
 				spGoAfterFramePage( pListMenu->pUplevelFrame );
 			}
 			else
@@ -360,7 +445,7 @@ void cbListMenuWindow(WM_MESSAGE* pMsg)
 				{
 					;
 				}
-			#else	
+			#else
 				int iPara = 0;
 				int iTmp = 0;
 				iPara = pListMenu->pListParam[iSelet];
@@ -379,15 +464,15 @@ void cbListMenuWindow(WM_MESSAGE* pMsg)
 						pListMenu->pListParam[iSelet] = (BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1;
 					}
 					///iPara = pListMenu->pListParam[iSelet];	///flush the variable
-					///set the item disabled flag for new 
+					///set the item disabled flag for new
 					iPara = LISTBOX_GetNumItems( pMsg->hWin );
 					for( iTmp=iSelet+1; iTmp<iPara; iTmp++ )
 						LISTBOX_SetItemDisabled( pMsg->hWin, iTmp, (pListMenu->pListParam[iSelet] == ((BOOLEAN_OPTION_FIELD<<ELEMENT_FIELD_OFFSET)|1)?0:1 ) );
-					
+
 					LISTBOX_SetItemDisabled( pMsg->hWin, iSelet, 1 );	///trigger redraw
 					LISTBOX_SetItemDisabled( pMsg->hWin, iSelet, 0 );	///trigger redraw
 				}
-			#endif	
+			#endif
 				else
 				{
 					///jump to what you selected
@@ -399,7 +484,7 @@ void cbListMenuWindow(WM_MESSAGE* pMsg)
 			{
 				SPPRINTF( "!!!!!LISTBOX_GetSel=%d\n", iSelet );
 				spGoAfterFramePage( pBeforeFramePage );
-			}	
+			}
 		}
 
 	}
@@ -410,7 +495,7 @@ void cbListMenuWindow(WM_MESSAGE* pMsg)
 		spcbScrollIconDraw( pMsg, GUI_BLUE );
 		return;
 	}
-	
+
 	if( pCurrFramePageOldCb )
 		pCurrFramePageOldCb( pMsg );
 
@@ -426,13 +511,13 @@ void ListMenuWindow( int iOption )
 	FP_LISTMENU_HEADER* pListMenu = NULL;
 	int iTmp = 0;
 
-	
+
 	if( pCurrFramePageClearFirst > 0 )
 		spBlankScreen();
 
 	spSetDefaultEffect();
 
-	if( 
+	if(
 		IsNotCurrFPListMenuLike ||
 		NULL == pCurrFramePageFrameData
 	)
@@ -440,53 +525,107 @@ void ListMenuWindow( int iOption )
 		SPPRINTF("!!!!Error, there should list menu data here!! abort!!\n");
 		return;
 	}
-	
+
 	pListMenu = pCurrFramePageFrameData;
 	///create frame title
 	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pListMenu->sListTitle, NULL);
 	FRAMEWIN_SetDefaultFont( &GUI_FontArial17_11pt );
 	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
+	///FRAMEWIN_SetClientColor( hFrame, GUI_RED );
+
+#ifdef 	USE_LIST_SCROLL_ICON
+	if( SCROLL_ICON_HEIGHT )
+	{
+	#if 0
+		WM_MESSAGE  MsgCmd;
+
+		MsgCmd.MsgId = WM_GET_CLIENT_WINDOW;
+		MsgCmd.hWin = hFrame;
+		///get handle of client window
+		WM_SendMessage( hFrame, &MsgCmd );
+		hListScrollMain = MsgCmd.Data.v;
+	#else
+		hListScrollMain = WM_GetClientWindow( hFrame );
+	#endif
+		///set callback to client window
+		pcbListMainScroll = WM_SetCallback( hListScrollMain, cbListMainScroll );
+
+		iFirstIdx	= 0;
+		iLastIdx	= pListMenu->iListNum - 1;
+	}
+#endif
+
+#ifdef 	USE_LIST_SCROLL_BTN
+	if( SCROLL_BTN_HEIGHT )
+	{
+		hUpScroll = BUTTON_CreateEx( 
+					0,
+					0+iTmp,
+					SCROLL_BTN_WIDTH,
+					SCROLL_BTN_HEIGHT,
+					hFrame,
+					WM_CF_SHOW,
+					0,
+					88);
+
+		hDownScroll = BUTTON_CreateEx( 
+					0,
+					LCD_GetYSize()-SCROLL_BTN_HEIGHT,
+					SCROLL_BTN_WIDTH,
+					SCROLL_BTN_HEIGHT,
+					hFrame,
+					WM_CF_SHOW,
+					0,
+					89);
+					
+		BUTTON_SetText( hUpScroll, "UP" );
+		BUTTON_SetText( hDownScroll, "DOWN" );
+		iFirstIdx	= 0;
+		iLastIdx	= pListMenu->iListNum - 1;		
+	}
+#endif
 
 	///create list menu
 	hList = LISTBOX_CreateEx(
-					0, 
-					iTmp+SCROLL_ICON_HEIGHT, 
-					LCD_GetXSize(), 
-					LCD_GetYSize()-iTmp-SCROLL_ICON_HEIGHT-SCROLL_ICON_HEIGHT, 
-					(WM_HWIN)hFrame, WM_CF_SHOW, 
-					0, 
-					0, 
+					0,
+					iTmp+SCROLL_ICON_HEIGHT+SCROLL_BTN_HEIGHT,
+					LCD_GetXSize(),
+					LCD_GetYSize()-iTmp-SCROLL_ICON_HEIGHT-SCROLL_ICON_HEIGHT-SCROLL_BTN_HEIGHT-SCROLL_BTN_HEIGHT,
+					(WM_HWIN)hFrame, 
+					WM_CF_SHOW,
+					0,
+					0,
 					pListMenu->sListName);
 
 	///add callback
 	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
-	
+
 	LISTBOX_SetOwnerDraw( hList, spListBoxOwnerDraw );
 	///LISTBOX_InvalidateItem( hList, 2 );
 	LISTBOX_SetFont( hList, &GUI_FontArial16_10pt );
-	
+
 	if( pListMenu->uListItemSpacing > 0 )
 		LISTBOX_SetItemSpacing( hList, pListMenu->uListItemSpacing );
-	
+
 	if( FRAMEPAGE_LISTMENU_BOOLOPTION != pCurrFramePageType )
 	{	///in case we have boolean option field in the list
 		int iCnt = 0;
 		///int iTmp = 0;
 		iCnt = LISTBOX_GetNumItems( hList );
-		
+
 		for( iTmp=0; iTmp<iCnt; iTmp++ )
 			spListMenuOptionFieldCheck( hList, iTmp, 1 );
 	}
-	
-	
+
+
 	WM_BringToTop( hList );
 	WM_SetFocus( hList );
 
-	
+
 	WM_ExecIdle();
 	spFramePageWait();
 
-	WM_DeleteWindow( hList );	
+	WM_DeleteWindow( hList );
 	WM_DeleteWindow( hFrame );
 }
 
@@ -503,16 +642,16 @@ void cbPopupWindow(WM_MESSAGE* pMsg)
 		spcbRoundWinExt( pMsg, GUI_BLACK, 13, 2, 1 );
 		if( FRAMEPAGE_POPUP_NUMBERS == pCurrFramePageType )
 			spcbPopupNumberWinExt( pMsg, GUI_BLACK, 2, 1 );
-		
+
 		WM_DefaultProc(pMsg);
 	}
-/*	
+/*
 	else
 	if( pMsg->MsgId == WM_KEY )
 	{
 		if( FRAMEPAGE_POPUP_NUMBERS == pCurrFramePageType )
 			spcbPopupNumberWinExt( pMsg, GUI_BLACK, 2, 1 );
-		
+
 		WM_DefaultProc(pMsg);
 	}
 */
@@ -523,7 +662,7 @@ void cbPopupWindow(WM_MESSAGE* pMsg)
 void cbPopupWindowList(WM_MESSAGE* pMsg)
 {
 	///SPPRINTF("cbPopupWindowList() ==> %d \n", pMsg->MsgId);
-	
+
 	if( WM_KEY == pMsg->MsgId )
 	{
 		int Key = 0;
@@ -542,8 +681,8 @@ void cbPopupWindowList(WM_MESSAGE* pMsg)
 			int iSelet = -1;
 			///pBeforeFramePage = pCurrFramePage;
 			///pCurrFramePage = pAfterFramePage;
-		
-			if( 
+
+			if(
 				FRAMEPAGE_POPUP_OPTION != pCurrFramePageType ||
 				NULL == pCurrFramePageFrameData
 			)
@@ -551,7 +690,7 @@ void cbPopupWindowList(WM_MESSAGE* pMsg)
 				SPPRINTF("!!!!Error, there should popup list data here!! abort!!\n");
 				return;
 			}
-			
+
 			pPopList = pCurrFramePageFrameData;
 			///check what you selected
 			iSelet = LISTBOX_GetSel(pMsg->hWin);
@@ -566,7 +705,7 @@ void cbPopupWindowList(WM_MESSAGE* pMsg)
 			{
 				SPPRINTF( "!!!!!Error!! LISTBOX_GetSel=%d\n", iSelet );
 				spGoAfterFramePage( pBeforeFramePage );
-			}	
+			}
 		}
 		else
 		if( IsBACK_press(Key) )	///back
@@ -581,7 +720,7 @@ void cbPopupWindowList(WM_MESSAGE* pMsg)
 	{
 		if( pCurrFramePageOldCb )
 			pCurrFramePageOldCb( pMsg );
-	}	
+	}
 }
 #endif
 
@@ -594,16 +733,16 @@ void PopupWindowList( int iOption )
 	WM_CALLBACK* pOldCB = NULL;
 	FP_POPUPLIST_HEADER* pPopList = NULL;
 
-	
+
 	if( pCurrFramePageClearFirst > 0 )
 		spBlankScreen();
 
 	spSetDefaultEffect();
-	
+
 	//need a blank space ???
 	///spBlankRect( 0+EDGEOFFSET, 0+EDGEOFFSET, LCD_GetXSize()-(EDGEOFFSET*2), LCD_GetYSize()-(EDGEOFFSET*2) );
-	
-	if( 
+
+	if(
 		FRAMEPAGE_POPUP_OPTION != pCurrFramePageType ||
 		NULL == pCurrFramePageFrameData
 	)
@@ -612,8 +751,8 @@ void PopupWindowList( int iOption )
 		return;
 	}
 	pPopList = pCurrFramePageFrameData;
-	
-	
+
+
 	///create windows for popup outline
 	hWin1 = WM_CreateWindow( 0+EDGEOFFSET, 0+EDGEOFFSET, LCD_GetXSize()-(EDGEOFFSET*2), LCD_GetYSize()-(EDGEOFFSET*2), WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
 	///add callback
@@ -626,16 +765,16 @@ void PopupWindowList( int iOption )
 		hList = LISTBOX_CreateEx( 0+EDGEOFFSET+2, 0+EDGEOFFSET+13, LCD_GetXSize()-(EDGEOFFSET*2)-4, LCD_GetYSize()-(EDGEOFFSET*2)-(13*2), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pPopList->sListName);
 	///add callback
 	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
-	
-	
+
+
 	WM_BringToTop( hWin1 );
 	WM_SetFocus( hWin1 );
 	WM_BringToTop( hList );
 	WM_SetFocus( hList );
-	
+
 	WM_ExecIdle();
 	spFramePageWait();
-	
+
 	WM_DeleteWindow( hWin1 );
 	WM_DeleteWindow( hList );
 
@@ -649,8 +788,8 @@ static void spcbPopupWindowNumbersSelect(WM_MESSAGE* pMsg)
 	int iSelet = -1;
 	///pBeforeFramePage = pCurrFramePage;
 	///pCurrFramePage = pAfterFramePage;
-		
-	if( 
+
+	if(
 		FRAMEPAGE_POPUP_NUMBERS != pCurrFramePageType ||
 		NULL == pCurrFramePageFrameData
 	)
@@ -658,7 +797,7 @@ static void spcbPopupWindowNumbersSelect(WM_MESSAGE* pMsg)
 		SPPRINTF("!!!!Error, there should popup list data here!! abort!!\n");
 		return;
 	}
-	
+
 	pPopList = pCurrFramePageFrameData;
 	///check what you selected
 	iSelet = LISTBOX_GetSel(pMsg->hWin);
@@ -681,7 +820,7 @@ static void spcbPopupWindowNumbersSelect(WM_MESSAGE* pMsg)
 void cbPopupWindowNumbers(WM_MESSAGE* pMsg)
 {
 	SPPRINTF("cbPopupWindowNumbers() ==> %d \n", pMsg->MsgId);
-	
+
 	if( WM_KEY == pMsg->MsgId )
 	{
 		int Key = 0;
@@ -701,7 +840,7 @@ void cbPopupWindowNumbers(WM_MESSAGE* pMsg)
 		}
 		else
 		if( IsENTER_press(Key) )	///enter
-		{	
+		{
 			spcbPopupWindowNumbersSelect(pMsg);
 		}
 		else
@@ -723,7 +862,7 @@ void cbPopupWindowNumbers(WM_MESSAGE* pMsg)
 void cbSAPDPADSASNSPopupWindowNumbers(WM_MESSAGE* pMsg)
 {
 	SPPRINTF("cbSAPDPADSASNSPopupWindowNumbers() ==> %d \n", pMsg->MsgId);
-	
+
 	if( WM_KEY == pMsg->MsgId )
 	{
 		int Key = 0;
@@ -786,7 +925,7 @@ void PopupWindowNumbers( int iOption )
 
 	///set default setting
 	spSetDefaultEffect();
-	
+
 	///set font for list
 	///pFont = &GUI_Font16B_ASCII;
 	pFont = &GUI_Font32B_ASCII;
@@ -795,14 +934,14 @@ void PopupWindowNumbers( int iOption )
 	y = 56-4;
 	xsize = 64;
 	ysize = 56+8;
-	
+
 	//need a blank space ???
 	if( pCurrFramePageClearFirst > 0 )
 		spBlankScreen();
 
 	if( spFramePageValid( FRAMEPAGE_POPUP_NUMBERS ) )
 		return;
-	
+
 	pPopList = pCurrFramePageFrameData;
 	///create windows for popup outline
 	hWin1 = WM_CreateWindow( x, y, xsize, ysize, WM_CF_SHOW|WM_CF_STAYONTOP, NULL, 0 );
@@ -817,26 +956,26 @@ void PopupWindowNumbers( int iOption )
 
 	///add callback
 	pCurrFramePageOldCb = WM_SetCallback( hList, pCurrFramePageMainCb );
-	
+
 	///LISTBOX_SetTextAlign( hList, GUI_TA_HCENTER|GUI_TA_VCENTER );
 	///set font in list
 	LISTBOX_SetFont( hList , pFont );
 	///set to default selected in list
 	LISTBOX_SetSel( hList , pPopList->iListSel );
-	
+
 	///pull window to top
 	WM_BringToTop( hWin1 );
 	WM_SetFocus( hWin1 );
 	WM_BringToTop( hList );
 	WM_SetFocus( hList );
-	
+
 	WM_ExecIdle();
 	iTO = spFramePageWait();
-	
+
 	///kill all window
 	WM_DeleteWindow( hWin1 );
 	WM_DeleteWindow( hList );
-	
+
 	///go timeout frame if we were timeout
 	spFrameTimeoutHandling(iTO);
 }
