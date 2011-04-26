@@ -45,8 +45,8 @@ static GUI_POINT pScrollDown[] = {
 						};
 
 
-#ifdef 	USE_LIST_SCROLL_ICON
 
+#ifdef 	USE_LIST_SCROLL_ICON
 static WM_HWIN 			hListScrollMain = NULL;
 static WM_CALLBACK* 	pcbListMainScroll = NULL;
 static int				iFirstIdx	= 0;
@@ -80,19 +80,17 @@ static cbListMainScroll(WM_MESSAGE* pMsg)
 	iIsTop = 0;
 	iIsEnd = 0;
 }
-
-
 #endif
+
 
 #ifdef 	USE_LIST_SCROLL_BTN
 static BUTTON_Handle	hUpScroll = NULL;
 static BUTTON_Handle	hDownScroll = NULL;
 static int				iFirstIdx	= 0;
 static int				iLastIdx	= 0;
-#endif
 
 
-#ifdef 	USE_LIST_SCROLL_BTN
+
 static void spListBoxScrollBtnCtl( int iIndex )
 {
 	static int moreUp = 0;
@@ -100,14 +98,14 @@ static void spListBoxScrollBtnCtl( int iIndex )
 	
 	SPPRINTF("spListBoxScrollBtnCtl idx=%d\n", iIndex);
 
-	if( (iFirstIdx != iIndex) && (iLastIdx != iIndex) )
+	if( iLastIdx > LISTMENU_ITEMS_MAX-1 )	///over page
 	{
-		if( iIndex >= LISTMENU_ITEMS_MAX-2 )
-			moreUp = 1;
+		if( 0 == moreUp && 0 == moreDn )
+		{	///first time
+			moreUp = 0;
+			moreDn = 1;
+		}
 
-	}
-	else
-	{
 		if( iFirstIdx == iIndex )	///handling up max
 		{
 			if( moreUp )
@@ -119,6 +117,19 @@ static void spListBoxScrollBtnCtl( int iIndex )
 			if( moreDn )
 				moreDn = 0;
 		}
+		else
+		{
+			if( iIndex >= LISTMENU_ITEMS_MAX )
+				moreUp = 1;
+			if( iIndex <= iLastIdx-LISTMENU_ITEMS_MAX )
+				moreDn = 1;
+		}
+
+	}
+	else	///only one page
+	{
+		moreUp = 0;
+		moreDn = 0;
 	}
 
 	if( moreUp )
@@ -197,20 +208,7 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 				*/
 				if( FRAMEPAGE_LISTMENU_BOOLOPTION == pCurrFramePageType )
 				{	///handle the frame page with all boolean option in it!!
-				/*
-					GUI_POINT pPoint1[] = {
-									{ 0+0, 0+2},
-									{ 0+0, 8+2},
-									{ 8+0, 8+2},
-									{ 8+0, 0+2},
-								};
-					GUI_POINT pPoint2[] = {
-									{ 0+0+2, 0+2+2},
-									{ 0+0+5, 0+2+7},
-									{ 0+0+12, 0+2},
-									{ 0+0+5, 0+2+5},
-								};
-				*/
+
 					if( 1 == spGetListParamValue( pListMenu->pListParam[pDrawItemInfo->ItemIndex] ) )
 					{
 						///draw the square
@@ -231,20 +229,7 @@ static int spListBoxOwnerDraw(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 				else
 				if( BOOLEAN_OPTION_FIELD == spGetListParamType( pListMenu->pListParam[pDrawItemInfo->ItemIndex] ) )
 				{	///handle the single element with boolean option
-				/*
-					GUI_POINT pPoint1[] = {
-									{ 0+0, 0+2},
-									{ 0+0, 8+2},
-									{ 8+0, 8+2},
-									{ 8+0, 0+2},
-								};
-					GUI_POINT pPoint2[] = {
-									{ 0+0+2, 0+2+2},
-									{ 0+0+5, 0+2+7},
-									{ 0+0+12, 0+2},
-									{ 0+0+5, 0+2+5},
-								};
-				*/
+
 					if( 1 == spGetListParamValue( pListMenu->pListParam[pDrawItemInfo->ItemIndex] ) )
 					{
 						///draw the square
@@ -396,10 +381,18 @@ void cbListMenuWindow(WM_MESSAGE* pMsg)
 
 		Key = ((WM_KEY_INFO*)(pMsg->Data.p))->Key;
 		if( IsUP_press(Key) )	///up
+		{
 			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_UP;
+			if( pCurrFramePageOldCb ) pCurrFramePageOldCb( pMsg );
+			return;
+		}
 		else
 		if( IsDOWN_press(Key) )	///down
+		{
 			((WM_KEY_INFO*)(pMsg->Data.p))->Key = GUI_KEY_DOWN;
+			if( pCurrFramePageOldCb ) pCurrFramePageOldCb( pMsg );
+			return;
+		}
 		else
 		if( IsUP_hold(Key) )
 		{	/// hold up key
@@ -530,7 +523,6 @@ void cbListMenuWindow(WM_MESSAGE* pMsg)
 				spGoAfterFramePage( pBeforeFramePage );
 			}
 		}
-
 	}
 	else
 	if( pMsg->MsgId == WM_PAINT )
@@ -582,7 +574,7 @@ void ListMenuWindow( int iOption )
 #ifdef 	USE_LIST_SCROLL_ICON
 	if( SCROLL_ICON_HEIGHT )
 	{
-	#if 0
+	#if 0	///access with message
 		WM_MESSAGE  MsgCmd;
 
 		MsgCmd.MsgId = WM_GET_CLIENT_WINDOW;
