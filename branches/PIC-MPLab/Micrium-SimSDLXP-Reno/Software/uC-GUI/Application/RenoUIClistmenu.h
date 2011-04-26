@@ -24,6 +24,10 @@
 
 #define		ELEMENT_VALUE_MASK				0x0000FFFF
 
+
+#define		LISTMENU_ITEMS_MAX				8
+
+
 ///enable the list scroll icon
 ///#define		USE_LIST_SCROLL_ICON
 
