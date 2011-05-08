@@ -27,14 +27,22 @@ void spSetDefaultEffect ( void )
 	
 	FRAMEWIN_SetDefaultBorderSize( 0 );
 	FRAMEWIN_SetDefaultClientColor( GUI_WHITE );
-	FRAMEWIN_SetDefaultBarColor( 1, GUI_BLACK );
-	FRAMEWIN_SetDefaultTextColor( 1, GUI_WHITE );
+///	FRAMEWIN_SetDefaultBarColor( 1, GUI_BLACK );
+///	FRAMEWIN_SetDefaultTextColor( 1, GUI_WHITE );
+	FRAMEWIN_SetDefaultBarColor( 1, GUI_WHITE );		///meet requirement
+	FRAMEWIN_SetDefaultTextColor( 1, GUI_BLACK );		///meet requirement
+	FRAMEWIN_SetDefaultTitleHeight( 22 );		///meet requirement
 	FRAMEWIN_SetDefaultFont( &GUI_Font16B_ASCII );
 	
 	///we don't want to see disabled items
 	LISTBOX_SetDefaultBkColor( LISTBOX_CI_DISABLED, GUI_WHITE );
 	LISTBOX_SetDefaultTextColor( LISTBOX_CI_DISABLED, GUI_WHITE );
-
+	
+	///
+	BUTTON_SetDefaultBkColor( GUI_WHITE, BUTTON_CI_DISABLED );
+	BUTTON_SetDefaultBkColor( GUI_WHITE, BUTTON_CI_PRESSED );
+	BUTTON_SetDefaultBkColor( GUI_WHITE, BUTTON_CI_UNPRESSED );
+	
 	GUI_SetColor(GUI_BLACK);
 	GUI_SetBkColor(GUI_WHITE); 
 

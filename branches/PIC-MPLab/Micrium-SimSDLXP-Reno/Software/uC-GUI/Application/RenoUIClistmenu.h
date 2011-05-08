@@ -41,7 +41,7 @@
 #endif
 
 #ifdef 	USE_LIST_SCROLL_BTN
-	#define		SCROLL_BTN_HEIGHT				12
+	#define		SCROLL_BTN_HEIGHT				8
 	#define		SCROLL_BTN_WIDTH				144
 #else
 	#define		SCROLL_BTN_HEIGHT				0
