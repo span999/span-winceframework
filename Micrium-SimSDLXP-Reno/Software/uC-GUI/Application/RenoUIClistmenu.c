@@ -567,10 +567,14 @@ void ListMenuWindow( int iOption )
 	pListMenu = pCurrFramePageFrameData;
 	///create frame title
 	hFrame = FRAMEWIN_CreateEx(0, 0, LCD_GetXSize(), LCD_GetYSize(), WM_HWIN_NULL, WM_CF_SHOW|WM_CF_STAYONTOP, 0, 0, pListMenu->sListTitle, NULL);
-	FRAMEWIN_SetDefaultFont( &GUI_FontArial17_11pt );
+	///FRAMEWIN_SetDefaultFont( &GUI_FontArial17_11pt );
+	FRAMEWIN_SetDefaultFont( &GUI_FontArial22_14pt );
 	iTmp = FRAMEWIN_GetTitleHeight( hFrame );
 	///FRAMEWIN_SetClientColor( hFrame, GUI_RED );
-
+	GUI_DrawHLine( iTmp+1, 0,LCD_GetXSize() );
+	GUI_DrawHLine( iTmp+2, 0,LCD_GetXSize() );
+	iTmp = iTmp + 3;	// add Title Line
+	
 #ifdef 	USE_LIST_SCROLL_ICON
 	if( SCROLL_ICON_HEIGHT )
 	{
@@ -608,7 +612,7 @@ void ListMenuWindow( int iOption )
 
 		hDownScroll = BUTTON_CreateEx( 
 					0,
-					LCD_GetYSize()-SCROLL_BTN_HEIGHT,
+					LCD_GetYSize()-SCROLL_BTN_HEIGHT-2,
 					SCROLL_BTN_WIDTH,
 					SCROLL_BTN_HEIGHT,
 					hFrame,
@@ -641,7 +645,8 @@ void ListMenuWindow( int iOption )
 	LISTBOX_SetOwnerDraw( hList, spListBoxOwnerDraw );
 	///LISTBOX_InvalidateItem( hList, 2 );
 	LISTBOX_SetFont( hList, &GUI_FontArial16_10pt );
-
+	///LISTBOX_SetFont( hList, &GUI_FontArial18_12pt );
+	
 	if( pListMenu->uListItemSpacing > 0 )
 		LISTBOX_SetItemSpacing( hList, pListMenu->uListItemSpacing );
 

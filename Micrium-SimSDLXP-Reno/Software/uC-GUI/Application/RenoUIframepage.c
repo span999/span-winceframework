@@ -15,6 +15,14 @@
 #include "RenoUICwatchmode.h"
 
 
+
+
+#define		SPACEING_MENULIST_SETTINGS		2		///16+1
+
+
+
+
+
 static const GUI_ConstString _apListBox[] = {
   "English", "Deutsch", "Français", "Japanese", "Italiano", NULL
 };
@@ -703,7 +711,7 @@ FP_LISTMENU_HEADER fpListMenuData_SettingsWindow = {
 	NULL,
 	_SettingListFrame,
 	_SettingListParam,
-	0
+	SPACEING_MENULIST_SETTINGS
 };
 
 FRAMEPAGE_HEADER headSettingsWindow = {
@@ -1167,7 +1175,7 @@ FP_LISTMENU_HEADER fpListMenuData_SDSWindow = {
 	&headSettingsWindow,
 	_SDSListFrame,
 	_SDSListParam,
-	0
+	SPACEING_MENULIST_SETTINGS
 };
 
 FRAMEPAGE_HEADER headSDSWindow = {
@@ -1236,7 +1244,7 @@ FP_LISTMENU_HEADER fpListMenuData_SDSLWindow = {
 	&headSDSWindow,
 	_SDSLListFrame,
 	_SDSLListParam,
-	0
+	SPACEING_MENULIST_SETTINGS
 };
 
 FRAMEPAGE_HEADER headSDSLWindow = {
