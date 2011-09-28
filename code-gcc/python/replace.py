@@ -133,7 +133,7 @@ def CopyDllBinary():
                 item.count('oal.pdb') > 0 or \
                 item.count('oal.rel') > 0 \
             :
-                os.system('copy /V'+item+' files\\')
+                os.system('copy /V '+item+' files\\')
 
 """ ====================================================== """
 
@@ -335,7 +335,11 @@ def ParseBIBfile( filename ):
 
 #   os.system('rename files\\platform.bib platform.abg')
 #   os.system('rename files\\'+REPLACETEMPFILE+' platform.bib')
-    newfilename = string.replace(filename, '.bib', '.abg' , 1)
+    if filename.count('bib') > 0:
+        newfilename = string.replace(filename, '.bib', '.abg' , 1)
+    if filename.count('BIB') > 0:
+        newfilename = string.replace(filename, '.BIB', '.abg' , 1)
+
     os.system('copy '+filename+' '+newfilename)
     print '>>>>>>>> original '+filename+' -> '+newfilename
     os.system('copy files\\'+REPLACETEMPFILE+' '+filename)
