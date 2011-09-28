@@ -19,11 +19,13 @@ DIRFILELIST = 'dir.tmp'
 BIBFILELIST = 'biblist.txt'
 INSERTKEY = '\\dllbinary\\'
 DLLBINARYFOLDER = 'dllbinary'
+ESCCODE = '----ESCCODE----'
 
-getList = [ '--1.start--' ]
-getsList = [ '--2.start--' ]
-dirList = [ '--3.start--' ]
-bibList = [ '--4.start--' ]
+getList = [ ESCCODE+'1' ]
+getsList = [ ESCCODE+'2' ]
+dirList = [ ESCCODE+'3' ]
+bibList = [ ESCCODE+'4' ]
+bibsList = [ ESCCODE+'5' ]
 
 
 """ check if it's a BSP folder """
@@ -31,13 +33,15 @@ bibList = [ '--4.start--' ]
 def IsBSPfolder():
     bOk = False
     os.system('dir /AD /B > '+DIRFILELIST)
+
     with open(DIRFILELIST) as openedfile:
-	for readline in openedfile:
+        for readline in openedfile:
 #	    print readline + '=> ', len(readline)
             lastchar = readline[len(readline)-1]
             stripedline = readline.strip(lastchar)
             dirList.append(stripedline)
-        dirList.append('--end--')
+
+        dirList.append(ESCCODE)
 
     for item in dirList:
         print item
@@ -60,9 +64,36 @@ def IsBSPfolder():
         print '==================================='
         print '.'
         bOk = False
+
     return bOk
 """ ====================================================== """
 
+
+""" Match sentance in line """
+""" ====================================================== """
+def FindMatchPattern( lineString, matchPattern ):
+#	print 'find <'+matchPattern+'> in <'+lineString+'>'
+
+    if \
+        re.search( matchPattern, lineString, re.IGNORECASE ) == None and \
+        re.match( matchPattern, lineString, re.IGNORECASE ) == None and \
+        1 > lineString.count( matchPattern ) \
+    :
+        return False
+    else:
+        return True
+""" ====================================================== """
+
+
+""" check if has escape code """
+""" ====================================================== """
+def HasESCcode( line ):
+
+    if FindMatchPattern( line, ESCCODE ):
+        return True
+    else:
+        return False
+""" ====================================================== """
 
 """ copy dll binary to files folder """
 """ ====================================================== """
@@ -81,7 +112,7 @@ def CopyDllBinary():
             stripedline = readline.strip(lastchar)
             getList.append(stripedline)
 
-        getList.append('--end--')
+        getList.append(ESCCODE)
 
 #	for item in getList:
 #		print item
@@ -91,16 +122,18 @@ def CopyDllBinary():
     os.system('rmdir /S /Q files\\'+DLLBINARYFOLDER)
     os.system('mkdir files\\'+DLLBINARYFOLDER)
 
+#   do the binary copy
     for item in getList:
-        print 'copy '+item+' to files\\'+DLLBINARYFOLDER
-        os.system('copy '+item+' files\\'+DLLBINARYFOLDER+'\\')
-        if \
-            item.count('oal.exe') > 0 or \
-            item.count('oal.map') > 0 or \
-            item.count('oal.pdb') > 0 or \
-            item.count('oal.rel') > 0  \
+        if False == HasESCcode( item ):
+            print 'copy '+item+' to files\\'+DLLBINARYFOLDER
+            os.system('copy /V '+item+' files\\'+DLLBINARYFOLDER+'\\')
+            if \
+                item.count('oal.exe') > 0 or \
+                item.count('oal.map') > 0 or \
+                item.count('oal.pdb') > 0 or \
+                item.count('oal.rel') > 0 \
             :
-            os.system('copy '+item+' files\\')
+                os.system('copy /V'+item+' files\\')
 
 """ ====================================================== """
 
@@ -119,8 +152,9 @@ def GetDllList():
             stripedline = readline.strip(lastchar)
             getsList.append(stripedline)
 
-    getsList.append('--end--')
+    getsList.append(ESCCODE)
 
+    print '>>>>>>>> Dll files list:'
     for item in getsList:
         print item
 
@@ -141,8 +175,9 @@ def GetBIBList():
             stripedline = readline.strip(lastchar)
             bibList.append(stripedline)
 
-    bibList.append('--end--')
+    bibList.append(ESCCODE)
 
+    print '>>>>>>>> bib files list:'
     for item in bibList:
         print item
 
@@ -154,15 +189,15 @@ def GetBIBList():
 """ ====================================================== """
 def FindSentanceInFile( filename, sentanceList ):
 
-    with open(BIBFILELIST) as openedfiles:
+    with open(filename) as openedfiles:
         for readline in openedfiles:
-#            print readline + '=> ', len(readline)
-            lastchar = readline[len(readline)-1]
-            stripedline = readline.strip(lastchar)
-            bibList.append(stripedline)
+            for item in sentanceList:
+                if False == HasESCcode( item ):
+                    if True == FindMatchPattern( readline, item ):
+                        print 'hit! found '+item+' in '+filename
+                        return True
 
-    bibList.append('--end--')
-
+    return False
 """ ====================================================== """
 
 
@@ -171,17 +206,17 @@ def FindSentanceInFile( filename, sentanceList ):
 def FilterBIBList():
 
     for item in bibList:
-        FindSentanceInFile( item, getsList )
+        if False == HasESCcode( item ):
+            if False == FindSentanceInFile( item, getsList ):
+                bibList.remove( item )
+            else:
+                bibsList.append( item )
 
-
-
-
-    for item in bibList:
+    bibsList.append( ESCCODE )
+    print '>>>>>>>> after filter bib files list:'
+    for item in bibsList:
         print item
-
-    os.system('del '+BIBFILELIST)
 """ ====================================================== """
-
 
 
 """ check if BIB file escape code """
@@ -221,17 +256,17 @@ def WritelineToFile( line ):
 	writeto.close()
 """ ====================================================== """
 
-""" find dll name natch """
+""" find dll name match """
 """ ====================================================== """
 def FindMatchDllName( lineIn, name ):
 #	print 'find <'+name+'> in <'+lineIn+'>'
 #	if re.match( name, lineIn, re.IGNORECASE ) == None:
 #	if re.search( name, lineIn, re.IGNORECASE ) == None:
 	if \
-            re.search( name, lineIn, re.IGNORECASE ) == None and \
-            re.match( name, lineIn, re.IGNORECASE ) == None and \
-            1 > lineIn.count(name) \
-        :
+        re.search( name, lineIn, re.IGNORECASE ) == None and \
+        re.match( name, lineIn, re.IGNORECASE ) == None and \
+        1 > lineIn.count(name) \
+    :
 		return False
 	else:
 		return True
@@ -243,13 +278,14 @@ def FindMatchDllName( lineIn, name ):
 """ ====================================================== """
 def DoLineparce( line ):
 #	print line, len(line)
-	bHit = False
-	for dllname in getsList:
-#		print 'looking for ' + dllname + ' in (' + line + ')'
-#		if dllname in line:
-#		if -1 < string.find(line,dllname):
-#		if 0 < line.count(dllname):
-#		if 0 < line.count('\\'+dllname):
+    bHit = False
+    for dllname in getsList:
+        if False == HasESCcode( dllname ):
+#		     print 'looking for ' + dllname + ' in (' + line + ')'
+#		     if dllname in line:
+#		     if -1 < string.find(line,dllname):
+#		     if 0 < line.count(dllname):
+#		     if 0 < line.count('\\'+dllname):
             if FindMatchDllName(line,'\\'+dllname):
                 print 'hit "'+dllname+'" and replace it! '
                 WritelineToFile(';abg; replace >> '+'"\\'+dllname+'" with "'+INSERTKEY+dllname+'"')
@@ -274,6 +310,40 @@ def nDoLineparce( line ):
 #	WritelineToFile('ignore  >> '+line)
 	WritelineToFile(line)
 """ ====================================================== """
+
+
+""" parse .bib file and do the replacemenet """
+""" ====================================================== """
+def ParseBIBfile( filename ):
+    print '>>>>>>>> parse bib file: '+filename
+#    os.system('del files\\'+REPLACETEMPFILE)
+    os.system('del files\\'+REPLACETEMPFILE)
+
+    with open(filename) as openedfile:
+        for readline in openedfile:
+            if IsBIBescapeCode( readline ):
+                nDoLineparce( readline )
+            else:
+                DoLineparce( readline )
+
+    print \
+    """
+    ======================================================
+    ===== save original ????.bib to ????.abg =====
+    ======================================================
+    """
+
+#   os.system('rename files\\platform.bib platform.abg')
+#   os.system('rename files\\'+REPLACETEMPFILE+' platform.bib')
+    newfilename = string.replace(filename, '.bib', '.abg' , 1)
+    os.system('copy '+filename+' '+newfilename)
+    print '>>>>>>>> original '+filename+' -> '+newfilename
+    os.system('copy files\\'+REPLACETEMPFILE+' '+filename)
+""" ====================================================== """
+
+
+
+
 
 
 
@@ -311,27 +381,14 @@ GetDllList()
 """ retrieve bib list in simple format """
 GetBIBList()
 
+""" filter out bib files that won't change in list """
+FilterBIBList()
+
+for item in bibsList:
+    if False == HasESCcode( item ):
+        ParseBIBfile( item )
 
 
-""" parse platform.bib """
-os.system('del files\\'+REPLACETEMPFILE)
-
-with open('files\\'+REPLACETARGETFILE) as openedfile:
-    for readline in openedfile:
-		if IsBIBescapeCode( readline ):
-			nDoLineparce( readline )
-		else:
-			DoLineparce( readline )
-
-print \
-"""
-======================================================
-===== save original platform.bib to platform.abg =====
-======================================================
-"""
-
-os.system('rename files\\platform.bib platform.abg')
-os.system('rename files\\'+REPLACETEMPFILE+' platform.bib')
 
 print \
 """
