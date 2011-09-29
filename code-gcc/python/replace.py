@@ -7,6 +7,8 @@ import os
 import time
 import string
 import re
+import win32api
+import win32con
 
 
 """ declare """
@@ -26,6 +28,7 @@ getsList = [ ESCCODE+'2' ]
 dirList = [ ESCCODE+'3' ]
 bibList = [ ESCCODE+'4' ]
 bibsList = [ ESCCODE+'5' ]
+srcbinList = [ ESCCODE+'6' ]
 
 
 """ check if it's a BSP folder """
@@ -72,7 +75,7 @@ def IsBSPfolder():
 """ Match sentance in line """
 """ ====================================================== """
 def FindMatchPattern( lineString, matchPattern ):
-#	print 'find <'+matchPattern+'> in <'+lineString+'>'
+#    print 'Try to find <'+matchPattern+'> in <'+lineString+'>'
 
     if \
         re.search( matchPattern, lineString, re.IGNORECASE ) == None and \
@@ -154,6 +157,7 @@ def GetDllList():
 
     getsList.append(ESCCODE)
 
+    print '.'
     print '>>>>>>>> Dll files list:'
     for item in getsList:
         print item
@@ -177,6 +181,7 @@ def GetBIBList():
 
     bibList.append(ESCCODE)
 
+    print '.'
     print '>>>>>>>> bib files list:'
     for item in bibList:
         print item
@@ -213,6 +218,7 @@ def FilterBIBList():
                 bibsList.append( item )
 
     bibsList.append( ESCCODE )
+    print '.'
     print '>>>>>>>> after filter bib files list:'
     for item in bibsList:
         print item
@@ -273,31 +279,111 @@ def FindMatchDllName( lineIn, name ):
 """ ====================================================== """
 
 
+""" compare char with case ignored """
+""" ====================================================== """
+def CompareCharInCase( s1, s2 ):
+    if s1 == s2:
+        return True
+    if s1.upper() == s2.upper():
+        return True
+    if s1.lower() == s2.lower():
+        return True
+
+    return False
+""" ====================================================== """
+
+""" index of match pattern """
+""" ====================================================== """
+def GetIndexMatchPattern( lineString, MatchPattern ):
+    rIndex = 9
+    patternLen = len(MatchPattern)
+    lineLen = len(lineString)
+    matchKey = False
+
+    for idx in range(0,lineLen-1-patternLen):
+        if rIndex > 0:
+            rIndex = 0
+            for idx2 in range(0,patternLen-1):
+                if CompareCharInCase(MatchPattern[idx2],lineString[idx+idx2]):
+                    rIndex = rIndex
+                else:
+                    rIndex = rIndex + 1
+        else:
+#            print 'GetIndexMatchPattern=',idx
+            return idx
+
+    print 'GetIndexMatchPattern not found matched !!!'
+    return -1
+""" ====================================================== """
+
+
+""" replace subkey in string with case ignored """
+""" ====================================================== """
+def ReplaceInSentance( linestring, oldKey, newKey ):
+#    print 'ReplaceInSentance:'+linestring
+#    print 'oldKey='+oldKey+', newKey='+newKey
+    oldKeylen = len(oldKey)
+
+    tmp = []
+#   locate the position of oldKey, get the index
+    oldKeyIndex = GetIndexMatchPattern(linestring, oldKey)
+
+#   check if out of range
+    if oldKeyIndex == -1:
+        print 'ReplaceInSentance fail !!!'
+        return linestring
+
+#   copy start
+    for idx in range(0,oldKeyIndex-1):
+        tmp.append(linestring[idx])
+#    print tmp
+
+#   replace from the oldKey position with newKey
+#    for idx2 in range(0,len(newKey)):
+#        tmp.append(newKey[idx2])
+    tmp.append(newKey)
+#    print tmp
+
+#   append tail of linestring
+    for idx3 in range(oldKeyIndex+len(oldKey),len(linestring)-1):
+        tmp.append(linestring[idx3])
+#    print tmp
+
+#   add newline
+    tmp.append('\r')
+#    return tmp
+    return ''.join(tmp)
+
+""" ====================================================== """
 
 """ handle line with replacement """
 """ ====================================================== """
-def DoLineparce( line ):
-#	print line, len(line)
+def DoLineparse( line ):
+#    print 'DoLineparse:'+line, len(line)
+
     bHit = False
+
     for dllname in getsList:
         if False == HasESCcode( dllname ):
-#		     print 'looking for ' + dllname + ' in (' + line + ')'
-#		     if dllname in line:
-#		     if -1 < string.find(line,dllname):
-#		     if 0 < line.count(dllname):
-#		     if 0 < line.count('\\'+dllname):
-            if FindMatchDllName(line,'\\'+dllname):
+#            print 'looking for ' + dllname + ' in (' + line + ')'
+            if FindMatchPattern( line, '\\'+dllname ):
                 print 'hit "'+dllname+'" and replace it! '
                 WritelineToFile(';abg; replace >> '+'"\\'+dllname+'" with "'+INSERTKEY+dllname+'"')
                 WritelineToFile('\r')
                 WritelineToFile(';abg; '+line)
-                WritelineToFile(line.replace('\\'+dllname,INSERTKEY+dllname,2))
+                replaced = ReplaceInSentance(line,'\\'+dllname,INSERTKEY+dllname)
+#                WritelineToFile(line.replace('\\'+dllname,INSERTKEY+dllname,2))
+                WritelineToFile(replaced)
                 bHit = True
-#           else:
-#               print dllname
-#               WritelineToFile(line)
+                return
+#            else:
+#                print dllname+' not found'
+#                WritelineToFile(line)
+#        else:
+#            print 'found escape code in list '+dllname+' !!!'
+#            print 'try next in list'
 
-	if bHit == False:
+    if bHit == False:
 		WritelineToFile(line)
 
 """ ====================================================== """
@@ -305,7 +391,7 @@ def DoLineparce( line ):
 
 """ handle line without replacement """
 """ ====================================================== """
-def nDoLineparce( line ):
+def nDoLineparse( line ):
 #	print 'ignore >> ' + line, len(line)
 #	WritelineToFile('ignore  >> '+line)
 	WritelineToFile(line)
@@ -322,16 +408,16 @@ def ParseBIBfile( filename ):
     with open(filename) as openedfile:
         for readline in openedfile:
             if IsBIBescapeCode( readline ):
-                nDoLineparce( readline )
+                nDoLineparse( readline )
             else:
-                DoLineparce( readline )
+                DoLineparse( readline )
 
     print \
-    """
-    ======================================================
-    ===== save original ????.bib to ????.abg =====
-    ======================================================
-    """
+"""
+======================================================
+===== save original ????.bib to ????.abg =====
+======================================================
+"""
 
 #   os.system('rename files\\platform.bib platform.abg')
 #   os.system('rename files\\'+REPLACETEMPFILE+' platform.bib')
@@ -341,15 +427,87 @@ def ParseBIBfile( filename ):
         newfilename = string.replace(filename, '.BIB', '.abg' , 1)
 
     os.system('copy '+filename+' '+newfilename)
+    print '.'
     print '>>>>>>>> original '+filename+' -> '+newfilename
     os.system('copy files\\'+REPLACETEMPFILE+' '+filename)
 """ ====================================================== """
 
 
+""" clean src folder """
+""" ====================================================== """
+def CleanSrcFolder():
+    os.system('dir /S /B /AD src\\ > '+DIRFILELIST)
+
+    with open(DIRFILELIST) as openedfile:
+        for readline in openedfile:
+#	    print readline + '=> ', len(readline)
+            if FindMatchPattern(readline,'\\obj'):
+                if False == FindMatchPattern(readline,'ARMV4I'):
+#                    print 'delete folder '+readline
+                    os.system('rmdir /S /Q '+readline)
+
+    os.system('del '+DIRFILELIST)
+""" ====================================================== """
 
 
+""" delete files in src folder """
+""" ====================================================== """
+def DeleteSrcFolder():
+    os.system('dir /S /B src\\ > '+DIRFILELIST)
+    reversedFile = False
+
+    with open(DIRFILELIST) as openedfile:
+        for readline in openedfile:
+#	    print readline + '=> ', len(readline)
+            reversedFile = False
+            for item in srcbinList:
+                if FindMatchPattern(readline,item):
+                    print 'reserved file: '+readline
+                    reversedFile = True
+#                else:
+#                    print 'not reserved file'
+
+            if False == reversedFile:
+                print win32file.GetFileAttributes(readline)
+#                print 'delete file: '+readline
+#                if os.path.isdir(readline):
+                if False == os.path.isfile(readline):
+                    print 'this is a folder: '+readline
+                else:
+                    print 'delete file: '+readline
+                    os.system('del /Q /F '+readline)
+
+    os.system('del '+DIRFILELIST)
+""" ====================================================== """
 
 
+""" find all bib files item that reserved in src\ folder """
+""" ====================================================== """
+def FilterSrcInBIB():
+
+    for filename in bibsList:
+        if False == HasESCcode(filename):
+            print 'open bib file: '+filename
+            with open(filename) as openedfiles:
+                for readline in openedfiles:
+                    if False == IsBIBescapeCode(readline):
+                        if FindMatchPattern(readline,'\\src'):
+                            splited = readline.rsplit('\\',1)
+                            splited = splited[1].rsplit()
+                            srcbinList.append(splited[0])
+
+
+    srcbinList.append( '.bib' )
+    srcbinList.append( '.reg' )
+    srcbinList.append( '.BIB' )
+    srcbinList.append( '.REG' )
+
+    srcbinList.append( ESCCODE )
+    print '.'
+    print '>>>>>>>> after filter src\\ in bib files list:'
+    for item in srcbinList:
+        print item
+""" ====================================================== """
 
 
 """ main start """
@@ -388,10 +546,13 @@ GetBIBList()
 """ filter out bib files that won't change in list """
 FilterBIBList()
 
+""" parse each bib file """
 for item in bibsList:
     if False == HasESCcode( item ):
         ParseBIBfile( item )
 
+""" parse src\ in BIB files """
+FilterSrcInBIB()
 
 
 print \
@@ -403,8 +564,10 @@ print \
 
 os.system('rmdir /S /Q lib')
 os.system('rmdir /S /Q target')
-os.system('rmdir /S /Q src')
-
+#os.system('rmdir /S /Q src')
+#clean src folder
+CleanSrcFolder()
+DeleteSrcFolder()
 
 print \
 """
