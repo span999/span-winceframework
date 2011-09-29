@@ -7,8 +7,8 @@ import os
 import time
 import string
 import re
-import win32api
-import win32con
+#import win32api
+#import win32con
 
 
 """ declare """
@@ -262,8 +262,10 @@ def WritelineToFile( line ):
 	writeto.close()
 """ ====================================================== """
 
+
 """ find dll name match """
 """ ====================================================== """
+"""
 def FindMatchDllName( lineIn, name ):
 #	print 'find <'+name+'> in <'+lineIn+'>'
 #	if re.match( name, lineIn, re.IGNORECASE ) == None:
@@ -276,6 +278,7 @@ def FindMatchDllName( lineIn, name ):
 		return False
 	else:
 		return True
+"""
 """ ====================================================== """
 
 
@@ -312,7 +315,8 @@ def GetIndexMatchPattern( lineString, MatchPattern ):
 #            print 'GetIndexMatchPattern=',idx
             return idx
 
-    print 'GetIndexMatchPattern not found matched !!!'
+    print 'GetIndexMatchPattern found NO matched '+MatchPattern+' !!!'
+    print 'In '+lineString+' !!!'
     return -1
 """ ====================================================== """
 
@@ -468,10 +472,10 @@ def DeleteSrcFolder():
 #                    print 'not reserved file'
 
             if False == reversedFile:
-                print win32file.GetFileAttributes(readline)
+                print os.path.getsize(readline)
 #                print 'delete file: '+readline
 #                if os.path.isdir(readline):
-                if False == os.path.isfile(readline):
+                if 4 > os.path.getsize(readline):
                     print 'this is a folder: '+readline
                 else:
                     print 'delete file: '+readline
@@ -479,6 +483,47 @@ def DeleteSrcFolder():
 
     os.system('del '+DIRFILELIST)
 """ ====================================================== """
+
+
+"""  """
+""" ====================================================== """
+def IsReservedSrcFile( readline ):
+    reversedFile = False
+
+    for item in srcbinList:
+        if FindMatchPattern(readline,item):
+#            print 'reserved file: '+readline
+            reversedFile = True
+#       else:
+#           print 'not reserved file'
+
+    return reversedFile
+""" ====================================================== """
+
+
+""" delete files in src folder """
+""" ====================================================== """
+def DeleteSrcFolders():
+
+    # pick a folder you have ...
+    folder = 'src\\'
+    folder_size = 0
+
+    for (path, dirs, files) in os.walk(folder):
+        for item in files:
+            filename = os.path.join(path, item)
+#            print filename
+            folder_size += os.path.getsize(filename)
+            #check if it's reserved file
+            if IsReservedSrcFile(filename):
+                print 'reserved file: '+filename
+            else:
+#                print 'delete file: '+filename
+                os.system('del /Q /F '+filename)
+
+    print "Folder files total = %0.1f MB" % (folder_size/(1024*1024.0))
+""" ====================================================== """
+
 
 
 """ find all bib files item that reserved in src\ folder """
@@ -567,7 +612,8 @@ os.system('rmdir /S /Q target')
 #os.system('rmdir /S /Q src')
 #clean src folder
 CleanSrcFolder()
-DeleteSrcFolder()
+#DeleteSrcFolder()
+DeleteSrcFolders()
 
 print \
 """
