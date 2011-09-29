@@ -9,8 +9,10 @@ import string
 import re
 #import win32api
 #import win32con
+import spWinToolHelps
 
-
+# make a short cut of spWinToolHelps
+spWTH = spWinToolHelps
 """ declare """
 REPLACETARGETFILE = 'platform.bib'
 REPLACEBACKUPFILE = 'platform.abg'
@@ -491,11 +493,13 @@ def IsReservedSrcFile( readline ):
     reversedFile = False
 
     for item in srcbinList:
-        if FindMatchPattern(readline,item):
-#            print 'reserved file: '+readline
-            reversedFile = True
-#       else:
-#           print 'not reserved file'
+        if False == HasESCcode(item):
+#           if FindMatchPattern(readline,item):
+            if spWTH.spWTH_FindPatternInStrNoCase(readline,item):
+#               print 'reserved file: '+readline
+                reversedFile = True
+#           else:
+#               print 'not reserved file'
 
     return reversedFile
 """ ====================================================== """
@@ -570,6 +574,8 @@ print \
 ======================================================
 
 """
+spWTH.spWTH_Version()
+
 
 select = raw_input('--> (Y/N) ')
 if select != 'Y':
