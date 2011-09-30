@@ -76,6 +76,7 @@ def IsBSPfolder():
 
 """ Match sentance in line """
 """ ====================================================== """
+"""
 def FindMatchPattern( lineString, matchPattern ):
 #    print 'Try to find <'+matchPattern+'> in <'+lineString+'>'
 
@@ -87,6 +88,7 @@ def FindMatchPattern( lineString, matchPattern ):
         return False
     else:
         return True
+"""
 """ ====================================================== """
 
 
@@ -94,11 +96,13 @@ def FindMatchPattern( lineString, matchPattern ):
 """ ====================================================== """
 def HasESCcode( line ):
 
-    if FindMatchPattern( line, ESCCODE ):
+#    if FindMatchPattern( line, ESCCODE ):
+    if spWTH.spWTH_FindPatternInStrNoCase( line, ESCCODE ):
         return True
     else:
         return False
 """ ====================================================== """
+
 
 """ copy dll binary to files folder """
 """ ====================================================== """
@@ -200,7 +204,8 @@ def FindSentanceInFile( filename, sentanceList ):
         for readline in openedfiles:
             for item in sentanceList:
                 if False == HasESCcode( item ):
-                    if True == FindMatchPattern( readline, item ):
+#                    if True == FindMatchPattern( readline, item ):
+                    if spWTH.spWTH_FindPatternInStrNoCase( readline, item ):
                         print 'hit! found '+item+' in '+filename
                         return True
 
@@ -305,10 +310,10 @@ def GetIndexMatchPattern( lineString, MatchPattern ):
     lineLen = len(lineString)
     matchKey = False
 
-    for idx in range(0,lineLen-1-patternLen):
+    for idx in range(0,1+lineLen-1-patternLen):
         if rIndex > 0:
             rIndex = 0
-            for idx2 in range(0,patternLen-1):
+            for idx2 in range(0,1+patternLen-1):
                 if CompareCharInCase(MatchPattern[idx2],lineString[idx+idx2]):
                     rIndex = rIndex
                 else:
@@ -340,18 +345,18 @@ def ReplaceInSentance( linestring, oldKey, newKey ):
         return linestring
 
 #   copy start
-    for idx in range(0,oldKeyIndex-1):
+    for idx in range(0,1+oldKeyIndex-1):
         tmp.append(linestring[idx])
 #    print tmp
 
 #   replace from the oldKey position with newKey
-#    for idx2 in range(0,len(newKey)):
+#    for idx2 in range(0,1+len(newKey)):
 #        tmp.append(newKey[idx2])
     tmp.append(newKey)
 #    print tmp
 
 #   append tail of linestring
-    for idx3 in range(oldKeyIndex+len(oldKey),len(linestring)-1):
+    for idx3 in range(oldKeyIndex+len(oldKey),1+len(linestring)-1):
         tmp.append(linestring[idx3])
 #    print tmp
 
@@ -372,7 +377,8 @@ def DoLineparse( line ):
     for dllname in getsList:
         if False == HasESCcode( dllname ):
 #            print 'looking for ' + dllname + ' in (' + line + ')'
-            if FindMatchPattern( line, '\\'+dllname ):
+#            if FindMatchPattern( line, '\\'+dllname ):
+            if spWTH.spWTH_FindPatternInStrNoCase( line, '\\'+dllname ):
                 print 'hit "'+dllname+'" and replace it! '
                 WritelineToFile(';abg; replace >> '+'"\\'+dllname+'" with "'+INSERTKEY+dllname+'"')
                 WritelineToFile('\r')
@@ -439,7 +445,7 @@ def ParseBIBfile( filename ):
 """ ====================================================== """
 
 
-""" clean src folder """
+""" clean src folder (delete obj folder) """
 """ ====================================================== """
 def CleanSrcFolder():
     os.system('dir /S /B /AD src\\ > '+DIRFILELIST)
@@ -447,8 +453,10 @@ def CleanSrcFolder():
     with open(DIRFILELIST) as openedfile:
         for readline in openedfile:
 #	    print readline + '=> ', len(readline)
-            if FindMatchPattern(readline,'\\obj'):
-                if False == FindMatchPattern(readline,'ARMV4I'):
+#            if FindMatchPattern(readline,'\\obj'):
+            if spWTH.spWTH_FindPatternInStrNoCase(readline,'\\obj'):
+#                if False == FindMatchPattern(readline,'ARMV4I'):
+                if False == spWTH.spWTH_FindPatternInStrNoCase(readline,'ARMV4I'):
 #                    print 'delete folder '+readline
                     os.system('rmdir /S /Q '+readline)
 
@@ -456,9 +464,9 @@ def CleanSrcFolder():
 """ ====================================================== """
 
 
-""" delete files in src folder """
+""" delete files in src folder (delete files in src folder except reserved) """
 """ ====================================================== """
-def DeleteSrcFolder():
+def DeleteSrcFiles():
     os.system('dir /S /B src\\ > '+DIRFILELIST)
     reversedFile = False
 
@@ -467,23 +475,65 @@ def DeleteSrcFolder():
 #	    print readline + '=> ', len(readline)
             reversedFile = False
             for item in srcbinList:
-                if FindMatchPattern(readline,item):
+#                if FindMatchPattern(readline,item):
+                if spWTH.spWTH_FindPatternInStrNoCase(readline,item):
                     print 'reserved file: '+readline
                     reversedFile = True
 #                else:
 #                    print 'not reserved file'
 
             if False == reversedFile:
-                print os.path.getsize(readline)
-#                print 'delete file: '+readline
-#                if os.path.isdir(readline):
-                if 4 > os.path.getsize(readline):
+#                print os.path.getsize(readline)
+                print 'check file/path: '+readline
+                if os.path.exists(readline):
+#                if 4 > os.path.getsize(readline):
                     print 'this is a folder: '+readline
                 else:
                     print 'delete file: '+readline
                     os.system('del /Q /F '+readline)
 
     os.system('del '+DIRFILELIST)
+
+def DeleteSrcFilesExt():
+    fileList = []
+
+    reversedFile = False
+
+#   get file/folder list in src\
+    os.system('dir /S /B src\\ > '+DIRFILELIST)
+
+    with open(DIRFILELIST) as openedfile:
+        for readline in openedfile:
+            fileList.append( readline )
+
+    os.system('del '+DIRFILELIST)
+
+#   get folder list in src\ and remove it from file/folder list
+    os.system('dir /S /B /AD src\\ > '+DIRFILELIST)
+
+    with open(DIRFILELIST) as openedfile:
+        for readline in openedfile:
+            fileList.remove(readline)
+
+    os.system('del '+DIRFILELIST)
+
+#   now we have files only list
+#    for item in fileList:
+#        print item
+
+    for filename in fileList:
+        reversedFile = False
+        for rsvitem in srcbinList:
+            if spWTH.spWTH_FindPatternInStrNoCase(filename,rsvitem):
+#                print 'reserved file: '+filename+' for '+rsvitem
+                reversedFile = True
+
+        if reversedFile:
+            print 'reserved file: '+filename
+        else:
+#            print 'delete file: '+filename
+            os.system('del /Q /F '+filename)
+
 """ ====================================================== """
 
 
@@ -507,6 +557,7 @@ def IsReservedSrcFile( readline ):
 
 """ delete files in src folder """
 """ ====================================================== """
+"""
 def DeleteSrcFolders():
 
     # pick a folder you have ...
@@ -526,13 +577,15 @@ def DeleteSrcFolders():
                 os.system('del /Q /F '+filename)
 
     print "Folder files total = %0.1f MB" % (folder_size/(1024*1024.0))
+    print "os.path.getsize = %0.1f MB" % (os.path.getsize(folder)/(1024*1024.0))
+"""
 """ ====================================================== """
 
 
 
 """ find all bib files item that reserved in src\ folder """
 """ ====================================================== """
-def FilterSrcInBIB():
+def FilterSrcForBIB():
 
     for filename in bibsList:
         if False == HasESCcode(filename):
@@ -540,7 +593,8 @@ def FilterSrcInBIB():
             with open(filename) as openedfiles:
                 for readline in openedfiles:
                     if False == IsBIBescapeCode(readline):
-                        if FindMatchPattern(readline,'\\src'):
+#                        if FindMatchPattern(readline,'\\src'):
+                        if spWTH.spWTH_FindPatternInStrNoCase(readline,'\\src'):
                             splited = readline.rsplit('\\',1)
                             splited = splited[1].rsplit()
                             srcbinList.append(splited[0])
@@ -548,8 +602,8 @@ def FilterSrcInBIB():
 
     srcbinList.append( '.bib' )
     srcbinList.append( '.reg' )
-    srcbinList.append( '.BIB' )
-    srcbinList.append( '.REG' )
+#    srcbinList.append( '.BIB' )
+#    srcbinList.append( '.REG' )
 
     srcbinList.append( ESCCODE )
     print '.'
@@ -557,6 +611,27 @@ def FilterSrcInBIB():
     for item in srcbinList:
         print item
 """ ====================================================== """
+
+
+""" delete empty folder in src """
+""" ====================================================== """
+def DeleteEmptyFolders():
+    # pick a folder you have ...
+    folder = 'src\\'
+    folder_size = 0
+
+    for (path, dirs, files) in os.walk(folder, topdown=False):
+        for name in dirs:
+            dirname = os.path.join(path, name)
+            print 'folder: '+dirname
+            if spWTH.spWTH_IsFolderEmpty(dirname):
+                os.rmdir( dirname )
+                print 'delete folder: '+dirname
+""" ====================================================== """
+
+
+
+
 
 
 """ main start """
@@ -603,7 +678,7 @@ for item in bibsList:
         ParseBIBfile( item )
 
 """ parse src\ in BIB files """
-FilterSrcInBIB()
+FilterSrcForBIB()
 
 
 print \
@@ -619,7 +694,8 @@ os.system('rmdir /S /Q target')
 #clean src folder
 CleanSrcFolder()
 #DeleteSrcFolder()
-DeleteSrcFolders()
+DeleteSrcFilesExt()
+DeleteEmptyFolders()
 
 print \
 """
