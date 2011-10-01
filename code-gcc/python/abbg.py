@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """ import area """
-import datetime
+#import datetime
 import os
-import time
+#import time
 import string
 import re
 #import win32api
@@ -640,7 +640,8 @@ def DeleteEmptyFolders():
 print \
 """
 ======================================================
-=====   start auto binary BSP generation (abg)   =====
+=====      auto binary BSP generation (abg)      =====
+=====                                 v 0.1      =====
 =====                                            =====
 =====   This tool helps to generate the binary   =====
 =====   BSP from normal BSP (WinCE BSP)          =====
@@ -669,10 +670,10 @@ GetDllList()
 """ retrieve bib list in simple format """
 GetBIBList()
 
-""" filter out bib files that won't change in list """
+""" filter out bib files that won't change from list """
 FilterBIBList()
 
-""" parse each bib file """
+""" parse each bib file. make necessary change """
 for item in bibsList:
     if False == HasESCcode( item ):
         ParseBIBfile( item )
@@ -691,27 +692,21 @@ print \
 os.system('rmdir /S /Q lib')
 os.system('rmdir /S /Q target')
 #os.system('rmdir /S /Q src')
-#clean src folder
+# clean src folder. remove all obj folder
 CleanSrcFolder()
+# delete files in src\ except reserved
 #DeleteSrcFolder()
 DeleteSrcFilesExt()
+# delete empty folder under src\
 DeleteEmptyFolders()
 
 print \
 """
 ======================================================
-=====   start auto binary BSP generation (abg)   =====
+=====      auto binary BSP generation (abg)      =====
 =====                                            =====
 =====   Done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   =====
 ======================================================
 
 """
 
-"""
-os.system('del '+DIRTMPFILE)
-"""
-"""
-for nn in getList:
-#	time.sleep(0.5)
-	print nn
-"""
