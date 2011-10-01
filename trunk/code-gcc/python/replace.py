@@ -310,7 +310,7 @@ def GetIndexMatchPattern( lineString, MatchPattern ):
     lineLen = len(lineString)
     matchKey = False
 
-    for idx in range(0,1+lineLen-1-patternLen):
+    for idx in range(0,1+lineLen-1-patternLen+1):
         if rIndex > 0:
             rIndex = 0
             for idx2 in range(0,1+patternLen-1):
@@ -320,7 +320,7 @@ def GetIndexMatchPattern( lineString, MatchPattern ):
                     rIndex = rIndex + 1
         else:
 #            print 'GetIndexMatchPattern=',idx
-            return idx
+            return idx-1
 
     print 'GetIndexMatchPattern found NO matched '+MatchPattern+' !!!'
     print 'In '+lineString+' !!!'
@@ -361,7 +361,7 @@ def ReplaceInSentance( linestring, oldKey, newKey ):
 #    print tmp
 
 #   add newline
-    tmp.append('\r')
+#    tmp.append('\r')
 #    return tmp
     return ''.join(tmp)
 
