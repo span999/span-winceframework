@@ -47,6 +47,14 @@ def spWTH_CompareCharNoCase( s1, s2 ):
 """ ====================================================== """
 
 
+""" remove last char in string """
+""" ====================================================== """
+def spWTH_RemoveStringTailChar( stringIn ):
+    lastchar = stringIn[len(stringIn)-1]
+    return stringIn.strip(lastchar)
+""" ====================================================== """
+
+
 """
 find pattern in string with case ignored
 """
@@ -58,7 +66,7 @@ def spWTH_FindPatternInStrNoCase( StringIn, PatternIn ):
 #    print PatternInLen,':'+PatternIn+' & ',StringInLen,':'+StringIn
 
     if StringInLen < PatternInLen:
-        print 'Parameter Error!!'
+        print 'Invalid parameter!! ignored.'
         print '    '+PatternIn+' > '+StringIn+' !!'
         return False
 
@@ -75,6 +83,24 @@ def spWTH_FindPatternInStrNoCase( StringIn, PatternIn ):
 #            print 'try next char'
 
     return False
+""" ====================================================== """
+
+
+"""
+find pattern in List with case ignored
+"""
+def spWTH_FindPatternInListNoCase( ListIn, PatternIn ):
+#    print PatternInLen,':'+PatternIn+' & ',StringInLen,':'+ListIn
+    PatternMatchedCnt = 0
+
+    for item in ListIn:
+        if spWTH_FindPatternInStrNoCase( item, PatternIn ):
+            PatternMatchedCnt = PatternMatchedCnt + 1
+
+    if PatternMatchedCnt == 0:
+        return False
+    else:
+        return True
 """ ====================================================== """
 
 
@@ -124,3 +150,23 @@ def spWTH_FindPatternsInFile( filename, patternList ):
     return False
 """ ====================================================== """
 
+
+""" get dir list in folder """
+""" ====================================================== """
+def spWTH_GetDirListinFolder( folder ):
+    dirsList = []
+    # pick a folder you have ...
+#    folder = '.\\'
+
+    for (path, dirs, files) in os.walk(folder):
+        for name in dirs:
+            dirname = os.path.join(path, name)
+            print 'folder: '+dirname
+            dirsList.append(dirname)
+
+    for item in dirsList:
+        print item
+
+
+    return dirsList
+""" ====================================================== """
