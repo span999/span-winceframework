@@ -36,27 +36,25 @@ srcbinList = [ ESCCODE+'6' ]
 """ check if it's a BSP folder """
 """ ====================================================== """
 def IsBSPfolder():
-    bOk = False
+    dirsList = []
     os.system('dir /AD /B > '+DIRFILELIST)
 
     with open(DIRFILELIST) as openedfile:
         for readline in openedfile:
 #	    print readline + '=> ', len(readline)
-            lastchar = readline[len(readline)-1]
-            stripedline = readline.strip(lastchar)
-            dirList.append(stripedline)
-
-        dirList.append(ESCCODE)
-
-    for item in dirList:
-        print item
+            dirsList.append(spWTH.spWTH_RemoveStringTailChar(readline))
 
     os.system('del '+DIRFILELIST)
 
+    for item in dirsList:
+        print item
+
+
+    bOk = False
     if \
-        dirList.count('files') > 0 and \
-        dirList.count('lib') > 0 and \
-        dirList.count('target') > 0 \
+        spWTH.spWTH_FindPatternInListNoCase(dirsList,'files') and \
+        spWTH.spWTH_FindPatternInListNoCase(dirsList,'lib') and \
+        spWTH.spWTH_FindPatternInListNoCase(dirsList,'target') \
         :
         print '================================'
         print '===== Yes, it\'s a BSP !!! ====='
@@ -219,7 +217,8 @@ def FilterBIBList():
 
     for item in bibList:
         if False == HasESCcode( item ):
-            if False == FindSentanceInFile( item, getsList ):
+#            if False == FindSentanceInFile( item, getsList ):
+            if False == spWTH.spWTH_FindPatternsInFile( item, getsList ):
                 bibList.remove( item )
             else:
                 bibsList.append( item )
@@ -618,7 +617,7 @@ def FilterSrcForBIB():
 def DeleteEmptyFolders():
     # pick a folder you have ...
     folder = 'src\\'
-    folder_size = 0
+#    folder_size = 0
 
     for (path, dirs, files) in os.walk(folder, topdown=False):
         for name in dirs:
