@@ -262,9 +262,9 @@ def FilterBIBList():
 #    for itemnum in range( 0, bibListNum ):
 #        item = bibList[itemnum]
 #        print 'Go for checking! '+bibList[itemnum]
-        print 'Go for checking '+item
+#        print 'Go for checking '+item
         if False == HasESCcode( item ):
-            print 'Go for searching in '+item
+#            print 'Go for searching in '+item
 #            if False == FindSentanceInFile( item, getsList ):
             if False == spWTH.spWTH_FindPatternsInFile( item, getsList ):
                 print 'remove item : '+item
@@ -716,7 +716,7 @@ print \
 """
 ======================================================
 =====      auto binary BSP generation (abg)      =====
-=====                                 v 0.1      =====
+=====                                 v 0.2      =====
 =====                                            =====
 =====   This tool helps to generate the binary   =====
 =====   BSP from normal BSP (WinCE BSP)          =====
@@ -728,9 +728,25 @@ print \
 spWTH.spWTH_Version()
 
 
-select = raw_input('--> (Y/N) ')
+select = raw_input('--> (Y/N/?) ')
+if select == '?':
+    print \
+"""
+======================================================
+Usage:
+To use this script, please go the BSP folder. ex: STA2064\
+and run this script with path. ex: c:\test\script\abb.py
+
+hisorty:
+v 0.2 supported STA2064(ST)/Hammer/NX048(Prima) BSP.
+v 0.1 supported STA2064 BSP.
+======================================================
+
+"""
 if select != 'Y':
     exit()
+
+
 
 """ check BSP """
 if False == IsBSPfolder():
@@ -775,6 +791,7 @@ DeleteSrcFilesExt()
 # delete empty folder under src\
 DeleteEmptyFolders()
 
+os.system('del files\\'+REPLACETEMPFILE)
 os.system('del build.wrn')
 os.system('del build.log')
 os.system('del build.dat')
