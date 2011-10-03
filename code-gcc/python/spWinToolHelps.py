@@ -66,8 +66,8 @@ def spWTH_FindPatternInStrNoCase( StringIn, PatternIn ):
 #    print PatternInLen,':'+PatternIn+' & ',StringInLen,':'+StringIn
 
     if StringInLen < PatternInLen:
-        print 'Invalid parameter!! ignored.'
-        print '    '+PatternIn+' > '+StringIn+' !!'
+#        print 'Invalid parameter!! ignored.'
+#        print '    '+PatternIn+' > '+StringIn+' !!'
         return False
 
     for sidx in range( 0, 1+StringInLen-1-PatternInLen+1 ):
@@ -144,6 +144,7 @@ find parttens(in list) in file
 def spWTH_FindPatternsInFile( filename, patternList ):
 
     for item in patternList:
+        print 'search '+item+' in '+filename
         if spWTH_FindPatternInFile( filename, item ):
             return True
 
