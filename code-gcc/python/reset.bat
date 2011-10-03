@@ -1,11 +1,22 @@
-echo on
+echo off
 echo ========= reset folder =========
 
-REM rmdir /q /s STA2064
-REM 7z x STA2064.zip
+set STOAGEBASE=d:\workshop\storge
+set RESETFOLDERNAME=%1
 
-rmdir /q /s Hammer
-7z x Hammer.zip
+if "%RESETFOLDERNAME%" == "" (
+    set RESETFOLDERNAME=STA2064
+    )
+
+echo we are going to reset "%RESETFOLDERNAME%" folder
+echo from base %STOAGEBASE%
+
+
+rmdir /q /s %RESETFOLDERNAME%
+7z x %STOAGEBASE%\%RESETFOLDERNAME%.zip
+
+REM rmdir /q /s Hammer
+REM 7z x Hammer.zip
 
 
 echo ========= done !!!!!!! =========

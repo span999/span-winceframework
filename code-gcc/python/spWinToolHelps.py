@@ -18,8 +18,8 @@ import string
 show version !!!
 """
 def spWTH_Version():
-    print 'spWinToolHelp(spWTH) ver 0.0.1'
-    return 'spWinToolHelp(spWTH) ver 0.0.1'
+    print 'spWinToolHelp(spWTH) ver 0.0.3'
+    return 'spWinToolHelp(spWTH) ver 0.0.3'
 """ ====================================================== """
 
 
@@ -144,7 +144,7 @@ find parttens(in list) in file
 def spWTH_FindPatternsInFile( filename, patternList ):
 
     for item in patternList:
-        print 'search '+item+' in '+filename
+#        print 'search '+item+' in '+filename
         if spWTH_FindPatternInFile( filename, item ):
             return True
 
