@@ -2,17 +2,16 @@
 # -*- coding: utf-8 -*-
 
 """ import area """
-#import datetime
 import os
 #import time
 import string
 import re
-#import win32api
-#import win32con
 import spWinToolHelps
 
 # make a short cut of spWinToolHelps
 spWTH = spWinToolHelps
+
+
 """ declare """
 REPLACETARGETFILE = 'platform.bib'
 REPLACEBACKUPFILE = 'platform.abg'
@@ -25,13 +24,20 @@ INSERTKEY = '\\dllbinary\\'
 DLLBINARYFOLDER = 'dllbinary'
 ESCCODE = '----ESCCODE----'
 
-getList = [ ESCCODE+'1' ]
-getsList = [ ESCCODE+'2' ]
-dirList = [ ESCCODE+'3' ]
-bibList = [ ESCCODE+'4' ]
-bibsList = [ ESCCODE+'5' ]
-srcbinList = [ ESCCODE+'6' ]
+#getList = [ ESCCODE+'1' ]
+#getsList = [ ESCCODE+'2' ]
+#dirList = [ ESCCODE+'3' ]
+#bibList = [ ESCCODE+'4' ]
+#bibsList = [ ESCCODE+'5' ]
+#srcbinList = [ ESCCODE+'6' ]
+getList = []
+getsList = []
+dirList = []
+bibList = []
+bibsList = []
+srcbinList = []
 
+bibListNum = 0
 
 """ check if it's a BSP folder """
 """ ====================================================== """
@@ -68,6 +74,9 @@ def IsBSPfolder():
         print '.'
         bOk = False
 
+    print '.'
+    print '.'
+
     return bOk
 """ ====================================================== """
 
@@ -92,10 +101,11 @@ def FindMatchPattern( lineString, matchPattern ):
 
 """ check if has escape code """
 """ ====================================================== """
-def HasESCcode( line ):
+def HasESCcode( lineIn ):
 
 #    if FindMatchPattern( line, ESCCODE ):
-    if spWTH.spWTH_FindPatternInStrNoCase( line, ESCCODE ):
+    if spWTH.spWTH_FindPatternInStrNoCase( lineIn, ESCCODE ):
+        print 'found escaped code "'+ESCCODE+'" in '+line
         return True
     else:
         return False
@@ -105,7 +115,9 @@ def HasESCcode( line ):
 """ copy dll binary to files folder """
 """ ====================================================== """
 def CopyDllBinary():
-#	os.system('del '+DLLFILELISTB)
+
+    os.system('del '+DLLFILELISTB)
+
     os.system('dir /S /B target\\*.dll > '+DLLFILELISTB)
     os.system('dir /S /B target\\*.exe >> '+DLLFILELISTB)
     os.system('dir /S /B target\\*.rel >> '+DLLFILELISTB)
@@ -115,14 +127,18 @@ def CopyDllBinary():
     with open(DLLFILELISTB) as openedfile:
         for readline in openedfile:
 #            print readline + '=> ', len(readline)
-            lastchar = readline[len(readline)-1]
-            stripedline = readline.strip(lastchar)
-            getList.append(stripedline)
+#            lastchar = readline[len(readline)-1]
+#            stripedline = readline.strip(lastchar)
+#            getList.append(stripedline)
+            getList.append(spWTH.spWTH_RemoveStringTailChar(readline))
 
-        getList.append(ESCCODE)
+#        getList.append(ESCCODE)
 
 #	for item in getList:
 #		print item
+#
+#    print '.'
+#    print '.'
 
     os.system('del '+DLLFILELISTB)
 
@@ -132,8 +148,17 @@ def CopyDllBinary():
 #   do the binary copy
     for item in getList:
         if False == HasESCcode( item ):
-            print 'copy '+item+' to files\\'+DLLBINARYFOLDER
+            print 'copy '+item+' to files\\'+DLLBINARYFOLDER+'...'
             os.system('copy /V '+item+' files\\'+DLLBINARYFOLDER+'\\')
+            if \
+                spWTH.spWTH_FindPatternInStrNoCase(item,'oal.exe') or \
+                spWTH.spWTH_FindPatternInStrNoCase(item,'oal.map') or \
+                spWTH.spWTH_FindPatternInStrNoCase(item,'oal.pdb') or \
+                spWTH.spWTH_FindPatternInStrNoCase(item,'oal.rel') \
+            :
+                print 'copy '+item+' to files\\...'
+                os.system('copy /V '+item+' files\\')
+"""
             if \
                 item.count('oal.exe') > 0 or \
                 item.count('oal.map') > 0 or \
@@ -141,6 +166,7 @@ def CopyDllBinary():
                 item.count('oal.rel') > 0 \
             :
                 os.system('copy /V '+item+' files\\')
+"""
 
 """ ====================================================== """
 
@@ -155,18 +181,22 @@ def GetDllList():
     with open(DLLFILELIST) as openedfiles:
         for readline in openedfiles:
 #            print readline + '=> ', len(readline)
-            lastchar = readline[len(readline)-1]
-            stripedline = readline.strip(lastchar)
-            getsList.append(stripedline)
+#            lastchar = readline[len(readline)-1]
+#            stripedline = readline.strip(lastchar)
+#            getsList.append(stripedline)
+            getsList.append(spWTH.spWTH_RemoveStringTailChar(readline))
 
-    getsList.append(ESCCODE)
+#    getsList.append(ESCCODE)
+
+    os.system('del '+DLLFILELIST)
 
     print '.'
     print '>>>>>>>> Dll files list:'
     for item in getsList:
         print item
 
-    os.system('del '+DLLFILELIST)
+    print '.'
+    print '.'
 """ ====================================================== """
 
 
@@ -175,22 +205,30 @@ def GetDllList():
 def GetBIBList():
     os.system('del '+BIBFILELIST)
     os.system('dir /B /S *.bib > '+BIBFILELIST)
+    bibListNum = 0
 
     with open(BIBFILELIST) as openedfiles:
         for readline in openedfiles:
+            bibListNum = bibListNum + 1
 #            print readline + '=> ', len(readline)
-            lastchar = readline[len(readline)-1]
-            stripedline = readline.strip(lastchar)
-            bibList.append(stripedline)
+#            lastchar = readline[len(readline)-1]
+#            stripedline = readline.strip(lastchar)
+#            bibList.append(stripedline)
+            bibList.append(spWTH.spWTH_RemoveStringTailChar(readline))
+#            bibList.append(string.lower(spWTH.spWTH_RemoveStringTailChar(readline)))
 
-    bibList.append(ESCCODE)
+#    bibList.append(ESCCODE)
+
+    os.system('del '+BIBFILELIST)
 
     print '.'
-    print '>>>>>>>> bib files list:'
+    print '>>>>>>>> bib files list: total in ', bibListNum
     for item in bibList:
         print item
 
-    os.system('del '+BIBFILELIST)
+    print '.'
+    print '.'
+
 """ ====================================================== """
 
 
@@ -215,19 +253,43 @@ def FindSentanceInFile( filename, sentanceList ):
 """ ====================================================== """
 def FilterBIBList():
 
+#    bibList.append('D:\workshop\python\Hammer\FILES\PLATFORM.BIB')
+#    bibList.append('D:\workshop\python\Hammer\FILES\platform.bib')
+#    for item in bibList:
+#        print item
+
     for item in bibList:
+#    for itemnum in range( 0, bibListNum ):
+#        item = bibList[itemnum]
+#        print 'Go for checking! '+bibList[itemnum]
+        print 'Go for checking '+item
         if False == HasESCcode( item ):
+            print 'Go for searching in '+item
 #            if False == FindSentanceInFile( item, getsList ):
             if False == spWTH.spWTH_FindPatternsInFile( item, getsList ):
-                bibList.remove( item )
+                print 'remove item : '+item
+#                bibList.remove( item )
             else:
                 bibsList.append( item )
 
-    bibsList.append( ESCCODE )
+#    bibsList.append( ESCCODE )
+
     print '.'
     print '>>>>>>>> after filter bib files list:'
+    for item in bibList:
+        print item
+
+    print '.'
+    print '.'
+
+
+    print '.'
+    print '>>>>>>>> New after filter bib files:'
     for item in bibsList:
         print item
+
+    print '.'
+    print '.'
 """ ====================================================== """
 
 
@@ -370,7 +432,7 @@ def ReplaceInSentance( linestring, oldKey, newKey ):
 """ ====================================================== """
 def DoLineparse( line ):
 #    print 'DoLineparse:'+line, len(line)
-
+    hitcount = 0
     bHit = False
 
     for dllname in getsList:
@@ -386,7 +448,8 @@ def DoLineparse( line ):
 #                WritelineToFile(line.replace('\\'+dllname,INSERTKEY+dllname,2))
                 WritelineToFile(replaced)
                 bHit = True
-                return
+                hitcount = hitcount + 1
+                return hitcount
 #            else:
 #                print dllname+' not found'
 #                WritelineToFile(line)
@@ -394,9 +457,12 @@ def DoLineparse( line ):
 #            print 'found escape code in list '+dllname+' !!!'
 #            print 'try next in list'
 
+
+
     if bHit == False:
 		WritelineToFile(line)
 
+    return hitcount
 """ ====================================================== """
 
 
@@ -412,6 +478,7 @@ def nDoLineparse( line ):
 """ parse .bib file and do the replacemenet """
 """ ====================================================== """
 def ParseBIBfile( filename ):
+    hitcount = 0
     print '>>>>>>>> parse bib file: '+filename
 #    os.system('del files\\'+REPLACETEMPFILE)
     os.system('del files\\'+REPLACETEMPFILE)
@@ -421,8 +488,10 @@ def ParseBIBfile( filename ):
             if IsBIBescapeCode( readline ):
                 nDoLineparse( readline )
             else:
-                DoLineparse( readline )
+                hits = DoLineparse( readline )
+                hitcount = hitcount + hits
 
+    print 'Total hit & replace : ', hitcount
     print \
 """
 ======================================================
@@ -601,14 +670,21 @@ def FilterSrcForBIB():
 
     srcbinList.append( '.bib' )
     srcbinList.append( '.reg' )
-#    srcbinList.append( '.BIB' )
-#    srcbinList.append( '.REG' )
+    srcbinList.append( '.lib' )
+    srcbinList.append( '.dll' )
+# for Hammer
+    srcbinList.append( '.exe' )
+    srcbinList.append( '.cpl' )
 
-    srcbinList.append( ESCCODE )
+
+#    srcbinList.append( ESCCODE )
     print '.'
     print '>>>>>>>> after filter src\\ in bib files list:'
     for item in srcbinList:
         print item
+
+    print '.'
+    print '.'
 """ ====================================================== """
 
 
@@ -698,6 +774,11 @@ CleanSrcFolder()
 DeleteSrcFilesExt()
 # delete empty folder under src\
 DeleteEmptyFolders()
+
+os.system('del build.wrn')
+os.system('del build.log')
+os.system('del build.dat')
+
 
 print \
 """
