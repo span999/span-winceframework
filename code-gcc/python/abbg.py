@@ -717,6 +717,7 @@ print \
 ======================================================
 =====      auto binary BSP generation (abg)      =====
 =====                                 v 0.2      =====
+=====                                    (patch1)=====
 =====                                            =====
 =====   This tool helps to generate the binary   =====
 =====   BSP from normal BSP (WinCE BSP)          =====
@@ -734,12 +735,13 @@ if select == '?':
 """
 ======================================================
 Usage:
-To use this script, please go the BSP folder. ex: STA2064\
-and run this script with path. ex: c:\test\script\abb.py
+To use this script, please go the BSP folder. ex: STA2064\\
+and run this script with path. ex: c:\\test\\script\\abbg.py
 
 hisorty:
-v 0.2 supported STA2064(ST)/Hammer/NX048(Prima) BSP.
-v 0.1 supported STA2064 BSP.
+v 0.2 patch 1 : fixed some typo in help txt.
+v 0.2 : supported STA2064(ST)/Hammer/NX048(Prima) BSP.
+v 0.1 : supported STA2064 BSP.
 ======================================================
 
 """
