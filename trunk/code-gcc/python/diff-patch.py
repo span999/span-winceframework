@@ -36,10 +36,12 @@ main()
 
 print \
 """
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 This script try to helps you from android code upgrade.
 please use compare tool after patching by this script, 
-since the diff dosen't handle binary well.
+since the diff dosen't handle binary very well.
 ------------------------- powered by span.liu 10/7/2011
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 """
 
 
