@@ -1,0 +1,43 @@
+#
+#
+#
+#
+
+
+#CC=gcc
+#AR=ar
+
+CC=/home/span/workshop/bin/toolchains/arm-2010q1-eabi/bin/arm-none-eabi-gcc
+AR=/home/span/workshop/bin/toolchains/arm-2010q1-eabi/bin/arm-none-eabi-ar
+GCCLIBPATH=/home/span/workshop/bin/toolchains/arm-2010q1-eabi/lib/gcc/arm-none-eabi/4.4.1
+GCCLIBA=$(GCCLIBPATH)/libgcc.a $(GCCLIBPATH)/libgcov.a $(GCCLIBPATH)/*.o
+
+CFLAGS=-I.
+
+main: main.o staticlib.a
+	$(CC) -v -Wall -fmessage-length=0 -o myTest main.o staticlib.a $(GCCLIBA)
+
+main.o:
+	$(CC) -fmessage-length=0 -c main.c
+
+sharedlib.o:
+	$(CC) -Wall -fPIC -c sharedlib.c $(GCCLIBA)
+
+sharedlib.so: sharedlib.o
+	$(CC) -shared -Wl,-soname,libshared.so -o libshared.so sharedlib.o $(GCCLIBA)
+
+staticlib.o:
+	$(CC) -v -Wall -fmessage-length=0 -c staticlib.c $(GCCLIBA)
+
+staticlib.a: staticlib.o
+	$(AR) -cvq staticlib.a staticlib.o
+
+
+all: main
+
+
+clean:
+	rm *.o
+	rm *.a
+	rm *.so
+	rm myTest
