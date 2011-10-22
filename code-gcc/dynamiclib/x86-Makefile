@@ -7,9 +7,10 @@
 CC=gcc
 AR=ar
 CFLAGS=-I.
+CURRPATH=/home/span/workshop/build/code-gcc/dynamiclib
 
 main: main.o staticlib.a sharedlib.so
-	$(CC) -Wall -L/home/span/workshop/build/gcc/dynamiclib -lshared -o myTest main.o staticlib.a
+	$(CC) -Wall -L$(CURRPATH) -lshared -o myTest main.o staticlib.a
 
 main.o:
 	$(CC) -c main.c
