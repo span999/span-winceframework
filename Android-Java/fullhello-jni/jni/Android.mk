@@ -16,7 +16,14 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE    := hello-jni
-LOCAL_SRC_FILES := hello-jni.c
+LOCAL_MODULE    := fullhello-jni
+LOCAL_SRC_FILES := fullhello-jni.c
 
 include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE    := fullhello-main
+LOCAL_SRC_FILES := fullhello-main.c
+
+include $(BUILD_EXECUTABLE)
