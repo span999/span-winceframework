@@ -1,4 +1,4 @@
-package com.example.HelloJni;
+package com.example.FullHelloJni;
 
 import android.test.ActivityInstrumentationTestCase;
 
@@ -12,10 +12,10 @@ import android.test.ActivityInstrumentationTestCase;
  * -e class com.example.HelloJni.HelloJniTest \
  * com.example.HelloJni.tests/android.test.InstrumentationTestRunner
  */
-public class HelloJniTest extends ActivityInstrumentationTestCase<HelloJni> {
+public class FullHelloJniTest extends ActivityInstrumentationTestCase<HelloJni> {
 
-    public HelloJniTest() {
-        super("com.example.HelloJni", HelloJni.class);
+    public FullHelloJniTest() {
+        super("com.example.FullHelloJni", FullHelloJni.class);
     }
 
 }

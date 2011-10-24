@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.hellojni;
+package com.example.fullhellojni;
 
 import android.app.Activity;
 import android.widget.TextView;
 import android.os.Bundle;
 
 
-public class HelloJni extends Activity
+public class FullHelloJni extends Activity
 {
     /** Called when the activity is first created. */
     @Override
@@ -61,6 +61,6 @@ public class HelloJni extends Activity
      * installation time by the package manager.
      */
     static {
-        System.loadLibrary("hello-jni");
+        System.loadLibrary("fullhello-jni");
     }
 }
