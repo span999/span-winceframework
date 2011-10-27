@@ -9,8 +9,8 @@ AR=ar
 CFLAGS=-I.
 CURRPATH=/home/span/workshop/build/code-gcc/dynamiclib
 
-main: main.o staticlib.a sharedlib.so
-	$(CC) -Wall -L$(CURRPATH) -lshared -o myTest main.o staticlib.a
+main: main.o staticlib.a sharedlib.so libsIO-common.a
+	$(CC) -Wall -L$(CURRPATH) -lshared -o myTest main.o staticlib.a libsIO-common.a
 
 main.o:
 	$(CC) -c main.c
@@ -26,6 +26,12 @@ staticlib.o:
 
 staticlib.a: staticlib.o
 	$(AR) -cvq staticlib.a staticlib.o
+
+libsIO-common.o:
+	$(CC) -Wall -c libsIO-common.c
+
+libsIO-common.a: libsIO-common.o
+	$(AR) -cvq libsIO-common.a libsIO-common.o
 
 
 all: main
