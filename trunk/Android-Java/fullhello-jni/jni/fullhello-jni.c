@@ -16,6 +16,7 @@
  */
 #include <string.h>
 #include <jni.h>
+#include "libsIO-common.h"
 
 /* This is a trivial JNI example where we use a native method
  * to return a new VM String. See the corresponding Java source
@@ -27,5 +28,7 @@ jstring
 Java_com_example_fullhellojni_FullHelloJni_stringFromJNI( JNIEnv* env,
                                                   jobject thiz )
 {
+	libsdumpcupinfo();
+	libsdumpmeminfo();
     return (*env)->NewStringUTF(env, "Hello from JNI !");
 }

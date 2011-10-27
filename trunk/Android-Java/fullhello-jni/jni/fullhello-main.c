@@ -14,12 +14,20 @@
  * limitations under the License.
  *
  */
-///#include <string.h>
+#include <stdio.h>
 ///#include <jni.h>
+#include "libsIO-common.h"
+
 
 int main( void )
 {
 	int iRet = 0;
 
-    return iRet;
+	printf("test program start ...\r\n");
+	libsdumpcupinfo();
+	libsdumpmeminfo();
+
+	libsi2csearch();
+
+	return iRet;
 }
