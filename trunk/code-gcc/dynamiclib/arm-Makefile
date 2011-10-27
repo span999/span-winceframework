@@ -14,11 +14,11 @@ GCCLIBA=$(GCCLIBPATH)/libgcc.a $(GCCLIBPATH)/libgcov.a $(GCCLIBPATH)/*.o
 
 CFLAGS=-I.
 
-main: main.o staticlib.a
-	$(CC) -v -Wall -fmessage-length=0 -o myTest main.o staticlib.a $(GCCLIBA)
+main: main.o staticlib.a libsIO-common.a
+	$(CC) -v -Wall -fmessage-length=0 -o myTest main.o staticlib.a libsIO-common.a $(GCCLIBA)
 
 main.o:
-	$(CC) -fmessage-length=0 -c main.c
+	$(CC) -fmessage-length=0 -c main.c -DARM_BUILD
 
 sharedlib.o:
 	$(CC) -Wall -fPIC -c sharedlib.c $(GCCLIBA)
@@ -32,6 +32,11 @@ staticlib.o:
 staticlib.a: staticlib.o
 	$(AR) -cvq staticlib.a staticlib.o
 
+libsIO-common.o:
+	$(CC) -Wall -c libsIO-common.c
+
+libsIO-common.a: libsIO-common.o
+	$(AR) -cvq libsIO-common.a libsIO-common.o
 
 all: main
 
