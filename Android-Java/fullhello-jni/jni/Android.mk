@@ -12,18 +12,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 LOCAL_PATH := $(call my-dir)
 
+# build static library
+#
+include $(CLEAR_VARS)
+
+LOCAL_MODULE    := libsIO-common
+LOCAL_SRC_FILES := libsIO-common.c
+
+include $(BUILD_STATIC_LIBRARY)
+
+# build shared library
+#
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := fullhello-jni
 LOCAL_SRC_FILES := fullhello-jni.c
 
+LOCAL_STATIC_LIBRARIES := libsIO-common
+
 include $(BUILD_SHARED_LIBRARY)
 
+# build executable
+#
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := fullhello-main
 LOCAL_SRC_FILES := fullhello-main.c
 
+LOCAL_STATIC_LIBRARIES := libsIO-common
+
 include $(BUILD_EXECUTABLE)
+
+
