@@ -1,15 +1,26 @@
 #!/bin/bash
 # shell init script
 
-export PATH=/home/span/workshop/bin:/home/span/workshop/bin/jdk_1.5/jdk1.5.0_22-x86_64/bin:${PATH}
+MYSTARTPATH=/home/span/bins
+MYBINPATH=/home/span/workshop/bin
+JAVA5TOOLPATH=/home/span/workshop/bin/jdk1.5.0_22/bin
 
-echo "========================="
-echo "========================="
-echo "  In Span's shell"
-echo "  PATH shows as below:"
-echo "  PATH=$PATH"
-echo "========================="
-echo "========================="
+###export PATH=${JAVA5TOOLPATH}:${PATH}
+export PATH=${MYSTARTPATH}:${PATH}
+export PATH=${MYBINPATH}:${PATH}
+echo "system path now set as below:"
+echo "==> $PATH"
 
-echo "Jump into workshop..."
+echo "=========================="
+echo "=========================="
+echo "===   span's workshop  ==="
+echo "=== jump to workshop !! =="
+echo "=========================="
+echo "=========================="
 cd /home/span/workshop
+
+echo "iBus enabled!!"
+export GTK_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
+export QT_IM_MODULE=ibus 
+
