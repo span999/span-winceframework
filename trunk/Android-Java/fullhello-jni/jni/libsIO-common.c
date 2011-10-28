@@ -112,6 +112,34 @@ int libsi2csearch( void )
 	return libsi2cdevsearch( DEVI2CFILE_PRIFIX, DEVI2CFILE_MAXNUM );
 }
 
+static int libsi2c_readreg( int fh, char reg, int count )
+{
+        char data[2];
+
+        if( fh == 0 )
+			return -1;
+
+        if (count < 1 || count > 2)
+			return -1;
+
+
+        data[0] = reg;
+		usleep(1000);
+        if (write(fh, &data, 1) != 1) {
+                ///perror("write before read");
+                return -1;
+        }
+
+        data[1] = 0;
+		usleep(1000);
+        if (read(fh, &data, count) != count) {
+                ///perror("read");
+                return -1;
+        }
+
+        return (data[1] << 8) + data[0];
+}
+
 
 static int libsi2cdevsearch( const char *filename, int iMaxNum )
 {
@@ -133,78 +161,282 @@ static int libsi2cdevsearch( const char *filename, int iMaxNum )
 
 		printf("searching %s !!!\r\n", devname );
 
-#if 0
-		fp = fopen(devname,"r");
-		if( fp == NULL )
-		{
-			printf("Oops!! %s is not available !!!\r\n", devname );
-		}
-		else
-		{
-			printf("Good!! %s is available for access !!!\r\n", devname );
-		}
-
-		if( fp != NULL )	///close only opend
-			fclose(fp);
-#endif
-
+		///try open dev node
 		file = open( devname, O_RDWR );
 		if( file < 0 )
 		{
-			printf("Oops!! %s is not available !!!\r\n", devname );
+			printf("Oops!! %s bus is not available !!!\r\n", devname );
 		}
 		else
 		{
 			int iLp = 0;
-			///char index = 0;
+			int ioctlRet = 0;
 
 			printf("Good!! %s is available for access !!!\r\n", devname );
 
-			for( iLp = 0; iLp < 256; iLp++ )
+			for( iLp = 0; iLp < 128; iLp++ )
 			{
 				int addr;
 				
 				addr = iLp;
+				///printf(".");
+				///printf("Try %s with chip ID=0x%x !!!\r", devname, addr );
 				///printf("Try %s with chip ID=0x%x !!!\r\n", devname, addr );
 				/// set slave address
-				if( ioctl( file, I2C_SLAVE, addr ) < 0 )
+				ioctlRet = ioctl( file, I2C_SLAVE, addr );
+				if( ioctlRet < 0 )
 				{
-					///printf("Oops!! ID=0x%02x on %s is not available !!!\r\n", addr, devname );
+					printf(".");
+					printf("Oops!! ID=0x%02x(0x%02x) on %s is not controlable err=(%d) !!!\r\n", addr, (addr*2), devname, ioctlRet );
 				}
 				else
 				{
 					char buf[10];
-					int readret;
+					int readRet;
+					char reg;
 
 					///printf("Good!! ID=0x%02x on %s is available !!!\r\n", addr, devname );
-					
-					buf[0] = 0x0;	///register 0x0
-					readret = read(file, buf, 1);
-					
-					if( readret != 1)
-						readret = read(file, buf, 1);
-
-					if( readret != 1)
-						readret = read(file, buf, 1);
-
-					if( readret != 1)
-						readret = read(file, buf, 1);
-
-					if( readret != 1) {
-						/* ERROR HANDLING: i2c transaction failed */
-						///printf("Oops!! ID=0x%02x on %s is not readable 0x00(0x%x)!!!\r\n", addr, devname, buf[0] );
-					} else {
-				    	/* buf[0] contains the read byte */
-						printf("Good!! ID=0x%02x on %s is readable 0x00(0x%x)!!!\r\n", addr, devname, buf[0] );
-
-						buf[0] = 0x1;	///register 0x1
-						if(read(file, buf, 1) == 1) {
-							printf("Good!! ID=0x%02x on %s is readable 0x01(0x%x)!!!\r\n", addr, devname, buf[0] );
-						}
+#if 0
+					for( reg = 0; reg < 256; reg++ )
+					{
+						usleep(200);
+						readRet = libsi2c_readreg( file, reg, 2 );
+						usleep(200);
+						if( readRet < 0 ) {
+							/* ERROR HANDLING: i2c transaction failed */
+							///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+						} else {
+							if( reg == 0 )
+								printf("\r\n");
+							printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+						} 
+						usleep(200);
 					}
+#else
+					///printf("\r\n");
+					reg = 0x0;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("\r\n");
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} 
 					
+					reg = 0x2;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} 
+
+					reg = 0x4;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} 
+
+					reg = 0x6;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+					reg = 0x8;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+					reg = 0xa;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+					reg = 0xc;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+					reg = 0xe;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+					reg = 0x10;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+					reg = 0x12;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+
+					reg = 0x14;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+
+					reg = 0x16;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+
+					reg = 0x1c;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+
+					reg = 0x22;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+
+					reg = 0x34;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+
+					reg = 0x36;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+
+					reg = 0x38;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+
+					reg = 0x3a;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+
+					reg = 0x3c;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+
+					reg = 0x3e;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+					reg = 0x5a;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+					reg = 0x7c;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+
+					reg = 0x7e;
+					readRet = libsi2c_readreg( file, reg, 2 );
+					if( readRet < 0 ) {
+						/* ERROR HANDLING: i2c transaction failed */
+						///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					} else {
+						printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
+					}
+#endif					
 				}
+				usleep(2000);
+				
 			}
+			printf("\r\n");
 
 			close(file);
 		}
