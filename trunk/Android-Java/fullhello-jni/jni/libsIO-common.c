@@ -15,6 +15,7 @@
 
 ///#include <linux/i2c-dev.h>
 #define I2C_SLAVE	0x0703	/* Use this slave address */
+#define I2C_SLAVE_FORCE	0x0706
 
 #define X86CPUINFOFILE		"/proc/cpuinfo"
 #define X86MEMINFOFILE		"/proc/meminfo"
@@ -162,7 +163,7 @@ static int libsi2cdevsearch( const char *filename, int iMaxNum )
 		printf("searching %s !!!\r\n", devname );
 
 		///try open dev node
-		file = open( devname, O_RDWR );
+		file = open( devname, O_RDWR|O_NONBLOCK );
 		if( file < 0 )
 		{
 			printf("Oops!! %s bus is not available !!!\r\n", devname );
@@ -182,12 +183,14 @@ static int libsi2cdevsearch( const char *filename, int iMaxNum )
 				///printf(".");
 				///printf("Try %s with chip ID=0x%x !!!\r", devname, addr );
 				///printf("Try %s with chip ID=0x%x !!!\r\n", devname, addr );
+				
 				/// set slave address
-				ioctlRet = ioctl( file, I2C_SLAVE, addr );
+				///ioctlRet = ioctl( file, I2C_SLAVE, addr );
+				ioctlRet = ioctl( file, I2C_SLAVE_FORCE, addr );
 				if( ioctlRet < 0 )
 				{
 					printf(".");
-					printf("Oops!! ID=0x%02x(0x%02x) on %s is not controlable err=(%d) !!!\r\n", addr, (addr*2), devname, ioctlRet );
+					printf("Oops!! ID=0x%02x(0x%02x) on %s is not controlable err=(%d - %s) !!!\r\n", addr, (addr*2), devname, ioctlRet, strerror(ioctlRet) );
 				}
 				else
 				{
