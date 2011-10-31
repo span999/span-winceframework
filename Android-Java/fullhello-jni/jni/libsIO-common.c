@@ -269,23 +269,7 @@ static int libsi2cdevsearch( const char *filename, int iMaxNum )
 					char reg;
 
 					///printf("..Good!! ID=0x%02x(0x%02x) on %s is available !!!\r\n", addr, (addr*2), devname );
-#if 0
-					for( reg = 0; reg < 256; reg++ )
-					{
-						usleep(200);
-						readRet = libsi2c_readreg( file, reg, 2 );
-						usleep(200);
-						if( readRet < 0 ) {
-							/* ERROR HANDLING: i2c transaction failed */
-							///printf("Oops!! ID=0x%02x(0x%02x) on %s is not readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
-						} else {
-							if( reg == 0 )
-								printf("\r\n");
-							printf("Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
-						} 
-						usleep(200);
-					}
-#else
+
 	#if 1
 ///					printf("\r\n");
 
@@ -576,7 +560,8 @@ static int libsi2cdevsearch( const char *filename, int iMaxNum )
 						printf("....Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!\r\n", addr, (addr*2), devname, reg, readRet );
 					}
 	#endif
-#endif					
+				
+				
 				}
 				usleep(2000);
 				
