@@ -271,7 +271,7 @@ static int libsi2cdevsearch( const char *filename, int iMaxNum )
 					///printf("..Good!! ID=0x%02x(0x%02x) on %s is available !!!\r\n", addr, (addr*2), devname );
 
 
-					if( (0x1a == addr) || (0x66 == addr) || (0x1e == addr) || (0x0f == addr) )
+					if( (0x00 <= addr) && (0xff >= addr) )
 					{
 						int iT = 0;
 						struct tI2CCHIPREG *pReglist;
@@ -308,34 +308,6 @@ static int libsi2cdevsearch( const char *filename, int iMaxNum )
 					else
 					{
 						libsi2c_showchipname( devname, addr );
-						libsi2c_readreg_ex( devname, file, addr, 0x00, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x02, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x04, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x06, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x08, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x0a, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x0c, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x0e, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x10, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x12, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x14, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x16, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x18, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x1a, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x1c, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x1e, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x20, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x22, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x32, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x34, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x36, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x38, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x3a, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x3c, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x3e, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x5a, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x7c, 2 );
-						libsi2c_readreg_ex( devname, file, addr, 0x7e, 2 );
 					}
 					printf("\r\n");
 				
