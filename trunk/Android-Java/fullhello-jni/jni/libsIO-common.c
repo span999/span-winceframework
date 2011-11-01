@@ -264,9 +264,9 @@ static int libsi2cdevsearch( const char *filename, int iMaxNum )
 				}
 				else
 				{
-					char buf[10];
-					int readRet;
-					char reg;
+///					char buf[10];
+///					int readRet;
+///					char reg;
 
 					///printf("..Good!! ID=0x%02x(0x%02x) on %s is available !!!\r\n", addr, (addr*2), devname );
 
