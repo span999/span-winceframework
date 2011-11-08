@@ -28,7 +28,18 @@ jstring
 Java_com_example_fullhellojni_FullHelloJni_stringFromJNI( JNIEnv* env,
                                                   jobject thiz )
 {
-	libsdumpcupinfo();
-	libsdumpmeminfo();
+	///libsdumpcupinfo();
+	///libsdumpmeminfo();
     return (*env)->NewStringUTF(env, "Hello from JNI !");
 }
+
+
+jstring
+Java_com_example_fullhellojni_FullhellojniActivity_stringFromJNI( JNIEnv* env,
+                                                  jobject thiz )
+{
+	///libsdumpcupinfo();
+	///libsdumpmeminfo();
+    return (*env)->NewStringUTF(env, "Hello from JNI 2 !");
+}
+
