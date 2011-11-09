@@ -15,19 +15,70 @@
  *
  */
 #include <stdio.h>
-///#include <jni.h>
+#include "libsIO-help.h"
 #include "libsIO-common.h"
 
 
-int main( void )
+
+
+void printhelp( void )
+{
+	printf("%s\r\n",helpstr);
+}
+
+
+int main( int argc, char *argv[] )
 {
 	int iRet = 0;
 
 	printf("test program start ...\r\n");
-	libsdumpcupinfo();
-	libsdumpmeminfo();
+	
+	if( argc > 0 )
+	{
+		if( 0 == strcmp( argv[0], "help" ) )
+			goto _HELP;
+		else
+		if( 0 == strcmp( argv[0], "cpu" ) )
+			libsdumpcupinfo();
+		else
+		if( 0 == strcmp( argv[0], "mem" ) )
+			libsdumpmeminfo();
+		else
+		if( 0 == strcmp( argv[0], "iic" ) )
+			if( 0 == strcmp( argv[1], "search" ) )
+				libsi2csearch();
+			else
+			if( 0 == strcmp( argv[1], "list" ) )
+				;///libsi2csearch();
+			else
+			if( 0 == strcmp( argv[1], "dmup" ) )
+				;///libsi2csearch();
+			else
+			if( 0 == strcmp( argv[1], "get" ) )
+				;///libsi2csearch();
+			else
+			if( 0 == strcmp( argv[1], "set" ) )
+				;///libsi2csearch();
+			else
+				goto _HELP;
+		else
+		if( 0 == strcmp( argv[0], "gpio" ) )
+			goto _HELP;
+		else
+			goto _HELP;
+	}
+	else
+	{
+		goto _HELP;
+	}
 
-	libsi2csearch();
+	///libsdumpcupinfo();
+	///libsdumpmeminfo();
+
+	///libsi2csearch();
+_HELP:
+	printhelp();
+_EXIT:	
 
 	return iRet;
 }
