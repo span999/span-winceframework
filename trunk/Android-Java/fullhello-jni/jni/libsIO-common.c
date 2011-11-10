@@ -26,9 +26,9 @@
 
 
 ///#include <linux/i2c-dev.h>
-#define I2C_SLAVE	0x0703	/* Use this slave address */
-#define I2C_SLAVE_FORCE 0x0706  /* Use this slave address, even if it
-                                   is already in use by a driver! */
+#define I2C_SLAVE			0x0703	/* Use this slave address */
+#define I2C_SLAVE_FORCE 	0x0706  /* Use this slave address, even if it
+										is already in use by a driver! */
 
 #define X86CPUINFOFILE		"/proc/cpuinfo"
 #define X86MEMINFOFILE		"/proc/meminfo"
@@ -63,7 +63,7 @@ enum tSYSINFOIDX{
 static int libsdumpsysteminfo( enum tSYSINFOIDX index );
 static int libsi2cdevsearch( const char *filename, int iMaxNum, int ifunc );
 static int libsi2cdevdump( const char *filename, int iMaxNum );
-
+static int libsi2cdevregget( int iBus, int iAddr, int iIdx );
 
 
 
@@ -139,6 +139,18 @@ int libsi2cdump( void )
 }
 
 
+int libsi2cget( int iBus, int iAddr, int iIdx )
+{
+	if( iBus < 0 || iBus > 6 )
+		return -1;
+	if( iAddr < 0 || iAddr > 0x7f )
+		return -2;
+	if( iIdx < 0 || iIdx > 100 )
+		return -3;
+
+	return libsi2cdevregget( iBus, iAddr, iIdx );
+}
+
 static int libsi2c_readreg( int fh, char reg, int count )
 {
         char data[2];
@@ -212,11 +224,81 @@ static int libsi2c_readreg_ex( char* devname, int file, int addr, char reg, int 
 }
 
 
+static int libsi2cdevregget( int iBus, int iAddr, int iIdx )
+{
+	int iRet = -1;
+	char devname[128];
+	char devnum[8];
+	int file = 0;
+
+	///load dev name
+	strcpy(devname, DEVI2CFILE_PRIFIX);
+	sprintf(devnum,"%d",iBus);
+	strcat(devname, devnum);
+
+	file = open( devname, O_RDWR|O_NONBLOCK );
+	if( file < 0 )
+	{
+		printf("[I2C]Oops!! %s bus is not available !!!\r\n", devname );
+	}
+	else
+	{
+		int ioctlRet = 0;
+
+		/// set slave address
+		ioctlRet = ioctl( file, I2C_SLAVE, iAddr );
+		
+		if( ioctlRet < 0 )
+		{
+			printf("[I2C]..Oops!! ID=0x%02x(0x%02x) on %s is not controlable err=(%s) !!!\r\n", iAddr, (iAddr*2), devname, strerror(-ioctlRet) );
+			printf("[I2C]..Oops!! ID=0x%02x(0x%02x) on %s is not controlable errno=(%s) !!!\r\n", iAddr, (iAddr*2), devname, strerror(errno) );
+			printf("[I2C]..re-try with FORCE !!");
+			usleep(1000);
+			ioctlRet = ioctl( file, I2C_SLAVE_FORCE, iAddr );
+		}				
+		if( ioctlRet < 0 )	///check again
+		{
+			printf("[I2C]....Oops!! ID=0x%02x(0x%02x) on %s is not controlable err=(%s) !!!\r\n", iAddr, (iAddr*2), devname, ioctlRet, strerror(-ioctlRet) );
+			printf("[I2C]....Oops!! ID=0x%02x(0x%02x) on %s is not controlable errno=(%s) !!!\r\n", iAddr, (iAddr*2), devname, strerror(errno) );
+		}
+		else if( libsi2c_readreg( file, 0x0, 2 ) < 0 )	///try to read index 0x0
+		{
+			if( errno == ENXIO )	///0x6
+				printf("\r\n....Oops!! ID=0x%02x(0x%02x), No such device or address !!", iAddr, (iAddr*2) );
+			else
+				printf("\r\n....Oops!! ID=0x%02x(0x%02x), unknow error=0x%x !!", iAddr, (iAddr*2), errno );
+		}
+		else
+		{
+			iRet = libsi2c_readreg( file, iIdx, 2 );
+			if( iRet < 0 )
+			{
+				if( errno == ENXIO )	///0x6
+					printf("\r\n....Oops!! ID=0x%02x(0x%02x), No such device or address !!", iAddr, (iAddr*2) );
+				else
+					printf("\r\n....Oops!! ID=0x%02x(0x%02x), unknow error=0x%x !!", iAddr, (iAddr*2), errno );
+			}
+			else
+			{
+				
+				printf("\r\n[I2C] ID=0x%02x(0x%02x) on %s, index(0x%02x)=0x%04x\r\n", iAddr, (iAddr*2), devname, iIdx, iRet );
+				///libsi2c_showchipname( devname, addr );
+			}
+
+		}
+		
+
+	}
+
+	return iRet;
+}
+
+
 static int libsi2cdevsearch( const char *filename, int iMaxNum, int ifunc )
 {
 	int iRet = 0;
 	int iLoop = 0;
-	FILE *fp = NULL;
+///	FILE *fp = NULL;
 	char devname[128];
 	char devnum[8];
 	int file = 0;
@@ -362,7 +444,7 @@ static int libsi2cdevdump( const char *filename, int iMaxNum )
 {
 	int iRet = 0;
 	int iLoop = 0;
-	FILE *fp = NULL;
+///	FILE *fp = NULL;
 	char devname[128];
 	char devnum[8];
 	int file = 0;

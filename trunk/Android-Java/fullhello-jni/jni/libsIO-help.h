@@ -23,11 +23,13 @@ Available subcommands:\r\n\
    gpio(not yet)\r\n\
 \r\n\
 Available options for iic:\r\n\
-   search\r\n\
-   list\r\n\
+   search (search all available device on all bus)\r\n\
+   list (list all available device on all bus)\r\n\
    dump\r\n\
-   set\r\n\
-   get\r\n\
+   set (set data on specified index of specified device)\r\n\
+      (ex: libsIO iic set 1 2c 1a 7f7f - set value 7f7f to index 0x1a of address 0x2c on bus1. )\r\n\
+   get (get data on specified index of specified device)\r\n\
+      (ex: libsIO iic get 1 2c 1a - get value from index 0x1a of address 0x2c on bus1. )\r\n\
 \r\n\
 libsIO is a tool for low level accessing.\r\n\
 For additional information, please mail spanliu@gmail.com\r\n\
