@@ -20,7 +20,7 @@
 #include "libsIO-i2cchip_KXTF9.h"
 #include "libsIO-i2cchip_ALC5621.h"
 #include "libsIO-i2cchip_MAX8698C.h"
-
+#include "libsIO-i2cchip_TPS65950.h"
 
 
 
@@ -240,6 +240,18 @@ static void libsi2c_showchipname ( char* devname, int addr )
 	else
 	if( 0x0f == addr )
 		printf("\r\n[I2C]....Good!! ID=0x%02x(0x%02x) on %s is kionix kxtf9 (3D-accelerometer)!!!", addr, (addr*2), devname );
+	else
+	if( 0x48 == addr )
+		printf("\r\n[I2C]....Good!! ID=0x%02x(0x%02x) on %s is Ti TPS65950 (USB controller)!!!", addr, (addr*2), devname );
+	else
+	if( 0x49 == addr )
+		printf("\r\n[I2C]....Good!! ID=0x%02x(0x%02x) on %s is Ti TPS65950 (AUDIO controller)!!!", addr, (addr*2), devname );
+	else
+	if( 0x4a == addr )
+		printf("\r\n[I2C]....Good!! ID=0x%02x(0x%02x) on %s is Ti TPS65950 (PMIC controller)!!!", addr, (addr*2), devname );
+	else
+	if( 0x4b == addr )
+		printf("\r\n[I2C]....Good!! ID=0x%02x(0x%02x) on %s is Ti TPS65950 (PMIC controller)!!!", addr, (addr*2), devname );
 	else
 		printf("\r\n[I2C]....Good!! ID=0x%02x(0x%02x) on %s is Unknow ??? ( ??? )!!!", addr, (addr*2), devname );
 	
