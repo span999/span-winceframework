@@ -90,7 +90,7 @@ static int strtoint( char *str )
 {
 	int iRet = -1;
 	int iCnt = 0;
-	int iNum[2];
+	int iNum[4];
 	
 	if( 0 != str )
 	{
@@ -114,6 +114,16 @@ static int strtoint( char *str )
 	{
 		iRet = (iNum[0]*16) + (iNum[1]);
 	}
+	else
+	if( 3 == iCnt )	///3 digit
+	{
+		iRet = (iNum[0]*256) + (iNum[1]*16) + (iNum[2]);
+	}
+	else
+	if( 4 == iCnt )	///4 digit
+	{
+		iRet = (iNum[0]*4096) + (iNum[1]*256) + (iNum[2]*16) + (iNum[3]);
+	}
 	
 	///printf("{%d}", iRet );
 	///printf("\r\n");
@@ -125,7 +135,7 @@ int main( int argc, char *argv[] )
 {
 	int iRet = 0;
 
-	printf("test program start ...%d \r\n", argc);
+	printf("    << program start ...%d >> \r\n", argc);
 	
 	if( argc > 1 )
 	{
@@ -173,7 +183,26 @@ int main( int argc, char *argv[] )
 			}
 			else
 			if( 0 == strcmp( argv[2], "set" ) )
-				;///libsi2csearch();
+			{
+				if( 7 > argc )
+				{
+					goto _HELP;
+				}
+				else
+				{
+					printf("Bus=%s, ID=0x%s, reg=0x%s , value=0x%s \r\n", argv[3], argv[4], argv[5], argv[6] );
+					strtoint( argv[3] );
+					strtoint( argv[4] );
+					strtoint( argv[5] );
+					strtoint( argv[6] );
+
+					libsi2cset( strtoint( argv[3] ), strtoint( argv[4] ), strtoint( argv[5] ), strtoint( argv[6] ) );
+					///libsi2cget( 2, 0x1e, 0x00 );
+					///libsi2cget( 2, 0x1e, 0x02 );
+					///libsi2cget( 2, 0x1e, 0x04 );
+					///libsi2cget( 2, 0x1e, 0x06 );
+				}
+			}
 			else
 				goto _HELP;
 		else
