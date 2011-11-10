@@ -14,6 +14,7 @@ extern int libsi2csearch( void );
 extern int libsi2cdump( void );
 extern int libsi2clist( void );
 extern int libsi2cget( int iBus, int iAddr, int iIdx );
+extern int libsi2cset( int iBus, int iAddr, int iIdx, int iVal );
 
 
 #endif /* __LIBSIO_COMMON_H__ */
