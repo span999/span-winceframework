@@ -31,38 +31,41 @@ int main( int argc, char *argv[] )
 {
 	int iRet = 0;
 
-	printf("test program start ...\r\n");
+	printf("test program start ...%d \r\n", argc);
 	
-	if( argc > 0 )
+	if( argc > 1 )
 	{
-		if( 0 == strcmp( argv[0], "help" ) )
+		if( 0 == strcmp( argv[1], "help" ) )
 			goto _HELP;
 		else
-		if( 0 == strcmp( argv[0], "cpu" ) )
+		if( 0 == strcmp( argv[1], "cpu" ) )
 			libsdumpcupinfo();
 		else
-		if( 0 == strcmp( argv[0], "mem" ) )
+		if( 0 == strcmp( argv[1], "mem" ) )
 			libsdumpmeminfo();
 		else
-		if( 0 == strcmp( argv[0], "iic" ) )
-			if( 0 == strcmp( argv[1], "search" ) )
+		if( 0 == strcmp( argv[1], "iic" ) )
+			if( 0 == strcmp( argv[2], "search" ) )
 				libsi2csearch();
 			else
-			if( 0 == strcmp( argv[1], "list" ) )
+			if( 2 == argc )
+				libsi2csearch();
+			else
+			if( 0 == strcmp( argv[2], "list" ) )
+				libsi2clist();
+			else
+			if( 0 == strcmp( argv[2], "dump" ) )
+				libsi2cdump();
+			else
+			if( 0 == strcmp( argv[2], "get" ) )
 				;///libsi2csearch();
 			else
-			if( 0 == strcmp( argv[1], "dmup" ) )
-				;///libsi2csearch();
-			else
-			if( 0 == strcmp( argv[1], "get" ) )
-				;///libsi2csearch();
-			else
-			if( 0 == strcmp( argv[1], "set" ) )
+			if( 0 == strcmp( argv[2], "set" ) )
 				;///libsi2csearch();
 			else
 				goto _HELP;
 		else
-		if( 0 == strcmp( argv[0], "gpio" ) )
+		if( 0 == strcmp( argv[1], "gpio" ) )
 			goto _HELP;
 		else
 			goto _HELP;
@@ -76,6 +79,8 @@ int main( int argc, char *argv[] )
 	///libsdumpmeminfo();
 
 	///libsi2csearch();
+	goto _EXIT;
+	
 _HELP:
 	printhelp();
 _EXIT:	
