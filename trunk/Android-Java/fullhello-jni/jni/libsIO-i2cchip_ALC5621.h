@@ -11,7 +11,7 @@
 
 
 
-
+static const struct tI2CCHIPREG chipreglist_ALC5621[];
 /*   */
 static const struct tI2CCHIPDATA chipdata_ALC5621 = {
 	"Realtek",
@@ -21,6 +21,7 @@ static const struct tI2CCHIPDATA chipdata_ALC5621 = {
 	0x1a,
 	0x0,
 	2,
+	(struct tI2CCHIPREG**)&chipreglist_ALC5621,
 };
 
 static const struct tI2CCHIPREG chipreglist_ALC5621[] = {

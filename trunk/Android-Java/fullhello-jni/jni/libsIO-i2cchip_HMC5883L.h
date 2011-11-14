@@ -10,7 +10,7 @@
 #include "libsIO-i2cchip.h"
 
 
-
+static const struct tI2CCHIPREG chipreglist_HMC5883L[];
 /*   */
 static const struct tI2CCHIPDATA chipdata_HMC5883L = {
 	"Honeywell",
@@ -20,6 +20,7 @@ static const struct tI2CCHIPDATA chipdata_HMC5883L = {
 	0x1e,
 	0x0,
 	1,
+	(struct tI2CCHIPREG**)&chipreglist_HMC5883L,
 };
 
 static const struct tI2CCHIPREG chipreglist_HMC5883L[] = {

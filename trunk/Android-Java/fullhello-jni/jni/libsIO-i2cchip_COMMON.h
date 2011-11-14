@@ -11,7 +11,7 @@
 
 
 
-
+static const struct tI2CCHIPREG chipreglist_COMMON[];
 /*   */
 static const struct tI2CCHIPDATA chipdata_COMMON = {
 	"N/A",
@@ -21,6 +21,7 @@ static const struct tI2CCHIPDATA chipdata_COMMON = {
 	0x0,
 	0x0,
 	1,
+	(struct tI2CCHIPREG**)&chipreglist_COMMON,
 };
 
 static const struct tI2CCHIPREG chipreglist_COMMON[] = {

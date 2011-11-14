@@ -10,7 +10,7 @@
 #include "libsIO-i2cchip.h"
 
 
-
+static const struct tI2CCHIPREG chipreglist_MAX8698C[];
 /*   */
 static const struct tI2CCHIPDATA chipdata_MAX8698C = {
 	"Maxim",
@@ -20,6 +20,7 @@ static const struct tI2CCHIPDATA chipdata_MAX8698C = {
 	0x66,
 	0x0,
 	1,
+	(struct tI2CCHIPREG**)&chipreglist_MAX8698C,
 };
 
 static const struct tI2CCHIPREG chipreglist_MAX8698C[] = {

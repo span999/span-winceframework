@@ -10,7 +10,7 @@
 #include "libsIO-i2cchip.h"
 
 
-
+static const struct tI2CCHIPREG chipreglist_KXTF9[];
 /*   */
 static const struct tI2CCHIPDATA chipdata_KXTF9 = {
 	"kionix",
@@ -20,6 +20,7 @@ static const struct tI2CCHIPDATA chipdata_KXTF9 = {
 	0x0f,
 	0x0,
 	1,
+	(struct tI2CCHIPREG**)&chipreglist_KXTF9,
 };
 
 static const struct tI2CCHIPREG chipreglist_KXTF9[] = {
