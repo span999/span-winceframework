@@ -10,6 +10,18 @@
 #include "libsIO-i2cchip.h"
 
 
+
+/*   */
+static const struct tI2CCHIPDATA chipdata_KXTF9 = {
+	"kionix",
+	"KXTF9",
+	"N/A",
+	"3D-accelerometer",
+	0x0f,
+	0x0,
+	1,
+};
+
 static const struct tI2CCHIPREG chipreglist_KXTF9[] = {
 	{	0x00,	1,	"XOUT_HPF_L" },
 	{	0x01,	1,	"XOUT_HPF_H" },

@@ -14,13 +14,8 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#include "libsIO-i2cchip.h"
-#include "libsIO-i2cchip_COMMON.h"
-#include "libsIO-i2cchip_HMC5883L.h"
-#include "libsIO-i2cchip_KXTF9.h"
-#include "libsIO-i2cchip_ALC5621.h"
-#include "libsIO-i2cchip_MAX8698C.h"
-#include "libsIO-i2cchip_TPS65950.h"
+#include "libsIO-i2cchip_list.h"
+
 
 
 
@@ -220,8 +215,30 @@ static int libsi2c_writereg( int fh, char reg, int count, int Val )
 }
 
 
+static struct tI2CCHIPDATA* getChipInfobyID( int iID )
+{
+	struct tI2CCHIPDATA* pRet = 0;
+	int iCnt = 0;
+	
+	while( 0 != chiplistP[iCnt] )
+	{
+		pRet = (struct tI2CCHIPDATA*)chiplistP[iCnt];
+		if( pRet->chipID == iID )
+			break;
+		else
+			pRet = (struct tI2CCHIPDATA*)chiplistP[0];	///set to common chip
+
+		iCnt++;
+	}
+	
+	return pRet;
+}
+
+
 static void libsi2c_showchipname ( char* devname, int addr )
 {
+	
+#if 0
 	printf("\r\n[I2C]....============================================================" );
 	if( 0x66 == addr )
 		printf("\r\n[I2C]....Good!! ID=0x%02x(0x%02x) on %s is Maxim MAX8698C (PMIC)!!!", addr, (addr*2), devname );
@@ -257,7 +274,17 @@ static void libsi2c_showchipname ( char* devname, int addr )
 	
 	printf("\r\n[I2C]....============================================================" );	
 	printf("\r\n");
+#else
+	struct tI2CCHIPDATA* pCD = 0;
 
+	printf("\r\n[I2C]....============================================================" );
+
+	pCD = getChipInfobyID( addr );
+	printf("\r\n[I2C]....Good!! ID=0x%02x(0x%02x) on %s is %s %s (%s) !!!", addr, (addr*2), devname, pCD->vendorName, pCD->chipName, pCD->description ); 
+	
+	printf("\r\n[I2C]....============================================================" );	
+	printf("\r\n");
+#endif
 }
 
 
@@ -503,51 +530,8 @@ static int libsi2cdevsearch( const char *filename, int iMaxNum, int ifunc )
 				else
 				{
 
-#if 1
 					printf("\r\n[I2C]..Good!! ID=0x%02x(0x%02x) on %s is available !!!\r\n", addr, (addr*2), devname );
 					libsi2c_showchipname( devname, addr );
-
-#else
-					if( (0x00 <= addr) && (0xff >= addr) )
-					{
-						int iT = 0;
-						struct tI2CCHIPREG *pReglist;
-
-						if(0x66 == addr)
-							pReglist = (struct tI2CCHIPREG *)&chipreglist_MAX8698C[0];
-						else
-						if(0x1a == addr)
-							pReglist = (struct tI2CCHIPREG *)&chipreglist_ALC5621[0];
-						else
-						if(0x1e == addr)
-							pReglist = (struct tI2CCHIPREG *)&chipreglist_HMC5883L[0];
-						else
-						if(0x0f == addr)
-							pReglist = (struct tI2CCHIPREG *)&chipreglist_KXTF9[0];
-						else
-							pReglist = (struct tI2CCHIPREG *)&chipreglist_COMMON[0];
-							
-
-						libsi2c_showchipname( devname, addr );
-						for( iT=0; iT<0xff; iT++ )
-						{							
-							if( ((pReglist+iT)->regNum != 0xff) && ((pReglist+iT)->regWidth != 0) )
-							{
-								;///printf("\r\n....register <%s>:", (pReglist+iT)->regName );
-								;///libsi2c_readreg_ex( devname, file, addr, (pReglist+iT)->regNum, (pReglist+iT)->regWidth );
-							}
-							else
-							{
-								break;
-							}
-						}
-					}
-					else
-					{
-						libsi2c_showchipname( devname, addr );
-					}
-					printf("\r\n");
-#endif				
 				
 				}
 				usleep(2000);

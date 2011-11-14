@@ -10,6 +10,18 @@
 #include "libsIO-i2cchip.h"
 
 
+
+/*   */
+static const struct tI2CCHIPDATA chipdata_HMC5883L = {
+	"Honeywell",
+	"hmc5883l",
+	"N/A",
+	"Compass",
+	0x1e,
+	0x0,
+	1,
+};
+
 static const struct tI2CCHIPREG chipreglist_HMC5883L[] = {
 	{	0x00,	1,	"Configuration Register A" },
 	{	0x01,	1,	"Configuration Register B" },
