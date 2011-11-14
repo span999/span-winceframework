@@ -10,6 +10,18 @@
 #include "libsIO-i2cchip.h"
 
 
+
+/*   */
+static const struct tI2CCHIPDATA chipdata_MAX8698C = {
+	"Maxim",
+	"MAX8698C",
+	"N/A",
+	"PMIC driver",
+	0x66,
+	0x0,
+	1,
+};
+
 static const struct tI2CCHIPREG chipreglist_MAX8698C[] = {
 	{	0x00,	1,	"ONOFF1" },
 	{	0x01,	1,	"ONOFF2" },

@@ -10,6 +10,19 @@
 #include "libsIO-i2cchip.h"
 
 
+
+
+/*   */
+static const struct tI2CCHIPDATA chipdata_COMMON = {
+	"N/A",
+	"COMMOM",
+	"N/A",
+	"COMMON",
+	0x0,
+	0x0,
+	1,
+};
+
 static const struct tI2CCHIPREG chipreglist_COMMON[] = {
 	{	0x00,	1,	"COMMON_00" },
 	{	0x01,	1,	"COMMON_01" },
