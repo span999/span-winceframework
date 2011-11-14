@@ -16,6 +16,7 @@
 #include "libsIO-i2cchip_ALC5621.h"
 #include "libsIO-i2cchip_MAX8698C.h"
 #include "libsIO-i2cchip_TPS65950.h"
+#include "libsIO-i2cchip_si470x.h"
 
 
 static const struct tI2CCHIPDATA* chiplistP[] = {
@@ -29,6 +30,7 @@ static const struct tI2CCHIPDATA* chiplistP[] = {
 	&chipdata_KXTF9,
 	&chipdata_HMC5883L,
 	&chipdata_ALC5621,
+	&chipdata_si470x,
 	0									/* null for end*/
 };
 

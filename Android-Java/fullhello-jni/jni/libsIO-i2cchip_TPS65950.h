@@ -10,6 +10,7 @@
 #include "libsIO-i2cchip.h"
 
 
+static const struct tI2CCHIPREG chipreglist_TPS65950_48USB[];
 /*   */
 static const struct tI2CCHIPDATA chipdata_TPS65950_48USB = {
 	"Ti",
@@ -19,6 +20,7 @@ static const struct tI2CCHIPDATA chipdata_TPS65950_48USB = {
 	0x48,
 	0x0,
 	2,
+	(struct tI2CCHIPREG**)&chipreglist_TPS65950_48USB,
 };
 
 static const struct tI2CCHIPREG chipreglist_TPS65950_48USB[] = {
@@ -29,6 +31,7 @@ static const struct tI2CCHIPREG chipreglist_TPS65950_48USB[] = {
 };
 
 
+static const struct tI2CCHIPREG chipreglist_TPS65950_49AUDIO[];
 /*   */
 static const struct tI2CCHIPDATA chipdata_TPS65950_49AUDIO = {
 	"Ti",
@@ -38,6 +41,7 @@ static const struct tI2CCHIPDATA chipdata_TPS65950_49AUDIO = {
 	0x49,
 	0x0,
 	2,
+	(struct tI2CCHIPREG**)&chipreglist_TPS65950_49AUDIO,
 };
 
 static const struct tI2CCHIPREG chipreglist_TPS65950_49AUDIO[] = {
@@ -48,6 +52,7 @@ static const struct tI2CCHIPREG chipreglist_TPS65950_49AUDIO[] = {
 };
 
 
+static const struct tI2CCHIPREG chipreglist_TPS65950_4aPM[];
 /*   */
 static const struct tI2CCHIPDATA chipdata_TPS65950_4aPM = {
 	"Ti",
@@ -57,6 +62,7 @@ static const struct tI2CCHIPDATA chipdata_TPS65950_4aPM = {
 	0x4a,
 	0x0,
 	2,
+	(struct tI2CCHIPREG**)&chipreglist_TPS65950_4aPM,
 };
 
 static const struct tI2CCHIPREG chipreglist_TPS65950_4aPM[] = {
@@ -67,6 +73,7 @@ static const struct tI2CCHIPREG chipreglist_TPS65950_4aPM[] = {
 };
 
 
+static const struct tI2CCHIPREG chipreglist_TPS65950_4bPM[];
 /*   */
 static const struct tI2CCHIPDATA chipdata_TPS65950_4bPM = {
 	"Ti",
@@ -76,6 +83,7 @@ static const struct tI2CCHIPDATA chipdata_TPS65950_4bPM = {
 	0x4b,
 	0x0,
 	2,
+	(struct tI2CCHIPREG**)&chipreglist_TPS65950_4bPM,
 };
 
 static const struct tI2CCHIPREG chipreglist_TPS65950_4bPM[] = {
@@ -86,6 +94,7 @@ static const struct tI2CCHIPREG chipreglist_TPS65950_4bPM[] = {
 };
 
 
+static const struct tI2CCHIPREG chipreglist_TPS65950_12SMARTREFLEX[];
 /*   */
 static const struct tI2CCHIPDATA chipdata_TPS65950_12SMARTREFLEX = {
 	"Ti",
@@ -95,6 +104,7 @@ static const struct tI2CCHIPDATA chipdata_TPS65950_12SMARTREFLEX = {
 	0x12,
 	0x0,
 	2,
+	(struct tI2CCHIPREG**)&chipreglist_TPS65950_12SMARTREFLEX,
 };
 
 static const struct tI2CCHIPREG chipreglist_TPS65950_12SMARTREFLEX[] = {

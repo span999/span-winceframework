@@ -25,13 +25,14 @@ struct tI2CCHIPREG {
  * struct for chip information
  */
 struct tI2CCHIPDATA {
-	char* 	vendorName;
-	char* 	chipName;
-	char* 	version;
-	char*	description;
-	int		chipID;
-	int		chipID2;
-	int 	regWidth;	///register width in byte. (8bit=1,16bit=2)
+	char* 					vendorName;
+	char* 					chipName;
+	char* 					version;
+	char*					description;
+	int						chipID;
+	int						chipID2;
+	int 					regWidth;	///register width in byte. (8bit=1,16bit=2)
+	struct tI2CCHIPREG** 	ppchipReg;
 };
 
 
