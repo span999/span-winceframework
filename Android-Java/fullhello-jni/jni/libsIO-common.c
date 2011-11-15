@@ -297,7 +297,10 @@ static int libsi2c_readreg_ex( char* devname, int file, int addr, char reg, int 
 		/* ERROR HANDLING: i2c transaction failed */
 		printf("\r\n[I2C]....Oops!! ID=0x%02x(0x%02x) on %s, register 0x%02x is not readable err=(0x%x - %s)!!!", addr, (addr*2), devname, reg, errno, strerror(errno) );
 	} else {
-		printf("\r\n[I2C]....Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!", addr, (addr*2), devname, reg, readRet );
+		if( 1 == count )
+			printf("\r\n[I2C]....Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%02x)!!!", addr, (addr*2), devname, reg, readRet );
+		else
+			printf("\r\n[I2C]....Good!! ID=0x%02x(0x%02x) on %s is readable (0x%02x=0x%04x)!!!", addr, (addr*2), devname, reg, readRet );
 	} 
 	return readRet;
 }
@@ -628,7 +631,9 @@ static int libsi2cdevdump( const char *filename, int iMaxNum )
 					{
 						int iT = 0;
 						struct tI2CCHIPREG *pReglist;
+						struct tI2CCHIPDATA *pChipInfo;
 
+#if 0
 						if(0x66 == addr)
 							pReglist = (struct tI2CCHIPREG *)&chipreglist_MAX8698C[0];
 						else
@@ -643,6 +648,13 @@ static int libsi2cdevdump( const char *filename, int iMaxNum )
 						else
 							pReglist = (struct tI2CCHIPREG *)&chipreglist_COMMON[0];
 							
+						printf("\r\n[I2C]..addr=0x%x.pChipInfo=0x%08x.pReglist=0x%08x", addr, pChipInfo, pReglist );
+#else
+						pChipInfo = getChipInfobyID( addr );
+						pReglist = (struct tI2CCHIPREG *)pChipInfo->ppchipReg;
+						
+						///printf("\r\n[I2C]..addr=0x%x.pChipInfo=0x%08x.pReglist=0x%08x", addr, pChipInfo, pReglist );
+#endif						
 
 						libsi2c_showchipname( devname, addr );
 						for( iT=0; iT<0xff; iT++ )

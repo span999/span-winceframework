@@ -32,7 +32,7 @@ struct tI2CCHIPDATA {
 	int						chipID;
 	int						chipID2;
 	int 					regWidth;	///register width in byte. (8bit=1,16bit=2)
-	struct tI2CCHIPREG** 	ppchipReg;
+	struct tI2CCHIPREG** 	ppchipReg;	///point to registers list
 };
 
 
