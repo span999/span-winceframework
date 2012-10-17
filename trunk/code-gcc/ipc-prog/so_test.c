@@ -22,15 +22,16 @@
 Prints a number of characters to stderr, as given by PARAMETERS,
 which is a pointer to a struct char_print_parms. 
 */
-void* lib_char_print (void* parameters)
+void* lib_char_print( void* parameters )
 {
 	/* Cast the cookie pointer to the right type. */
-	struct char_print_parms* p = (struct char_print_parms*) parameters;
+	struct char_print_parms* p = (struct char_print_parms*)parameters;
 	int i;
 
-	for (i = 0; i < p->count; ++i)
-		fputc (p->character, stderr);
+	for( i = 0; i < p->count; ++i )
+		fputc( p->character, stderr );
 	
 	return NULL;
 }
+
 
