@@ -61,6 +61,17 @@ int main()
 	
 	return_value = system("ls -al ./");
 
+	return_value = system("cat /proc/version");
+	return_value = system("cat /proc/devices");
+	return_value = system("cat /proc/driver/rtc | grep rtc_time");
+	return_value = system("cat /proc/driver/rtc | grep rtc_date");
+	return_value = system("cat /proc/driver/rtc | grep alrm_time");
+	return_value = system("cat /proc/driver/rtc | grep alrm_date");
+
+	return_value = system("cat /proc/cpuinfo | grep processor");
+	return_value = system("cat /proc/cpuinfo | grep MHz");
+
+
 	printf("The process ID is %d\n", (int)getpid() );
 	printf("The parent process ID is %d\n", (int)getppid() );
 
