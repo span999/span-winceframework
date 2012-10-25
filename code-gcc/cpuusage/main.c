@@ -73,10 +73,13 @@ static int getProcStat( struct ProcStatNums *pIn )
 	int iTmp;
 	int iCnt;
 
-	fp = popen( "cat /proc/stat | grep '^\\cpu '", "r" );
+	memset( statOut, sizeof(statOut), 0 );
+
+	///fp = popen( "cat /proc/stat | grep '^\\cpu '", "r" );
+	fp = popen( "cat /proc/stat | grep '^\cpu '", "r" );
 	if( fp == NULL )
 	{
-		printf("Failed on cat /proc/stat !!");
+		printf("Failed on cat /proc/stat !!\n");
 		goto _pEXIT;
 	}
 	
@@ -87,11 +90,14 @@ static int getProcStat( struct ProcStatNums *pIn )
 
 	pclose( fp );
 
-	pCh = &(statOut[0]);	///set start point
+	///pCh = &(statOut[0]);	///set start point
+	pCh = statOut;	///set start point
 
-	if( *(pCh) != 'c' || *(pCh+1) != 'p' || *(pCh+2) != 'u' )
+	///if( (*(pCh+0) != 'c') || (*(pCh+1) != 'p') || (*(pCh+2) != 'u') )
+	///if( (*(pCh+2) != 'u') )
+	if( (*(pCh+0) != 'c') && (*(pCh+1) != 'p') && (*(pCh+2) != 'u') )
 	{
-		printf("It's NOT a /proc/stat cat !!");
+		printf("It's NOT a /proc/stat cat !![%c][%c][%c]\n", *(pCh+0), *(pCh+1), *(pCh+2) );
 		goto _pEXIT;
 	} 
 
@@ -116,7 +122,7 @@ static int getProcStat( struct ProcStatNums *pIn )
 		iCnt++;
 		iTmp = 0;
 	}
-
+	iRet = 0;
 
 _pEXIT:
 	return iRet;
@@ -128,19 +134,39 @@ int main()
 {
 	int return_value = 0;
 	pthread_t thread_id;
-	struct ProcStatNums	NowChk;
-	struct ProcStatNums	OldChk;
+	struct ProcStatNums	 NowChk;
+	struct ProcStatNums	 OldChk;
 	int iTmp = 0;
 	///int iValue = 0;
 	double iValue = 0;
 	
-	getProcStat( &OldChk );
+	if( -1 == getProcStat( &OldChk ) )
+	{
+		printf( "\ngetProcStat failed !!\n" );
+		goto _ERROR;		
+	}
 
 	while( iTmp++ < 100 )
 	{
 		sleep( 1 );
-		getProcStat( &NowChk );
+
+		///getProcStat( &NowChk );
+		if( -1 == getProcStat( &NowChk ) )
+		{
+			printf( "\ngetProcStat failed !!\n" );
+			goto _ERROR;		
+		}
+
+
+#if 0
+
 		iValue = (double)(( (NowChk.userNUM-OldChk.userNUM)+(NowChk.niceNUM-OldChk.niceNUM)+(NowChk.systemNUM-OldChk.systemNUM) )*100)/( (NowChk.userNUM-OldChk.userNUM)+(NowChk.userNUM-OldChk.userNUM)+(NowChk.userNUM-OldChk.userNUM)+(NowChk.idleNUM-OldChk.idleNUM)+(NowChk.iowaitNUM-OldChk.iowaitNUM)+(NowChk.irqNUM-OldChk.irqNUM)+(NowChk.softirqNUM-OldChk.softirqNUM) );
+
+#else
+
+		iValue = (double)(( (NowChk.userNUM-OldChk.userNUM)+(NowChk.niceNUM-OldChk.niceNUM)+(NowChk.systemNUM-OldChk.systemNUM)+(NowChk.iowaitNUM-OldChk.iowaitNUM)+(NowChk.irqNUM-OldChk.irqNUM)+(NowChk.softirqNUM-OldChk.softirqNUM) )*100)/( (NowChk.userNUM-OldChk.userNUM)+(NowChk.userNUM-OldChk.userNUM)+(NowChk.userNUM-OldChk.userNUM)+(NowChk.idleNUM-OldChk.idleNUM)+(NowChk.iowaitNUM-OldChk.iowaitNUM)+(NowChk.irqNUM-OldChk.irqNUM)+(NowChk.softirqNUM-OldChk.softirqNUM) );
+
+#endif
 		printf( "CPU usage: %f%%.\n", iValue );
 		memcpy( &OldChk, &NowChk, sizeof(struct ProcStatNums) );
 	}
@@ -153,5 +179,9 @@ int main()
 
 	printf( "\ndone \n" );
 	return 0;
+
+_ERROR:
+	printf( "\nsomething wrong !!\n" );
+	return return_value;
 }
 
