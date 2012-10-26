@@ -33,6 +33,7 @@ int main()
 	struct ProcStatNums	 OldChk1;
 	struct ProcStatNums	 DiffChk1;
 	struct ProcStatNums	 *pThis;
+	struct ProcMeminfoNums	 MemChk;
 
 	int iTmp = 0;
 	double iValue = 0;
@@ -60,7 +61,10 @@ int main()
 
 	while( iTmp++ < 100 )
 	{
+		
 		sleep( 1 );
+
+		getProcMeminfo( &MemChk );
 
 		if( -1 == getProcStat( &NowChk, -1 ) )
 		{
