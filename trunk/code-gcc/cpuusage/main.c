@@ -115,7 +115,7 @@ int main()
 #endif
 		///printf( "CPU usage: %3.2f%%.[0:%3.2f%%]\n", iValue, iValue0 );
 		printf( "CPU usage:%3.2f%%.[0:%3.2f%%][1:%3.2f%%] ", iValue, iValue0, iValue1 );
-		printf( "Mem Total:%ldkB.Used:%ldkB.Free:%ldkB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
+		printf( "Mem [Total:%ld][Used:%ld][Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
 	}	///while
 
 
