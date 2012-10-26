@@ -64,7 +64,7 @@ int main()
 		
 		sleep( 1 );
 
-		getProcMeminfo( &MemChk );
+		///getProcMeminfo( &MemChk );
 
 		if( -1 == getProcStat( &NowChk, -1 ) )
 		{
@@ -96,6 +96,7 @@ int main()
 			updateNUM( &OldChk1, &NowChk1, &DiffChk1 );
 		}
 
+		getProcMeminfo( &MemChk );
 
 #if 0
 		pThis = &DiffChk;
@@ -113,7 +114,8 @@ int main()
 		iValue1 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
 #endif
 		///printf( "CPU usage: %3.2f%%.[0:%3.2f%%]\n", iValue, iValue0 );
-		printf( "CPU usage:%3.2f%%.[0:%3.2f%%][1:%3.2f%%]\n", iValue, iValue0, iValue1 );
+		printf( "CPU usage:%3.2f%%.[0:%3.2f%%][1:%3.2f%%] ", iValue, iValue0, iValue1 );
+		printf( "Mem Total:%ldkB.Used:%ldkB.Free:%ldkB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
 	}	///while
 
 
