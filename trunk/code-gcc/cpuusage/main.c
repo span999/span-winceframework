@@ -26,44 +26,90 @@ int main()
 	struct ProcStatNums	 NowChk;
 	struct ProcStatNums	 OldChk;
 	struct ProcStatNums	 DiffChk;
+	struct ProcStatNums	 NowChk0;
+	struct ProcStatNums	 OldChk0;
+	struct ProcStatNums	 DiffChk0;
+	struct ProcStatNums	 NowChk1;
+	struct ProcStatNums	 OldChk1;
+	struct ProcStatNums	 DiffChk1;
+	struct ProcStatNums	 *pThis;
+
 	int iTmp = 0;
-	///int iValue = 0;
 	double iValue = 0;
+	double iValue0 = 0;
+	double iValue1 = 0;
 	
-	if( -1 == getProcStat( &OldChk ) )
+	if( -1 == getProcStat( &OldChk, -1 ) )
 	{
 		printf( "\ngetProcStat failed !!\n" );
 		goto _ERROR;		
 	}
 
+	if( -1 == getProcStat( &OldChk0, 0 ) )
+	{
+		printf( "\ngetProcStat 0 failed !!\n" );
+		///goto _ERROR;		
+	}
+
+	if( -1 == getProcStat( &OldChk1, 1 ) )
+	{
+		printf( "\ngetProcStat 1 failed !!\n" );
+		///goto _ERROR;		
+	}
+
+
 	while( iTmp++ < 100 )
 	{
 		sleep( 1 );
 
-		if( -1 == getProcStat( &NowChk ) )
+		if( -1 == getProcStat( &NowChk, -1 ) )
 		{
 			printf( "\ngetProcStat failed !!\n" );
 			goto _ERROR;		
 		}
 		else
 		{
-			DiffChk.userNUM = (NowChk.userNUM-OldChk.userNUM);
-			DiffChk.niceNUM = (NowChk.niceNUM-OldChk.niceNUM);
-			DiffChk.systemNUM = (NowChk.systemNUM-OldChk.systemNUM);
-			DiffChk.idleNUM = (NowChk.idleNUM-OldChk.idleNUM);
-			DiffChk.iowaitNUM = (NowChk.iowaitNUM-OldChk.iowaitNUM);
-			DiffChk.irqNUM = (NowChk.irqNUM-OldChk.irqNUM);
-			DiffChk.softirqNUM = (NowChk.softirqNUM-OldChk.softirqNUM);
-			DiffChk.sumNUM = DiffChk.userNUM+DiffChk.niceNUM+DiffChk.systemNUM+DiffChk.idleNUM+DiffChk.iowaitNUM+DiffChk.irqNUM+DiffChk.softirqNUM;
-			memcpy( &OldChk, &NowChk, sizeof(struct ProcStatNums) );
+			updateNUM( &OldChk, &NowChk, &DiffChk );
 		}
 
+		if( -1 == getProcStat( &NowChk0, 0 ) )
+		{
+			printf( "\ngetProcStat 0 failed !!\n" );
+			///goto _ERROR;		
+		}
+		else
+		{
+			updateNUM( &OldChk0, &NowChk0, &DiffChk0 );
+		}
+
+		if( -1 == getProcStat( &NowChk1, 1 ) )
+		{
+			printf( "\ngetProcStat 1 failed !!\n" );
+			///goto _ERROR;		
+		}
+		else
+		{
+			updateNUM( &OldChk1, &NowChk1, &DiffChk1 );
+		}
+
+
 #if 0
-		iValue = (double)( ((DiffChk.userNUM)+(DiffChk.niceNUM)+(DiffChk.systemNUM))*100 )/( DiffChk.sumNUM );
+		pThis = &DiffChk;
+		iValue = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM))*100 )/( pThis->sumNUM );
+		pThis = &DiffChk0;
+		iValue0 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM))*100 )/( pThis->sumNUM );
+		pThis = &DiffChk1;
+		iValue1 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM))*100 )/( pThis->sumNUM );
 #else
-		iValue = (double)( ((DiffChk.userNUM)+(DiffChk.niceNUM)+(DiffChk.systemNUM)+(DiffChk.iowaitNUM)+(DiffChk.irqNUM)+(DiffChk.softirqNUM))*100 )/( DiffChk.sumNUM );
+		pThis = &DiffChk;
+		iValue = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
+		pThis = &DiffChk0;
+		iValue0 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
+		pThis = &DiffChk1;
+		iValue1 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
 #endif
-		printf( "CPU usage: %3.2f%%.\n", iValue );
+		///printf( "CPU usage: %3.2f%%.[0:%3.2f%%]\n", iValue, iValue0 );
+		printf( "CPU usage:%3.2f%%.[0:%3.2f%%][1:%3.2f%%]\n", iValue, iValue0, iValue1 );
 	}	///while
 
 

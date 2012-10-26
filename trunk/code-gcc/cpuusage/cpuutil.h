@@ -24,5 +24,6 @@ struct ProcStatNums
 };
 
 
-int getProcStat( struct ProcStatNums *pIn );
+int getProcStat( struct ProcStatNums *pIn, int cpuIdx );
+int updateNUM( struct ProcStatNums *pOld, struct ProcStatNums *pNew, struct ProcStatNums *pDiff );
 

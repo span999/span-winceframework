@@ -44,7 +44,76 @@ static int setProcStatNum( struct ProcStatNums *pIn, int iIdx, int Num )
 }
 
 
-int getProcStat( struct ProcStatNums *pIn )
+static FILE* openProcStat( int cpuIdx )
+{
+	FILE *fRet = NULL;
+
+	/* open proc stat ... */
+	if( (-1) == cpuIdx )
+	{
+		///fRet = popen( "cat /proc/stat | grep '^\\cpu '", "r" );
+		fRet = popen( "cat /proc/stat | grep '^\cpu '", "r" );
+	}
+	else
+	if( (0) == cpuIdx )
+	{
+		fRet = popen( "cat /proc/stat | grep '^\cpu0 '", "r" );
+	}
+	else
+	if( (1) == cpuIdx )
+	{
+		fRet = popen( "cat /proc/stat | grep '^\cpu1 '", "r" );
+	}
+	else
+	if( (2) == cpuIdx )
+	{
+		fRet = popen( "cat /proc/stat | grep '^\cpu2 '", "r" );
+	}
+	else
+	if( (3) == cpuIdx )
+	{
+		fRet = popen( "cat /proc/stat | grep '^\cpu3 '", "r" );
+	}
+	else
+	if( (4) == cpuIdx )
+	{
+		fRet = popen( "cat /proc/stat | grep '^\cpu4 '", "r" );
+	}
+	else
+	if( (5) == cpuIdx )
+	{
+		fRet = popen( "cat /proc/stat | grep '^\cpu5 '", "r" );
+	}
+	else
+	if( (6) == cpuIdx )
+	{
+		fRet = popen( "cat /proc/stat | grep '^\cpu6 '", "r" );
+	}
+	else
+	if( (7) == cpuIdx )
+	{
+		fRet = popen( "cat /proc/stat | grep '^\cpu7 '", "r" );
+	}
+	else
+	if( (8) == cpuIdx )
+	{
+		fRet = popen( "cat /proc/stat | grep '^\cpu8 '", "r" );
+	}
+
+
+	if( fRet == NULL )
+	{
+		printf("Failed on cat /proc/stat !!\n");
+		goto _tEXIT;
+	}
+
+
+_tEXIT:
+	return fRet;
+}
+
+
+int getProcStat( struct ProcStatNums *pIn, int cpuIdx )
 {
 	int iRet = (-1);
 	char statOut[64];
@@ -58,7 +127,8 @@ int getProcStat( struct ProcStatNums *pIn )
 
 	/* get proc stat ... */
 	///fp = popen( "cat /proc/stat | grep '^\\cpu '", "r" );
-	fp = popen( "cat /proc/stat | grep '^\cpu '", "r" );
+	///fp = popen( "cat /proc/stat | grep '^\cpu '", "r" );
+	fp = openProcStat( cpuIdx );
 	if( fp == NULL )
 	{
 		printf("Failed on cat /proc/stat !!\n");
@@ -113,6 +183,28 @@ _pEXIT:
 	return iRet;
 }
 
+
+int updateNUM( struct ProcStatNums *pOld, struct ProcStatNums *pNew, struct ProcStatNums *pDiff )
+{
+	int iRet = 0;
+
+	if( (pOld) && (pNew) && (pDiff) )
+	{
+		pDiff->userNUM = (pNew->userNUM-pOld->userNUM);
+		pDiff->niceNUM = (pNew->niceNUM-pOld->niceNUM);
+		pDiff->systemNUM = (pNew->systemNUM-pOld->systemNUM);
+		pDiff->idleNUM = (pNew->idleNUM-pOld->idleNUM);
+		pDiff->iowaitNUM = (pNew->iowaitNUM-pOld->iowaitNUM);
+		pDiff->irqNUM = (pNew->irqNUM-pOld->irqNUM);
+		pDiff->softirqNUM = (pNew->softirqNUM-pOld->softirqNUM);
+		pDiff->sumNUM = pDiff->userNUM+pDiff->niceNUM+pDiff->systemNUM+pDiff->idleNUM+pDiff->iowaitNUM+pDiff->irqNUM+pDiff->softirqNUM;
+		memcpy( pOld, pNew, sizeof(struct ProcStatNums) );		
+	}
+	else
+		iRet = -1;
+
+	return iRet;
+}
 
 
 
