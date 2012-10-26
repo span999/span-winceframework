@@ -24,6 +24,19 @@ struct ProcStatNums
 };
 
 
+struct ProcMeminfoNums
+{
+	_TYPNUM memtotalNUM;
+	_TYPNUM memfreeNUM;
+	_TYPNUM memusedNUM;	/* memtotalNUM - memfreeNUM */
+	_TYPNUM buffersNUM;
+	_TYPNUM vmalloctotalNUM;
+	_TYPNUM vmallocusedNUM;
+	_TYPNUM vmallocchunkNUM;
+};
+
+
 int getProcStat( struct ProcStatNums *pIn, int cpuIdx );
 int updateNUM( struct ProcStatNums *pOld, struct ProcStatNums *pNew, struct ProcStatNums *pDiff );
+int getProcMeminfo( struct ProcMeminfoNums *pIn );
 
