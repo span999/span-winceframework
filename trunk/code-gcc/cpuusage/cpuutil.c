@@ -234,10 +234,12 @@ int updateNUM( struct ProcStatNums *pOld, struct ProcStatNums *pNew, struct Proc
 }
 
 
+///#define	_MEMDEBUG_
+
 int getProcMeminfo( struct ProcMeminfoNums *pIn )
 {
 	int iRet = (-1);
-	char statOut[1024];
+	char statOut[2048];
 	char statNum[16];
 	FILE *fp;
 	char *pCh;
@@ -263,23 +265,24 @@ int getProcMeminfo( struct ProcMeminfoNums *pIn )
 	///while( fgets( statOut, sizeof(statOut)-1, fp ) != NULL )
 	while( fgets( pCh, sizeof(statOut)-1, fp ) != NULL )
 	{
-#if 0
+#ifdef _MEMDEBUG_
 		printf("%s", pCh );	
 #endif
-		pCh = pCh + strlen(pCh) + 1;
+		///pCh = pCh + strlen(pCh) + 1;
+		pCh = pCh + strlen(pCh);
 	}
 
-#if 0	
+#ifdef _MEMDEBUG_	
 	pCh = statOut;	///set start point
 	iTmp = 0;
-	while( iTmp < 1024 )
+	printf("------------------------------------\n");
+	while( (iTmp < 2048) && (0 != *(pCh+iTmp)) )
 	{
 		printf("%c", *(pCh+iTmp) );
 		iTmp++;
 	}
 #endif
 	pclose( fp );
-	///sleep(1);
 
 	/* check proc meminfo output ... */
 	////pCh = &(statOut[0]);	///set start point
@@ -318,27 +321,81 @@ int getProcMeminfo( struct ProcMeminfoNums *pIn )
 		iTmp = 0;
 	}
 #else
-	iCnt = 10;
+	iCnt = 50;
 	line = strtok( statOut, delims );
 	///line = strtok( (pCh+29), delims );
 
-	while( (line != NULL) && iCnt > 0 )
+	while( (line != NULL) && (iCnt > 0) )
 	{
+#ifdef _MEMDEBUG_
 		printf("Mem Cnt:%d <%s>\n", iCnt, line );
-
+#endif
 		pCh = strstr(line, "MemTotal:");
-
 		if( pCh != NULL )
 		{
 			sscanf(line, "%*s %ld", &(pIn->memtotalNUM) );
+#ifdef _MEMDEBUG_
 			printf("MemTotal:%ld\n", pIn->memtotalNUM );
+#endif
 		}
 
 		pCh = strstr(line, "MemFree:");
 		if( pCh != NULL )
 		{
 			sscanf(line, "%*s %ld", &(pIn->memfreeNUM) );
+#ifdef _MEMDEBUG_
 			printf("MemFree:%ld\n", pIn->memfreeNUM );
+#endif
+		}
+
+		pIn->memusedNUM = pIn->memtotalNUM - pIn->memfreeNUM;
+
+		pCh = strstr(line, "Buffers:");
+		if( pCh != NULL )
+		{
+			sscanf(line, "%*s %ld", &(pIn->buffersNUM) );
+#ifdef _MEMDEBUG_
+			printf("Buffers:%ld\n", pIn->buffersNUM );
+#endif
+		}
+
+		pCh = strstr(line, "Cached:");
+		if( pCh != NULL )
+		{
+			if( 0 == pIn->cachedNUM )
+			{
+				sscanf(line, "%*s %ld", &(pIn->cachedNUM) );
+#ifdef _MEMDEBUG_
+				printf("Cached:%ld\n", pIn->cachedNUM );
+#endif
+			}
+		}
+
+		pCh = strstr(line, "VmallocTotal:");
+		if( pCh != NULL )
+		{
+			sscanf(line, "%*s %ld", &(pIn->vmalloctotalNUM) );
+#ifdef _MEMDEBUG_
+			printf("VmallocTotal:%ld\n", pIn->vmalloctotalNUM );
+#endif
+		}
+
+		pCh = strstr(line, "VmallocUsed:");
+		if( pCh != NULL )
+		{
+			sscanf(line, "%*s %ld", &(pIn->vmallocusedNUM) );
+#ifdef _MEMDEBUG_
+			printf("VmallocUsed:%ld\n", pIn->vmallocusedNUM );
+#endif
+		}
+
+		pCh = strstr(line, "VmallocChunk:");
+		if( pCh != NULL )
+		{
+			sscanf(line, "%*s %ld", &(pIn->vmallocchunkNUM) );
+#ifdef _MEMDEBUG_
+			printf("VmallocChunk:%ld\n", pIn->vmallocchunkNUM );
+#endif
 		}
 
 		line = strtok( NULL, delims );

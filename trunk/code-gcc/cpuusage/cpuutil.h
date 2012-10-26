@@ -30,6 +30,7 @@ struct ProcMeminfoNums
 	_TYPNUM memfreeNUM;
 	_TYPNUM memusedNUM;	/* memtotalNUM - memfreeNUM */
 	_TYPNUM buffersNUM;
+	_TYPNUM cachedNUM;
 	_TYPNUM vmalloctotalNUM;
 	_TYPNUM vmallocusedNUM;
 	_TYPNUM vmallocchunkNUM;
