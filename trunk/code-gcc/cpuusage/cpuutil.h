@@ -24,6 +24,21 @@ struct ProcStatNums
 };
 
 
+struct ProcStatSets
+{
+	struct ProcStatNums cpu;
+	int					cpuNUM;
+	struct ProcStatNums cpu0;
+	struct ProcStatNums cpu1;
+	struct ProcStatNums cpu2;
+	struct ProcStatNums cpu3;
+	struct ProcStatNums cpu4;
+	struct ProcStatNums cpu5;
+	struct ProcStatNums cpu6;
+	struct ProcStatNums cpu7;
+};
+
+
 struct ProcMeminfoNums
 {
 	_TYPNUM memtotalNUM;
@@ -38,6 +53,8 @@ struct ProcMeminfoNums
 
 
 int getProcStat( struct ProcStatNums *pIn, int cpuIdx );
+int getProcStatSet( struct ProcStatSets *pIn );
 int updateNUM( struct ProcStatNums *pOld, struct ProcStatNums *pNew, struct ProcStatNums *pDiff );
+int updateSetsNUM( struct ProcStatSets *pOld, struct ProcStatSets *pNew, struct ProcStatSets *pDiff );
 int getProcMeminfo( struct ProcMeminfoNums *pIn );
 

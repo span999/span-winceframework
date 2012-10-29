@@ -234,6 +234,256 @@ int updateNUM( struct ProcStatNums *pOld, struct ProcStatNums *pNew, struct Proc
 }
 
 
+int updateSetsNUM( struct ProcStatSets *pOld, struct ProcStatSets *pNow, struct ProcStatSets *pDiff )
+{
+	int iRet = 0;
+	struct ProcStatNums *pcpuOld;
+	struct ProcStatNums *pcpuNow;
+	struct ProcStatNums *pcpuDiff;
+
+	pcpuOld = &(pOld->cpu);
+	pcpuNow = &(pNow->cpu);
+	pcpuDiff = &(pDiff->cpu);
+	iRet = updateNUM( pcpuOld, pcpuNow, pcpuDiff );
+
+	pcpuOld = &(pOld->cpu0);
+	pcpuNow = &(pNow->cpu0);
+	pcpuDiff = &(pDiff->cpu0);
+	iRet = updateNUM( pcpuOld, pcpuNow, pcpuDiff );
+
+	pcpuOld = &(pOld->cpu1);
+	pcpuNow = &(pNow->cpu1);
+	pcpuDiff = &(pDiff->cpu1);
+	iRet = updateNUM( pcpuOld, pcpuNow, pcpuDiff );
+
+	pcpuOld = &(pOld->cpu2);
+	pcpuNow = &(pNow->cpu2);
+	pcpuDiff = &(pDiff->cpu2);
+	iRet = updateNUM( pcpuOld, pcpuNow, pcpuDiff );
+
+	pcpuOld = &(pOld->cpu3);
+	pcpuNow = &(pNow->cpu3);
+	pcpuDiff = &(pDiff->cpu3);
+	iRet = updateNUM( pcpuOld, pcpuNow, pcpuDiff );
+
+	pcpuOld = &(pOld->cpu4);
+	pcpuNow = &(pNow->cpu4);
+	pcpuDiff = &(pDiff->cpu4);
+	iRet = updateNUM( pcpuOld, pcpuNow, pcpuDiff );
+
+	pcpuOld = &(pOld->cpu5);
+	pcpuNow = &(pNow->cpu5);
+	pcpuDiff = &(pDiff->cpu5);
+	iRet = updateNUM( pcpuOld, pcpuNow, pcpuDiff );
+
+	pcpuOld = &(pOld->cpu6);
+	pcpuNow = &(pNow->cpu6);
+	pcpuDiff = &(pDiff->cpu6);
+	iRet = updateNUM( pcpuOld, pcpuNow, pcpuDiff );
+
+	pcpuOld = &(pOld->cpu7);
+	pcpuNow = &(pNow->cpu7);
+	pcpuDiff = &(pDiff->cpu7);
+	iRet = updateNUM( pcpuOld, pcpuNow, pcpuDiff );
+
+	return iRet;
+}
+
+
+///#define	_STATDEBUG_
+
+int getProcStatSet( struct ProcStatSets *pIn )
+{	
+	int iRet = (-1);
+	char statOut[4096];
+	char statNum[64];
+	FILE *fp;
+	char *pCh;
+	int iTmp;
+	int iCnt;
+	char delims[] = "\n";
+	char* line;
+	char* search_result;
+	struct ProcStatNums *pcpu = NULL;
+
+	memset( statOut, sizeof(statOut), 0 );
+
+	/* get proc stat ... */
+	fp = popen( "cat /proc/stat", "r" );
+	if( fp == NULL )
+	{
+		printf("Failed on cat /proc/stat !!\n");
+		goto _pEXIT;
+	}
+	
+	pCh = statOut;	///set start point
+	///grep /proc/stat out line by line
+	///while( fgets( statOut, sizeof(statOut)-1, fp ) != NULL )
+	while( fgets( pCh, sizeof(statOut)-1, fp ) != NULL )
+	{
+#ifdef _STATDEBUG_
+		///printf("0x%08x:%s", (unsigned int)pCh, statOut );
+		printf("0x%08x:%s", (unsigned int)pCh, pCh );	
+#endif
+		pCh = pCh + strlen(pCh);
+	}
+
+#ifdef _STATDEBUG_	
+	pCh = statOut;	///set start point
+	iTmp = 0;
+	printf("-----------dump from 0x%08x-------------\n", (unsigned int)pCh);
+	while( (iTmp < 4096) && (0 != *(pCh+iTmp)) )
+	{
+		printf("%c", *(pCh+iTmp) );
+		iTmp++;
+	}
+#endif
+
+	pclose( fp );
+
+	/* check proc stat output ... */
+	////pCh = &(statOut[0]);	///set start point
+	pCh = statOut;	///set start point
+
+	if( (*(pCh+0) != 'c') || (*(pCh+1) != 'p') || (*(pCh+2) != 'u') )
+	{
+		printf("It's NOT a /proc/stat cat !![%c][%c][%c][%c]\n", *(pCh+0), *(pCh+1), *(pCh+2), *(pCh+3) );
+		printf("It's NOT a /proc/stat cat !![%s]\n", pCh );
+		goto _pEXIT;
+	} 
+
+	/* parse proc stat number ... */
+	iCnt = 50;
+	line = strtok( statOut, delims );
+	///line = strtok( (pCh+29), delims );
+
+	while( (line != NULL) && (iCnt > 0) )
+	{
+#ifdef _STATDEBUG_
+		printf("Cpu Cnt:%d <%s>\n", iCnt, line );
+#endif
+
+		pcpu = &(pIn->cpu);
+		pCh = strstr(line, "cpu ");
+		if( pCh != NULL )
+		{
+			sscanf(line, "%*s %ld %ld %ld %ld %ld %ld %ld", &(pcpu->userNUM), &(pcpu->niceNUM), &(pcpu->systemNUM), &(pcpu->idleNUM), &(pcpu->iowaitNUM), &(pcpu->irqNUM), &(pcpu->softirqNUM) );
+			pcpu->sumNUM = pcpu->userNUM+pcpu->niceNUM+pcpu->systemNUM+pcpu->idleNUM+pcpu->iowaitNUM+pcpu->irqNUM+pcpu->softirqNUM;
+			pIn->cpuNUM = 1;
+#ifdef _STATDEBUG_
+			printf("cpu :%ld %ld %ld %ld %ld %ld %ld %ld\n", pcpu->userNUM, pcpu->niceNUM, pcpu->systemNUM, pcpu->idleNUM, pcpu->iowaitNUM, pcpu->irqNUM, pcpu->softirqNUM, pIn->cpu.sumNUM );
+#endif
+		}
+
+		pcpu = &(pIn->cpu0);
+		pCh = strstr(line, "cpu0");
+		if( pCh != NULL )
+		{
+			sscanf(line, "%*s %ld %ld %ld %ld %ld %ld %ld", &(pcpu->userNUM), &(pcpu->niceNUM), &(pcpu->systemNUM), &(pcpu->idleNUM), &(pcpu->iowaitNUM), &(pcpu->irqNUM), &(pcpu->softirqNUM) );
+			pcpu->sumNUM = pcpu->userNUM+pcpu->niceNUM+pcpu->systemNUM+pcpu->idleNUM+pcpu->iowaitNUM+pcpu->irqNUM+pcpu->softirqNUM;
+			pIn->cpuNUM = 1;
+#ifdef _STATDEBUG_
+			printf("cpu0:%ld %ld %ld %ld %ld %ld %ld %ld\n", pcpu->userNUM, pcpu->niceNUM, pcpu->systemNUM, pcpu->idleNUM, pcpu->iowaitNUM, pcpu->irqNUM, pcpu->softirqNUM, pIn->cpu.sumNUM );
+#endif
+		}
+
+		pcpu = &(pIn->cpu1);
+		pCh = strstr(line, "cpu1");
+		if( pCh != NULL )
+		{
+			sscanf(line, "%*s %ld %ld %ld %ld %ld %ld %ld", &(pcpu->userNUM), &(pcpu->niceNUM), &(pcpu->systemNUM), &(pcpu->idleNUM), &(pcpu->iowaitNUM), &(pcpu->irqNUM), &(pcpu->softirqNUM) );
+			pcpu->sumNUM = pcpu->userNUM+pcpu->niceNUM+pcpu->systemNUM+pcpu->idleNUM+pcpu->iowaitNUM+pcpu->irqNUM+pcpu->softirqNUM;
+			pIn->cpuNUM = 2;
+#ifdef _STATDEBUG_
+			printf("cpu1:%ld %ld %ld %ld %ld %ld %ld %ld\n", pcpu->userNUM, pcpu->niceNUM, pcpu->systemNUM, pcpu->idleNUM, pcpu->iowaitNUM, pcpu->irqNUM, pcpu->softirqNUM, pIn->cpu.sumNUM );
+#endif
+		}
+
+		pcpu = &(pIn->cpu2);
+		pCh = strstr(line, "cpu2");
+		if( pCh != NULL )
+		{
+			sscanf(line, "%*s %ld %ld %ld %ld %ld %ld %ld", &(pcpu->userNUM), &(pcpu->niceNUM), &(pcpu->systemNUM), &(pcpu->idleNUM), &(pcpu->iowaitNUM), &(pcpu->irqNUM), &(pcpu->softirqNUM) );
+			pcpu->sumNUM = pcpu->userNUM+pcpu->niceNUM+pcpu->systemNUM+pcpu->idleNUM+pcpu->iowaitNUM+pcpu->irqNUM+pcpu->softirqNUM;
+			pIn->cpuNUM = 3;
+#ifdef _STATDEBUG_
+			printf("cpu2:%ld %ld %ld %ld %ld %ld %ld %ld\n", pcpu->userNUM, pcpu->niceNUM, pcpu->systemNUM, pcpu->idleNUM, pcpu->iowaitNUM, pcpu->irqNUM, pcpu->softirqNUM, pIn->cpu.sumNUM );
+#endif
+		}
+
+		pcpu = &(pIn->cpu3);
+		pCh = strstr(line, "cpu3");
+		if( pCh != NULL )
+		{
+			sscanf(line, "%*s %ld %ld %ld %ld %ld %ld %ld", &(pcpu->userNUM), &(pcpu->niceNUM), &(pcpu->systemNUM), &(pcpu->idleNUM), &(pcpu->iowaitNUM), &(pcpu->irqNUM), &(pcpu->softirqNUM) );
+			pcpu->sumNUM = pcpu->userNUM+pcpu->niceNUM+pcpu->systemNUM+pcpu->idleNUM+pcpu->iowaitNUM+pcpu->irqNUM+pcpu->softirqNUM;
+			pIn->cpuNUM = 4;
+#ifdef _STATDEBUG_
+			printf("cpu3:%ld %ld %ld %ld %ld %ld %ld %ld\n", pcpu->userNUM, pcpu->niceNUM, pcpu->systemNUM, pcpu->idleNUM, pcpu->iowaitNUM, pcpu->irqNUM, pcpu->softirqNUM, pIn->cpu.sumNUM );
+#endif
+		}
+
+		pcpu = &(pIn->cpu4);
+		pCh = strstr(line, "cpu4");
+		if( pCh != NULL )
+		{
+			sscanf(line, "%*s %ld %ld %ld %ld %ld %ld %ld", &(pcpu->userNUM), &(pcpu->niceNUM), &(pcpu->systemNUM), &(pcpu->idleNUM), &(pcpu->iowaitNUM), &(pcpu->irqNUM), &(pcpu->softirqNUM) );
+			pcpu->sumNUM = pcpu->userNUM+pcpu->niceNUM+pcpu->systemNUM+pcpu->idleNUM+pcpu->iowaitNUM+pcpu->irqNUM+pcpu->softirqNUM;
+			pIn->cpuNUM = 5;
+#ifdef _STATDEBUG_
+			printf("cpu4:%ld %ld %ld %ld %ld %ld %ld %ld\n", pcpu->userNUM, pcpu->niceNUM, pcpu->systemNUM, pcpu->idleNUM, pcpu->iowaitNUM, pcpu->irqNUM, pcpu->softirqNUM, pIn->cpu.sumNUM );
+#endif
+		}
+
+		pcpu = &(pIn->cpu5);
+		pCh = strstr(line, "cpu5");
+		if( pCh != NULL )
+		{
+			sscanf(line, "%*s %ld %ld %ld %ld %ld %ld %ld", &(pcpu->userNUM), &(pcpu->niceNUM), &(pcpu->systemNUM), &(pcpu->idleNUM), &(pcpu->iowaitNUM), &(pcpu->irqNUM), &(pcpu->softirqNUM) );
+			pcpu->sumNUM = pcpu->userNUM+pcpu->niceNUM+pcpu->systemNUM+pcpu->idleNUM+pcpu->iowaitNUM+pcpu->irqNUM+pcpu->softirqNUM;
+			pIn->cpuNUM = 6;
+#ifdef _STATDEBUG_
+			printf("cpu5:%ld %ld %ld %ld %ld %ld %ld %ld\n", pcpu->userNUM, pcpu->niceNUM, pcpu->systemNUM, pcpu->idleNUM, pcpu->iowaitNUM, pcpu->irqNUM, pcpu->softirqNUM, pIn->cpu.sumNUM );
+#endif
+		}
+
+		pcpu = &(pIn->cpu6);
+		pCh = strstr(line, "cpu6");
+		if( pCh != NULL )
+		{
+			sscanf(line, "%*s %ld %ld %ld %ld %ld %ld %ld", &(pcpu->userNUM), &(pcpu->niceNUM), &(pcpu->systemNUM), &(pcpu->idleNUM), &(pcpu->iowaitNUM), &(pcpu->irqNUM), &(pcpu->softirqNUM) );
+			pcpu->sumNUM = pcpu->userNUM+pcpu->niceNUM+pcpu->systemNUM+pcpu->idleNUM+pcpu->iowaitNUM+pcpu->irqNUM+pcpu->softirqNUM;
+			pIn->cpuNUM = 7;
+#ifdef _STATDEBUG_
+			printf("cpu6:%ld %ld %ld %ld %ld %ld %ld %ld\n", pcpu->userNUM, pcpu->niceNUM, pcpu->systemNUM, pcpu->idleNUM, pcpu->iowaitNUM, pcpu->irqNUM, pcpu->softirqNUM, pIn->cpu.sumNUM );
+#endif
+		}
+
+		pcpu = &(pIn->cpu7);
+		pCh = strstr(line, "cpu7");
+		if( pCh != NULL )
+		{
+			sscanf(line, "%*s %ld %ld %ld %ld %ld %ld %ld", &(pcpu->userNUM), &(pcpu->niceNUM), &(pcpu->systemNUM), &(pcpu->idleNUM), &(pcpu->iowaitNUM), &(pcpu->irqNUM), &(pcpu->softirqNUM) );
+			pcpu->sumNUM = pcpu->userNUM+pcpu->niceNUM+pcpu->systemNUM+pcpu->idleNUM+pcpu->iowaitNUM+pcpu->irqNUM+pcpu->softirqNUM;
+			pIn->cpuNUM = 8;
+#ifdef _STATDEBUG_
+			printf("cpu7:%ld %ld %ld %ld %ld %ld %ld %ld\n", pcpu->userNUM, pcpu->niceNUM, pcpu->systemNUM, pcpu->idleNUM, pcpu->iowaitNUM, pcpu->irqNUM, pcpu->softirqNUM, pIn->cpu.sumNUM );
+#endif
+		}
+
+
+
+		line = strtok( NULL, delims );
+		iCnt--;
+	}
+	iRet = 0;
+
+
+_pEXIT:
+	return iRet;
+}
+
+
 ///#define	_MEMDEBUG_
 
 int getProcMeminfo( struct ProcMeminfoNums *pIn )
@@ -296,31 +546,7 @@ int getProcMeminfo( struct ProcMeminfoNums *pIn )
 		goto _pEXIT;
 	} 
 
-#if 0
-	/* parce proc meminfo number ... */
-	pCh = pCh+5;	///first number set
-	
-	iTmp = 0;
-	iCnt = 0;
-	while( iCnt < 7 )	///11 number set
-	{
-		while( *(pCh+iTmp) != ' ' )
-		{
-			statNum[iTmp] = *(pCh+iTmp);
-			iTmp++;
-		}
-		statNum[iTmp] = '\0';
-		///printf( "Num%d:%s[%d]\n", iCnt, statNum, atoi(statNum) );
-		pCh = pCh + iTmp + 1;
-
-		///setProcStatNum( pIn, iCnt, atoi(statNum) );
-		setProcStatNum( pIn, iCnt, atol(statNum) );		
-
-		memset( statNum, sizeof(statNum), 0 );
-		iCnt++;
-		iTmp = 0;
-	}
-#else
+	/* parse proc meminfo number ... */
 	iCnt = 50;
 	line = strtok( statOut, delims );
 	///line = strtok( (pCh+29), delims );
@@ -402,9 +628,7 @@ int getProcMeminfo( struct ProcMeminfoNums *pIn )
 		iCnt--;
 	}
 
-#endif
 	iRet = 0;
-
 _pEXIT:
 	return iRet;
 }
