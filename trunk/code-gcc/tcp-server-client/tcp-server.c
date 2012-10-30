@@ -78,7 +78,7 @@ waitLoop:
 }
 
 
-int tcpServer( int iPara )
+int tcpServer( int iParam )
 {
 	int iRet = 0;
 	int ServSock = 0;
