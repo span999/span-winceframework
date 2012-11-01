@@ -15,11 +15,13 @@ IPCMGR = sysIPCMGR
 IPCSRV = sysIPCSRV
 IPCSRVBIN = libsysIPCSRV.a
 POWERMGR = sysPowerMGR
+POWERSRV = sysPowerSRV
+POWERSRVBIN = libsysPowerSRV.a
 
 
 
 
-all: clean HELPER TCPIPS CLIENT SERVER IPCSRV POWERMGR IPCMGR
+all: clean HELPER TCPIPS CLIENT SERVER IPCSRV POWERSRV POWERMGR IPCMGR
 	@echo ================================================================
 
 POWERMGR:
@@ -31,6 +33,11 @@ IPCMGR:
 	@echo ================================================================
 	$(CC) $(CCGLAG) -c ../$(IPCMGR).c
 	$(CC) $(CCGLAG) -o $(IPCMGR) $(IPCMGR).o tcp-server.o ipcpacket.o -L. -l$(HELPER) -l$(IPCSRV)
+
+POWERSRV:
+	@echo ================================================================
+	$(CC) $(CCFLAG) -c ../$(POWERSRV).c
+	$(AR) $(ARFLAG) $(POWERSRVBIN) $(IPCSRV).o
 
 IPCSRV:
 	@echo ================================================================
