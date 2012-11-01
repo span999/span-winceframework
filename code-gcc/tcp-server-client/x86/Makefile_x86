@@ -9,12 +9,33 @@ ARFLAG = rcs
 SERVER = host
 CLIENT = client
 TCPIPS = tcp-ip 
-HELPER = toolhelps 
+HELPER = toolhelps
 HELPERBIN = libtoolhelps.a
+IPCMGR = sysIPCMGR
+IPCSRV = sysIPCSRV
+IPCSRVBIN = libsysIPCSRV.a
+POWERMGR = sysPowerMGR
 
 
-all: clean HELPER TCPIPS CLIENT SERVER
+
+
+all: clean HELPER TCPIPS CLIENT SERVER IPCSRV POWERMGR IPCMGR
 	@echo ================================================================
+
+POWERMGR:
+	@echo ================================================================
+	$(CC) $(CCGLAG) -c ../$(POWERMGR).c
+	$(CC) $(CCGLAG) -o $(POWERMGR) tcp-client.o tcp-server.o ipcpacket.o -L. -l$(HELPER) -l$(IPCSRV)
+
+IPCMGR:
+	@echo ================================================================
+	$(CC) $(CCGLAG) -c ../$(IPCMGR).c
+	$(CC) $(CCGLAG) -o $(IPCMGR) tcp-client.o tcp-server.o ipcpacket.o -L. -l$(HELPER) -l$(IPCSRV)
+
+IPCSRV:
+	@echo ================================================================
+	$(CC) $(CCFLAG) -c ../$(IPCSRV).c
+	$(AR) $(ARFLAG) $(IPCSRVBIN) $(IPCSRV).o
 
 SERVER:
 	@echo ================================================================
@@ -33,11 +54,11 @@ TCPIPS:
 
 HELPER:
 	@echo ================================================================
-	$(CC) $(CCFLAG) -c ../toolhelps.c
-	$(AR) $(ARFLAG) $(HELPERBIN) toolhelps.o
+	$(CC) $(CCFLAG) -c ../$(HELPER).c
+	$(AR) $(ARFLAG) $(HELPERBIN) $(HELPER).o
 
 clean:
 	@echo ================================================================
-	rm -f test client *.o *.a
+	rm -f $(IPCMGR) $(SERVER) $(CLIENT) *.o *.a
 
 
