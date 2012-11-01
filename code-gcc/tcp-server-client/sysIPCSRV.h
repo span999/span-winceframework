@@ -22,7 +22,7 @@ typedef void (*PFNIPCCALLBACK)( void );
 
 
 
-int spIPCsend( char *pData, int iLen );
+int spIPCsend( char *pData, int iLen, tSRVMGRTYP type );
 int spIPCrecv( char *pData, int *piLen, int iSrcID, int iTarID );
 int spIPCsetCallback( PFNIPCCALLBACK pCB );
 int spIPCinitServer( PFNIPCCALLBACK pCB );

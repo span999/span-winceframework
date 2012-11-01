@@ -44,6 +44,9 @@ static void PowerCmdInit( struct sysPowerCmd *pCmd )
 static int PowerCmdSend( struct sysPowerCmd *pCmd )
 {
 	int iRet = -1;
+	
+	/* call ipc */
+	spIPCsend( (char *)pCmd, sizeof(struct sysPowerCmd), POWERMGR );
 
 	return iRet;
 } 

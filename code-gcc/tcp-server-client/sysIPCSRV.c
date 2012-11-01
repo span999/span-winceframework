@@ -25,6 +25,8 @@ static PFNIPCCALLBACK ipcCallback = NULL;
 static pthread_t tcpserv_thread_id;
 
 
+
+
 static int tcpSockgetData( int newSock )
 {
 	int iRet = -1;
@@ -148,10 +150,24 @@ static void *tcpServer( void *argv )
 
 
 
-static int spIPCsendEx( char *pData, int iLen, int iSrcID, int iTarID )
+static int spIPCsendEx( char *pData, int iLen, int iSrcID, int iSrcPort, int iTarID, int iTarPort )
 {
 	int iRet = -1;
+	struct ipcpacket ipcPak;
+	
+	spIPCPacketInit( &ipcPak );
+	
+	ipcPak.userID = iSrcID;
+	memcpy( ipcPak.srcip, "127.0.0.1", 10 );
+	ipcPak.srcport = iSrcPort;
+	memcpy( ipcPak.tarip, "127.0.0.1", 10 );
+	ipcPak.tarport = iTarPort;
+	ipcPak.serialnum = 0;
+	ipcPak.packetnum = 0;
+	ipcPak.payloadnum = iLen;
+	memcpy( ipcPak.payload, pData, iLen );
 
+	iRet = 0;
 	return iRet;
 }
 
@@ -164,11 +180,66 @@ static int spIPCrecvEx( char *pData, int *piLen, int iSrcID, int iTarID )
 }
 
 
-int spIPCsend( char *pData, int iLen )
+static int spIPCgetMgrID( tSRVMGRTYP type )
+{
+	int iRet = -1;
+	
+	if( POWERMGR == type )
+		iRet = 3456;
+	
+	return iRet;
+}
+
+
+static int spIPCgetMgrPort( tSRVMGRTYP type )
 {
 	int iRet = -1;
 
-	iRet = spIPCsendEx( pData, iLen, 0, 0 );	
+	if( POWERMGR == type )
+		iRet = INITIPCHOSTPORTNUM+1;
+	
+	return iRet;
+}
+
+
+static int spIPCgetClientID( void )
+{
+	int iRet = -1;
+	
+	iRet = 1234;
+	
+	return iRet;
+}
+
+
+static int spIPCgetClientPort( void )
+{
+	int iRet = -1;
+	
+	iRet = INITIPCCLIENTPORTNUM;
+	
+	return iRet;
+}
+
+
+int spIPCsend( char *pData, int iLen, tSRVMGRTYP type )
+{
+	int iRet = -1;
+	int tarID = -1;
+	int tarPort = -1;
+	int srcID = -1;
+	int srcPort = -1;
+	
+	/* parse target user ID by manager type */
+	tarID = spIPCgetMgrID( type );
+	/* parse target port number by manager type */
+	tarPort = spIPCgetMgrPort( type );
+	/* get/create source user ID for current user */
+	srcID = spIPCgetClientID();
+	/* get/create source port number for current user */
+	srcPort = spIPCgetClientPort();
+	
+	iRet = spIPCsendEx( pData, iLen, tarID, tarPort, srcID, srcPort );	
 
 	return iRet;
 }
