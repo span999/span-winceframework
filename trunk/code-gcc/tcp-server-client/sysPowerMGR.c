@@ -33,6 +33,14 @@ void *mainPowerMGR( void *argv )
 }
 
 
+void IPCCallBack( void )
+{
+
+	spQMSG( "IPCCallBack in %s !!! \n", PROGRAMNAME );
+	return;
+}
+
+
 int main( int argc, char *argv )
 {
 	int iRet = -1;
@@ -41,7 +49,7 @@ int main( int argc, char *argv )
 
 	/* setup ipc communication routine */
 	/* set callback */
-
+	spIPCinitServer( IPCCallBack );
 	
 	/* create routine for power manager */
 	pthread_create( &thread_id, NULL, &mainPowerMGR, NULL );
