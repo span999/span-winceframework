@@ -23,7 +23,7 @@ struct ipcpacket
 };
 
 
-void spIPCPacketInit( struct ipcpacket * pPack );
+void spIPCPacketInit( struct ipcpacket *pPack );
 void spIPCPacketCRCsign( struct ipcpacket *pPack );
 int spIPCPacketCRCvalid( struct ipcpacket *pPack );
 
