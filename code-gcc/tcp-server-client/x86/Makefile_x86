@@ -25,12 +25,12 @@ all: clean HELPER TCPIPS CLIENT SERVER IPCSRV POWERMGR IPCMGR
 POWERMGR:
 	@echo ================================================================
 	$(CC) $(CCGLAG) -c ../$(POWERMGR).c
-	$(CC) $(CCGLAG) -o $(POWERMGR) tcp-client.o tcp-server.o ipcpacket.o -L. -l$(HELPER) -l$(IPCSRV)
+	$(CC) $(CCGLAG) -o $(POWERMGR) $(POWERMGR).o ipcpacket.o -lpthread -L. -l$(HELPER) -l$(IPCSRV)
 
 IPCMGR:
 	@echo ================================================================
 	$(CC) $(CCGLAG) -c ../$(IPCMGR).c
-	$(CC) $(CCGLAG) -o $(IPCMGR) tcp-client.o tcp-server.o ipcpacket.o -L. -l$(HELPER) -l$(IPCSRV)
+	$(CC) $(CCGLAG) -o $(IPCMGR) $(IPCMGR).o tcp-server.o ipcpacket.o -L. -l$(HELPER) -l$(IPCSRV)
 
 IPCSRV:
 	@echo ================================================================
