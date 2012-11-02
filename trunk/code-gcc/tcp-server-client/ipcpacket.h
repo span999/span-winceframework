@@ -26,6 +26,7 @@ struct ipcpacket
 void spIPCPacketInit( struct ipcpacket *pPack );
 void spIPCPacketCRCsign( struct ipcpacket *pPack );
 int spIPCPacketCRCvalid( struct ipcpacket *pPack );
+void spIPCPacketDump( struct ipcpacket *pPack );
 
 
 #endif /* #ifndef __IPCPACKET_H__ */

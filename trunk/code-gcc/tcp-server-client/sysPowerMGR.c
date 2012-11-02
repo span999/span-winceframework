@@ -48,8 +48,8 @@ int main( int argc, char *argv )
 
 
 	/* setup ipc communication routine */
-	/* set callback */
-	spIPCinitServer( IPCCallBack );
+	/* set server type & callback */
+	spIPCinitServer( POWERMGR, IPCCallBack );
 	
 	/* create routine for power manager */
 	pthread_create( &thread_id, NULL, &mainPowerMGR, NULL );
