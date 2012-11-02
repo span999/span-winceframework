@@ -10,9 +10,11 @@
 #include "ipcpacket.h"
 #include "toolhelps.h"
 
+/*
+#define	__DEBUG__
+*/
 
-
-static unsigned short spGetCRC( unsigned char* pPack, int DataCnt )
+static unsigned short spGetCRC( unsigned char *pPack, int DataCnt )
 {
 	int cCnt = 0;
 	unsigned short crc = 0;
@@ -21,12 +23,16 @@ static unsigned short spGetCRC( unsigned char* pPack, int DataCnt )
 	{
 		crc = (unsigned char)(crc >> 8) | (crc << 8);
 		crc ^= pPack[cCnt];
+	#ifdef __DEBUG__
+		spQMSG( "[0x%02x]", pPack[cCnt] );
+	#endif
 		crc ^= (unsigned char)(crc & 0xff) >> 4;
 		crc ^= (crc << 8) << 4;
 		crc ^= ((crc & 0xff) << 4) << 1;
 	}
 
 	/* DBGMS( DBGFLAG_ERR, "SDP@MMcmdgetCRC %d[0x%08X] \r\n", crc, crc ); */
+	spQMSG( "spGetCRC: 0x%04x\n", crc );
 	return crc;
 }
 
@@ -58,6 +64,7 @@ void spIPCPacketInit( struct ipcpacket *pPack )
 
 void spIPCPacketDump( struct ipcpacket *pPack )
 {
+	int iLoop = 0;
 	
 	if( pPack )
 	{
@@ -69,9 +76,11 @@ void spIPCPacketDump( struct ipcpacket *pPack )
 		spQMSG( "serial number: %d\n", pPack->serialnum );
 		spQMSG( "packet number: %d\n", pPack->packetnum );
 		spQMSG( "payload size: %d\n", pPack->payloadnum );
-		/*
-		memset( pPack->payload, 0, 255 );
-		*/ 
+		for( ; iLoop < pPack->payloadnum; iLoop++ )
+		{
+			spQMSG( "[0x%02x]", pPack->payload[iLoop] );
+		}
+		spQMSG( "\n" );
 		spQMSG( "CRC: 0x%04x\n", pPack->CRC );
 	}
 
@@ -84,7 +93,11 @@ void spIPCPacketCRCsign( struct ipcpacket *pPack )
 	if( pPack )
 	{
 		unsigned short crc = 0;
+	#if 0
  		crc = spGetCRC( (unsigned char *)pPack, sizeof(struct ipcpacket)-sizeof(unsigned short) );
+ 	#else
+		crc = spGetCRC( (unsigned char *)pPack, sizeof(struct ipcpacket)-sizeof(int) );
+ 	#endif
 		pPack->CRC = crc;
 	}
 
@@ -99,13 +112,45 @@ int spIPCPacketCRCvalid( struct ipcpacket *pPack )
 	if( pPack )
 	{
 		unsigned short crc = 0;
+	#if 0
  		crc = spGetCRC( (unsigned char *)pPack, sizeof(struct ipcpacket)-sizeof(unsigned short) );
+ 	#else
+		crc = spGetCRC( (unsigned char *)pPack, sizeof(struct ipcpacket)-sizeof(int) );
+ 	#endif
 		if( pPack->CRC == crc )
 			iRet = 0;
+		else
+		{
+			spQMSG( "ERROR!! crc:0x%04x while CRC:0x%04x\n", crc, pPack->CRC );
+		}
 	}
 
 	return iRet;
 }
 
 
+int spIPCPacketDataSize( struct ipcpacket *pPack )
+{
+	int iRet = -1;
+	
+	if( pPack )
+	{
+		iRet = pPack->payloadnum;
+	}
 
+	return iRet;
+}
+
+
+int spIPCPacketDataQuery( struct ipcpacket *pPack, char *pData, int *piSize )
+{
+	int iRet = -1;
+
+	if( pPack && pData && piSize && (*piSize >= spIPCPacketDataSize(pPack) ) )
+	{
+		iRet = spIPCPacketDataSize(pPack);
+		memcpy( pData, pPack->payload, iRet );
+	}
+	
+	return iRet;
+}
