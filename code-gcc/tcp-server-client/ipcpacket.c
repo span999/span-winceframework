@@ -8,7 +8,7 @@
 #include <stdarg.h>
 
 #include "ipcpacket.h"
-
+#include "toolhelps.h"
 
 
 
@@ -50,6 +50,29 @@ void spIPCPacketInit( struct ipcpacket *pPack )
 		pPack->payloadnum = 0;
 		memset( pPack->payload, 0, 255 );
 		pPack->CRC = 0;
+	}
+
+	return;
+}
+
+
+void spIPCPacketDump( struct ipcpacket *pPack )
+{
+	
+	if( pPack )
+	{
+		spQMSG( "start sign [%c%c%c%c]\n", pPack->start[0], pPack->start[1], pPack->start[2], pPack->start[3] );
+		spQMSG( "user ID: %d\n", pPack->userID );
+		spQMSG( "IPC type: %d\n", pPack->ipctype );
+		spQMSG( "SRC IP: %s[%d]\n", pPack->srcip, pPack->srcport );
+		spQMSG( "DES IP: %s[%d]\n", pPack->tarip, pPack->tarport );
+		spQMSG( "serial number: %d\n", pPack->serialnum );
+		spQMSG( "packet number: %d\n", pPack->packetnum );
+		spQMSG( "payload size: %d\n", pPack->payloadnum );
+		/*
+		memset( pPack->payload, 0, 255 );
+		*/ 
+		spQMSG( "CRC: 0x%04x\n", pPack->CRC );
 	}
 
 	return;

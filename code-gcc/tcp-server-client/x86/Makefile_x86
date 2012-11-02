@@ -8,6 +8,7 @@ ARFLAG = rcs
 
 SERVER = host
 CLIENT = client
+TESTCILENT = testclient
 TCPIPS = tcp-ip 
 HELPER = toolhelps
 HELPERBIN = libtoolhelps.a
@@ -21,7 +22,7 @@ POWERSRVBIN = libsysPowerSRV.a
 
 
 
-all: clean HELPER TCPIPS CLIENT SERVER IPCSRV POWERSRV POWERMGR IPCMGR
+all: clean HELPER TCPIPS CLIENT SERVER IPCSRV POWERSRV TESTCILENT POWERMGR IPCMGR
 	@echo ================================================================
 
 POWERMGR:
@@ -34,15 +35,20 @@ IPCMGR:
 	$(CC) $(CCGLAG) -c ../$(IPCMGR).c
 	$(CC) $(CCGLAG) -o $(IPCMGR) $(IPCMGR).o tcp-server.o ipcpacket.o -L. -l$(HELPER) -l$(IPCSRV)
 
+TESTCILENT:
+	@echo ================================================================
+	$(CC) $(CCFLAG) -o $(TESTCILENT) ../$(TESTCILENT).c -L. -l$(HELPER) -l$(POWERSRV) -lpthread
+
+
 POWERSRV:
 	@echo ================================================================
 	$(CC) $(CCFLAG) -c ../$(POWERSRV).c
-	$(AR) $(ARFLAG) $(POWERSRVBIN) $(IPCSRV).o
+	$(AR) $(ARFLAG) $(POWERSRVBIN) $(IPCSRV).o $(POWERSRV).o ipcpacket.o
 
 IPCSRV:
 	@echo ================================================================
 	$(CC) $(CCFLAG) -c ../$(IPCSRV).c
-	$(AR) $(ARFLAG) $(IPCSRVBIN) $(IPCSRV).o
+	$(AR) $(ARFLAG) $(IPCSRVBIN) $(IPCSRV).o 
 
 SERVER:
 	@echo ================================================================

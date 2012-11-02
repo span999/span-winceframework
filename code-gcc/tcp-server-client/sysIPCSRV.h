@@ -12,8 +12,8 @@ typedef enum {
 } tSRVMGRTYP;
 
 
-#define INITIPCCLIENTPORTNUM 	77777		/* use this default port number for client initial */
-#define INITIPCHOSTPORTNUM 		88888		/* use this default port number for host initial */
+#define INITIPCCLIENTPORTNUM 	77777		/* use this default port number for client initial, common clinet for sysIPCMGR */
+#define INITIPCHOSTPORTNUM 		88888		/* use this default port number for host initial, fixed host for sysIPCMGR */
 /* we should get ipc host port number in boardcase way later ... */
 
 
@@ -23,9 +23,13 @@ typedef void (*PFNIPCCALLBACK)( void );
 
 
 int spIPCsend( char *pData, int iLen, tSRVMGRTYP type );
+/*
 int spIPCrecv( char *pData, int *piLen, int iSrcID, int iTarID );
+*/
+int spIPCrecv( char *pData, int *piLen, tSRVMGRTYP type  );
+int spIPCrequest( char *pData, int *piLen, tSRVMGRTYP type );
 int spIPCsetCallback( PFNIPCCALLBACK pCB );
-int spIPCinitServer( PFNIPCCALLBACK pCB );
+int spIPCinitServer( tSRVMGRTYP servertype, PFNIPCCALLBACK pCB );
 
 
 
