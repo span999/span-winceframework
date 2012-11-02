@@ -19,7 +19,10 @@ struct ipcpacket
 	int				packetnum;		/* packet number, used when data zise over packet size. start with '1' */
 	int				payloadnum;		/* size in byte for payload data after */
 	char			payload[255];	/* payload data, max = 255 */
+	/*
 	unsigned short	CRC;
+	*/ 
+	int				CRC;
 };
 
 
@@ -27,6 +30,8 @@ void spIPCPacketInit( struct ipcpacket *pPack );
 void spIPCPacketCRCsign( struct ipcpacket *pPack );
 int spIPCPacketCRCvalid( struct ipcpacket *pPack );
 void spIPCPacketDump( struct ipcpacket *pPack );
+int spIPCPacketDataSize( struct ipcpacket *pPack );
+int spIPCPacketDataQuery( struct ipcpacket *pPack, char *pData, int *piSize );
 
 
 #endif /* #ifndef __IPCPACKET_H__ */

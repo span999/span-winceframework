@@ -54,7 +54,7 @@ static int tcpSockgetData( int newSock )
 	/*
 	printf( "[%s]\r\n", buffer ); fflush( stdout );
 	*/
-	spQMSG( "CLIENT:%d bytes\r\n", ndo );
+	spQMSG( "CLIENT:%d bytes CRC:%s \r\n", ndo, ((0 == spIPCPacketCRCvalid((struct ipcpacket *)buffer))?"ok":"fail") );
 	spIPCPacketDump( (struct ipcpacket *)buffer );
 	
 #if 0
@@ -208,7 +208,8 @@ static int spIPCsendEx( char *pData, int iLen, int iSrcID, int iSrcPort, int iTa
 
 	/* add CRC sign */
 	spIPCPacketCRCsign( &ipcPak );
-
+	spIPCPacketDump( &ipcPak );
+	
 	/* send out with tcp socket */
 	iRet = tcpSockSend( ipcPak.tarip, ipcPak.tarport, (char *)&ipcPak, sizeof(struct ipcpacket) );
 
