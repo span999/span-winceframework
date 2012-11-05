@@ -55,7 +55,7 @@ static int spIPCPackBuffADD( struct ipcpacket *pBuf )
 	if( pBuf )
 	{
 		spIPCPackBuffINIT();	
-		cbWrite( pcb, pBuf, sizeof(struct ipcpacket) );
+		cbWrite( pcb, (unsigned char *)pBuf, sizeof(struct ipcpacket) );
 	}
 	
 	return iRet;
@@ -73,7 +73,7 @@ static int spIPCPackBuffGET( struct ipcpacket *pBuf )
 		*/
 		if( !cbIsEmpty( pcb ) )
 		{
-			cbRead( pcb, pBuf, sizeof(struct ipcpacket) );
+			cbRead( pcb, (unsigned char *)pBuf, sizeof(struct ipcpacket) );
 		}
 
 	}
@@ -93,7 +93,7 @@ static int spIPCPackBuffDUMP( void )
 		spQMSG( "RingBuffer dump:\n");
 		/* Remove and print all elements */
 		while( !cbIsEmpty( pcb ) ) {
-			cbRead( pcb, &elem, sizeof(struct ipcpacket) );
+			cbRead( pcb, (unsigned char *)&elem, sizeof(struct ipcpacket) );
 			spIPCPacketDump( &elem );
 		}
 	}
@@ -102,6 +102,30 @@ static int spIPCPackBuffDUMP( void )
 }
 
 
+int spIPCpayloadGet( char *pBuf, int *pLen )
+{
+	int iRet = -1;
+	
+	if( !cbIsEmpty( pcb ) )
+	{
+		struct ipcpacket elem;
+		
+		cbCopy( pcb, (unsigned char *)&elem, sizeof(struct ipcpacket) );
+		iRet = 0;
+		if( pBuf && *pLen >= elem.payloadnum )
+		{
+			iRet = elem.payloadnum;
+			cbRead( pcb, (unsigned char *)&elem, sizeof(struct ipcpacket) );
+			memcpy( pBuf, elem.payload, elem.payloadnum );
+		}
+	}
+	
+	
+	
+	
+	/* return actual size */
+	return iRet;
+}
 
 
 static int tcpSockgetData( int newSock )

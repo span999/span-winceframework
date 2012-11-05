@@ -30,7 +30,7 @@ all: clean HELPER TCPIPS CLIENT SERVER RINGBUF IPCSRV POWERSRV TESTCILENT POWERM
 POWERMGR:
 	@echo ================================================================
 	$(CC) $(CCGLAG) -c ../$(POWERMGR).c
-	$(CC) $(CCGLAG) -o $(POWERMGR) $(POWERMGR).o ipcpacket.o -lpthread -L. -l$(HELPER) -l$(IPCSRV)
+	$(CC) $(CCGLAG) -o $(POWERMGR) $(POWERMGR).o $(POWERSRV).o ipcpacket.o -lpthread -L. -l$(HELPER) -l$(IPCSRV)
 
 IPCMGR:
 	@echo ================================================================

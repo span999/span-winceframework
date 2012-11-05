@@ -9,9 +9,12 @@ typedef enum {
 	GETCPUACTIVATEDNUM,
 } tPWRCMDID;
 
+#define		POWERMGRPACKSIGN		5647
+
 
 struct sysPowerCmd
 {
+	int				packType;		/* power command packet sign */
 	int				cmdID;			/* power command ID */
 	int				cmdParam1;		/* the first command paramter */
 	int				cmdParam2;		/* the second command paramter */
