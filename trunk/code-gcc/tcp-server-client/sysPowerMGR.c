@@ -13,6 +13,8 @@
 #include "sysIPCSRV.h"
 
 
+
+
 static char PROGRAMNAME[] = "sysPowerMGR";
 static pthread_t thread_id;
 
@@ -21,6 +23,7 @@ void *mainPowerMGR( void *argv )
 {
 	int iLoop = 0;
 	struct sysPowerCmd pwrCmd;
+	struct ipcpacket ipcPack;
 	int Len = 0;
 	int iRet = -1;
 
@@ -31,14 +34,32 @@ void *mainPowerMGR( void *argv )
 			spQMSG( "%s is here ... \n", "mainPowerMGR" );
 			
 		/*  */
+	#if 0
 		Len = sizeof(struct sysPowerCmd);
-		iRet = spIPCpayloadGet( (char *)&pwrCmd, &Len );
+		iRet = spIPCpayloadGet( NULL, (char *)&pwrCmd, &Len );
 		if( iRet > 0 )
 		{
 			spQMSG( "%s get data %d bytes... \n", "mainPowerMGR", iRet );
-			PowerCmdDump( &pwrCmd );
-			
+			PowerCmdDump( &pwrCmd );	
 		}
+	#else
+		/* get data pack */
+		iRet = spIPCPackBuffOUT( &ipcPack );
+		if( 0 == iRet )
+		{
+			Len = sizeof(struct sysPowerCmd);
+			iRet = spIPCpayloadGet( &ipcPack, (char *)&pwrCmd, &Len );
+			if( iRet > 0 )
+			{
+				spQMSG( "%s get data %d bytes... \n", "mainPowerMGR", iRet );
+				PowerCmdDump( &pwrCmd );
+				
+				/* get power command */
+				/* proceed  the coamnd */
+				/* response */
+			}
+		}
+	#endif	
 	}
 
 	spQMSG( "Exit %s !!! \n", PROGRAMNAME );

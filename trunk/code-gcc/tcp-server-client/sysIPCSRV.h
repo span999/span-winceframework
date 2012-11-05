@@ -30,7 +30,8 @@ int spIPCrecv( char *pData, int *piLen, tSRVMGRTYP type  );
 int spIPCrequest( char *pData, int *piLen, tSRVMGRTYP type );
 int spIPCsetCallback( PFNIPCCALLBACK pCB );
 int spIPCinitServer( tSRVMGRTYP servertype, PFNIPCCALLBACK pCB );
-int spIPCpayloadGet( char *pBuf, int *pLen );
+int spIPCpayloadGet( struct ipcpacket *pPack, char *pBuf, int *pLen );
+int spIPCPackBuffOUT( struct ipcpacket *pBuf );
 
 
 #endif /* ##ifndef __SYSIPCSRV_H__ */
