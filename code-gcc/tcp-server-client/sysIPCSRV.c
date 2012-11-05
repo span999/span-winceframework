@@ -74,10 +74,14 @@ static int spIPCPackBuffGET( struct ipcpacket *pBuf )
 		if( !cbIsEmpty( pcb ) )
 		{
 			cbRead( pcb, (unsigned char *)pBuf, sizeof(struct ipcpacket) );
+			iRet = 0;
 		}
-
+		else
+			spQMSG( "spIPCPackBuffGET cbIsEmpty fail !!\n" );
 	}
 	
+	if( -1 == iRet )
+		spQMSG( "spIPCPackBuffGET fail !!\n" );
 	return iRet;
 }
 
@@ -102,28 +106,84 @@ static int spIPCPackBuffDUMP( void )
 }
 
 
-int spIPCpayloadGet( char *pBuf, int *pLen )
+int spIPCpayloadGet( struct ipcpacket *pPack, char *pBuf, int *pLen )
 {
 	int iRet = -1;
+	
+	if( pPack )
+	{
+		if( 1 )
+		{
+			struct ipcpacket *pThisPack = NULL;	
+			
+			pThisPack = pPack;
+
+			iRet = 0;
+			if( pBuf && *pLen >= pThisPack->payloadnum )
+			{
+				iRet = pThisPack->payloadnum;
+				memcpy( pBuf, pThisPack->payload, pThisPack->payloadnum );
+			}
+		}
+	}
+	else
+	{
+		if( !cbIsEmpty( pcb ) )
+		{
+			struct ipcpacket elem;
+			struct ipcpacket *pThisPack = NULL;
+		
+			pThisPack = &elem;
+			cbCopy( pcb, (unsigned char *)pThisPack, sizeof(struct ipcpacket) );
+
+			iRet = 0;
+			if( pBuf && *pLen >= pThisPack->payloadnum )
+			{
+				iRet = pThisPack->payloadnum;
+				cbRead( pcb, (unsigned char *)pThisPack, sizeof(struct ipcpacket) );
+				memcpy( pBuf, pThisPack->payload, pThisPack->payloadnum );
+			}
+		}
+	}
 	
 	if( !cbIsEmpty( pcb ) )
 	{
 		struct ipcpacket elem;
+		struct ipcpacket *pThisPack = NULL;
 		
-		cbCopy( pcb, (unsigned char *)&elem, sizeof(struct ipcpacket) );
-		iRet = 0;
-		if( pBuf && *pLen >= elem.payloadnum )
+		if( pPack )
+			pThisPack = pPack;
+		else
 		{
-			iRet = elem.payloadnum;
-			cbRead( pcb, (unsigned char *)&elem, sizeof(struct ipcpacket) );
-			memcpy( pBuf, elem.payload, elem.payloadnum );
+			pThisPack = &elem;
+			cbCopy( pcb, (unsigned char *)pThisPack, sizeof(struct ipcpacket) );
+		}
+
+		iRet = 0;
+		if( pBuf && *pLen >= pThisPack->payloadnum )
+		{
+			iRet = pThisPack->payloadnum;
+			cbRead( pcb, (unsigned char *)pThisPack, sizeof(struct ipcpacket) );
+			memcpy( pBuf, pThisPack->payload, pThisPack->payloadnum );
 		}
 	}
 	
-	
-	
-	
 	/* return actual size */
+	return iRet;
+}
+
+
+int spIPCPackBuffOUT( struct ipcpacket *pBuf )
+{
+	int iRet = -1;
+	
+	if( pBuf )
+	{
+		iRet = spIPCPackBuffGET( pBuf );
+	}
+	
+	if( -1 == iRet )
+		spQMSG( "spIPCPackBuffOUT fail !!\n" );
 	return iRet;
 }
 
