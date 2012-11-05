@@ -129,6 +129,19 @@ void cbRead(CircularBuffer *cb, unsigned char *elem, int OutSize )
 }
 
 
+/* Copy oldest element. App must ensure !cbIsEmpty() first. */
+void cbCopy(CircularBuffer *cb, unsigned char *elem, int OutSize )
+{
+	if( OutSize >= g_elemsize )
+	{
+		memcpy( elem, (cb->elems + (g_elemsize * cb->start)), g_elemsize );
+		/*
+		cb->start = (cb->start + 1) % cb->size;
+		*/
+	}
+}
+
+
 
 #if 0
 int main(int argc, char **argv) {

@@ -9,6 +9,7 @@
 #include <pthread.h>
 
 #include "ipcpacket.h"
+#include "sysPowerSRV.h"
 #include "sysIPCSRV.h"
 
 
@@ -19,12 +20,25 @@ static pthread_t thread_id;
 void *mainPowerMGR( void *argv )
 {
 	int iLoop = 0;
+	struct sysPowerCmd pwrCmd;
+	int Len = 0;
+	int iRet = -1;
 
 	while( 1 )
-	{
+	{	
 		sleep( 1 );
 		if( ++iLoop % 5 == 0 )
 			spQMSG( "%s is here ... \n", "mainPowerMGR" );
+			
+		/*  */
+		Len = sizeof(struct sysPowerCmd);
+		iRet = spIPCpayloadGet( (char *)&pwrCmd, &Len );
+		if( iRet > 0 )
+		{
+			spQMSG( "%s get data %d bytes... \n", "mainPowerMGR", iRet );
+			PowerCmdDump( &pwrCmd );
+			
+		}
 	}
 
 	spQMSG( "Exit %s !!! \n", PROGRAMNAME );

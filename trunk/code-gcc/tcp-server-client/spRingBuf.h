@@ -28,8 +28,10 @@ typedef struct {
 void cbInit(CircularBuffer *cb, int size, int elemsize );
 void cbFree(CircularBuffer *cb);
 int cbIsFull(CircularBuffer *cb);
+int cbIsEmpty(CircularBuffer *cb);
 void cbWrite(CircularBuffer *cb, unsigned char *elem, int InSize );
 void cbRead(CircularBuffer *cb, unsigned char *elem, int OutSize );
+void cbCopy(CircularBuffer *cb, unsigned char *elem, int OutSize );
 
 
 

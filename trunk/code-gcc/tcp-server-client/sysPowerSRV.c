@@ -22,11 +22,15 @@
 	these function routine should be placed at sysPowerSRV.so / sysPowerSRV.a
 */
 
+
+
+
 static void PowerCmdInit( struct sysPowerCmd *pCmd )
 {
 
 	if( pCmd )
 	{
+		pCmd->packType = POWERMGRPACKSIGN;
 		pCmd->cmdID = -1;
 		pCmd->cmdParam1 = -1;
 		pCmd->cmdParam2 = -1;
@@ -49,6 +53,26 @@ static int PowerCmdSend( struct sysPowerCmd *pCmd )
 	spIPCsend( (char *)pCmd, sizeof(struct sysPowerCmd), POWERMGR );
 
 	return iRet;
+} 
+
+
+void PowerCmdDump( struct sysPowerCmd *pCmd )
+{
+
+	if( pCmd )
+	{
+		spQMSG( "Power Cmd sign [%d]\n", pCmd->packType );
+		spQMSG( "Power Cmd ID [%d/0x%02x]\n", pCmd->cmdID, pCmd->cmdID );
+		spQMSG( "Power Cmd Param1 [%d/0x%02x]\n", pCmd->cmdParam1, pCmd->cmdParam1 );
+		spQMSG( "Power Cmd Param2 [%d/0x%02x]\n", pCmd->cmdParam2, pCmd->cmdParam2 );
+		spQMSG( "Power Cmd timestamp [%d/0x%02x]\n", pCmd->cmdtimestamp, pCmd->cmdtimestamp );
+		spQMSG( "Power Ret value [%d/0x%02x]\n", pCmd->rspReturn, pCmd->rspReturn );
+		spQMSG( "Power Rsp Param1 [%d/0x%02x]\n", pCmd->rspParam1, pCmd->rspParam1 );
+		spQMSG( "Power Rsp Param2 [%d/0x%02x]\n", pCmd->rspParam2, pCmd->rspParam2 );
+		spQMSG( "Power Rsp timestamp [%d/0x%02x]\n", pCmd->rsptimestamp, pCmd->rsptimestamp );
+	}
+
+	return;
 } 
 
 
