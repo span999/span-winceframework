@@ -19,6 +19,7 @@
 #include "tcp-client.h"
 */
 #include "sysIPCSRV.h"
+#include "spRingBuf.h"
 
 
 
@@ -29,6 +30,76 @@ static int spIPCgetMgrPort( tSRVMGRTYP type );
 static tSRVMGRTYP serverType = 0;
 static PFNIPCCALLBACK ipcCallback = NULL;
 static pthread_t tcpserv_thread_id;
+
+
+
+static CircularBuffer cb;
+static CircularBuffer *pcb = NULL;
+static int RingBufferSize = 16;
+static void spIPCPackBuffINIT( void )
+{
+	if( NULL == pcb )
+	{
+		cbInit(&cb, RingBufferSize, sizeof(struct ipcpacket));
+		pcb = &cb;
+	}	
+	
+	return;
+}
+
+
+static int spIPCPackBuffADD( struct ipcpacket *pBuf )
+{
+	int iRet = -1;
+	
+	if( pBuf )
+	{
+		spIPCPackBuffINIT();	
+		cbWrite( pcb, pBuf, sizeof(struct ipcpacket) );
+	}
+	
+	return iRet;
+}
+
+
+static int spIPCPackBuffGET( struct ipcpacket *pBuf )
+{
+	int iRet = -1;
+	
+	if( pBuf )
+	{
+		/*
+		spIPCPackBuffINIT();
+		*/
+		if( !cbIsEmpty( pcb ) )
+		{
+			cbRead( pcb, pBuf, sizeof(struct ipcpacket) );
+		}
+
+	}
+	
+	return iRet;
+}
+
+
+static int spIPCPackBuffDUMP( void )
+{
+	int iRet = -1;
+	
+	if( pcb )
+	{
+		struct ipcpacket elem;
+		
+		spQMSG( "RingBuffer dump:\n");
+		/* Remove and print all elements */
+		while( !cbIsEmpty( pcb ) ) {
+			cbRead( pcb, &elem, sizeof(struct ipcpacket) );
+			spIPCPacketDump( &elem );
+		}
+	}
+	
+	return iRet;
+}
 
 
 
@@ -43,11 +114,7 @@ static int tcpSockgetData( int newSock )
 
 
 	SETZERO( buffer, BUFSIZE );
-#if 0
-	ndo = read( newSock, buffer, BUFSIZE );
-#else
 	ndo = recv( newSock, buffer, BUFSIZE, 0 );
-#endif
 	if( ndo < 0 )
 		spERR( "read fail return !!" );
 
@@ -56,14 +123,18 @@ static int tcpSockgetData( int newSock )
 	*/
 	spQMSG( "CLIENT:%d bytes CRC:%s \r\n", ndo, ((0 == spIPCPacketCRCvalid((struct ipcpacket *)buffer))?"ok":"fail") );
 	spIPCPacketDump( (struct ipcpacket *)buffer );
+	spIPCPackBuffADD( (struct ipcpacket *)buffer );
+/*	
+	spIPCPackBuffADD( (struct ipcpacket *)buffer );
+	spIPCPackBuffDUMP();
+*/
 	
-#if 0
-	ndo = write( newSock, "Got your message", 16 );
-#else
+
+#if 0	
 	ndo = send( newSock, "Got your message", 16, 0 );
-#endif
 	if( ndo < 0 )
 		spERR( "write fail return !!" );
+#endif
 
 	iRet = 0;
 	return iRet;

@@ -18,11 +18,13 @@ IPCSRVBIN = libsysIPCSRV.a
 POWERMGR = sysPowerMGR
 POWERSRV = sysPowerSRV
 POWERSRVBIN = libsysPowerSRV.a
+RINGBUF = spRingBuf
+RINGBUFBIN = libspRingBuf.a
 
 
 
 
-all: clean HELPER TCPIPS CLIENT SERVER IPCSRV POWERSRV TESTCILENT POWERMGR IPCMGR
+all: clean HELPER TCPIPS CLIENT SERVER RINGBUF IPCSRV POWERSRV TESTCILENT POWERMGR IPCMGR
 	@echo ================================================================
 
 POWERMGR:
@@ -39,16 +41,20 @@ TESTCILENT:
 	@echo ================================================================
 	$(CC) $(CCFLAG) -o $(TESTCILENT) ../$(TESTCILENT).c -L. -l$(HELPER) -l$(POWERSRV) -lpthread
 
-
 POWERSRV:
 	@echo ================================================================
 	$(CC) $(CCFLAG) -c ../$(POWERSRV).c
-	$(AR) $(ARFLAG) $(POWERSRVBIN) $(IPCSRV).o $(POWERSRV).o ipcpacket.o
+	$(AR) $(ARFLAG) $(POWERSRVBIN) $(RINGBUF).o $(IPCSRV).o $(POWERSRV).o ipcpacket.o
 
 IPCSRV:
 	@echo ================================================================
 	$(CC) $(CCFLAG) -c ../$(IPCSRV).c
-	$(AR) $(ARFLAG) $(IPCSRVBIN) $(IPCSRV).o 
+	$(AR) $(ARFLAG) $(IPCSRVBIN) $(IPCSRV).o $(RINGBUF).o
+
+RINGBUF:
+	@echo ================================================================
+	$(CC) $(CCFLAG) -c ../$(RINGBUF).c
+	$(AR) $(ARFLAG) $(RINGBUFBIN) $(RINGBUF).o 
 
 SERVER:
 	@echo ================================================================
