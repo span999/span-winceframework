@@ -13,6 +13,7 @@ void spQMSG( char *msgout, ... );
 void myerr( char *msg );
 void spERR( char *msg );
 void millisleep( int milliseconds );
+long spGetTimetick( void );
 
 
 

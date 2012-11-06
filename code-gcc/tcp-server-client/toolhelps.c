@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <sys/time.h>
 
 
 
@@ -78,7 +79,37 @@ void spERR( char *msg )
 
 void millisleep( int milliseconds )
 {
+#if 0
 	int iRet = 0;
 	iRet = usleep( (unsigned int)(milliseconds * 1000) );
+#else
+	usleep( (unsigned int)(milliseconds * 1000) );
+#endif
 }
 
+
+long spGetTimetick( void )
+{
+#if 0	
+    struct timespec now;
+    clock_gettime(CLOCK_MONOTONIC, &now);
+    return now.tv_sec*1000000 + now.tv_nsec/1000;
+#endif
+#if 1
+	long lRet = 0;
+	struct timeval tv;
+	
+	gettimeofday( &tv,NULL );
+	#if 0
+	while( tv.tv_usec > 1000000 )
+	{
+		tv.tv_sec++;
+		tv.tv_usec -= 1000000;
+	}
+	#else
+	lRet = (tv.tv_sec * 1000000) + tv.tv_usec;
+	#endif
+	
+	return lRet;
+#endif 
+}

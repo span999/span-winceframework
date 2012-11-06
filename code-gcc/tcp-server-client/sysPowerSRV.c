@@ -45,10 +45,20 @@ static void PowerCmdInit( struct sysPowerCmd *pCmd )
 } 
 
 
+
+static void PowerCmdTime( struct sysPowerCmd *pCmd )
+{
+	if( pCmd )
+		pCmd->cmdtimestamp = spGetTimetick();
+	return;
+}
+
+
 static int PowerCmdSend( struct sysPowerCmd *pCmd )
 {
 	int iRet = -1;
 	
+	PowerCmdTime( pCmd );
 	/* call ipc */
 	spIPCsend( (char *)pCmd, sizeof(struct sysPowerCmd), POWERMGR );
 
@@ -74,6 +84,27 @@ void PowerCmdDump( struct sysPowerCmd *pCmd )
 
 	return;
 } 
+
+
+int getPowerCmdID( struct sysPowerCmd *pCmd )
+{
+	int iRet = -1;
+	
+	if( pCmd )
+	{
+		if( pCmd->packType == POWERMGRPACKSIGN )
+		{
+			iRet = pCmd->cmdID;
+		}
+		else
+		{
+			iRet = 0;
+			spQMSG( "ERROR !!! power command sign error [%d]\n", pCmd->packType );
+		}	
+	}
+	
+	return iRet;
+}
 
 
 int getCPUActivatedNum( void )

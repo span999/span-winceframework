@@ -55,7 +55,9 @@ void *mainPowerMGR( void *argv )
 				PowerCmdDump( &pwrCmd );
 				
 				/* get power command */
-				/* proceed  the coamnd */
+				iRet = getPowerCmdID( &pwrCmd );
+				spQMSG( "%s get power command %d \n", "mainPowerMGR", iRet );
+				/* proceed the command */
 				/* response */
 			}
 		}
