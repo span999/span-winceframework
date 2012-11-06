@@ -8,8 +8,9 @@
 void PowerCmdDump( struct sysPowerCmd *pCmd );
 int getPowerCmdID( struct sysPowerCmd *pCmd );
 
-int getCPUActivatedNum( void );
 
+int getCPUActivatedNum( void );
+int setCPUActivatedNum( int num );
 
 
 

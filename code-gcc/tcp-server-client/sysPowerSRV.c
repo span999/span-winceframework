@@ -125,4 +125,20 @@ int getCPUActivatedNum( void )
 }
 
 
+int setCPUActivatedNum( int num )
+{
+	int iRet = -1;
+	struct sysPowerCmd PwrCmd;
+
+	PowerCmdInit( &PwrCmd );
+	/* pack the data for Power Manager */
+	PwrCmd.cmdID = SETCPUACTIVATEDNUM;
+
+	/* issue command to Power Manager */
+	iRet = PowerCmdSend( &PwrCmd );
+
+	/* wait & get the response from Power Manager */
+
+	return iRet;
+}
 

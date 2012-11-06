@@ -28,8 +28,9 @@ void *mainPowerMGR( void *argv )
 	int iRet = -1;
 
 	while( 1 )
-	{	
-		sleep( 1 );
+	{
+		sleep( ((0>iRet)?1:0) );
+
 		if( ++iLoop % 5 == 0 )
 			spQMSG( "%s is here ... \n", "mainPowerMGR" );
 			

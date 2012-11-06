@@ -54,8 +54,11 @@ static int spIPCPackBuffADD( struct ipcpacket *pBuf )
 	
 	if( pBuf )
 	{
-		spIPCPackBuffINIT();	
+		
+		spIPCPackBuffINIT();
+		spQMSG( "spIPCPackBuffADD +++\n" );
 		cbWrite( pcb, (unsigned char *)pBuf, sizeof(struct ipcpacket) );
+		spQMSG( "spIPCPackBuffADD ---\n" );
 	}
 	
 	return iRet;
@@ -148,29 +151,7 @@ int spIPCpayloadGet( struct ipcpacket *pPack, char *pBuf, int *pLen )
 			}
 		}
 	}
-	
-	if( !cbIsEmpty( pcb ) )
-	{
-		struct ipcpacket elem;
-		struct ipcpacket *pThisPack = NULL;
-		
-		if( pPack )
-			pThisPack = pPack;
-		else
-		{
-			pThisPack = &elem;
-			cbCopy( pcb, (unsigned char *)pThisPack, sizeof(struct ipcpacket) );
-		}
 
-		iRet = 0;
-		if( pBuf && *pLen >= pThisPack->payloadnum )
-		{
-			iRet = pThisPack->payloadnum;
-			cbRead( pcb, (unsigned char *)pThisPack, sizeof(struct ipcpacket) );
-			memcpy( pBuf, pThisPack->payload, pThisPack->payloadnum );
-		}
-	}
-	
 	/* return actual size */
 	return iRet;
 }
@@ -214,6 +195,8 @@ static int tcpSockgetData( int newSock )
 	spIPCPackBuffADD( (struct ipcpacket *)buffer );
 /*	
 	spIPCPackBuffADD( (struct ipcpacket *)buffer );
+*/
+/* 
 	spIPCPackBuffDUMP();
 */
 	

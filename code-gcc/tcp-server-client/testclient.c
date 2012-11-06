@@ -24,6 +24,19 @@ repeatLoop:
 
 
 	getCPUActivatedNum();
+	setCPUActivatedNum( 1 );
+	getCPUActivatedNum();
+	setCPUActivatedNum( 1 );
+	getCPUActivatedNum();
+	setCPUActivatedNum( 1 );
+	getCPUActivatedNum();
+	setCPUActivatedNum( 1 );
+	getCPUActivatedNum();
+	setCPUActivatedNum( 1 );
+	getCPUActivatedNum();
+	setCPUActivatedNum( 1 );
+	getCPUActivatedNum();
+	setCPUActivatedNum( 1 );
 
 	goto repeatLoop;
     	
