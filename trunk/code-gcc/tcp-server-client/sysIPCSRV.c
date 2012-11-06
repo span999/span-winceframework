@@ -76,12 +76,15 @@ static int spIPCPackBuffGET( struct ipcpacket *pBuf )
 			cbRead( pcb, (unsigned char *)pBuf, sizeof(struct ipcpacket) );
 			iRet = 0;
 		}
+/*		
 		else
 			spQMSG( "spIPCPackBuffGET cbIsEmpty fail !!\n" );
+*/
 	}
-	
+/*	
 	if( -1 == iRet )
 		spQMSG( "spIPCPackBuffGET fail !!\n" );
+*/
 	return iRet;
 }
 
@@ -181,9 +184,10 @@ int spIPCPackBuffOUT( struct ipcpacket *pBuf )
 	{
 		iRet = spIPCPackBuffGET( pBuf );
 	}
-	
+/*	
 	if( -1 == iRet )
 		spQMSG( "spIPCPackBuffOUT fail !!\n" );
+*/
 	return iRet;
 }
 
