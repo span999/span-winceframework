@@ -18,6 +18,9 @@
 static char PROGRAMNAME[] = "sysPowerMGR";
 static pthread_t thread_id;
 
+#define	_USE_USLEEP_
+#define CMD_INTERVAL	200		/* 200 ms polling */
+#define US_MS			1000000
 
 void *mainPowerMGR( void *argv )
 {
@@ -29,10 +32,20 @@ void *mainPowerMGR( void *argv )
 
 	while( 1 )
 	{
+		#ifdef _USE_USLEEP_
+		usleep( ((0>iRet)?CMD_INTERVAL:0) );
+		#else
 		sleep( ((0>iRet)?1:0) );
+		#endif
 
+
+		#ifdef _USE_USLEEP_
+		if( ( ++iLoop % ((5*US_MS)/CMD_INTERVAL) ) == 0 )
+			spQMSG( "%s is here ... %d \n", "mainPowerMGR", iLoop );
+		#else
 		if( ++iLoop % 5 == 0 )
 			spQMSG( "%s is here ... \n", "mainPowerMGR" );
+		#endif
 			
 		/*  */
 	#if 0
@@ -44,7 +57,7 @@ void *mainPowerMGR( void *argv )
 			PowerCmdDump( &pwrCmd );	
 		}
 	#else
-		/* get data pack */
+		/* try to get data pack */
 		iRet = spIPCPackBuffOUT( &ipcPack );
 		if( 0 == iRet )
 		{
