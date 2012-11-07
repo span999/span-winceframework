@@ -359,10 +359,139 @@ static int spIPCsendEx( char *pData, int iLen, int iSrcID, int iSrcPort, int iTa
 }
 
 
-static int spIPCrecvEx( char *pData, int *piLen, int iSrcID, int iTarID )
+static int tcpSockRecv( char *hostname, int portnum, char *buffer, int buflen )
 {
-	int iRet = -1;
+	int iRet = (-1);
+	int clntSock = 0;
+	int ndo = 0;
+	struct sockaddr_in serv_addr;
 
+	
+	SETZERO( &serv_addr, sizeof(serv_addr) );
+	serv_addr.sin_family = AF_INET;
+	inet_aton( hostname, &serv_addr.sin_addr.s_addr );
+	serv_addr.sin_port = htons( portnum );
+
+	clntSock = socket( AF_INET, SOCK_STREAM, 0 );
+	if( clntSock < 0 ) 
+		spERR( "ERROR tcpSockRecv opening socket" );
+
+	ndo = sizeof( serv_addr );
+	if( connect( clntSock, (struct sockaddr *)&serv_addr, ndo ) < 0 ) 
+		spERR("ERROR tcpSockRecv connecting");
+
+	ndo = recv( clntSock, buffer, buflen, 0 );
+	if( ndo < 0 ) 
+		spERR( "ERROR tcpSockRecv writing to socket" );
+	
+	iRet = ndo;
+	close( clntSock );
+	
+	return iRet;
+}
+
+
+static int tcpClient( int port )
+{
+	int iRet = 0;
+	int ServSock = 0;
+	int portno = 0;
+	struct sockaddr_in serv_addr;
+
+	/* create socket */
+	ServSock = socket( AF_INET, SOCK_STREAM, 0 );
+	if( ServSock < 0 )
+		spERR( "\r\n  socket() fail return !!" );
+	
+	portno = port;
+
+	SETZERO( &serv_addr, sizeof(serv_addr) );
+	/*
+	 * prepare socket address data
+	 * 
+	 * reference link, 
+	 * http://www.umiacs.com/sockaddr_inman.html
+	 */
+	serv_addr.sin_family = AF_INET;
+	serv_addr.sin_addr.s_addr = INADDR_ANY;
+	serv_addr.sin_port = htons(portno);
+
+	/*
+	 * bind socket with specified address data
+	 */
+	if( bind( ServSock, (struct sockaddr *)&serv_addr, sizeof(serv_addr) ) < 0 )
+		spERR( "\r\n  bind fail return !!" );
+
+	/*
+	 * listen to the socket with queue deepth in 5
+	 */
+	if( listen( ServSock, 5 ) < 0 )
+		spERR( "\r\n  listen fail return !!" );
+
+	iRet = ServSock;
+	return iRet;
+}
+
+
+static int spIPCrecvEx( int newSock, struct ipcpacket *precvPack )
+{
+	#define	BUFSIZE	512
+	int iRet = -1;
+	int ndo = 0;
+	char buffer[BUFSIZE];
+
+
+	SETZERO( buffer, BUFSIZE );
+	ndo = recv( newSock, buffer, BUFSIZE, 0 );
+	if( ndo < 0 )
+		spERR( "read fail return !!" );
+
+	iRet = (0 == spIPCPacketCRCvalid((struct ipcpacket *)buffer)?1:0);
+	spQMSG( "HOST:%d bytes CRC:%s \r\n", ndo, iRet?"ok":"fail" );
+	if( iRet )
+	{
+		spIPCPacketDump( (struct ipcpacket *)buffer );
+		iRet = sizeof( struct ipcpacket );
+		memcpy( precvPack, buffer, iRet );
+	}
+
+	/*
+	spIPCPackBuffADD( (struct ipcpacket *)buffer );
+	*/ 
+
+	return iRet;
+}
+
+
+static int spIPCrecvWait( int iSocket, int iPort, struct ipcpacket *precvPack )
+{
+	int iRet = 0;
+	int clilen = 0;
+	int ServSock = 0;
+	int newSock = 0;
+	int ndo = 0;
+	struct sockaddr_in cli_addr;
+
+	
+	ServSock = iSocket;
+	clilen = sizeof( cli_addr );
+
+	for(;;)
+	{
+		spQMSG( "[wait receive data~][port:%d]\r\n", iPort );
+		newSock = accept( ServSock, (struct sockaddr *)&cli_addr, (socklen_t *)&clilen );
+
+		if( newSock < 0 )
+			spERR( "\r\n  accept fail return !!" );
+
+		spQMSG( "[got receive data~][0x%08x][port:%d]\r\n", tcpserv_thread_id, iPort );
+	
+		ndo = spIPCrecvEx( newSock, precvPack ); 
+		if( 0 < ndo )
+			break;
+	}
+	
+	close( newSock );
 	return iRet;
 }
 
@@ -438,9 +567,9 @@ int spIPCrecv( char *pData, int *piLen, int iSrcID, int iTarID )
 int spIPCrecv( char *pData, int *piLen, tSRVMGRTYP type  )
 {
 	int iRet = -1;
-
+/*
 	iRet = spIPCrecvEx( pData, piLen, 0, 0 );
-
+*/
 	return iRet;
 }
 
@@ -448,16 +577,78 @@ int spIPCrecv( char *pData, int *piLen, tSRVMGRTYP type  )
 int spIPCrequest( char *pData, int *piLen, tSRVMGRTYP type )
 {
 	int iRet = -1;
+	int socket = 0;
+	int tarID = -1;
+	int tarPort = -1;
+	int srcID = -1;
+	int srcPort = -1;
+	struct ipcpacket recvPack;
+	
+	/* parse target user ID by manager type */
+	tarID = spIPCgetMgrID( type );
+	/* parse target port number by manager type */
+	tarPort = spIPCgetMgrPort( type );
+	/* get/create source user ID for current user */
+	srcID = spIPCgetClientID();
+	/* get/create source port number for current user */
+	srcPort = spIPCgetClientPort();
 
+	/* setup recv port before send */
+	socket = tcpClient( srcPort );
+	
 	/* send request */
-	iRet = spIPCsend( pData, *piLen, type );
+	iRet = spIPCsendEx( pData, *piLen, srcID, srcPort, tarID, tarPort );
 
 	/* wait response */
-
-
 	/* get feedback */
-	iRet = spIPCrecv( pData, piLen, type );
+	iRet = spIPCrecvWait( socket, srcPort, &recvPack );
+	if( 0 == iRet && (*piLen >= recvPack.payloadnum ) )
+	{
+		memcpy( pData, recvPack.payload, recvPack.payloadnum );
+		*piLen = recvPack.payloadnum;
+	}
 
+	close( socket );
+	return iRet;
+}
+
+
+int spIPCPackResponse( struct ipcpacket *pBuf )
+{
+	int iRet = -1;
+	struct ipcpacket ipcPak;
+	
+	if( pBuf )
+	{
+		memcpy( &ipcPak, pBuf, sizeof(struct ipcpacket) ); 
+	}
+	
+	spQMSG( "spIPCPackResponse: !!! \n" );
+	
+	/* clean packet */
+	/*
+	spIPCPacketInit( &ipcPak );
+	*/
+	
+	/* setup packet */
+	/* ipcPak.userID = iSrcID; */
+	memcpy( ipcPak.srcip, pBuf->tarip, 10 );
+	ipcPak.srcport = pBuf->tarport;
+	memcpy( ipcPak.tarip, pBuf->srcip, 10 );
+	ipcPak.tarport = pBuf->srcport;
+	ipcPak.serialnum = 0;
+	ipcPak.packetnum = 0;
+	/*
+	ipcPak.payloadnum = iLen;
+	memcpy( ipcPak.payload, pData, iLen );
+	*/
+
+	/* add CRC sign */
+	spIPCPacketCRCsign( &ipcPak );
+	spIPCPacketDump( &ipcPak );
+	
+	/* send out with tcp socket */
+	iRet = tcpSockSend( ipcPak.tarip, ipcPak.tarport, (char *)&ipcPak, sizeof(struct ipcpacket) );
 
 	return iRet;
 }

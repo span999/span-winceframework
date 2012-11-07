@@ -52,6 +52,7 @@ void *mainPowerMGR( void *argv )
 			iRet = spIPCpayloadGet( &ipcPack, (char *)&pwrCmd, &Len );
 			if( iRet > 0 )
 			{
+				struct sysPowerCmd *pThisCmd = NULL;
 				spQMSG( "%s get data %d bytes... \n", "mainPowerMGR", iRet );
 				PowerCmdDump( &pwrCmd );
 				
@@ -59,6 +60,20 @@ void *mainPowerMGR( void *argv )
 				iRet = getPowerCmdID( &pwrCmd );
 				spQMSG( "%s get power command %d \n", "mainPowerMGR", iRet );
 				/* proceed the command */
+				switch( iRet )
+				{
+					case 1:				
+					case 2:
+						pThisCmd = (struct sysPowerCmd *)ipcPack.payload;
+						pThisCmd->rspReturn = 5;
+						pThisCmd->rsptimestamp = spGetTimetick();
+						iRet = spIPCPackResponse( &ipcPack );
+						break;
+						
+					default:
+						break;
+				}	///switch
+				
 				/* response */
 			}
 		}

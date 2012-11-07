@@ -31,6 +31,7 @@ static void PowerCmdInit( struct sysPowerCmd *pCmd )
 	if( pCmd )
 	{
 		pCmd->packType = POWERMGRPACKSIGN;
+		pCmd->packSN = spGetTimetick();
 		pCmd->cmdID = -1;
 		pCmd->cmdParam1 = -1;
 		pCmd->cmdParam2 = -1;
@@ -66,12 +67,27 @@ static int PowerCmdSend( struct sysPowerCmd *pCmd )
 } 
 
 
+static int PowerCmdRequest( struct sysPowerCmd *pCmd )
+{
+	int iRet = -1;
+	int iSize = 0;
+	
+	iSize = sizeof(struct sysPowerCmd);
+	PowerCmdTime( pCmd );	/* mark the time */
+	/* call ipc */ /* wait for response */
+	spIPCrequest( (char *)pCmd, &iSize, POWERMGR );
+
+	return iRet;
+} 
+
+
 void PowerCmdDump( struct sysPowerCmd *pCmd )
 {
 
 	if( pCmd )
 	{
 		spQMSG( "Power Cmd sign [%d]\n", pCmd->packType );
+		spQMSG( "Power Cmd SN [%d/0x%02x]\n", pCmd->packSN, pCmd->packSN );
 		spQMSG( "Power Cmd ID [%d/0x%02x]\n", pCmd->cmdID, pCmd->cmdID );
 		spQMSG( "Power Cmd Param1 [%d/0x%02x]\n", pCmd->cmdParam1, pCmd->cmdParam1 );
 		spQMSG( "Power Cmd Param2 [%d/0x%02x]\n", pCmd->cmdParam2, pCmd->cmdParam2 );
@@ -117,7 +133,11 @@ int getCPUActivatedNum( void )
 	PwrCmd.cmdID = GETCPUACTIVATEDNUM;
 
 	/* issue command to Power Manager */
+	/*
 	iRet = PowerCmdSend( &PwrCmd );
+	*/
+	iRet = PowerCmdRequest( &PwrCmd );
+	PowerCmdDump( &PwrCmd );
 
 	/* wait & get the response from Power Manager */
 
@@ -135,7 +155,10 @@ int setCPUActivatedNum( int num )
 	PwrCmd.cmdID = SETCPUACTIVATEDNUM;
 
 	/* issue command to Power Manager */
+	/*
 	iRet = PowerCmdSend( &PwrCmd );
+	*/
+	iRet = PowerCmdRequest( &PwrCmd );
 
 	/* wait & get the response from Power Manager */
 

@@ -16,22 +16,15 @@ typedef enum {
 struct sysPowerCmd
 {
 	int				packType;		/* power command packet sign */
+	long			packSN;			/* power command packet serial nunber */
 	int				cmdID;			/* power command ID */
 	int				cmdParam1;		/* the first command paramter */
 	int				cmdParam2;		/* the second command paramter */
-#if 0	
-	int				cmdtimestamp;	/* time stamp */
-#else
 	long			cmdtimestamp;	/* time stamp */
-#endif
 	int				rspReturn;		/* the return value from response */
 	int				rspParam1;		/* the first response paramter */
 	int				rspParam2;		/* the second response paramter */
-#if 0
-	int				rsptimestamp;	/* time stamp */
-#else
 	long			rsptimestamp;	/* time stamp */
-#endif
 };
 
 
