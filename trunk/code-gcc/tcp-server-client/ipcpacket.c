@@ -39,6 +39,8 @@ static unsigned short spGetCRC( unsigned char *pPack, int DataCnt )
 
 void spIPCPacketInit( struct ipcpacket *pPack )
 {
+	static unsigned int SN = 0; 
+	
 	if( pPack )
 	{
 		pPack->start[0] = '5';
@@ -51,11 +53,13 @@ void spIPCPacketInit( struct ipcpacket *pPack )
 		pPack->srcport = 77777;
 		memcpy( pPack->tarip, "255.255.255.255", 16 ); 
 		pPack->tarport = 77777;
-		pPack->serialnum = 0;
+		pPack->serialnum = SN;
 		pPack->packetnum = 1;
 		pPack->payloadnum = 0;
 		memset( pPack->payload, 0, 255 );
 		pPack->CRC = 0;
+		
+		SN++;
 	}
 
 	return;

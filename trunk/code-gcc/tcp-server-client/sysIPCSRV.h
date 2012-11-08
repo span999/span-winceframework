@@ -21,18 +21,46 @@ typedef enum {
 typedef void (*PFNIPCCALLBACK)( void );
 
 
-
-int spIPCsend( char *pData, int iLen, tSRVMGRTYP type );
+/* common function call */
 /*
-int spIPCrecv( char *pData, int *piLen, int iSrcID, int iTarID );
-*/
+ * send data to specified server
+ */
+int spIPCsend( char *pData, int iLen, tSRVMGRTYP type );
+
+/*
+ * get data from specified server
+ */
 int spIPCrecv( char *pData, int *piLen, tSRVMGRTYP type  );
+
+/*
+ * send & get feedback for specified server
+ */
 int spIPCrequest( char *pData, int *piLen, tSRVMGRTYP type );
-int spIPCsetCallback( PFNIPCCALLBACK pCB );
+
+/* server funciton call */
+/*
+ * intial server service
+ */
 int spIPCinitServer( tSRVMGRTYP servertype, PFNIPCCALLBACK pCB );
+
+/*
+ * setup server callback
+ */
+int spIPCsetCallback( PFNIPCCALLBACK pCB );
+
+/* packet handling function call */
+/*
+ * parse payload out from specified IPC packet, or from IPC queue if not specified
+ */
 int spIPCpayloadGet( struct ipcpacket *pPack, char *pBuf, int *pLen );
-int spIPCPackBuffOUT( struct ipcpacket *pBuf );
-int spIPCPackResponse( struct ipcpacket *pBuf );
+
+/*
+ * get the oldest packet from IPC queue
+ */
+int spIPCPackBuffOUT( struct ipcpacket *pPack );
+
+
+int spIPCPackResponse( struct ipcpacket *pOrgPack, char *pData, int iLen );
 
 
 #endif /* ##ifndef __SYSIPCSRV_H__ */

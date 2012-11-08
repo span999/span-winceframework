@@ -61,11 +61,11 @@ void *mainPowerMGR( void *argv )
 		iRet = spIPCPackBuffOUT( &ipcPack );
 		if( 0 == iRet )
 		{
+			/* parse the payload */
 			Len = sizeof(struct sysPowerCmd);
 			iRet = spIPCpayloadGet( &ipcPack, (char *)&pwrCmd, &Len );
 			if( iRet > 0 )
 			{
-				struct sysPowerCmd *pThisCmd = NULL;
 				spQMSG( "%s get data %d bytes... \n", "mainPowerMGR", iRet );
 				PowerCmdDump( &pwrCmd );
 				
@@ -77,10 +77,9 @@ void *mainPowerMGR( void *argv )
 				{
 					case 1:				
 					case 2:
-						pThisCmd = (struct sysPowerCmd *)ipcPack.payload;
-						pThisCmd->rspReturn = 5;
-						pThisCmd->rsptimestamp = spGetTimetick();
-						iRet = spIPCPackResponse( &ipcPack );
+						pwrCmd.rspReturn = 5;
+						pwrCmd.rsptimestamp = spGetTimetick();
+						iRet = spIPCPackResponse( &ipcPack, (char *)&pwrCmd, sizeof(struct sysPowerCmd) );
 						break;
 						
 					default:
