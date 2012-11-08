@@ -75,7 +75,7 @@ static int PowerCmdRequest( struct sysPowerCmd *pCmd )
 	iSize = sizeof(struct sysPowerCmd);
 	PowerCmdTime( pCmd );	/* mark the time */
 	/* call ipc */ /* wait for response */
-	spIPCrequest( (char *)pCmd, &iSize, POWERMGR );
+	iRet = spIPCrequest( (char *)pCmd, &iSize, POWERMGR );
 
 	return iRet;
 } 
@@ -87,15 +87,15 @@ void PowerCmdDump( struct sysPowerCmd *pCmd )
 	if( pCmd )
 	{
 		spQMSG( "Power Cmd sign [%d]\n", pCmd->packType );
-		spQMSG( "Power Cmd SN [%d/0x%02x]\n", pCmd->packSN, pCmd->packSN );
+		spQMSG( "Power Cmd SN [%u/0x%02x]\n", pCmd->packSN, pCmd->packSN );
 		spQMSG( "Power Cmd ID [%d/0x%02x]\n", pCmd->cmdID, pCmd->cmdID );
 		spQMSG( "Power Cmd Param1 [%d/0x%02x]\n", pCmd->cmdParam1, pCmd->cmdParam1 );
 		spQMSG( "Power Cmd Param2 [%d/0x%02x]\n", pCmd->cmdParam2, pCmd->cmdParam2 );
-		spQMSG( "Power Cmd timestamp [%d/0x%02x]\n", pCmd->cmdtimestamp, pCmd->cmdtimestamp );
+		spQMSG( "Power Cmd timestamp [%u/0x%08x]\n", pCmd->cmdtimestamp, pCmd->cmdtimestamp );
 		spQMSG( "Power Ret value [%d/0x%02x]\n", pCmd->rspReturn, pCmd->rspReturn );
 		spQMSG( "Power Rsp Param1 [%d/0x%02x]\n", pCmd->rspParam1, pCmd->rspParam1 );
 		spQMSG( "Power Rsp Param2 [%d/0x%02x]\n", pCmd->rspParam2, pCmd->rspParam2 );
-		spQMSG( "Power Rsp timestamp [%d/0x%02x]\n", pCmd->rsptimestamp, pCmd->rsptimestamp );
+		spQMSG( "Power Rsp timestamp [%u/0x%08x]\n", pCmd->rsptimestamp, pCmd->rsptimestamp );
 	}
 
 	return;
@@ -133,13 +133,10 @@ int getCPUActivatedNum( void )
 	PwrCmd.cmdID = GETCPUACTIVATEDNUM;
 
 	/* issue command to Power Manager */
-	/*
-	iRet = PowerCmdSend( &PwrCmd );
-	*/
+	/* iRet = PowerCmdSend( &PwrCmd ); */
+	/* wait & get the response from Power Manager */
 	iRet = PowerCmdRequest( &PwrCmd );
 	PowerCmdDump( &PwrCmd );
-
-	/* wait & get the response from Power Manager */
 
 	return iRet;
 }
@@ -155,12 +152,9 @@ int setCPUActivatedNum( int num )
 	PwrCmd.cmdID = SETCPUACTIVATEDNUM;
 
 	/* issue command to Power Manager */
-	/*
-	iRet = PowerCmdSend( &PwrCmd );
-	*/
-	iRet = PowerCmdRequest( &PwrCmd );
-
+	/* iRet = PowerCmdSend( &PwrCmd ); */
 	/* wait & get the response from Power Manager */
+	iRet = PowerCmdRequest( &PwrCmd );
 
 	return iRet;
 }

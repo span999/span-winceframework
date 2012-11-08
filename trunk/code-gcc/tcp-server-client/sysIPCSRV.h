@@ -59,7 +59,9 @@ int spIPCpayloadGet( struct ipcpacket *pPack, char *pBuf, int *pLen );
  */
 int spIPCPackBuffOUT( struct ipcpacket *pPack );
 
-
+/*
+ * send response base on origonal IPC packet
+ */
 int spIPCPackResponse( struct ipcpacket *pOrgPack, char *pData, int iLen );
 
 
