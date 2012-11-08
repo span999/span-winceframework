@@ -8,7 +8,7 @@ ARFLAG = rcs
 
 SERVER = host
 CLIENT = client
-TESTCILENT = testclient
+TESTCLIENT = testclient
 TCPIPS = tcp-ip 
 HELPER = toolhelps
 HELPERBIN = libtoolhelps.a
@@ -24,7 +24,7 @@ RINGBUFBIN = libspRingBuf.a
 
 
 
-all: clean HELPER TCPIPS CLIENT SERVER RINGBUF IPCSRV POWERSRV TESTCILENT POWERMGR IPCMGR
+all: clean HELPER TCPIPS CLIENT SERVER RINGBUF IPCSRV POWERSRV TESTCLIENT POWERMGR IPCMGR
 	@echo ================================================================
 
 POWERMGR:
@@ -37,9 +37,9 @@ IPCMGR:
 	$(CC) $(CCGLAG) -c ../$(IPCMGR).c
 	$(CC) $(CCGLAG) -o $(IPCMGR) $(IPCMGR).o tcp-server.o ipcpacket.o -L. -l$(HELPER) -l$(IPCSRV)
 
-TESTCILENT:
+TESTCLIENT:
 	@echo ================================================================
-	$(CC) $(CCFLAG) -o $(TESTCILENT) ../$(TESTCILENT).c -L. -l$(HELPER) -l$(POWERSRV) -lpthread
+	$(CC) $(CCFLAG) -o $(TESTCLIENT) ../$(TESTCLIENT).c -L. -l$(HELPER) -l$(POWERSRV) -lpthread
 
 POWERSRV:
 	@echo ================================================================
@@ -78,6 +78,6 @@ HELPER:
 
 clean:
 	@echo ================================================================
-	rm -f $(IPCMGR) $(SERVER) $(CLIENT) *.o *.a
+	rm -f $(IPCMGR) $(SERVER) $(CLIENT) $(POWERMGR) $(TESTCLIENT) *.o *.a
 
 
