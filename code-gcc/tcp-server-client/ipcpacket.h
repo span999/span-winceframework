@@ -15,7 +15,11 @@ struct ipcpacket
 	int				srcport;		/* port number */
 	char			tarip[16];		/* 255.255.255.255 */
 	int				tarport;		/* port number */
+#if 0	
 	int				serialnum;		/* serial number, same data pack use same serial number. start with '0' */
+#else
+	unsigned int	serialnum;		/* serial number, same data pack use same serial number. start with '0' */
+#endif
 	int				packetnum;		/* packet number, used when data zise over packet size. start with '1' */
 	int				payloadnum;		/* size in byte for payload data after */
 	char			payload[255];	/* payload data, max = 255 */

@@ -613,10 +613,14 @@ int spIPCrequest( char *pData, int *piLen, tSRVMGRTYP type )
 }
 
 
-int spIPCPackResponse( struct ipcpacket *pBuf )
+int spIPCPackResponse( struct ipcpacket *pBuf, char *pData, int iLen )
 {
 	int iRet = -1;
 	struct ipcpacket ipcPak;
+
+
+	/* init packet */
+	spIPCPacketInit( &ipcPak );
 	
 	if( pBuf )
 	{
@@ -625,24 +629,24 @@ int spIPCPackResponse( struct ipcpacket *pBuf )
 	
 	spQMSG( "spIPCPackResponse: !!! \n" );
 	
-	/* clean packet */
-	/*
-	spIPCPacketInit( &ipcPak );
-	*/
-	
-	/* setup packet */
-	/* ipcPak.userID = iSrcID; */
-	memcpy( ipcPak.srcip, pBuf->tarip, 10 );
-	ipcPak.srcport = pBuf->tarport;
-	memcpy( ipcPak.tarip, pBuf->srcip, 10 );
-	ipcPak.tarport = pBuf->srcport;
-	ipcPak.serialnum = 0;
-	ipcPak.packetnum = 0;
-	/*
-	ipcPak.payloadnum = iLen;
-	memcpy( ipcPak.payload, pData, iLen );
-	*/
-
+	if( pBuf && pData && (iLen<=255) )
+	{
+		/* setup packet */
+		/* ipcPak.userID = iSrcID; */
+		memcpy( ipcPak.srcip, pBuf->tarip, 10 );
+		ipcPak.srcport = pBuf->tarport;
+		memcpy( ipcPak.tarip, pBuf->srcip, 10 );
+		ipcPak.tarport = pBuf->srcport;
+		/* ipcPak.serialnum = 0; */
+		ipcPak.packetnum = 0;
+		
+		/* copy payload data */
+		ipcPak.payloadnum = iLen;
+		memcpy( ipcPak.payload, pData, iLen );
+	}
+	else
+		spQMSG( "spIPCPackResponse: error !!! \n" );
+		
 	/* add CRC sign */
 	spIPCPacketCRCsign( &ipcPak );
 	spIPCPacketDump( &ipcPak );
