@@ -12,6 +12,8 @@ TESTCLIENT = testclient
 TCPIPS = tcp-ip 
 HELPER = toolhelps
 HELPERBIN = libtoolhelps.a
+IPCPACK = sysIPCpack
+IPCPACKBIN = libsysIPCpack.a
 IPCMGR = sysIPCMGR
 IPCSRV = sysIPCSRV
 IPCSRVBIN = libsysIPCSRV.a
@@ -24,60 +26,64 @@ RINGBUFBIN = libspRingBuf.a
 
 
 
-all: clean HELPER TCPIPS CLIENT SERVER RINGBUF IPCSRV POWERSRV TESTCLIENT POWERMGR IPCMGR
+all: clean HELPER TCPIPS IPCPACK CLIENT SERVER RINGBUF IPCSRV POWERSRV TESTCLIENT POWERMGR IPCMGR
 	@echo ================================================================
 
 POWERMGR:
-	@echo ================================================================
+	@echo === $(POWERMGR) =============================================================
 	$(CC) $(CCGLAG) -c ../$(POWERMGR).c
-	$(CC) $(CCGLAG) -o $(POWERMGR) $(POWERMGR).o $(POWERSRV).o ipcpacket.o -lpthread -L. -l$(HELPER) -l$(IPCSRV)
+	$(CC) $(CCGLAG) -o $(POWERMGR) $(POWERMGR).o -lpthread -L. -l$(HELPER) -l$(IPCSRV) -l$(POWERSRV)
 
 IPCMGR:
-	@echo ================================================================
+	@echo === $(IPCMGR) =============================================================
 	$(CC) $(CCGLAG) -c ../$(IPCMGR).c
-	$(CC) $(CCGLAG) -o $(IPCMGR) $(IPCMGR).o tcp-server.o ipcpacket.o -L. -l$(HELPER) -l$(IPCSRV)
+	$(CC) $(CCGLAG) -o $(IPCMGR) $(IPCMGR).o -L. -l$(HELPER) -l$(IPCSRV)
 
 TESTCLIENT:
-	@echo ================================================================
+	@echo === $(TESTCILENT) =============================================================
 	$(CC) $(CCFLAG) -o $(TESTCLIENT) ../$(TESTCLIENT).c -L. -l$(HELPER) -l$(POWERSRV) -lpthread
 
 POWERSRV:
-	@echo ================================================================
+	@echo === $(POWERSRV) =============================================================
 	$(CC) $(CCFLAG) -c ../$(POWERSRV).c
 	$(AR) $(ARFLAG) $(POWERSRVBIN) $(RINGBUF).o $(IPCSRV).o $(POWERSRV).o ipcpacket.o
 
 IPCSRV:
-	@echo ================================================================
+	@echo === $(IPCSRV) =============================================================
 	$(CC) $(CCFLAG) -c ../$(IPCSRV).c
 	$(AR) $(ARFLAG) $(IPCSRVBIN) $(IPCSRV).o $(RINGBUF).o
 
 RINGBUF:
-	@echo ================================================================
+	@echo === $(RINGBUF) =============================================================
 	$(CC) $(CCFLAG) -c ../$(RINGBUF).c
 	$(AR) $(ARFLAG) $(RINGBUFBIN) $(RINGBUF).o 
 
 SERVER:
-	@echo ================================================================
+	@echo === $(SERVER) =============================================================
 	$(CC) $(CCGLAG) -c ../testrun.c ../main.c
 	$(CC) $(CCGLAG) -o $(SERVER) testrun.o tcp-server.o main.o -L. -l$(HELPER)
 
 CLIENT:
-	@echo ================================================================
+	@echo === $(CLIENT) =============================================================
 	$(CC) $(CCFLAG) -o $(CLIENT) tcp-client.o -L. -l$(HELPER)
 
+IPCPACK:
+	@echo === $(IPCPACK) =============================================================
+	$(CC) $(CCFLAG) -c ../ipcpacket.c
+	$(AR) $(ARFLAG) $(IPCPACKBIN)
+
 TCPIPS:
-	@echo ================================================================
+	@echo === $(TCPIPS) =============================================================
 	$(CC) $(CCFLAG) -c ../tcp-server.c
 	$(CC) $(CCFLAG) -c ../tcp-client.c
-	$(CC) $(CCFLAG) -c ../ipcpacket.c
 
 HELPER:
-	@echo ================================================================
+	@echo === $(HELPER) =============================================================
 	$(CC) $(CCFLAG) -c ../$(HELPER).c
 	$(AR) $(ARFLAG) $(HELPERBIN) $(HELPER).o
 
 clean:
-	@echo ================================================================
+	@echo === clean =============================================================
 	rm -f $(IPCMGR) $(SERVER) $(CLIENT) $(POWERMGR) $(TESTCLIENT) *.o *.a
 
 

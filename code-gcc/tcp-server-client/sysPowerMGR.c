@@ -18,6 +18,47 @@
 static char PROGRAMNAME[] = "sysPowerMGR";
 static pthread_t thread_id;
 
+
+
+
+
+
+
+
+
+
+
+
+static int PowerCmdParser( struct sysPowerCmd *pCmd )
+{
+	int iRet = -1;
+	
+	if( pCmd )
+	{
+		/* get power command */
+		iRet = getPowerCmdID( pCmd );
+		spQMSG( "%s get power command [%d] \n", "PowerCmdParser", iRet );
+		
+		/* proceed the command */
+		switch( iRet )
+		{
+			case 1:				
+			case 2:
+				pCmd->rspReturn = 5;
+				pCmd->rsptimestamp = spGetTimetick();
+				break;
+						
+			default:
+				break;
+		}	///switch
+		iRet = 0;
+	}
+
+	return iRet;
+}
+
+
+
 #define	_USE_USLEEP_
 #define CMD_INTERVAL	200		/* 200 ms polling */
 #define US_MS			1000000
@@ -69,25 +110,14 @@ void *mainPowerMGR( void *argv )
 				spQMSG( "%s get data %d bytes... \n", "mainPowerMGR", iRet );
 				PowerCmdDump( &pwrCmd );
 				
-				/* get power command */
-				iRet = getPowerCmdID( &pwrCmd );
-				spQMSG( "%s get power command %d \n", "mainPowerMGR", iRet );
-				/* proceed the command */
-				switch( iRet )
-				{
-					case 1:				
-					case 2:
-						pwrCmd.rspReturn = 5;
-						pwrCmd.rsptimestamp = spGetTimetick();
-						iRet = spIPCPackResponse( &ipcPack, (char *)&pwrCmd, sizeof(struct sysPowerCmd) );
-						break;
-						
-					default:
-						break;
-				}	///switch
+				iRet = PowerCmdParser( &pwrCmd );
 				
-				/* response */
+				if( 0 == iRet )
+					iRet = spIPCPackResponse( &ipcPack, (char *)&pwrCmd, sizeof(struct sysPowerCmd) );
+
 			}
+			else
+				spQMSG( "%s get payload data %d bytes... fail !! \n", "mainPowerMGR", iRet );
 		}
 	#endif	
 	}
