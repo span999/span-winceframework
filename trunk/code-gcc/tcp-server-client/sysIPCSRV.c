@@ -33,6 +33,86 @@ static pthread_t tcpserv_thread_id;
 
 
 
+static pthread_mutex_t mutex;
+static int mutexON = 0;
+
+static int mutex_INIT( void )
+{
+	int iRet = -1;
+	
+	if( !mutexON )
+	{
+		if( pthread_mutex_init( &mutex, NULL ) != 0 )
+		{
+			spQMSG( "%s: mutex init failed !!\n", __FUNCTION__ );
+		}
+		else
+		{
+			mutexON = 1;
+			iRet = 0;
+		}
+	}
+	else
+		iRet = 0;
+	
+	return iRet;
+}
+
+
+static int mutex_DESTROY( void )
+{
+	int iRet = -1;
+
+	if( mutexON )
+	{
+		pthread_mutex_destroy( &mutex );
+		spQMSG( "%s: mutex destroy !!\n", __FUNCTION__ );
+		mutexON = 0;
+		iRet = 0;
+	}
+	
+	return iRet;
+}
+
+
+static int mutex_LOCK( void )
+{
+	int iRet = -1;
+	
+	mutex_INIT();
+	if( mutexON )
+	{
+		spQMSG( "%s: +++\n", __FUNCTION__ );
+		pthread_mutex_lock( &mutex );
+		spQMSG( "%s: ---\n", __FUNCTION__ );
+	}
+	else
+		spQMSG( "%s: fail !!\n", __FUNCTION__ );
+	
+	return iRet;
+}
+
+
+static int mutex_UNLOCK( void )
+{
+	int iRet = -1;
+	
+	mutex_INIT();
+	if( mutexON )
+	{
+		spQMSG( "%s: +++\n", __FUNCTION__ );
+		pthread_mutex_unlock( &mutex );
+		spQMSG( "%s: ---\n", __FUNCTION__ );
+	}
+	else
+		spQMSG( "%s: fail !!\n", __FUNCTION__ );
+	
+	return iRet;
+}
+
+
+
+
 static CircularBuffer cb;
 static CircularBuffer *pcb = NULL;
 static int RingBufferSize = 1024;
@@ -252,10 +332,19 @@ static void *tcpServer( void *argv )
 	int portno = 0;
 	struct sockaddr_in serv_addr;
 
+	mutex_LOCK();
+
 	/* create socket */
 	ServSock = socket( AF_INET, SOCK_STREAM, 0 );
 	if( ServSock < 0 )
-		spERR( "\r\n  socket() fail return !!" );
+		spERR( "\r\n  tcpServer: socket() fail return !!" );
+	
+	if(1) /* work around for issue "Address already in use" */
+	{
+		/* What you need to do is add the following two line to your code */
+		unsigned value = 1;
+		setsockopt(ServSock, SOL_SOCKET, SO_REUSEADDR, &value, sizeof(value));
+	}
 	
 	/*
 	portno = SERVERPORTNO;
@@ -277,13 +366,15 @@ static void *tcpServer( void *argv )
 	 * bind socket with specified address data
 	 */
 	if( bind( ServSock, (struct sockaddr *)&serv_addr, sizeof(serv_addr) ) < 0 )
-		spERR( "\r\n  bind fail return !!" );
+		spERR( "\r\n  tcpServer: bind fail return !!" );
 
 	/*
 	 * listen to the socket with queue deepth in 5
 	 */
 	if( listen( ServSock, 5 ) < 0 )
-		spERR( "\r\n  listen fail return !!" );
+		spERR( "\r\n  tcpServer: listen fail return !!" );
+
+	mutex_UNLOCK();
 
 	tcpSockListenWait( ServSock, portno );
 
@@ -299,6 +390,7 @@ int tcpSockSend( char *hostname, int portnum, char *pData, int iSize )
 	struct sockaddr_in serv_addr;
 	
 	spQMSG( "tcpSockSend: %s:%d 0x%08x %d !!! \n", hostname, portnum, pData, iSize );
+	mutex_LOCK();
 	
 	SETZERO( &serv_addr, sizeof(serv_addr) );
 	serv_addr.sin_family = AF_INET;
@@ -322,6 +414,8 @@ int tcpSockSend( char *hostname, int portnum, char *pData, int iSize )
 	
 	iRet = 0;
 	close( clntSock );
+	
+	mutex_UNLOCK();
 	
 	return iRet;
 }
@@ -366,6 +460,7 @@ static int tcpSockRecv( char *hostname, int portnum, char *buffer, int buflen )
 	int ndo = 0;
 	struct sockaddr_in serv_addr;
 
+	mutex_LOCK();
 	
 	SETZERO( &serv_addr, sizeof(serv_addr) );
 	serv_addr.sin_family = AF_INET;
@@ -387,6 +482,8 @@ static int tcpSockRecv( char *hostname, int portnum, char *buffer, int buflen )
 	iRet = ndo;
 	close( clntSock );
 	
+	mutex_UNLOCK();
+	
 	return iRet;
 }
 
@@ -398,10 +495,12 @@ static int tcpClient( int port )
 	int portno = 0;
 	struct sockaddr_in serv_addr;
 
+	mutex_LOCK();
+	
 	/* create socket */
 	ServSock = socket( AF_INET, SOCK_STREAM, 0 );
 	if( ServSock < 0 )
-		spERR( "\r\n  socket() fail return !!" );
+		spERR( "\r\n  tcpClient: socket() fail return !!" );
 	
 	portno = port;
 
@@ -420,13 +519,15 @@ static int tcpClient( int port )
 	 * bind socket with specified address data
 	 */
 	if( bind( ServSock, (struct sockaddr *)&serv_addr, sizeof(serv_addr) ) < 0 )
-		spERR( "\r\n  bind fail return !!" );
+		spERR( "\r\n  tcpClient: bind fail return !!" );
 
 	/*
 	 * listen to the socket with queue deepth in 5
 	 */
 	if( listen( ServSock, 5 ) < 0 )
-		spERR( "\r\n  listen fail return !!" );
+		spERR( "\r\n  tcpClient: listen fail return !!" );
+
+	mutex_UNLOCK();
 
 	iRet = ServSock;
 	return iRet;
@@ -444,7 +545,7 @@ static int spIPCrecvEx( int newSock, struct ipcpacket *precvPack )
 	SETZERO( buffer, BUFSIZE );
 	ndo = recv( newSock, buffer, BUFSIZE, 0 );
 	if( ndo < 0 )
-		spERR( "read fail return !!" );
+		spERR( "spIPCrecvEx: read fail return !!\n" );
 
 	iRet = (0 == spIPCPacketCRCvalid((struct ipcpacket *)buffer)?1:0);
 	spQMSG( "HOST:%d bytes CRC:%s \r\n", ndo, iRet?"ok":"fail" );
@@ -595,6 +696,8 @@ int spIPCrequest( char *pData, int *piLen, tSRVMGRTYP type )
 
 	/* setup recv port before send */
 	socket = tcpClient( srcPort );
+	
+	 usleep( 10*1000 ); /* work around for issue "Address already in use" */
 	
 	/* send request */
 	iRet = spIPCsendEx( pData, *piLen, srcID, srcPort, tarID, tarPort );

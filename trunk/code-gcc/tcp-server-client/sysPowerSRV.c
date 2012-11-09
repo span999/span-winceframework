@@ -22,7 +22,74 @@
 	these function routine should be placed at sysPowerSRV.so / sysPowerSRV.a
 */
 
+static pthread_mutex_t mutex;
+static int mutexON = 0;
 
+static int mutex_INIT( void )
+{
+	int iRet = -1;
+	
+	if( !mutexON )
+	{
+		if( pthread_mutex_init( &mutex, NULL ) != 0 )
+		{
+			spQMSG( "%s: mutex init failed !!\n", __FUNCTION__ );
+		}
+		else
+		{
+			mutexON = 1;
+			iRet = 0;
+		}
+	}
+	else
+		iRet = 0;
+	
+	return iRet;
+}
+
+
+static int mutex_DESTROY( void )
+{
+	int iRet = -1;
+
+	if( mutexON )
+	{
+		pthread_mutex_destroy( &mutex );
+		spQMSG( "%s: mutex destroy !!\n", __FUNCTION__ );
+		mutexON = 0;
+		iRet = 0;
+	}
+	
+	return iRet;
+}
+
+
+static int mutex_LOCK( void )
+{
+	int iRet = -1;
+	
+	mutex_INIT();
+	if( mutexON )
+		pthread_mutex_lock( &mutex );
+	else
+		spQMSG( "%s: fail !!\n", __FUNCTION__ );
+	
+	return iRet;
+}
+
+
+static int mutex_UNLOCK( void )
+{
+	int iRet = -1;
+	
+	mutex_INIT();
+	if( mutexON )
+		pthread_mutex_unlock( &mutex );
+	else
+		spQMSG( "%s: fail !!\n", __FUNCTION__ );
+	
+	return iRet;
+}
 
 
 static void PowerCmdInit( struct sysPowerCmd *pCmd )
@@ -280,6 +347,8 @@ int loopbackTest( int test )
 	int iRet = -1;
 	struct sysPowerCmd PwrCmd;
 
+	mutex_LOCK();
+	
 	PowerCmdInit( &PwrCmd );
 	/* pack the data for Power Manager */
 	PwrCmd.cmdID = LOOPBACKTEST;
@@ -295,6 +364,8 @@ int loopbackTest( int test )
 	{
 		iRet = getPowerCmdReturn( &PwrCmd );
 	}
+	
+	mutex_UNLOCK();
 	
 	return iRet;
 }
