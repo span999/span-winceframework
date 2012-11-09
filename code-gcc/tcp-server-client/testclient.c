@@ -18,7 +18,7 @@ int main( int argc, char *argv[] )
 	int iLoop = 0;
 	int iRet = 0;
 
-	while( iLoop < 1000000 )
+	while( iLoop < 1000 )
 	{
 		/*
 		spQMSG( "Please enter the message: " );	
