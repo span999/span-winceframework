@@ -22,6 +22,16 @@
 	these function routine should be placed at sysPowerSRV.so / sysPowerSRV.a
 */
 
+static void setPowerCmdtime( struct sysPowerCmd *pCmd );
+
+
+
+
+
+
+
+
+
 static pthread_mutex_t mutex;
 static int mutexON = 0;
 
@@ -33,7 +43,7 @@ static int mutex_INIT( void )
 	{
 		if( pthread_mutex_init( &mutex, NULL ) != 0 )
 		{
-			spQMSG( "%s: mutex init failed !!\n", __FUNCTION__ );
+			spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
 		}
 		else
 		{
@@ -55,7 +65,7 @@ static int mutex_DESTROY( void )
 	if( mutexON )
 	{
 		pthread_mutex_destroy( &mutex );
-		spQMSG( "%s: mutex destroy !!\n", __FUNCTION__ );
+		spQMSG( "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
 		mutexON = 0;
 		iRet = 0;
 	}
@@ -72,7 +82,7 @@ static int mutex_LOCK( void )
 	if( mutexON )
 		pthread_mutex_lock( &mutex );
 	else
-		spQMSG( "%s: fail !!\n", __FUNCTION__ );
+		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -86,7 +96,7 @@ static int mutex_UNLOCK( void )
 	if( mutexON )
 		pthread_mutex_unlock( &mutex );
 	else
-		spQMSG( "%s: fail !!\n", __FUNCTION__ );
+		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -102,33 +112,29 @@ static void PowerCmdInit( struct sysPowerCmd *pCmd )
 		pCmd->cmdID = -1;
 		pCmd->cmdParam1 = -1;
 		pCmd->cmdParam2 = -1;
-		pCmd->cmdtimestamp = -1;
+		pCmd->cmdtimestamp = 0;
 		pCmd->rspReturn = -1;
 		pCmd->rspParam1 = -1;
 		pCmd->rspParam2 = -1;
-		pCmd->rsptimestamp = -1;
+		pCmd->rsptimestamp = 0;
 	}
-
+	else
+		spQMSG( "ERROR !!! %s:%s: fail \n", __FILE__, __FUNCTION__ );
+	
 	return;
 } 
-
-
-
-static void PowerCmdTime( struct sysPowerCmd *pCmd )
-{
-	if( pCmd )
-		pCmd->cmdtimestamp = spGetTimetick();
-	return;
-}
 
 
 static int PowerCmdSend( struct sysPowerCmd *pCmd )
 {
 	int iRet = -1;
 	
-	PowerCmdTime( pCmd );
+	setPowerCmdtime( pCmd );
 	/* call ipc */
-	spIPCsend( (char *)pCmd, sizeof(struct sysPowerCmd), POWERMGR );
+	iRet = spIPCsend( (char *)pCmd, sizeof(struct sysPowerCmd), POWERMGR );
+
+	if( 0 != iRet )
+		spQMSG( "ERROR !!! %s:%s: fail \n", __FILE__, __FUNCTION__ );
 
 	return iRet;
 } 
@@ -140,10 +146,13 @@ static int PowerCmdRequest( struct sysPowerCmd *pCmd )
 	int iSize = 0;
 	
 	iSize = sizeof(struct sysPowerCmd);
-	PowerCmdTime( pCmd );	/* mark the time */
+	setPowerCmdtime( pCmd );	/* mark the time */
 	/* call ipc */ /* wait for response */
 	iRet = spIPCrequest( (char *)pCmd, &iSize, POWERMGR );
 
+	if( 0 != iRet )
+		spQMSG( "ERROR !!! %s:%s: fail \n", __FILE__, __FUNCTION__ );
+	
 	return iRet;
 } 
 
@@ -169,7 +178,7 @@ void PowerCmdDump( struct sysPowerCmd *pCmd )
 } 
 
 
-int getPowerCmdID( struct sysPowerCmd *pCmd )
+static int chkPowerCmdsign( struct sysPowerCmd *pCmd )
 {
 	int iRet = -1;
 	
@@ -177,16 +186,44 @@ int getPowerCmdID( struct sysPowerCmd *pCmd )
 	{
 		if( pCmd->packType == POWERMGRPACKSIGN )
 		{
-			iRet = pCmd->cmdID;
+			iRet = 0;
 		}
 		else
 		{
-			spQMSG( "ERROR !!! power command sign error [%d]\n", pCmd->packType );
-			iRet = 0;
+			spQMSG( "ERROR !!! %s:%s: power command sign error [%d]\n", __FILE__, __FUNCTION__, pCmd->packType );
 		}	
 	}
+	else
+		spQMSG( "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
+
+	return iRet;
+}
+
+
+int getPowerCmdID( struct sysPowerCmd *pCmd )
+{
+	int iRet = -1;
+	
+	if( pCmd )
+	{
+		if( 0 == chkPowerCmdsign( pCmd ) )
+		{
+			iRet = pCmd->cmdID;
+		}
+	}
+	else
+		spQMSG( "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
+}
+
+
+static void setPowerCmdtime( struct sysPowerCmd *pCmd )
+{
+	if( pCmd )
+		pCmd->cmdtimestamp = spGetTimetick();
+		
+	return;
 }
 
 
@@ -196,16 +233,13 @@ int getPowerCmdReturn( struct sysPowerCmd *pCmd )
 	
 	if( pCmd )
 	{
-		if( pCmd->packType == POWERMGRPACKSIGN )
+		if( 0 == chkPowerCmdsign( pCmd ) )
 		{
 			iRet = pCmd->rspReturn;
 		}
-		else
-		{
-			spQMSG( "ERROR !!! power command sign error [%d]\n", pCmd->packType );
-			iRet = 0;
-		}	
 	}
+	else
+		spQMSG( "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -217,16 +251,14 @@ int setPowerCmdParam1( struct sysPowerCmd *pCmd, int iVal )
 	
 	if( pCmd )
 	{
-		if( pCmd->packType == POWERMGRPACKSIGN )
+		if( 0 == chkPowerCmdsign( pCmd ) )
 		{
 			pCmd->cmdParam1 = iVal;
 			iRet = 0;
 		}
-		else
-		{
-			spQMSG( "ERROR !!! power command sign error [%d]\n", pCmd->packType );
-		}	
 	}
+	else
+		spQMSG( "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -238,16 +270,13 @@ int getPowerCmdParam1( struct sysPowerCmd *pCmd )
 	
 	if( pCmd )
 	{
-		if( pCmd->packType == POWERMGRPACKSIGN )
+		if( 0 == chkPowerCmdsign( pCmd ) )
 		{
 			iRet = pCmd->cmdParam1;
 		}
-		else
-		{
-			spQMSG( "ERROR !!! power command sign error [%d]\n", pCmd->packType );
-			iRet = 0;
-		}	
 	}
+	else
+		spQMSG( "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -259,16 +288,14 @@ int setPowerCmdReturn( struct sysPowerCmd *pCmd, int iVal )
 	
 	if( pCmd )
 	{
-		if( pCmd->packType == POWERMGRPACKSIGN )
+		if( 0 == chkPowerCmdsign( pCmd ) )
 		{
 			pCmd->rspReturn = iVal;
 			iRet = 0;
 		}
-		else
-		{
-			spQMSG( "ERROR !!! power command sign error [%d]\n", pCmd->packType );
-		}	
 	}
+	else
+		spQMSG( "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -280,16 +307,14 @@ int setPowerCmdRsptime( struct sysPowerCmd *pCmd, long iVal )
 	
 	if( pCmd )
 	{
-		if( pCmd->packType == POWERMGRPACKSIGN )
+		if( 0 == chkPowerCmdsign( pCmd ) )
 		{
 			pCmd->rsptimestamp = iVal;
 			iRet = 0;
 		}
-		else
-		{
-			spQMSG( "ERROR !!! power command sign error [%d]\n", pCmd->packType );
-		}	
 	}
+	else
+		spQMSG( "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -355,10 +380,12 @@ int loopbackTest( int test )
 
 	setPowerCmdParam1( &PwrCmd, test );
 
+	PowerCmdDump( &PwrCmd );
 	/* issue command to Power Manager */
 	/* iRet = PowerCmdSend( &PwrCmd ); */
 	/* wait & get the response from Power Manager */
 	iRet = PowerCmdRequest( &PwrCmd );
+	PowerCmdDump( &PwrCmd );
 
 	if( 0 == iRet )
 	{
@@ -367,5 +394,8 @@ int loopbackTest( int test )
 	
 	mutex_UNLOCK();
 	
+	if( iRet != test )
+		spQMSG( "%s:%s: fail !!\n", __FILE__, __FUNCTION__ );
+		
 	return iRet;
 }
