@@ -72,6 +72,7 @@ void spIPCPacketDump( struct ipcpacket *pPack )
 	
 	if( pPack )
 	{
+		spQMSG( "%s:%s: \n", __FILE__, __FUNCTION__ );
 		spQMSG( "start sign [%c%c%c%c]\n", pPack->start[0], pPack->start[1], pPack->start[2], pPack->start[3] );
 		spQMSG( "user ID: %d\n", pPack->userID );
 		spQMSG( "IPC type: %d\n", pPack->ipctype );

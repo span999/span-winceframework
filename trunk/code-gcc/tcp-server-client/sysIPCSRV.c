@@ -27,6 +27,10 @@ static int spIPCgetMgrPort( tSRVMGRTYP type );
 
 
 
+
+
+
+
 static tSRVMGRTYP serverType = 0;
 static PFNIPCCALLBACK ipcCallback = NULL;
 static pthread_t tcpserv_thread_id;
@@ -44,7 +48,7 @@ static int mutex_INIT( void )
 	{
 		if( pthread_mutex_init( &mutex, NULL ) != 0 )
 		{
-			spQMSG( "%s: mutex init failed !!\n", __FUNCTION__ );
+			spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
 		}
 		else
 		{
@@ -66,7 +70,7 @@ static int mutex_DESTROY( void )
 	if( mutexON )
 	{
 		pthread_mutex_destroy( &mutex );
-		spQMSG( "%s: mutex destroy !!\n", __FUNCTION__ );
+		spQMSG( "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
 		mutexON = 0;
 		iRet = 0;
 	}
@@ -81,13 +85,9 @@ static int mutex_LOCK( void )
 	
 	mutex_INIT();
 	if( mutexON )
-	{
-		spQMSG( "%s: +++\n", __FUNCTION__ );
 		pthread_mutex_lock( &mutex );
-		spQMSG( "%s: ---\n", __FUNCTION__ );
-	}
 	else
-		spQMSG( "%s: fail !!\n", __FUNCTION__ );
+		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -99,13 +99,9 @@ static int mutex_UNLOCK( void )
 	
 	mutex_INIT();
 	if( mutexON )
-	{
-		spQMSG( "%s: +++\n", __FUNCTION__ );
 		pthread_mutex_unlock( &mutex );
-		spQMSG( "%s: ---\n", __FUNCTION__ );
-	}
 	else
-		spQMSG( "%s: fail !!\n", __FUNCTION__ );
+		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -122,7 +118,10 @@ static void spIPCPackBuffINIT( void )
 	{
 		cbInit(&cb, RingBufferSize, sizeof(struct ipcpacket));
 		pcb = &cb;
-	}	
+	}
+
+	if( NULL == pcb )
+		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
 	
 	return;
 }
@@ -136,10 +135,12 @@ static int spIPCPackBuffADD( struct ipcpacket *pBuf )
 	{
 		
 		spIPCPackBuffINIT();
-		spQMSG( "spIPCPackBuffADD +++\n" );
+		spQMSG( "%s:%s: +++\n", __FILE__, __FUNCTION__ );
 		cbWrite( pcb, (unsigned char *)pBuf, sizeof(struct ipcpacket) );
-		spQMSG( "spIPCPackBuffADD ---\n" );
+		spQMSG( "%s:%s: ---\n", __FILE__, __FUNCTION__ );
 	}
+	else
+		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -151,9 +152,6 @@ static int spIPCPackBuffGET( struct ipcpacket *pBuf )
 	
 	if( pBuf )
 	{
-		/*
-		spIPCPackBuffINIT();
-		*/
 		if( !cbIsEmpty( pcb ) )
 		{
 			cbRead( pcb, (unsigned char *)pBuf, sizeof(struct ipcpacket) );
@@ -164,10 +162,9 @@ static int spIPCPackBuffGET( struct ipcpacket *pBuf )
 			spQMSG( "spIPCPackBuffGET cbIsEmpty fail !!\n" );
 */
 	}
-/*	
-	if( -1 == iRet )
-		spQMSG( "spIPCPackBuffGET fail !!\n" );
-*/
+	else
+		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
+
 	return iRet;
 }
 
@@ -245,10 +242,9 @@ int spIPCPackBuffOUT( struct ipcpacket *pBuf )
 	{
 		iRet = spIPCPackBuffGET( pBuf );
 	}
-/*	
-	if( -1 == iRet )
-		spQMSG( "spIPCPackBuffOUT fail !!\n" );
-*/
+	else
+		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
+
 	return iRet;
 }
 
@@ -265,27 +261,11 @@ static int tcpSockgetData( int newSock )
 	SETZERO( buffer, BUFSIZE );
 	ndo = recv( newSock, buffer, BUFSIZE, 0 );
 	if( ndo < 0 )
-		spERR( "read fail return !!" );
+		spERR( "socket read fail return !!" );
 
-	/*
-	printf( "[%s]\r\n", buffer ); fflush( stdout );
-	*/
-	spQMSG( "CLIENT:%d bytes CRC:%s \r\n", ndo, ((0 == spIPCPacketCRCvalid((struct ipcpacket *)buffer))?"ok":"fail") );
+	spQMSG( "%s:%s: %d bytes CRC:%s \r\n", __FILE__, __FUNCTION__, ndo, ((0 == spIPCPacketCRCvalid((struct ipcpacket *)buffer))?"ok":"fail") );
 	spIPCPacketDump( (struct ipcpacket *)buffer );
 	spIPCPackBuffADD( (struct ipcpacket *)buffer );
-/*	
-	spIPCPackBuffADD( (struct ipcpacket *)buffer );
-*/
-/* 
-	spIPCPackBuffDUMP();
-*/
-	
-
-#if 0	
-	ndo = send( newSock, "Got your message", 16, 0 );
-	if( ndo < 0 )
-		spERR( "write fail return !!" );
-#endif
 
 	iRet = 0;
 	return iRet;
@@ -306,13 +286,14 @@ static int tcpSockListenWait( int iSocket, int iPort )
 	clilen = sizeof( cli_addr );
 
 waitLoop:
-	spQMSG( "[wait client data~][0x%08x][port:%d]\r\n", tcpserv_thread_id, iPort );
+
+	spQMSG( "%s:%s: [wait client data~][0x%08x][port:%d]\r\n", __FILE__, __FUNCTION__, tcpserv_thread_id, iPort );
 	newSock = accept( ServSock, (struct sockaddr *)&cli_addr, (socklen_t *)&clilen );
 
 	if( newSock < 0 )
 		spERR( "\r\n  accept fail return !!" );
 
-	spQMSG( "[got client data~][0x%08x][port:%d]\r\n", tcpserv_thread_id, iPort );
+	spQMSG( "%s:%s: [got client data~][0x%08x][port:%d]\r\n", __FILE__, __FUNCTION__, tcpserv_thread_id, iPort );
 	
 	ndo = tcpSockgetData( newSock ); 
 	if( ipcCallback )
@@ -389,7 +370,7 @@ int tcpSockSend( char *hostname, int portnum, char *pData, int iSize )
 	int ndo = 0;
 	struct sockaddr_in serv_addr;
 	
-	spQMSG( "tcpSockSend: %s:%d 0x%08x %d !!! \n", hostname, portnum, pData, iSize );
+	spQMSG( "%s:%s: %s:%d 0x%08x %d !!! \n", __FILE__, __FUNCTION__, hostname, portnum, pData, iSize );
 	mutex_LOCK();
 	
 	SETZERO( &serv_addr, sizeof(serv_addr) );
@@ -426,7 +407,7 @@ static int spIPCsendEx( char *pData, int iLen, int iSrcID, int iSrcPort, int iTa
 	int iRet = -1;
 	struct ipcpacket ipcPak;
 	
-	spQMSG( "spIPCsendEx: 0x%08x %d [%d:%d]->[%d:%d]!!! \n", pData, iLen, iSrcID, iSrcPort, iTarID, iTarPort );
+	spQMSG( "%s:%s: 0x%08x %d [%d:%d]->[%d:%d]!!! \n", __FILE__, __FUNCTION__, pData, iLen, iSrcID, iSrcPort, iTarID, iTarPort );
 	
 	/* clean packet */
 	spIPCPacketInit( &ipcPak );
@@ -697,7 +678,7 @@ int spIPCrequest( char *pData, int *piLen, tSRVMGRTYP type )
 	/* setup recv port before send */
 	socket = tcpClient( srcPort );
 	
-	 usleep( 10*1000 ); /* work around for issue "Address already in use" */
+	 usleep( 100*1000 ); /* work around for issue "Address already in use" */
 	
 	/* send request */
 	iRet = spIPCsendEx( pData, *piLen, srcID, srcPort, tarID, tarPort );
