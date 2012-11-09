@@ -42,12 +42,27 @@ static int PowerCmdParser( struct sysPowerCmd *pCmd )
 		/* proceed the command */
 		switch( iRet )
 		{
-			case 1:				
-			case 2:
+			case GETCPUACTIVATEDNUM:				
+			case SETCPUACTIVATEDNUM:
+				#if 0
 				pCmd->rspReturn = 5;
 				pCmd->rsptimestamp = spGetTimetick();
+				#else
+				setPowerCmdReturn( pCmd, 5 );
+				setPowerCmdRsptime( pCmd, spGetTimetick() );
+				#endif
 				break;
-						
+				
+			case LOOPBACKTEST:
+				#if 0
+				pCmd->rspReturn = 5;
+				pCmd->rsptimestamp = spGetTimetick();
+				#else
+				setPowerCmdReturn( pCmd, getPowerCmdParam1(pCmd) );
+				setPowerCmdRsptime( pCmd, spGetTimetick() );
+				#endif
+				break;
+				
 			default:
 				break;
 		}	///switch

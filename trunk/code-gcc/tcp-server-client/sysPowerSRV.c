@@ -114,7 +114,112 @@ int getPowerCmdID( struct sysPowerCmd *pCmd )
 		}
 		else
 		{
+			spQMSG( "ERROR !!! power command sign error [%d]\n", pCmd->packType );
 			iRet = 0;
+		}	
+	}
+	
+	return iRet;
+}
+
+
+int getPowerCmdReturn( struct sysPowerCmd *pCmd )
+{
+	int iRet = -1;
+	
+	if( pCmd )
+	{
+		if( pCmd->packType == POWERMGRPACKSIGN )
+		{
+			iRet = pCmd->rspReturn;
+		}
+		else
+		{
+			spQMSG( "ERROR !!! power command sign error [%d]\n", pCmd->packType );
+			iRet = 0;
+		}	
+	}
+	
+	return iRet;
+}
+
+
+int setPowerCmdParam1( struct sysPowerCmd *pCmd, int iVal )
+{
+	int iRet = -1;
+	
+	if( pCmd )
+	{
+		if( pCmd->packType == POWERMGRPACKSIGN )
+		{
+			pCmd->cmdParam1 = iVal;
+			iRet = 0;
+		}
+		else
+		{
+			spQMSG( "ERROR !!! power command sign error [%d]\n", pCmd->packType );
+		}	
+	}
+	
+	return iRet;
+}
+
+
+int getPowerCmdParam1( struct sysPowerCmd *pCmd )
+{
+	int iRet = -1;
+	
+	if( pCmd )
+	{
+		if( pCmd->packType == POWERMGRPACKSIGN )
+		{
+			iRet = pCmd->cmdParam1;
+		}
+		else
+		{
+			spQMSG( "ERROR !!! power command sign error [%d]\n", pCmd->packType );
+			iRet = 0;
+		}	
+	}
+	
+	return iRet;
+}
+
+
+int setPowerCmdReturn( struct sysPowerCmd *pCmd, int iVal )
+{
+	int iRet = -1;
+	
+	if( pCmd )
+	{
+		if( pCmd->packType == POWERMGRPACKSIGN )
+		{
+			pCmd->rspReturn = iVal;
+			iRet = 0;
+		}
+		else
+		{
+			spQMSG( "ERROR !!! power command sign error [%d]\n", pCmd->packType );
+		}	
+	}
+	
+	return iRet;
+}
+
+
+int setPowerCmdRsptime( struct sysPowerCmd *pCmd, long iVal )
+{
+	int iRet = -1;
+	
+	if( pCmd )
+	{
+		if( pCmd->packType == POWERMGRPACKSIGN )
+		{
+			pCmd->rsptimestamp = iVal;
+			iRet = 0;
+		}
+		else
+		{
 			spQMSG( "ERROR !!! power command sign error [%d]\n", pCmd->packType );
 		}	
 	}
@@ -136,7 +241,12 @@ int getCPUActivatedNum( void )
 	/* iRet = PowerCmdSend( &PwrCmd ); */
 	/* wait & get the response from Power Manager */
 	iRet = PowerCmdRequest( &PwrCmd );
-	PowerCmdDump( &PwrCmd );
+	/* PowerCmdDump( &PwrCmd ); */
+
+	if( 0 == iRet )
+	{
+		iRet = getPowerCmdReturn( &PwrCmd );
+	}
 
 	return iRet;
 }
@@ -156,6 +266,35 @@ int setCPUActivatedNum( int num )
 	/* wait & get the response from Power Manager */
 	iRet = PowerCmdRequest( &PwrCmd );
 
+	if( 0 == iRet )
+	{
+		iRet = getPowerCmdReturn( &PwrCmd );
+	}
+
 	return iRet;
 }
 
+
+int loopbackTest( int test )
+{
+	int iRet = -1;
+	struct sysPowerCmd PwrCmd;
+
+	PowerCmdInit( &PwrCmd );
+	/* pack the data for Power Manager */
+	PwrCmd.cmdID = LOOPBACKTEST;
+
+	setPowerCmdParam1( &PwrCmd, test );
+
+	/* issue command to Power Manager */
+	/* iRet = PowerCmdSend( &PwrCmd ); */
+	/* wait & get the response from Power Manager */
+	iRet = PowerCmdRequest( &PwrCmd );
+
+	if( 0 == iRet )
+	{
+		iRet = getPowerCmdReturn( &PwrCmd );
+	}
+	
+	return iRet;
+}

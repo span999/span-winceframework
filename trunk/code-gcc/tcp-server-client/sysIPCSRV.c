@@ -35,7 +35,7 @@ static pthread_t tcpserv_thread_id;
 
 static CircularBuffer cb;
 static CircularBuffer *pcb = NULL;
-static int RingBufferSize = 16;
+static int RingBufferSize = 1024;
 static void spIPCPackBuffINIT( void )
 {
 	if( NULL == pcb )
