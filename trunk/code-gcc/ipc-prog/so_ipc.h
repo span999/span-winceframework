@@ -10,7 +10,6 @@
 
 
 /* Semaphores */
-int getSemaphoresID( void );
 int getNamedSemaphoresID( char *Name );
 int SemaphoresIDinit( int semid );
 int SemaphoresIDdestroy( int semid );
