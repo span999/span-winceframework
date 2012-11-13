@@ -3,9 +3,13 @@ CC	= /home/span/workshop/bin/toolchains/freescale/gcc-4.4.4-glibc-2.11.1-multili
 DEFINES =
 CFLAGS	= -O2 -I. -L. ${DEFINES}
 
+AR	= /home/span/workshop/bin/toolchains/freescale/gcc-4.4.4-glibc-2.11.1-multilib-1.0/arm-fsl-linux-gnueabi/bin/arm-fsl-linux-gnueabi-ar
+ARFLAG = rcs
+
 PROGRAM	= testcode
 DYNLIB1  = libtest.so
 DYNLIB2  = libipc.so
+STATICLIB1  = libtest
 
 
 all: clean PROGRAM
@@ -16,7 +20,7 @@ all: clean PROGRAM
 #
 
 
-DYNLIB1:
+DYNLIB1: STATICLIB1
 	@echo 
 	@echo ================================================================
 	@echo build dynamic library ${DYNLIB1}
@@ -29,6 +33,11 @@ DYNLIB2:
 	@echo build dynamic library ${DYNLIB2}
 	@echo ----------------------------------------------------------------
 	${CC} ../so_ipc.c -fPIC -shared -o ${DYNLIB2}
+
+STATICLIB1:
+	@echo ================================================================
+	$(CC) $(CFLAGS) -c ../so_ipc.c
+	$(AR) $(ARFLAG) $(STATICLIB1).a so_ipc.o
 
 
 PROGRAM: DYNLIB1 DYNLIB2
