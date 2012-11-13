@@ -4,7 +4,8 @@ DEFINES =
 CFLAGS	= -O2 -I. -L. ${DEFINES}
 
 PROGRAM	= testcode
-DYNLIB  = libtest.so
+DYNLIB1  = libtest.so
+DYNLIB2  = libipc.so
 
 
 all: clean PROGRAM
@@ -15,22 +16,30 @@ all: clean PROGRAM
 #
 
 
-DYNLIB:
+DYNLIB1:
 	@echo 
 	@echo ================================================================
-	@echo build dynamic library
+	@echo build dynamic library ${DYNLIB1}
 	@echo ----------------------------------------------------------------
-	${CC} so_test.c -fPIC -shared -o ${DYNLIB}
+	${CC} so_test.c -fPIC -shared -o ${DYNLIB1}
 
-PROGRAM: DYNLIB
+DYNLIB2:
+	@echo 
+	@echo ================================================================
+	@echo build dynamic library ${DYNLIB2}
+	@echo ----------------------------------------------------------------
+	${CC} so_ipc.c -fPIC -shared -o ${DYNLIB2}
+
+
+PROGRAM: DYNLIB1 DYNLIB2
 	@echo 
 	@echo ================================================================
 	@echo 
-	@echo build binary.
-	@echo use export LD_LIBRARY_PATH=. for linrary path setting!!
+	@echo build binary. ${PROGRAM}
+	@echo   use export LD_LIBRARY_PATH=. for linrary path setting!! 
 	@echo 
 	@echo ----------------------------------------------------------------
-	${CC} main.c ${DYNLIB} -o ${PROGRAM} -lpthread
+	${CC} main.c ${DYNLIB1}  ${DYNLIB2} -o ${PROGRAM} -lpthread
 
 clean:
 	@echo 
