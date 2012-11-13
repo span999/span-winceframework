@@ -99,9 +99,11 @@ static int SemaphoresIDset( int semid, int op )
 	/*                        |         */
 	/*                        v         */
 	iRet = semop( semid, &sb, 1 );
-	printf("\n%s:%s:TRY! semop --- %s ....\n", __FILE__, __FUNCTION__, (0==op)?"unlock":"lock" );
+	
 	if( iRet == -1 )
 		printf("%s:%s:ERROR! semop %s fail\n", __FILE__, __FUNCTION__, (0==op)?"unlock":"lock" );
+	else
+		printf("\n%s:%s:TRY! semop --- %s ....\n", __FILE__, __FUNCTION__, (0==op)?"unlock":"lock" );
 	
 	return iRet;
 }
