@@ -7,7 +7,12 @@ PROGRAM	= testcode
 DYNLIB  = libtest.so
 
 
-all:PROGRAM
+all: clean PROGRAM
+
+#
+# export LD_LIBRARY_PATH=.
+# if you got error while loading shared linraries
+#
 
 
 DYNLIB:
@@ -20,8 +25,10 @@ DYNLIB:
 PROGRAM: DYNLIB
 	@echo 
 	@echo ================================================================
+	@echo 
 	@echo build binary.
 	@echo use export LD_LIBRARY_PATH=. for linrary path setting!!
+	@echo 
 	@echo ----------------------------------------------------------------
 	${CC} main.c ${DYNLIB} -o ${PROGRAM} -lpthread
 
