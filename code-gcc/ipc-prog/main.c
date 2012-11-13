@@ -80,6 +80,28 @@ static int SemaphoresIDinit( int semid )
 }
 
 
+static int SemaphoresIDdestroy( int semid )
+{
+	int iRet = 0;
+	union semun sem_arg;
+	
+	if( semid > -1 )
+	{
+		
+		/* set 1 to #0 semaphores */
+		/* means semaphores #0 is available */
+		sem_arg.val = 1;
+		iRet = semctl( semid, 0, IPC_RMID, sem_arg );
+		if( iRet == -1 )
+			printf("%s:%s:ERROR! semctl fail\n", __FILE__, __FUNCTION__ );
+	}
+	else
+		printf("%s:%s:ERROR! fail\n", __FILE__, __FUNCTION__ );
+	
+	return iRet;
+}
+
+
 static int SemaphoresIDset( int semid, int op )
 {
 	/* op: 0=unlock, 1=lock */
@@ -96,8 +118,8 @@ static int SemaphoresIDset( int semid, int op )
  	
  	printf("\n%s:%s:TRY! semop +++ %s ....\n", __FILE__, __FUNCTION__, (0==op)?"unlock":"lock" );
 	/*                numbers of sembuf */
-	/*                        |         */
-	/*                        v         */
+	/*                sembuf  |         */
+	/*                    v   v         */
 	iRet = semop( semid, &sb, 1 );
 	
 	if( iRet == -1 )
@@ -194,6 +216,7 @@ int main()
 	print_ys( NULL );
 
 	sleep(1); /* leave some time for thread */
+	SemaphoresIDdestroy( iSemaphore );
 	printf( "\ndone \n" );
 	return 0;
 }
