@@ -15,6 +15,20 @@
 
 #include "ipc_common.h"
 #include "so_ipc.h"
+#include "toolhelps.h"
+
+
+/* debug flag sets */
+#define	dDBG			0x00001000
+#define	dINFO			0x00000100
+#define	dERR			0x00010000
+/* #define	DBGFSET		(dDBG|dINFO|dERR) */
+#define	DBGFSET		(dINFO|dERR)
+#define	dF(x)		(DBGFSET&x)
+
+
+
+
 
 
 #define		RINGBUFSIZE		1024
@@ -45,7 +59,7 @@ static int SendData( char *pData, unsigned int len )
 		iRet = 0;
 	}
 	else
-		printf("%s:%s: ERROR!! SharedMemoryIDinit return null pointer !\n", __FILE__, __FUNCTION__);
+		spMSG( dF(dERR), "%s:%s: ERROR!! SharedMemoryIDinit return null pointer !\n", __FILE__, __FUNCTION__);
 	SharedMemoryIDdeinit( pPool );
 
 	/* set for pool available */
@@ -85,7 +99,7 @@ static int RequestData( char *pData, unsigned int len )
 	iRet = SendData( pData, len );
 	
 	/* wait response after data out*/
-	printf("%s:%s: wait for response !\n", __FILE__, __FUNCTION__);
+	spMSG( dF(dDBG), "%s:%s: wait for response !\n", __FILE__, __FUNCTION__);
 	semLOCK( clientpoolAvailableSEM_ID );
 	
 	
@@ -96,7 +110,7 @@ static int RequestData( char *pData, unsigned int len )
 		memcpy( pData, pPool, len );
 	}
 	else
-		printf("%s:%s: ERROR!! SharedMemoryIDinit return null pointer !\n", __FILE__, __FUNCTION__);
+		spMSG( dF(dERR), "%s:%s: ERROR!! SharedMemoryIDinit return null pointer !\n", __FILE__, __FUNCTION__);
 	SharedMemoryIDdeinit( pPool );
 
 
@@ -129,8 +143,8 @@ int main()
 	/* SemaphoresIDinit( hostpoolReadySEM_ID ); */
 
 
-	printf("The process ID is %d\n", (int)getpid() );
-	printf("The parent process ID is %d\n", (int)getppid() );
+	spMSG( dF(dINFO), "The process ID is %d\n", (int)getpid() );
+	spMSG( dF(dINFO), "The parent process ID is %d\n", (int)getppid() );
 
 	if(1)
 	{
@@ -145,12 +159,12 @@ int main()
 			ipc.payloadnum = sizeof(struct sysPowerCmd);
 			
 			pCmd->cmdID = iLoop;
-			printf("send cmd data [%d] to shared memory\n", iLoop );
+			spMSG( dF(dINFO), "send cmd data [%d] to shared memory\n", iLoop );
 			#if 0
 			SendData( (char *)&ipc, sizeof(struct ipcpacket) );
 			#else
 			iRet = RequestData( (char *)&ipc, sizeof(struct ipcpacket) );
-			printf("get cmd resp [%d]\n", pCmd->rspReturn );
+			spMSG( dF(dINFO), "get cmd resp [%d] from shared memory\n", pCmd->rspReturn );
 			#endif
 			iLoop++;
 		}
@@ -160,7 +174,7 @@ int main()
 	sleep(0); /* leave some time for thread */
 	/* getchar(); */
 
-	printf( "\ndone \n" );
+	spMSG( dF(dINFO), "\ndone \n" );
 	return 0;
 }
 

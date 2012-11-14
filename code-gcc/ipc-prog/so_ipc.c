@@ -14,6 +14,18 @@
 #include <sys/shm.h>
 #include <sys/ipc.h>
 
+#include "toolhelps.h"
+
+
+/* debug flag sets */
+#define	dDBG			0x00001000
+#define	dINFO			0x00000100
+#define	dERR			0x00010000
+/* #define	DBGFSET		(dDBG|dINFO|dERR) */
+#define	DBGFSET		(dINFO|dERR)
+#define	dF(x)		(DBGFSET&x)
+
+
 
 
 
@@ -41,18 +53,18 @@ int getSemaphoresID( void )
 		if( semid != -1 )
 		{
 			iRet = semid;
-			printf("%s:%s:OK! semget [%d] \n", __FILE__, __FUNCTION__, semid );
+			spMSG( dF(dDBG), "%s:%s:OK! semget [%d] \n", __FILE__, __FUNCTION__, semid );
 		}
 		else
 		{
-			printf("%s:%s:ERROR! semget fail [%d] \n", __FILE__, __FUNCTION__, semid );
+			spMSG( dF(dERR), "%s:%s:ERROR! semget fail [%d] \n", __FILE__, __FUNCTION__, semid );
 			/*
 			perror( "ERROR!! " );
 			*/ 
 		}
 	}
 	else
-		printf("%s:%s:ERROR! ftok fail\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s:ERROR! ftok fail\n", __FILE__, __FUNCTION__ );
 		
 	return iRet;
 }
@@ -73,18 +85,18 @@ int getNamedSemaphoresID( char *Name )
 		if( semid != -1 )
 		{
 			iRet = semid;
-			printf("%s:%s:OK! semget [%d] \n", __FILE__, __FUNCTION__, semid );
+			spMSG( dF(dDBG), "%s:%s:OK! semget [%d] \n", __FILE__, __FUNCTION__, semid );
 		}
 		else
 		{
-			printf("%s:%s:ERROR! semget fail [%d] \n", __FILE__, __FUNCTION__, semid );
+			spMSG( dF(dERR), "%s:%s:ERROR! semget fail [%d] \n", __FILE__, __FUNCTION__, semid );
 			/*
 			perror( "ERROR!! " );
 			*/ 
 		}
 	}
 	else
-		printf("%s:%s:ERROR! ftok fail\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s:ERROR! ftok fail\n", __FILE__, __FUNCTION__ );
 		
 	return iRet;
 }
@@ -105,18 +117,18 @@ int getNamedSemaphoresIDs( char *Name )
 		if( semid != -1 )
 		{
 			iRet = semid;
-			printf("%s:%s:OK! semget [%d] \n", __FILE__, __FUNCTION__, semid );
+			spMSG( dF(dDBG), "%s:%s:OK! semget [%d] \n", __FILE__, __FUNCTION__, semid );
 		}
 		else
 		{
-			printf("%s:%s:ERROR! semget fail [%d] \n", __FILE__, __FUNCTION__, semid );
+			spMSG( dF(dERR), "%s:%s:ERROR! semget fail [%d] \n", __FILE__, __FUNCTION__, semid );
 			/*
 			perror( "ERROR!! " );
 			*/ 
 		}
 	}
 	else
-		printf("%s:%s:ERROR! ftok fail\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s:ERROR! ftok fail\n", __FILE__, __FUNCTION__ );
 		
 	return iRet;
 }
@@ -135,10 +147,10 @@ int SemaphoresIDinit( int semid )
 		sem_arg.val = 1;
 		iRet = semctl( semid, 0, SETVAL, sem_arg );
 		if( iRet == -1 )
-			printf("%s:%s:ERROR! semctl fail\n", __FILE__, __FUNCTION__ );
+			spMSG( dF(dERR), "%s:%s:ERROR! semctl fail\n", __FILE__, __FUNCTION__ );
 	}
 	else
-		printf("%s:%s:ERROR! fail\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s:ERROR! fail\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -157,10 +169,10 @@ int SemaphoresIDinitwait( int semid )
 		sem_arg.val = 0;
 		iRet = semctl( semid, 0, SETVAL, sem_arg );
 		if( iRet == -1 )
-			printf("%s:%s:ERROR! semctl fail\n", __FILE__, __FUNCTION__ );
+			spMSG( dF(dERR), "%s:%s:ERROR! semctl fail\n", __FILE__, __FUNCTION__ );
 	}
 	else
-		printf("%s:%s:ERROR! fail\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s:ERROR! fail\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -179,10 +191,10 @@ int SemaphoresIDdestroy( int semid )
 		sem_arg.val = 1;
 		iRet = semctl( semid, 0, IPC_RMID, sem_arg );
 		if( iRet == -1 )
-			printf("%s:%s:ERROR! semctl fail\n", __FILE__, __FUNCTION__ );
+			spMSG( dF(dERR), "%s:%s:ERROR! semctl fail\n", __FILE__, __FUNCTION__ );
 	}
 	else
-		printf("%s:%s:ERROR! fail\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s:ERROR! fail\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -202,16 +214,18 @@ int SemaphoresIDset( int semid, int op )
 	sb.sem_flg = 0;
  	
  	
- 	printf("\n%s:%s:TRY! semop +++ %s ....\n", __FILE__, __FUNCTION__, (0==op)?"unlock":"lock" );
+ 	spMSG( dF(dDBG), "\n%s:%s:TRY! semop +++ %s ....\n", __FILE__, __FUNCTION__, (0==op)?"unlock":"lock" );
 	/*                numbers of sembuf */
 	/*                sembuf  |         */
 	/*                    v   v         */
 	iRet = semop( semid, &sb, 1 );
 	
 	if( iRet == -1 )
-		printf("%s:%s:ERROR! semop %s fail\n", __FILE__, __FUNCTION__, (0==op)?"unlock":"lock" );
+		spMSG( dF(dERR), "%s:%s:ERROR! semop %s fail\n", __FILE__, __FUNCTION__, (0==op)?"unlock":"lock" );
 	else
-		printf("\n%s:%s:TRY! semop --- %s ....\n", __FILE__, __FUNCTION__, (0==op)?"unlock":"lock" );
+	{
+		spMSG( dF(dDBG), "\n%s:%s:TRY! semop --- %s ....\n", __FILE__, __FUNCTION__, (0==op)?"unlock":"lock" );
+	}
 	
 	return iRet;
 }
@@ -239,18 +253,18 @@ int getNamedSharedMemoryID( char *Name, int iSize )
 		if( shmid != -1 )
 		{
 			iRet = shmid;
-			printf("%s:%s:OK! shmget [%d] \n", __FILE__, __FUNCTION__, shmid );
+			spMSG( dF(dDBG), "%s:%s:OK! shmget [%d] \n", __FILE__, __FUNCTION__, shmid );
 		}
 		else
 		{
-			printf("%s:%s:ERROR! shmget fail [%d] \n", __FILE__, __FUNCTION__, shmid );
+			spMSG( dF(dERR), "%s:%s:ERROR! shmget fail [%d] \n", __FILE__, __FUNCTION__, shmid );
 			/*
 			perror( "ERROR!! " );
 			*/ 
 		}
 	}
 	else
-		printf("%s:%s:ERROR! ftok fail\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s:ERROR! ftok fail\n", __FILE__, __FUNCTION__ );
 		
 	return iRet;
 }
@@ -275,18 +289,18 @@ int getNamedSharedMemoryIDs( char *Name, int iSize )
 		if( shmid != -1 )
 		{
 			iRet = shmid;
-			printf("%s:%s:OK! shmget [%d] \n", __FILE__, __FUNCTION__, shmid );
+			spMSG( dF(dDBG), "%s:%s:OK! shmget [%d] \n", __FILE__, __FUNCTION__, shmid );
 		}
 		else
 		{
-			printf("%s:%s:ERROR! shmget fail [%d] \n", __FILE__, __FUNCTION__, shmid );
+			spMSG( dF(dERR), "%s:%s:ERROR! shmget fail [%d] \n", __FILE__, __FUNCTION__, shmid );
 			/*
 			perror( "ERROR!! " );
 			*/ 
 		}
 	}
 	else
-		printf("%s:%s:ERROR! ftok fail\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s:ERROR! ftok fail\n", __FILE__, __FUNCTION__ );
 		
 	return iRet;
 }
@@ -303,18 +317,18 @@ int SharedMemoryIDinit( int shmid, char **This )
 		pV = shmat( shmid, NULL, 0 );
 		if( pV == NULL || pV == -1 )
 		{
-			printf("%s:%s:ERROR! shmat fail [0x%x]->[0x%x]\n", __FILE__, __FUNCTION__, *This, pV );
+			spMSG( dF(dERR), "%s:%s:ERROR! shmat fail [0x%x]->[0x%x]\n", __FILE__, __FUNCTION__, *This, pV );
 			iRet = -1;
 		}
 		else
 		{
-			printf("%s:%s:OK! shmat [0x%x]\n", __FILE__, __FUNCTION__, *This );
+			spMSG( dF(dDBG), "%s:%s:OK! shmat [0x%x]\n", __FILE__, __FUNCTION__, *This );
 			*This = (char *)pV;
-			printf("->[0x%x]\n", *This );
+			spMSG( dF(dDBG), "->[0x%x]\n", *This );
 		}
 	}
 	else
-		printf("%s:%s:ERROR! fail\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s:ERROR! fail\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -329,10 +343,10 @@ int SharedMemoryIDdeinit( char *This )
 		/* de-attach memory address */
 		iRet = shmdt( This );
 		if( iRet == -1 )
-			printf("%s:%s:ERROR! shmdt [0x%x] fail\n", __FILE__, __FUNCTION__, This );
+			spMSG( dF(dERR), "%s:%s:ERROR! shmdt [0x%x] fail\n", __FILE__, __FUNCTION__, This );
 	}
 	else
-		printf("%s:%s:ERROR! fail\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s:ERROR! fail\n", __FILE__, __FUNCTION__ );
 		
 	return iRet;
 }
@@ -346,10 +360,10 @@ int SharedMemoryIDdestroy( int shmid )
 	{
 		iRet = shmctl( shmid, IPC_RMID, NULL );
 		if( iRet == -1 )
-			printf("%s:%s:ERROR! shmctl fail\n", __FILE__, __FUNCTION__ );
+			spMSG( dF(dERR), "%s:%s:ERROR! shmctl fail\n", __FILE__, __FUNCTION__ );
 	}
 	else
-		printf("%s:%s:ERROR! fail\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s:ERROR! fail\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
