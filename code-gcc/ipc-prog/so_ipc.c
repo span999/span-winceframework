@@ -301,8 +301,11 @@ int SharedMemoryIDinit( int shmid, char **This )
 	{
 		/* attach memory address */
 		pV = shmat( shmid, NULL, 0 );
-		if( pV == NULL )
-			printf("%s:%s:ERROR! shmat fail\n", __FILE__, __FUNCTION__ );
+		if( pV == NULL || pV == -1 )
+		{
+			printf("%s:%s:ERROR! shmat fail [0x%x]->[0x%x]\n", __FILE__, __FUNCTION__, *This, pV );
+			iRet = -1;
+		}
 		else
 		{
 			printf("%s:%s:OK! shmat [0x%x]\n", __FILE__, __FUNCTION__, *This );
