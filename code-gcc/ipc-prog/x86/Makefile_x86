@@ -10,9 +10,12 @@ PROGRAM	= testcode
 DYNLIB1  = libtest.so
 DYNLIB2  = libipc.so
 STATICLIB1  = libtest
+CLIENT = clinet
+HOST = host
 
 
-all: clean PROGRAM
+
+all: clean PROGRAM TESTPROG
 
 #
 # export LD_LIBRARY_PATH=.
@@ -49,6 +52,17 @@ PROGRAM: DYNLIB1 DYNLIB2
 	@echo 
 	@echo ----------------------------------------------------------------
 	${CC} ../main.c ${DYNLIB1}  ${DYNLIB2} -o ${PROGRAM} -lpthread
+
+TESTPROG:
+	@echo 
+	@echo ================================================================
+	@echo 
+	@echo build binary. ${PROGRAM}
+	@echo   use export LD_LIBRARY_PATH=. for linrary path setting!! 
+	@echo 
+	@echo ----------------------------------------------------------------
+	${CC} ../host.c ${DYNLIB2} -o ${HOST} -lpthread
+	${CC} ../client.c ${DYNLIB2} -o ${CLIENT} -lpthread
 
 clean:
 	@echo 
