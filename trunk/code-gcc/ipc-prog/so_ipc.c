@@ -90,6 +90,38 @@ int getNamedSemaphoresID( char *Name )
 }
 
 
+int getNamedSemaphoresIDs( char *Name )
+{
+	int iRet = -1;
+	key_t key = -1;
+	int semid = -1;
+
+	/* create semaphores with 1 resource */
+	key = ftok( Name, 'E');
+	if( -1 != key )
+	{
+		semid = semget( key, 1, 0 );
+
+		if( semid != -1 )
+		{
+			iRet = semid;
+			printf("%s:%s:OK! semget [%d] \n", __FILE__, __FUNCTION__, semid );
+		}
+		else
+		{
+			printf("%s:%s:ERROR! semget fail [%d] \n", __FILE__, __FUNCTION__, semid );
+			/*
+			perror( "ERROR!! " );
+			*/ 
+		}
+	}
+	else
+		printf("%s:%s:ERROR! ftok fail\n", __FILE__, __FUNCTION__ );
+		
+	return iRet;
+}
+
+
 int SemaphoresIDinit( int semid )
 {
 	int iRet = 0;
@@ -101,6 +133,28 @@ int SemaphoresIDinit( int semid )
 		/* set 1 to #0 semaphores */
 		/* means semaphores #0 is available */
 		sem_arg.val = 1;
+		iRet = semctl( semid, 0, SETVAL, sem_arg );
+		if( iRet == -1 )
+			printf("%s:%s:ERROR! semctl fail\n", __FILE__, __FUNCTION__ );
+	}
+	else
+		printf("%s:%s:ERROR! fail\n", __FILE__, __FUNCTION__ );
+	
+	return iRet;
+}
+
+
+int SemaphoresIDinitwait( int semid )
+{
+	int iRet = 0;
+	union semun sem_arg;
+	
+	if( semid > -1 )
+	{
+		
+		/* set 0 to #0 semaphores */
+		/* means semaphores #0 is NOT available */
+		sem_arg.val = 0;
 		iRet = semctl( semid, 0, SETVAL, sem_arg );
 		if( iRet == -1 )
 			printf("%s:%s:ERROR! semctl fail\n", __FILE__, __FUNCTION__ );
@@ -202,6 +256,42 @@ int getNamedSharedMemoryID( char *Name, int iSize )
 }
 
 
+int getNamedSharedMemoryIDs( char *Name, int iSize )
+{
+	int iRet = -1;
+	key_t key = -1;
+	int shmid = -1;
+
+	/* create shared memory with key */
+	key = ftok( Name, 'M');
+	if( -1 != key )
+	{
+		#if 1
+		shmid = shmget( key, iSize, 0 );
+		#else
+		shmid = shmget( key, iSize, 0 );
+		#endif
+
+		if( shmid != -1 )
+		{
+			iRet = shmid;
+			printf("%s:%s:OK! shmget [%d] \n", __FILE__, __FUNCTION__, shmid );
+		}
+		else
+		{
+			printf("%s:%s:ERROR! shmget fail [%d] \n", __FILE__, __FUNCTION__, shmid );
+			/*
+			perror( "ERROR!! " );
+			*/ 
+		}
+	}
+	else
+		printf("%s:%s:ERROR! ftok fail\n", __FILE__, __FUNCTION__ );
+		
+	return iRet;
+}
+
+
 int SharedMemoryIDinit( int shmid, char **This )
 {
 	int iRet = 0;
@@ -215,7 +305,7 @@ int SharedMemoryIDinit( int shmid, char **This )
 			printf("%s:%s:ERROR! shmat fail\n", __FILE__, __FUNCTION__ );
 		else
 		{
-			printf("%s:%s:OK! shmat [0x%x]", __FILE__, __FUNCTION__, *This );
+			printf("%s:%s:OK! shmat [0x%x]\n", __FILE__, __FUNCTION__, *This );
 			*This = (char *)pV;
 			printf("->[0x%x]\n", *This );
 		}
