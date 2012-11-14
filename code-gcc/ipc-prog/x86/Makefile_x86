@@ -7,9 +7,11 @@ AR	= ar
 ARFLAG = rcs
 
 PROGRAM	= testcode
+TESTPROG = testprog
 DYNLIB1  = libtest.so
 DYNLIB2  = libipc.so
 STATICLIB1  = libtest
+RINGBUFF = spRingBuf
 CLIENT = clinet
 HOST = host
 
@@ -25,48 +27,53 @@ all: clean PROGRAM TESTPROG
 
 DYNLIB1: STATICLIB1
 	@echo 
-	@echo ================================================================
+	@echo ==== ${DYNLIB1} ============================================================
 	@echo build dynamic library ${DYNLIB1}
 	@echo ----------------------------------------------------------------
 	${CC} ../so_test.c -fPIC -shared -o ${DYNLIB1}
 
 DYNLIB2:
 	@echo 
-	@echo ================================================================
+	@echo ==== ${DYNLIB2} ============================================================
 	@echo build dynamic library ${DYNLIB2}
 	@echo ----------------------------------------------------------------
 	${CC} ../so_ipc.c -fPIC -shared -o ${DYNLIB2}
 
 STATICLIB1:
-	@echo ================================================================
+	@echo ==== $(STATICLIB1) ============================================================
 	$(CC) $(CFLAGS) -c ../so_ipc.c
 	$(AR) $(ARFLAG) $(STATICLIB1).a so_ipc.o
 
+RINGBUFF:
+	@echo ==== $(RINGBUFF) ============================================================
+	$(CC) $(CFLAGS) -c ../$(RINGBUFF).c
+	$(AR) $(ARFLAG) lib$(RINGBUFF).a $(RINGBUFF).o
 
-PROGRAM: DYNLIB1 DYNLIB2
+
+PROGRAM: RINGBUFF DYNLIB1 DYNLIB2
 	@echo 
-	@echo ================================================================
+	@echo ==== ${PROGRAM} ============================================================
 	@echo 
 	@echo build binary. ${PROGRAM}
 	@echo   use export LD_LIBRARY_PATH=. for linrary path setting!! 
 	@echo 
 	@echo ----------------------------------------------------------------
-	${CC} ../main.c ${DYNLIB1}  ${DYNLIB2} -o ${PROGRAM} -lpthread
+	${CC} ../main.c ${DYNLIB1}  ${DYNLIB2} -o ${PROGRAM} -lpthread -L. -l$(RINGBUFF)
 
 TESTPROG:
 	@echo 
-	@echo ================================================================
+	@echo ==== ${TESTPROG} ============================================================
 	@echo 
-	@echo build binary. ${PROGRAM}
+	@echo build binary. ${TESTPROG}
 	@echo   use export LD_LIBRARY_PATH=. for linrary path setting!! 
 	@echo 
 	@echo ----------------------------------------------------------------
-	${CC} ../host.c ${DYNLIB2} -o ${HOST} -lpthread
-	${CC} ../client.c ${DYNLIB2} -o ${CLIENT} -lpthread
+	${CC} ../host.c ${DYNLIB2} -o ${HOST} -lpthread -L. -l$(RINGBUFF)
+	${CC} ../client.c ${DYNLIB2} -o ${CLIENT} -lpthread -L. -l$(RINGBUFF)
 
 clean:
 	@echo 
-	@echo ================================================================
+	@echo ==== clean ============================================================
 	@echo Erasing objects and backup files.
 	@echo ----------------------------------------------------------------
 	rm -f ${PROGRAM} *.so *.o

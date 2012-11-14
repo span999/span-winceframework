@@ -17,77 +17,77 @@
 #include "so_ipc.h"
 
 
-
-static int iSemaphore = 0;
-static int iSharedMemory = 0;
+#define		RINGBUFSIZE		1024
 
 
-
+static int hostpoolReadySEM_ID = 0;
+static int hostpoolAvailableSEM_ID = 0;
+static int hostSHMpool_ID = 0;
 
 static int SendData( char *pData, unsigned int len )
 {
 	int iRet = -1;
+	char *pPool = NULL;
 	
+	/* wait for pool ready */
+	semLOCK(hostpoolReadySEM_ID);
+
+	/* wait for pool available */
+	/* semLOCK(hostpoolAvailableSEM_ID); */
 	
+	/* copy data to pool */
+	SharedMemoryIDinit( hostSHMpool_ID, &pPool );
+	if( NULL != pPool )
+		memcpy( pPool, pData, len );
+	else
+		printf("%s:%s: ERROR!! SharedMemoryIDinit return null pointer !\n", __FILE__, __FUNCTION__);
+	SharedMemoryIDdeinit( pPool );
+
+	/* set for pool available */
+	semUNLOCK(hostpoolAvailableSEM_ID);
+	/* set for pool ready */
+	semUNLOCK(hostpoolReadySEM_ID);
+
 	return iRet;
 }
-
-
 
 
 int main()
 {
 	int return_value = 0;
 	pthread_t thread_id;
+	char testchar = 'A';
+	int iLoop = 10;
 
-	#if 0
-	iSemaphore = getSemaphoresID();
-	#else
-	iSemaphore = getNamedSemaphoresID( "/dev/null" );
-	#endif
-	SemaphoresIDinit( iSemaphore );
+	/* create shared memory */
+	hostSHMpool_ID = getNamedSharedMemoryIDs( NAMEDHOSTSHMPATH, RINGBUFSIZE );
 
-#define	SHM_SIZE	(1024*4)
-	iSharedMemory = getNamedSharedMemoryID( "/dev/zero", SHM_SIZE );
+	/* create semaphore for memory pool available */
+	hostpoolAvailableSEM_ID = getNamedSemaphoresIDs( NAMEDHOSTSEMAVAPATH );
+	/* init semaphore as pending */
+	/* SemaphoresIDinitwait( hostpoolAvailableSEM_ID ); */
 
-
+	/* create semaphore for memory pool ready */
+	hostpoolReadySEM_ID = getNamedSemaphoresIDs( NAMEDHOSTSeMRDYPATH );
+	/* init semaphore as free */
+	/* SemaphoresIDinit( hostpoolReadySEM_ID ); */
 
 
 	printf("The process ID is %d\n", (int)getpid() );
 	printf("The parent process ID is %d\n", (int)getppid() );
 
-
-
-
-	if(1)
+	
+	while( iLoop > 0 )
 	{
-		char *pChar;
-		
-		SharedMemoryIDinit( iSharedMemory, &pChar );
-		
-		strncpy( pChar, "This is a test string!", 24 );
-		pChar[0] = 'T';
-		pChar[1] = 'h';
-		pChar[2] = 'a';
-		pChar[3] = 't';
-		
-		printf( "set ==>%s [%c][%c][%c][%c]\n", pChar, pChar[0], pChar[1], pChar[2], pChar[3] );
-		SharedMemoryIDdeinit( pChar );		
-	}
-
-	if(1)
-	{
-		char *pChar2;
-		
-		SharedMemoryIDinit( iSharedMemory, &pChar2 );
-		printf( "get ==>%s [%c][%c][%c][%c]\n", pChar2, pChar2[0], pChar2[1], pChar2[2], pChar2[3] );
-		SharedMemoryIDdeinit( pChar2 );
+		printf("send data [%c] to shared memory\n", testchar );
+		SendData( &testchar, sizeof(testchar) );
+		testchar = testchar + 1;
+		iLoop--;
 	}
 
 
-	sleep(1); /* leave some time for thread */
-	SemaphoresIDdestroy( iSemaphore );
-	SharedMemoryIDdestroy(iSharedMemory );
+	sleep(0); /* leave some time for thread */
+	getchar();
 
 	printf( "\ndone \n" );
 	return 0;
