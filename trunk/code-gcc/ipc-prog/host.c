@@ -17,6 +17,20 @@
 #include "ipc_common.h"
 #include "so_ipc.h"
 #include "spRingBuf.h"
+#include "toolhelps.h"
+
+
+/* debug flag sets */
+#define	dDBG			0x00001000
+#define	dINFO			0x00000100
+#define	dERR			0x00010000
+/* #define	DBGFSET		(dDBG|dINFO|dERR) */
+#define	DBGFSET		(dINFO|dERR)
+#define	dF(x)		(DBGFSET&x)
+
+
+
+
 
 
 
@@ -48,16 +62,16 @@ static int spRingBufADD( char *pData, int Size )
 	{
 		if( RINGBUFLEVEL <= Size )
 		{
-			printf("%s:%s: cbWrite +++\n", __FILE__, __FUNCTION__);
+			spMSG( dF(dDBG), "%s:%s: cbWrite +++\n", __FILE__, __FUNCTION__ );
 			cbWrite( spRingBufINIT(0), (unsigned char *)pData, Size );
-			printf("%s:%s: cbWrite ---\n", __FILE__, __FUNCTION__);
+			spMSG( dF(dDBG), "%s:%s: cbWrite ---\n", __FILE__, __FUNCTION__ );
 			iRet = 0;
 		}
 		else
-			printf("%s:%s: ERROR!! data over flow !\n", __FILE__, __FUNCTION__);
+			spMSG( dF(dERR), "%s:%s: ERROR!! data over flow !\n", __FILE__, __FUNCTION__ );
 	}
 	else
-		printf("%s:%s: ERROR!! null pointer !\n", __FILE__, __FUNCTION__);
+		spMSG( dF(dERR), "%s:%s: ERROR!! null pointer !\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -77,13 +91,15 @@ static int spRingBufGET( char *pData, int Size )
 				iRet = 0;
 			}
 			else
-				printf("%s:%s: ERROR!! data empty !\n", __FILE__, __FUNCTION__);
+			{
+				spMSG( dF(dDBG), "%s:%s: ERROR!! data empty !\n", __FILE__, __FUNCTION__ );
+			}
 		}
 		else
-			printf("%s:%s: ERROR!! data not available !\n", __FILE__, __FUNCTION__);
+			spMSG( dF(dERR), "%s:%s: ERROR!! data not available !\n", __FILE__, __FUNCTION__ );
 	}
 	else
-		printf("%s:%s: ERROR!! null pointer !\n", __FILE__, __FUNCTION__);
+		spMSG( dF(dERR), "%s:%s: ERROR!! null pointer !\n", __FILE__, __FUNCTION__ );
 
 	return iRet;
 }
@@ -103,13 +119,13 @@ static int spRingBufPEEK( char *pData, int Size )
 				iRet = 0;
 			}
 			else
-				printf("%s:%s: ERROR!! data over flow !\n", __FILE__, __FUNCTION__);
+				spMSG( dF(dERR), "%s:%s: ERROR!! data over flow !\n", __FILE__, __FUNCTION__ );
 		}
 		else
-			printf("%s:%s: ERROR!! data not available !\n", __FILE__, __FUNCTION__);
+			spMSG( dF(dERR), "%s:%s: ERROR!! data not available !\n", __FILE__, __FUNCTION__ );
 	}
 	else
-		printf("%s:%s: ERROR!! null pointer !\n", __FILE__, __FUNCTION__);
+		spMSG( dF(dERR), "%s:%s: ERROR!! null pointer !\n", __FILE__, __FUNCTION__ );
 
 	return iRet;
 }
@@ -128,26 +144,26 @@ static void *sharedmemoryHandler( void* unused )
 	for(;;)
 	{
 		/* wait data available */
-		printf("%s:%s: wait data available +++\n", __FILE__, __FUNCTION__);
+		spMSG( dF(dDBG), "%s:%s: wait data available +++\n", __FILE__, __FUNCTION__);
 		semLOCK(hostpoolAvailableSEM_ID);
-		printf("%s:%s: wait data available ---\n", __FILE__, __FUNCTION__);
+		spMSG( dF(dDBG), "%s:%s: wait data available ---\n", __FILE__, __FUNCTION__);
 		/* data available, lock pool with NOT ready */
 		semLOCK(hostpoolReadySEM_ID);
-		printf("%s:%s: pending for data copy +++\n", __FILE__, __FUNCTION__);
+		spMSG( dF(dDBG), "%s:%s: pending for data copy +++\n", __FILE__, __FUNCTION__);
 		
 		/* copy data to ring buffer */
 		SharedMemoryIDinit( hostSHMpool_ID, &pPool );
 		if( NULL != pPool )
 		{
 			spRingBufADD( pPool, RINGBUFSIZE );
-			printf( "%s:%s: add [%c] to ringbuffer\n", __FILE__, __FUNCTION__, *(char *)pPool );
+			spMSG( dF(dDBG), "%s:%s: add [%c] to ringbuffer\n", __FILE__, __FUNCTION__, *(char *)pPool );
 		}
 		else
-			printf( "%s:%s: ERROR!! SharedMemoryIDinit return null pointer !\n", __FILE__, __FUNCTION__ );
+			spMSG( dF(dERR), "%s:%s: ERROR!! SharedMemoryIDinit return null pointer !\n", __FILE__, __FUNCTION__ );
 		SharedMemoryIDdeinit( pPool );
 		
 		/* copy done, unlock pool with ready */
-		printf("%s:%s: pending for data copy ---\n", __FILE__, __FUNCTION__);
+		spMSG( dF(dDBG), "%s:%s: pending for data copy ---\n", __FILE__, __FUNCTION__);
 		semUNLOCK(hostpoolReadySEM_ID);
 	}
 
@@ -178,7 +194,7 @@ static void *ringbufferHandler( void* unused )
 			pCmd = (struct sysPowerCmd *)pipc->payload;
 			clientSHMid = pipc->srcSHMid;
 			clientSEMid = pipc->srcSEMid;
-			printf( "%s:%s: SHM:%d SEM:%d size:%d\n", __FILE__, __FUNCTION__, clientSHMid, clientSEMid, pipc->payloadnum );
+			spMSG( dF(dDBG), "%s:%s: SHM:%d SEM:%d size:%d\n", __FILE__, __FUNCTION__, clientSHMid, clientSEMid, pipc->payloadnum );
 			if( pipc->payloadnum > 0 )
 			{
 				pCmd->rspReturn = pCmd->cmdID;
@@ -191,18 +207,20 @@ static void *ringbufferHandler( void* unused )
 					memcpy( pPool, tmpBuf, sizeof(struct ipcpacket) );
 				}
 				else
-					printf("%s:%s: ERROR!! SharedMemoryIDinit return null pointer !\n", __FILE__, __FUNCTION__);
+					spMSG( dF(dERR), "%s:%s: ERROR!! SharedMemoryIDinit return null pointer !\n", __FILE__, __FUNCTION__);
 				SharedMemoryIDdeinit( pPool );
 				
 				/* release */
 				semUNLOCK(clientSEMid);
 			}
 			else
-				printf( "%s:%s: ERROR!! payloadnum = %d \n", __FILE__, __FUNCTION__, pipc->payloadnum );
+				spMSG( dF(dERR), "%s:%s: ERROR!! payloadnum = %d \n", __FILE__, __FUNCTION__, pipc->payloadnum );
 
 		}
 		else
-			printf("%s:%s: ERROR!! spRingBufGET \n", __FILE__, __FUNCTION__);
+		{
+			spMSG( dF(dDBG), "%s:%s: ERROR!! spRingBufGET \n", __FILE__, __FUNCTION__);
+		}
 	}
 
 	return NULL;
@@ -233,8 +251,8 @@ int main()
 
 
 
-	printf( "The process ID is %d\n", (int)getpid() );
-	printf( "The parent process ID is %d\n", (int)getppid() );
+	spMSG( dF(dINFO), "The process ID is %d\n", (int)getpid() );
+	spMSG( dF(dINFO), "The parent process ID is %d\n", (int)getppid() );
 
 	pthread_create( &thread_id1, NULL, &ringbufferHandler, NULL );
 	pthread_create( &thread_id2, NULL, &sharedmemoryHandler, NULL );
@@ -247,7 +265,7 @@ int main()
 	SemaphoresIDdestroy( hostpoolAvailableSEM_ID );
 	SharedMemoryIDdestroy(hostSHMpool_ID );
 
-	printf( "\ndone \n" );
+	spMSG( dF(dINFO), "\ndone \n" );
 	return iRet;
 }
 

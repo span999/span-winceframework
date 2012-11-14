@@ -11,8 +11,9 @@ TESTPROG = testprog
 DYNLIB1  = libtest.so
 DYNLIB2  = libipc.so
 STATICLIB1  = libtest
+STATICLIB2  = toolhelps
 RINGBUFF = spRingBuf
-CLIENT = clinet
+CLIENT = client
 HOST = host
 
 
@@ -25,7 +26,7 @@ all: clean PROGRAM TESTPROG
 #
 
 
-DYNLIB1: STATICLIB1
+DYNLIB1:
 	@echo 
 	@echo ==== ${DYNLIB1} ============================================================
 	@echo build dynamic library ${DYNLIB1}
@@ -37,12 +38,18 @@ DYNLIB2:
 	@echo ==== ${DYNLIB2} ============================================================
 	@echo build dynamic library ${DYNLIB2}
 	@echo ----------------------------------------------------------------
-	${CC} ../so_ipc.c -fPIC -shared -o ${DYNLIB2}
+	${CC} ../so_ipc.c ../$(STATICLIB2).c -fPIC -shared -o ${DYNLIB2}
 
 STATICLIB1:
 	@echo ==== $(STATICLIB1) ============================================================
 	$(CC) $(CFLAGS) -c ../so_ipc.c
 	$(AR) $(ARFLAG) $(STATICLIB1).a so_ipc.o
+
+STATICLIB2:
+	@echo ==== $(STATICLIB2) ============================================================
+	$(CC) $(CFLAGS) -c ../$(STATICLIB2).c
+	$(AR) $(ARFLAG) lib$(STATICLIB2).a $(STATICLIB2).o
+
 
 RINGBUFF:
 	@echo ==== $(RINGBUFF) ============================================================
@@ -50,7 +57,7 @@ RINGBUFF:
 	$(AR) $(ARFLAG) lib$(RINGBUFF).a $(RINGBUFF).o
 
 
-PROGRAM: RINGBUFF DYNLIB1 DYNLIB2
+PROGRAM: RINGBUFF STATICLIB1 STATICLIB2 DYNLIB1 DYNLIB2
 	@echo 
 	@echo ==== ${PROGRAM} ============================================================
 	@echo 
@@ -68,12 +75,12 @@ TESTPROG:
 	@echo   use export LD_LIBRARY_PATH=. for linrary path setting!! 
 	@echo 
 	@echo ----------------------------------------------------------------
-	${CC} ../host.c ${DYNLIB2} -o ${HOST} -lpthread -L. -l$(RINGBUFF)
-	${CC} ../client.c ${DYNLIB2} -o ${CLIENT} -lpthread -L. -l$(RINGBUFF)
+	${CC} ../host.c ${DYNLIB2} -o ${HOST} -lpthread -L. -l$(RINGBUFF) -l$(STATICLIB2)
+	${CC} ../client.c ${DYNLIB2} -o ${CLIENT} -lpthread -L. -l$(RINGBUFF) -l$(STATICLIB2)
 
 clean:
 	@echo 
 	@echo ==== clean ============================================================
 	@echo Erasing objects and backup files.
 	@echo ----------------------------------------------------------------
-	rm -f ${PROGRAM} *.so *.o
+	rm -f ${PROGRAM} ${HOST} ${CLIENT} *.a *.so *.o
