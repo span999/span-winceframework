@@ -77,7 +77,7 @@ static int spRingBufGET( char *pData, int Size )
 				iRet = 0;
 			}
 			else
-				printf("%s:%s: ERROR!! data over flow !\n", __FILE__, __FUNCTION__);
+				printf("%s:%s: ERROR!! data empty !\n", __FILE__, __FUNCTION__);
 		}
 		else
 			printf("%s:%s: ERROR!! data not available !\n", __FILE__, __FUNCTION__);
@@ -155,13 +155,67 @@ static void *sharedmemoryHandler( void* unused )
 }
 
 
+static void *ringbufferHandler( void* unused )
+{
+	int iRet = -1;
+	char tmpBuf[2048];
+	char *pPool;
+
+	
+	for(;;)
+	{
+		sleep(1);
+		/* check ring buffer data available */
+		iRet = spRingBufGET( tmpBuf, 2048 );
+		if( 0 == iRet )
+		{
+			struct ipcpacket *pipc;
+			struct sysPowerCmd *pCmd;
+			int clientSHMid = -1;
+			int clientSEMid = -1;
+			
+			pipc = (struct ipcpacket *)tmpBuf;
+			pCmd = (struct sysPowerCmd *)pipc->payload;
+			clientSHMid = pipc->srcSHMid;
+			clientSEMid = pipc->srcSEMid;
+			printf( "%s:%s: SHM:%d SEM:%d size:%d\n", __FILE__, __FUNCTION__, clientSHMid, clientSEMid, pipc->payloadnum );
+			if( pipc->payloadnum > 0 )
+			{
+				pCmd->rspReturn = pCmd->cmdID;
+				
+				/* copy data to pool */
+				iRet = SharedMemoryIDinit( clientSHMid, &pPool );
+				///if( NULL != pPool )
+				if( (pPool > 0) && (0 == iRet) )
+				{
+					memcpy( pPool, tmpBuf, sizeof(struct ipcpacket) );
+				}
+				else
+					printf("%s:%s: ERROR!! SharedMemoryIDinit return null pointer !\n", __FILE__, __FUNCTION__);
+				SharedMemoryIDdeinit( pPool );
+				
+				/* release */
+				semUNLOCK(clientSEMid);
+			}
+			else
+				printf( "%s:%s: ERROR!! payloadnum = %d \n", __FILE__, __FUNCTION__, pipc->payloadnum );
+
+		}
+		else
+			printf("%s:%s: ERROR!! spRingBufGET \n", __FILE__, __FUNCTION__);
+	}
+
+	return NULL;
+}
+
 
 
 
 int main()
 {
 	int iRet = 0;
-	pthread_t thread_id;
+	pthread_t thread_id1;
+	pthread_t thread_id2;
 
 
 	/* create shared memory */
@@ -182,35 +236,10 @@ int main()
 	printf( "The process ID is %d\n", (int)getpid() );
 	printf( "The parent process ID is %d\n", (int)getppid() );
 
-	pthread_create( &thread_id, NULL, &sharedmemoryHandler, NULL );
+	pthread_create( &thread_id1, NULL, &ringbufferHandler, NULL );
+	pthread_create( &thread_id2, NULL, &sharedmemoryHandler, NULL );
 
 
-/*
-	if(1)
-	{
-		char *pChar;
-		
-		SharedMemoryIDinit( iSharedMemory, &pChar );
-		
-		strncpy( pChar, "This is a test string!", 24 );
-		pChar[0] = 'T';
-		pChar[1] = 'h';
-		pChar[2] = 'a';
-		pChar[3] = 't';
-		
-		printf( "set ==>%s [%c][%c][%c][%c]\n", pChar, pChar[0], pChar[1], pChar[2], pChar[3] );
-		SharedMemoryIDdeinit( pChar );		
-	}
-
-	if(1)
-	{
-		char *pChar2;
-		
-		SharedMemoryIDinit( iSharedMemory, &pChar2 );
-		printf( "get ==>%s [%c][%c][%c][%c]\n", pChar2, pChar2[0], pChar2[1], pChar2[2], pChar2[3] );
-		SharedMemoryIDdeinit( pChar2 );
-	}
-*/
 
 	sleep(0); /* leave some time for thread */
 	getchar();
