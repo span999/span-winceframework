@@ -63,6 +63,28 @@ void spQMSG( char *msgout, ... )
 }
 
 
+void spMSG( int iFlag, char *msgout, ... )
+{
+	int n, size = 128;
+	char *p;
+	va_list ap;
+	
+	if( iFlag <= 0 )
+		return;
+
+	if((p = malloc(size)) == NULL)
+		return;
+
+	va_start(ap, msgout);
+	n = vsnprintf(p, size, msgout, ap);
+	va_end(ap);
+
+	fprintf( stderr, "%s", p );
+	
+	free(p);
+}
+
+
 void myerr( char *msg )
 {
 	perror( msg );
