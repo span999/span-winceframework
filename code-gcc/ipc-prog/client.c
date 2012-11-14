@@ -139,7 +139,7 @@ int main()
 		int iRet = -1;
 		
 		iLoop = 0;
-		while( iLoop < 10 )
+		while( iLoop < 1000 )
 		{
 			pCmd = (struct sysPowerCmd *)ipc.payload;
 			ipc.payloadnum = sizeof(struct sysPowerCmd);
@@ -158,7 +158,7 @@ int main()
 
 
 	sleep(0); /* leave some time for thread */
-	getchar();
+	/* getchar(); */
 
 	printf( "\ndone \n" );
 	return 0;

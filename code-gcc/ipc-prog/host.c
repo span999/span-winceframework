@@ -164,7 +164,7 @@ static void *ringbufferHandler( void* unused )
 	
 	for(;;)
 	{
-		sleep(1);
+		usleep( (iRet == -1)?500000:10000 );
 		/* check ring buffer data available */
 		iRet = spRingBufGET( tmpBuf, 2048 );
 		if( 0 == iRet )
