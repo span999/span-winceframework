@@ -6,23 +6,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-/*
-#include <pthread.h>
-*/
 #include <string.h>
-/*
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-*/
 #include "toolhelps.h"
 #include "ipcpacket.h"
 #include "sysIPCSRV.h"
-#include "sysIPCSRVtcp.h"
 #include "sysIPCSRVbuffer.h"
-/*
-#include "spRingBuf.h"
-*/
+
+
+#define	__USE_TCP__
+
+#ifdef __USE_TCP__
+#include "sysIPCSRVtcp.h"
+#else
+#include "sysIPCSRVshm.h"
+#endif
 
 
 
@@ -140,6 +137,13 @@ int spIPCsend( char *pData, int iLen, tSRVMGRTYP type )
 	
 	iRet = spIPCsendEx( pData, iLen, srcID, srcPort, tarID, tarPort );	
 #endif
+
+#ifdef __USE_TCP__
+
+#else
+
+#endif
+
 	return iRet;
 }
 
@@ -153,6 +157,12 @@ int spIPCrecv( char *pData, int *piLen, tSRVMGRTYP type  )
 /*
 	iRet = spIPCrecvEx( pData, piLen, 0, 0 );
 */
+#ifdef __USE_TCP__
+
+#else
+
+#endif
+
 	return iRet;
 }
 
@@ -160,8 +170,12 @@ int spIPCrecv( char *pData, int *piLen, tSRVMGRTYP type  )
 int spIPCrequest( char *pData, int *piLen, tSRVMGRTYP type )
 {
 	int iRet = -1;
-	
+
+#ifdef __USE_TCP__	
 	iRet = spIPCrequestTCP( pData, piLen, type );
+#else
+	iRet = spIPCrequestSHM( pData, piLen, type );
+#endif
 
 	return iRet;
 }
@@ -171,7 +185,11 @@ int spIPCPackResponse( struct ipcpacket *pBuf, char *pData, int iLen )
 {
 	int iRet = -1;
 	
+#ifdef __USE_TCP__
 	iRet = spIPCPackResponseTCP( pBuf, pData, iLen );
+#else
+	iRet = spIPCPackResponseSHM( pBuf, pData, iLen );
+#endif
 
 	return iRet;
 }
@@ -184,7 +202,11 @@ int spIPCsetCallback( PFNIPCCALLBACK pCB )
 	if( pCB )
 	{
 		ipcCallback = pCB;
+#ifdef __USE_TCP__
 		spIPCsetCallbackTCP( pCB );
+#else
+		spIPCsetCallbackSHM( pCB );
+#endif
 		iRet = 0;
 	}
 
@@ -198,8 +220,11 @@ int spIPCinitServer( tSRVMGRTYP servertype, PFNIPCCALLBACK pCB )
 
 	serverType = servertype;
 	iRet = spIPCsetCallback( pCB );
-
+#ifdef __USE_TCP__
 	iRet = spIPCinitServerTCP( servertype, pCB );
+#else
+	iRet = spIPCinitServerSHM( servertype, pCB );
+#endif
 
 
 	return iRet;
@@ -208,13 +233,21 @@ int spIPCinitServer( tSRVMGRTYP servertype, PFNIPCCALLBACK pCB )
 
 int spIPCInit( void )
 {
+#ifdef __USE_TCP__
 	spIPCInitTCP();
+#else
+	spIPCInitSHM();
+#endif
 	return 0;
 }
 
 
 int spIPCDeinit( void )
 {
+#ifdef __USE_TCP__
 	spIPCDeinitTCP();
+#else
+	spIPCDeinitSHM();
+#endif
 	return 0;
 }
