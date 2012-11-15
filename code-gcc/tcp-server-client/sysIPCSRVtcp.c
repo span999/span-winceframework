@@ -16,6 +16,7 @@
 #include "toolhelps.h"
 #include "ipcpacket.h"
 #include "sysIPCSRV.h"
+#include "sysIPCSRVbuffer.h"
 #include "spRingBuf.h"
 
 
@@ -230,7 +231,7 @@ static int tcpSockRecv( char *hostname, int portnum, char *buffer, int buflen )
 }
 
 
-static int spIPCrecvEx( int newSock, struct ipcpacket *precvPack )
+int spIPCrecvEx( int newSock, struct ipcpacket *precvPack )
 {
 	#define	BUFSIZE	512
 	int iRet = -1;
@@ -255,6 +256,38 @@ static int spIPCrecvEx( int newSock, struct ipcpacket *precvPack )
 	/*
 	spIPCPackBuffADD( (struct ipcpacket *)buffer );
 	*/ 
+
+	return iRet;
+}
+
+
+int spIPCsendEx( char *pData, int iLen, int iSrcID, int iSrcPort, int iTarID, int iTarPort )
+{
+	int iRet = -1;
+	struct ipcpacket ipcPak;
+	
+	spQMSG( "%s:%s: 0x%08x %d [%d:%d]->[%d:%d]!!! \n", __FILE__, __FUNCTION__, pData, iLen, iSrcID, iSrcPort, iTarID, iTarPort );
+	
+	/* clean packet */
+	spIPCPacketInit( &ipcPak );
+	
+	/* setup packet */
+	ipcPak.userID = iSrcID;
+	memcpy( ipcPak.srcip, "127.0.0.1", 10 );
+	ipcPak.srcport = iSrcPort;
+	memcpy( ipcPak.tarip, "127.0.0.1", 10 );
+	ipcPak.tarport = iTarPort;
+	ipcPak.serialnum = 0;
+	ipcPak.packetnum = 0;
+	ipcPak.payloadnum = iLen;
+	memcpy( ipcPak.payload, pData, iLen );
+
+	/* add CRC sign */
+	spIPCPacketCRCsign( &ipcPak );
+	spIPCPacketDump( &ipcPak );
+	
+	/* send out with tcp socket */
+	iRet = tcpSockSend( ipcPak.tarip, ipcPak.tarport, (char *)&ipcPak, sizeof(struct ipcpacket) );
 
 	return iRet;
 }

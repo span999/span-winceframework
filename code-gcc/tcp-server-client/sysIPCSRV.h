@@ -58,9 +58,11 @@ int spIPCpayloadGet( struct ipcpacket *pPack, char *pBuf, int *pLen );
  * get the oldest packet from IPC queue
  */
 int spIPCPackBuffOUT( struct ipcpacket *pPack );
+/*
 int spIPCPackBuffADD( struct ipcpacket *pBuf );
 int spIPCPackBuffGET( struct ipcpacket *pBuf );
 int spIPCPackBuffDUMP( void );
+*/
 
 /*
  * send response base on origonal IPC packet

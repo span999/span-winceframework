@@ -16,6 +16,7 @@
 #include "ipcpacket.h"
 #include "sysIPCSRV.h"
 #include "sysIPCSRVtcp.h"
+#include "sysIPCSRVbuffer.h"
 #include "spRingBuf.h"
 
 
@@ -106,7 +107,7 @@ static int mutex_UNLOCK( void )
 #endif
 
 
-
+#if 0
 static CircularBuffer cb;
 static CircularBuffer *pcb = NULL;
 static int RingBufferSize = 1024;
@@ -185,7 +186,7 @@ int spIPCPackBuffDUMP( void )
 	
 	return iRet;
 }
-
+#endif
 
 int spIPCpayloadGet( struct ipcpacket *pPack, char *pBuf, int *pLen )
 {
@@ -207,8 +208,9 @@ int spIPCpayloadGet( struct ipcpacket *pPack, char *pBuf, int *pLen )
 			}
 		}
 	}
-	else
+	else /* pPack == NULL */
 	{
+#if 0		
 		if( !cbIsEmpty( pcb ) )
 		{
 			struct ipcpacket elem;
@@ -225,6 +227,9 @@ int spIPCpayloadGet( struct ipcpacket *pPack, char *pBuf, int *pLen )
 				memcpy( pBuf, pThisPack->payload, pThisPack->payloadnum );
 			}
 		}
+#else
+		iRet = spIPCPackBuffpayloadGet( pBuf, pLen );
+#endif
 	}
 
 	/* return actual size */
@@ -405,36 +410,6 @@ int tcpSockSend( char *hostname, int portnum, char *pData, int iSize )
 }
 #endif
 
-static int spIPCsendEx( char *pData, int iLen, int iSrcID, int iSrcPort, int iTarID, int iTarPort )
-{
-	int iRet = -1;
-	struct ipcpacket ipcPak;
-	
-	spQMSG( "%s:%s: 0x%08x %d [%d:%d]->[%d:%d]!!! \n", __FILE__, __FUNCTION__, pData, iLen, iSrcID, iSrcPort, iTarID, iTarPort );
-	
-	/* clean packet */
-	spIPCPacketInit( &ipcPak );
-	
-	/* setup packet */
-	ipcPak.userID = iSrcID;
-	memcpy( ipcPak.srcip, "127.0.0.1", 10 );
-	ipcPak.srcport = iSrcPort;
-	memcpy( ipcPak.tarip, "127.0.0.1", 10 );
-	ipcPak.tarport = iTarPort;
-	ipcPak.serialnum = 0;
-	ipcPak.packetnum = 0;
-	ipcPak.payloadnum = iLen;
-	memcpy( ipcPak.payload, pData, iLen );
-
-	/* add CRC sign */
-	spIPCPacketCRCsign( &ipcPak );
-	spIPCPacketDump( &ipcPak );
-	
-	/* send out with tcp socket */
-	iRet = tcpSockSend( ipcPak.tarip, ipcPak.tarport, (char *)&ipcPak, sizeof(struct ipcpacket) );
-
-	return iRet;
-}
 
 #if 0
 static int tcpSockRecv( char *hostname, int portnum, char *buffer, int buflen )
@@ -625,6 +600,39 @@ static int spIPCgetClientPort( void )
 	return iRet;
 }
 
+
+#if 0
+static int spIPCsendEx( char *pData, int iLen, int iSrcID, int iSrcPort, int iTarID, int iTarPort )
+{
+	int iRet = -1;
+	struct ipcpacket ipcPak;
+	
+	spQMSG( "%s:%s: 0x%08x %d [%d:%d]->[%d:%d]!!! \n", __FILE__, __FUNCTION__, pData, iLen, iSrcID, iSrcPort, iTarID, iTarPort );
+	
+	/* clean packet */
+	spIPCPacketInit( &ipcPak );
+	
+	/* setup packet */
+	ipcPak.userID = iSrcID;
+	memcpy( ipcPak.srcip, "127.0.0.1", 10 );
+	ipcPak.srcport = iSrcPort;
+	memcpy( ipcPak.tarip, "127.0.0.1", 10 );
+	ipcPak.tarport = iTarPort;
+	ipcPak.serialnum = 0;
+	ipcPak.packetnum = 0;
+	ipcPak.payloadnum = iLen;
+	memcpy( ipcPak.payload, pData, iLen );
+
+	/* add CRC sign */
+	spIPCPacketCRCsign( &ipcPak );
+	spIPCPacketDump( &ipcPak );
+	
+	/* send out with tcp socket */
+	iRet = tcpSockSend( ipcPak.tarip, ipcPak.tarport, (char *)&ipcPak, sizeof(struct ipcpacket) );
+
+	return iRet;
+}
+#endif
 
 int spIPCsend( char *pData, int iLen, tSRVMGRTYP type )
 {
