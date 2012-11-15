@@ -158,23 +158,18 @@ int main( int argc, char *argv )
 
 
 	/* setup ipc communication routine */
+	spIPCInit();
 	/* set server type & callback */
 	spIPCinitServer( POWERMGR, IPCCallBack );
 	
 	/* create routine for power manager */
 	pthread_create( &thread_id, NULL, &mainPowerMGR, NULL );
 
-	#if 0
-	/* wait until loop end */
-	while( 1 )
-	{
-		sleep( 1 );
-		if( ++iLoop % 5 == 0 )
-			spQMSG( "%s is here ... \n", PROGRAMNAME );
-	}
-	#else
+
 	getchar();
-	#endif
+
+
+	spIPCDeinit();
 	spQMSG( "Exit %s !!! \n", PROGRAMNAME );
 	return iRet;
 }

@@ -14,6 +14,9 @@ int setPowerCmdReturn( struct sysPowerCmd *pCmd, int iVal );
 int setPowerCmdRsptime( struct sysPowerCmd *pCmd, long iVal );
 
 
+int sysPowerSRVInit( void );
+int sysPowerSRVDeinit( void );
+
 int getCPUActivatedNum( void );
 int setCPUActivatedNum( int num );
 

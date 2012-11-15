@@ -29,73 +29,8 @@ static pthread_t tcpserv_thread_id;
 
 
 static pthread_mutex_t mutex;
-static int mutexON = 0;
+static int mutexINITED = 0;
 
-static int mutex_INIT( void )
-{
-	int iRet = -1;
-	
-	if( !mutexON )
-	{
-		if( pthread_mutex_init( &mutex, NULL ) != 0 )
-		{
-			spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
-		}
-		else
-		{
-			mutexON = 1;
-			iRet = 0;
-		}
-	}
-	else
-		iRet = 0;
-	
-	return iRet;
-}
-
-
-static int mutex_DESTROY( void )
-{
-	int iRet = -1;
-
-	if( mutexON )
-	{
-		pthread_mutex_destroy( &mutex );
-		spQMSG( "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
-		mutexON = 0;
-		iRet = 0;
-	}
-	
-	return iRet;
-}
-
-
-static int mutex_LOCK( void )
-{
-	int iRet = -1;
-	
-	mutex_INIT();
-	if( mutexON )
-		pthread_mutex_lock( &mutex );
-	else
-		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
-	
-	return iRet;
-}
-
-
-static int mutex_UNLOCK( void )
-{
-	int iRet = -1;
-	
-	mutex_INIT();
-	if( mutexON )
-		pthread_mutex_unlock( &mutex );
-	else
-		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
-	
-	return iRet;
-}
 
 
 
@@ -165,7 +100,7 @@ int tcpSockSend( char *hostname, int portnum, char *pData, int iSize )
 	struct sockaddr_in serv_addr;
 	
 	spQMSG( "%s:%s: %s:%d 0x%08x %d !!! \n", __FILE__, __FUNCTION__, hostname, portnum, pData, iSize );
-	mutex_LOCK();
+	spMxL( &mutex, &mutexINITED );
 	
 	SETZERO( &serv_addr, sizeof(serv_addr) );
 	serv_addr.sin_family = AF_INET;
@@ -190,7 +125,7 @@ int tcpSockSend( char *hostname, int portnum, char *pData, int iSize )
 	iRet = 0;
 	close( clntSock );
 	
-	mutex_UNLOCK();
+	spMxU( &mutex, &mutexINITED );
 	
 	return iRet;
 }
@@ -203,7 +138,7 @@ static int tcpSockRecv( char *hostname, int portnum, char *buffer, int buflen )
 	int ndo = 0;
 	struct sockaddr_in serv_addr;
 
-	mutex_LOCK();
+	spMxL( &mutex, &mutexINITED );
 	
 	SETZERO( &serv_addr, sizeof(serv_addr) );
 	serv_addr.sin_family = AF_INET;
@@ -225,7 +160,7 @@ static int tcpSockRecv( char *hostname, int portnum, char *buffer, int buflen )
 	iRet = ndo;
 	close( clntSock );
 	
-	mutex_UNLOCK();
+	spMxU( &mutex, &mutexINITED );
 	
 	return iRet;
 }
@@ -333,7 +268,7 @@ int tcpClient( int port )
 	int portno = 0;
 	struct sockaddr_in serv_addr;
 
-	mutex_LOCK();
+	spMxL( &mutex, &mutexINITED );
 	
 	/* create socket */
 	ServSock = socket( AF_INET, SOCK_STREAM, 0 );
@@ -365,7 +300,7 @@ int tcpClient( int port )
 	if( listen( ServSock, 5 ) < 0 )
 		spERR( "\r\n  tcpClient: listen fail return !!" );
 
-	mutex_UNLOCK();
+	spMxU( &mutex, &mutexINITED );
 
 	iRet = ServSock;
 	return iRet;
@@ -379,7 +314,7 @@ static void *tcpServer( void *argv )
 	int portno = 0;
 	struct sockaddr_in serv_addr;
 
-	mutex_LOCK();
+	spMxL( &mutex, &mutexINITED );
 
 	/* create socket */
 	ServSock = socket( AF_INET, SOCK_STREAM, 0 );
@@ -421,13 +356,56 @@ static void *tcpServer( void *argv )
 	if( listen( ServSock, 5 ) < 0 )
 		spERR( "\r\n  tcpServer: listen fail return !!" );
 
-	mutex_UNLOCK();
+	spMxU( &mutex, &mutexINITED );
 
 	tcpSockListenWait( ServSock, portno );
 
 	return piRet;
 }
 
+
+int spIPCrequestTCP( char *pData, int *piLen, tSRVMGRTYP type )
+{
+	int iRet = -1;
+	int socket = 0;
+	int tarID = -1;
+	int tarPort = -1;
+	int srcID = -1;
+	int srcPort = -1;
+	struct ipcpacket recvPack;
+	
+
+	
+	/* parse target user ID by manager type */
+	tarID = spIPCgetMgrID( type );
+	/* parse target port number by manager type */
+	tarPort = spIPCgetMgrPort( type );
+	/* get/create source user ID for current user */
+	srcID = spIPCgetClientID();
+	/* get/create source port number for current user */
+	srcPort = spIPCgetClientPort();
+
+	/* setup recv port before send */
+	socket = tcpClient( srcPort );
+	
+	 usleep( 100*1000 ); /* work around for issue "Address already in use" */
+	
+	/* send request */
+	iRet = spIPCsendEx( pData, *piLen, srcID, srcPort, tarID, tarPort );
+
+	/* wait response */
+	/* get feedback */
+	iRet = spIPCrecvWait( socket, srcPort, &recvPack );
+	if( 0 == iRet && (*piLen >= recvPack.payloadnum ) )
+	{
+		memcpy( pData, recvPack.payload, recvPack.payloadnum );
+		*piLen = recvPack.payloadnum;
+	}
+
+	close( socket );
+	
+	return iRet;
+}
 
 int spIPCPackResponseTCP( struct ipcpacket *pBuf, char *pData, int iLen )
 {
@@ -497,4 +475,18 @@ int spIPCinitServerTCP( tSRVMGRTYP servertype, PFNIPCCALLBACK pCB )
 	pthread_create( &tcpserv_thread_id, NULL, &tcpServer, NULL );
 
 	return iRet;
+}
+
+
+int spIPCInitTCP( void )
+{
+	spMxI( &mutex, &mutexINITED );
+	return 0;
+}
+
+
+int spIPCDeinitTCP( void )
+{
+	spMxD( &mutex, &mutexINITED );
+	return 0;
 }

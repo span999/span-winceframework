@@ -18,6 +18,8 @@ int main( int argc, char *argv[] )
 	int iLoop = 0;
 	int iRet = 0;
 
+	sysPowerSRVInit();
+
 	while( iLoop < 200 )
 	{
 		/*
@@ -38,6 +40,7 @@ int main( int argc, char *argv[] )
 		iLoop++;
 	}
 
+	sysPowerSRVDeinit();
     	
 	return 0;
 }
