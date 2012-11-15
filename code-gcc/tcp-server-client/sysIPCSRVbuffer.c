@@ -5,115 +5,34 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-/*
-#include <stdarg.h>
-*/
 #include <pthread.h>
-/*
-#include <string.h>
-*/
-/*
-#include <sys/socket.h>
-*/
-/*
-#include <sys/types.h>
-*/
-/*
-#include <netinet/in.h>
-*/
-#include "toolhelps.h"
 
+#include "toolhelps.h"
 #include "ipcpacket.h"
-/*
-#include "sysIPCSRV.h"
-*/
 #include "spRingBuf.h"
 
 
-
-
+#define		RINGBUFFERLEVEL		64
+#define		RINGBUFFERSIZE		(sizeof(struct ipcpacket))
 
 
 #if 0 /* leave ir unused for now */
 static pthread_mutex_t mutex;
-static int mutexON = 0;
-
-static int mutex_INIT( void )
-{
-	int iRet = -1;
-	
-	if( !mutexON )
-	{
-		if( pthread_mutex_init( &mutex, NULL ) != 0 )
-		{
-			spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
-		}
-		else
-		{
-			mutexON = 1;
-			iRet = 0;
-		}
-	}
-	else
-		iRet = 0;
-	
-	return iRet;
-}
-
-
-static int mutex_DESTROY( void )
-{
-	int iRet = -1;
-
-	if( mutexON )
-	{
-		pthread_mutex_destroy( &mutex );
-		spQMSG( "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
-		mutexON = 0;
-		iRet = 0;
-	}
-	
-	return iRet;
-}
-
-
-static int mutex_LOCK( void )
-{
-	int iRet = -1;
-	
-	mutex_INIT();
-	if( mutexON )
-		pthread_mutex_lock( &mutex );
-	else
-		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
-	
-	return iRet;
-}
-
-
-static int mutex_UNLOCK( void )
-{
-	int iRet = -1;
-	
-	mutex_INIT();
-	if( mutexON )
-		pthread_mutex_unlock( &mutex );
-	else
-		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
-	
-	return iRet;
-}
+static int mutexINITED = 0;
 #endif
 
 
 static CircularBuffer cb;
 static CircularBuffer *pcb = NULL;
-static int RingBufferSize = 1024;
+static int RingBufferLevel = RINGBUFFERLEVEL;
+static int RingBufferSize = RINGBUFFERSIZE;
+
+
 static void spIPCPackBuffINIT( void )
 {
 	if( NULL == pcb )
 	{
-		cbInit(&cb, RingBufferSize, sizeof(struct ipcpacket));
+		cbInit( &cb, RingBufferLevel, RingBufferSize );
 		pcb = &cb;
 	}
 
