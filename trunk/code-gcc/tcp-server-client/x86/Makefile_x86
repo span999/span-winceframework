@@ -46,12 +46,12 @@ TESTCLIENT:
 POWERSRV:
 	@echo === $(POWERSRV) =============================================================
 	$(CC) $(CCFLAG) -c ../$(POWERSRV).c
-	$(AR) $(ARFLAG) $(POWERSRVBIN) $(RINGBUF).o $(IPCSRV).o $(IPCSRV)tcp.o $(POWERSRV).o ipcpacket.o
+	$(AR) $(ARFLAG) $(POWERSRVBIN) $(RINGBUF).o $(IPCSRV).o $(IPCSRV)tcp.o $(IPCSRV)buffer.o $(POWERSRV).o ipcpacket.o
 
 IPCSRV:
 	@echo === $(IPCSRV) =============================================================
-	$(CC) $(CCFLAG) -c ../$(IPCSRV).c ../$(IPCSRV)tcp.c
-	$(AR) $(ARFLAG) $(IPCSRVBIN) $(IPCSRV).o $(IPCSRV)tcp.o $(RINGBUF).o
+	$(CC) $(CCFLAG) -c ../$(IPCSRV).c ../$(IPCSRV)tcp.c ../$(IPCSRV)buffer.c
+	$(AR) $(ARFLAG) $(IPCSRVBIN) $(IPCSRV).o $(IPCSRV)tcp.o $(IPCSRV)buffer.o $(RINGBUF).o
 
 RINGBUF:
 	@echo === $(RINGBUF) =============================================================
