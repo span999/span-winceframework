@@ -14,17 +14,14 @@
 
 #include "toolhelps.h"
 #include "ipcpacket.h"
-/*
-#include "tcp-server.h"
-#include "tcp-client.h"
-*/
 #include "sysIPCSRV.h"
+#include "sysIPCSRVtcp.h"
 #include "spRingBuf.h"
 
 
-
-static int spIPCgetMgrPort( tSRVMGRTYP type );
-
+#if 0
+int spIPCgetMgrPort( tSRVMGRTYP type );
+#endif
 
 
 
@@ -33,10 +30,11 @@ static int spIPCgetMgrPort( tSRVMGRTYP type );
 
 static tSRVMGRTYP serverType = 0;
 static PFNIPCCALLBACK ipcCallback = NULL;
+#if 0
 static pthread_t tcpserv_thread_id;
+#endif
 
-
-
+#if 0
 static pthread_mutex_t mutex;
 static int mutexON = 0;
 
@@ -105,7 +103,7 @@ static int mutex_UNLOCK( void )
 	
 	return iRet;
 }
-
+#endif
 
 
 
@@ -127,7 +125,7 @@ static void spIPCPackBuffINIT( void )
 }
 
 
-static int spIPCPackBuffADD( struct ipcpacket *pBuf )
+int spIPCPackBuffADD( struct ipcpacket *pBuf )
 {
 	int iRet = -1;
 	
@@ -146,7 +144,7 @@ static int spIPCPackBuffADD( struct ipcpacket *pBuf )
 }
 
 
-static int spIPCPackBuffGET( struct ipcpacket *pBuf )
+int spIPCPackBuffGET( struct ipcpacket *pBuf )
 {
 	int iRet = -1;
 	
@@ -169,7 +167,7 @@ static int spIPCPackBuffGET( struct ipcpacket *pBuf )
 }
 
 
-static int spIPCPackBuffDUMP( void )
+int spIPCPackBuffDUMP( void )
 {
 	int iRet = -1;
 	
@@ -249,6 +247,7 @@ int spIPCPackBuffOUT( struct ipcpacket *pBuf )
 }
 
 
+#if 0
 static int tcpSockgetData( int newSock )
 {
 	#define	BUFSIZE	512
@@ -270,8 +269,9 @@ static int tcpSockgetData( int newSock )
 	iRet = 0;
 	return iRet;
 }
+#endif
 
-
+#if 0
 static int tcpSockListenWait( int iSocket, int iPort )
 {
 	int iRet = 0;
@@ -304,8 +304,9 @@ waitLoop:
 	
 	return iRet;
 }
+#endif
 
-
+#if 0
 static void *tcpServer( void *argv )
 {
 	unsigned int *piRet = NULL;
@@ -361,8 +362,10 @@ static void *tcpServer( void *argv )
 
 	return piRet;
 }
+#endif
 
 
+#if 0
 int tcpSockSend( char *hostname, int portnum, char *pData, int iSize )
 {
 	int iRet = (-1);
@@ -400,7 +403,7 @@ int tcpSockSend( char *hostname, int portnum, char *pData, int iSize )
 	
 	return iRet;
 }
-
+#endif
 
 static int spIPCsendEx( char *pData, int iLen, int iSrcID, int iSrcPort, int iTarID, int iTarPort )
 {
@@ -433,7 +436,7 @@ static int spIPCsendEx( char *pData, int iLen, int iSrcID, int iSrcPort, int iTa
 	return iRet;
 }
 
-
+#if 0
 static int tcpSockRecv( char *hostname, int portnum, char *buffer, int buflen )
 {
 	int iRet = (-1);
@@ -467,8 +470,9 @@ static int tcpSockRecv( char *hostname, int portnum, char *buffer, int buflen )
 	
 	return iRet;
 }
+#endif
 
-
+#if 0
 static int tcpClient( int port )
 {
 	int iRet = 0;
@@ -513,8 +517,9 @@ static int tcpClient( int port )
 	iRet = ServSock;
 	return iRet;
 }
+#endif
 
-
+#if 0
 static int spIPCrecvEx( int newSock, struct ipcpacket *precvPack )
 {
 	#define	BUFSIZE	512
@@ -543,8 +548,9 @@ static int spIPCrecvEx( int newSock, struct ipcpacket *precvPack )
 
 	return iRet;
 }
+#endif
 
-
+#if 0
 static int spIPCrecvWait( int iSocket, int iPort, struct ipcpacket *precvPack )
 {
 	int iRet = 0;
@@ -576,7 +582,7 @@ static int spIPCrecvWait( int iSocket, int iPort, struct ipcpacket *precvPack )
 	close( newSock );
 	return iRet;
 }
-
+#endif
 
 static int spIPCgetMgrID( tSRVMGRTYP type )
 {
@@ -589,7 +595,7 @@ static int spIPCgetMgrID( tSRVMGRTYP type )
 }
 
 
-static int spIPCgetMgrPort( tSRVMGRTYP type )
+int spIPCgetMgrPort( tSRVMGRTYP type )
 {
 	int iRet = -1;
 
@@ -700,6 +706,8 @@ int spIPCrequest( char *pData, int *piLen, tSRVMGRTYP type )
 int spIPCPackResponse( struct ipcpacket *pBuf, char *pData, int iLen )
 {
 	int iRet = -1;
+	
+#if 0
 	struct ipcpacket ipcPak;
 
 
@@ -737,6 +745,9 @@ int spIPCPackResponse( struct ipcpacket *pBuf, char *pData, int iLen )
 	
 	/* send out with tcp socket */
 	iRet = tcpSockSend( ipcPak.tarip, ipcPak.tarport, (char *)&ipcPak, sizeof(struct ipcpacket) );
+#else
+	iRet = spIPCPackResponseTCP( pBuf, pData, iLen );
+#endif
 
 	return iRet;
 }
@@ -749,6 +760,7 @@ int spIPCsetCallback( PFNIPCCALLBACK pCB )
 	if( pCB )
 	{
 		ipcCallback = pCB;
+		spIPCsetCallbackTCP( pCB );
 		iRet = 0;
 	}
 
@@ -762,7 +774,11 @@ int spIPCinitServer( tSRVMGRTYP servertype, PFNIPCCALLBACK pCB )
 
 	serverType = servertype;
 	iRet = spIPCsetCallback( pCB );
+#if 0	
 	pthread_create( &tcpserv_thread_id, NULL, &tcpServer, NULL );
+#else
+	iRet = spIPCinitServerTCP( servertype, pCB );
+#endif
 
 	return iRet;
 }
