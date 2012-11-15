@@ -164,6 +164,7 @@ int main( int argc, char *argv )
 	/* create routine for power manager */
 	pthread_create( &thread_id, NULL, &mainPowerMGR, NULL );
 
+	#if 0
 	/* wait until loop end */
 	while( 1 )
 	{
@@ -171,7 +172,9 @@ int main( int argc, char *argv )
 		if( ++iLoop % 5 == 0 )
 			spQMSG( "%s is here ... \n", PROGRAMNAME );
 	}
-
+	#else
+	getchar();
+	#endif
 	spQMSG( "Exit %s !!! \n", PROGRAMNAME );
 	return iRet;
 }
