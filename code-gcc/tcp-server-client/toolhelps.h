@@ -6,6 +6,11 @@
 #define __TOOLHELPS_H__
 
 
+#include <pthread.h>
+
+
+
+
 #define SETZERO(t, s) memset(t, 0, s)
 #define QMSG( X ) fprintf(stderr, X)
 
@@ -15,6 +20,25 @@ void myerr( char *msg );
 void spERR( char *msg );
 void millisleep( int milliseconds );
 long spGetTimetick( void );
+
+
+/* for mutex function */
+/*
+static pthread_mutex_t mutex;
+static int mutexINITED = 0;
+*/
+
+int sp_mutex_INIT( pthread_mutex_t *pKey, int *pInt );
+int sp_mutex_DESTROY( pthread_mutex_t *pKey, int *pInt );
+int sp_mutex_LOCK( pthread_mutex_t *pKey, int *pInt );
+int sp_mutex_UNLOCK( pthread_mutex_t *pKey, int *pInt );
+
+
+#define		spMxI(x,y)	sp_mutex_INIT(x,y)
+#define		spMxD(x,y)	sp_mutex_DESTROY(x,y)
+#define		spMxL(x,y)	sp_mutex_LOCK(x,y)
+#define		spMxU(x,y)	sp_mutex_UNLOCK(x,y)
+
 
 
 #if 0 /* example */
@@ -29,6 +53,9 @@ to use spMSG() with flags set as below
 #define	dF(x)		(DBGFSET&x)
 
 #endif
+
+
+
 
 
 
