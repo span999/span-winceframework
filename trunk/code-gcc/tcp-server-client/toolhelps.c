@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <pthread.h>
 #include <sys/time.h>
 
 
@@ -135,3 +136,105 @@ long spGetTimetick( void )
 	return lRet;
 #endif 
 }
+
+
+
+/*
+ * use code below to initial mutex key.
+ * static pthread_mutex_t mutex;
+ * static int mutexINITED = 0;
+*/
+int sp_mutex_INIT( pthread_mutex_t *pKey, int *pInt )
+{
+	int iRet = -1;
+	
+	if( *pInt == 0 )
+	{
+		iRet = pthread_mutex_init( pKey, NULL );
+		if( 0 == iRet )
+		{
+			spQMSG( "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
+			*pInt = 1;
+		}
+		else
+		{
+			perror( "ERROR!! pthread_mutex_init fail:" );
+		}
+	}
+	else
+		spQMSG( "%s:%s: done already !!\n", __FILE__, __FUNCTION__ );
+	
+	return iRet;
+}
+
+
+int sp_mutex_DESTROY( pthread_mutex_t *pKey, int *pInt )
+{
+	int iRet = -1;
+	
+	if( *pInt == 1 )
+	{
+		iRet = pthread_mutex_destroy( pKey );
+		if( 0 == iRet )
+		{
+			spQMSG( "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
+			*pInt = 0;
+		}
+		else
+		{
+			perror( "ERROR!! pthread_mutex_destroy fail:" );
+		}
+	}
+	else
+		spQMSG( "%s:%s: not valid key !!\n", __FILE__, __FUNCTION__ );
+	
+	return iRet;
+}
+
+
+int sp_mutex_LOCK( pthread_mutex_t *pKey, int *pInt )
+{
+	int iRet = -1;
+	
+	sp_mutex_INIT( pKey, pInt );
+	
+	if( *pInt == 1 )
+	{
+		iRet = pthread_mutex_lock( pKey );
+		if( 0 == iRet )
+		{
+			spQMSG( "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
+		}
+		else
+		{
+			perror( "ERROR!! pthread_mutex_lock fail:" );
+		}
+	}
+
+	return iRet;
+}
+
+
+int sp_mutex_UNLOCK( pthread_mutex_t *pKey, int *pInt )
+{
+	int iRet = -1;
+	
+	sp_mutex_INIT( pKey, pInt );
+	
+	if( *pInt == 1 )
+	{	
+		iRet = pthread_mutex_unlock( pKey );
+		if( 0 == iRet )
+		{
+			spQMSG( "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
+		}
+		else
+		{
+			perror( "ERROR!! pthread_mutex_unlock fail:" );
+		}
+	}
+	
+	return iRet;
+}
+
+
