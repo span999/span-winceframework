@@ -12,8 +12,10 @@
 #include "sysIPCSRV.h"
 #include "sysIPCSRVbuffer.h"
 
-
+/*
 #define	__USE_TCP__
+*/
+
 
 #ifdef __USE_TCP__
 #include "sysIPCSRVtcp.h"

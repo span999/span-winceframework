@@ -6,7 +6,8 @@
 
 /* */
 typedef enum {
-	IPCMGR = 0,
+	NONEMGR = 0,
+	IPCMGR,
 	POWERMGR,
 	HEALTHMGR,
 } tSRVMGRTYP;
