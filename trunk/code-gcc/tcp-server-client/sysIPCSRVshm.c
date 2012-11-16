@@ -22,8 +22,8 @@
 #define	dDBG			0x00001000
 #define	dINFO			0x00000100
 #define	dERR			0x00010000
-#define	DBGFSET		(dDBG|dINFO|dERR)
-/* #define	DBGFSET		(dINFO|dERR) */
+/* #define	DBGFSET		(dDBG|dINFO|dERR) */
+#define	DBGFSET		(dINFO|dERR)
 #define	dF(x)		(DBGFSET&x)
 
 
@@ -122,6 +122,8 @@ static int SendData2host( char *pData, int ilen )
 	int iRet = -1;
 	char *pPool = NULL;
 
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
+	
 	/* create shared memory */
 	hostSHMpool_ID = getNamedSharedMemoryIDs( NAMEDHOSTSHMPATH, RINGBUFSIZE );
 
@@ -170,6 +172,7 @@ static int SendData2client( char *pData, int ilen )
 	int iSHM;
 	int iSEM;
 	
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 	pipc = (struct ipcpacket *)pData;
 
 	iSHM = pipc->srcSHMid;
@@ -198,8 +201,6 @@ static int SendData2client( char *pData, int ilen )
 
 	/* set for pool available */
 	semUNLOCK(iSEM);
-	/* set for pool ready */
-	/* semUNLOCK(hostpoolReadySEM_ID); */
 
 	return iRet;
 }
@@ -218,7 +219,7 @@ int spIPCrequestSHM( char *pData, int *piLen, tSRVMGRTYP type )
 	struct ipcpacket *pipc;
 	struct ipcpacket ipcPak;
 	
-	spQMSG( "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 	
 	/* prepare recv memory pool */
 	/* create shared memory */
@@ -244,7 +245,7 @@ int spIPCrequestSHM( char *pData, int *piLen, tSRVMGRTYP type )
 
 	/* add CRC sign */
 	spIPCPacketCRCsign( &ipcPak );
-	spIPCPacketDump( &ipcPak );
+	if( dF(dDBG) ) spIPCPacketDump( &ipcPak );
 
 	iRet = SendData2host( (char *)&ipcPak, sizeof(struct ipcpacket) );
 
@@ -289,38 +290,25 @@ int spIPCPackResponseSHM( struct ipcpacket *pBuf, char *pData, int iLen )
 		memcpy( &ipcPak, pBuf, sizeof(struct ipcpacket) ); 
 	}
 	
-	spQMSG( "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 	
 	if( pBuf && pData && (iLen<=255) )
 	{
 		/* setup packet */
-	#if 0	
-		/* ipcPak.userID = iSrcID; */
-		memcpy( ipcPak.srcip, pBuf->tarip, 10 );
-		ipcPak.srcport = pBuf->tarport;
-		memcpy( ipcPak.tarip, pBuf->srcip, 10 );
-		ipcPak.tarport = pBuf->srcport;
-		/* ipcPak.serialnum = 0; */
-		ipcPak.packetnum = 0;
-	#else
-	#endif	
+
 		/* copy payload data */
 		ipcPak.payloadnum = iLen;
 		memcpy( ipcPak.payload, pData, iLen );
 	}
 	else
-		spQMSG( "spIPCPackResponse: error !!! \n" );
+		spMSG( dF(dERR), "%s:%s: ERROR!! spIPCPackResponse: error !!! \n", __FILE__, __FUNCTION__ );
 		
 	/* add CRC sign */
 	spIPCPacketCRCsign( &ipcPak );
-	spIPCPacketDump( &ipcPak );
+	if( dF(dDBG) ) spIPCPacketDump( &ipcPak );
 	
-	/* send out with tcp socket */
-	#if 0
-	iRet = tcpSockSend( ipcPak.tarip, ipcPak.tarport, (char *)&ipcPak, sizeof(struct ipcpacket) );
-	#else
+	/* send out */
 	iRet = SendData2client( (char *)&ipcPak, sizeof(struct ipcpacket) );
-	#endif
 
 	return iRet;
 }
@@ -330,6 +318,7 @@ int spIPCsetCallbackSHM( PFNIPCCALLBACK pCB )
 {
 	int iRet = -1;
 
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 	if( pCB )
 	{
 		ipcCallbackSHM = pCB;
@@ -344,6 +333,8 @@ int spIPCinitServerSHM( tSRVMGRTYP servertype, PFNIPCCALLBACK pCB )
 {
 	int iRet = -1;
 
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
+
 	serverTypeSHM = servertype;
 	iRet = spIPCsetCallbackSHM( pCB );
 	pthread_create( &shmserv_thread_id, NULL, &shmServer, NULL );
@@ -354,6 +345,8 @@ int spIPCinitServerSHM( tSRVMGRTYP servertype, PFNIPCCALLBACK pCB )
 
 int spIPCInitSHM( void )
 {
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
+	
 	spMxI( &mutex, &mutexINITED );
 
 	return 0;
@@ -362,6 +355,8 @@ int spIPCInitSHM( void )
 
 int spIPCDeinitSHM( void )
 {
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
+	
 	if( serverTypeSHM != NONEMGR )
 	{
 		/* release resource from server service */

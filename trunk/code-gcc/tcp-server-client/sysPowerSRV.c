@@ -17,6 +17,14 @@
 
 
 
+/* debug flag sets */
+#define	dDBG			0x00001000
+#define	dINFO			0x00000100
+#define	dERR			0x00010000
+/* #define	DBGFSET		(dDBG|dINFO|dERR) */
+#define	DBGFSET		(dINFO|dERR)
+#define	dF(x)		(DBGFSET&x)
+
 
 /*
 	these function routine should be placed at sysPowerSRV.so / sysPowerSRV.a
@@ -47,11 +55,11 @@ static int chkPowerCmdsign( struct sysPowerCmd *pCmd )
 		}
 		else
 		{
-			spQMSG( "ERROR !!! %s:%s: power command sign error [%d]\n", __FILE__, __FUNCTION__, pCmd->packType );
+			spMSG( dF(dERR), "ERROR !!! %s:%s: power command sign error [%d]\n", __FILE__, __FUNCTION__, pCmd->packType );
 		}	
 	}
 	else
-		spQMSG( "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
 
 	return iRet;
 }
@@ -69,7 +77,7 @@ int getPowerCmdID( struct sysPowerCmd *pCmd )
 		}
 	}
 	else
-		spQMSG( "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -96,7 +104,7 @@ int getPowerCmdReturn( struct sysPowerCmd *pCmd )
 		}
 	}
 	else
-		spQMSG( "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -115,7 +123,7 @@ int setPowerCmdParam1( struct sysPowerCmd *pCmd, int iVal )
 		}
 	}
 	else
-		spQMSG( "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -133,7 +141,7 @@ int getPowerCmdParam1( struct sysPowerCmd *pCmd )
 		}
 	}
 	else
-		spQMSG( "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -152,7 +160,7 @@ int setPowerCmdReturn( struct sysPowerCmd *pCmd, int iVal )
 		}
 	}
 	else
-		spQMSG( "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -171,7 +179,7 @@ int setPowerCmdRsptime( struct sysPowerCmd *pCmd, long iVal )
 		}
 	}
 	else
-		spQMSG( "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -194,7 +202,7 @@ static void PowerCmdInit( struct sysPowerCmd *pCmd )
 		pCmd->rsptimestamp = 0;
 	}
 	else
-		spQMSG( "ERROR !!! %s:%s: fail \n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "ERROR !!! %s:%s: fail \n", __FILE__, __FUNCTION__ );
 	
 	return;
 } 
@@ -230,7 +238,7 @@ static int PowerCmdSend( struct sysPowerCmd *pCmd )
 	iRet = spIPCsend( (char *)pCmd, sizeof(struct sysPowerCmd), POWERMGR );
 
 	if( 0 != iRet )
-		spQMSG( "ERROR !!! %s:%s: fail \n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "ERROR !!! %s:%s: fail \n", __FILE__, __FUNCTION__ );
 
 	return iRet;
 } 
@@ -247,7 +255,7 @@ static int PowerCmdRequest( struct sysPowerCmd *pCmd )
 	iRet = spIPCrequest( (char *)pCmd, &iSize, POWERMGR );
 
 	if( 0 != iRet )
-		spQMSG( "ERROR !!! %s:%s: fail \n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "ERROR !!! %s:%s: fail \n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 } 
@@ -323,12 +331,12 @@ int loopbackTest( int test )
 
 	setPowerCmdParam1( &PwrCmd, test );
 
-	PowerCmdDump( &PwrCmd );
+	if( dF(dDBG) ) PowerCmdDump( &PwrCmd );
 	/* issue command to Power Manager */
 	/* iRet = PowerCmdSend( &PwrCmd ); */
 	/* wait & get the response from Power Manager */
 	iRet = PowerCmdRequest( &PwrCmd );
-	PowerCmdDump( &PwrCmd );
+	if( dF(dDBG) ) PowerCmdDump( &PwrCmd );
 
 	if( 0 == iRet )
 	{
@@ -338,7 +346,7 @@ int loopbackTest( int test )
 	spMxU( &mutex, &mutexINITED );
 	
 	if( iRet != test )
-		spQMSG( "%s:%s: fail !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s: fail !!\n", __FILE__, __FUNCTION__ );
 		
 	return iRet;
 }

@@ -10,6 +10,16 @@
 #include <sys/time.h>
 
 
+/* debug flag sets */
+#define	dDBG			0x00001000
+#define	dINFO			0x00000100
+#define	dERR			0x00010000
+/* #define	DBGFSET		(dDBG|dINFO|dERR) */
+#define	DBGFSET		(dINFO|dERR)
+#define	dF(x)		(DBGFSET&x)
+
+
+
 
 
 char * make_message(const char *fmt, ...)
@@ -153,7 +163,7 @@ int sp_mutex_INIT( pthread_mutex_t *pKey, int *pInt )
 		iRet = pthread_mutex_init( pKey, NULL );
 		if( 0 == iRet )
 		{
-			spQMSG( "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
+			spMSG( dF(dDBG), "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
 			*pInt = 1;
 		}
 		else
@@ -162,7 +172,7 @@ int sp_mutex_INIT( pthread_mutex_t *pKey, int *pInt )
 		}
 	}
 	else
-		spQMSG( "%s:%s: done already !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dDBG), "%s:%s: done already !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -177,7 +187,7 @@ int sp_mutex_DESTROY( pthread_mutex_t *pKey, int *pInt )
 		iRet = pthread_mutex_destroy( pKey );
 		if( 0 == iRet )
 		{
-			spQMSG( "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
+			spMSG( dF(dDBG), "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
 			*pInt = 0;
 		}
 		else
@@ -186,7 +196,7 @@ int sp_mutex_DESTROY( pthread_mutex_t *pKey, int *pInt )
 		}
 	}
 	else
-		spQMSG( "%s:%s: not valid key !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s: not valid key !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -203,7 +213,7 @@ int sp_mutex_LOCK( pthread_mutex_t *pKey, int *pInt )
 		iRet = pthread_mutex_lock( pKey );
 		if( 0 == iRet )
 		{
-			spQMSG( "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
+			spMSG( dF(dDBG), "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
 		}
 		else
 		{
@@ -226,7 +236,7 @@ int sp_mutex_UNLOCK( pthread_mutex_t *pKey, int *pInt )
 		iRet = pthread_mutex_unlock( pKey );
 		if( 0 == iRet )
 		{
-			spQMSG( "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
+			spMSG( dF(dDBG), "%s:%s: done !!\n", __FILE__, __FUNCTION__ );
 		}
 		else
 		{

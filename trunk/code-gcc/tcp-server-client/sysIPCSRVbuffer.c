@@ -12,6 +12,20 @@
 #include "spRingBuf.h"
 
 
+
+
+/* debug flag sets */
+#define	dDBG			0x00001000
+#define	dINFO			0x00000100
+#define	dERR			0x00010000
+/* #define	DBGFSET		(dDBG|dINFO|dERR) */
+#define	DBGFSET		(dINFO|dERR)
+#define	dF(x)		(DBGFSET&x)
+
+
+
+
+
 #define		RINGBUFFERLEVEL		64
 #define		RINGBUFFERSIZE		(sizeof(struct ipcpacket))
 
@@ -37,7 +51,7 @@ static void spIPCPackBuffINIT( void )
 	}
 
 	if( NULL == pcb )
-		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
 	
 	return;
 }
@@ -51,12 +65,12 @@ int spIPCPackBuffADD( struct ipcpacket *pBuf )
 	{
 		
 		spIPCPackBuffINIT();
-		spQMSG( "%s:%s: +++\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dDBG), "%s:%s: +++\n", __FILE__, __FUNCTION__ );
 		cbWrite( pcb, (unsigned char *)pBuf, sizeof(struct ipcpacket) );
-		spQMSG( "%s:%s: ---\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dDBG), "%s:%s: ---\n", __FILE__, __FUNCTION__ );
 	}
 	else
-		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
 	
 	return iRet;
 }
@@ -79,7 +93,7 @@ int spIPCPackBuffGET( struct ipcpacket *pBuf )
 */
 	}
 	else
-		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
 
 	return iRet;
 }
@@ -102,7 +116,7 @@ int spIPCPackBuffPEEK( struct ipcpacket *pBuf )
 */
 	}
 	else
-		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
 
 	return iRet;
 }
@@ -116,7 +130,7 @@ int spIPCPackBuffDUMP( void )
 	{
 		struct ipcpacket elem;
 		
-		spQMSG( "RingBuffer dump:\n");
+		spMSG( dF(dDBG), "%s:%s: RingBuffer dump:\n");
 		/* Remove and print all elements */
 		while( !cbIsEmpty( pcb ) ) {
 			cbRead( pcb, (unsigned char *)&elem, sizeof(struct ipcpacket) );

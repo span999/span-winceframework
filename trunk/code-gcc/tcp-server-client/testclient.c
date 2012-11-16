@@ -35,7 +35,7 @@ int main( int argc, char *argv[] )
 		setCPUActivatedNum( 1 );
 		*/
 		iRet = loopbackTest( iLoop );
-		spQMSG( "loopback test %s \n", (iLoop==iRet)?"Ok !":"Fail !!" );	
+		spQMSG( "loopback test num:%d %s \n", iLoop, (iLoop==iRet)?"Ok !":"Fail !!" );	
 	
 		iLoop++;
 	}

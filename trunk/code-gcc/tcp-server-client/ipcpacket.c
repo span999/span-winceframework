@@ -10,9 +10,16 @@
 #include "ipcpacket.h"
 #include "toolhelps.h"
 
-/*
-#define	__DEBUG__
-*/
+
+/* debug flag sets */
+#define	dDBG			0x00001000
+#define	dINFO			0x00000100
+#define	dERR			0x00010000
+/* #define	DBGFSET		(dDBG|dINFO|dERR) */
+#define	DBGFSET		(dINFO|dERR)
+#define	dF(x)		(DBGFSET&x)
+
+
 
 static unsigned short spGetCRC( unsigned char *pPack, int DataCnt )
 {
@@ -23,16 +30,14 @@ static unsigned short spGetCRC( unsigned char *pPack, int DataCnt )
 	{
 		crc = (unsigned char)(crc >> 8) | (crc << 8);
 		crc ^= pPack[cCnt];
-	#ifdef __DEBUG__
-		spQMSG( "[0x%02x]", pPack[cCnt] );
-	#endif
+		spMSG( dF(dDBG), "[0x%02x]", pPack[cCnt] );
 		crc ^= (unsigned char)(crc & 0xff) >> 4;
 		crc ^= (crc << 8) << 4;
 		crc ^= ((crc & 0xff) << 4) << 1;
 	}
 
 	/* DBGMS( DBGFLAG_ERR, "SDP@MMcmdgetCRC %d[0x%08X] \r\n", crc, crc ); */
-	spQMSG( "spGetCRC: 0x%04x\n", crc );
+	spMSG( dF(dDBG), "%s:%s: spGetCRC: 0x%04x\n", __FILE__, __FUNCTION__, crc );
 	return crc;
 }
 
@@ -128,7 +133,7 @@ int spIPCPacketCRCvalid( struct ipcpacket *pPack )
 			iRet = 0;
 		else
 		{
-			spQMSG( "ERROR!! crc:0x%04x while CRC:0x%04x\n", crc, pPack->CRC );
+			spMSG( dF(dERR), "%s:%s: ERROR!! crc:0x%04x while CRC:0x%04x\n", __FILE__, __FUNCTION__, crc, pPack->CRC );
 		}
 	}
 
