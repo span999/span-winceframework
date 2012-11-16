@@ -21,7 +21,7 @@
 
 
 
-static tSRVMGRTYP serverTypeTCP = 0;
+static tSRVMGRTYP serverTypeTCP = NONEMGR;
 static PFNIPCCALLBACK ipcCallbackTCP = NULL;
 static pthread_t tcpserv_thread_id;
 
@@ -421,7 +421,7 @@ int spIPCPackResponseTCP( struct ipcpacket *pBuf, char *pData, int iLen )
 		memcpy( &ipcPak, pBuf, sizeof(struct ipcpacket) ); 
 	}
 	
-	spQMSG( "spIPCPackResponse: !!! \n" );
+	spQMSG( "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 	
 	if( pBuf && pData && (iLen<=255) )
 	{

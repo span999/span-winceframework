@@ -78,6 +78,8 @@ void spIPCPacketDump( struct ipcpacket *pPack )
 		spQMSG( "IPC type: %d\n", pPack->ipctype );
 		spQMSG( "SRC IP: %s[%d]\n", pPack->srcip, pPack->srcport );
 		spQMSG( "DES IP: %s[%d]\n", pPack->tarip, pPack->tarport );
+		spQMSG( "SHM ID: %d[%d]\n", pPack->srcSHMid, pPack->srcSHMid );
+		spQMSG( "SEM ID: %d[%d]\n", pPack->srcSEMid, pPack->srcSEMid );
 		spQMSG( "serial number: %d\n", pPack->serialnum );
 		spQMSG( "packet number: %d\n", pPack->packetnum );
 		spQMSG( "payload size: %d\n", pPack->payloadnum );
