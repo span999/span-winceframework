@@ -21,6 +21,16 @@
 
 
 
+/* debug flag sets */
+#define	dDBG			0x00001000
+#define	dINFO			0x00000100
+#define	dERR			0x00010000
+/* #define	DBGFSET		(dDBG|dINFO|dERR) */
+#define	DBGFSET		(dINFO|dERR)
+#define	dF(x)		(DBGFSET&x)
+
+
+
 static tSRVMGRTYP serverTypeTCP = NONEMGR;
 static PFNIPCCALLBACK ipcCallbackTCP = NULL;
 static pthread_t tcpserv_thread_id;
@@ -48,8 +58,8 @@ static int tcpSockgetData( int newSock )
 	if( ndo < 0 )
 		spERR( "socket read fail return !!" );
 
-	spQMSG( "%s:%s: %d bytes CRC:%s \r\n", __FILE__, __FUNCTION__, ndo, ((0 == spIPCPacketCRCvalid((struct ipcpacket *)buffer))?"ok":"fail") );
-	spIPCPacketDump( (struct ipcpacket *)buffer );
+	spMSG( dF(dDBG), "%s:%s: %d bytes CRC:%s \r\n", __FILE__, __FUNCTION__, ndo, ((0 == spIPCPacketCRCvalid((struct ipcpacket *)buffer))?"ok":"fail") );
+	if( dF(dDBG) ) spIPCPacketDump( (struct ipcpacket *)buffer );
 	spIPCPackBuffADD( (struct ipcpacket *)buffer );
 
 	iRet = 0;
@@ -73,13 +83,13 @@ static int tcpSockListenWait( int iSocket, int iPort )
 
 waitLoop:
 
-	spQMSG( "%s:%s: [wait client data~][0x%08x][port:%d]\r\n", __FILE__, __FUNCTION__, tcpserv_thread_id, iPort );
+	spMSG( dF(dINFO), "%s:%s: [wait client data~][0x%08x][port:%d]\r\n", __FILE__, __FUNCTION__, tcpserv_thread_id, iPort );
 	newSock = accept( ServSock, (struct sockaddr *)&cli_addr, (socklen_t *)&clilen );
 
 	if( newSock < 0 )
 		spERR( "\r\n  accept fail return !!" );
 
-	spQMSG( "%s:%s: [got client data~][0x%08x][port:%d]\r\n", __FILE__, __FUNCTION__, tcpserv_thread_id, iPort );
+	spMSG( dF(dINFO), "%s:%s: [got client data~][0x%08x][port:%d]\r\n", __FILE__, __FUNCTION__, tcpserv_thread_id, iPort );
 	
 	ndo = tcpSockgetData( newSock ); 
 	if( ipcCallbackTCP )
@@ -99,7 +109,7 @@ int tcpSockSend( char *hostname, int portnum, char *pData, int iSize )
 	int ndo = 0;
 	struct sockaddr_in serv_addr;
 	
-	spQMSG( "%s:%s: %s:%d 0x%08x %d !!! \n", __FILE__, __FUNCTION__, hostname, portnum, pData, iSize );
+	spMSG( dF(dDBG), "%s:%s: %s:%d 0x%08x %d !!! \n", __FILE__, __FUNCTION__, hostname, portnum, pData, iSize );
 	spMxL( &mutex, &mutexINITED );
 	
 	SETZERO( &serv_addr, sizeof(serv_addr) );
@@ -180,10 +190,10 @@ int spIPCrecvEx( int newSock, struct ipcpacket *precvPack )
 		spERR( "spIPCrecvEx: read fail return !!\n" );
 
 	iRet = (0 == spIPCPacketCRCvalid((struct ipcpacket *)buffer)?1:0);
-	spQMSG( "HOST:%d bytes CRC:%s \r\n", ndo, iRet?"ok":"fail" );
+	spMSG( dF(dDBG), "HOST:%d bytes CRC:%s \r\n", ndo, iRet?"ok":"fail" );
 	if( iRet )
 	{
-		spIPCPacketDump( (struct ipcpacket *)buffer );
+		if( dF(dDBG) ) spIPCPacketDump( (struct ipcpacket *)buffer );
 		iRet = sizeof( struct ipcpacket );
 		memcpy( precvPack, buffer, iRet );
 	}
@@ -201,7 +211,7 @@ int spIPCsendEx( char *pData, int iLen, int iSrcID, int iSrcPort, int iTarID, in
 	int iRet = -1;
 	struct ipcpacket ipcPak;
 	
-	spQMSG( "%s:%s: 0x%08x %d [%d:%d]->[%d:%d]!!! \n", __FILE__, __FUNCTION__, pData, iLen, iSrcID, iSrcPort, iTarID, iTarPort );
+	spMSG( dF(dDBG), "%s:%s: 0x%08x %d [%d:%d]->[%d:%d]!!! \n", __FILE__, __FUNCTION__, pData, iLen, iSrcID, iSrcPort, iTarID, iTarPort );
 	
 	/* clean packet */
 	spIPCPacketInit( &ipcPak );
@@ -219,7 +229,7 @@ int spIPCsendEx( char *pData, int iLen, int iSrcID, int iSrcPort, int iTarID, in
 
 	/* add CRC sign */
 	spIPCPacketCRCsign( &ipcPak );
-	spIPCPacketDump( &ipcPak );
+	if( dF(dDBG) ) spIPCPacketDump( &ipcPak );
 	
 	/* send out with tcp socket */
 	iRet = tcpSockSend( ipcPak.tarip, ipcPak.tarport, (char *)&ipcPak, sizeof(struct ipcpacket) );
@@ -243,13 +253,13 @@ int spIPCrecvWait( int iSocket, int iPort, struct ipcpacket *precvPack )
 
 	for(;;)
 	{
-		spQMSG( "[wait receive data~][port:%d]\r\n", iPort );
+		spMSG( dF(dDBG), "[wait receive data~][port:%d]\r\n", iPort );
 		newSock = accept( ServSock, (struct sockaddr *)&cli_addr, (socklen_t *)&clilen );
 
 		if( newSock < 0 )
 			spERR( "\r\n  accept fail return !!" );
 
-		spQMSG( "[got receive data~][0x%08x][port:%d]\r\n", tcpserv_thread_id, iPort );
+		spMSG( dF(dDBG), "[got receive data~][0x%08x][port:%d]\r\n", tcpserv_thread_id, iPort );
 	
 		ndo = spIPCrecvEx( newSock, precvPack ); 
 		if( 0 < ndo )
@@ -313,6 +323,9 @@ static void *tcpServer( void *argv )
 	int ServSock = 0;
 	int portno = 0;
 	struct sockaddr_in serv_addr;
+
+	spMSG( dF(dINFO), "%s:%s: The process ID is %d\n", __FILE__, __FUNCTION__, (int)getpid() );
+	spMSG( dF(dINFO), "%s:%s: The parent process ID is %d\n", __FILE__, __FUNCTION__, (int)getppid() );
 
 	spMxL( &mutex, &mutexINITED );
 
@@ -421,7 +434,7 @@ int spIPCPackResponseTCP( struct ipcpacket *pBuf, char *pData, int iLen )
 		memcpy( &ipcPak, pBuf, sizeof(struct ipcpacket) ); 
 	}
 	
-	spQMSG( "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 	
 	if( pBuf && pData && (iLen<=255) )
 	{
@@ -439,11 +452,11 @@ int spIPCPackResponseTCP( struct ipcpacket *pBuf, char *pData, int iLen )
 		memcpy( ipcPak.payload, pData, iLen );
 	}
 	else
-		spQMSG( "spIPCPackResponse: error !!! \n" );
+		spMSG( dF(dERR), "%s:%s: error !!! \n", __FILE__, __FUNCTION__ );
 		
 	/* add CRC sign */
 	spIPCPacketCRCsign( &ipcPak );
-	spIPCPacketDump( &ipcPak );
+	if( dF(dDBG) ) spIPCPacketDump( &ipcPak );
 	
 	/* send out with tcp socket */
 	iRet = tcpSockSend( ipcPak.tarip, ipcPak.tarport, (char *)&ipcPak, sizeof(struct ipcpacket) );

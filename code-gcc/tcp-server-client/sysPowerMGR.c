@@ -14,18 +14,20 @@
 
 
 
+/* debug flag sets */
+#define	dDBG			0x00001000
+#define	dINFO			0x00000100
+#define	dERR			0x00010000
+/* #define	DBGFSET		(dDBG|dINFO|dERR) */
+#define	DBGFSET		(dINFO|dERR)
+#define	dF(x)		(DBGFSET&x)
+
+
+
+
 
 static char PROGRAMNAME[] = "sysPowerMGR";
 static pthread_t thread_id;
-
-
-
-
-
-
-
-
-
 
 
 
@@ -37,30 +39,20 @@ static int PowerCmdParser( struct sysPowerCmd *pCmd )
 	{
 		/* get power command */
 		iRet = getPowerCmdID( pCmd );
-		spQMSG( "%s get power command [%d] \n", "PowerCmdParser", iRet );
+		spMSG( dF(dDBG), "%s:%s: get power command [%d] \n", __FILE__, __FUNCTION__, iRet );
 		
 		/* proceed the command */
 		switch( iRet )
 		{
 			case GETCPUACTIVATEDNUM:				
 			case SETCPUACTIVATEDNUM:
-				#if 0
-				pCmd->rspReturn = 5;
-				pCmd->rsptimestamp = spGetTimetick();
-				#else
 				setPowerCmdReturn( pCmd, 5 );
 				setPowerCmdRsptime( pCmd, spGetTimetick() );
-				#endif
 				break;
 				
 			case LOOPBACKTEST:
-				#if 0
-				pCmd->rspReturn = 5;
-				pCmd->rsptimestamp = spGetTimetick();
-				#else
 				setPowerCmdReturn( pCmd, getPowerCmdParam1(pCmd) );
 				setPowerCmdRsptime( pCmd, spGetTimetick() );
-				#endif
 				break;
 				
 			default:
@@ -97,10 +89,10 @@ void *mainPowerMGR( void *argv )
 
 		#ifdef _USE_USLEEP_
 		if( ( ++iLoop % ((5*US_MS)/CMD_INTERVAL) ) == 0 )
-			spQMSG( "%s is here ... %d \n", "mainPowerMGR", iLoop );
+			spMSG( dF(dINFO), "%s:%s: is here ... %d \n", __FILE__, __FUNCTION__, iLoop );
 		#else
 		if( ++iLoop % 5 == 0 )
-			spQMSG( "%s is here ... \n", "mainPowerMGR" );
+			spMSG( dF(dINFO), "%s:%s: is here ... \n", __FILE__, __FUNCTION__ );
 		#endif
 			
 		/*  */
@@ -109,7 +101,7 @@ void *mainPowerMGR( void *argv )
 		iRet = spIPCpayloadGet( NULL, (char *)&pwrCmd, &Len );
 		if( iRet > 0 )
 		{
-			spQMSG( "%s get data %d bytes... \n", "mainPowerMGR", iRet );
+			spMSG( dF(dDBG), "%s:%s: get data %d bytes... \n", __FILE__, __FUNCTION__, iRet );
 			PowerCmdDump( &pwrCmd );	
 		}
 	#else
@@ -122,8 +114,8 @@ void *mainPowerMGR( void *argv )
 			iRet = spIPCpayloadGet( &ipcPack, (char *)&pwrCmd, &Len );
 			if( iRet > 0 )
 			{
-				spQMSG( "%s get data %d bytes... \n", "mainPowerMGR", iRet );
-				PowerCmdDump( &pwrCmd );
+				spMSG( dF(dDBG), "%s:%s: get data %d bytes... \n", __FILE__, __FUNCTION__, iRet );
+				if( dF(dDBG) ) PowerCmdDump( &pwrCmd );
 				
 				iRet = PowerCmdParser( &pwrCmd );
 				
@@ -132,12 +124,12 @@ void *mainPowerMGR( void *argv )
 
 			}
 			else
-				spQMSG( "%s get payload data %d bytes... fail !! \n", "mainPowerMGR", iRet );
+				spMSG( dF(dERR), "%s:%s: get payload data %d bytes... fail !! \n", __FILE__, __FUNCTION__, iRet );
 		}
 	#endif	
 	}
 
-	spQMSG( "Exit %s !!! \n", PROGRAMNAME );
+	spMSG( dF(dINFO), "%s:%s: Exit %s !!! \n", __FILE__, __FUNCTION__, PROGRAMNAME );
 
 	return;
 }
@@ -146,7 +138,7 @@ void *mainPowerMGR( void *argv )
 void IPCCallBack( void )
 {
 
-	spQMSG( "IPCCallBack in %s !!! \n", PROGRAMNAME );
+	spMSG( dF(dDBG), "IPCCallBack in %s !!! \n", __FILE__, __FUNCTION__, PROGRAMNAME );
 	return;
 }
 
@@ -170,6 +162,6 @@ int main( int argc, char *argv )
 
 
 	spIPCDeinit();
-	spQMSG( "Exit %s !!! \n", PROGRAMNAME );
+	spMSG( dF(dINFO), "%s:%s: Exit %s !!! \n", __FILE__, __FUNCTION__, PROGRAMNAME );
 	return iRet;
 }

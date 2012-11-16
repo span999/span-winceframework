@@ -20,8 +20,8 @@
 #define	dDBG			0x00001000
 #define	dINFO			0x00000100
 #define	dERR			0x00010000
-#define	DBGFSET		(dDBG|dINFO|dERR)
-/* #define	DBGFSET		(dINFO|dERR) */
+/* #define	DBGFSET		(dDBG|dINFO|dERR) */
+#define	DBGFSET		(dINFO|dERR)
 #define	dF(x)		(DBGFSET&x)
 
 

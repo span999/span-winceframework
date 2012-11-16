@@ -12,9 +12,9 @@
 #include "sysIPCSRV.h"
 #include "sysIPCSRVbuffer.h"
 
-/*
+#if 0
 #define	__USE_TCP__
-*/
+#endif
 
 
 #ifdef __USE_TCP__
@@ -22,6 +22,17 @@
 #else
 #include "sysIPCSRVshm.h"
 #endif
+
+
+
+/* debug flag sets */
+#define	dDBG			0x00001000
+#define	dINFO			0x00000100
+#define	dERR			0x00010000
+/* #define	DBGFSET		(dDBG|dINFO|dERR) */
+#define	DBGFSET		(dINFO|dERR)
+#define	dF(x)		(DBGFSET&x)
+
 
 
 
@@ -35,6 +46,7 @@ int spIPCpayloadGet( struct ipcpacket *pPack, char *pBuf, int *pLen )
 {
 	int iRet = -1;
 	
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 	if( pPack )
 	{
 		if( 1 )
@@ -66,12 +78,13 @@ int spIPCPackBuffOUT( struct ipcpacket *pBuf )
 {
 	int iRet = -1;
 	
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 	if( pBuf )
 	{
 		iRet = spIPCPackBuffGET( pBuf );
 	}
 	else
-		spQMSG( "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
+		spMSG( dF(dERR), "%s:%s: failed !!\n", __FILE__, __FUNCTION__ );
 
 	return iRet;
 }
@@ -81,6 +94,7 @@ int spIPCgetMgrID( tSRVMGRTYP type )
 {
 	int iRet = -1;
 	
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 	if( POWERMGR == type )
 		iRet = 3456;
 	
@@ -92,6 +106,7 @@ int spIPCgetMgrPort( tSRVMGRTYP type )
 {
 	int iRet = -1;
 
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 	if( POWERMGR == type )
 		iRet = INITIPCHOSTPORTNUM+1;
 	
@@ -103,6 +118,7 @@ int spIPCgetClientID( void )
 {
 	int iRet = -1;
 	
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 	iRet = 1234;
 	
 	return iRet;
@@ -113,6 +129,7 @@ int spIPCgetClientPort( void )
 {
 	int iRet = -1;
 	
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 	iRet = INITIPCCLIENTPORTNUM;
 	
 	return iRet;
@@ -122,24 +139,8 @@ int spIPCgetClientPort( void )
 int spIPCsend( char *pData, int iLen, tSRVMGRTYP type )
 {
 	int iRet = -1;
-#if 0	
-	int tarID = -1;
-	int tarPort = -1;
-	int srcID = -1;
-	int srcPort = -1;
 
-	/* parse target user ID by manager type */
-	tarID = spIPCgetMgrID( type );
-	/* parse target port number by manager type */
-	tarPort = spIPCgetMgrPort( type );
-	/* get/create source user ID for current user */
-	srcID = spIPCgetClientID();
-	/* get/create source port number for current user */
-	srcPort = spIPCgetClientPort();
-	
-	iRet = spIPCsendEx( pData, iLen, srcID, srcPort, tarID, tarPort );	
-#endif
-
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 #ifdef __USE_TCP__
 
 #else
@@ -156,6 +157,7 @@ int spIPCrecv( char *pData, int *piLen, int iSrcID, int iTarID )
 int spIPCrecv( char *pData, int *piLen, tSRVMGRTYP type  )
 {
 	int iRet = -1;
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 /*
 	iRet = spIPCrecvEx( pData, piLen, 0, 0 );
 */
@@ -173,6 +175,7 @@ int spIPCrequest( char *pData, int *piLen, tSRVMGRTYP type )
 {
 	int iRet = -1;
 
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 #ifdef __USE_TCP__	
 	iRet = spIPCrequestTCP( pData, piLen, type );
 #else
@@ -187,6 +190,7 @@ int spIPCPackResponse( struct ipcpacket *pBuf, char *pData, int iLen )
 {
 	int iRet = -1;
 	
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 #ifdef __USE_TCP__
 	iRet = spIPCPackResponseTCP( pBuf, pData, iLen );
 #else
@@ -201,6 +205,7 @@ int spIPCsetCallback( PFNIPCCALLBACK pCB )
 {
 	int iRet = -1;
 
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 	if( pCB )
 	{
 		ipcCallback = pCB;
@@ -220,6 +225,7 @@ int spIPCinitServer( tSRVMGRTYP servertype, PFNIPCCALLBACK pCB )
 {
 	int iRet = -1;
 
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 	serverType = servertype;
 	iRet = spIPCsetCallback( pCB );
 #ifdef __USE_TCP__
@@ -235,6 +241,7 @@ int spIPCinitServer( tSRVMGRTYP servertype, PFNIPCCALLBACK pCB )
 
 int spIPCInit( void )
 {
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 #ifdef __USE_TCP__
 	spIPCInitTCP();
 #else
@@ -246,6 +253,7 @@ int spIPCInit( void )
 
 int spIPCDeinit( void )
 {
+	spMSG( dF(dDBG), "%s:%s: !!! \n", __FILE__, __FUNCTION__ );
 #ifdef __USE_TCP__
 	spIPCDeinitTCP();
 #else
