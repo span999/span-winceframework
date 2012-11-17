@@ -4,6 +4,7 @@ AR	= ar
 DEFINES =
 CFLAGS	= -O2 -I. -L. ${DEFINES}
 
+
 PROGRAM	= cpuusage
 DYNLIB  = libtest.so
 STATICLIB = libcpuutil.a
@@ -18,7 +19,7 @@ STATICLIB:
 	@echo ================================================================
 	@echo build static library
 	@echo ----------------------------------------------------------------
-	${CC} -c ../${STATICNAME}.c
+	${CC} ${CFLAGS} -c ../${STATICNAME}.c
 	${AR} rcs ${STATICLIB} ${STATICNAME}.o
 
 DYNLIB:
@@ -33,7 +34,7 @@ PROGRAM: STATICLIB
 	@echo ================================================================
 	@echo build binary.
 	@echo ----------------------------------------------------------------
-	${CC} ../main.c -o ${PROGRAM} -lpthread -L. -l${STATICNAME}
+	${CC} ../main.c ${CFLAGS} -o ${PROGRAM} -lpthread -L. -l${STATICNAME}
 
 clean:
 	@echo 

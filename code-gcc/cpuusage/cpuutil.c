@@ -150,7 +150,7 @@ int getProcStat( struct ProcStatNums *pIn, int cpuIdx )
 	int iTmp;
 	int iCnt;
 
-	memset( statOut, sizeof(statOut), 0 );
+	memset( statOut, 0, sizeof(statOut) );
 
 	/* get proc stat ... */
 	///fp = popen( "cat /proc/stat | grep '^\\cpu '", "r" );
@@ -200,7 +200,7 @@ int getProcStat( struct ProcStatNums *pIn, int cpuIdx )
 		///setProcStatNum( pIn, iCnt, atoi(statNum) );
 		setProcStatNum( pIn, iCnt, atol(statNum) );		
 
-		memset( statNum, sizeof(statNum), 0 );
+		memset( statNum, 0, sizeof(statNum) );
 		iCnt++;
 		iTmp = 0;
 	}
@@ -306,7 +306,7 @@ int getProcStatSet( struct ProcStatSets *pIn )
 	char* search_result;
 	struct ProcStatNums *pcpu = NULL;
 
-	memset( statOut, sizeof(statOut), 0 );
+	memset( statOut, 0, sizeof(statOut) );
 
 	/* get proc stat ... */
 	fp = popen( "cat /proc/stat", "r" );
@@ -500,7 +500,7 @@ int getProcMeminfo( struct ProcMeminfoNums *pIn )
 	char* search_result;
 
 
-	memset( statOut, sizeof(statOut), 0 );
+	memset( statOut, 0, sizeof(statOut) );
 
 	/* get proc meminfo ... */
 	fp = popen( "cat /proc/meminfo", "r" );
