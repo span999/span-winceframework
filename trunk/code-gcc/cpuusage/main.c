@@ -45,6 +45,8 @@ int main()
 	double iValue = 0;
 	double iValue0 = 0;
 	double iValue1 = 0;
+	double iValue2 = 0;
+	double iValue3 = 0;
 
 #ifdef _USE_NO_GREP_	
 	if( -1 == getProcStatSet( &StatSetsOld ) )
@@ -72,7 +74,7 @@ int main()
 	}
 #endif
 
-	while( iTmp++ < 100 )
+	while( iTmp++ < 5 )
 	{
 		
 		sleep( 1 );
@@ -127,7 +129,10 @@ int main()
 		iValue0 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
 		pThis = &(StatSetsDiff.cpu1);
 		iValue1 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
-
+		pThis = &(StatSetsDiff.cpu2);
+		iValue2 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
+		pThis = &(StatSetsDiff.cpu3);
+		iValue3 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
 #else
 #if 0
 		pThis = &DiffChk;
@@ -147,7 +152,7 @@ int main()
 #endif	///#ifdef _USE_NO_GREP_
 
 		///printf( "CPU usage: %3.2f%%.[0:%3.2f%%]\n", iValue, iValue0 );
-		printf( "CPU usage:%3.2f%%.[0:%3.2f%%][1:%3.2f%%] ", iValue, iValue0, iValue1 );
+		printf( "CPU usage:%3.2f%%.[0:%3.2f%%][1:%3.2f%%][0:%3.2f%%][1:%3.2f%%] ", iValue, iValue0, iValue1, iValue2, iValue3 );
 		printf( "Mem [Total:%ld][Used:%ld][Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
 
 	}	///while
