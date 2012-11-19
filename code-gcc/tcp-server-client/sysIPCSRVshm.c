@@ -48,7 +48,7 @@ static int mutexINITED = 0;
 
 #define		NAMEDHOSTSHMPATH		("/dev/null")
 #define		NAMEDHOSTSEMAVAPATH		("/dev/zero")
-#define		NAMEDHOSTSeMRDYPATH		("/dev/rtc")
+#define		NAMEDHOSTSeMRDYPATH		("/dev/rtc0")
 
 #define		semLOCK(x)		SemaphoresIDset(x,1)
 #define		semUNLOCK(x)	SemaphoresIDset(x,0)
@@ -207,7 +207,8 @@ static int SendData2client( char *pData, int ilen )
 
 
 #define		NAMEDCLINTSHMPATH			("/dev/fb0")
-#define		NAMEDCLIENTSEMAVAPATH		("/dev/loop0")
+/*#define		NAMEDCLIENTSEMAVAPATH		("/dev/loop0")*/
+#define		NAMEDCLIENTSEMAVAPATH		("/dev/full")
 
 int spIPCrequestSHM( char *pData, int *piLen, tSRVMGRTYP type )
 {

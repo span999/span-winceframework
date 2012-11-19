@@ -157,8 +157,12 @@ int main( int argc, char *argv )
 	/* create routine for power manager */
 	pthread_create( &thread_id, NULL, &mainPowerMGR, NULL );
 
-
+#if 0	/* loop forever */
+	while(1)
+		;
+#else
 	getchar();
+#endif
 
 
 	spIPCDeinit();
