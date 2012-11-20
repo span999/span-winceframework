@@ -8,6 +8,7 @@
 #include <stdarg.h>
 #include <pthread.h>
 
+#include "toolhelps.h"
 #include "ipcpacket.h"
 #include "sysPowerSRV.h"
 #include "sysIPCSRV.h"
@@ -29,6 +30,85 @@
 
 static pthread_t thread_id;
 static int CPUcoreActivated = 4;
+
+/* for mutex */
+static pthread_mutex_t mutex;
+static int mutexINITED = 0;
+
+
+
+static void setCPUcoreDOWN( int CoreNum )
+{
+	/* CoreNum = 0,1,2,3 */
+	spMSG( dF(dERR), "%s:%s: set core [%d] DOWN\n", __FILE__, __FUNCTION__, CoreNum );
+	
+#ifdef __ARM_CODE__
+#else
+	CPUcoreActivated = CoreNum;
+#endif	
+}
+
+
+static void setCPUcoreUP( int CoreNum )
+{
+	/* CoreNum = 0,1,2,3 */
+	spMSG( dF(dERR), "%s:%s: set core[%d] UP\n", __FILE__, __FUNCTION__, CoreNum );
+
+#ifdef __ARM_CODE__
+#else
+	CPUcoreActivated = CoreNum + 1;
+#endif	
+}
+
+
+static int setCPUcoreActivatedNumber( int num )
+{
+	int iRet = -1;
+	
+	spMxL( &mutex, &mutexINITED );
+	if( CPUcoreActivated == num )
+	{
+		spMSG( dF(dDBG), "%s:%s: set core[%d] already [%d] \n", __FILE__, __FUNCTION__, num, CPUcoreActivated );
+		iRet = 0;
+	}
+	else
+	{
+		if( num > CPUcoreActivated )
+		{	/* steps up */ 
+			int iDiff = 0;
+			int iCurN = 0;
+			iDiff = num - CPUcoreActivated;
+			iCurN = CPUcoreActivated;
+			
+			while( iDiff > 0 )
+			{
+				setCPUcoreUP( iCurN );
+				iDiff--;
+				iCurN++;
+				sleep(1);
+			}
+		}
+		else
+		{	/* steps down */
+			int iDiff = 0;
+			int iCurN = 0;
+			iDiff = CPUcoreActivated - num;
+			iCurN = CPUcoreActivated - 1;
+			
+			while( iDiff > 0 )
+			{
+				setCPUcoreDOWN( iCurN );
+				iDiff--;
+				iCurN--;
+				sleep(1);
+			} 
+		}
+	}
+	
+	spMxU( &mutex, &mutexINITED );
+	
+	return iRet;
+}
 
 
 static int ifCoreNumValid( int iCore )
@@ -67,10 +147,9 @@ static int PowerCmdParser( struct sysPowerCmd *pCmd )
 				iParam1 = getPowerCmdParam1( pCmd );
 				if( 0 == ifCoreNumValid( iParam1 ) )
 				{
-					/* fake code .... */
-					CPUcoreActivated = iParam1;
-					setPowerCmdReturn( pCmd, 0 );
-					spMSG( dF(dDBG), "%s:%s: get power command iParam1[%d] OK !!\n", __FILE__, __FUNCTION__, iParam1 );
+					iRet = setCPUcoreActivatedNumber( iParam1 );
+					setPowerCmdReturn( pCmd, iRet );
+					spMSG( dF(dDBG), "%s:%s: get power command iParam1[%d] %s !!\n", __FILE__, __FUNCTION__, iParam1, (0==iRet)?"OK":"Fail" );
 				}
 				else
 				{
@@ -87,7 +166,7 @@ static int PowerCmdParser( struct sysPowerCmd *pCmd )
 				
 			default:
 				break;
-		}	///switch
+		}	/* switch */
 		iRet = 0;
 	}
 
@@ -161,7 +240,7 @@ void *mainPowerMGR( void *argv )
 
 	spMSG( dF(dINFO), "%s:%s: Exit !!! \n", __FILE__, __FUNCTION__ );
 
-	return;
+	return 0;
 }
 
 
@@ -173,28 +252,30 @@ void IPCCallBack( void )
 }
 
 
-int main( int argc, char *argv )
+int main( int argc, char *argv[] )
 {
 	int iRet = -1;
-	int iLoop = 0;
-
 
 	/* setup ipc communication routine */
 	spIPCInit();
 	/* set server type & callback */
 	spIPCinitServer( POWERMGR, IPCCallBack );
 	
+	spMxI( &mutex, &mutexINITED );
+	
 	/* create routine for power manager */
 	pthread_create( &thread_id, NULL, &mainPowerMGR, NULL );
 
-#if 0	/* loop forever */
+#ifdef __ARM_CODE__
+	/* loop forever */
 	while(1)
 		;
 #else
 	getchar();
-#endif
+#endif	/* #ifdef __ARM_CODE__ */
 
-
+	spMxD( &mutex, &mutexINITED );
+	
 	spIPCDeinit();
 	spMSG( dF(dINFO), "%s:%s: Exit !!! \n", __FILE__, __FUNCTION__ );
 	return iRet;
