@@ -6,7 +6,7 @@
 
 
 void PowerCmdDump( struct sysPowerCmd *pCmd );
-int getPowerCmdID( struct sysPowerCmd *pCmd );
+int setPowerCmdID( struct sysPowerCmd *pCmd, int iVal );
 int getPowerCmdID( struct sysPowerCmd *pCmd );
 int setPowerCmdParam1( struct sysPowerCmd *pCmd, int iVal );
 int getPowerCmdParam1( struct sysPowerCmd *pCmd );
@@ -17,10 +17,10 @@ int setPowerCmdRsptime( struct sysPowerCmd *pCmd, long iVal );
 int sysPowerSRVInit( void );
 int sysPowerSRVDeinit( void );
 
-int getCPUActivatedNum( void );
-int setCPUActivatedNum( int num );
+int sPSgetCPUActivatedNum( void );
+int sPSsetCPUActivatedNum( int num );
 
-int loopbackTest( int test );
+int sPSloopbackTest( int test );
 
 
 
