@@ -13,17 +13,16 @@
 
 #include "cpuutil.h"
 
-#define _USE_NO_GREP_
 
 
-
+#define	CHECKLOOP		5
 
 
 int main()
 {
 	int return_value = 0;
 	pthread_t thread_id;
-#ifdef _USE_NO_GREP_
+#ifdef _USE_NO_GREP_	/* cpuutil.h */
 	struct ProcStatSets  StatSetsOld;
 	struct ProcStatSets  StatSetsNow;
 	struct ProcStatSets  StatSetsDiff;
@@ -48,7 +47,7 @@ int main()
 	double iValue2 = 0;
 	double iValue3 = 0;
 
-#ifdef _USE_NO_GREP_	
+#ifdef _USE_NO_GREP_	/* cpuutil.h */
 	if( -1 == getProcStatSet( &StatSetsOld ) )
 	{
 		printf( "\ngetProcStat 1st failed !!\n" );
@@ -74,11 +73,11 @@ int main()
 	}
 #endif
 
-	while( iTmp++ < 5 )
+	while( iTmp++ < CHECKLOOP )
 	{
 		
 		sleep( 1 );
-#ifdef _USE_NO_GREP_
+#ifdef _USE_NO_GREP_	/* cpuutil.h */
 		if( -1 == getProcStatSet( &StatSetsNow ) )
 		{
 			printf( "\ngetProcStat failed !!\n" );
@@ -122,7 +121,7 @@ int main()
 		getProcMeminfo( &MemChk );
 
 
-#ifdef _USE_NO_GREP_
+#ifdef _USE_NO_GREP_	/* cpuutil.h */
 		pThis = &(StatSetsDiff.cpu);
 		iValue = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
 		pThis = &(StatSetsDiff.cpu0);
@@ -134,26 +133,26 @@ int main()
 		pThis = &(StatSetsDiff.cpu3);
 		iValue3 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
 #else
-#if 0
+		#if 0
 		pThis = &DiffChk;
 		iValue = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM))*100 )/( pThis->sumNUM );
 		pThis = &DiffChk0;
 		iValue0 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM))*100 )/( pThis->sumNUM );
 		pThis = &DiffChk1;
 		iValue1 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM))*100 )/( pThis->sumNUM );
-#else
+		#else
 		pThis = &DiffChk;
 		iValue = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
 		pThis = &DiffChk0;
 		iValue0 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
 		pThis = &DiffChk1;
 		iValue1 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
-#endif	///#if 0
+		#endif	///#if 0
 #endif	///#ifdef _USE_NO_GREP_
 
 		///printf( "CPU usage: %3.2f%%.[0:%3.2f%%]\n", iValue, iValue0 );
-		printf( "CPU usage:%3.2f%%.[0:%3.2f%%][1:%3.2f%%][0:%3.2f%%][1:%3.2f%%] ", iValue, iValue0, iValue1, iValue2, iValue3 );
-		printf( "Mem [Total:%ld][Used:%ld][Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
+		printf( "CPU usage:%3.2f%%[0:%3.2f%%/1:%3.2f%%/2:%3.2f%%/3:%3.2f%%] ", iValue, iValue0, iValue1, iValue2, iValue3 );
+		printf( "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
 
 	}	///while
 
