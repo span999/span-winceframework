@@ -40,24 +40,52 @@ static int mutexINITED = 0;
 static void setCPUcoreDOWN( int CoreNum )
 {
 	/* CoreNum = 0,1,2,3 */
-	spMSG( dF(dERR), "%s:%s: set core [%d] DOWN\n", __FILE__, __FUNCTION__, CoreNum );
 	
+	char devCPU[] = "echo 0 > /sys/devices/system/cpu/cpuX/online";
+	char base0 = '0';
+	FILE *fp;
+
+	devCPU[36] = base0+CoreNum;
 #ifdef __ARM_CODE__
+	fp = popen( devCPU, "r" );
+	if( fp == NULL )
+	{
+		spMSG( dF(dERR), "%s:%s: Failed on %s !!!\n", __FILE__, __FUNCTION__, devCPU );
+		return;
+	}
+	sleep(1);
+	pclose( fp );
 #else
-	CPUcoreActivated = CoreNum;
-#endif	
+	spMSG( dF(dERR), "%s:%s: OK on %s !!!\n", __FILE__, __FUNCTION__, devCPU );
+#endif
+	CPUcoreActivated = CoreNum;	
+	spMSG( dF(dERR), "%s:%s: set core [%d] DOWN\n", __FILE__, __FUNCTION__, CoreNum );
 }
 
 
 static void setCPUcoreUP( int CoreNum )
 {
 	/* CoreNum = 0,1,2,3 */
-	spMSG( dF(dERR), "%s:%s: set core[%d] UP\n", __FILE__, __FUNCTION__, CoreNum );
 
+	char devCPU[] = "echo 1 > /sys/devices/system/cpu/cpuX/online";
+	char base0 = '0';
+	FILE *fp;
+
+	devCPU[36] = base0+CoreNum;
 #ifdef __ARM_CODE__
+	fp = popen( devCPU, "r" );
+	if( fp == NULL )
+	{
+		spMSG( dF(dERR), "%s:%s: Failed on %s !!!\n", __FILE__, __FUNCTION__, devCPU );
+		return;
+	}
+	sleep(1);
+	pclose( fp );
 #else
+	spMSG( dF(dERR), "%s:%s: OK on %s !!!\n", __FILE__, __FUNCTION__, devCPU );
+#endif
 	CPUcoreActivated = CoreNum + 1;
-#endif	
+	spMSG( dF(dERR), "%s:%s: set core[%d] UP\n", __FILE__, __FUNCTION__, CoreNum );
 }
 
 
@@ -85,7 +113,6 @@ static int setCPUcoreActivatedNumber( int num )
 				setCPUcoreUP( iCurN );
 				iDiff--;
 				iCurN++;
-				sleep(1);
 			}
 		}
 		else
@@ -100,9 +127,9 @@ static int setCPUcoreActivatedNumber( int num )
 				setCPUcoreDOWN( iCurN );
 				iDiff--;
 				iCurN--;
-				sleep(1);
 			} 
 		}
+		iRet = 0;
 	}
 	
 	spMxU( &mutex, &mutexINITED );
@@ -269,7 +296,7 @@ int main( int argc, char *argv[] )
 #ifdef __ARM_CODE__
 	/* loop forever */
 	while(1)
-		;
+		sleep(3);
 #else
 	getchar();
 #endif	/* #ifdef __ARM_CODE__ */
