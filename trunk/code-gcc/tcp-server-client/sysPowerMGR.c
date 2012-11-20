@@ -26,14 +26,28 @@
 
 
 
-static char PROGRAMNAME[] = "sysPowerMGR";
-static pthread_t thread_id;
 
+static pthread_t thread_id;
+static int CPUcoreActivated = 4;
+
+
+static int ifCoreNumValid( int iCore )
+{
+	int iRet = -1;
+	
+	if( (iCore > 0) && (iCore < 5) )
+	{
+		iRet = 0;
+	}
+	
+	return iRet;
+}
 
 
 static int PowerCmdParser( struct sysPowerCmd *pCmd )
 {
 	int iRet = -1;
+	int iParam1 = -1;
 	
 	if( pCmd )
 	{
@@ -45,8 +59,24 @@ static int PowerCmdParser( struct sysPowerCmd *pCmd )
 		switch( iRet )
 		{
 			case GETCPUACTIVATEDNUM:				
+				setPowerCmdReturn( pCmd, CPUcoreActivated );
+				setPowerCmdRsptime( pCmd, spGetTimetick() );
+				break;
+
 			case SETCPUACTIVATEDNUM:
-				setPowerCmdReturn( pCmd, 5 );
+				iParam1 = getPowerCmdParam1( pCmd );
+				if( 0 == ifCoreNumValid( iParam1 ) )
+				{
+					/* fake code .... */
+					CPUcoreActivated = iParam1;
+					setPowerCmdReturn( pCmd, 0 );
+					spMSG( dF(dDBG), "%s:%s: get power command iParam1[%d] OK !!\n", __FILE__, __FUNCTION__, iParam1 );
+				}
+				else
+				{
+					setPowerCmdReturn( pCmd, -1 );
+					spMSG( dF(dERR), "%s:%s: get power command iParam1[%d] over specification !!\n", __FILE__, __FUNCTION__, iParam1 );
+				}
 				setPowerCmdRsptime( pCmd, spGetTimetick() );
 				break;
 				
@@ -129,7 +159,7 @@ void *mainPowerMGR( void *argv )
 	#endif	
 	}
 
-	spMSG( dF(dINFO), "%s:%s: Exit %s !!! \n", __FILE__, __FUNCTION__, PROGRAMNAME );
+	spMSG( dF(dINFO), "%s:%s: Exit !!! \n", __FILE__, __FUNCTION__ );
 
 	return;
 }
@@ -138,7 +168,7 @@ void *mainPowerMGR( void *argv )
 void IPCCallBack( void )
 {
 
-	spMSG( dF(dDBG), "IPCCallBack in %s !!! \n", __FILE__, __FUNCTION__, PROGRAMNAME );
+	spMSG( dF(dDBG), "IPCCallBack in !!! \n", __FILE__, __FUNCTION__ );
 	return;
 }
 
@@ -166,6 +196,6 @@ int main( int argc, char *argv )
 
 
 	spIPCDeinit();
-	spMSG( dF(dINFO), "%s:%s: Exit %s !!! \n", __FILE__, __FUNCTION__, PROGRAMNAME );
+	spMSG( dF(dINFO), "%s:%s: Exit !!! \n", __FILE__, __FUNCTION__ );
 	return iRet;
 }
