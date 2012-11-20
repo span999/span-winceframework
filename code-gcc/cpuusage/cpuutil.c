@@ -1,7 +1,77 @@
 /*
+ * 
+ * 
 
 
-*/
+example:
+int main()
+{
+	struct ProcStatSets  StatSetsOld;
+	struct ProcStatSets  StatSetsNow;
+	struct ProcStatSets  StatSetsDiff;
+
+	struct ProcStatNums	 *pThis;
+	struct ProcMeminfoNums	 MemChk;
+
+	int iTmp = 0;
+	double iValue = 0;
+	double iValue0 = 0;
+	double iValue1 = 0;
+	double iValue2 = 0;
+	double iValue3 = 0;
+
+	if( -1 == getProcStatSet( &StatSetsOld ) )
+	{
+		printf( "\ngetProcStat 1st failed !!\n" );
+		goto _ERROR;		
+	}
+
+	while( iTmp++ < CHECKLOOP )
+	{
+		sleep( 1 );
+		if( -1 == getProcStatSet( &StatSetsNow ) )
+		{
+			printf( "\ngetProcStat failed !!\n" );
+			goto _ERROR;		
+		}
+		else
+		{
+			updateSetsNUM( &StatSetsOld, &StatSetsNow, &StatSetsDiff );
+		}
+		getProcMeminfo( &MemChk );
+
+
+		pThis = &(StatSetsDiff.cpu);
+		iValue = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
+		pThis = &(StatSetsDiff.cpu0);
+		iValue0 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
+		pThis = &(StatSetsDiff.cpu1);
+		iValue1 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
+		pThis = &(StatSetsDiff.cpu2);
+		iValue2 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
+		pThis = &(StatSetsDiff.cpu3);
+		iValue3 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
+
+		printf( "CPU usage:%3.2f%%[0:%3.2f%%/1:%3.2f%%/2:%3.2f%%/3:%3.2f%%] ", iValue, iValue0, iValue1, iValue2, iValue3 );
+		printf( "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
+
+	}	///while
+
+	printf( "\ndone !!\n" );
+	return 0;
+
+_ERROR:
+	printf( "\nsomething wrong !!\n" );
+	return 1;
+}
+
+
+ *
+ *
+ */
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
