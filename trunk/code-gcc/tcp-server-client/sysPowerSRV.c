@@ -65,6 +65,25 @@ static int chkPowerCmdsign( struct sysPowerCmd *pCmd )
 }
 
 
+int setPowerCmdID( struct sysPowerCmd *pCmd, int iVal )
+{
+	int iRet = -1;
+	
+	if( pCmd )
+	{
+		if( 0 == chkPowerCmdsign( pCmd ) )
+		{
+			pCmd->cmdID = iVal;
+			iRet = 0;
+		}
+	}
+	else
+		spMSG( dF(dERR), "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
+	
+	return iRet;
+}
+
+
 int getPowerCmdID( struct sysPowerCmd *pCmd )
 {
 	int iRet = -1;
@@ -263,7 +282,7 @@ static int PowerCmdRequest( struct sysPowerCmd *pCmd )
 
 
 
-int getCPUActivatedNum( void )
+int sPSgetCPUActivatedNum( void )
 {
 	int iRet = -1;
 	struct sysPowerCmd PwrCmd;
@@ -272,7 +291,8 @@ int getCPUActivatedNum( void )
 	
 	PowerCmdInit( &PwrCmd );
 	/* pack the data for Power Manager */
-	PwrCmd.cmdID = GETCPUACTIVATEDNUM;
+	/* PwrCmd.cmdID = GETCPUACTIVATEDNUM; */
+	setPowerCmdID( &PwrCmd, GETCPUACTIVATEDNUM);
 
 	/* issue command to Power Manager */
 	/* iRet = PowerCmdSend( &PwrCmd ); */
@@ -291,7 +311,7 @@ int getCPUActivatedNum( void )
 }
 
 
-int setCPUActivatedNum( int num )
+int sPSsetCPUActivatedNum( int num )
 {
 	int iRet = -1;
 	struct sysPowerCmd PwrCmd;
@@ -300,7 +320,9 @@ int setCPUActivatedNum( int num )
 	
 	PowerCmdInit( &PwrCmd );
 	/* pack the data for Power Manager */
-	PwrCmd.cmdID = SETCPUACTIVATEDNUM;
+	/* PwrCmd.cmdID = SETCPUACTIVATEDNUM; */
+	setPowerCmdID( &PwrCmd, SETCPUACTIVATEDNUM);
+	setPowerCmdParam1( &PwrCmd, num );
 
 	/* issue command to Power Manager */
 	/* iRet = PowerCmdSend( &PwrCmd ); */
@@ -318,7 +340,7 @@ int setCPUActivatedNum( int num )
 }
 
 
-int loopbackTest( int test )
+int sPSloopbackTest( int test )
 {
 	int iRet = -1;
 	struct sysPowerCmd PwrCmd;
@@ -327,7 +349,8 @@ int loopbackTest( int test )
 	
 	PowerCmdInit( &PwrCmd );
 	/* pack the data for Power Manager */
-	PwrCmd.cmdID = LOOPBACKTEST;
+	/* PwrCmd.cmdID = LOOPBACKTEST; */
+	setPowerCmdID( &PwrCmd, LOOPBACKTEST);
 
 	setPowerCmdParam1( &PwrCmd, test );
 
