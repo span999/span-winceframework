@@ -33,13 +33,13 @@ all: clean HELPER TCPIPS IPCPACK CLIENT SERVER RINGBUF SEMSHM IPCSRV POWERSRV TE
 
 POWERMGR:
 	@echo === $(POWERMGR) =============================================================
-	$(CC) $(CCGLAG) -c ../$(POWERMGR).c
-	$(CC) $(CCGLAG) -o $(POWERMGR) $(POWERMGR).o -lpthread -L. -l$(HELPER) -l$(IPCSRV) -l$(POWERSRV)
+	$(CC) $(CCFLAG) -c ../$(POWERMGR).c
+	$(CC) $(CCFLAG) -o $(POWERMGR) $(POWERMGR).o -lpthread -L. -l$(HELPER) -l$(IPCSRV) -l$(POWERSRV)
 
 IPCMGR:
 	@echo === $(IPCMGR) =============================================================
-	$(CC) $(CCGLAG) -c ../$(IPCMGR).c
-	$(CC) $(CCGLAG) -o $(IPCMGR) $(IPCMGR).o -L. -l$(HELPER) -l$(IPCSRV)
+	$(CC) $(CCFLAG) -c ../$(IPCMGR).c
+	$(CC) $(CCFLAG) -o $(IPCMGR) $(IPCMGR).o -L. -l$(HELPER) -l$(IPCSRV)
 
 TESTCLIENT:
 	@echo === $(TESTCILENT) =============================================================
@@ -67,8 +67,8 @@ SEMSHM:
 
 SERVER:
 	@echo === $(SERVER) =============================================================
-	$(CC) $(CCGLAG) -c ../testrun.c ../main.c
-	$(CC) $(CCGLAG) -o $(SERVER) testrun.o tcp-server.o main.o -L. -l$(HELPER)
+	$(CC) $(CCFLAG) -c ../testrun.c ../main.c
+	$(CC) $(CCFLAG) -o $(SERVER) testrun.o tcp-server.o main.o -L. -l$(HELPER)
 
 CLIENT:
 	@echo === $(CLIENT) =============================================================
