@@ -5,9 +5,15 @@
 
 
 
+#define _USE_NO_GREP_
+
+
+
+
 /* 
 Parameters in /proc/stat
 */
+
 
 typedef  long	_TYPNUM;
 
@@ -51,10 +57,12 @@ struct ProcMeminfoNums
 	_TYPNUM vmallocchunkNUM;
 };
 
-
-int getProcStat( struct ProcStatNums *pIn, int cpuIdx );
-int getProcStatSet( struct ProcStatSets *pIn );
-int updateNUM( struct ProcStatNums *pOld, struct ProcStatNums *pNew, struct ProcStatNums *pDiff );
+#ifdef	_USE_NO_GREP_
 int updateSetsNUM( struct ProcStatSets *pOld, struct ProcStatSets *pNew, struct ProcStatSets *pDiff );
+int getProcStatSet( struct ProcStatSets *pIn );
+#else
+int getProcStat( struct ProcStatNums *pIn, int cpuIdx );
+int updateNUM( struct ProcStatNums *pOld, struct ProcStatNums *pNew, struct ProcStatNums *pDiff );
+#endif
 int getProcMeminfo( struct ProcMeminfoNums *pIn );
 

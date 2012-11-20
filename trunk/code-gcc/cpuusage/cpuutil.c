@@ -37,7 +37,7 @@
 #endif
 
 
-
+#ifndef _USE_NO_GREP_
 static int setProcStatNum( struct ProcStatNums *pIn, int iIdx, int Num )
 {
 	int iRet = 0;
@@ -209,6 +209,7 @@ int getProcStat( struct ProcStatNums *pIn, int cpuIdx )
 _pEXIT:
 	return iRet;
 }
+#endif	/* #ifndef _USE_NO_GREP_ */
 
 
 int updateNUM( struct ProcStatNums *pOld, struct ProcStatNums *pNew, struct ProcStatNums *pDiff )
