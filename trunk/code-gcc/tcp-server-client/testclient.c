@@ -29,8 +29,8 @@ char *commands[] = { \
 
 char *descript[] = { \
 "command loopback", \
-"get activate core number", \
-"set activate core number", \
+"get activate core number (1,2,3,4)", \
+"set activate core number (1,2,3,4)", \
 "fullpower (set all core ON)", \
 "lowpower (set 1 core ON only)", \
 "null", \

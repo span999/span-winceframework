@@ -14,7 +14,7 @@
 static char PROGRAMNAME[] = "sysIPCMGR";
 
 
-int main( int argc, char *argv )
+int main( int argc, char *argv[] )
 {
 	int iRet = -1;
 	int iLoop = 0;
