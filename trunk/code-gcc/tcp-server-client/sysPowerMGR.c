@@ -205,6 +205,8 @@ static int PowerCmdParser( struct sysPowerCmd *pCmd )
 #define	_USE_USLEEP_
 #define CMD_INTERVAL	200		/* 200 ms polling */
 #define US_MS			1000000
+#define	HEREMSGTIME		15
+
 
 void *mainPowerMGR( void *argv )
 {
@@ -224,10 +226,10 @@ void *mainPowerMGR( void *argv )
 
 
 		#ifdef _USE_USLEEP_
-		if( ( ++iLoop % ((5*US_MS)/CMD_INTERVAL) ) == 0 )
+		if( ( ++iLoop % ((HEREMSGTIME*US_MS)/CMD_INTERVAL) ) == 0 )
 			spMSG( dF(dINFO), "%s:%s: is here ... %d \n", __FILE__, __FUNCTION__, iLoop );
 		#else
-		if( ++iLoop % 5 == 0 )
+		if( ++iLoop % HEREMSGTIME == 0 )
 			spMSG( dF(dINFO), "%s:%s: is here ... \n", __FILE__, __FUNCTION__ );
 		#endif
 			
