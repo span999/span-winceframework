@@ -12,16 +12,20 @@
 #include <sys/time.h>
 
 #include "cpuutil.h"
+#include "framebuffer.h"
+
+
 
 
 
 #define	CHECKLOOP		5
 
 
-int main()
+int main( int argc, char *argv[] )
 {
 	int return_value = 0;
 	pthread_t thread_id;
+	
 #ifdef _USE_NO_GREP_	/* cpuutil.h */
 	struct ProcStatSets  StatSetsOld;
 	struct ProcStatSets  StatSetsNow;
@@ -46,6 +50,17 @@ int main()
 	double iValue1 = 0;
 	double iValue2 = 0;
 	double iValue3 = 0;
+
+	int checkloop = 0;
+	int loopmode = 0;
+	checkloop = CHECKLOOP;
+
+	if( (2 == argc) && (0 == strcmp("loop", argv[1])) )
+	{
+		checkloop = 65534;
+		loopmode = 1;
+	}
+
 
 #ifdef _USE_NO_GREP_	/* cpuutil.h */
 	if( -1 == getProcStatSet( &StatSetsOld ) )
@@ -73,7 +88,9 @@ int main()
 	}
 #endif
 
-	while( iTmp++ < CHECKLOOP )
+	getFBinfo();
+
+	while( iTmp++ < checkloop )
 	{
 		
 		sleep( 1 );
@@ -150,9 +167,26 @@ int main()
 		#endif	///#if 0
 #endif	///#ifdef _USE_NO_GREP_
 
-		///printf( "CPU usage: %3.2f%%.[0:%3.2f%%]\n", iValue, iValue0 );
-		printf( "CPU usage:%3.2f%%[0:%3.2f%%/1:%3.2f%%/2:%3.2f%%/3:%3.2f%%] ", iValue, iValue0, iValue1, iValue2, iValue3 );
-		printf( "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
+		if( 0 == loopmode )
+		{
+			///printf( "CPU usage: %3.2f%%.[0:%3.2f%%]\n", iValue, iValue0 );
+			printf( "CPU usage:%3.2f%%[0:%3.2f%%/1:%3.2f%%/2:%3.2f%%/3:%3.2f%%] ", iValue, iValue0, iValue1, iValue2, iValue3 );
+			printf( "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
+		}
+		drawHbar( 0, 0, (100*5), 10, _BLACK_COLOR );
+		drawHbar( 0, 2, (iValue*5), 8, _RED_COLOR );
+
+		drawHbar( 0, 10, (100*5), 10, _BLACK_COLOR );
+		drawHbar( 0, 12, (iValue0*5), 8, _PINK_COLOR );
+
+		drawHbar( 0, 20, (100*5), 10, _BLACK_COLOR );
+		drawHbar( 0, 22, (iValue1*5), 8, _PINK_COLOR );
+
+		drawHbar( 0, 30, (100*5), 10, _BLACK_COLOR );
+		drawHbar( 0, 32, (iValue2*5), 8, _PINK_COLOR );
+
+		drawHbar( 0, 40, (100*5), 10, _BLACK_COLOR );
+		drawHbar( 0, 42, (iValue3*5), 8, _PINK_COLOR );
 
 	}	///while
 
