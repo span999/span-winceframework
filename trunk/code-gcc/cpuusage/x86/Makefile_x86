@@ -7,20 +7,31 @@ CFLAGS	= -O2 -I. -L. ${DEFINES}
 
 PROGRAM	= cpuusage
 DYNLIB  = libtest.so
-STATICLIB = libcpuutil.a
-STATICNAME = cpuutil
+STATIC1LIB = libcpuutil.a
+STATIC1NAME = cpuutil
+STATIC2LIB = libframebuffer.a
+STATIC2NAME = framebuffer
 
 
 all: clean PROGRAM
 
 
-STATICLIB:
+STATIC1LIB:
 	@echo 
 	@echo ================================================================
-	@echo build static library
+	@echo build static ${STATIC1LIB} library
 	@echo ----------------------------------------------------------------
-	${CC} ${CFLAGS} -c ../${STATICNAME}.c
-	${AR} rcs ${STATICLIB} ${STATICNAME}.o
+	${CC} ${CFLAGS} -c ../${STATIC1NAME}.c
+	${AR} rcs ${STATIC1LIB} ${STATIC1NAME}.o
+
+STATIC2LIB:
+	@echo 
+	@echo ================================================================
+	@echo build static ${STATIC2LIB} library
+	@echo ----------------------------------------------------------------
+	${CC} ${CFLAGS} -c ../${STATIC2NAME}.c
+	${AR} rcs ${STATIC2LIB} ${STATIC2NAME}.o
+
 
 DYNLIB:
 	@echo 
@@ -29,12 +40,12 @@ DYNLIB:
 	@echo ----------------------------------------------------------------
 	${CC} ../so_test.c -fPIC -shared -o ${DYNLIB}
 
-PROGRAM: STATICLIB
+PROGRAM: STATIC1LIB STATIC2LIB
 	@echo 
 	@echo ================================================================
-	@echo build binary.
+	@echo build ${PROGRAM} binary.
 	@echo ----------------------------------------------------------------
-	${CC} ../main.c ${CFLAGS} -o ${PROGRAM} -lpthread -L. -l${STATICNAME}
+	${CC} ../main.c ${CFLAGS} -o ${PROGRAM} -lpthread -L. -l${STATIC1NAME} -l${STATIC2NAME}
 
 clean:
 	@echo 

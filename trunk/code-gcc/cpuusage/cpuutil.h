@@ -3,6 +3,9 @@
 
 */
 
+#ifndef __CPUUTIL_H__
+#define __CPUUTIL_H__
+
 
 
 #define _USE_NO_GREP_
@@ -66,3 +69,5 @@ int updateNUM( struct ProcStatNums *pOld, struct ProcStatNums *pNew, struct Proc
 #endif
 int getProcMeminfo( struct ProcMeminfoNums *pIn );
 
+
+#endif	/* __CPUUTIL_H__ */
