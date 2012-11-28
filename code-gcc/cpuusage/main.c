@@ -58,16 +58,59 @@ static struct cpuBarCfgS V4 = \
 };
 
 
-static struct cpuBarCfgS* pV = &V4;
+static struct cpuBarCfgS* pV = &V2; /* graphic mode 0 by default */
+static char verStr[] = "v5";
+
+static long g_loop = 5;
+static long g_interval = 1000;
+static long g_text = 1;
+static long g_graphic = 1;
+static long g_graphicmode = 0;
 
 
 #define	CHECKLOOP		5
 
 
+void logo( void )
+{
+	printf( "\n===========================================" );
+	printf( "\n=   cpu usage tool %s, powered by span.   =", verStr );
+	printf( "\n=   additional -h for more information.   =" );
+	printf( "\n===========================================" );
+	printf( "\n" );
+}
+
+
+void helps( void )
+{
+	printf( "\n==============================================================" );
+	printf( "\n=  cpu usage tool %s. parameter info                         =", verStr );
+	printf( "\n=  -h     : this help list.                                  =" );
+	printf( "\n=  -l num : loops of checking. 0=forever, default=5          =" );
+	printf( "\n=  -i num : interval of chaecking. 1000=1sec, default=1000.  =" );
+	printf( "\n=  -t num : text msg. 0=off 1=on, default=1                  =" );
+	printf( "\n=  -g num : graphic msg. 0=off 1=on, default=1               =" );
+	printf( "\n=  -v num : graphic msg mode. 0=type0 ..., default=0         =" );
+	printf( "\n=                                            powered by span =" );
+	printf( "\n==============================================================" );
+	printf( "\n" );
+	printf( "\n" );
+}
+
+
+void configs( void )
+{
+	printf( "\n== run with -l %lu, -i %lu, -t %lu, -g %lu, -v %lu config. ==", g_loop, g_interval, g_text, g_graphic, g_graphicmode );
+	printf( "\n" );
+}
+
+
 int main( int argc, char *argv[] )
 {
 	int return_value = 0;
+/*
 	pthread_t thread_id;
+*/
 	
 #ifdef _USE_NO_GREP_	/* cpuutil.h */
 	struct ProcStatSets  StatSetsOld;
@@ -87,25 +130,69 @@ int main( int argc, char *argv[] )
 	struct ProcStatNums	 *pThis;
 	struct ProcMeminfoNums	 MemChk;
 
-	int iTmp = 0;
+	long lTmp = 0;
 	double iValue = 0;
 	double iValue0 = 0;
 	double iValue1 = 0;
 	double iValue2 = 0;
 	double iValue3 = 0;
 
-	int checkloop = 0;
-	int loopmode = 0;
-	checkloop = CHECKLOOP;
-
-	if( (2 == argc) && (0 == strcmp("loop", argv[1])) )
+	if( (2 == argc) && (0 == strcmp("-h", argv[1])) )
 	{
-		checkloop = 65534;
-		loopmode = 1;
+		helps();
+		exit(0);
 	}
 	
-	printf( "\n   cpu usage tool v4, powered by span.\n" );
-
+	/* check user parameter */
+	lTmp = 1;
+	while( (argc>1) && (argc>lTmp) )
+	{
+		if( (0 == strcmp("-l", argv[lTmp])) )
+		{
+			g_loop = atoi( argv[lTmp+1] );
+			lTmp++;
+		}
+		else
+		if( (0 == strcmp("-i", argv[lTmp])) )
+		{
+			g_interval = atoi( argv[lTmp+1] );
+			lTmp++;
+		}
+		else
+		if( (0 == strcmp("-t", argv[lTmp])) )
+		{
+			g_text = atoi( argv[lTmp+1] );
+			lTmp++;
+		}
+		else
+		if( (0 == strcmp("-g", argv[lTmp])) )
+		{
+			g_graphic = atoi( argv[lTmp+1] );
+			lTmp++;
+		}
+		else
+		if( (0 == strcmp("-v", argv[lTmp])) )
+		{
+			g_graphicmode = atoi( argv[lTmp+1] );
+			if( g_graphicmode == 0 )
+				pV = &V2;
+			else
+			if( g_graphicmode == 1 )
+				pV = &V3;
+			else
+			if( g_graphicmode == 2 )
+				pV = &V4;
+			lTmp++;
+		}
+		else
+			printf( "\n  unknow parameter %s !!\n", argv[lTmp] );
+	
+		lTmp++;
+	}
+	
+	logo();
+	
+	configs();
 
 #ifdef _USE_NO_GREP_	/* cpuutil.h */
 	if( -1 == getProcStatSet( &StatSetsOld ) )
@@ -135,10 +222,11 @@ int main( int argc, char *argv[] )
 
 	getFBinfo();
 
-	while( iTmp++ < checkloop )
+	lTmp = 0;
+	while( lTmp++ < g_loop )
 	{
-		
-		sleep( 1 );
+		usleep( (g_interval*1000) );
+
 #ifdef _USE_NO_GREP_	/* cpuutil.h */
 		if( -1 == getProcStatSet( &StatSetsNow ) )
 		{
@@ -212,35 +300,39 @@ int main( int argc, char *argv[] )
 		#endif	///#if 0
 #endif	///#ifdef _USE_NO_GREP_
 
-		if( 0 == loopmode )
+		if( g_text > 0 )
 		{
 			///printf( "CPU usage: %3.2f%%.[0:%3.2f%%]\n", iValue, iValue0 );
 			printf( "CPU usage:%3.2f%%[0:%3.2f%%/1:%3.2f%%/2:%3.2f%%/3:%3.2f%%] ", iValue, iValue0, iValue1, iValue2, iValue3 );
 			printf( "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
 		}
 
-		drawHbar( pV->_ab.X, pV->_ab.Y, (pV->_ab.L*pV->_ab.M), pV->_ab.H, pV->_ab.C );
-		drawHbar( pV->_af.X, pV->_af.Y, (iValue*pV->_af.M), pV->_af.H, pV->_af.C );
+		if( g_graphic > 0 )
+		{
+			drawHbar( pV->_ab.X, pV->_ab.Y, (pV->_ab.L*pV->_ab.M), pV->_ab.H, pV->_ab.C );
+			drawHbar( pV->_af.X, pV->_af.Y, (iValue*pV->_af.M), pV->_af.H, pV->_af.C );
 
-		drawHbar( pV->_0b.X, pV->_0b.Y, (pV->_0b.L*pV->_0b.M), pV->_0b.H, pV->_0b.C );
-		drawHbar( pV->_0f.X, pV->_0f.Y, (iValue0*pV->_0f.M), pV->_0f.H, pV->_0f.C );
+			drawHbar( pV->_0b.X, pV->_0b.Y, (pV->_0b.L*pV->_0b.M), pV->_0b.H, pV->_0b.C );
+			drawHbar( pV->_0f.X, pV->_0f.Y, (iValue0*pV->_0f.M), pV->_0f.H, pV->_0f.C );
 
-		drawHbar( pV->_1b.X, pV->_1b.Y, (pV->_1b.L*pV->_1b.M), pV->_1b.H, pV->_1b.C );
-		drawHbar( pV->_1f.X, pV->_1f.Y, (iValue1*pV->_1f.M), pV->_1f.H, pV->_1f.C );
+			drawHbar( pV->_1b.X, pV->_1b.Y, (pV->_1b.L*pV->_1b.M), pV->_1b.H, pV->_1b.C );
+			drawHbar( pV->_1f.X, pV->_1f.Y, (iValue1*pV->_1f.M), pV->_1f.H, pV->_1f.C );
 
-		drawHbar( pV->_2b.X, pV->_2b.Y, (pV->_2b.L*pV->_2b.M), pV->_2b.H, pV->_2b.C );
-		drawHbar( pV->_2f.X, pV->_2f.Y, (iValue2*pV->_2f.M), pV->_2f.H, pV->_2f.C );
+			drawHbar( pV->_2b.X, pV->_2b.Y, (pV->_2b.L*pV->_2b.M), pV->_2b.H, pV->_2b.C );
+			drawHbar( pV->_2f.X, pV->_2f.Y, (iValue2*pV->_2f.M), pV->_2f.H, pV->_2f.C );
 
-		drawHbar( pV->_3b.X, pV->_3b.Y, (pV->_3b.L*pV->_3b.M), pV->_3b.H, pV->_3b.C );
-		drawHbar( pV->_3f.X, pV->_3f.Y, (iValue3*pV->_3f.M), pV->_3f.H, pV->_3f.C );
+			drawHbar( pV->_3b.X, pV->_3b.Y, (pV->_3b.L*pV->_3b.M), pV->_3b.H, pV->_3b.C );
+			drawHbar( pV->_3f.X, pV->_3f.Y, (iValue3*pV->_3f.M), pV->_3f.H, pV->_3f.C );
+		}
 	}	///while
 
-
+/*
 	printf("The process ID is %d\n", (int)getpid() );
 	printf("The parent process ID is %d\n", (int)getppid() );
-
-	///pthread_create( &thread_id, NULL, &print_xs, NULL );
-
+*/
+/*
+	pthread_create( &thread_id, NULL, &print_xs, NULL );
+*/
 	printf( "\ndone \n" );
 	return 0;
 
