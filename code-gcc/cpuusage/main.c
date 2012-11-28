@@ -61,7 +61,7 @@ int main( int argc, char *argv[] )
 		loopmode = 1;
 	}
 	
-	printf( "\n   cpu usage tool v2, powered by span.\n" );
+	printf( "\n   cpu usage tool v3, powered by span.\n" );
 
 
 #ifdef _USE_NO_GREP_	/* cpuutil.h */
@@ -175,7 +175,7 @@ int main( int argc, char *argv[] )
 			printf( "CPU usage:%3.2f%%[0:%3.2f%%/1:%3.2f%%/2:%3.2f%%/3:%3.2f%%] ", iValue, iValue0, iValue1, iValue2, iValue3 );
 			printf( "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
 		}
-	#if 1
+	#if 0
 		drawHbar( 0, 0, (100*5), 10, _BLACK_COLOR );
 		drawHbar( 0, 2, (iValue*5), 8, _RED_COLOR );
 
