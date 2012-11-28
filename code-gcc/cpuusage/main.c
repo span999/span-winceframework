@@ -60,6 +60,8 @@ int main( int argc, char *argv[] )
 		checkloop = 65534;
 		loopmode = 1;
 	}
+	
+	printf( "\n   cpu usage tool v2, powered by span.\n" );
 
 
 #ifdef _USE_NO_GREP_	/* cpuutil.h */
@@ -173,6 +175,7 @@ int main( int argc, char *argv[] )
 			printf( "CPU usage:%3.2f%%[0:%3.2f%%/1:%3.2f%%/2:%3.2f%%/3:%3.2f%%] ", iValue, iValue0, iValue1, iValue2, iValue3 );
 			printf( "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
 		}
+	#if 1
 		drawHbar( 0, 0, (100*5), 10, _BLACK_COLOR );
 		drawHbar( 0, 2, (iValue*5), 8, _RED_COLOR );
 
@@ -187,7 +190,22 @@ int main( int argc, char *argv[] )
 
 		drawHbar( 0, 40, (100*5), 10, _BLACK_COLOR );
 		drawHbar( 0, 42, (iValue3*5), 8, _PINK_COLOR );
+	#else
+		drawHbar( 0, 0, (100), 10, _BLACK_COLOR );
+		drawHbar( 0, 2, (iValue), 8, _RED_COLOR );
 
+		drawHbar( 100, 0, (100), 10, _BLACK_COLOR );
+		drawHbar( 100, 2, (iValue0), 8, _PINK_COLOR );
+
+		drawHbar( 200, 0, (100), 10, _BLACK_COLOR );
+		drawHbar( 200, 2, (iValue1), 8, _PINK_COLOR );
+
+		drawHbar( 300, 0, (100), 10, _BLACK_COLOR );
+		drawHbar( 300, 2, (iValue2), 8, _PINK_COLOR );
+
+		drawHbar( 400, 0, (100), 10, _BLACK_COLOR );
+		drawHbar( 400, 2, (iValue3), 8, _PINK_COLOR );
+	#endif
 	}	///while
 
 
