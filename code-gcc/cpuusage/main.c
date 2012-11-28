@@ -15,7 +15,50 @@
 #include "framebuffer.h"
 
 
+static struct cpuBarCfgS V2 = \
+{
+	{ 0,  2, 100,  8, 5, _RED_COLOR },
+	{ 0,  0, 100, 10, 5, _BLACK_COLOR },
+	{ 0, 12, 100,  8, 5, _PINK_COLOR },
+	{ 0, 10, 100, 10, 5, _BLACK_COLOR },
+	{ 0, 22, 100,  8, 5, _PINK_COLOR },
+	{ 0, 20, 100, 10, 5, _BLACK_COLOR },
+	{ 0, 32, 100,  8, 5, _PINK_COLOR },
+	{ 0, 30, 100, 10, 5, _BLACK_COLOR },
+	{ 0, 42, 100,  8, 5, _PINK_COLOR },
+	{ 0, 40, 100, 10, 5, _BLACK_COLOR },
+};
 
+static struct cpuBarCfgS V3 = \
+{
+	{   0,  2, 100,  8, 1, _RED_COLOR },
+	{   0,  0, 100, 10, 1, _BLACK_COLOR },
+	{ 100,  2, 100,  8, 1, _PINK_COLOR },
+	{ 100,  0, 100, 10, 1, _BLACK_COLOR },
+	{ 200,  2, 100,  8, 1, _PINK_COLOR },
+	{ 200,  0, 100, 10, 1, _BLACK_COLOR },
+	{ 300,  2, 100,  8, 1, _PINK_COLOR },
+	{ 300,  0, 100, 10, 1, _BLACK_COLOR },
+	{ 400,  2, 100,  8, 1, _PINK_COLOR },
+	{ 400,  0, 100, 10, 1, _BLACK_COLOR },
+};
+
+static struct cpuBarCfgS V4 = \
+{
+	{   0,  2, 100,  8, 4, _RED_COLOR },
+	{   0,  0, 100, 10, 4, _BLACK_COLOR },
+	{   0, 12, 100,  8, 1, _PINK_COLOR },
+	{   0, 10, 100, 10, 1, _BLACK_COLOR },
+	{ 100, 12, 100,  8, 1, _PINK_COLOR },
+	{ 100, 10, 100, 10, 1, _BLACK_COLOR },
+	{ 200, 12, 100,  8, 1, _PINK_COLOR },
+	{ 200, 10, 100, 10, 1, _BLACK_COLOR },
+	{ 300, 12, 100,  8, 1, _PINK_COLOR },
+	{ 300, 10, 100, 10, 1, _BLACK_COLOR },
+};
+
+
+static struct cpuBarCfgS* pV = &V4;
 
 
 #define	CHECKLOOP		5
@@ -61,7 +104,7 @@ int main( int argc, char *argv[] )
 		loopmode = 1;
 	}
 	
-	printf( "\n   cpu usage tool v3, powered by span.\n" );
+	printf( "\n   cpu usage tool v4, powered by span.\n" );
 
 
 #ifdef _USE_NO_GREP_	/* cpuutil.h */
@@ -175,37 +218,21 @@ int main( int argc, char *argv[] )
 			printf( "CPU usage:%3.2f%%[0:%3.2f%%/1:%3.2f%%/2:%3.2f%%/3:%3.2f%%] ", iValue, iValue0, iValue1, iValue2, iValue3 );
 			printf( "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
 		}
-	#if 0
-		drawHbar( 0, 0, (100*5), 10, _BLACK_COLOR );
-		drawHbar( 0, 2, (iValue*5), 8, _RED_COLOR );
 
-		drawHbar( 0, 10, (100*5), 10, _BLACK_COLOR );
-		drawHbar( 0, 12, (iValue0*5), 8, _PINK_COLOR );
+		drawHbar( pV->_ab.X, pV->_ab.Y, (pV->_ab.L*pV->_ab.M), pV->_ab.H, pV->_ab.C );
+		drawHbar( pV->_af.X, pV->_af.Y, (iValue*pV->_af.M), pV->_af.H, pV->_af.C );
 
-		drawHbar( 0, 20, (100*5), 10, _BLACK_COLOR );
-		drawHbar( 0, 22, (iValue1*5), 8, _PINK_COLOR );
+		drawHbar( pV->_0b.X, pV->_0b.Y, (pV->_0b.L*pV->_0b.M), pV->_0b.H, pV->_0b.C );
+		drawHbar( pV->_0f.X, pV->_0f.Y, (iValue0*pV->_0f.M), pV->_0f.H, pV->_0f.C );
 
-		drawHbar( 0, 30, (100*5), 10, _BLACK_COLOR );
-		drawHbar( 0, 32, (iValue2*5), 8, _PINK_COLOR );
+		drawHbar( pV->_1b.X, pV->_1b.Y, (pV->_1b.L*pV->_1b.M), pV->_1b.H, pV->_1b.C );
+		drawHbar( pV->_1f.X, pV->_1f.Y, (iValue1*pV->_1f.M), pV->_1f.H, pV->_1f.C );
 
-		drawHbar( 0, 40, (100*5), 10, _BLACK_COLOR );
-		drawHbar( 0, 42, (iValue3*5), 8, _PINK_COLOR );
-	#else
-		drawHbar( 0, 0, (100), 10, _BLACK_COLOR );
-		drawHbar( 0, 2, (iValue), 8, _RED_COLOR );
+		drawHbar( pV->_2b.X, pV->_2b.Y, (pV->_2b.L*pV->_2b.M), pV->_2b.H, pV->_2b.C );
+		drawHbar( pV->_2f.X, pV->_2f.Y, (iValue2*pV->_2f.M), pV->_2f.H, pV->_2f.C );
 
-		drawHbar( 100, 0, (100), 10, _BLACK_COLOR );
-		drawHbar( 100, 2, (iValue0), 8, _PINK_COLOR );
-
-		drawHbar( 200, 0, (100), 10, _BLACK_COLOR );
-		drawHbar( 200, 2, (iValue1), 8, _PINK_COLOR );
-
-		drawHbar( 300, 0, (100), 10, _BLACK_COLOR );
-		drawHbar( 300, 2, (iValue2), 8, _PINK_COLOR );
-
-		drawHbar( 400, 0, (100), 10, _BLACK_COLOR );
-		drawHbar( 400, 2, (iValue3), 8, _PINK_COLOR );
-	#endif
+		drawHbar( pV->_3b.X, pV->_3b.Y, (pV->_3b.L*pV->_3b.M), pV->_3b.H, pV->_3b.C );
+		drawHbar( pV->_3f.X, pV->_3f.Y, (iValue3*pV->_3f.M), pV->_3f.H, pV->_3f.C );
 	}	///while
 
 

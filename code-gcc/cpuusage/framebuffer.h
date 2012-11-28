@@ -18,7 +18,29 @@
 int getFBinfo( void );
 int drawHbar( unsigned long startX, unsigned long startY, unsigned long lenth, unsigned long height, unsigned short color );
 
+struct cpuBarCfg
+{
+	unsigned long X;
+	unsigned long Y;
+	unsigned long L;
+	unsigned long H;
+	unsigned long M;
+	unsigned short C;
+};
 
+struct cpuBarCfgS
+{
+	struct cpuBarCfg _af;
+	struct cpuBarCfg _ab;
+	struct cpuBarCfg _0f;
+	struct cpuBarCfg _0b;
+	struct cpuBarCfg _1f;
+	struct cpuBarCfg _1b;
+	struct cpuBarCfg _2f;
+	struct cpuBarCfg _2b;
+	struct cpuBarCfg _3f;
+	struct cpuBarCfg _3b;
+};
 
 
 
