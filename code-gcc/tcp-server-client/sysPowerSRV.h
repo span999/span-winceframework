@@ -19,6 +19,8 @@ int sysPowerSRVDeinit( void );
 
 int sPSgetCPUActivatedNum( void );
 int sPSsetCPUActivatedNum( int num );
+int sPSsetCPUDVFS( int num );
+int sPSsetCPUspeed( int nMHz );
 
 int sPSloopbackTest( int test );
 
