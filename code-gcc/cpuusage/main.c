@@ -87,7 +87,7 @@ void helps( void )
 	printf( "\n=  cpu usage tool %s. parameter info                       =", verStr );
 	printf( "\n=  -h     : this help list.                                  =" );
 	printf( "\n=  -l num : loops of checking. 0=forever, default=5          =" );
-	printf( "\n=  -i num : interval of chaecking. 1000=1sec, default=1000.  =" );
+	printf( "\n=  -i num : interval of checking. 1000=1sec, default=1000.   =" );
 	printf( "\n=  -t num : text msg. 0=off 1=on, default=1                  =" );
 	printf( "\n=  -g num : graphic msg. 0=off 1=on, default=1               =" );
 	printf( "\n=  -v num : graphic msg mode. 0=type0 ..., default=0         =" );
