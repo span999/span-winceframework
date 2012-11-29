@@ -30,6 +30,7 @@
 
 static pthread_t thread_id;
 static int CPUcoreActivated = 4;
+static char verStr[] = "v2.0";
 
 /* for mutex */
 static pthread_mutex_t mutex;
@@ -151,6 +152,81 @@ static int ifCoreNumValid( int iCore )
 }
 
 
+static int setCPUdvfs( int iOn )
+{
+	int iRet = -1;
+	FILE *fp;
+	char devDVFSon[] = "echo interactive > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor";
+	char devDVFSoff[] = "echo userspace > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor";
+
+#ifdef __ARM_CODE__
+	if( 0 == iOn )
+		fp = popen( devDVFSoff, "r" );
+	else
+	if( 1 == iOn )
+		fp = popen( devDVFSon, "r" );
+	else
+		;
+
+	if( fp == NULL )
+	{
+		spMSG( dF(dERR), "%s:%s: Failed on %s !!!\n", __FILE__, __FUNCTION__, (0==iOn)?devDVFSoff:devDVFSon );
+		return iRet;
+	}
+	sleep(1);
+	pclose( fp );
+	iRet = 0;
+#else
+	spMSG( dF(dERR), "%s:%s: OK on %s !!!\n", __FILE__, __FUNCTION__, (0==iOn)?devDVFSoff:devDVFSon );
+	iRet = 0;
+#endif
+
+	return iRet;
+}
+
+
+static int setCPUspeed( int nSpeed )
+{
+	int iRet = -1;
+	int iLoop = 0;
+	FILE *fp;
+	char base0 = '0';
+	char devCPUspeed200[] = "echo 198000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed";
+	char devCPUspeed1000[] = "echo 996000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed";
+	char *devCPUspeed = NULL;
+	
+	devCPUspeed = devCPUspeed1000;
+	if( nSpeed == 200 )
+		devCPUspeed = devCPUspeed200;
+
+#ifdef __ARM_CODE__
+	
+	iLoop = 0;
+	while( iLoop < CPUcoreActivated )
+	{
+		devCPUspeed[41] = base0+iLoop;
+		fp = popen( devCPUspeed, "r" );
+
+		if( fp == NULL )
+			spMSG( dF(dERR), "%s:%s: Failed on %s !!!\n", __FILE__, __FUNCTION__, devCPUspeed );
+		else
+		{
+			sleep(1);
+			pclose( fp );
+		}
+		
+		iLoop++;
+	}
+	iRet = 0;
+#else
+	spMSG( dF(dERR), "%s:%s: OK on %s !!!\n", __FILE__, __FUNCTION__, devCPUspeed );
+	iRet = 0;
+#endif
+
+	return iRet;
+}
+
+
 static int PowerCmdParser( struct sysPowerCmd *pCmd )
 {
 	int iRet = -1;
@@ -185,6 +261,21 @@ static int PowerCmdParser( struct sysPowerCmd *pCmd )
 				}
 				setPowerCmdRsptime( pCmd, spGetTimetick() );
 				break;
+
+			case SETCPUDVFS:
+				iParam1 = getPowerCmdParam1( pCmd );
+				iRet = setCPUdvfs( iParam1 );
+				setPowerCmdReturn( pCmd, iRet );
+				setPowerCmdRsptime( pCmd, spGetTimetick() );
+				break;
+
+			case SETCPUSPEED:
+				iParam1 = getPowerCmdParam1( pCmd );
+				setCPUdvfs( 0 );
+				iRet = setCPUspeed( iParam1 );
+				setPowerCmdReturn( pCmd, iRet );
+				setPowerCmdRsptime( pCmd, spGetTimetick() );
+				break;
 				
 			case LOOPBACKTEST:
 				setPowerCmdReturn( pCmd, getPowerCmdParam1(pCmd) );
@@ -205,7 +296,7 @@ static int PowerCmdParser( struct sysPowerCmd *pCmd )
 #define	_USE_USLEEP_
 #define CMD_INTERVAL	200		/* 200 ms polling */
 #define US_MS			1000000
-#define	HEREMSGTIME		15
+#define	HEREMSGTIME		45
 
 
 void *mainPowerMGR( void *argv )
@@ -227,10 +318,10 @@ void *mainPowerMGR( void *argv )
 
 		#ifdef _USE_USLEEP_
 		if( ( ++iLoop % ((HEREMSGTIME*US_MS)/CMD_INTERVAL) ) == 0 )
-			spMSG( dF(dINFO), "%s:%s: is here ... %d \n", __FILE__, __FUNCTION__, iLoop );
+			spMSG( dF(dINFO), "%s:%s: %s is here ... %d \n", __FILE__, __FUNCTION__, verStr, iLoop );
 		#else
 		if( ++iLoop % HEREMSGTIME == 0 )
-			spMSG( dF(dINFO), "%s:%s: is here ... \n", __FILE__, __FUNCTION__ );
+			spMSG( dF(dINFO), "%s:%s: %s is here ... %d \n", __FILE__, __FUNCTION__, verStr, iLoop );
 		#endif
 			
 		/*  */
