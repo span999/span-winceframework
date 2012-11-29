@@ -13,6 +13,9 @@
 
 
 
+
+static char verStr[] = "v2.0";
+
 /*
 #define COMMANDNUM		5
 char *commands[COMMANDNUM] = { "loopback", "fullpower", "null", "null" ,"null" };
@@ -23,6 +26,9 @@ char *commands[] = { \
 "corenumset", \
 "fullpower", \
 "lowpower", \
+"dvfsset", \
+"fullspeed", \
+"lowspeed", \
 "null", \
 "null" \
 };
@@ -31,8 +37,11 @@ char *descript[] = { \
 "command loopback", \
 "get activate core number (1,2,3,4)", \
 "set activate core number (1,2,3,4)", \
-"fullpower (set all core ON)", \
-"lowpower (set 1 core ON only)", \
+"set fullpower mode (all core ON)", \
+"set lowpower mode (1 core ON only)", \
+"set DVFS mode (on/off)", \
+"set fullspeed mode (1GHz)", \
+"set lowspeed mode (200MHz)", \
 "null", \
 "null" \
 };
@@ -60,11 +69,11 @@ int main( int argc, char *argv[] )
 	{
 		spQMSG( "\n" );
 		spQMSG( "------------------------------------------------------------------\n" );
-		spQMSG( "%s: help for commands in %s.\n", argv[0], argv[0] );
+		spQMSG( "   help for commands in %s %s.\n", argv[0], verStr );
 		iLoop = 0;
 		while( (0 != strcmp(commands[iLoop],"null")) )
 		{
-			spQMSG( "%s: use \"%s %s\" for %s testing.\n", argv[0], argv[0], commands[iLoop], descript[iLoop] );
+			spQMSG( "   use \"%s %s\" for %s testing.\n", argv[0], commands[iLoop], descript[iLoop] );
 			iLoop++;
 		}
 		spQMSG( "------------------------------------------------------------------\n" );
@@ -192,6 +201,55 @@ int main( int argc, char *argv[] )
 		else
 		{
 			spQMSG( "%s set CPU activate core num: What's your input ?!?!\n", (iRet>0)?"====>Ok !":"=>Fail !!" );	
+		}
+	}
+	else
+	if( 0 == strcmp(commands[5], argv[1]) )
+	{	/* command index 5, */
+		iRet = -1;
+		
+		if( 0 == strcmp( "on", argv[2]) )
+		{
+			iRet = sPSsetCPUDVFS( 1 );
+		}
+		else
+		if( 0 == strcmp( "off", argv[2]) )
+		{
+			iRet = sPSsetCPUDVFS( 0 );
+		}
+		else
+		{
+			spQMSG( "%s set CPU DVFS: What's your input ?!?! (on/off)\n", (iRet>0)?"====>Ok !":"=>Fail !!" );	
+		}		
+	}
+	else
+	if( 0 == strcmp(commands[6], argv[1]) )
+	{	/* command index 6, */
+		int iSpeed = 0;
+		
+		iRet = -1;
+		iSpeed = 1000;
+
+		iRet = sPSsetCPUspeed( iSpeed );
+
+		if( -2 == iRet )
+		{
+			spQMSG( "%s set CPU speed: What's your input ?!?! (200~1000)\n", (iRet>0)?"====>Ok !":"=>Fail !!" );	
+		}
+	}
+	else
+	if( 0 == strcmp(commands[7], argv[1]) )
+	{	/* command index 7, */
+		int iSpeed = 0;
+		
+		iRet = -1;
+		iSpeed = 200;
+
+		iRet = sPSsetCPUspeed( iSpeed );
+
+		if( -2 == iRet )
+		{
+			spQMSG( "%s set CPU speed: What's your input ?!?! (200~1000)\n", (iRet>0)?"====>Ok !":"=>Fail !!" );	
 		}
 	}
 
