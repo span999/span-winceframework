@@ -59,7 +59,7 @@ static struct cpuBarCfgS V4 = \
 
 
 static struct cpuBarCfgS* pV = &V2; /* graphic mode 0 by default */
-static char verStr[] = "v5";
+static char verStr[] = "v5.1";
 
 static long g_loop = 5;
 static long g_interval = 1000;
@@ -68,15 +68,15 @@ static long g_graphic = 1;
 static long g_graphicmode = 0;
 
 
-#define	CHECKLOOP		5
-
+#define	CHECKLOOP			5
+#define	LOOPFOREVER			0xffffffff
 
 void logo( void )
 {
-	printf( "\n===========================================" );
+	printf( "\n=============================================" );
 	printf( "\n=   cpu usage tool %s, powered by span.   =", verStr );
-	printf( "\n=   additional -h for more information.   =" );
-	printf( "\n===========================================" );
+	printf( "\n=   additional -h for more information.     =" );
+	printf( "\n=============================================" );
 	printf( "\n" );
 }
 
@@ -84,7 +84,7 @@ void logo( void )
 void helps( void )
 {
 	printf( "\n==============================================================" );
-	printf( "\n=  cpu usage tool %s. parameter info                         =", verStr );
+	printf( "\n=  cpu usage tool %s. parameter info                       =", verStr );
 	printf( "\n=  -h     : this help list.                                  =" );
 	printf( "\n=  -l num : loops of checking. 0=forever, default=5          =" );
 	printf( "\n=  -i num : interval of chaecking. 1000=1sec, default=1000.  =" );
@@ -100,7 +100,11 @@ void helps( void )
 
 void configs( void )
 {
-	printf( "\n== run with -l %lu, -i %lu, -t %lu, -g %lu, -v %lu config. ==", g_loop, g_interval, g_text, g_graphic, g_graphicmode );
+	long tmploop = g_loop;
+	
+	if( tmploop == LOOPFOREVER )
+		tmploop = 0;
+	printf( "\n== run with -l %lu, -i %lu, -t %lu, -g %lu, -v %lu config. ==", tmploop, g_interval, g_text, g_graphic, g_graphicmode );
 	printf( "\n" );
 }
 
@@ -150,6 +154,8 @@ int main( int argc, char *argv[] )
 		if( (0 == strcmp("-l", argv[lTmp])) )
 		{
 			g_loop = atoi( argv[lTmp+1] );
+			if( 0 == g_loop )
+				g_loop = LOOPFOREVER;
 			lTmp++;
 		}
 		else
