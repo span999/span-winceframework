@@ -340,6 +340,70 @@ int sPSsetCPUActivatedNum( int num )
 }
 
 
+int sPSsetCPUDVFS( int num )
+{
+	int iRet = -1;
+	struct sysPowerCmd PwrCmd;
+
+	spMxL( &mutex, &mutexINITED );
+	
+	PowerCmdInit( &PwrCmd );
+	/* pack the data for Power Manager */
+	setPowerCmdID( &PwrCmd, SETCPUDVFS );
+	setPowerCmdParam1( &PwrCmd, num );
+
+	/* issue command to Power Manager */
+	/* iRet = PowerCmdSend( &PwrCmd ); */
+	/* wait & get the response from Power Manager */
+	iRet = PowerCmdRequest( &PwrCmd );
+
+	if( 0 == iRet )
+	{
+		iRet = getPowerCmdReturn( &PwrCmd );
+	}
+	
+	spMxU( &mutex, &mutexINITED );
+
+	return iRet;
+}
+
+
+int sPSsetCPUspeed( int nMHz )
+{
+	int iRet = -1;
+	struct sysPowerCmd PwrCmd;
+
+	/* set limitation here */
+	if( (nMHz != 200) && (nMHz != 1000) )
+	{
+		spMSG( dF(dERR), "%s:%s: parameter invalid [%d] !!\n", __FILE__, __FUNCTION__, nMHz );
+		iRet = -2;
+		return iRet;
+	}
+
+	spMxL( &mutex, &mutexINITED );
+	
+	PowerCmdInit( &PwrCmd );
+	/* pack the data for Power Manager */
+	setPowerCmdID( &PwrCmd, SETCPUSPEED );
+	setPowerCmdParam1( &PwrCmd, nMHz );
+
+	/* issue command to Power Manager */
+	/* iRet = PowerCmdSend( &PwrCmd ); */
+	/* wait & get the response from Power Manager */
+	iRet = PowerCmdRequest( &PwrCmd );
+
+	if( 0 == iRet )
+	{
+		iRet = getPowerCmdReturn( &PwrCmd );
+	}
+	
+	spMxU( &mutex, &mutexINITED );
+
+	return iRet;
+}
+
+
 int sPSloopbackTest( int test )
 {
 	int iRet = -1;
