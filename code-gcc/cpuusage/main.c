@@ -59,7 +59,7 @@ static struct cpuBarCfgS V4 = \
 
 
 static struct cpuBarCfgS* pV = &V2; /* graphic mode 0 by default */
-static char verStr[] = "v5.1";
+static char verStr[] = "v5.2";
 
 static long g_loop = 5;
 static long g_interval = 1000;
@@ -229,7 +229,7 @@ int main( int argc, char *argv[] )
 	getFBinfo();
 
 	lTmp = 0;
-	while( lTmp++ < g_loop )
+	while( (lTmp++ < g_loop) || (g_loop == LOOPFOREVER) )
 	{
 		usleep( (g_interval*1000) );
 
