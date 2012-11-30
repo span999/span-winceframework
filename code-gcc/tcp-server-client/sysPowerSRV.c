@@ -374,7 +374,7 @@ int sPSsetCPUspeed( int nMHz )
 	struct sysPowerCmd PwrCmd;
 
 	/* set limitation here */
-	if( (nMHz != 200) && (nMHz != 1000) )
+	if( (nMHz != 400) && (nMHz != 800) && (nMHz != 1000) )
 	{
 		spMSG( dF(dERR), "%s:%s: parameter invalid [%d] !!\n", __FILE__, __FUNCTION__, nMHz );
 		iRet = -2;

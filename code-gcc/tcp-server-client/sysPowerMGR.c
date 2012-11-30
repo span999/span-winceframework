@@ -30,7 +30,7 @@
 
 static pthread_t thread_id;
 static int CPUcoreActivated = 4;
-static char verStr[] = "v2.0";
+static char verStr[] = "v2.1";
 
 /* for mutex */
 static pthread_mutex_t mutex;
@@ -191,13 +191,21 @@ static int setCPUspeed( int nSpeed )
 	int iLoop = 0;
 	FILE *fp;
 	char base0 = '0';
-	char devCPUspeed200[] = "echo 198000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed";
+	char devCPUspeed400[] = "echo 396000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed";
+	char devCPUspeed800[] = "echo 792000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed";
 	char devCPUspeed1000[] = "echo 996000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed";
+	char devCPUcurrspeed[] = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
 	char *devCPUspeed = NULL;
+	char stdOut[32];
 	
-	devCPUspeed = devCPUspeed1000;
-	if( nSpeed == 200 )
-		devCPUspeed = devCPUspeed200;
+	
+	if( nSpeed == 400 )
+		devCPUspeed = devCPUspeed400;
+	else
+	if( nSpeed == 800 )
+		devCPUspeed = devCPUspeed800;
+	else
+		devCPUspeed = devCPUspeed1000;
 
 #ifdef __ARM_CODE__
 	
@@ -205,13 +213,25 @@ static int setCPUspeed( int nSpeed )
 	while( iLoop < CPUcoreActivated )
 	{
 		devCPUspeed[41] = base0+iLoop;
+		devCPUcurrspeed[31] = base0+iLoop;
 		fp = popen( devCPUspeed, "r" );
 
 		if( fp == NULL )
+		{
 			spMSG( dF(dERR), "%s:%s: Failed on %s !!!\n", __FILE__, __FUNCTION__, devCPUspeed );
+		}
 		else
 		{
+			pclose( fp );
 			sleep(1);
+			spMSG( dF(dINFO), "%s:%s: CPU core%d set freq. %dMHz !!!\n", __FILE__, __FUNCTION__, iLoop, nSpeed );
+			/* check it */
+			fp = popen( devCPUcurrspeed, "r" );
+			while( fgets( stdOut, sizeof(stdOut)-1, fp ) != NULL )
+			{
+				/* printf("%s", stdOut ); */ 
+				spMSG( dF(dINFO), "%s:%s: CPU core%d now freq. %sMHz.\n", __FILE__, __FUNCTION__, iLoop, stdOut );
+			}
 			pclose( fp );
 		}
 		
