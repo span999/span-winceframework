@@ -14,7 +14,7 @@
 
 
 
-static char verStr[] = "v2.0";
+static char verStr[] = "v2.1";
 
 /*
 #define COMMANDNUM		5
@@ -29,6 +29,7 @@ char *commands[] = { \
 "dvfsset", \
 "fullspeed", \
 "lowspeed", \
+"speedset", \
 "null", \
 "null" \
 };
@@ -41,7 +42,8 @@ char *descript[] = { \
 "set lowpower mode (1 core ON only)", \
 "set DVFS mode (on/off)", \
 "set fullspeed mode (1GHz)", \
-"set lowspeed mode (200MHz)", \
+"set lowspeed mode (400MHz)", \
+"set cpu speed (400,800,1000 MHz)", \
 "null", \
 "null" \
 };
@@ -244,6 +246,21 @@ int main( int argc, char *argv[] )
 		
 		iRet = -1;
 		iSpeed = 200;
+
+		iRet = sPSsetCPUspeed( iSpeed );
+
+		if( -2 == iRet )
+		{
+			spQMSG( "%s set CPU speed: What's your input ?!?! (200~1000)\n", (iRet>0)?"====>Ok !":"=>Fail !!" );	
+		}
+	}
+	else
+	if( 0 == strcmp(commands[8], argv[1]) )
+	{	/* command index 8, */
+		int iSpeed = 0;
+		
+		iRet = -1;
+		iSpeed = atoi(argv[2]);;
 
 		iRet = sPSsetCPUspeed( iSpeed );
 
