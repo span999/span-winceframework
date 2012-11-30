@@ -75,7 +75,9 @@ _ERROR:
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#if 0
+#include <sys/timeb.h>	/* for timeb in busystress */
+#endif
 #include "cpuutil.h"
 
 
@@ -704,3 +706,48 @@ _pEXIT:
 	return iRet;
 }
 
+static void loopit( long loops )
+{
+	volatile long cnt1, cnt2, cnt3;
+	
+	cnt1 = cnt2 = cnt3 = 0;
+	
+	while( cnt1++ < loops )
+	{
+		while( cnt2++ < loops )
+		{
+			while( cnt3++ < loops )
+			{
+				volatile long long pretendWeNeedTheResult = 0;
+				pretendWeNeedTheResult = cnt1^cnt2^cnt3%cnt1%cnt2%cnt3;
+			}
+			cnt3 = 0;
+		}
+		cnt2 = 0;
+	}
+	cnt1 = 0;
+}
+
+int stressbusy( long second )
+{
+	int iRet = -1;
+	
+#if 0
+	struct timeb tp;
+	ftime(&tp);
+#endif
+	time_t tls, tle;
+	
+	tle = tls = time(NULL);
+	tle = tls + second;
+	
+	while( tle > time(NULL) )
+	{
+	#if 0	
+		printf("%s:%s: time=%ld\n", __FILE__, __FUNCTION__, time(NULL) );
+	#endif
+		loopit( 2 );
+	}
+	
+	return iRet;
+}

@@ -69,5 +69,7 @@ int updateNUM( struct ProcStatNums *pOld, struct ProcStatNums *pNew, struct Proc
 #endif
 int getProcMeminfo( struct ProcMeminfoNums *pIn );
 
+int stressbusy( long second );
+
 
 #endif	/* __CPUUTIL_H__ */
