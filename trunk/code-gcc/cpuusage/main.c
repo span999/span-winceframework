@@ -21,11 +21,11 @@ static struct cpuBarCfgS V2 = \
 	{ 0,  0, 100, 10, 5, _BLACK_COLOR },
 	{ 0, 12, 100,  8, 5, _PINK_COLOR },
 	{ 0, 10, 100, 10, 5, _BLACK_COLOR },
-	{ 0, 22, 100,  8, 5, _PINK_COLOR },
+	{ 0, 22, 100,  8, 5, _YELLOW_COLOR },
 	{ 0, 20, 100, 10, 5, _BLACK_COLOR },
-	{ 0, 32, 100,  8, 5, _PINK_COLOR },
+	{ 0, 32, 100,  8, 5, _CYAN_COLOR },
 	{ 0, 30, 100, 10, 5, _BLACK_COLOR },
-	{ 0, 42, 100,  8, 5, _PINK_COLOR },
+	{ 0, 42, 100,  8, 5, _GREEN_COLOR },
 	{ 0, 40, 100, 10, 5, _BLACK_COLOR },
 };
 
@@ -35,11 +35,11 @@ static struct cpuBarCfgS V3 = \
 	{   0,  0, 100, 10, 1, _BLACK_COLOR },
 	{ 100,  2, 100,  8, 1, _PINK_COLOR },
 	{ 100,  0, 100, 10, 1, _BLACK_COLOR },
-	{ 200,  2, 100,  8, 1, _PINK_COLOR },
+	{ 200,  2, 100,  8, 1, _YELLOW_COLOR },
 	{ 200,  0, 100, 10, 1, _BLACK_COLOR },
-	{ 300,  2, 100,  8, 1, _PINK_COLOR },
+	{ 300,  2, 100,  8, 1, _CYAN_COLOR },
 	{ 300,  0, 100, 10, 1, _BLACK_COLOR },
-	{ 400,  2, 100,  8, 1, _PINK_COLOR },
+	{ 400,  2, 100,  8, 1, _GREEN_COLOR },
 	{ 400,  0, 100, 10, 1, _BLACK_COLOR },
 };
 
@@ -49,17 +49,17 @@ static struct cpuBarCfgS V4 = \
 	{   0,  0, 100, 10, 4, _BLACK_COLOR },
 	{   0, 12, 100,  8, 1, _PINK_COLOR },
 	{   0, 10, 100, 10, 1, _BLACK_COLOR },
-	{ 100, 12, 100,  8, 1, _PINK_COLOR },
+	{ 100, 12, 100,  8, 1, _YELLOW_COLOR },
 	{ 100, 10, 100, 10, 1, _BLACK_COLOR },
-	{ 200, 12, 100,  8, 1, _PINK_COLOR },
+	{ 200, 12, 100,  8, 1, _CYAN_COLOR },
 	{ 200, 10, 100, 10, 1, _BLACK_COLOR },
-	{ 300, 12, 100,  8, 1, _PINK_COLOR },
+	{ 300, 12, 100,  8, 1, _GREEN_COLOR },
 	{ 300, 10, 100, 10, 1, _BLACK_COLOR },
 };
 
 
 static struct cpuBarCfgS* pV = &V2; /* graphic mode 0 by default */
-static char verStr[] = "v5.2";
+static char verStr[] = "v5.3";
 
 static long g_loop = 5;
 static long g_interval = 1000;

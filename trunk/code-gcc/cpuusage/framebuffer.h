@@ -8,7 +8,9 @@
 
 
 #define		_RED_COLOR		0xf800
-#define		_PINK_COLOR		(0xf800|0x00e0|0x0007)
+#define		_PINK_COLOR		(0xf800|0x0000|0x001f)
+#define		_YELLOW_COLOR	(0xf800|0x07e0|0x0000)
+#define		_CYAN_COLOR		(0x0000|0x07e0|0x001f)
 #define		_GREEN_COLOR	0x07e0
 #define		_BLUE_COLOR		0x001f
 #define		_WHITE_COLOR	0xffff
