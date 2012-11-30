@@ -59,13 +59,14 @@ static struct cpuBarCfgS V4 = \
 
 
 static struct cpuBarCfgS* pV = &V2; /* graphic mode 0 by default */
-static char verStr[] = "v5.3";
+static char verStr[] = "v5.4";
 
 static long g_loop = 5;
 static long g_interval = 1000;
 static long g_text = 1;
 static long g_graphic = 1;
 static long g_graphicmode = 0;
+static long g_stress = 0;
 
 
 #define	CHECKLOOP			5
@@ -83,16 +84,17 @@ void logo( void )
 
 void helps( void )
 {
-	printf( "\n==============================================================" );
-	printf( "\n=  cpu usage tool %s. parameter info                       =", verStr );
-	printf( "\n=  -h     : this help list.                                  =" );
-	printf( "\n=  -l num : loops of checking. 0=forever, default=5          =" );
-	printf( "\n=  -i num : interval of checking. 1000=1sec, default=1000.   =" );
-	printf( "\n=  -t num : text msg. 0=off 1=on, default=1                  =" );
-	printf( "\n=  -g num : graphic msg. 0=off 1=on, default=1               =" );
-	printf( "\n=  -v num : graphic msg mode. 0=type0 ..., default=0         =" );
-	printf( "\n=                                            powered by span =" );
-	printf( "\n==============================================================" );
+	printf( "\n===================================================================" );
+	printf( "\n=  cpu usage tool %s. parameter info                            =", verStr );
+	printf( "\n=  -h     : this help list.                                       =" );
+	printf( "\n=  -l num : loops of checking. 0=forever, default=5               =" );
+	printf( "\n=  -i num : interval of checking. 1000=1sec, default=1000.        =" );
+	printf( "\n=  -t num : text msg. 0=off 1=on, default=1                       =" );
+	printf( "\n=  -g num : graphic msg. 0=off 1=on, default=1                    =" );
+	printf( "\n=  -v num : graphic msg mode. 0=type0 ..., default=0              =" );
+	printf( "\n=  -s num : stress test. num=n second.(excluded other commnad)    =" );
+	printf( "\n=                                                 powered by span =" );
+	printf( "\n===================================================================" );
 	printf( "\n" );
 	printf( "\n" );
 }
@@ -104,7 +106,10 @@ void configs( void )
 	
 	if( tmploop == LOOPFOREVER )
 		tmploop = 0;
-	printf( "\n== run with -l %lu, -i %lu, -t %lu, -g %lu, -v %lu config. ==", tmploop, g_interval, g_text, g_graphic, g_graphicmode );
+	if( g_stress == 0 )
+		printf( "\n== run with -l %lu, -i %lu, -t %lu, -g %lu, -v %lu config. ==", tmploop, g_interval, g_text, g_graphic, g_graphicmode );
+	else
+		printf( "\n== run for stress %lu seconds. ==", g_stress );
 	printf( "\n" );
 }
 
@@ -191,6 +196,12 @@ int main( int argc, char *argv[] )
 			lTmp++;
 		}
 		else
+		if( (0 == strcmp("-s", argv[lTmp])) )
+		{
+			g_stress = atoi( argv[lTmp+1] );
+			lTmp++;
+		}
+		else
 			printf( "\n  unknow parameter %s !!\n", argv[lTmp] );
 	
 		lTmp++;
@@ -199,6 +210,12 @@ int main( int argc, char *argv[] )
 	logo();
 	
 	configs();
+
+	if( g_stress > 0 )
+	{
+		stressbusy( g_stress );
+		return 0;
+	}
 
 #ifdef _USE_NO_GREP_	/* cpuutil.h */
 	if( -1 == getProcStatSet( &StatSetsOld ) )
