@@ -206,11 +206,15 @@ void lcd_glyph(unsigned char left, unsigned char top,
 			/* check if the character pixel is set or not */
 			if(*glyph_scan & char_mask)
 			{
+#ifndef __ARM_CODE__
 				l_display_array[byte_offset][x] |= mask;	/* set image pixel */
+#endif
 			}
 			else
 			{
+#ifndef __ARM_CODE__
       			l_display_array[byte_offset][x] &= ~mask;	/* clear the image pixel */
+#endif
 			}
 
 			if(l_mask_array[0] & 0x80)
