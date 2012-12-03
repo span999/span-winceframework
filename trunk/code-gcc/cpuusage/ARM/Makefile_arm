@@ -11,6 +11,8 @@ STATIC1LIB = libcpuutil.a
 STATIC1NAME = cpuutil
 STATIC2LIB = libframebuffer.a
 STATIC2NAME = framebuffer
+STATIC3LIB = libfonts.a
+STATIC3NAME = fonts
 
 
 all: clean PROGRAM
@@ -32,6 +34,13 @@ STATIC2LIB:
 	${CC} ${CFLAGS} -c ../${STATIC2NAME}.c
 	${AR} rcs ${STATIC2LIB} ${STATIC2NAME}.o
 
+STATIC3LIB:
+	@echo 
+	@echo ================================================================
+	@echo build static ${STATIC3LIB} library
+	@echo ----------------------------------------------------------------
+	${CC} ${CFLAGS} -c ../${STATIC3NAME}.c
+	${AR} rcs ${STATIC3LIB} ${STATIC3NAME}.o
 
 DYNLIB:
 	@echo 
@@ -40,12 +49,12 @@ DYNLIB:
 	@echo ----------------------------------------------------------------
 	${CC} ../so_test.c -fPIC -shared -o ${DYNLIB}
 
-PROGRAM: STATIC1LIB STATIC2LIB
+PROGRAM: STATIC1LIB STATIC2LIB STATIC3LIB
 	@echo 
 	@echo ================================================================
 	@echo build ${PROGRAM} binary.
 	@echo ----------------------------------------------------------------
-	${CC} ../main.c ${CFLAGS} -o ${PROGRAM} -lpthread -L. -l${STATIC1NAME} -l${STATIC2NAME}
+	${CC} ../main.c ${CFLAGS} -o ${PROGRAM} -lpthread -L. -l${STATIC1NAME} -l${STATIC2NAME} -l${STATIC3NAME}
 #	${CC} ../main.c ../${STATIC1NAME}.c ${CFLAGS} -o ${PROGRAM} -lpthread
 
 clean:
