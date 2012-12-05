@@ -14,7 +14,7 @@
 
 
 
-static char verStr[] = "v2.1";
+static char verStr[] = "v2.2";
 
 /*
 #define COMMANDNUM		5
@@ -245,7 +245,7 @@ int main( int argc, char *argv[] )
 		int iSpeed = 0;
 		
 		iRet = -1;
-		iSpeed = 200;
+		iSpeed = 400;
 
 		iRet = sPSsetCPUspeed( iSpeed );
 
