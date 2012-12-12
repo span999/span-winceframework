@@ -59,12 +59,13 @@ static struct cpuBarCfgS V4 = \
 
 
 static struct cpuBarCfgS* pV = &V2; /* graphic mode 0 by default */
-static char verStr[] = "v5.4";
+static char verStr[] = "v6.0";
 
 static long g_loop = 5;
 static long g_interval = 1000;
 static long g_text = 1;
 static long g_graphic = 1;
+static long g_graphictext = 0;
 static long g_graphicmode = 0;
 static long g_stress = 0;
 
@@ -90,8 +91,9 @@ void helps( void )
 	printf( "\n=  -l num : loops of checking. 0=forever, default=5               =" );
 	printf( "\n=  -i num : interval of checking. 1000=1sec, default=1000.        =" );
 	printf( "\n=  -t num : text msg. 0=off 1=on, default=1                       =" );
-	printf( "\n=  -g num : graphic msg. 0=off 1=on, default=1                    =" );
-	printf( "\n=  -v num : graphic msg mode. 0=type0 ..., default=0              =" );
+	printf( "\n=  -g num : graphic bar. 0=off 1=on, default=1                    =" );
+	printf( "\n=  -d num : graphic text. 0=off 1=on, default=0                   =" );
+	printf( "\n=  -v num : graphic bar mode. 0=type0 ..., default=0              =" );
 	printf( "\n=  -s num : stress test. num=n second.(excluded other commnad)    =" );
 	printf( "\n=                                                 powered by span =" );
 	printf( "\n===================================================================" );
@@ -104,10 +106,15 @@ void configs( void )
 {
 	long tmploop = g_loop;
 	
+	if( g_graphictext > 0 )
+	{
+		g_graphic = 0; /* force graphic bar off if use graphic text */
+	}	
+	
 	if( tmploop == LOOPFOREVER )
 		tmploop = 0;
 	if( g_stress == 0 )
-		printf( "\n== run with -l %lu, -i %lu, -t %lu, -g %lu, -v %lu config. ==", tmploop, g_interval, g_text, g_graphic, g_graphicmode );
+		printf( "\n== run with -l %lu, -i %lu, -t %lu, -g %lu, -d %lu, -v %lu config. ==", tmploop, g_interval, g_text, g_graphic, g_graphictext, g_graphicmode );
 	else
 		printf( "\n== run for stress %lu seconds. ==", g_stress );
 	printf( "\n" );
@@ -179,6 +186,12 @@ int main( int argc, char *argv[] )
 		if( (0 == strcmp("-g", argv[lTmp])) )
 		{
 			g_graphic = atoi( argv[lTmp+1] );
+			lTmp++;
+		}
+		else
+		if( (0 == strcmp("-d", argv[lTmp])) )
+		{
+			g_graphictext = atoi( argv[lTmp+1] );
 			lTmp++;
 		}
 		else
@@ -328,6 +341,23 @@ int main( int argc, char *argv[] )
 			///printf( "CPU usage: %3.2f%%.[0:%3.2f%%]\n", iValue, iValue0 );
 			printf( "CPU usage:%3.2f%%[0:%3.2f%%/1:%3.2f%%/2:%3.2f%%/3:%3.2f%%] ", iValue, iValue0, iValue1, iValue2, iValue3 );
 			printf( "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
+		}
+
+		if( g_graphictext > 0 )
+		{
+			char strC[512];
+			char strM[512];
+
+			sprintf( strC, "CPU:%3.2f%%[0:%3.2f%%/1:%3.2f%%/2:%3.2f%%/3:%3.2f%%]", iValue, iValue0, iValue1, iValue2, iValue3 );
+			sprintf( strM, "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
+			
+			drawHtext( 0, 0, _PINK_COLOR, _YELLOW_COLOR, 1, strC );
+			drawHtext( 0, 15, _PINK_COLOR, _YELLOW_COLOR, 1, strM );
+		#if 0	
+			drawHtext( 0, 100, _PINK_COLOR, _YELLOW_COLOR, 0, strC );
+			drawHtext( 0, 200, _PINK_COLOR, _YELLOW_COLOR, 1, strC );
+			drawHtext( 0, 300, _PINK_COLOR, _YELLOW_COLOR, 2, strC );
+		#endif
 		}
 
 		if( g_graphic > 0 )

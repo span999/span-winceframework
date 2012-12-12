@@ -12,23 +12,27 @@
 
 
 
+#ifdef _IN_LINUX_
 struct FONT_DEF 
 {
    unsigned char store_width;            /* glyph storage width in bytes */
    unsigned char glyph_height;  		 /* glyph height for storage */
-#ifdef _IN_LINUX_
    unsigned char *glyph_table;      /* font table start address in memory */
-#else
-   unsigned char code *glyph_table;      /* font table start address in memory */
-#endif
    unsigned char fixed_width;            /* fixed width of glyphs. If zero */
                                          /* then use the width table. */
-#ifdef _IN_LINUX_
    unsigned char *width_table; 	 /* variable width table start adress */
-#else
-   unsigned char code *width_table; 	 /* variable width table start adress */
-#endif
 };
+#else
+struct FONT_DEF 
+{
+   unsigned char store_width;            /* glyph storage width in bytes */
+   unsigned char glyph_height;  		 /* glyph height for storage */
+   unsigned char code *glyph_table;      /* font table start address in memory */
+   unsigned char fixed_width;            /* fixed width of glyphs. If zero */
+                                         /* then use the width table. */
+   unsigned char code *width_table; 	 /* variable width table start adress */
+};
+#endif
 
 /* define the range if characters in the font tables */
 #define ASCII_BOT	0x20
