@@ -19,6 +19,7 @@
 
 int getFBinfo( void );
 int drawHbar( unsigned long startX, unsigned long startY, unsigned long lenth, unsigned long height, unsigned short color );
+int drawHtext( unsigned long startX, unsigned long startY, unsigned short fcolor, unsigned short bcolor, unsigned char font, char *str );
 
 struct cpuBarCfg
 {

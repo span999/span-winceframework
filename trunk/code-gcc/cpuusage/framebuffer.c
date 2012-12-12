@@ -86,7 +86,7 @@ _OKEXIT:
 int drawHbar( unsigned long startX, unsigned long startY, unsigned long lenth, unsigned long height, unsigned short color )
 {
 	int iRet = 0;
-	long screensize=0;
+	long screensize = 0;
 	int fp = 0;
 	char *fbp = 0;
 	long x = 0, y = 0;
@@ -151,14 +151,23 @@ _ERREXIT:
 }
 
 
-
+#ifndef _IN_LINUX_
 /* LCD screen and bitmap image array consants */
+#if 0
 #define X_BYTES				106
 #define Y_BYTES	      		8
 #define SCRN_LEFT			0
 #define SCRN_TOP			0
 #define SCRN_RIGHT			105
 #define SCRN_BOTTOM			55
+#else
+#define X_BYTES				640
+#define Y_BYTES	      		16
+#define SCRN_LEFT			0
+#define SCRN_TOP			0
+#define SCRN_RIGHT			640
+#define SCRN_BOTTOM			480
+#endif
 
 /* pixel level bit masks for display */
 /* this array is setup to map the order */
@@ -185,6 +194,7 @@ void lcd_glyph(unsigned char left, unsigned char top,
 	unsigned char x;
 	unsigned char *glyph_scan;
 	unsigned char glyph_offset;
+	
 
   	bit_pos = top & 0x07;		/* get the bit offset into a byte */
 
@@ -206,15 +216,11 @@ void lcd_glyph(unsigned char left, unsigned char top,
 			/* check if the character pixel is set or not */
 			if(*glyph_scan & char_mask)
 			{
-#ifndef __ARM_CODE__
 				l_display_array[byte_offset][x] |= mask;	/* set image pixel */
-#endif
 			}
 			else
 			{
-#ifndef __ARM_CODE__
       			l_display_array[byte_offset][x] &= ~mask;	/* clear the image pixel */
-#endif
 			}
 
 			if(l_mask_array[0] & 0x80)
@@ -238,7 +244,7 @@ void lcd_glyph(unsigned char left, unsigned char top,
 
 			/* bump the glyph scan to next raster */
 			glyph_scan += store_width;
-		}
+		} /* while */
 
 		/* shift over to next glyph bit */
 		char_mask >>= 1;
@@ -247,19 +253,107 @@ void lcd_glyph(unsigned char left, unsigned char top,
 			char_mask = 0x80;
 			glyph_offset++;
 	    }
-	}
+	} /* for */
+
+	return;
 }
 
+#else
 
-int drawHtext( unsigned long startX, unsigned long startY, unsigned short fcolor, unsigned short bcolor, unsigned char font, char *str )
+void lcd_glyph(unsigned long left, unsigned long top,
+			   unsigned long width, unsigned long height,
+			   unsigned char *glyph, unsigned long store_width, 
+			   unsigned short fcolor, unsigned short bcolor 
+			   )
+{
+	unsigned long h;
+	unsigned long w;
+	unsigned long l;
+	unsigned long m;
+	unsigned long t;
+	unsigned char char_mask;
+	int iRet;
+	int fp = 0;
+	char *fbp = 0;
+	unsigned short *fbsp = 0;
+	long screensize = 0;
+
+
+	if( (0==g_xres) || (0==g_yres) || (0==g_bpp) || (0==g_linelen) )
+	{
+		iRet = getFBinfo();
+		if( 0 != iRet )
+			goto _ERREXIT;
+	}
+	
+	fp = open( "/dev/fb0", O_RDWR );
+
+	if( fp < 0 )
+	{
+		printf("Error : Can not open framebuffer device\n");
+		iRet = -1;
+		goto _ERREXIT;
+	}
+
+	screensize = g_xres * g_yres * g_bpp / 8;
+	fbp = (char *)mmap( 0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fp, 0 );
+	if( (int)fbp == -1 )
+	{
+		printf ("Error: failed to map framebuffer device to memory.\n");
+		iRet = -2;
+		close( fp );
+		goto _ERREXIT;
+	}
+
+	/* draw it !! */
+	fbsp = fbp;
+  	for( h=0; h<height; h++ )
+  	{
+		for( l=0; l<store_width; l++ )
+		{
+			m = *(glyph+(h*store_width)+l);
+			char_mask = 0x80;
+			t = 0;
+			while( char_mask>0 )
+			{
+				if( m & char_mask )
+				{
+					*( fbsp+((top+h)*g_xres)+(left)+(t)+(l*8) ) = fcolor;
+				}	
+				else
+				{
+					*( fbsp+((top+h)*g_xres)+(left)+(t)+(l*8) ) = bcolor;
+				}
+				
+				char_mask = char_mask >> 1;
+				t++;
+			}
+		}	
+	}
+
+
+
+_OKEXIT:
+	munmap(fbp, screensize ); 
+	close( fp );
+_ERREXIT:
+	return;
+}
+#endif
+
+
+int drawHtext( unsigned long startX, unsigned long startY, 
+				unsigned short fcolor, unsigned short bcolor, 
+				unsigned char font, char *str 
+			)
 {
 	int iRet = -1;
 
-  	unsigned char x = startX;
-  	unsigned char glyph;
-  	unsigned char width;
-	unsigned char height;
-	unsigned char store_width;
+  	unsigned long x = startX;
+  	unsigned long glyph;
+  	unsigned long width;
+	unsigned long height;
+	unsigned long store_width;
 	unsigned char *glyph_ptr;
 
   	while(*str != 0x00)
@@ -287,8 +381,11 @@ int drawHtext( unsigned long startX, unsigned long startY, unsigned short fcolor
 
 		glyph_ptr = fonts[font].glyph_table + (glyph * store_width * height);
 
+#ifndef _IN_LINUX_
 		lcd_glyph(x,startY,width,height,glyph_ptr,store_width);  /* plug symbol into buffer */
-
+#else
+		lcd_glyph(x,startY,width,height,glyph_ptr,store_width,fcolor,bcolor);  /* plug symbol into buffer */
+#endif
 		x += width;							/* move right for next character */
 		str++;								/* point to next character in string */
 	}
