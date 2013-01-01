@@ -1,6 +1,17 @@
 #
 #
 #
+### dbus-glib build env install
+### install dbus #
+# apt-get install dbus
+### install d-feet for session bus & system bus #
+# apt-get install d-feet
+### install glib2.0 #
+# apt-get install libgtk2.0-dev
+### install dbus-glib #
+# apt-get install libdbus-glib-1-dev 
+#
+#
 
 CC      = gcc
 AR      = ar
