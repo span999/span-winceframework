@@ -14,6 +14,7 @@
 	
 
 static DBusConnection* g_conn = NULL;
+static int iType = 0;
 
 static DBusConnection* getDBusConn( void )
 {
@@ -89,13 +90,15 @@ int send_sig( void )
      
 	sigvalue = sigstr;
 	 
+	printf("SPD@%s\n", __FUNCTION__);
 	// create a signal and check for errors 
 	msg = dbus_message_new_signal("/test/signal/Object", // object name of the signal
 								"test.signal.Type", // interface name of the signal
 								"Test"); // name of the signal
 	if (NULL == msg) 
 	{ 
-		fprintf(stderr, "Message Null\n"); 
+		fprintf(stderr, "Message Null\n");
+		printf("SPD@%s Message Null\n", __FUNCTION__);
 		exit(1); 
 	}
 
@@ -118,6 +121,73 @@ int send_sig( void )
 
 }
 
+#ifndef true
+	#define	true 1
+#endif
+int wait_sig( void )
+{
+	DBusError err;
+	dbus_uint32_t serial = 0; // unique number to associate replies with requests
+	DBusMessage* msg;
+	DBusMessageIter args;
+	char sigstr[] = "123456789";
+	void *sigvalue = NULL;
+     
+	sigvalue = sigstr;
+	 
+	printf("SPD@%s\n", __FUNCTION__);
+	// add a rule for which messages we want to see
+	dbus_bus_add_match(getDBusConn(), 
+					"type='signal',interface='test.signal.Type'", 
+					&err); // see signals from the given interface
+	
+	dbus_connection_flush(getDBusConn());
+	if (dbus_error_is_set(&err)) { 
+		fprintf(stderr, "Match Error (%s)\n", err.message);
+		///printf("SPD@%s Match Error (%s)\n", __FUNCTION__, err.message);
+		exit(1); 
+	}
+
+	// loop listening for signals being emmitted
+	while (true) {
+
+		// non blocking read of the next available message
+		dbus_connection_read_write(getDBusConn(), 0);
+		msg = dbus_connection_pop_message(getDBusConn());
+
+		// loop again if we haven't read a message
+		if (NULL == msg) { 
+			sleep(1);
+			continue;
+		}
+
+		// check if the message is a signal from the correct interface and with the correct name
+		if (dbus_message_is_signal(msg, "test.signal.Type", "Test")) {
+			// read the parameters
+			if (!dbus_message_iter_init(msg, &args))
+			{
+				fprintf(stderr, "Message has no arguments!\n");
+				///printf("SPD@%s Message has no arguments!\n", __FUNCTION__);
+			}
+			else
+			if (DBUS_TYPE_STRING != dbus_message_iter_get_arg_type(&args))
+			{
+				fprintf(stderr, "Argument is not string!\n"); 
+				///printf("SPD@%s Argument is not string!\n", __FUNCTION__);
+			}
+			else 
+			{
+				dbus_message_iter_get_basic(&args, &sigvalue);
+				///printf("Got Signal with value %s\n", (char *)sigvalue);
+			}
+		}
+
+		// free the message
+		dbus_message_unref(msg);
+	}
+
+}
+
 
 int main( int argc, char *argv[] )
 {
@@ -126,13 +196,50 @@ int main( int argc, char *argv[] )
 
 	printf("SPD@%s +++\n", __FUNCTION__);
 
+
+	if( argc > 1 )
+	{
+		if( (0 == strcmp("-host", argv[1])) )
+		{
+			printf("SPD@%s parameter! [%s] \n", __FUNCTION__, argv[1]);
+			iType = 1;
+		}
+		else
+		if( (0 == strcmp("-client", argv[1])) )
+		{
+			printf("SPD@%s parameter! [%s] \n", __FUNCTION__, argv[1]);
+			iType = 2;
+		}	
+		else
+		{
+			printf("SPD@%s unknow parameter! [%s] \n", __FUNCTION__, argv[1]);
+			goto _EXIT;
+		}	
+	}
+	else
+	{
+		printf("SPD@%s parameter needed![%d] \n", __FUNCTION__, argc);
+		goto _EXIT;
+	}
+
 	_dbus_init();
 
+	if( 1 == iType )
+	{
+		wait_sig();
+	}
+	else
+	if( 2 == iType )
+	{
+		send_sig();
+		
+	}
 
 	_dbus_deinit();
 
 	printf("SPD@%s ---\n", __FUNCTION__);
-	
+
+_EXIT:	
 	return iRet;
 }
 
