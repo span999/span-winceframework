@@ -21,8 +21,11 @@
 #define	dDBG			0x00001000
 #define	dINFO			0x00000100
 #define	dERR			0x00010000
-/* #define	DBGFSET		(dDBG|dINFO|dERR) */
-#define	DBGFSET		(dINFO|dERR)
+#if 0
+	#define	DBGFSET		(dDBG|dINFO|dERR)
+#else
+	#define	DBGFSET		(dINFO|dERR)
+#endif
 #define	dF(x)		(DBGFSET&x)
 
 
@@ -204,6 +207,24 @@ int setPowerCmdRsptime( struct sysPowerCmd *pCmd, long iVal )
 }
 
 
+long getPowerCmdRsptime( struct sysPowerCmd *pCmd )
+{
+	long iRet = -1;
+	
+	if( pCmd )
+	{
+		if( 0 == chkPowerCmdsign( pCmd ) )
+		{
+			iRet = pCmd->rsptimestamp;
+		}
+	}
+	else
+		spMSG( dF(dERR), "ERROR !!! %s:%s: fail !!\n", __FILE__, __FUNCTION__ );
+	
+	return iRet;
+}
+
+
 static void PowerCmdInit( struct sysPowerCmd *pCmd )
 {
 
@@ -298,7 +319,7 @@ int sPSgetCPUActivatedNum( void )
 	/* iRet = PowerCmdSend( &PwrCmd ); */
 	/* wait & get the response from Power Manager */
 	iRet = PowerCmdRequest( &PwrCmd );
-	/* PowerCmdDump( &PwrCmd ); */
+	if( dF(dDBG) ) PowerCmdDump( &PwrCmd );
 
 	if( 0 == iRet )
 	{
@@ -328,6 +349,7 @@ int sPSsetCPUActivatedNum( int num )
 	/* iRet = PowerCmdSend( &PwrCmd ); */
 	/* wait & get the response from Power Manager */
 	iRet = PowerCmdRequest( &PwrCmd );
+	if( dF(dDBG) ) PowerCmdDump( &PwrCmd );
 
 	if( 0 == iRet )
 	{
@@ -356,6 +378,7 @@ int sPSsetCPUDVFS( int num )
 	/* iRet = PowerCmdSend( &PwrCmd ); */
 	/* wait & get the response from Power Manager */
 	iRet = PowerCmdRequest( &PwrCmd );
+	if( dF(dDBG) ) PowerCmdDump( &PwrCmd );
 
 	if( 0 == iRet )
 	{
@@ -392,6 +415,36 @@ int sPSsetCPUspeed( int nMHz )
 	/* iRet = PowerCmdSend( &PwrCmd ); */
 	/* wait & get the response from Power Manager */
 	iRet = PowerCmdRequest( &PwrCmd );
+	if( dF(dDBG) ) PowerCmdDump( &PwrCmd );
+
+	if( 0 == iRet )
+	{
+		iRet = getPowerCmdReturn( &PwrCmd );
+	}
+	
+	spMxU( &mutex, &mutexINITED );
+
+	return iRet;
+}
+
+
+int sPSsetCPUsuspend( void )
+{
+	int iRet = -1;
+	struct sysPowerCmd PwrCmd;
+
+	spMxL( &mutex, &mutexINITED );
+	
+	PowerCmdInit( &PwrCmd );
+	/* pack the data for Power Manager */
+	setPowerCmdID( &PwrCmd, SETCPUSUSPEND );
+	setPowerCmdParam1( &PwrCmd, 0 );
+
+	/* issue command to Power Manager */
+	/* iRet = PowerCmdSend( &PwrCmd ); */
+	/* wait & get the response from Power Manager */
+	iRet = PowerCmdRequest( &PwrCmd );
+	if( dF(dDBG) ) PowerCmdDump( &PwrCmd );	
 
 	if( 0 == iRet )
 	{
