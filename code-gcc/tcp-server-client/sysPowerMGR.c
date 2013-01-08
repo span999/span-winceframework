@@ -19,8 +19,11 @@
 #define	dDBG			0x00001000
 #define	dINFO			0x00000100
 #define	dERR			0x00010000
-/* #define	DBGFSET		(dDBG|dINFO|dERR) */
-#define	DBGFSET		(dINFO|dERR)
+#if 0
+	#define	DBGFSET		(dDBG|dINFO|dERR)
+#else
+	#define	DBGFSET		(dINFO|dERR)
+#endif
 #define	dF(x)		(DBGFSET&x)
 
 
@@ -30,7 +33,7 @@
 
 static pthread_t thread_id;
 static int CPUcoreActivated = 4;
-static char verStr[] = "v2.1";
+static char verStr[] = "v2.2";
 
 /* for mutex */
 static pthread_mutex_t mutex;
@@ -48,7 +51,7 @@ static void setCPUcoreDOWN( int CoreNum )
 
 	devCPU[36] = base0+CoreNum;
 #ifdef __ARM_CODE__
-	fp = popen( devCPU, "r" );
+	fp = (FILE *)popen( devCPU, "r" );
 	if( fp == NULL )
 	{
 		spMSG( dF(dERR), "%s:%s: Failed on %s !!!\n", __FILE__, __FUNCTION__, devCPU );
@@ -74,7 +77,7 @@ static void setCPUcoreUP( int CoreNum )
 
 	devCPU[36] = base0+CoreNum;
 #ifdef __ARM_CODE__
-	fp = popen( devCPU, "r" );
+	fp = (FILE *)popen( devCPU, "r" );
 	if( fp == NULL )
 	{
 		spMSG( dF(dERR), "%s:%s: Failed on %s !!!\n", __FILE__, __FUNCTION__, devCPU );
@@ -161,10 +164,10 @@ static int setCPUdvfs( int iOn )
 
 #ifdef __ARM_CODE__
 	if( 0 == iOn )
-		fp = popen( devDVFSoff, "r" );
+		fp = (FILE *)popen( devDVFSoff, "r" );
 	else
 	if( 1 == iOn )
-		fp = popen( devDVFSon, "r" );
+		fp = (FILE *)popen( devDVFSon, "r" );
 	else
 		;
 
@@ -214,7 +217,7 @@ static int setCPUspeed( int nSpeed )
 	{
 		devCPUspeed[41] = base0+iLoop;
 		devCPUcurrspeed[31] = base0+iLoop;
-		fp = popen( devCPUspeed, "r" );
+		fp = (FILE *)popen( devCPUspeed, "r" );
 
 		if( fp == NULL )
 		{
@@ -226,7 +229,7 @@ static int setCPUspeed( int nSpeed )
 			sleep(1);
 			spMSG( dF(dINFO), "%s:%s: CPU core%d set freq. %dMHz !!!\n", __FILE__, __FUNCTION__, iLoop, nSpeed );
 			/* check it */
-			fp = popen( devCPUcurrspeed, "r" );
+			fp = (FILE *)popen( devCPUcurrspeed, "r" );
 			while( fgets( stdOut, sizeof(stdOut)-1, fp ) != NULL )
 			{
 				/* printf("%s", stdOut ); */ 
@@ -247,6 +250,39 @@ static int setCPUspeed( int nSpeed )
 }
 
 
+static int setCPUsuspend( void )
+{
+	int iRet = -1;
+	FILE *fp;
+	char suspend[] = "echo mem > /sys/power/state";
+
+#ifdef __ARM_CODE__
+#if 1
+	fp = (FILE *)popen( suspend, "r" );
+
+	if( fp == NULL )
+	{
+		spMSG( dF(dERR), "%s:%s: Failed on %s !!!\n", __FILE__, __FUNCTION__, suspend );
+		return iRet;
+	}
+	sleep(1);
+	pclose( fp );
+#else
+	/*
+	sprintf(suspend, "echo mem > /sys/power/state");
+	*/
+	system(suspend); 
+#endif
+	iRet = 0;
+#else
+	spMSG( dF(dERR), "%s:%s: OK on %s !!!\n", __FILE__, __FUNCTION__, suspend );
+	iRet = 0;
+#endif
+
+	return iRet;
+}
+
+
 static int PowerCmdParser( struct sysPowerCmd *pCmd )
 {
 	int iRet = -1;
@@ -257,6 +293,12 @@ static int PowerCmdParser( struct sysPowerCmd *pCmd )
 		/* get power command */
 		iRet = getPowerCmdID( pCmd );
 		spMSG( dF(dDBG), "%s:%s: get power command [%d] \n", __FILE__, __FUNCTION__, iRet );
+		
+		if( 0 != getPowerCmdRsptime( pCmd ) )
+		{
+			spMSG( dF(dERR), "%s:%s: ERROR!! get power command [%d] with Rsptime!! \n", __FILE__, __FUNCTION__, iRet );
+			return iRet;
+		}
 		
 		/* proceed the command */
 		switch( iRet )
@@ -293,6 +335,14 @@ static int PowerCmdParser( struct sysPowerCmd *pCmd )
 				iParam1 = getPowerCmdParam1( pCmd );
 				setCPUdvfs( 0 );
 				iRet = setCPUspeed( iParam1 );
+				setPowerCmdReturn( pCmd, iRet );
+				setPowerCmdRsptime( pCmd, spGetTimetick() );
+				break;
+
+			case SETCPUSUSPEND:
+				iParam1 = getPowerCmdParam1( pCmd );
+				/* iRet = setCPUsuspend(); */
+				iRet = 0;
 				setPowerCmdReturn( pCmd, iRet );
 				setPowerCmdRsptime( pCmd, spGetTimetick() );
 				break;
@@ -370,6 +420,13 @@ void *mainPowerMGR( void *argv )
 				
 				if( 0 == iRet )
 					iRet = spIPCPackResponse( &ipcPack, (char *)&pwrCmd, sizeof(struct sysPowerCmd) );
+
+				/* work around for shm crash after suspend/resume */
+				if( (SETCPUSUSPEND == getPowerCmdID( &pwrCmd )) && (0 == iRet) )
+				{
+					sleep(1);
+					setCPUsuspend();
+				}
 
 			}
 			else

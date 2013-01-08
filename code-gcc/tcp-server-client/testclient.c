@@ -14,7 +14,7 @@
 
 
 
-static char verStr[] = "v2.2";
+static char verStr[] = "v2.3";
 
 /*
 #define COMMANDNUM		5
@@ -30,6 +30,7 @@ char *commands[] = { \
 "fullspeed", \
 "lowspeed", \
 "speedset", \
+"suspend", \
 "null", \
 "null" \
 };
@@ -44,6 +45,7 @@ char *descript[] = { \
 "set fullspeed mode (1GHz)", \
 "set lowspeed mode (400MHz)", \
 "set cpu speed (400,800,1000 MHz)", \
+"set cpu in suspend", \
 "null", \
 "null" \
 };
@@ -268,6 +270,15 @@ int main( int argc, char *argv[] )
 		{
 			spQMSG( "%s set CPU speed: What's your input ?!?! (200~1000)\n", (iRet>0)?"====>Ok !":"=>Fail !!" );	
 		}
+	}
+	else
+	if( 0 == strcmp(commands[9], argv[1]) )
+	{	/* command index 9, */
+		iRet = -1;
+		
+		spQMSG( "%s about to set CPU in suspend !!!\n", "====>Ok !" );
+		iRet = sPSsetCPUsuspend();
+		spQMSG( "%s just leave CPU suspend !!!\n", "====>Ok !" );
 	}
 
 
