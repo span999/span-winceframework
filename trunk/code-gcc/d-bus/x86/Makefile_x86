@@ -20,16 +20,18 @@ CFLAGS+= -O2 -I. -L. ${DEFINES}
 #CFLAGS+="$(pkg-config dbus-1 --cflags)"
 
 OUTBIN1 = dbus_x86.bin
+OUTBIN2 = sample_x86.bin
 DBUSINC = -I/usr/include/dbus-1.0 -I/usr/lib/dbus-1.0/include
 #DBUSINC = $(pkg-config dbus-1 --cflags)
 DBUSLIB = -l dbus-1
 PROGRAM = ../dbus.c
+SAMPLE = ../dbus-example.c
 DYNLIB  = libtest.so
 STATICLIB = libcpuutil.a
 STATICNAME = cpuutil
 
 
-all: clean PROGRAM
+all: clean PROGRAM SAMPLE
 
 
 STATICLIB:
@@ -55,6 +57,13 @@ PROGRAM:
 	${CC} ${PROGRAM} -o ${OUTBIN1} -lpthread ${DBUSINC} ${DBUSLIB} ${CFLAGS}
 #	${CC} ${PROGRAM} -o ${OUTBIN1} -lpthread ${CFLAGS}
 
+SAMPLE: 
+	@echo 
+	@echo ================================================================
+	@echo build binary = ${OUTBIN2}
+	@echo ----------------------------------------------------------------
+	${CC} ${SAMPLE} -o ${OUTBIN2} -lpthread ${DBUSINC} ${DBUSLIB} ${CFLAGS}
+#	${CC} ${PROGRAM} -o ${OUTBIN1} -lpthread ${CFLAGS}
 
 clean:
 	@echo 
