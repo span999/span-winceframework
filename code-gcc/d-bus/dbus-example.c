@@ -117,6 +117,19 @@ void query(char* param)
                                       "/test/method/Object", // object to call on
                                       "test.method.Type", // interface to call on
                                       "Method"); // method name
+	/*
+	 * # dbus-send --system --print-reply --type=method_call --dest='test.method.server' /test/method/Object 'test.method.Type.Method' string:’hello world’
+	 * 
+	     dbus-send --dest=org.freedesktop.ExampleName               \
+                   /org/freedesktop/sample/object/name              \
+                   org.freedesktop.ExampleInterface.ExampleMethod   \
+                   int32:47 string:’hello world’ double:65.32       \
+                   array:string:"1st item","next item","last item"  \
+                   dict:string:int32:"one",1,"two",2,"three",3      \
+                   variant:int32:-8                                 \
+                   objpath:/org/freedesktop/sample/object/name
+     *
+	 */
    if (NULL == msg) { 
       fprintf(stderr, "Message Null\n");
       exit(1);
@@ -276,7 +289,7 @@ void listen()
       }
       
       // check this is a method call for the right interface & method
-      if (dbus_message_is_method_call(msg, "test.method.Type", "Method")) 
+      if (dbus_message_is_method_call(msg, "test.method.Type", "Method"))
          reply_to_method_call(msg, conn);
 
       // free the message
