@@ -205,7 +205,7 @@ void calls( int iID, int iParam )
    DBusPendingCall* pending;
    int ret;
    bool stat;
-   dbus_uint32_t level;
+   dbus_int32_t level;
 
    printf("Calling remote method with %d:%d\n", iID, iParam );
 
@@ -325,12 +325,12 @@ void calls( int iID, int iParam )
 
    if (!dbus_message_iter_next(&args))
       fprintf(stderr, "Message has too few arguments!\n"); 
-   else if (DBUS_TYPE_UINT32 != dbus_message_iter_get_arg_type(&args)) 
-      fprintf(stderr, "Argument is not int!\n"); 
+   else if (DBUS_TYPE_INT32 != dbus_message_iter_get_arg_type(&args)) 
+      fprintf(stderr, "Argument is not int32!\n"); 
    else
       dbus_message_iter_get_basic(&args, &level);
 
-   printf("Got Reply: %d, %d\n", stat, level);
+   printf("Got Reply: %s, %d\n", (stat>0)?"true":"false", level);
    
    // free reply and close connection
    dbus_message_unref(msg);   
@@ -558,7 +558,7 @@ int main(int argc, char** argv)
 		else
 			printf ("Error: call function without param\n");
 			
-		calls( iID, &iParam );
+		calls( iID, iParam );
 	}
 	else {
 		printf ("Syntax: dbus-example [send|receive|listen|query] [<param>]\n");

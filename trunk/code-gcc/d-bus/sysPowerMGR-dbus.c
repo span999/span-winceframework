@@ -308,6 +308,52 @@ void reply_to_method_call(DBusMessage* msg, DBusConnection* conn)
 }
 
 
+void reply_to_method_call2(DBusMessage* msg, DBusConnection* conn)
+{
+	DBusMessage* reply;
+	DBusMessageIter args;
+	bool stat = true;
+	dbus_int32_t level = 9999;
+	dbus_uint32_t serial = 0;
+	char* param = "";
+	int iParam = 0;
+
+	// read the arguments
+	if (!dbus_message_iter_init(msg, &args))
+		spMSG( dF(dERR), "%s:%s: Message has no arguments!\n", __FILE__, __FUNCTION__ );
+	else if (DBUS_TYPE_INT32 != dbus_message_iter_get_arg_type(&args)) 
+		spMSG( dF(dERR), "%s:%s: Argument is not int32!\n", __FILE__, __FUNCTION__ );
+	else 
+		dbus_message_iter_get_basic(&args, &iParam);
+
+	spMSG( dF(dINFO), "%s:%s: Method called with %d\n", __FILE__, __FUNCTION__, iParam );
+
+	// create a reply from the message
+	reply = dbus_message_new_method_return(msg);
+
+	// add the arguments to the reply
+	dbus_message_iter_init_append(reply, &args);
+	if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_BOOLEAN, &stat)) { 
+		spMSG( dF(dERR), "%s:%s: Out Of Memory!\n", __FILE__, __FUNCTION__ );
+		exit(1);
+	}
+	if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &level)) { 
+		spMSG( dF(dERR), "%s:%s: Out Of Memory!\n", __FILE__, __FUNCTION__ );
+		exit(1);
+	}
+
+	// send the reply && flush the connection
+	if (!dbus_connection_send(conn, reply, &serial)) {
+		spMSG( dF(dERR), "%s:%s: Out Of Memory!\n", __FILE__, __FUNCTION__ );
+		exit(1);
+	}
+	dbus_connection_flush(conn);
+
+	// free the reply
+	dbus_message_unref(reply);
+}
+
+
 /**
  * Server that exposes a method call and waits for it to be called
  */
@@ -366,12 +412,12 @@ void *PowerCall_listen( void *argv )
 		else
 		if (dbus_message_is_method_call(msg, "test.method.Type", "m_CPUcoreUP")) {
 			spMSG( dF(dINFO), "%s:%s: method m_CPUcoreUP call\n", __FILE__, __FUNCTION__ );
-			reply_to_method_call(msg, conn);
+			reply_to_method_call2(msg, conn);
 		}
 		else
 		if (dbus_message_is_method_call(msg, "test.method.Type", "m_CPUcoreDOWN")) {
 			spMSG( dF(dINFO), "%s:%s: method m_CPUcoreDOWN call\n", __FILE__, __FUNCTION__ );
-			reply_to_method_call(msg, conn);
+			reply_to_method_call2(msg, conn);
 		}
 		// free the message
 		dbus_message_unref(msg);
