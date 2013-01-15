@@ -27,7 +27,7 @@
 #define	dDBG			0x00001000
 #define	dINFO			0x00000100
 #define	dERR			0x00010000
-#if 0
+#if 1
 	#define	DBGFSET		(dDBG|dINFO|dERR)
 #else
 	#define	DBGFSET		(dINFO|dERR)
@@ -40,6 +40,7 @@
 
 
 static pthread_t thread_id;
+static pthread_t dbus_thread_id;
 static char verStr[] = "v0.1";
 
 /* for mutex */
@@ -242,6 +243,7 @@ void *mainPowerMGR( void *argv )
 
 	while( 1 )
 	{
+		sleep(3);
 	}
 
 	spMSG( dF(dINFO), "%s:%s: Exit !!! \n", __FILE__, __FUNCTION__ );
@@ -272,13 +274,13 @@ void reply_to_method_call(DBusMessage* msg, DBusConnection* conn)
 
 	// read the arguments
 	if (!dbus_message_iter_init(msg, &args))
-		fprintf(stderr, "Message has no arguments!\n"); 
+		spMSG( dF(dERR), "%s:%s: Message has no arguments!\n", __FILE__, __FUNCTION__ );
 	else if (DBUS_TYPE_STRING != dbus_message_iter_get_arg_type(&args)) 
-		fprintf(stderr, "Argument is not string!\n"); 
+		spMSG( dF(dERR), "%s:%s: Argument is not string!\n", __FILE__, __FUNCTION__ );
 	else 
 		dbus_message_iter_get_basic(&args, &param);
 
-	printf("Method called with %s\n", param);
+	spMSG( dF(dINFO), "%s:%s: Method called with %s\n", __FILE__, __FUNCTION__, param );
 
 	// create a reply from the message
 	reply = dbus_message_new_method_return(msg);
@@ -286,17 +288,17 @@ void reply_to_method_call(DBusMessage* msg, DBusConnection* conn)
 	// add the arguments to the reply
 	dbus_message_iter_init_append(reply, &args);
 	if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_BOOLEAN, &stat)) { 
-		fprintf(stderr, "Out Of Memory!\n"); 
+		spMSG( dF(dERR), "%s:%s: Out Of Memory!\n", __FILE__, __FUNCTION__ );
 		exit(1);
 	}
 	if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_UINT32, &level)) { 
-		fprintf(stderr, "Out Of Memory!\n"); 
+		spMSG( dF(dERR), "%s:%s: Out Of Memory!\n", __FILE__, __FUNCTION__ );
 		exit(1);
 	}
 
 	// send the reply && flush the connection
 	if (!dbus_connection_send(conn, reply, &serial)) {
-		fprintf(stderr, "Out Of Memory!\n"); 
+		spMSG( dF(dERR), "%s:%s: Out Of Memory!\n", __FILE__, __FUNCTION__ );
 		exit(1);
 	}
 	dbus_connection_flush(conn);
@@ -309,7 +311,7 @@ void reply_to_method_call(DBusMessage* msg, DBusConnection* conn)
 /**
  * Server that exposes a method call and waits for it to be called
  */
-void PowerCall_listen() 
+void *PowerCall_listen( void *argv ) 
 {
 	DBusMessage* msg;
 	DBusMessage* reply;
@@ -319,7 +321,7 @@ void PowerCall_listen()
 	int ret;
 	char* param;
 
-	printf("Listening for method calls\n");
+	spMSG( dF(dINFO), "%s:%s: Listening for method calls ... \n", __FILE__, __FUNCTION__ );
 
 	// initialise the error
 	dbus_error_init(&err);
@@ -327,22 +329,22 @@ void PowerCall_listen()
 	// connect to the bus and check for errors
 	conn = dbus_bus_get(DBUS_BUS_SYSTEM, &err);
 	if (dbus_error_is_set(&err)) { 
-		fprintf(stderr, "Connection Error (%s)\n", err.message); 
+		spMSG( dF(dERR), "%s:%s: Connection Error (%s)\n", __FILE__, __FUNCTION__, err.message );
 		dbus_error_free(&err); 
 	}
 	if (NULL == conn) {
-		fprintf(stderr, "Connection Null\n"); 
+		spMSG( dF(dERR), "%s:%s: Connection Null!!\n", __FILE__, __FUNCTION__ );
 		exit(1); 
 	}
    
 	// request our name on the bus and check for errors
 	ret = dbus_bus_request_name(conn, "test.method.server", DBUS_NAME_FLAG_REPLACE_EXISTING , &err);
 	if (dbus_error_is_set(&err)) { 
-		fprintf(stderr, "Name Error (%s)\n", err.message); 
+		spMSG( dF(dERR), "%s:%s: Name Error (%s)\n", __FILE__, __FUNCTION__, err.message );
 		dbus_error_free(&err);
 	}
 	if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) { 
-		fprintf(stderr, "Not Primary Owner (%d)\n", ret);
+		spMSG( dF(dERR), "%s:%s: Not Primary Owner (%d)\n", __FILE__, __FUNCTION__, ret );
 		exit(1); 
 	}
 
@@ -361,7 +363,16 @@ void PowerCall_listen()
 		// check this is a method call for the right interface & method
 		if (dbus_message_is_method_call(msg, "test.method.Type", "Method"))
 			reply_to_method_call(msg, conn);
-
+		else
+		if (dbus_message_is_method_call(msg, "test.method.Type", "m_CPUcoreUP")) {
+			spMSG( dF(dINFO), "%s:%s: method m_CPUcoreUP call\n", __FILE__, __FUNCTION__ );
+			reply_to_method_call(msg, conn);
+		}
+		else
+		if (dbus_message_is_method_call(msg, "test.method.Type", "m_CPUcoreDOWN")) {
+			spMSG( dF(dINFO), "%s:%s: method m_CPUcoreDOWN call\n", __FILE__, __FUNCTION__ );
+			reply_to_method_call(msg, conn);
+		}
 		// free the message
 		dbus_message_unref(msg);
 	}
@@ -410,6 +421,9 @@ int main( int argc, char *argv[] )
 	
 	/* create routine for power manager */
 	pthread_create( &thread_id, NULL, &mainPowerMGR, NULL );
+
+	pthread_create( &dbus_thread_id, NULL, &PowerCall_listen, NULL );
+	///PowerCall_listen();
 
 #ifdef __ARM_CODE__
 	/* loop forever */
