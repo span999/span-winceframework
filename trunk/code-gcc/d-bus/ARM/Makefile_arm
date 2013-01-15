@@ -20,22 +20,29 @@ TOOLCHAINPREFIX = /home/span/workshop/bin/toolchains/freescale/gcc-4.4.4-glibc-2
 CC      = ${TOOLCHAINPREFIX}gcc
 AR      = ${TOOLCHAINPREFIX}ar
 DEFINES =
-CFLAGS+= -O2 -I. -L${ROOTFS}/usr/lib ${DEFINES}
+CFLAGS+= -O2 -I. -L${ROOTFS}/usr/lib ${DEFINES} -L.
 #CFLAGS+="$(pkg-config dbus-1 --cflags)"
+ARFLAG = rcs
 
 OUTBIN1 = dbus_${CPU}.bin
 OUTBIN2 = sample_${CPU}.bin
+OUTBIN3 = sysPowerMGR-dbus_${CPU}.bin
 #DBUSINC = $(pkg-config dbus-1 --cflags)
 DBUSINC = -I${ROOTFS}/usr/include/dbus-1.0 -I${ROOTFS}/usr/lib/dbus-1.0/include
 DBUSLIB = -l dbus-1
+HELPER = toolhelps
+HELPERBIN = libtoolhelps.a
+LOWLEVEL = sysPower-lowlevel
+LOWLEVELBIN = libsysPower-lowlevel.a
 PROGRAM = ../dbus.c
 SAMPLE = ../dbus-example.c
+PWRMGR = ../sysPowerMGR-dbus.c
 DYNLIB  = libtest.so
 STATICLIB = libcpuutil.a
 STATICNAME = cpuutil
 
 
-all: clean PROGRAM SAMPLE
+all: clean HELPER LOWLEVEL PROGRAM SAMPLE PWRMGR
 
 
 STATICLIB:
@@ -69,9 +76,32 @@ SAMPLE:
 	${CC} ${SAMPLE} -o ${OUTBIN2} -lpthread ${DBUSINC} ${DBUSLIB} ${CFLAGS}
 #	${CC} ${PROGRAM} -o ${OUTBIN2} -lpthread ${CFLAGS}
 
+PWRMGR: 
+	@echo 
+	@echo ================================================================
+	@echo build binary = ${OUTBIN3}
+	@echo ----------------------------------------------------------------
+	${CC} ${PWRMGR} -o ${OUTBIN3} -lpthread -l$(HELPER) -l$(LOWLEVEL) ${DBUSINC} ${DBUSLIB} ${CFLAGS}
+
+HELPER:
+	@echo 
+	@echo ================================================================
+	@echo build static library = ${HELPER}.a
+	@echo ----------------------------------------------------------------
+	${CC} -c ../${HELPER}.c ${CFLAGS}
+	$(AR) $(ARFLAG) $(HELPERBIN) $(HELPER).o
+
+LOWLEVEL:
+	@echo 
+	@echo ================================================================
+	@echo build static library = ${LOWLEVEL}.a
+	@echo ----------------------------------------------------------------
+	${CC} -c ../${LOWLEVEL}.c ${CFLAGS}
+	$(AR) $(ARFLAG) $(LOWLEVELBIN) $(HELPER).o
+	
 clean:
 	@echo 
 	@echo ================================================================
 	@echo Erasing objects and backup files.
 	@echo ----------------------------------------------------------------
-	rm -f ${OUTBIN1} ${OUTBIN2} *.so *.o *.a
+	rm -f ${OUTBIN1} ${OUTBIN2} ${OUTBIN3} *.so *.o *.a
