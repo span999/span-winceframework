@@ -16,7 +16,7 @@
 #define	dDBG			0x00001000
 #define	dINFO			0x00000100
 #define	dERR			0x00010000
-#if 0
+#if 1
 	#define	DBGFSET		(dDBG|dINFO|dERR)
 #else
 	#define	DBGFSET		(dINFO|dERR)

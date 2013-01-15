@@ -192,6 +192,152 @@ void query(char* param)
    dbus_connection_close(conn);
 }
 
+
+/**
+ * Call a method on a remote object
+ */
+void calls( int iID, int iParam ) 
+{
+   DBusMessage* msg;
+   DBusMessageIter args;
+   DBusConnection* conn;
+   DBusError err;
+   DBusPendingCall* pending;
+   int ret;
+   bool stat;
+   dbus_uint32_t level;
+
+   printf("Calling remote method with %d:%d\n", iID, iParam );
+
+   // initialiset the errors
+   dbus_error_init(&err);
+
+   // connect to the system bus and check for errors
+   conn = dbus_bus_get(DBUS_BUS_SYSTEM, &err);
+   if (dbus_error_is_set(&err)) { 
+      fprintf(stderr, "Connection Error (%s)\n", err.message); 
+      dbus_error_free(&err);
+   }
+   if (NULL == conn) { 
+      exit(1); 
+   }
+
+   // request our name on the bus
+   ret = dbus_bus_request_name(conn, "test.method.caller", DBUS_NAME_FLAG_REPLACE_EXISTING , &err);
+   if (dbus_error_is_set(&err)) { 
+      fprintf(stderr, "Name Error (%s)\n", err.message); 
+      dbus_error_free(&err);
+   }
+   if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) { 
+      exit(1);
+   }
+
+	switch( iID )
+	{
+		case 0:
+	// create a new method call and check for errors
+	msg = dbus_message_new_method_call("test.method.server", // target for the method call
+										"/test/method/Object", // object to call on
+										"test.method.Type", // interface to call on
+										"Method"); // method name
+			break;
+		
+		case 1:
+	// create a new method call and check for errors
+	msg = dbus_message_new_method_call("test.method.server", // target for the method call
+										"/test/method/Object", // object to call on
+										"test.method.Type", // interface to call on
+										"m_CPUcoreUP"); // method name
+			break;
+			
+		case 2:
+	// create a new method call and check for errors
+	msg = dbus_message_new_method_call("test.method.server", // target for the method call
+										"/test/method/Object", // object to call on
+										"test.method.Type", // interface to call on
+										"m_CPUcoreDOWN"); // method name
+			break;
+		
+		default:
+			break;
+	}
+									
+	/*
+	 * # dbus-send --system --print-reply --type=method_call --dest='test.method.server' /test/method/Object 'test.method.Type.Method' string:’hello world’
+	 * 
+	     dbus-send --dest=org.freedesktop.ExampleName               \
+                   /org/freedesktop/sample/object/name              \
+                   org.freedesktop.ExampleInterface.ExampleMethod   \
+                   int32:47 string:’hello world’ double:65.32       \
+                   array:string:"1st item","next item","last item"  \
+                   dict:string:int32:"one",1,"two",2,"three",3      \
+                   variant:int32:-8                                 \
+                   objpath:/org/freedesktop/sample/object/name
+     *
+	 */
+   if (NULL == msg) { 
+      fprintf(stderr, "Message Null\n");
+      exit(1);
+   }
+
+   // append arguments
+   dbus_message_iter_init_append(msg, &args);
+   if (!dbus_message_iter_append_basic(&args, (iID==0)?DBUS_TYPE_STRING:DBUS_TYPE_INT32, &iParam)) {
+      fprintf(stderr, "Out Of Memory!\n"); 
+      exit(1);
+   }
+   
+   // send message and get a handle for a reply
+   if (!dbus_connection_send_with_reply (conn, msg, &pending, -1)) { // -1 is default timeout
+      fprintf(stderr, "Out Of Memory!\n"); 
+      exit(1);
+   }
+   if (NULL == pending) { 
+      fprintf(stderr, "Pending Call Null\n"); 
+      exit(1); 
+   }
+   dbus_connection_flush(conn);
+   
+   printf("Request Sent\n");
+   
+   // free message
+   dbus_message_unref(msg);
+   
+   // block until we recieve a reply
+   dbus_pending_call_block(pending);
+
+   // get the reply message
+   msg = dbus_pending_call_steal_reply(pending);
+   if (NULL == msg) {
+      fprintf(stderr, "Reply Null\n"); 
+      exit(1); 
+   }
+   // free the pending message handle
+   dbus_pending_call_unref(pending);
+
+   // read the parameters
+   if (!dbus_message_iter_init(msg, &args))
+      fprintf(stderr, "Message has no arguments!\n"); 
+   else if (DBUS_TYPE_BOOLEAN != dbus_message_iter_get_arg_type(&args)) 
+      fprintf(stderr, "Argument is not boolean!\n"); 
+   else
+      dbus_message_iter_get_basic(&args, &stat);
+
+   if (!dbus_message_iter_next(&args))
+      fprintf(stderr, "Message has too few arguments!\n"); 
+   else if (DBUS_TYPE_UINT32 != dbus_message_iter_get_arg_type(&args)) 
+      fprintf(stderr, "Argument is not int!\n"); 
+   else
+      dbus_message_iter_get_basic(&args, &level);
+
+   printf("Got Reply: %d, %d\n", stat, level);
+   
+   // free reply and close connection
+   dbus_message_unref(msg);   
+   dbus_connection_close(conn);
+}
+
+
 void reply_to_method_call(DBusMessage* msg, DBusConnection* conn)
 {
    DBusMessage* reply;
@@ -382,23 +528,41 @@ void receive()
 
 int main(int argc, char** argv)
 {
-   if (2 > argc) {
-      printf ("Syntax: dbus-example [send|receive|listen|query] [<param>]\n");
-      return 1;
-   }
-   char* param = "no param";
-   if (3 >= argc && NULL != argv[2]) param = argv[2];
-   if (0 == strcmp(argv[1], "send"))
-      sendsignal(param);
-   else if (0 == strcmp(argv[1], "receive"))
-      receive();
-   else if (0 == strcmp(argv[1], "listen"))
-      listen();
-   else if (0 == strcmp(argv[1], "query"))
-      query(param);
-   else {
-      printf ("Syntax: dbus-example [send|receive|listen|query] [<param>]\n");
-      return 1;
-   }
-   return 0;
+	if (2 > argc) {
+		printf ("Syntax: dbus-example [send|receive|listen|query|call] [<param>]\n");
+		return 1;
+	}
+	char* param = "no param";
+	if (3 >= argc && NULL != argv[2]) 
+		param = argv[2];
+	if (0 == strcmp(argv[1], "send"))
+		sendsignal(param);
+	else if (0 == strcmp(argv[1], "receive"))
+		receive();
+	else if (0 == strcmp(argv[1], "listen"))
+		listen();
+	else if (0 == strcmp(argv[1], "query"))
+		query(param);
+	else if (0 == strcmp(argv[1], "call"))
+	{
+		int iID = 0;
+		int iParam = 0;
+		
+		if (0 != strcmp(argv[2], ""))
+			iID = atoi(argv[2]);
+		else
+			printf ("Error: call function without ID\n");
+			
+		if (0 != strcmp(argv[3], ""))
+			iParam = atoi(argv[3]);
+		else
+			printf ("Error: call function without param\n");
+			
+		calls( iID, &iParam );
+	}
+	else {
+		printf ("Syntax: dbus-example [send|receive|listen|query] [<param>]\n");
+		return 1;
+	}
+	return 0;
 }
