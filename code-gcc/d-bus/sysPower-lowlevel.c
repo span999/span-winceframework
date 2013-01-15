@@ -32,6 +32,7 @@ static int CPUcoreActivated = 4;
 
 void setCPUcoreDOWN( int CoreNum )
 {
+	int iRet = -1;
 	/* CoreNum = 0,1,2,3 */
 	
 	char devCPU[] = "echo 0 > /sys/devices/system/cpu/cpuX/online";
@@ -53,11 +54,14 @@ void setCPUcoreDOWN( int CoreNum )
 #endif
 	CPUcoreActivated = CoreNum;	
 	spMSG( dF(dERR), "%s:%s: set core [%d] DOWN\n", __FILE__, __FUNCTION__, CoreNum );
+	
+	return 0;
 }
 
 
 void setCPUcoreUP( int CoreNum )
 {
+	int iRet = -1;
 	/* CoreNum = 0,1,2,3 */
 
 	char devCPU[] = "echo 1 > /sys/devices/system/cpu/cpuX/online";
@@ -79,6 +83,8 @@ void setCPUcoreUP( int CoreNum )
 #endif
 	CPUcoreActivated = CoreNum + 1;
 	spMSG( dF(dERR), "%s:%s: set core[%d] UP\n", __FILE__, __FUNCTION__, CoreNum );
+	
+	return 0;
 }
 
 
@@ -129,6 +135,15 @@ int setCPUcoreActivatedNumber( int num )
 	return iRet;
 }
 
+
+int getCPUcoreActivatedNumber( void )
+{
+	int iRet = -1;
+	
+	iRet = CPUcoreActivated;
+	
+	return iRet;
+}
 
 int ifCoreNumValid( int iCore )
 {

@@ -4,9 +4,10 @@
 
 
 
-void setCPUcoreDOWN( int CoreNum );
-void setCPUcoreUP( int CoreNum );
+int setCPUcoreDOWN( int CoreNum );
+int setCPUcoreUP( int CoreNum );
 int setCPUcoreActivatedNumber( int num );
+int getCPUcoreActivatedNumber( void );
 int setCPUdvfs( int iOn );
 int setCPUspeed( int nSpeed );
 int setCPUsuspend( void );
