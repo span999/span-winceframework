@@ -30,7 +30,7 @@ static int CPUcoreActivated = 4;
 
 
 
-void setCPUcoreDOWN( int CoreNum )
+int setCPUcoreDOWN( int CoreNum )
 {
 	int iRet = -1;
 	/* CoreNum = 0,1,2,3 */
@@ -59,7 +59,7 @@ void setCPUcoreDOWN( int CoreNum )
 }
 
 
-void setCPUcoreUP( int CoreNum )
+int setCPUcoreUP( int CoreNum )
 {
 	int iRet = -1;
 	/* CoreNum = 0,1,2,3 */
