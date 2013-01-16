@@ -109,7 +109,8 @@ int dbus_method_call_ex( int *piRet, int iIn1, char *pFn )
 	bool stat;
 	dbus_int32_t level;
 
-	printf("Calling remote method with %s(%d)\n", pFn, iIn1 );
+	///printf("Calling remote method with %s(%d)\n", pFn, iIn1 );
+	spMSG( dF(dINFO), "%s:%s: Calling remote method with %s(%d)\n", __FILE__, __FUNCTION__, pFn, iIn1 );
 
 	// initialiset the errors
 	dbus_error_init(&err);
@@ -117,7 +118,8 @@ int dbus_method_call_ex( int *piRet, int iIn1, char *pFn )
 	// connect to the system bus and check for errors
 	conn = dbus_bus_get(DBUS_BUS_SYSTEM, &err);
 	if (dbus_error_is_set(&err)) { 
-		fprintf(stderr, "Connection Error (%s)\n", err.message); 
+		///fprintf(stderr, "Connection Error (%s)\n", err.message);
+		spMSG( dF(dERR), "%s:%s: Connection Error (%s)\n", __FILE__, __FUNCTION__, err.message ); 
 		dbus_error_free(&err);
 	}
 	if (NULL == conn) { 
@@ -127,7 +129,8 @@ int dbus_method_call_ex( int *piRet, int iIn1, char *pFn )
 	// request our name on the bus
 	ret = dbus_bus_request_name(conn, "test.method.caller", DBUS_NAME_FLAG_REPLACE_EXISTING , &err);
 	if (dbus_error_is_set(&err)) { 
-		fprintf(stderr, "Name Error (%s)\n", err.message); 
+		///fprintf(stderr, "Name Error (%s)\n", err.message);
+		spMSG( dF(dERR), "%s:%s: Name Error (%s)\n", __FILE__, __FUNCTION__, err.message );
 		dbus_error_free(&err);
 	}
 	if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) { 
@@ -154,29 +157,34 @@ int dbus_method_call_ex( int *piRet, int iIn1, char *pFn )
      *
 	 */
 	if (NULL == msg) { 
-		fprintf(stderr, "Message Null\n");
+		///fprintf(stderr, "Message Null\n");
+		spMSG( dF(dERR), "%s:%s: Message Null\n", __FILE__, __FUNCTION__ );
 		exit(1);
 	}
 
 	// append arguments
 	dbus_message_iter_init_append(msg, &args);
 	if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &iIn1)) {
-		fprintf(stderr, "Out Of Memory!\n"); 
+		///fprintf(stderr, "Out Of Memory!\n");
+		spMSG( dF(dERR), "%s:%s: Out Of Memory!\n", __FILE__, __FUNCTION__ );
 		exit(1);
 	}
    
 	// send message and get a handle for a reply
 	if (!dbus_connection_send_with_reply (conn, msg, &pending, -1)) { // -1 is default timeout
-		fprintf(stderr, "Out Of Memory!\n"); 
+		///fprintf(stderr, "Out Of Memory!\n"); 
+		spMSG( dF(dERR), "%s:%s: Out Of Memory!\n", __FILE__, __FUNCTION__ );
 		exit(1);
 	}
 	if (NULL == pending) { 
-		fprintf(stderr, "Pending Call Null\n"); 
+		///fprintf(stderr, "Pending Call Null\n");
+		spMSG( dF(dERR), "%s:%s: Pending CAll Null\n", __FILE__, __FUNCTION__ );
 		exit(1); 
 	}
 	dbus_connection_flush(conn);
    
-	printf("Request Sent\n");
+	///printf("Request Sent\n");
+	spMSG( dF(dINFO), "%s:%s: Request Sent.\n", __FILE__, __FUNCTION__ );
    
 	// free message
 	dbus_message_unref(msg);
@@ -187,33 +195,42 @@ int dbus_method_call_ex( int *piRet, int iIn1, char *pFn )
 	// get the reply message
 	msg = dbus_pending_call_steal_reply(pending);
 	if (NULL == msg) {
-		fprintf(stderr, "Reply Null\n"); 
+		///fprintf(stderr, "Reply Null\n");
+		spMSG( dF(dERR), "%s:%s: Reply Null\n", __FILE__, __FUNCTION__ );
 		exit(1); 
 	}
 	// free the pending message handle
 	dbus_pending_call_unref(pending);
 
 	// read the parameters
-	if (!dbus_message_iter_init(msg, &args))
-		fprintf(stderr, "Message has no arguments!\n"); 
-	else if (DBUS_TYPE_BOOLEAN != dbus_message_iter_get_arg_type(&args)) 
-		fprintf(stderr, "Argument is not boolean!\n"); 
+	if (!dbus_message_iter_init(msg, &args)) {
+		///fprintf(stderr, "Message has no arguments!\n"); 
+		spMSG( dF(dERR), "%s:%s: Message has no arguments!\n", __FILE__, __FUNCTION__ );
+	}
+	else if (DBUS_TYPE_BOOLEAN != dbus_message_iter_get_arg_type(&args)) {
+		///fprintf(stderr, "Argument is not boolean!\n"); 
+		spMSG( dF(dERR), "%s:%s: Argument is not boolean!\n", __FILE__, __FUNCTION__ );
+	}
 	else
 		dbus_message_iter_get_basic(&args, &stat);
 
-	if (!dbus_message_iter_next(&args))
-		fprintf(stderr, "Message has too few arguments!\n"); 
-	else if (DBUS_TYPE_INT32 != dbus_message_iter_get_arg_type(&args)) 
-		fprintf(stderr, "Argument is not int32!\n"); 
+	if (!dbus_message_iter_next(&args)) {
+		///fprintf(stderr, "Message has too few arguments!\n"); 
+		spMSG( dF(dERR), "%s:%s: Message has too few arguments!\n", __FILE__, __FUNCTION__ );
+	}
+	else if (DBUS_TYPE_INT32 != dbus_message_iter_get_arg_type(&args)) {
+		///fprintf(stderr, "Argument is not int32!\n"); 
+		spMSG( dF(dERR), "%s:%s: Argument is not int32!\n", __FILE__, __FUNCTION__ );
+	}
 	else
 		dbus_message_iter_get_basic(&args, &level);
 
-	printf("Got Reply: %s, %d\n", (stat>0)?"true":"false", level);
-   
+	///printf("Got Reply: %s, %d\n", (stat>0)?"true":"false", level);
+	spMSG( dF(dINFO), "%s:%s: Got Reply: %s, %d\n", __FILE__, __FUNCTION__, (stat>0)?"true":"false", level);
+	
 	// free reply and close connection
 	dbus_message_unref(msg);   
 	dbus_connection_close(conn);
-
 	
 	return iRet;
 }
