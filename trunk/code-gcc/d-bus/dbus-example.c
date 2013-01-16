@@ -6,11 +6,8 @@
 #include <stdlib.h>
 
 #include "sysPowerSRV-dbus.h"
+#include "sysPowerMethod-dbus.h"
 
-
-#define DBUSSRV_METHOD_SERVER		"test.method.server"
-#define DBUSSRV_METHOD_OBJECT		"/test/method/Object"
-#define DBUSSRV_METHOD_TYPE			"test.method.Type"
 
 
 
@@ -537,8 +534,20 @@ void receive()
 
 int main(int argc, char** argv)
 {
-	//sPSgetCPUActivatedNum();
-	sPSsetCPUActivatedNum(2);
+	int iCnt = 0;
+	
+	sysPowerSRVInit();
+	while( iCnt++ < 1000 )
+	{
+		sPSgetCPUActivatedNum();
+		sPSsetCPUActivatedNum(2);
+		sPSgetCPUActivatedNum();
+		sPSsetCPUActivatedNum(2);
+		///sPSsetCPUDVFS(1);
+	}
+	sysPowerSRVDeinit();
+	return 0;
+	
 	
 	if (2 > argc) {
 		printf ("Syntax: dbus-example [send|receive|listen|query|call] [<param>]\n");

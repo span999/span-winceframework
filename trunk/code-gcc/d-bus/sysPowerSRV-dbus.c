@@ -10,14 +10,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-//#include <pthread.h>
-//#include <string.h>
 
 #include "toolhelps.h"
-//#include "ipcpacket.h"
-//#include "sysIPCSRV.h"
-//#include "sysPowerCOMM.h"
-//#include "sysPowerSRV.h"
+#include "sysPowerMethod-dbus.h"
 
 
 
@@ -35,9 +30,6 @@
 
 
 
-#define DBUSSRV_METHOD_SERVER		"test.method.server"
-#define DBUSSRV_METHOD_OBJECT		"/test/method/Object"
-#define DBUSSRV_METHOD_TYPE			"test.method.Type"
 
 
 #define spMxON \
@@ -47,23 +39,6 @@
 		spMxU( &mutex, &mutexINITED );
 
 
-
-struct sysPowerCallMethod
-{
-	int				iID;			/* id */
-	int				iType;			/* method type */
-	char*			userName;		/* user function name */
-	char*			dbusName;		/* dbus function name */
-};
-
-static struct sysPowerCallMethod methodList[] = {
-	{	0,	0,	"sPSgetCPUActivatedNum", "getCPUcoreActivatedNumber"	},
-	{	1,	0,	"sPSsetCPUActivatedNum", "setCPUcoreActivatedNumber"	},
-	{	2,	0,	"sPSsetCPUDVFS", "setCPUdvfs"	},
-	{	3,	0,	"sPSsetCPUspeed", "setCPUspeed"	},
-	{	4,	0,	"sPSsetCPUsuspend", "setCPUsuspend"	},
-	{	-1,	-1,	NULL, NULL	}
-};
 
 
 /*
@@ -97,28 +72,24 @@ static char **getDbusNameFromUserName( char *UserName )
 }
 
 
-int dbus_method_call_ex( int *piRet, int iIn1, char *pFn )
-{
-	int iRet = -1;
-	DBusMessage* msg;
-	DBusMessageIter args;
+static DBusConnection* g_conn = NULL;
+
+static DBusConnection *dbus_hook( void )
+{	
 	DBusConnection* conn;
 	DBusError err;
-	DBusPendingCall* pending;
 	int ret;
-	bool stat;
-	dbus_int32_t level;
+	int iRet = -1;
 
-	///printf("Calling remote method with %s(%d)\n", pFn, iIn1 );
-	spMSG( dF(dINFO), "%s:%s: Calling remote method with %s(%d)\n", __FILE__, __FUNCTION__, pFn, iIn1 );
+	if( g_conn != NULL )
+		return g_conn;
 
 	// initialiset the errors
 	dbus_error_init(&err);
-
+		
 	// connect to the system bus and check for errors
 	conn = dbus_bus_get(DBUS_BUS_SYSTEM, &err);
 	if (dbus_error_is_set(&err)) { 
-		///fprintf(stderr, "Connection Error (%s)\n", err.message);
 		spMSG( dF(dERR), "%s:%s: Connection Error (%s)\n", __FILE__, __FUNCTION__, err.message ); 
 		dbus_error_free(&err);
 	}
@@ -129,13 +100,72 @@ int dbus_method_call_ex( int *piRet, int iIn1, char *pFn )
 	// request our name on the bus
 	ret = dbus_bus_request_name(conn, "test.method.caller", DBUS_NAME_FLAG_REPLACE_EXISTING , &err);
 	if (dbus_error_is_set(&err)) { 
-		///fprintf(stderr, "Name Error (%s)\n", err.message);
 		spMSG( dF(dERR), "%s:%s: Name Error (%s)\n", __FILE__, __FUNCTION__, err.message );
 		dbus_error_free(&err);
 	}
 	if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) { 
 		exit(1);
 	}
+	
+	g_conn = conn;
+	return conn;
+}
+
+
+static int dbus_unhook( void )
+{
+	int iRet = -1;
+	
+	if( g_conn != NULL )
+	{
+		dbus_connection_close(g_conn);
+		iRet = 0;
+	}
+	
+	return iRet;
+}
+
+
+int dbus_method_call_ex( int *piRet, int iIn1, char *pFn )
+{
+	int iRet = -1;
+	DBusMessage* msg;
+	DBusMessageIter args;
+	DBusConnection* conn;
+	DBusError err;
+	DBusPendingCall* pending;
+	int ret;
+	bool stat = false;
+	dbus_int32_t level = 0;
+
+	spMSG( dF(dINFO), "%s:%s: Calling remote method with %s(%d)\n", __FILE__, __FUNCTION__, pFn, iIn1 );
+
+	// initialiset the errors
+	dbus_error_init(&err);
+
+#if 0
+	// connect to the system bus and check for errors
+	conn = dbus_bus_get(DBUS_BUS_SYSTEM, &err);
+	if (dbus_error_is_set(&err)) { 
+		spMSG( dF(dERR), "%s:%s: Connection Error (%s)\n", __FILE__, __FUNCTION__, err.message ); 
+		dbus_error_free(&err);
+	}
+	if (NULL == conn) { 
+		exit(1); 
+	}
+
+	// request our name on the bus
+	ret = dbus_bus_request_name(conn, "test.method.caller", DBUS_NAME_FLAG_REPLACE_EXISTING , &err);
+	if (dbus_error_is_set(&err)) { 
+		spMSG( dF(dERR), "%s:%s: Name Error (%s)\n", __FILE__, __FUNCTION__, err.message );
+		dbus_error_free(&err);
+	}
+	if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) { 
+		exit(1);
+	}
+#else
+	conn = dbus_hook();
+#endif
 
 	// create a new method call and check for errors
 	msg = dbus_message_new_method_call(DBUSSRV_METHOD_SERVER, // target for the method call
@@ -157,7 +187,6 @@ int dbus_method_call_ex( int *piRet, int iIn1, char *pFn )
      *
 	 */
 	if (NULL == msg) { 
-		///fprintf(stderr, "Message Null\n");
 		spMSG( dF(dERR), "%s:%s: Message Null\n", __FILE__, __FUNCTION__ );
 		exit(1);
 	}
@@ -165,25 +194,21 @@ int dbus_method_call_ex( int *piRet, int iIn1, char *pFn )
 	// append arguments
 	dbus_message_iter_init_append(msg, &args);
 	if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &iIn1)) {
-		///fprintf(stderr, "Out Of Memory!\n");
 		spMSG( dF(dERR), "%s:%s: Out Of Memory!\n", __FILE__, __FUNCTION__ );
 		exit(1);
 	}
    
 	// send message and get a handle for a reply
 	if (!dbus_connection_send_with_reply (conn, msg, &pending, -1)) { // -1 is default timeout
-		///fprintf(stderr, "Out Of Memory!\n"); 
 		spMSG( dF(dERR), "%s:%s: Out Of Memory!\n", __FILE__, __FUNCTION__ );
 		exit(1);
 	}
 	if (NULL == pending) { 
-		///fprintf(stderr, "Pending Call Null\n");
 		spMSG( dF(dERR), "%s:%s: Pending CAll Null\n", __FILE__, __FUNCTION__ );
 		exit(1); 
 	}
 	dbus_connection_flush(conn);
    
-	///printf("Request Sent\n");
 	spMSG( dF(dINFO), "%s:%s: Request Sent.\n", __FILE__, __FUNCTION__ );
    
 	// free message
@@ -195,7 +220,6 @@ int dbus_method_call_ex( int *piRet, int iIn1, char *pFn )
 	// get the reply message
 	msg = dbus_pending_call_steal_reply(pending);
 	if (NULL == msg) {
-		///fprintf(stderr, "Reply Null\n");
 		spMSG( dF(dERR), "%s:%s: Reply Null\n", __FILE__, __FUNCTION__ );
 		exit(1); 
 	}
@@ -204,33 +228,32 @@ int dbus_method_call_ex( int *piRet, int iIn1, char *pFn )
 
 	// read the parameters
 	if (!dbus_message_iter_init(msg, &args)) {
-		///fprintf(stderr, "Message has no arguments!\n"); 
 		spMSG( dF(dERR), "%s:%s: Message has no arguments!\n", __FILE__, __FUNCTION__ );
 	}
 	else if (DBUS_TYPE_BOOLEAN != dbus_message_iter_get_arg_type(&args)) {
-		///fprintf(stderr, "Argument is not boolean!\n"); 
 		spMSG( dF(dERR), "%s:%s: Argument is not boolean!\n", __FILE__, __FUNCTION__ );
 	}
 	else
 		dbus_message_iter_get_basic(&args, &stat);
 
 	if (!dbus_message_iter_next(&args)) {
-		///fprintf(stderr, "Message has too few arguments!\n"); 
 		spMSG( dF(dERR), "%s:%s: Message has too few arguments!\n", __FILE__, __FUNCTION__ );
 	}
 	else if (DBUS_TYPE_INT32 != dbus_message_iter_get_arg_type(&args)) {
-		///fprintf(stderr, "Argument is not int32!\n"); 
 		spMSG( dF(dERR), "%s:%s: Argument is not int32!\n", __FILE__, __FUNCTION__ );
 	}
 	else
 		dbus_message_iter_get_basic(&args, &level);
 
-	///printf("Got Reply: %s, %d\n", (stat>0)?"true":"false", level);
 	spMSG( dF(dINFO), "%s:%s: Got Reply: %s, %d\n", __FILE__, __FUNCTION__, (stat>0)?"true":"false", level);
 	
 	// free reply and close connection
-	dbus_message_unref(msg);   
+	dbus_message_unref(msg);
+#if 0	   
 	dbus_connection_close(conn);
+#else
+	///dbus_unhook();
+#endif
 	
 	return iRet;
 }
@@ -248,6 +271,7 @@ int dbus_method_call( int *piRet, int iIn1, char *pFn )
 	{
 		spMSG( dF(dINFO), "%s:%s: use function name [%s]\n", __FILE__, __FUNCTION__, *pDbusName );
 		dbus_method_call_ex( piRet, iIn1, *pDbusName );
+		///sleep(1);
 	}
 	else
 		spMSG( dF(dERR), "%s:%s: mapping function name NOT found!!\n", __FILE__, __FUNCTION__ );
@@ -367,12 +391,14 @@ int sPSloopbackTest( int test )
 int sysPowerSRVInit( void )
 {
 	spMxI( &mutex, &mutexINITED );
+	dbus_hook();
 	return 0;
 }
 
 
 int sysPowerSRVDeinit( void )
 {
+	dbus_unhook();
 	spMxD( &mutex, &mutexINITED );
 	return 0;
 }
