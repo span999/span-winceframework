@@ -12,14 +12,10 @@
 #include <dbus/dbus.h>
 #include <stdbool.h>
 
-
-
 #include "toolhelps.h"
 #include "sysPowerCOMM.h"
 #include "sysPower-lowlevel.h"
-///#include "ipcpacket.h"
-///#include "sysPowerSRV.h"
-///#include "sysIPCSRV.h"
+#include "sysPowerMethod-dbus.h"
 
 
 
@@ -354,6 +350,8 @@ void reply_to_method_call2(DBusMessage* msg, DBusConnection* conn)
 }
 
 
+#define DBUS_INTERVAL 500
+
 /**
  * Server that exposes a method call and waits for it to be called
  */
@@ -401,11 +399,22 @@ void *PowerCall_listen( void *argv )
 		msg = dbus_connection_pop_message(conn);
 
 		// loop again if we haven't got a message
-		if (NULL == msg) { 
+	#if 0	
+		if (NULL == msg) {
 			sleep(1); 
 			continue; 
 		}
-      
+	#else
+		if (NULL == msg) {
+			#ifdef _USE_USLEEP_
+			usleep( ((NULL == msg)?DBUS_INTERVAL:100) );
+			#else
+			sleep( ((NULL == msg)?1:0) );
+			#endif
+			continue; 
+		}
+	#endif	
+
 		// check this is a method call for the right interface & method
 		if (dbus_message_is_method_call(msg, "test.method.Type", "Method"))
 			reply_to_method_call(msg, conn);
@@ -419,6 +428,17 @@ void *PowerCall_listen( void *argv )
 			spMSG( dF(dINFO), "%s:%s: method m_CPUcoreDOWN call\n", __FILE__, __FUNCTION__ );
 			reply_to_method_call2(msg, conn);
 		}
+		else
+		if (dbus_message_is_method_call(msg, "test.method.Type", "getCPUcoreActivatedNumber")) {
+			spMSG( dF(dINFO), "%s:%s: method getCPUcoreActivatedNumber call\n", __FILE__, __FUNCTION__ );
+			reply_to_method_call2(msg, conn);
+		}
+		else
+		if (dbus_message_is_method_call(msg, "test.method.Type", "setCPUcoreActivatedNumber")) {
+			spMSG( dF(dINFO), "%s:%s: method setCPUcoreActivatedNumber call\n", __FILE__, __FUNCTION__ );
+			reply_to_method_call2(msg, conn);
+		}
+		
 		// free the message
 		dbus_message_unref(msg);
 	}
