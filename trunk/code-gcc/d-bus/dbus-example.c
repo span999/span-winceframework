@@ -537,7 +537,8 @@ void receive()
 
 int main(int argc, char** argv)
 {
-	sPSgetCPUActivatedNum();
+	//sPSgetCPUActivatedNum();
+	sPSsetCPUActivatedNum(2);
 	
 	if (2 > argc) {
 		printf ("Syntax: dbus-example [send|receive|listen|query|call] [<param>]\n");
