@@ -27,9 +27,12 @@ ARFLAG = rcs
 OUTBIN1 = dbus_${CPU}.bin
 OUTBIN2 = sample_${CPU}.bin
 OUTBIN3 = sysPowerMGR-dbus_${CPU}.bin
+OUTBIN4 = sysFakeKey_${CPU}.bin
 #DBUSINC = $(pkg-config dbus-1 --cflags)
 DBUSINC = -I${ROOTFS}/usr/include/dbus-1.0 -I${ROOTFS}/usr/lib/dbus-1.0/include
 DBUSLIB = -ldbus-1
+XEXTINC = -I${ROOTFS}/usr/include/X11 -I${ROOTFS}/usr/include/X11/extensions
+XEXTLIB = -lXext -lXtst
 HELPER = toolhelps
 HELPERBIN = libtoolhelps.a
 LOWLEVEL = sysPower-lowlevel
@@ -39,12 +42,13 @@ PWRSRVBIN = libsysPowerSRV-dbus.a
 PROGRAM = ../dbus.c
 SAMPLE = ../dbus-example.c
 PWRMGR = ../sysPowerMGR-dbus.c
+FAKEKEY = ../sysFakeKey.c
 DYNLIB  = libtest.so
 STATICLIB = libcpuutil.a
 STATICNAME = cpuutil
 
 
-all: clean HELPER LOWLEVEL PWRSRV PROGRAM SAMPLE PWRMGR
+all: clean HELPER LOWLEVEL PWRSRV FAKEKEY PROGRAM SAMPLE PWRMGR
 
 
 STATICLIB:
@@ -84,6 +88,13 @@ PWRMGR:
 	@echo build binary = ${OUTBIN3}
 	@echo ----------------------------------------------------------------
 	${CC} ${PWRMGR} -o ${OUTBIN3} -lpthread -l$(HELPER) -l$(LOWLEVEL) ${DBUSINC} ${DBUSLIB} ${CFLAGS}
+
+FAKEKEY:
+	@echo 
+	@echo ================================================================
+	@echo build binary = ${OUTBIN4}
+	@echo ----------------------------------------------------------------
+	${CC} ${FAKEKEY} -o ${OUTBIN4} -lpthread -l$(HELPER) ${XEXTINC} ${XEXTLIB} ${CFLAGS}
 
 HELPER:
 	@echo 
