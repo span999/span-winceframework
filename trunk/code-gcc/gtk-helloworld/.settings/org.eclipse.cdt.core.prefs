@@ -1,0 +1,16 @@
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.config.gnu.exe.debug.366913568/ARM_CROSS_COMPILE/delimiter=\:
+environment/project/cdt.managedbuild.config.gnu.exe.debug.366913568/ARM_CROSS_COMPILE/operation=append
+environment/project/cdt.managedbuild.config.gnu.exe.debug.366913568/ARM_CROSS_COMPILE/value=/home/span/workshop/bin/toolchains/freescale/gcc-4.4.4-glibc-2.11.1-multilib-1.0/arm-fsl-linux-gnueabi/bin
+environment/project/cdt.managedbuild.config.gnu.exe.debug.366913568/append=true
+environment/project/cdt.managedbuild.config.gnu.exe.debug.366913568/appendContributed=true
+environment/project/cdt.managedbuild.config.gnu.exe.release.1226026758.1529791172/ARM_ROOTFS_ROOT/delimiter=\:
+environment/project/cdt.managedbuild.config.gnu.exe.release.1226026758.1529791172/ARM_ROOTFS_ROOT/operation=append
+environment/project/cdt.managedbuild.config.gnu.exe.release.1226026758.1529791172/ARM_ROOTFS_ROOT/value=/home/span/workshop/build/trial/ltib/rootfs
+environment/project/cdt.managedbuild.config.gnu.exe.release.1226026758.1529791172/append=true
+environment/project/cdt.managedbuild.config.gnu.exe.release.1226026758.1529791172/appendContributed=true
+environment/project/cdt.managedbuild.config.gnu.exe.release.1226026758/ARM_CROSS_COMPILE/delimiter=\:
+environment/project/cdt.managedbuild.config.gnu.exe.release.1226026758/ARM_CROSS_COMPILE/operation=append
+environment/project/cdt.managedbuild.config.gnu.exe.release.1226026758/ARM_CROSS_COMPILE/value=/home/span/workshop/bin/toolchains/freescale/gcc-4.4.4-glibc-2.11.1-multilib-1.0/arm-fsl-linux-gnueabi/bin
+environment/project/cdt.managedbuild.config.gnu.exe.release.1226026758/append=true
+environment/project/cdt.managedbuild.config.gnu.exe.release.1226026758/appendContributed=true
