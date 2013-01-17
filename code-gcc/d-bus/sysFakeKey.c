@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+/* install if libxtst not found */
+/* sudo apt-get install libxtst-dev */
 #if 1
 #include <X11/extensions/XTest.h>
 #else  /* new X11 */
