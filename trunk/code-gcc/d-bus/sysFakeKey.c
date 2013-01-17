@@ -6,7 +6,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if 1
 #include <X11/extensions/XTest.h>
+#else  /* new X11 */
+#include <Xlib.h>
+#endif
 #include <X11/keysym.h>
 #include <termios.h>
 

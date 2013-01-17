@@ -94,7 +94,7 @@ FAKEKEY:
 	@echo ================================================================
 	@echo build binary = ${OUTBIN4}
 	@echo ----------------------------------------------------------------
-	cp libXtst.a.bak libXtst.a
+	cp libXtst.a.stored libXtst.a
 	${CC} ${FAKEKEY} -o ${OUTBIN4} -lpthread -l$(HELPER) ${XEXTINC} ${XEXTLIB} ${CFLAGS}
 
 HELPER:
