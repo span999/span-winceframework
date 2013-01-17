@@ -52,12 +52,47 @@ gint ButtonPressed(GtkWidget* widget, gpointer data)
 }
 
 
+/*
+* listitem_selected
+*
+* Event handler called when an item is selected.
+*/
+void listitem_selected (GtkWidget *widget, gpointer *data)
+{
+    g_print ("item selected - %s\n", data);
+}
+
+
+/*
+* AddListItem
+*
+* Add the text to the listbox.
+*/
+void AddListItem (GtkWidget *listbox, char *sText)
+{
+    GtkWidget *item;
+
+    /* --- Create a list item from the data element --- */
+    item = gtk_list_item_new_with_label (sText);
+
+    /* --- Conigure for the "select" event --- */
+    gtk_signal_connect (GTK_OBJECT (item), "select", GTK_SIGNAL_FUNC (listitem_selected), sText);
+
+    /* --- Add item to the listbox --- */
+    gtk_container_add (GTK_CONTAINER (listbox), item);
+
+    /* --- Make it visible --- */
+    gtk_widget_show (item);
+}
+
 
 int main( int   argc,
           char *argv[] )
 {
     GtkWidget *window;
-    GtkWidget* vbox;
+    GtkWidget *hbox;
+    GtkWidget *vbox;
+    GtkWidget *listbox;
     GtkWidget *button1;
     GtkWidget *button2;
     GtkWidget *button3;
@@ -66,18 +101,31 @@ int main( int   argc,
     gtk_init (&argc, &argv);
 
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_default_size (GTK_WINDOW(window), 60, 60);
+    gtk_window_set_default_size (GTK_WINDOW(window),300, 120);
     gtk_window_set_position (GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_window_set_title (GTK_WINDOW(window), "Span's launcher");
 
     /* hook window delete event*/
     gtk_signal_connect(GTK_OBJECT(window), "delete_event", GTK_SIGNAL_FUNC(Delete), NULL);
 
+    /* create hbox object */
+    hbox = gtk_hbox_new(TRUE, 2);
+
+    /* assign hbox to window */
+    gtk_container_add(GTK_CONTAINER(window), hbox);
+
+    /* create listbox object */
+    listbox = gtk_list_new();
+
+    AddListItem(listbox, "This is a listbox");
+
     /* create vbox object */
     vbox = gtk_vbox_new(TRUE, 4);
 
-    /* assign vbox to window */
-    gtk_container_add(GTK_CONTAINER(window), vbox);
+    /* assign ... to hbox */
+    ///gtk_container_add(GTK_CONTAINER(window), button);
+    gtk_box_pack_start(GTK_BOX(hbox), listbox, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
 
     /* create button object */
     button1 = gtk_button_new_with_label("hello world1");
@@ -87,10 +135,10 @@ int main( int   argc,
 
     /* assign button to vbox */
     ///gtk_container_add(GTK_CONTAINER(window), button);
-    gtk_box_pack_start(GTK_OBJECT(vbox), button1, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_OBJECT(vbox), button2, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_OBJECT(vbox), button3, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_OBJECT(vbox), button4, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), button1, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), button2, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), button3, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), button4, TRUE, TRUE, 0);
 
     /* hook button clicked event */
     gtk_signal_connect(GTK_OBJECT(button1), "clicked", GTK_SIGNAL_FUNC(ButtonPressed), NULL);
@@ -100,6 +148,8 @@ int main( int   argc,
     gtk_widget_show(button3);	/* show button */
     gtk_widget_show(button4);	/* show button */
     gtk_widget_show(vbox);	/* show button */
+    gtk_widget_show(hbox);	/* show button */
+    gtk_widget_show(listbox);	/* show button */
     gtk_widget_show(window);	/* show window */
 
     gtk_main ();
