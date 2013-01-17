@@ -20,29 +20,35 @@ TOOLCHAINPREFIX = /home/span/workshop/bin/toolchains/freescale/gcc-4.4.4-glibc-2
 CC      = ${TOOLCHAINPREFIX}gcc
 AR      = ${TOOLCHAINPREFIX}ar
 DEFINES =
-CFLAGS+= -O2 -I. -L${ROOTFS}/usr/lib ${DEFINES} -L.
+CFLAGS+= -O2 -I. -D__ARM_CODE__ -L${ROOTFS}/usr/lib ${DEFINES} -L.
 #CFLAGS+="$(pkg-config dbus-1 --cflags)"
 ARFLAG = rcs
 
 OUTBIN1 = dbus_${CPU}.bin
 OUTBIN2 = sample_${CPU}.bin
 OUTBIN3 = sysPowerMGR-dbus_${CPU}.bin
+OUTBIN4 = sysFakeKey_${CPU}.bin
 #DBUSINC = $(pkg-config dbus-1 --cflags)
 DBUSINC = -I${ROOTFS}/usr/include/dbus-1.0 -I${ROOTFS}/usr/lib/dbus-1.0/include
-DBUSLIB = -l dbus-1
+DBUSLIB = -ldbus-1
+XEXTINC = -I${ROOTFS}/usr/include -I${ROOTFS}/usr/include/X11 -I${ROOTFS}/usr/include/X11/extensions
+XEXTLIB = -lX11 -lxcb -lXau -lxcb-xlib -lXext -lXtst
 HELPER = toolhelps
 HELPERBIN = libtoolhelps.a
 LOWLEVEL = sysPower-lowlevel
 LOWLEVELBIN = libsysPower-lowlevel.a
+PWRSRV = sysPowerSRV-dbus
+PWRSRVBIN = libsysPowerSRV-dbus.a
 PROGRAM = ../dbus.c
 SAMPLE = ../dbus-example.c
 PWRMGR = ../sysPowerMGR-dbus.c
+FAKEKEY = ../sysFakeKey.c
 DYNLIB  = libtest.so
 STATICLIB = libcpuutil.a
 STATICNAME = cpuutil
 
 
-all: clean HELPER LOWLEVEL PROGRAM SAMPLE PWRMGR
+all: clean HELPER LOWLEVEL PWRSRV FAKEKEY PROGRAM SAMPLE PWRMGR
 
 
 STATICLIB:
@@ -73,7 +79,7 @@ SAMPLE:
 	@echo ================================================================
 	@echo build binary = ${OUTBIN2}
 	@echo ----------------------------------------------------------------
-	${CC} ${SAMPLE} -o ${OUTBIN2} -lpthread ${DBUSINC} ${DBUSLIB} ${CFLAGS}
+	${CC} ${SAMPLE} -o ${OUTBIN2} -lpthread -l$(HELPER) -l${PWRSRV} ${DBUSINC} ${DBUSLIB} ${CFLAGS}
 #	${CC} ${PROGRAM} -o ${OUTBIN2} -lpthread ${CFLAGS}
 
 PWRMGR: 
@@ -82,6 +88,14 @@ PWRMGR:
 	@echo build binary = ${OUTBIN3}
 	@echo ----------------------------------------------------------------
 	${CC} ${PWRMGR} -o ${OUTBIN3} -lpthread -l$(HELPER) -l$(LOWLEVEL) ${DBUSINC} ${DBUSLIB} ${CFLAGS}
+
+FAKEKEY:
+	@echo 
+	@echo ================================================================
+	@echo build binary = ${OUTBIN4}
+	@echo ----------------------------------------------------------------
+	cp libXtst.a.bak libXtst.a
+	${CC} ${FAKEKEY} -o ${OUTBIN4} -lpthread -l$(HELPER) ${XEXTINC} ${XEXTLIB} ${CFLAGS}
 
 HELPER:
 	@echo 
@@ -97,8 +111,16 @@ LOWLEVEL:
 	@echo build static library = ${LOWLEVEL}.a
 	@echo ----------------------------------------------------------------
 	${CC} -c ../${LOWLEVEL}.c ${CFLAGS}
-	$(AR) $(ARFLAG) $(LOWLEVELBIN) $(HELPER).o
-	
+	$(AR) $(ARFLAG) $(LOWLEVELBIN) $(LOWLEVEL).o  $(HELPER).o
+
+PWRSRV:
+	@echo 
+	@echo ================================================================
+	@echo build static library = ${PWRSRV}.a
+	@echo ----------------------------------------------------------------
+	${CC} -c ../${PWRSRV}.c ${DBUSINC} ${DBUSLIB} ${CFLAGS}
+	$(AR) $(ARFLAG) $(PWRSRVBIN) $(PWRSRV).o $(HELPER).o	
+
 clean:
 	@echo 
 	@echo ================================================================
