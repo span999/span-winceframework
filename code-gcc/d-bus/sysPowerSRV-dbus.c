@@ -369,6 +369,22 @@ int sPSsetCPUsuspend( void )
 }
 
 
+int sPSsendFakeKey( int keycode )
+{
+	int iRet = -1;
+	int dRet = -1;
+	int iIn1 = keycode;
+
+	spMxON
+	
+	dRet = dbus_method_call( &iRet, iIn1, (char *)__FUNCTION__ ); 
+	
+	spMxOFF
+
+	return iRet;
+}
+
+
 int sPSloopbackTest( int test )
 {
 	int iRet = -1;

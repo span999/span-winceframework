@@ -17,6 +17,12 @@
 #include <termios.h>
 
 #include "toolhelps.h"
+#include "sysPowerSRV-dbus.h"
+#include "sysPowerMethod-dbus.h"
+
+
+
+
 
 /* debug flag sets */
 #define	dDBG			0x00001000
@@ -64,20 +70,29 @@ char _getch() {
 int FakeKeySend( Display* disp, unsigned int keyCode )
 {
 	int iRet = 0;
+
 #ifdef __ARM_CODE__
-	XTestFakeKeyEvent( disp, XKeysymToKeycode( disp, keyCode), True, CurrentTime );
+	/* send key code via d-bus */
+	sPSsendFakeKey(keyCode);
+	spMSG( dF(dINFO), "%s:%s: keyCode=%d[0x%04x] sent\n", __FILE__, __FUNCTION__, keyCode, keyCode );
+
+	///XTestFakeKeyEvent( disp, XKeysymToKeycode( disp, keyCode), True, CurrentTime );
 	///spMSG( dF(dINFO), "%s:%s: keyCode=%d ON\n", __FILE__, __FUNCTION__, keyCode );
-	XFlush(disp);
-	XTestFakeKeyEvent( disp, XKeysymToKeycode( disp, keyCode), False, CurrentTime );
+	///XFlush(disp);
+	///XTestFakeKeyEvent( disp, XKeysymToKeycode( disp, keyCode), False, CurrentTime );
 	///spMSG( dF(dINFO), "%s:%s: keyCode=%d OFF\n", __FILE__, __FUNCTION__, keyCode );
-	XFlush(disp);
+	///XFlush(disp);
 #else
-	XTestFakeKeyEvent( disp, XKeysymToKeycode( disp, keyCode), True, CurrentTime );
-	///spMSG( dF(dINFO), "%s:%s: keyCode=%d ON\n", __FILE__, __FUNCTION__, keyCode );
-	XFlush(disp);
-	XTestFakeKeyEvent( disp, XKeysymToKeycode( disp, keyCode), False, CurrentTime );
-	///spMSG( dF(dINFO), "%s:%s: keyCode=%d OFF\n", __FILE__, __FUNCTION__, keyCode );
-	XFlush(disp);
+	/* send key code via d-bus */
+	sPSsendFakeKey(keyCode);
+	spMSG( dF(dINFO), "%s:%s: keyCode=%d[0x%04x] sent\n", __FILE__, __FUNCTION__, keyCode, keyCode );
+
+	///XTestFakeKeyEvent( disp, XKeysymToKeycode( disp, keyCode), True, CurrentTime );
+	///spMSG( dF(dINFO), "%s:%s: keyCode=%d[0x%04x] ON\n", __FILE__, __FUNCTION__, keyCode, keyCode );
+	///XFlush(disp);
+	///XTestFakeKeyEvent( disp, XKeysymToKeycode( disp, keyCode), False, CurrentTime );
+	///spMSG( dF(dINFO), "%s:%s: keyCode=%d[0x%04x] OFF\n", __FILE__, __FUNCTION__, keyCode, keyCode );
+	///XFlush(disp);
 #endif	
 	return iRet;
 }
@@ -90,13 +105,16 @@ int main(void) {
 	char userKey = 0;
 	char prevKey = 0;
 	
-	
+#ifndef __ARM_CODE__	
 	disp = XOpenDisplay( NULL );
 	if( disp == NULL )
 	{
 		spMSG( dF(dERR), "%s:%s: XOpenDisplay fail !!!\n", __FILE__, __FUNCTION__ );
 		return 1;
 	}
+#endif
+	
+	sysPowerSRVInit();
 	
 	while( iTmp++ < 10000 )
 	{
@@ -104,10 +122,13 @@ int main(void) {
 
 		///userKey = getchar();
 		userKey = _getch();
-		spMSG( dF(dINFO), "%s:%s: user key = [%d][%c][0x%02x]\n", __FILE__, __FUNCTION__, userKey, userKey, userKey );
-		
-		/* double 'ESC' for exit */
-		if( (userKey == 27) && (prevKey == 27) )
+		///spMSG( dF(dINFO), "%s:%s: user key = [%d][%c][0x%02x]\n", __FILE__, __FUNCTION__, userKey, userKey, userKey );
+		spMSG( dF(dINFO), "%s:%s: user key = [%d][0x%02x]\n", __FILE__, __FUNCTION__, userKey, userKey );
+
+		if( (userKey == 27) && (prevKey == 27) )	/* double 'ESC' for exit */
+			break;
+		else
+		if( (userKey == 113) && (prevKey == 113) )	/* double 'q' for exit */
 			break;
 		else
 		if( (userKey == 65) && (prevKey == 91) )
@@ -141,14 +162,57 @@ int main(void) {
 			FakeKeySend( disp, XK_Page_Up );		
 		else
 		if( (userKey == 54) && (prevKey == 91) )
-			FakeKeySend( disp, XK_Page_Down );		
+			FakeKeySend( disp, XK_Page_Down );
+		else
+		if( (userKey == 104) )
+			FakeKeySend( disp, XK_F1 );
+		else
+		if( (userKey == 121) )
+			FakeKeySend( disp, XK_Pointer_Up );
+		else
+		if( (userKey == 110) )
+			FakeKeySend( disp, XK_Pointer_Down );
+		else
+		if( (userKey == 103) )
+			FakeKeySend( disp, XK_Pointer_Left );
+		else
+		if( (userKey == 106) )
+			FakeKeySend( disp, XK_Pointer_Right );
+		else
+		if( (userKey == 116) )
+			FakeKeySend( disp, XK_Pointer_UpLeft );
+		else
+		if( (userKey == 117) )
+			FakeKeySend( disp, XK_Pointer_UpRight );
+		else
+		if( (userKey == 98) )
+			FakeKeySend( disp, XK_Pointer_DownLeft );
+		else
+		if( (userKey == 109) )
+			FakeKeySend( disp, XK_Pointer_DownRight );
+		else
+		if( (userKey == 105) )
+			FakeKeySend( disp, XK_Pointer_Button_Dflt );
+		else
+		if( (userKey == 107) )
+			FakeKeySend( disp, XK_Pointer_DblClick_Dflt );
+		else
+		if( (userKey == 111) )
+			FakeKeySend( disp, XK_Pointer_Drag_Dflt );
+		else
+		{
+			sleep(0);
+			///continue;
+		}	
 		
 		sleep(0);
 		prevKey = userKey;
 	}
 	
-	
+	sysPowerSRVDeinit();
+#ifndef __ARM_CODE__
 	XCloseDisplay( disp );
+#endif
 	
 	
 	return 0;
