@@ -102,7 +102,45 @@ gint Delete(GtkWidget* widget, gpointer* data)
 gint Button01Pressed(GtkWidget* widget, gpointer data)
 {
 	g_print("You pressed the button01.\n");
+#ifdef USE_TEXT_VIEW
+#else
 	AddListItem(g_listbox, "You pressed the button01.");
+#endif
+	return FALSE;
+}
+
+
+/*
+ * After it's connected to the right event, this will run when
+ * the button is pressed
+ */
+gint ButtonXXPressed(GtkWidget* widget, gpointer data)
+{
+	gchar *name;
+#ifdef USE_NEW_BTN
+    if( buttonWdgItemList )
+    {
+    	int iTmp = 0;
+
+    	while( buttonWdgItemList[iTmp].btnId != -1 )
+    	{
+    		if( buttonWdgItemList[iTmp].btnWidget == widget )
+    		{
+    			name = buttonWdgItemList[iTmp].btnName;
+    			break;
+    		}
+    		name = "not found!";
+    		iTmp++;
+    	}
+
+    }
+#endif
+
+	g_print("You pressed the %s.\n", name );
+#ifdef USE_TEXT_VIEW
+#else
+	AddListItem(g_listbox, "You pressed the button01.");
+#endif
 	return FALSE;
 }
 
@@ -277,7 +315,6 @@ int main( int   argc,
     buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
     /* Set the default buffer text. */
     gtk_text_buffer_set_text (buffer, "Hello Text View!", -1);
-
 #else
     /* create listbox object */
     listbox = gtk_list_new();
@@ -427,7 +464,17 @@ int main( int   argc,
 #ifndef USE_NEW_BTN
     gtk_signal_connect(GTK_OBJECT(button01), "clicked", GTK_SIGNAL_FUNC(Button01Pressed), NULL);
 #else
-    gtk_signal_connect(GTK_OBJECT(buttonWdgItemList[0].btnWidget), "clicked", GTK_SIGNAL_FUNC(Button01Pressed), NULL);
+    ///gtk_signal_connect(GTK_OBJECT(buttonWdgItemList[0].btnWidget), "clicked", GTK_SIGNAL_FUNC(Button01Pressed), NULL);
+
+    if( buttonWdgItemList )
+    {
+    	int iTmp = 0;
+    	while( buttonWdgItemList[iTmp].btnId != -1 )
+    	{
+    		gtk_signal_connect(GTK_OBJECT(buttonWdgItemList[iTmp].btnWidget), "clicked", GTK_SIGNAL_FUNC(ButtonXXPressed), NULL);
+    		iTmp++;
+    	}
+    }
 #endif
 
 #ifdef USE_NEW_BTN
