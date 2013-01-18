@@ -15,6 +15,7 @@ int sPSsetCPUActivatedNum( int num );
 int sPSsetCPUDVFS( int num );
 int sPSsetCPUspeed( int nMHz );
 int sPSsetCPUsuspend( void );
+int sPSsendFakeKey( int keycode );
 
 int sPSloopbackTest( int test );
 
