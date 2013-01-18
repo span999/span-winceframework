@@ -25,6 +25,7 @@ int main(void) {
  * add `pkg-config --cflags gtk+-2.0` to compiler
  * add `pkg-config --libs gtk+-2.0` to linker
  *
+ * http://developer.gimp.org/api/2.0/gtk/GtkTextView.html
 */
 
 #include <gtk/gtk.h>
@@ -35,7 +36,8 @@ int main(void) {
 
 
 #define		USE_NEW_BTN
-
+#define		USE_SCROLL_WIN
+#define		USE_TEXT_VIEW
 
 
 #ifdef USE_NEW_BTN
@@ -224,8 +226,15 @@ int main( int   argc,
     GtkWidget *vbox3;
     GtkWidget *vbox4;
     GtkWidget *vbox5;
+#ifdef USE_TEXT_VIEW
+    GtkWidget *textview;
+    GtkTextBuffer *buffer;
+#else
     GtkWidget *listbox;
+#endif
+#ifdef USE_SCROLL_WIN
     GtkWidget *scroll_window;
+#endif
 #ifndef USE_NEW_BTN
     GtkWidget *button01;
     GtkWidget *button02;
@@ -261,6 +270,15 @@ int main( int   argc,
     /* assign hbox to window */
     gtk_container_add(GTK_CONTAINER(window), vbox1);
 
+#ifdef USE_TEXT_VIEW
+    /* create textview object */
+    textview = gtk_text_view_new();
+    /* Obtaining the buffer associated with the widget. */
+    buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
+    /* Set the default buffer text. */
+    gtk_text_buffer_set_text (buffer, "Hello Text View!", -1);
+
+#else
     /* create listbox object */
     listbox = gtk_list_new();
     g_listbox = listbox;
@@ -268,24 +286,35 @@ int main( int   argc,
 
     gtk_signal_connect (GTK_OBJECT (listbox), "selection_changed", GTK_SIGNAL_FUNC (listbox_changed), "selection_changed");
     AddListItem(listbox, "This is a listbox");
-#if 0
+#endif
+
+
+#ifdef USE_SCROLL_WIN
     /* create a scrollable container */
     scroll_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_window),
                                    GTK_POLICY_AUTOMATIC,
                                    GTK_POLICY_ALWAYS);
     ///gtk_container_add(GTK_CONTAINER(frame_window), scroll_window);
+	#ifdef USE_TEXT_VIEW
+    gtk_container_add(GTK_CONTAINER(scroll_window), textview);
+	#else
     gtk_container_add(GTK_CONTAINER(scroll_window), listbox);
+	#endif
 #endif
     /* create hbox object */
     hbox1 = gtk_hbox_new(TRUE, 4);
 
     /* assign ... to vbox */
     ///gtk_container_add(GTK_CONTAINER(window), button);
-#if 0
+#ifdef USE_SCROLL_WIN
     gtk_box_pack_start(GTK_BOX(vbox1), scroll_window, TRUE, TRUE, 0);
 #else
+	#ifdef USE_TEXT_VIEW
+    gtk_box_pack_start(GTK_BOX(vbox1), textview, TRUE, TRUE, 0);
+	#else
     gtk_box_pack_start(GTK_BOX(vbox1), listbox, TRUE, TRUE, 0);
+	#endif
 #endif
 
     gtk_box_pack_start(GTK_BOX(vbox1), hbox1, TRUE, TRUE, 0);
@@ -440,12 +469,19 @@ int main( int   argc,
     gtk_widget_show(vbox3);	/* show button */
     gtk_widget_show(vbox4);	/* show button */
     gtk_widget_show(vbox5);	/* show button */
+#ifdef USE_SCROLL_WIN
+    gtk_widget_show(scroll_window);	/* show button */
+#endif
+#ifdef USE_TEXT_VIEW
+    gtk_widget_show(textview);	/* show button */
+#else
     gtk_widget_show(listbox);	/* show button */
+#endif
     gtk_widget_show(window);	/* show window */
 
     pthread_create( &dbus_thread_id, NULL, &FakeKeyCall_listen, NULL );
 
-
+    gtk_window_set_resizable(GTK_WINDOW(window), FALSE );	///fixed window
     gtk_main ();
 
     return 0;
