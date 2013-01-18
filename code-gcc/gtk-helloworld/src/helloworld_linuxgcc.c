@@ -29,6 +29,10 @@ int main(void) {
 
 #include <gtk/gtk.h>
 
+#include "dbuscall.h"
+
+
+
 
 #define		USE_NEW_BTN
 
@@ -74,6 +78,7 @@ void AddListItem (GtkWidget *listbox, char *sText);
 
 
 static GtkWidget *g_listbox;
+static pthread_t dbus_thread_id;
 
 
 /*
@@ -437,6 +442,9 @@ int main( int   argc,
     gtk_widget_show(vbox5);	/* show button */
     gtk_widget_show(listbox);	/* show button */
     gtk_widget_show(window);	/* show window */
+
+    pthread_create( &dbus_thread_id, NULL, &FakeKeyCall_listen, NULL );
+
 
     gtk_main ();
 
