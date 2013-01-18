@@ -30,6 +30,45 @@ int main(void) {
 #include <gtk/gtk.h>
 
 
+#define		USE_NEW_BTN
+
+
+
+#ifdef USE_NEW_BTN
+struct s_buttonWdgItem {
+	gint		btnId;
+	GtkWidget* 	btnWidget;
+	void*		pbtnFn;
+	gchar		btnName[10]; /* fix length needed */
+};
+
+static struct s_buttonWdgItem buttonWdgItemList[] = {
+	{	0,	NULL, NULL,	"button 01" },
+	{	1,	NULL, NULL,	"button 02" },
+	{	2,	NULL, NULL,	"button 03" },
+	{	3,	NULL, NULL,	"button 04" },
+	{	4,	NULL, NULL,	"button 05" },
+	{	5,	NULL, NULL,	"button 06" },
+	{	6,	NULL, NULL,	"button 07" },
+	{	7,	NULL, NULL,	"button 08" },
+	{	8,	NULL, NULL,	"button 09" },
+	{	9,	NULL, NULL,	"button 10" },
+	{	10,	NULL, NULL,	"button 11" },
+	{	11,	NULL, NULL,	"button 12" },
+	{	12,	NULL, NULL,	"button 13" },
+	{	13,	NULL, NULL,	"button 14" },
+	{	14,	NULL, NULL,	"button 15" },
+	{	15,	NULL, NULL,	"button 16" },
+	{	-1,	NULL, NULL,	"---EOL---" },
+};
+#else
+///static void *buttonWdgItemList = NULL;
+#endif
+
+
+
+
+
 
 void AddListItem (GtkWidget *listbox, char *sText);
 
@@ -47,6 +86,7 @@ gint Delete(GtkWidget* widget, gpointer* data)
 	gtk_main_quit();                               /* stop gtk_main */
 	return FALSE;                                  /* Kill the window */
 }
+
 
 /*
  * After it's connected to the right event, this will run when
@@ -181,6 +221,7 @@ int main( int   argc,
     GtkWidget *vbox5;
     GtkWidget *listbox;
     GtkWidget *scroll_window;
+#ifndef USE_NEW_BTN
     GtkWidget *button01;
     GtkWidget *button02;
     GtkWidget *button03;
@@ -197,6 +238,7 @@ int main( int   argc,
     GtkWidget *button14;
     GtkWidget *button15;
     GtkWidget *button16;
+#endif
 
     gtk_init (&argc, &argv);
 
@@ -263,67 +305,130 @@ int main( int   argc,
     gtk_box_pack_start(GTK_BOX(hbox1), vbox5, TRUE, TRUE, 0);
 
     /* create button object */
-    button01 = gtk_button_new_with_label("button 01");
-    button02 = gtk_button_new_with_label("button 02");
-    button03 = gtk_button_new_with_label("button 03");
-    button04 = gtk_button_new_with_label("button 04");
-    button05 = gtk_button_new_with_label("button 05");
-    button06 = gtk_button_new_with_label("button 06");
-    button07 = gtk_button_new_with_label("button 07");
-    button08 = gtk_button_new_with_label("button 08");
-    button09 = gtk_button_new_with_label("button 09");
-    button10 = gtk_button_new_with_label("button 10");
-    button11 = gtk_button_new_with_label("button 11");
-    button12 = gtk_button_new_with_label("button 12");
-    button13 = gtk_button_new_with_label("button 13");
-    button14 = gtk_button_new_with_label("button 14");
-    button15 = gtk_button_new_with_label("button 15");
-    button16 = gtk_button_new_with_label("button 16");
+#ifdef USE_NEW_BTN
+    if( buttonWdgItemList )
+    {
+    	int iTmp = 0;
+
+    	while( buttonWdgItemList[iTmp].btnId != -1 )
+    	{
+    		buttonWdgItemList[iTmp].btnWidget = gtk_button_new_with_label( buttonWdgItemList[iTmp].btnName );
+    		g_print("id=%d[%d], create button <%s> ...\n", buttonWdgItemList[iTmp].btnId, iTmp, buttonWdgItemList[iTmp].btnName );
+    		iTmp++;
+    	}
+
+    }
+#else
+    	button01 = gtk_button_new_with_label("button 01");
+    	button02 = gtk_button_new_with_label("button 02");
+    	button03 = gtk_button_new_with_label("button 03");
+    	button04 = gtk_button_new_with_label("button 04");
+    	button05 = gtk_button_new_with_label("button 05");
+    	button06 = gtk_button_new_with_label("button 06");
+    	button07 = gtk_button_new_with_label("button 07");
+    	button08 = gtk_button_new_with_label("button 08");
+    	button09 = gtk_button_new_with_label("button 09");
+    	button10 = gtk_button_new_with_label("button 10");
+    	button11 = gtk_button_new_with_label("button 11");
+    	button12 = gtk_button_new_with_label("button 12");
+    	button13 = gtk_button_new_with_label("button 13");
+    	button14 = gtk_button_new_with_label("button 14");
+    	button15 = gtk_button_new_with_label("button 15");
+    	button16 = gtk_button_new_with_label("button 16");
+#endif
 
     /* assign button to vbox */
     ///gtk_container_add(GTK_CONTAINER(window), button);
-    gtk_box_pack_start(GTK_BOX(vbox2), button01, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox2), button02, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox2), button03, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox2), button04, TRUE, TRUE, 0);
+#ifdef USE_NEW_BTN
+    if( buttonWdgItemList )
+    {
+    	int iTmp = 0;
+    	///gint id = 0;
 
-    /* assign button to vbox */
-    gtk_box_pack_start(GTK_BOX(vbox3), button05, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox3), button06, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox3), button07, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox3), button08, TRUE, TRUE, 0);
+    	while( buttonWdgItemList[iTmp].btnId != -1 )
+    	{
+    		///id = buttonWdgItemList[iTmp].id;
+    		if( iTmp < 4 )
+    			gtk_box_pack_start(GTK_BOX(vbox2), buttonWdgItemList[iTmp].btnWidget, TRUE, TRUE, 0);
+    		else
+   			if( iTmp < 8 )
+   				gtk_box_pack_start(GTK_BOX(vbox3), buttonWdgItemList[iTmp].btnWidget, TRUE, TRUE, 0);
+    		else
+   			if( iTmp < 12 )
+   				gtk_box_pack_start(GTK_BOX(vbox4), buttonWdgItemList[iTmp].btnWidget, TRUE, TRUE, 0);
+     		else
+     			gtk_box_pack_start(GTK_BOX(vbox5), buttonWdgItemList[iTmp].btnWidget, TRUE, TRUE, 0);
 
-    /* assign button to vbox */
-    gtk_box_pack_start(GTK_BOX(vbox4), button09, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox4), button10, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox4), button11, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox4), button12, TRUE, TRUE, 0);
+    		iTmp++;
+    	}
 
-    /* assign button to vbox */
-    gtk_box_pack_start(GTK_BOX(vbox5), button13, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox5), button14, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox5), button15, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox5), button16, TRUE, TRUE, 0);
+    }
+#else
+        /* assign button to vbox */
+    	gtk_box_pack_start(GTK_BOX(vbox2), button01, TRUE, TRUE, 0);
+    	gtk_box_pack_start(GTK_BOX(vbox2), button02, TRUE, TRUE, 0);
+    	gtk_box_pack_start(GTK_BOX(vbox2), button03, TRUE, TRUE, 0);
+    	gtk_box_pack_start(GTK_BOX(vbox2), button04, TRUE, TRUE, 0);
+
+    	/* assign button to vbox */
+    	gtk_box_pack_start(GTK_BOX(vbox3), button05, TRUE, TRUE, 0);
+    	gtk_box_pack_start(GTK_BOX(vbox3), button06, TRUE, TRUE, 0);
+    	gtk_box_pack_start(GTK_BOX(vbox3), button07, TRUE, TRUE, 0);
+    	gtk_box_pack_start(GTK_BOX(vbox3), button08, TRUE, TRUE, 0);
+
+    	/* assign button to vbox */
+    	gtk_box_pack_start(GTK_BOX(vbox4), button09, TRUE, TRUE, 0);
+    	gtk_box_pack_start(GTK_BOX(vbox4), button10, TRUE, TRUE, 0);
+    	gtk_box_pack_start(GTK_BOX(vbox4), button11, TRUE, TRUE, 0);
+    	gtk_box_pack_start(GTK_BOX(vbox4), button12, TRUE, TRUE, 0);
+
+    	/* assign button to vbox */
+    	gtk_box_pack_start(GTK_BOX(vbox5), button13, TRUE, TRUE, 0);
+    	gtk_box_pack_start(GTK_BOX(vbox5), button14, TRUE, TRUE, 0);
+    	gtk_box_pack_start(GTK_BOX(vbox5), button15, TRUE, TRUE, 0);
+    	gtk_box_pack_start(GTK_BOX(vbox5), button16, TRUE, TRUE, 0);
+#endif
 
     /* hook button clicked event */
+#ifndef USE_NEW_BTN
     gtk_signal_connect(GTK_OBJECT(button01), "clicked", GTK_SIGNAL_FUNC(Button01Pressed), NULL);
+#else
+    gtk_signal_connect(GTK_OBJECT(buttonWdgItemList[0].btnWidget), "clicked", GTK_SIGNAL_FUNC(Button01Pressed), NULL);
+#endif
 
-    gtk_widget_show(button01);	/* show button */
-    gtk_widget_show(button02);	/* show button */
-    gtk_widget_show(button03);	/* show button */
-    gtk_widget_show(button04);	/* show button */
-    gtk_widget_show(button05);	/* show button */
-    gtk_widget_show(button06);	/* show button */
-    gtk_widget_show(button07);	/* show button */
-    gtk_widget_show(button08);	/* show button */
-    gtk_widget_show(button09);	/* show button */
-    gtk_widget_show(button10);	/* show button */
-    gtk_widget_show(button11);	/* show button */
-    gtk_widget_show(button12);	/* show button */
-    gtk_widget_show(button13);	/* show button */
-    gtk_widget_show(button14);	/* show button */
-    gtk_widget_show(button15);	/* show button */
-    gtk_widget_show(button16);	/* show button */
+#ifdef USE_NEW_BTN
+    if( buttonWdgItemList )
+    {
+    	int iTmp = 0;
+
+    	while( buttonWdgItemList[iTmp].btnId != -1 )
+    	{
+    		gtk_widget_show( buttonWdgItemList[iTmp].btnWidget );	/* show button */
+    		iTmp++;
+    	}
+
+    }
+
+#else
+    	gtk_widget_show(button01);	/* show button */
+    	gtk_widget_show(button02);	/* show button */
+    	gtk_widget_show(button03);	/* show button */
+    	gtk_widget_show(button04);	/* show button */
+    	gtk_widget_show(button05);	/* show button */
+    	gtk_widget_show(button06);	/* show button */
+    	gtk_widget_show(button07);	/* show button */
+    	gtk_widget_show(button08);	/* show button */
+    	gtk_widget_show(button09);	/* show button */
+    	gtk_widget_show(button10);	/* show button */
+    	gtk_widget_show(button11);	/* show button */
+    	gtk_widget_show(button12);	/* show button */
+    	gtk_widget_show(button13);	/* show button */
+    	gtk_widget_show(button14);	/* show button */
+    	gtk_widget_show(button15);	/* show button */
+    	gtk_widget_show(button16);	/* show button */
+#endif
+
+
     gtk_widget_show(vbox1);	/* show button */
     gtk_widget_show(hbox1);	/* show button */
     gtk_widget_show(vbox2);	/* show button */
