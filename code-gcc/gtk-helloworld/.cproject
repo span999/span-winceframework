@@ -24,10 +24,10 @@
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross.2115958009" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
 							<builder buildPath="${workspace_loc:/helloworld_linuxgcc/Debug}" id="cdt.managedbuild.builder.gnu.cross.803566138" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.compiler.1637886251" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
-								<option id="gnu.c.compiler.option.include.paths.180895140" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath"/>
+								<option id="gnu.c.compiler.option.include.paths.180895140" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths"/>
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.985572210" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.debugging.level.34720664" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.misc.other.756204292" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 `pkg-config --cflags gtk+-2.0`" valueType="string"/>
+								<option id="gnu.c.compiler.option.misc.other.756204292" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 `pkg-config --cflags gtk+-2.0` `pkg-config --cflags dbus-1`" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.738636856" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.487767607" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
@@ -36,8 +36,8 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.899643587" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker">
 								<option id="gnu.c.link.option.libs.1934483580" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs"/>
-								<option id="gnu.c.link.option.paths.1661940851" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths"/>
-								<option id="gnu.c.link.option.ldflags.1122358795" superClass="gnu.c.link.option.ldflags" value="`pkg-config --libs gtk+-2.0`" valueType="string"/>
+								<option id="gnu.c.link.option.paths.1661940851" name="Library search path (-L)" superClass="gnu.c.link.option.paths"/>
+								<option id="gnu.c.link.option.ldflags.1122358795" name="Linker flags" superClass="gnu.c.link.option.ldflags" value="`pkg-config --libs gtk+-2.0` `pkg-config --libs dbus-1`" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.557251990" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -137,7 +137,10 @@
 									<listOptionValue builtIn="false" value="&quot;${ARM_ROOTFS_ROOT}/usr/include/glib-2.0&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ARM_ROOTFS_ROOT}/usr/lib/glib-2.0/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ARM_ROOTFS_ROOT}/usr/include/libpng&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ARM_ROOTFS_ROOT}/usr/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ARM_ROOTFS_ROOT}/usr/include/gtk-2.0&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ARM_ROOTFS_ROOT}/usr/include/dbus-1.0&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ARM_ROOTFS_ROOT}/usr/lib/dbus-1.0/include&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.2007094693" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
@@ -151,6 +154,7 @@
 								</option>
 								<option id="gnu.c.link.option.libs.945740465" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="gtk-x11-2.0"/>
+									<listOptionValue builtIn="false" value="Xtst"/>
 									<listOptionValue builtIn="false" value="xcb"/>
 									<listOptionValue builtIn="false" value="gdk-x11-2.0"/>
 									<listOptionValue builtIn="false" value="atk-1.0"/>
@@ -161,6 +165,7 @@
 									<listOptionValue builtIn="false" value="gio-2.0"/>
 									<listOptionValue builtIn="false" value="fontconfig"/>
 									<listOptionValue builtIn="false" value="freetype"/>
+									<listOptionValue builtIn="false" value="pthread"/>
 									<listOptionValue builtIn="false" value="X11"/>
 									<listOptionValue builtIn="false" value="Xext"/>
 									<listOptionValue builtIn="false" value="pangoft2-1.0"/>
@@ -181,6 +186,7 @@
 									<listOptionValue builtIn="false" value="gmodule-2.0"/>
 									<listOptionValue builtIn="false" value="dl"/>
 									<listOptionValue builtIn="false" value="pangox-1.0"/>
+									<listOptionValue builtIn="false" value="dbus-1"/>
 									<listOptionValue builtIn="false" value="pango-1.0"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1129773733" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
