@@ -35,8 +35,12 @@
 								<option id="gnu.cpp.compiler.option.debugging.level.876582264" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.899643587" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker">
-								<option id="gnu.c.link.option.libs.1934483580" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs"/>
-								<option id="gnu.c.link.option.paths.1661940851" name="Library search path (-L)" superClass="gnu.c.link.option.paths"/>
+								<option id="gnu.c.link.option.libs.1934483580" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="sysPowerSRV-dbus_x86"/>
+								</option>
+								<option id="gnu.c.link.option.paths.1661940851" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="../liba"/>
+								</option>
 								<option id="gnu.c.link.option.ldflags.1122358795" name="Linker flags" superClass="gnu.c.link.option.ldflags" value="`pkg-config --libs gtk+-2.0` `pkg-config --libs dbus-1`" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.557251990" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -151,9 +155,11 @@
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.1875339285" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker">
 								<option id="gnu.c.link.option.paths.89527000" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${ARM_ROOTFS_ROOT}/usr/lib&quot;"/>
+									<listOptionValue builtIn="false" value="../liba"/>
 								</option>
 								<option id="gnu.c.link.option.libs.945740465" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="gtk-x11-2.0"/>
+									<listOptionValue builtIn="false" value="sysPowerSRV-dbus_arm"/>
 									<listOptionValue builtIn="false" value="Xtst"/>
 									<listOptionValue builtIn="false" value="xcb"/>
 									<listOptionValue builtIn="false" value="gdk-x11-2.0"/>
