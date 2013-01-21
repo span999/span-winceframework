@@ -316,11 +316,11 @@ int sPSsetCPUActivatedNum( int num )
 }
 
 
-int sPSsetCPUDVFS( int num )
+int sPSsetCPUDVFS( int On )
 {
 	int iRet = -1;
 	int dRet = -1;
-	int iIn1 = num;
+	int iIn1 = On;
 
 	spMxON
 	

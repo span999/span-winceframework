@@ -9,7 +9,7 @@ int sysPowerSRVDeinit( void );
 
 int sPSgetCPUActivatedNum( void );
 int sPSsetCPUActivatedNum( int num );
-int sPSsetCPUDVFS( int num );
+int sPSsetCPUDVFS( int On );
 int sPSsetCPUspeed( int nMHz );
 int sPSsetCPUsuspend( void );
 int sPSsendFakeKey( int keycode );
