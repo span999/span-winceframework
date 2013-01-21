@@ -51,15 +51,15 @@ struct s_buttonWdgItem {
 static struct s_buttonWdgItem buttonWdgItemList[] = {
 	{	0,	NULL, NULL,	"button 01" },
 	{	1,	NULL, NULL,	"button 02" },
-	{	2,	NULL, NULL,	"button 03" },
-	{	3,	NULL, NULL,	"button 04" },
+	{	2,	NULL, NULL,	"DVFS ON" },
+	{	3,	NULL, NULL,	"DVFS OFF" },
 	{	4,	NULL, NULL,	"CPU 1 core" },
 	{	5,	NULL, NULL,	"CPU 2 core" },
 	{	6,	NULL, NULL,	"CPU 3 core" },
 	{	7,	NULL, NULL,	"CPU 4 core" },
-	{	8,	NULL, NULL,	"MEM 400MHz" },
-	{	9,	NULL, NULL,	"MEM 800MHz" },
-	{	10,	NULL, NULL,	"MEM 1GHz" },
+	{	8,	NULL, NULL,	"CPU 400MHz" },
+	{	9,	NULL, NULL,	"CPU 800MHz" },
+	{	10,	NULL, NULL,	"CPU 1GHz" },
 	{	11,	NULL, NULL,	"button 12" },
 	{	12,	NULL, NULL,	"Go suspend" },
 	{	13,	NULL, NULL,	"button 14" },
@@ -75,11 +75,15 @@ static struct s_buttonWdgItem buttonWdgItemList[] = {
 
 
 
-
+#ifndef USE_TEXT_VIEW
 void AddListItem (GtkWidget *listbox, char *sText);
+#endif
+
 
 #ifndef USE_TEXT_VIEW
 static GtkWidget *g_listbox;
+#else
+static GtkTextBuffer *g_buffer;
 #endif
 static pthread_t dbus_thread_id;
 
@@ -96,6 +100,260 @@ gint Delete(GtkWidget* widget, gpointer* data)
 	return FALSE;                                  /* Kill the window */
 }
 
+
+gint go_Button_nofunction( void )
+{
+	gint iRet = 0;
+	GtkTextIter iter;
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	gtk_text_buffer_insert(g_buffer, &iter, "No function on this button yet!!\n", -1);
+
+	return iRet;
+}
+
+
+gint go_Button_01( void )
+{
+	gint iRet = 0;
+	GtkTextIter iter;
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	gtk_text_buffer_insert(g_buffer, &iter, "Plain text\n", -1);
+
+	return iRet;
+}
+
+
+gint go_Button_03( void )
+{
+	gint iRet = 0;
+	GtkTextIter iter;
+	int result = 0;
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	gtk_text_buffer_insert(g_buffer, &iter, "set CPU DVFS ON!\n", -1);
+
+	result = sPSsetCPUDVFS(1);
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	if( result == 0 )
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>ok!\n", -1);
+	else
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>fail!\n", -1);
+
+	return iRet;
+}
+
+
+gint go_Button_04( void )
+{
+	gint iRet = 0;
+	GtkTextIter iter;
+	int result = 0;
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	gtk_text_buffer_insert(g_buffer, &iter, "set CPU DVFS OFF!\n", -1);
+
+	result = sPSsetCPUDVFS(0);
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	if( result == 0 )
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>ok!\n", -1);
+	else
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>fail!\n", -1);
+
+	return iRet;
+}
+
+
+gint go_Button_05( void )
+{
+	gint iRet = 0;
+	GtkTextIter iter;
+	int result = 0;
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	gtk_text_buffer_insert(g_buffer, &iter, "set CPU on 1 core!\n", -1);
+
+	result = sPSsetCPUActivatedNum(1);
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	if( result == 0 )
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>ok!\n", -1);
+	else
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>fail!\n", -1);
+
+	return iRet;
+}
+
+
+gint go_Button_06( void )
+{
+	gint iRet = 0;
+	GtkTextIter iter;
+	int result = 0;
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	gtk_text_buffer_insert(g_buffer, &iter, "set CPU on 3 core!\n", -1);
+
+	result = sPSsetCPUActivatedNum(2);
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	if( result == 0 )
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>ok!\n", -1);
+	else
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>fail!\n", -1);
+
+	return iRet;
+}
+
+
+gint go_Button_07( void )
+{
+	gint iRet = 0;
+	GtkTextIter iter;
+	int result = 0;
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	gtk_text_buffer_insert(g_buffer, &iter, "set CPU on 3 core!\n", -1);
+
+	result = sPSsetCPUActivatedNum(3);
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	if( result == 0 )
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>ok!\n", -1);
+	else
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>fail!\n", -1);
+
+	return iRet;
+}
+
+
+gint go_Button_08( void )
+{
+	gint iRet = 0;
+	GtkTextIter iter;
+	int result = 0;
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	gtk_text_buffer_insert(g_buffer, &iter, "set CPU on 4 core!\n", -1);
+
+	result = sPSsetCPUActivatedNum(4);
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	if( result == 0 )
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>ok!\n", -1);
+	else
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>fail!\n", -1);
+
+	return iRet;
+}
+
+
+gint go_Button_09( void )
+{
+	gint iRet = 0;
+	GtkTextIter iter;
+	int result = 0;
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	gtk_text_buffer_insert(g_buffer, &iter, "set CPU at 400MHz!\n", -1);
+
+	result = sPSsetCPUspeed(400);
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	if( result == 0 )
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>ok!\n", -1);
+	else
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>fail!\n", -1);
+
+	return iRet;
+}
+
+
+gint go_Button_10( void )
+{
+	gint iRet = 0;
+	GtkTextIter iter;
+	int result = 0;
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	gtk_text_buffer_insert(g_buffer, &iter, "set CPU at 800MHz!\n", -1);
+
+	result = sPSsetCPUspeed(800);
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	if( result == 0 )
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>ok!\n", -1);
+	else
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>fail!\n", -1);
+
+	return iRet;
+}
+
+
+gint go_Button_11( void )
+{
+	gint iRet = 0;
+	GtkTextIter iter;
+	int result = 0;
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	gtk_text_buffer_insert(g_buffer, &iter, "set CPU at 1GHz!\n", -1);
+
+	result = sPSsetCPUspeed(1000);
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	if( result == 0 )
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>ok!\n", -1);
+	else
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>fail!\n", -1);
+
+	return iRet;
+}
+
+
+gint go_Button_12( void )
+{
+	gint iRet = 0;
+	GtkTextIter iter;
+	int result = 0;
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	gtk_text_buffer_insert(g_buffer, &iter, "set SDRAM run at 1GHz!\n", -1);
+
+	result = sPSsetCPUspeed(1000);
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	if( result == 0 )
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>ok!\n", -1);
+	else
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>fail!\n", -1);
+
+	return iRet;
+}
+
+
+gint go_Button_13( void )
+{
+	gint iRet = 0;
+	GtkTextIter iter;
+	int result = 0;
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	gtk_text_buffer_insert(g_buffer, &iter, "set CPU to suspend!\n", -1);
+
+	result = sPSsetCPUsuspend();
+
+	gtk_text_buffer_get_iter_at_offset(g_buffer, &iter, 0);
+	if( result == 0 )
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>ok!\n", -1);
+	else
+		gtk_text_buffer_insert(g_buffer, &iter, ">>>fail!\n", -1);
+
+	return iRet;
+}
 
 /*
  * After it's connected to the right event, this will run when
@@ -138,6 +396,61 @@ gint ButtonXXPressed(GtkWidget* widget, gpointer data)
     	if( buttonWdgItemList[iTmp].btnId != -1 )
     	{
     		g_print("call number %d function for button.\n", buttonWdgItemList[iTmp].btnId );
+
+    		switch(buttonWdgItemList[iTmp].btnId)
+    		{
+    			case 0:
+    				go_Button_nofunction();
+    				break;
+    			case 1:
+    				go_Button_nofunction();
+    				break;
+    			case 2:
+    				go_Button_03();
+    				break;
+    			case 3:
+    				go_Button_04();
+    				break;
+    			case 4:
+    				go_Button_05();
+    				break;
+    			case 5:
+    				go_Button_06();
+    				break;
+    			case 6:
+    				go_Button_07();
+    				break;
+    			case 7:
+    				go_Button_08();
+    				break;
+    			case 8:
+    				go_Button_09();
+    				break;
+    			case 9:
+    				go_Button_10();
+    				break;
+    			case 10:
+    				go_Button_11();
+    				break;
+    			case 11:
+    				go_Button_nofunction();
+    				break;
+    			case 12:
+    				go_Button_13();
+    				break;
+    			case 13:
+    				go_Button_nofunction();
+    				break;
+    			case 14:
+    				go_Button_nofunction();
+    				break;
+    			case 15:
+    				go_Button_nofunction();
+    				break;
+
+    			default:
+    				break;
+    		}//switch
     	}
     }
 #endif
@@ -151,6 +464,7 @@ gint ButtonXXPressed(GtkWidget* widget, gpointer data)
 }
 
 
+#ifndef USE_TEXT_VIEW
 /*
 * listitem_selected
 *
@@ -258,6 +572,7 @@ void AddListItem (GtkWidget *listbox, char *sText)
     /* --- Make it visible --- */
     gtk_widget_show (item);
 }
+#endif
 
 
 int main( int   argc,
@@ -320,6 +635,7 @@ int main( int   argc,
     textview = gtk_text_view_new();
     /* Obtaining the buffer associated with the widget. */
     buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
+    g_buffer = buffer;
     /* Set the default buffer text. */
     gtk_text_buffer_set_text (buffer, "Hello Text View!", -1);
 #else
@@ -533,8 +849,9 @@ int main( int   argc,
 #endif
     gtk_widget_show(window);	/* show window */
 
+#if 0
     pthread_create( &dbus_thread_id, NULL, &FakeKeyCall_listen, NULL );
-
+#endif
     gtk_window_set_resizable(GTK_WINDOW(window), FALSE );	///fixed window
     gtk_main ();
 
