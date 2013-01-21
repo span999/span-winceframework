@@ -32,7 +32,7 @@
 
 
 
-
+typedef int (*pFnsysPowerLowLevel)( int );
 
 
 static pthread_t thread_id;
@@ -304,7 +304,7 @@ void reply_to_method_call(DBusMessage* msg, DBusConnection* conn)
 }
 
 
-void reply_to_method_call2(DBusMessage* msg, DBusConnection* conn)
+void reply_to_method_call2(DBusMessage* msg, DBusConnection* conn, pFnsysPowerLowLevel pFn)
 {
 	DBusMessage* reply;
 	DBusMessageIter args;
@@ -313,6 +313,7 @@ void reply_to_method_call2(DBusMessage* msg, DBusConnection* conn)
 	dbus_uint32_t serial = 0;
 	char* param = "";
 	int iParam = 0;
+	int iRet = 0;
 
 	// read the arguments
 	if (!dbus_message_iter_init(msg, &args))
@@ -323,6 +324,12 @@ void reply_to_method_call2(DBusMessage* msg, DBusConnection* conn)
 		dbus_message_iter_get_basic(&args, &iParam);
 
 	spMSG( dF(dINFO), "%s:%s: Method called with %d\n", __FILE__, __FUNCTION__, iParam );
+	if( pFn )
+	{
+		iRet = pFn( iParam );
+		stat = true;
+		level = iRet;
+	}
 
 	// create a reply from the message
 	reply = dbus_message_new_method_return(msg);
@@ -421,22 +428,27 @@ void *PowerCall_listen( void *argv )
 		else
 		if (dbus_message_is_method_call(msg, "test.method.Type", "m_CPUcoreUP")) {
 			spMSG( dF(dINFO), "%s:%s: method m_CPUcoreUP call\n", __FILE__, __FUNCTION__ );
-			reply_to_method_call2(msg, conn);
+			reply_to_method_call2(msg, conn, NULL);
 		}
 		else
 		if (dbus_message_is_method_call(msg, "test.method.Type", "m_CPUcoreDOWN")) {
 			spMSG( dF(dINFO), "%s:%s: method m_CPUcoreDOWN call\n", __FILE__, __FUNCTION__ );
-			reply_to_method_call2(msg, conn);
+			reply_to_method_call2(msg, conn, NULL);
 		}
 		else
 		if (dbus_message_is_method_call(msg, "test.method.Type", "getCPUcoreActivatedNumber")) {
 			spMSG( dF(dINFO), "%s:%s: method getCPUcoreActivatedNumber call\n", __FILE__, __FUNCTION__ );
-			reply_to_method_call2(msg, conn);
+			reply_to_method_call2(msg, conn, getCPUcoreActivatedNumber);
 		}
 		else
 		if (dbus_message_is_method_call(msg, "test.method.Type", "setCPUcoreActivatedNumber")) {
 			spMSG( dF(dINFO), "%s:%s: method setCPUcoreActivatedNumber call\n", __FILE__, __FUNCTION__ );
-			reply_to_method_call2(msg, conn);
+			reply_to_method_call2(msg, conn, setCPUcoreActivatedNumber);
+		}
+		else
+		if (dbus_message_is_method_call(msg, "test.method.Type", "loopbackTest")) {
+			spMSG( dF(dINFO), "%s:%s: method loopbackTest call\n", __FILE__, __FUNCTION__ );
+			reply_to_method_call2(msg, conn, getLoopback);
 		}
 		
 		// free the message

@@ -136,7 +136,7 @@ int setCPUcoreActivatedNumber( int num )
 }
 
 
-int getCPUcoreActivatedNumber( void )
+int getCPUcoreActivatedNumber( int ignored )
 {
 	int iRet = -1;
 	
@@ -253,7 +253,7 @@ int setCPUspeed( int nSpeed )
 }
 
 
-int setCPUsuspend( void )
+int setCPUsuspend( int ignored )
 {
 	int iRet = -1;
 	FILE *fp;
@@ -286,3 +286,7 @@ int setCPUsuspend( void )
 }
 
 
+int getLoopback( int input )
+{
+	return input;
+}

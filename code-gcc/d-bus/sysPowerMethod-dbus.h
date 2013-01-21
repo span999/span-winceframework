@@ -22,6 +22,7 @@ static struct sysPowerCallMethod methodList[] = {
 	{	3,	0,	"sPSsetCPUspeed", "setCPUspeed"	},
 	{	4,	0,	"sPSsetCPUsuspend", "setCPUsuspend"	},
 	{	5,	0,	"sPSsendFakeKey", "sendFakeKey"	},
+	{	6,	0,	"sPSloopbackTest", "loopbackTest"	},
 	{	-1,	-1,	NULL, NULL	}
 };
 
