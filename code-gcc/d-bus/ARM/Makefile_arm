@@ -38,8 +38,9 @@ HELPER = toolhelps
 HELPERBIN = libtoolhelps.a
 LOWLEVEL = sysPower-lowlevel
 LOWLEVELBIN = libsysPower-lowlevel.a
-PWRSRV = sysPowerSRV-dbus
-PWRSRVBIN = libsysPowerSRV-dbus.a
+PWRSRVFILE = sysPowerSRV-dbus
+PWRSRV = sysPowerSRV-dbus_${CPU}
+PWRSRVBIN = libsysPowerSRV-dbus_${CPU}.a
 PROGRAM = ../dbus.c
 SAMPLE = ../dbus-example.c
 PWRMGR = ../sysPowerMGR-dbus.c
@@ -127,8 +128,8 @@ PWRSRV:
 	@echo ================================================================
 	@echo build static library = ${PWRSRV}.a
 	@echo ----------------------------------------------------------------
-	${CC} -c ../${PWRSRV}.c ${DBUSINC} ${DBUSLIB} ${CFLAGS}
-	$(AR) $(ARFLAG) $(PWRSRVBIN) $(PWRSRV).o $(HELPER).o	
+	${CC} -c ../${PWRSRVFILE}.c ${DBUSINC} ${DBUSLIB} ${CFLAGS}
+	$(AR) $(ARFLAG) $(PWRSRVBIN) ${PWRSRVFILE}.o $(HELPER).o	
 
 clean:
 	@echo 
