@@ -7,12 +7,12 @@
 int setCPUcoreDOWN( int CoreNum );
 int setCPUcoreUP( int CoreNum );
 int setCPUcoreActivatedNumber( int num );
-int getCPUcoreActivatedNumber( void );
+int getCPUcoreActivatedNumber( int ignored );
 int setCPUdvfs( int iOn );
 int setCPUspeed( int nSpeed );
-int setCPUsuspend( void );
+int setCPUsuspend( int ignored );
 
-
+int getLoopback( int input );
 
 
 

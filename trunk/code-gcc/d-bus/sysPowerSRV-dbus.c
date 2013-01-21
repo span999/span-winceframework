@@ -243,7 +243,10 @@ int dbus_method_call_ex( int *piRet, int iIn1, char *pFn )
 		spMSG( dF(dERR), "%s:%s: Argument is not int32!\n", __FILE__, __FUNCTION__ );
 	}
 	else
+	{
 		dbus_message_iter_get_basic(&args, &level);
+		*piRet = level;
+	}
 
 	spMSG( dF(dINFO), "%s:%s: Got Reply: %s, %d\n", __FILE__, __FUNCTION__, (stat>0)?"true":"false", level);
 	

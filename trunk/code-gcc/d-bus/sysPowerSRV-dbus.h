@@ -2,9 +2,6 @@
 #define __SYSPOWERSRV_DBUS_H__
 
 
-#include "sysPowerCOMM.h"
-
-
 
 
 int sysPowerSRVInit( void );
