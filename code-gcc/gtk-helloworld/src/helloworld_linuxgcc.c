@@ -31,7 +31,7 @@ int main(void) {
 #include <gtk/gtk.h>
 
 #include "dbuscall.h"
-
+#include "sysPowerSRV-dbus.h"
 
 
 
@@ -53,15 +53,15 @@ static struct s_buttonWdgItem buttonWdgItemList[] = {
 	{	1,	NULL, NULL,	"button 02" },
 	{	2,	NULL, NULL,	"button 03" },
 	{	3,	NULL, NULL,	"button 04" },
-	{	4,	NULL, NULL,	"button 05" },
-	{	5,	NULL, NULL,	"button 06" },
-	{	6,	NULL, NULL,	"button 07" },
-	{	7,	NULL, NULL,	"button 08" },
-	{	8,	NULL, NULL,	"button 09" },
-	{	9,	NULL, NULL,	"button 10" },
-	{	10,	NULL, NULL,	"button 11" },
+	{	4,	NULL, NULL,	"CPU 1 core" },
+	{	5,	NULL, NULL,	"CPU 2 core" },
+	{	6,	NULL, NULL,	"CPU 3 core" },
+	{	7,	NULL, NULL,	"CPU 4 core" },
+	{	8,	NULL, NULL,	"MEM 400MHz" },
+	{	9,	NULL, NULL,	"MEM 800MHz" },
+	{	10,	NULL, NULL,	"MEM 1GHz" },
 	{	11,	NULL, NULL,	"button 12" },
-	{	12,	NULL, NULL,	"button 13" },
+	{	12,	NULL, NULL,	"Go suspend" },
 	{	13,	NULL, NULL,	"button 14" },
 	{	14,	NULL, NULL,	"button 15" },
 	{	15,	NULL, NULL,	"button 16" },
@@ -78,8 +78,9 @@ static struct s_buttonWdgItem buttonWdgItemList[] = {
 
 void AddListItem (GtkWidget *listbox, char *sText);
 
-
+#ifndef USE_TEXT_VIEW
 static GtkWidget *g_listbox;
+#endif
 static pthread_t dbus_thread_id;
 
 
@@ -90,6 +91,7 @@ static pthread_t dbus_thread_id;
 gint Delete(GtkWidget* widget, gpointer* data)
 {
 	g_print("Screw you guys, I'm going home!\n");
+	sysPowerSRVDeinit();
 	gtk_main_quit();                               /* stop gtk_main */
 	return FALSE;                                  /* Kill the window */
 }
@@ -133,6 +135,10 @@ gint ButtonXXPressed(GtkWidget* widget, gpointer data)
     		iTmp++;
     	}
 
+    	if( buttonWdgItemList[iTmp].btnId != -1 )
+    	{
+    		g_print("call number %d function for button.\n", buttonWdgItemList[iTmp].btnId );
+    	}
     }
 #endif
 
@@ -293,6 +299,7 @@ int main( int   argc,
 #endif
 
     gtk_init (&argc, &argv);
+    sysPowerSRVInit();
 
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_default_size (GTK_WINDOW(window),300, 300);
