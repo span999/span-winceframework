@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 	while( iCnt++ < 1000 )
 	{
 		///do power service call whatever
-	#if 0	
+	#if 1	
 		Return = sPSgetCPUActivatedNum();
 		Return = sPSsetCPUActivatedNum(1);
 		Return = sPSgetCPUActivatedNum();
@@ -28,7 +28,13 @@ int main(int argc, char** argv)
 		Return = sPSsetCPUActivatedNum(3);
 		Return = sPSgetCPUActivatedNum();
 		Return = sPSsetCPUActivatedNum(4);
-		///Return = sPSsetCPUDVFS(1);
+		Return = sPSsetCPUDVFS(1);
+		Return = sPSsetCPUDVFS(0);
+		Return = sPSsetCPUspeed(200);
+		Return = sPSsetCPUspeed(400);
+		Return = sPSsetCPUspeed(800);
+		Return = sPSsetCPUspeed(1000);
+		Return = sPSsetCPUsuspend();
 	#else
 		Return = sPSloopbackTest(iCnt);
 		if( Return == iCnt )

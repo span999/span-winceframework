@@ -446,6 +446,21 @@ void *PowerCall_listen( void *argv )
 			reply_to_method_call2(msg, conn, setCPUcoreActivatedNumber);
 		}
 		else
+		if (dbus_message_is_method_call(msg, "test.method.Type", "setCPUdvfs")) {
+			spMSG( dF(dINFO), "%s:%s: method setCPUdvfs call\n", __FILE__, __FUNCTION__ );
+			reply_to_method_call2(msg, conn, setCPUdvfs);
+		}
+		else
+		if (dbus_message_is_method_call(msg, "test.method.Type", "setCPUspeed")) {
+			spMSG( dF(dINFO), "%s:%s: method setCPUspeed call\n", __FILE__, __FUNCTION__ );
+			reply_to_method_call2(msg, conn, setCPUspeed);
+		}
+		else
+		if (dbus_message_is_method_call(msg, "test.method.Type", "setCPUsuspend")) {
+			spMSG( dF(dINFO), "%s:%s: method setCPUsuspend call\n", __FILE__, __FUNCTION__ );
+			reply_to_method_call2(msg, conn, setCPUsuspend);
+		}
+		else
 		if (dbus_message_is_method_call(msg, "test.method.Type", "loopbackTest")) {
 			spMSG( dF(dINFO), "%s:%s: method loopbackTest call\n", __FILE__, __FUNCTION__ );
 			reply_to_method_call2(msg, conn, getLoopback);
