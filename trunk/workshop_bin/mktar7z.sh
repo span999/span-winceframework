@@ -30,6 +30,7 @@ fi
 
 if [ "$TOPTIONS" == "-c" ]; then
 	tar cf - $TFOLDER/ | 7z a -r -t7z -mx=9 -mmt=on -ms=on -v2g -si $TFILES-$TODAY.tar.7z
+#	tar cf - $TFOLDER/ | 7za a -r -t7z -mx=9 -mmt=4 -m0=bzip2 -ms=on -v2g -si $TFILES-$TODAY.tar.7z
 fi
 
 if [ "$TOPTIONS" == "-x" ]; then
