@@ -1,6 +1,17 @@
+#
+#
+#
 
-CC	= /home/span/workshop/bin/toolchains/freescale/gcc-4.4.4-glibc-2.11.1-multilib-1.0/arm-fsl-linux-gnueabi/bin/arm-fsl-linux-gnueabi-gcc
-AR	= /home/span/workshop/bin/toolchains/freescale/gcc-4.4.4-glibc-2.11.1-multilib-1.0/arm-fsl-linux-gnueabi/bin/arm-fsl-linux-gnueabi-ar
+TOOLCHAINPATH=/home/span/workshop/bin/toolchains
+TIMESYSCCPATH=armv7l-gnueabi-463/bin
+FSLCCPATH=freescale/gcc-4.4.4-glibc-2.11.1-multilib-1.0/arm-fsl-linux-gnueabi/bin
+
+#CC	= ${TOOLCHAINPATH}/${FSLCCPATH}/arm-fsl-linux-gnueabi-gcc
+#AR	= ${TOOLCHAINPATH}/${FSLCCPATH}/arm-fsl-linux-gnueabi-ar
+CC	= ${TOOLCHAINPATH}/${TIMESYSCCPATH}/armv7l-timesys-linux-gnueabi-gcc
+AR	= ${TOOLCHAINPATH}/${TIMESYSCCPATH}/armv7l-timesys-linux-gnueabi-ar
+
+
 DEFINES =
 CFLAGS	= -O2 -I. -L. ${DEFINES} -D__ARM_CODE__
 
