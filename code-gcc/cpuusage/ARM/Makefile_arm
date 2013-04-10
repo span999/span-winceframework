@@ -24,6 +24,8 @@ STATIC2LIB = libframebuffer.a
 STATIC2NAME = framebuffer
 STATIC3LIB = libfonts.a
 STATIC3NAME = fonts
+STATIC4LIB = libbattutil.a
+STATIC4NAME = battutil
 
 
 all: clean PROGRAM
@@ -53,6 +55,14 @@ STATIC3LIB:
 	${CC} ${CFLAGS} -c ../${STATIC3NAME}.c
 	${AR} rcs ${STATIC3LIB} ${STATIC3NAME}.o
 
+STATIC4LIB:
+	@echo 
+	@echo ================================================================
+	@echo build static ${STATIC4LIB} library
+	@echo ----------------------------------------------------------------
+	${CC} ${CFLAGS} -c ../${STATIC4NAME}.c
+	${AR} rcs ${STATIC4LIB} ${STATIC4NAME}.o
+
 DYNLIB:
 	@echo 
 	@echo ================================================================
@@ -60,12 +70,12 @@ DYNLIB:
 	@echo ----------------------------------------------------------------
 	${CC} ../so_test.c -fPIC -shared -o ${DYNLIB}
 
-PROGRAM: STATIC1LIB STATIC2LIB STATIC3LIB
+PROGRAM: STATIC1LIB STATIC2LIB STATIC3LIB STATIC4LIB
 	@echo 
 	@echo ================================================================
 	@echo build ${PROGRAM} binary.
 	@echo ----------------------------------------------------------------
-	${CC} ../main.c ${CFLAGS} -o ${PROGRAM} -lpthread -L. -l${STATIC1NAME} -l${STATIC2NAME} -l${STATIC3NAME}
+	${CC} ../main.c ${CFLAGS} -o ${PROGRAM} -lpthread -L. -l${STATIC1NAME} -l${STATIC2NAME} -l${STATIC3NAME} -l${STATIC4NAME}
 #	${CC} ../main.c ../${STATIC1NAME}.c ${CFLAGS} -o ${PROGRAM} -lpthread
 
 clean:
