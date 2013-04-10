@@ -12,6 +12,7 @@
 #include <sys/time.h>
 
 #include "cpuutil.h"
+#include "battutil.h"
 #include "framebuffer.h"
 
 
@@ -59,7 +60,7 @@ static struct cpuBarCfgS V4 = \
 
 
 static struct cpuBarCfgS* pV = &V2; /* graphic mode 0 by default */
-static char verStr[] = "v6.0";
+static char verStr[] = "v6.5";
 
 static long g_loop = 5;
 static long g_interval = 1000;
@@ -145,6 +146,9 @@ int main( int argc, char *argv[] )
 #endif
 	struct ProcStatNums	 *pThis;
 	struct ProcMeminfoNums	 MemChk;
+	struct BattStatSets		Batteries;
+	struct BattStatNums		*pBatt1;
+	struct BattStatNums		*pBatt2;
 
 	long lTmp = 0;
 	double iValue = 0;
@@ -305,7 +309,10 @@ int main( int argc, char *argv[] )
 		}
 #endif
 		getProcMeminfo( &MemChk );
-
+		
+#ifdef __ARM_CODE__
+		getBatteryinfo( &Batteries );
+#endif
 
 #ifdef _USE_NO_GREP_	/* cpuutil.h */
 		pThis = &(StatSetsDiff.cpu);
@@ -319,44 +326,42 @@ int main( int argc, char *argv[] )
 		pThis = &(StatSetsDiff.cpu3);
 		iValue3 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
 #else
-		#if 0
-		pThis = &DiffChk;
-		iValue = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM))*100 )/( pThis->sumNUM );
-		pThis = &DiffChk0;
-		iValue0 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM))*100 )/( pThis->sumNUM );
-		pThis = &DiffChk1;
-		iValue1 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM))*100 )/( pThis->sumNUM );
-		#else
 		pThis = &DiffChk;
 		iValue = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
 		pThis = &DiffChk0;
 		iValue0 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
 		pThis = &DiffChk1;
 		iValue1 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
-		#endif	///#if 0
 #endif	///#ifdef _USE_NO_GREP_
+
+		pBatt1 = &(Batteries.vehicle);
+		pBatt2 = &(Batteries.internal);
 
 		if( g_text > 0 )
 		{
-			///printf( "CPU usage: %3.2f%%.[0:%3.2f%%]\n", iValue, iValue0 );
-			printf( "CPU usage:%3.2f%%[0:%3.2f%%/1:%3.2f%%/2:%3.2f%%/3:%3.2f%%] ", iValue, iValue0, iValue1, iValue2, iValue3 );
+			printf( "CPU usage:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%]", iValue, iValue0, iValue1, iValue2, iValue3 );
 			printf( "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
+		#ifdef __ARM_CODE__
+			printf( "Batt Info:[A:%04d/%05d/%03d%%/%d][B:%04d/%04d/%03d%%/%s]", pBatt1->adc, pBatt1->voltage, pBatt1->percentage, pBatt1->online, pBatt2->adc, pBatt2->voltage, pBatt2->percentage, pBatt2->status );
+		#endif	
 		}
 
 		if( g_graphictext > 0 )
 		{
 			char strC[512];
 			char strM[512];
+			char strB[512];
 
-			sprintf( strC, "CPU:%3.2f%%[0:%3.2f%%/1:%3.2f%%/2:%3.2f%%/3:%3.2f%%]", iValue, iValue0, iValue1, iValue2, iValue3 );
+			sprintf( strC, "CPU:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%]", iValue, iValue0, iValue1, iValue2, iValue3 );
 			sprintf( strM, "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
+		#ifdef __ARM_CODE__
+			sprintf( strB, "Bat:[A:%04d/%05d/%03d%%/%d][B:%04d/%04d/%03d%%/%s]", pBatt1->adc, pBatt1->voltage, pBatt1->percentage, pBatt1->online, pBatt2->adc, pBatt2->voltage, pBatt2->percentage, pBatt2->status );
+		#endif
 			
 			drawHtext( 0, 0, _PINK_COLOR, _YELLOW_COLOR, 1, strC );
 			drawHtext( 0, 15, _PINK_COLOR, _YELLOW_COLOR, 1, strM );
-		#if 0	
-			drawHtext( 0, 100, _PINK_COLOR, _YELLOW_COLOR, 0, strC );
-			drawHtext( 0, 200, _PINK_COLOR, _YELLOW_COLOR, 1, strC );
-			drawHtext( 0, 300, _PINK_COLOR, _YELLOW_COLOR, 2, strC );
+		#ifdef __ARM_CODE__
+			drawHtext( 0, 30, _PINK_COLOR, _YELLOW_COLOR, 1, strB );
 		#endif
 		}
 

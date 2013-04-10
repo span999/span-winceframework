@@ -253,7 +253,7 @@ int getProcStat( struct ProcStatNums *pIn, int cpuIdx )
 		goto _pEXIT;
 	} 
 
-	/* parce proc stat number ... */
+	/* parse proc stat number ... */
 	pCh = pCh+5;	///first number set
 	
 	iTmp = 0;
