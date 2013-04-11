@@ -1,43 +1,49 @@
 #!/bin/bash
 #
+#
 
-echo "read ..."
-sudo hdparm -Tt /dev/mapper/isw_bhhjcaejbb_RAID10
+TOFILE=testfile.img
+#TARDEV=/dev/mapper/isw_bhhjcaejbb_RAID10
+#TARDEV=/dev/md126
+#TARDEV=/dev/sda1
+TARDEV=/dev/sde1
 
 
-echo "write ..."
+
+echo "Disk read ..."
+sudo hdparm -Tt ${TARDEV}
+
+
+###time sh -c "dd if=/dev/zero of=testfile bs=4k count=256k  && sync"
+
+echo "Disk write ..."
 echo "4k ..."
-dd if=/dev/zero of=test1.img bs=4k count=960k
-sync
-#dd if=test1.img of=/dev/null bs=4k
-rm test1.img
+dd if=/dev/zero of=${TOFILE} bs=4k count=512k
+rm ${TOFILE}
 sync
 
 echo "8k ..."
-dd if=/dev/zero of=test2.img bs=8k count=480k
-sync
-#dd if=test2.img of=/dev/null bs=8k
-rm test2.img
+dd if=/dev/zero of=${TOFILE} bs=8k count=256k
+rm ${TOFILE}
 sync
 
 echo "64k ..."
-dd if=/dev/zero of=test3.img bs=64k count=60k
+dd if=/dev/zero of=${TOFILE} bs=64k count=32k
+rm ${TOFILE}
 sync
-#dd if=test3.img of=/dev/null bs=64k
-rm test3.img
+
+echo "128k ..."
+dd if=/dev/zero of=${TOFILE} bs=128k count=16k
+rm ${TOFILE}
 sync
 
 echo "512k ..."
-dd if=/dev/zero of=test4.img bs=512k count=8k
-sync
-#dd if=test4.img of=/dev/null bs=512k
-rm test4.img
+dd if=/dev/zero of=${TOFILE} bs=512k count=4k
+rm ${TOFILE}
 sync
 
 echo "2M ..."
-dd if=/dev/zero of=test5.img bs=2048k count=2k
+dd if=/dev/zero of=${TOFILE} bs=2048k count=1k
+rm ${TOFILE}
 sync
-#dd if=test5.img of=/dev/null bs=2048k
-rm test5.img
-
 
