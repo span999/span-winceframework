@@ -60,7 +60,7 @@ static struct cpuBarCfgS V4 = \
 
 
 static struct cpuBarCfgS* pV = &V2; /* graphic mode 0 by default */
-static char verStr[] = "v6.5";
+static char verStr[] = "v6.6";
 
 static long g_loop = 5;
 static long g_interval = 1000;
@@ -69,6 +69,8 @@ static long g_graphic = 1;
 static long g_graphictext = 0;
 static long g_graphicmode = 0;
 static long g_stress = 0;
+static long g_battery = 1;
+static long g_thermal = 1;
 
 
 #define	CHECKLOOP			5
@@ -96,6 +98,8 @@ void helps( void )
 	printf( "\n=  -d num : graphic text. 0=off 1=on, default=0                   =" );
 	printf( "\n=  -v num : graphic bar mode. 0=type0 ..., default=0              =" );
 	printf( "\n=  -s num : stress test. num=n second.(excluded other commnad)    =" );
+	printf( "\n=  -b num : battery info. 0=off 1=on, default=1                   =" );
+	printf( "\n=  -m num : thermal info. 0=off 1=on, default=1                   =" );
 	printf( "\n=                                                 powered by span =" );
 	printf( "\n===================================================================" );
 	printf( "\n" );
@@ -115,7 +119,7 @@ void configs( void )
 	if( tmploop == LOOPFOREVER )
 		tmploop = 0;
 	if( g_stress == 0 )
-		printf( "\n== run with -l %lu, -i %lu, -t %lu, -g %lu, -d %lu, -v %lu config. ==", tmploop, g_interval, g_text, g_graphic, g_graphictext, g_graphicmode );
+		printf( "\n== run with -l %lu, -i %lu, -t %lu, -g %lu, -d %lu, -v %lu -b %lu -m %lu config. ==", tmploop, g_interval, g_text, g_graphic, g_graphictext, g_graphicmode, g_battery, g_thermal );
 	else
 		printf( "\n== run for stress %lu seconds. ==", g_stress );
 	printf( "\n" );
@@ -149,6 +153,9 @@ int main( int argc, char *argv[] )
 	struct BattStatSets		Batteries;
 	struct BattStatNums		*pBatt1;
 	struct BattStatNums		*pBatt2;
+	struct ThermalStatSets	Thermals;
+	struct ThermalStatNums	*pCPUthermal;
+
 
 	long lTmp = 0;
 	double iValue = 0;
@@ -216,6 +223,18 @@ int main( int argc, char *argv[] )
 		if( (0 == strcmp("-s", argv[lTmp])) )
 		{
 			g_stress = atoi( argv[lTmp+1] );
+			lTmp++;
+		}
+		else
+		if( (0 == strcmp("-b", argv[lTmp])) )
+		{
+			g_battery = atoi( argv[lTmp+1] );
+			lTmp++;
+		}
+		else
+		if( (0 == strcmp("-m", argv[lTmp])) )
+		{
+			g_thermal = atoi( argv[lTmp+1] );
 			lTmp++;
 		}
 		else
@@ -311,8 +330,15 @@ int main( int argc, char *argv[] )
 		getProcMeminfo( &MemChk );
 		
 #ifdef __ARM_CODE__
-		getBatteryinfo( &Batteries );
+		if( g_battery > 0 )
+			getBatteryinfo( &Batteries );
 #endif
+
+#ifdef __ARM_CODE__
+		if( g_thermal > 0 )
+			getThermalinfo( &Thermals );
+#endif
+
 
 #ifdef _USE_NO_GREP_	/* cpuutil.h */
 		pThis = &(StatSetsDiff.cpu);
@@ -334,15 +360,39 @@ int main( int argc, char *argv[] )
 		iValue1 = (double)( ((pThis->userNUM)+(pThis->niceNUM)+(pThis->systemNUM)+(pThis->iowaitNUM)+(pThis->irqNUM)+(pThis->softirqNUM))*100 )/( pThis->sumNUM );
 #endif	///#ifdef _USE_NO_GREP_
 
-		pBatt1 = &(Batteries.vehicle);
-		pBatt2 = &(Batteries.internal);
+	#ifdef __ARM_CODE__
+		if( g_battery > 0 )
+		{
+			pBatt1 = &(Batteries.vehicle);
+			pBatt2 = &(Batteries.internal);
+		}
+	#endif
+
+	#ifdef __ARM_CODE__
+		if( g_thermal > 0 )
+		{
+			pCPUthermal = &(Thermals.internal);
+		}
+	#endif
+
 
 		if( g_text > 0 )
 		{
+		#ifdef __ARM_CODE__
+			if( g_thermal > 0 )
+				printf( "CPU usage:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%] temper:%d dC", iValue, iValue0, iValue1, iValue2, iValue3, pCPUthermal->temp );
+			else
+				printf( "CPU usage:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%]", iValue, iValue0, iValue1, iValue2, iValue3 );
+		#else
 			printf( "CPU usage:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%]", iValue, iValue0, iValue1, iValue2, iValue3 );
+		#endif
+		
 			printf( "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
 		#ifdef __ARM_CODE__
-			printf( "Batt Info:[A:%04d/%05d/%03d%%/%d][B:%04d/%04d/%03d%%/%s]", pBatt1->adc, pBatt1->voltage, pBatt1->percentage, pBatt1->online, pBatt2->adc, pBatt2->voltage, pBatt2->percentage, pBatt2->status );
+			if( g_battery > 0 )
+			{
+				printf( "Batt Info:[A:%04d/%05d/%03d%%/%d][B:%04d/%04d/%03d%%/%s]", pBatt1->adc, pBatt1->voltage, pBatt1->percentage, pBatt1->online, pBatt2->adc, pBatt2->voltage, pBatt2->percentage, pBatt2->status );
+			}
 		#endif	
 		}
 
@@ -352,16 +402,29 @@ int main( int argc, char *argv[] )
 			char strM[512];
 			char strB[512];
 
+		#ifdef __ARM_CODE__
+			if( g_thermal > 0 )
+				sprintf( strC, "CPU:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%] Temper:%d dC", iValue, iValue0, iValue1, iValue2, iValue3, pCPUthermal->temp );
+			else
+				sprintf( strC, "CPU:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%]", iValue, iValue0, iValue1, iValue2, iValue3 );
+		#else
 			sprintf( strC, "CPU:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%]", iValue, iValue0, iValue1, iValue2, iValue3 );
+		#endif
 			sprintf( strM, "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
 		#ifdef __ARM_CODE__
-			sprintf( strB, "Bat:[A:%04d/%05d/%03d%%/%d][B:%04d/%04d/%03d%%/%s]", pBatt1->adc, pBatt1->voltage, pBatt1->percentage, pBatt1->online, pBatt2->adc, pBatt2->voltage, pBatt2->percentage, pBatt2->status );
+			if( g_battery > 0 )
+			{
+				sprintf( strB, "Bat:[A:%04d/%05d/%03d%%/%d][B:%04d/%04d/%03d%%/%s]", pBatt1->adc, pBatt1->voltage, pBatt1->percentage, pBatt1->online, pBatt2->adc, pBatt2->voltage, pBatt2->percentage, pBatt2->status );
+			}
 		#endif
 			
 			drawHtext( 0, 0, _PINK_COLOR, _YELLOW_COLOR, 1, strC );
 			drawHtext( 0, 15, _PINK_COLOR, _YELLOW_COLOR, 1, strM );
 		#ifdef __ARM_CODE__
-			drawHtext( 0, 30, _PINK_COLOR, _YELLOW_COLOR, 1, strB );
+			if( g_battery > 0 )
+			{
+				drawHtext( 0, 30, _PINK_COLOR, _YELLOW_COLOR, 1, strB );
+			}
 		#endif
 		}
 

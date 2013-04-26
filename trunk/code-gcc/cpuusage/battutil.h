@@ -29,7 +29,6 @@ struct BattStatNums
 	char 	status[32];
 };
 
-
 struct BattStatSets
 {
 	int					battNUM;
@@ -38,8 +37,21 @@ struct BattStatSets
 };
 
 
-int getBatteryinfo( struct BattStatSets *pIn );
+struct ThermalStatNums
+{
+	_TYPNUM temp;
+};
 
+struct ThermalStatSets
+{
+	int							thermalNUM;
+	struct ThermalStatNums 		internal;	///for cpu thermal,
+};
+
+
+
+int getBatteryinfo( struct BattStatSets *pIn );
+int getThermalinfo( struct ThermalStatSets *pIn );
 
 
 #endif	/* __BATTUTIL_H__ */

@@ -229,3 +229,93 @@ _pEXIT:
 		goto _pEXIT;
 	} 
 #endif
+
+
+
+
+
+
+
+#define	CPUTEMP "cat /sys/devices/virtual/thermal/thermal_zone0/temp"
+
+
+
+static int getThermalitem( int iItem )
+{
+	int iRet = (-1);
+	FILE *fp;
+	char *pCh;
+#ifdef _STATDEBUG_
+	int iTmp;
+#endif
+
+	switch( iItem )
+	{
+		case 1:
+			fp = popen( CPUTEMP, "r" );
+			break;
+		default:
+			break;
+	}
+	
+	if( fp == NULL )
+	{
+		printf("Failed on %s !!\n", CPUTEMP);
+		goto _pEXIT;
+	}
+	
+	pCh = statOut;	///set start point
+	while( fgets( pCh, sizeof(statOut)-1, fp ) != NULL )
+	{
+#ifdef _STATDEBUG_
+		///printf("0x%08x:%s", (unsigned int)pCh, statOut );
+		printf("0x%08x:%s", (unsigned int)pCh, pCh );	
+#endif
+		pCh = pCh + strlen(pCh);
+	}
+
+#ifdef _STATDEBUG_	
+	pCh = statOut;	///set start point
+	iTmp = 0;
+	printf("-----------dump from 0x%08x-------------\n", (unsigned int)pCh);
+	while( (iTmp < 4096) && (0 != *(pCh+iTmp)) )
+	{
+		printf("%c", *(pCh+iTmp) );
+		iTmp++;
+	}
+#endif
+
+	pclose( fp );
+	
+_pEXIT:
+	return iRet;
+}
+
+
+int getThermalinfo( struct ThermalStatSets *pIn )
+{	
+	int iRet = (-1);
+	char *pCh;
+	struct ThermalStatNums *pThermal = NULL;
+
+	memset( statOut, 0, sizeof(statOut) );
+
+	pThermal = &(pIn->internal);
+
+	/* get thermal temp ... */
+	getThermalitem( 1 );
+	pCh = statOut;	///set start point
+
+	/* parse thermal temp number ... */
+	pThermal->temp = atol(pCh);
+#ifdef _STATDEBUG_	
+	printf("pThermal->temp[%d]\n", pThermal->temp );
+#endif
+
+
+_pEXIT:
+	return iRet;
+}
+
+
+
