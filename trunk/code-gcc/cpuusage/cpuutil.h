@@ -6,7 +6,7 @@
 #ifndef __CPUUTIL_H__
 #define __CPUUTIL_H__
 
-
+#include "typedef.h"
 
 #define _USE_NO_GREP_
 
@@ -18,7 +18,7 @@ Parameters in /proc/stat
 */
 
 
-typedef  long	_TYPNUM;
+///typedef  long	_TYPNUM;
 
 struct ProcStatNums
 {

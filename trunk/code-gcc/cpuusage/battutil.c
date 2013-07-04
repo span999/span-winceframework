@@ -319,3 +319,88 @@ _pEXIT:
 
 
 
+
+#define	CPUFREQ0 "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+
+
+
+static int getCpuFreqitem( int iItem )
+{
+	int iRet = (-1);
+	FILE *fp;
+	char *pCh;
+#ifdef _STATDEBUG_
+	int iTmp;
+#endif
+
+	switch( iItem )
+	{
+		case 1:
+			fp = popen( CPUFREQ0, "r" );
+			break;
+		default:
+			break;
+	}
+	
+	if( fp == NULL )
+	{
+		printf("Failed on %s !!\n", CPUTEMP);
+		goto _pEXIT;
+	}
+	
+	pCh = statOut;	///set start point
+	while( fgets( pCh, sizeof(statOut)-1, fp ) != NULL )
+	{
+#ifdef _STATDEBUG_
+		///printf("0x%08x:%s", (unsigned int)pCh, statOut );
+		printf("0x%08x:%s", (unsigned int)pCh, pCh );	
+#endif
+		pCh = pCh + strlen(pCh);
+	}
+
+#ifdef _STATDEBUG_	
+	pCh = statOut;	///set start point
+	iTmp = 0;
+	printf("-----------dump from 0x%08x-------------\n", (unsigned int)pCh);
+	while( (iTmp < 4096) && (0 != *(pCh+iTmp)) )
+	{
+		printf("%c", *(pCh+iTmp) );
+		iTmp++;
+	}
+#endif
+
+	pclose( fp );
+	
+_pEXIT:
+	return iRet;
+}
+
+
+int getCpuFreqinfo( struct CpuFreqStatSets *pIn )
+{	
+	int iRet = (-1);
+	char *pCh;
+	struct CpuFreqStatNums *pCpuFreq = NULL;
+
+	memset( statOut, 0, sizeof(statOut) );
+
+	pIn->cpuNUM = 1;
+	pCpuFreq = &(pIn->cpu0);
+
+	/* get current cpu freq ... */
+	pCpuFreq->num = 0;
+	getCpuFreqitem( 1 );	///cpu0 current freq
+	pCh = statOut;	///set start point
+
+	/* parse current cpu freq ... */
+	strcpy( pCpuFreq->cur_freq, pCh );
+#ifdef _STATDEBUG_
+	printf("pCpuFreq->cur_freq[%s]\n", pCpuFreq->cur_freq );
+#endif
+
+_pEXIT:
+	return iRet;
+}
+
+
+
