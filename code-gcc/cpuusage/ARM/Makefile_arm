@@ -6,10 +6,10 @@ TOOLCHAINPATH=/home/span/workshop/bin/toolchains
 TIMESYSCCPATH=armv7l-gnueabi-463/bin
 FSLCCPATH=freescale/gcc-4.4.4-glibc-2.11.1-multilib-1.0/arm-fsl-linux-gnueabi/bin
 
-#CC	= ${TOOLCHAINPATH}/${FSLCCPATH}/arm-fsl-linux-gnueabi-gcc
-#AR	= ${TOOLCHAINPATH}/${FSLCCPATH}/arm-fsl-linux-gnueabi-ar
-CC	= ${TOOLCHAINPATH}/${TIMESYSCCPATH}/armv7l-timesys-linux-gnueabi-gcc
-AR	= ${TOOLCHAINPATH}/${TIMESYSCCPATH}/armv7l-timesys-linux-gnueabi-ar
+CC	= ${TOOLCHAINPATH}/${FSLCCPATH}/arm-fsl-linux-gnueabi-gcc
+AR	= ${TOOLCHAINPATH}/${FSLCCPATH}/arm-fsl-linux-gnueabi-ar
+#CC	= ${TOOLCHAINPATH}/${TIMESYSCCPATH}/armv7l-timesys-linux-gnueabi-gcc
+#AR	= ${TOOLCHAINPATH}/${TIMESYSCCPATH}/armv7l-timesys-linux-gnueabi-ar
 
 
 DEFINES =

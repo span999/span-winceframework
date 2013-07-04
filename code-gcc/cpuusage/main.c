@@ -60,7 +60,7 @@ static struct cpuBarCfgS V4 = \
 
 
 static struct cpuBarCfgS* pV = &V2; /* graphic mode 0 by default */
-static char verStr[] = "v6.6";
+static char verStr[] = "v7.0";
 
 static long g_loop = 5;
 static long g_interval = 1000;
@@ -71,6 +71,7 @@ static long g_graphicmode = 0;
 static long g_stress = 0;
 static long g_battery = 1;
 static long g_thermal = 1;
+static long g_cpufreq = 1;
 
 
 #define	CHECKLOOP			5
@@ -100,6 +101,7 @@ void helps( void )
 	printf( "\n=  -s num : stress test. num=n second.(excluded other commnad)    =" );
 	printf( "\n=  -b num : battery info. 0=off 1=on, default=1                   =" );
 	printf( "\n=  -m num : thermal info. 0=off 1=on, default=1                   =" );
+	printf( "\n=  -f num : cpu freq info. 0=off 1=on, default=1                  =" );
 	printf( "\n=                                                 powered by span =" );
 	printf( "\n===================================================================" );
 	printf( "\n" );
@@ -119,7 +121,7 @@ void configs( void )
 	if( tmploop == LOOPFOREVER )
 		tmploop = 0;
 	if( g_stress == 0 )
-		printf( "\n== run with -l %lu, -i %lu, -t %lu, -g %lu, -d %lu, -v %lu -b %lu -m %lu config. ==", tmploop, g_interval, g_text, g_graphic, g_graphictext, g_graphicmode, g_battery, g_thermal );
+		printf( "\n== run with -l %lu, -i %lu, -t %lu, -g %lu, -d %lu, -v %lu -b %lu -m %lu -f %lu config. ==", tmploop, g_interval, g_text, g_graphic, g_graphictext, g_graphicmode, g_battery, g_thermal, g_cpufreq );
 	else
 		printf( "\n== run for stress %lu seconds. ==", g_stress );
 	printf( "\n" );
@@ -155,6 +157,8 @@ int main( int argc, char *argv[] )
 	struct BattStatNums		*pBatt2;
 	struct ThermalStatSets	Thermals;
 	struct ThermalStatNums	*pCPUthermal;
+	struct CpuFreqStatSets	CpuFreq;
+	struct CpuFreqStatNums	*pCpu0Freq;
 
 
 	long lTmp = 0;
@@ -235,6 +239,12 @@ int main( int argc, char *argv[] )
 		if( (0 == strcmp("-m", argv[lTmp])) )
 		{
 			g_thermal = atoi( argv[lTmp+1] );
+			lTmp++;
+		}
+		else
+		if( (0 == strcmp("-f", argv[lTmp])) )
+		{
+			g_cpufreq = atoi( argv[lTmp+1] );
 			lTmp++;
 		}
 		else
@@ -339,6 +349,11 @@ int main( int argc, char *argv[] )
 			getThermalinfo( &Thermals );
 #endif
 
+#ifdef __ARM_CODE__
+		if( g_cpufreq > 0 )
+			getCpuFreqinfo( &CpuFreq );
+#endif
+
 
 #ifdef _USE_NO_GREP_	/* cpuutil.h */
 		pThis = &(StatSetsDiff.cpu);
@@ -372,6 +387,13 @@ int main( int argc, char *argv[] )
 		if( g_thermal > 0 )
 		{
 			pCPUthermal = &(Thermals.internal);
+		}
+	#endif
+
+	#ifdef __ARM_CODE__
+		if( g_cpufreq > 0 )
+		{
+			pCpu0Freq = &(CpuFreq.cpu0);
 		}
 	#endif
 
@@ -410,7 +432,16 @@ int main( int argc, char *argv[] )
 		#else
 			sprintf( strC, "CPU:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%]", iValue, iValue0, iValue1, iValue2, iValue3 );
 		#endif
+
+		#ifdef __ARM_CODE__
+			if( g_cpufreq > 0 )
+				sprintf( strM, "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB cpuFreq=%s\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM, pCpu0Freq->cur_freq );
+			else
+				sprintf( strM, "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
+		#else
 			sprintf( strM, "Mem:[Totl:%ld/Used:%ld/Free:%ld]kB\n", MemChk.memtotalNUM, MemChk.memusedNUM, MemChk.memfreeNUM );
+		#endif
+
 		#ifdef __ARM_CODE__
 			if( g_battery > 0 )
 			{

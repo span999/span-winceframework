@@ -6,7 +6,7 @@
 #ifndef __BATTUTIL_H__
 #define __BATTUTIL_H__
 
-
+#include "typedef.h"
 
 #define _USE_NO_GREP_
 
@@ -17,8 +17,9 @@
 Parameters in /sys/class/power_supply/internal_battery/
 */
 
+///typedef  long	_TYPNUM;
 
-typedef  long	_TYPNUM;
+
 
 struct BattStatNums
 {
@@ -49,9 +50,24 @@ struct ThermalStatSets
 };
 
 
+struct CpuFreqStatNums
+{
+	_TYPNUM num;
+	_TYPNUM online;
+	char 	cur_freq[16];
+};
+
+struct CpuFreqStatSets
+{
+	int							cpuNUM;
+	struct CpuFreqStatNums 		cpu0;
+};
+
+
 
 int getBatteryinfo( struct BattStatSets *pIn );
 int getThermalinfo( struct ThermalStatSets *pIn );
+int getCpuFreqinfo( struct CpuFreqStatSets *pIn );
 
 
 #endif	/* __BATTUTIL_H__ */
