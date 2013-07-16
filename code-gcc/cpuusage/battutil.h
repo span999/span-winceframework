@@ -41,6 +41,8 @@ struct BattStatSets
 struct ThermalStatNums
 {
 	_TYPNUM temp;
+	_TYPNUM temp_max;
+	_TYPNUM temp_min;
 };
 
 struct ThermalStatSets

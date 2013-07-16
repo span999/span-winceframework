@@ -312,6 +312,17 @@ int getThermalinfo( struct ThermalStatSets *pIn )
 	printf("pThermal->temp[%d]\n", pThermal->temp );
 #endif
 
+	if( (pThermal->temp_max > 150) || (pThermal->temp_min < 15) )
+	{
+		pThermal->temp_max = 25;
+		pThermal->temp_min = 101;
+	}
+
+	if( pThermal->temp > pThermal->temp_max )
+		pThermal->temp_max = pThermal->temp;
+
+	if( pThermal->temp < pThermal->temp_min )
+		pThermal->temp_min = pThermal->temp;
 
 _pEXIT:
 	return iRet;

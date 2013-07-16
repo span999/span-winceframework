@@ -60,7 +60,7 @@ static struct cpuBarCfgS V4 = \
 
 
 static struct cpuBarCfgS* pV = &V2; /* graphic mode 0 by default */
-static char verStr[] = "v7.0";
+static char verStr[] = "v7.1";
 
 static long g_loop = 5;
 static long g_interval = 1000;
@@ -402,7 +402,7 @@ int main( int argc, char *argv[] )
 		{
 		#ifdef __ARM_CODE__
 			if( g_thermal > 0 )
-				printf( "CPU usage:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%] temper:%d dC", iValue, iValue0, iValue1, iValue2, iValue3, pCPUthermal->temp );
+				printf( "CPU usage:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%] temper:%ld(%ld/%ld) dC", iValue, iValue0, iValue1, iValue2, iValue3, pCPUthermal->temp, pCPUthermal->temp_min, pCPUthermal->temp_max );
 			else
 				printf( "CPU usage:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%]", iValue, iValue0, iValue1, iValue2, iValue3 );
 		#else
@@ -426,7 +426,7 @@ int main( int argc, char *argv[] )
 
 		#ifdef __ARM_CODE__
 			if( g_thermal > 0 )
-				sprintf( strC, "CPU:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%] Temper:%d dC", iValue, iValue0, iValue1, iValue2, iValue3, pCPUthermal->temp );
+				sprintf( strC, "CPU:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%] Temper:%ld(%ld/%ld) dC", iValue, iValue0, iValue1, iValue2, iValue3, pCPUthermal->temp, pCPUthermal->temp_min, pCPUthermal->temp_max );
 			else
 				sprintf( strC, "CPU:%03.2f%%[0:%03.2f%%/1:%03.2f%%/2:%03.2f%%/3:%03.2f%%]", iValue, iValue0, iValue1, iValue2, iValue3 );
 		#else
