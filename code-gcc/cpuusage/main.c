@@ -413,7 +413,7 @@ int main( int argc, char *argv[] )
 		#ifdef __ARM_CODE__
 			if( g_battery > 0 )
 			{
-				printf( "Batt Info:[A:%04d/%05d/%03d%%/%d][B:%04d/%04d/%03d%%/%s]", pBatt1->adc, pBatt1->voltage, pBatt1->percentage, pBatt1->online, pBatt2->adc, pBatt2->voltage, pBatt2->percentage, pBatt2->status );
+				printf( "Batt Info:[A:%04ld/%05ld/%03ld%%/%ld][B:%04ld/%04ld/%03ld%%/%s]", pBatt1->adc, pBatt1->voltage, pBatt1->percentage, pBatt1->online, pBatt2->adc, pBatt2->voltage, pBatt2->percentage, pBatt2->status );
 			}
 		#endif	
 		}
@@ -445,7 +445,7 @@ int main( int argc, char *argv[] )
 		#ifdef __ARM_CODE__
 			if( g_battery > 0 )
 			{
-				sprintf( strB, "Bat:[A:%04d/%05d/%03d%%/%d][B:%04d/%04d/%03d%%/%s]", pBatt1->adc, pBatt1->voltage, pBatt1->percentage, pBatt1->online, pBatt2->adc, pBatt2->voltage, pBatt2->percentage, pBatt2->status );
+				sprintf( strB, "Bat:[A:%04ld/%05ld/%03ld%%/%ld][B:%04ld/%04ld/%03ld%%/%s]", pBatt1->adc, pBatt1->voltage, pBatt1->percentage, pBatt1->online, pBatt2->adc, pBatt2->voltage, pBatt2->percentage, pBatt2->status );
 			}
 		#endif
 			
