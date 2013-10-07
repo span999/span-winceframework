@@ -1,0 +1,26 @@
+
+CC	= gcc
+AR	= ar
+DEFINES =
+CFLAGS	= -O2 -I. -L. ${DEFINES}
+
+
+PROGRAM	= watchdogctl
+
+all: clean PROGRAM
+
+
+
+PROGRAM:
+	@echo 
+	@echo ================================================================
+	@echo build ${PROGRAM} binary.
+	@echo ----------------------------------------------------------------
+	${CC} ../main.c ${CFLAGS} -o ${PROGRAM}
+
+clean:
+	@echo 
+	@echo ================================================================
+	@echo Erasing objects and backup files.
+	@echo ----------------------------------------------------------------
+	rm -f ${PROGRAM} *.so *.o *.a
