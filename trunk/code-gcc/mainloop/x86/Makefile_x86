@@ -26,7 +26,7 @@ PROGRAM: TASKS
 	@echo ================================================================
 	@echo build ${PROGRAM} binary.
 	@echo ----------------------------------------------------------------
-	${CC} ../main.c ${CFLAGS} -o ${PROGRAM} -lpthread -ltasks
+	${CC} ../main.c ${CFLAGS} -o ${PROGRAM} -lpthread -ltasks -lrt
  
 clean:
 	@echo 

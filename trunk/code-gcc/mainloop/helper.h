@@ -35,6 +35,16 @@
 
 void MsSleep( int iVal );
 void _SPMSG( unsigned int iFlag, char *msgout, ... );
+long _GetTick( int iDiff );
+long _GetMicroSec( int iDiff );
+
+#if 1
+#define _GetTime()		_GetTick(0)
+#define _GetTimeDiff()	_GetTick(1)
+#else
+#define _GetTime()		_GetMicroSec(0)
+#define _GetTimeDiff()	_GetMicroSec(1)
+#endif
 
 
 #endif /* #ifndef __HELPER_H__ */
