@@ -1,0 +1,36 @@
+
+CC	= gcc
+AR	= ar
+DEFINES =
+CFLAGS	= -O2 -I. -L. ${DEFINES}
+
+
+PROGRAM	= mainloop
+
+
+all: clean PROGRAM
+
+
+TASKS:
+	@echo 
+	@echo ================================================================
+	@echo build ${PROGRAM} object.
+	@echo ----------------------------------------------------------------
+	${CC} ${CFLAGS} -c ../helper.c
+	${CC} ${CFLAGS} -c ../tasks.c
+	${CC} ${CFLAGS} -c ../usertasks.c
+	${AR} rcs libtasks.a helper.o tasks.o usertasks.o
+
+PROGRAM: TASKS
+	@echo 
+	@echo ================================================================
+	@echo build ${PROGRAM} binary.
+	@echo ----------------------------------------------------------------
+	${CC} ../main.c ${CFLAGS} -o ${PROGRAM} -lpthread -ltasks
+ 
+clean:
+	@echo 
+	@echo ================================================================
+	@echo Erasing objects and backup files.
+	@echo ----------------------------------------------------------------
+	rm -f ${PROGRAM} *.so *.o *.a
