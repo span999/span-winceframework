@@ -23,25 +23,26 @@
 
 void TasksDump( TaskList *ptasklist ) {
 	
-	printf("%s:%s ++\r\n", _MSGHEAD_, __func__);
+	_SPMSG(dINIT, "%s:%s ++\r\n", _MSGHEAD_, __func__);
+
 	if(ptasklist)
 	{
 		int tmp = 0;
 		for(tmp=0;tmp<16;tmp++)
 		{
-			printf("%s:%s valid[%d]=%d\r\n", _MSGHEAD_, __func__, tmp, ptasklist->valid[tmp]);
-			printf("%s:%s tasks[%d].begin=0x%08x\r\n", _MSGHEAD_, __func__, tmp, (unsigned)ptasklist->tasks[tmp].begin);
+			_SPMSG(dDUMP, "%s:%s valid[%d]=%d\r\n", _MSGHEAD_, __func__, tmp, ptasklist->valid[tmp]);
+			_SPMSG(dDUMP, "%s:%s tasks[%d].begin=0x%08lu\r\n", _MSGHEAD_, __func__, tmp, (unsigned long)ptasklist->tasks[tmp].begin);
 		}
 	}
 
-	printf("%s:%s --\r\n", _MSGHEAD_, __func__);
+	_SPMSG(dINIT, "%s:%s --\r\n", _MSGHEAD_, __func__);
 }
 
 
 int TasksStarter( TaskList *ptasklist ) {
 	int iRet = -1;
 	
-	printf("%s:%s ++\r\n", _MSGHEAD_, __func__);
+	_SPMSG(dINIT, "%s:%s ++\r\n", _MSGHEAD_, __func__);
 
 	if(ptasklist)
 	{
@@ -49,16 +50,24 @@ int TasksStarter( TaskList *ptasklist ) {
 		for(tmp=0;tmp<16;tmp++)
 		{
 			if(ptasklist->valid[tmp] > 0)
+			{
 				if(ptasklist->tasks[tmp].begin > 0)
+				{
 					ptasklist->tasks[tmp].begin(0);
+				}
 				else
-					printf("%s:%s tasks[%d].begin=NULL\r\n", _MSGHEAD_, __func__, tmp);
+				{
+					_SPMSG(dERR, "%s:%s tasks[%d].begin=NULL\r\n", _MSGHEAD_, __func__, tmp);
+				}
+			}
 			else
-				printf("%s:%s valid[%d]=%d\r\n", _MSGHEAD_, __func__, tmp, ptasklist->valid[tmp]);
+			{
+				_SPMSG(dINFO, "%s:%s valid[%d]=%d\r\n", _MSGHEAD_, __func__, tmp, ptasklist->valid[tmp]);
+			}
 		}
 	}	
 
-	printf("%s:%s --\r\n", _MSGHEAD_, __func__);
+	_SPMSG(dINIT, "%s:%s --\r\n", _MSGHEAD_, __func__);
 
 	return iRet;
 }
@@ -67,7 +76,7 @@ int TasksStarter( TaskList *ptasklist ) {
 int TasksPicker( TaskList *ptasklist ) {
 	int iRet = -1;
 	
-	printf("%s:%s ++\r\n", _MSGHEAD_, __func__);
+	_SPMSG(dINIT, "%s:%s ++\r\n", _MSGHEAD_, __func__);
 
 	if(ptasklist)
 	{
@@ -86,20 +95,20 @@ int TasksPicker( TaskList *ptasklist ) {
 					count++;
 				}
 				else
-					printf("%s:%s tasks[%d].duty=NULL\r\n", _MSGHEAD_, __func__, tmp);
+					_SPMSG(dERR, "%s:%s tasks[%d].duty=NULL\r\n", _MSGHEAD_, __func__, tmp);
 			}
 			else
 			{
-				;///printf("%s:%s valid[%d]=%d\r\n", _MSGHEAD_, __func__, tmp, ptasklist->valid[tmp]);
+				_SPMSG(dINFO, "%s:%s valid[%d]=%d\r\n", _MSGHEAD_, __func__, tmp, ptasklist->valid[tmp]);
 			}
 		}
-		printf("%s:%s avalable task=%d\r\n", _MSGHEAD_, __func__, count);
+		_SPMSG(dINFO, "%s:%s avalable task=%d\r\n", _MSGHEAD_, __func__, count);
 
 		/* now, execute duty with priority */
 		priority = TASK_PRIOR_MAX;	/* start with first priority */
 		while( (priority>(TASK_PRIOR_NONE)) && (count>0) )
 		{
-			printf("%s:%s check avalable task for priority=%d\r\n", _MSGHEAD_, __func__, priority);
+			_SPMSG(dINFO, "%s:%s check avalable task for priority=%d\r\n", _MSGHEAD_, __func__, priority);
 			for(tmp=0;tmp<16;tmp++)
 			{
 				if(ptasklist->valid[tmp] > 0)
@@ -115,22 +124,22 @@ int TasksPicker( TaskList *ptasklist ) {
 					}
 					else
 					{
-						printf("%s:%s tasks[%d].duty=NULL\r\n", _MSGHEAD_, __func__, tmp);
+						_SPMSG(dERR, "%s:%s tasks[%d].duty=NULL\r\n", _MSGHEAD_, __func__, tmp);
 					}
 				}
 				else
 				{
-					;///printf("%s:%s valid[%d]=%d\r\n", _MSGHEAD_, __func__, tmp, ptasklist->valid[tmp]);
+					_SPMSG(dINFO, "%s:%s valid[%d]=%d\r\n", _MSGHEAD_, __func__, tmp, ptasklist->valid[tmp]);
 				}
 			}
-			printf("%s:%s avalable task=%d\r\n", _MSGHEAD_, __func__, count);
+			_SPMSG(dINFO, "%s:%s avalable task=%d\r\n", _MSGHEAD_, __func__, count);
 			priority--;
 		}
 	}
 
 	MsSleep(500);
 
-	printf("%s:%s --\r\n", _MSGHEAD_, __func__);
+	_SPMSG(dINIT, "%s:%s --\r\n", _MSGHEAD_, __func__);
 
 	return iRet;
 }

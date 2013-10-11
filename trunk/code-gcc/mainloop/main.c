@@ -22,13 +22,13 @@
 TaskList tasks = {
 	{
 	TASK_VALID, TASK_VALID, TASK_VALID, TASK_VALID, \
-	TASK_INVALID, TASK_INVALID, TASK_INVALID, TASK_INVALID, \
+	TASK_INVALID, TASK_INVALID, TASK_VALID, TASK_VALID, \
 	TASK_INVALID, TASK_INVALID, TASK_INVALID, TASK_INVALID, \
 	TASK_INVALID, TASK_INVALID, TASK_INVALID, TASK_INVALID
 	},
 	{
 	TASK_PRIOR_NORNAL, TASK_PRIOR_HIGH, TASK_PRIOR_LOW, TASK_PRIOR_NORNAL, \
-	TASK_PRIOR_NORNAL, TASK_PRIOR_NORNAL, TASK_PRIOR_NORNAL, TASK_PRIOR_NORNAL, \
+	TASK_PRIOR_NORNAL, TASK_PRIOR_NORNAL, TASK_PRIOR_LOW, TASK_PRIOR_NORNAL, \
 	TASK_PRIOR_NORNAL, TASK_PRIOR_NORNAL, TASK_PRIOR_NORNAL, TASK_PRIOR_NORNAL, \
 	TASK_PRIOR_NORNAL, TASK_PRIOR_NORNAL, TASK_PRIOR_NORNAL, TASK_PRIOR_NORNAL
 	},
@@ -62,8 +62,8 @@ TaskList tasks = {
 
 int main( int argc, char *argv[] ) {
 	int iRet = -1;
-	
-	printf("%s:%s ++\r\n", _MSGHEAD_, __func__);
+
+	_SPMSG(dINIT, "%s:%s ++\r\n", _MSGHEAD_, __func__);
 
 	TasksDump( &tasks );
 	TasksStarter( &tasks );
@@ -71,7 +71,7 @@ int main( int argc, char *argv[] ) {
 	for(;;)
 		TasksPicker( &tasks );
 
-	printf("%s:%s --\r\n", _MSGHEAD_, __func__);
+	_SPMSG(dINIT, "%s:%s --\r\n", _MSGHEAD_, __func__);
 
 	return iRet;
 }
