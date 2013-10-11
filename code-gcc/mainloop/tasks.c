@@ -53,7 +53,9 @@ int TasksStarter( TaskList *ptasklist ) {
 			{
 				if(ptasklist->tasks[tmp].begin > 0)
 				{
+					_SPMSG(dTIME, "%s:%s GetTime=%lu\r\n", _MSGHEAD_, __func__, _GetTime() );
 					ptasklist->tasks[tmp].begin(0);
+					_SPMSG(dTIME, "%s:%s GetTimeDiff=%lu\r\n", _MSGHEAD_, __func__, _GetTimeDiff() );
 				}
 				else
 				{
@@ -91,7 +93,9 @@ int TasksPicker( TaskList *ptasklist ) {
 			{
 				if(ptasklist->tasks[tmp].duty > 0)
 				{
+					_SPMSG(dTIME, "%s:%s GetTime=%lu\r\n", _MSGHEAD_, __func__, _GetTime() );
 					ptasklist->requested[tmp] = ptasklist->tasks[tmp].duty(0);
+					_SPMSG(dTIME, "%s:%s GetTimeDiff=%lu\r\n", _MSGHEAD_, __func__, _GetTimeDiff() );
 					count++;
 				}
 				else
@@ -117,7 +121,9 @@ int TasksPicker( TaskList *ptasklist ) {
 					{
 						if(ptasklist->priority[tmp] == priority)
 						{
+							_SPMSG(dTIME, "%s:%s GetTime=%lu\r\n", _MSGHEAD_, __func__, _GetTime() );
 							ptasklist->tasks[tmp].IST(0);
+							_SPMSG(dTIME, "%s:%s GetTimeDiff=%lu\r\n", _MSGHEAD_, __func__, _GetTimeDiff() );
 							count--;
 							ptasklist->requested[tmp] = TASK_IST_NONREQ;
 						}
