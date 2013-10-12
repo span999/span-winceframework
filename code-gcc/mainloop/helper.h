@@ -6,8 +6,11 @@
 #define __HELPER_H__
 
 
-#define 	_MSGHEAD_ 		"SPD:"
+#define 	_MSGHEAD_ 				"SPD:"
+#define		SP_DEBUG_MESSAGE		1
+#define		SP_GETTIME_TICK			0
 
+#if SP_DEBUG_MESSAGE
 /* debug flag sets */
 #define	dTIME			0x00004000
 #define	dDBG			0x00001000
@@ -28,20 +31,27 @@
 #define	DBGFSET			(dTIME|dDUTY|dIST|dDUMP|dERR)
 
 #define	_dF_(x)			(!(DBGFSET&x))
+#endif	/* #if SP_DEBUG_MESSAGE */
 
+#if SP_DEBUG_MESSAGE
+void __SPMSG( unsigned int iFlag, char *msgout, ... );
+#define 	_SPMSG 					__SPMSG
+#else
+void __NODEBUG(void);
+#define 	_SPMSG(a,b,...) 		__NODEBUG()
+#endif	/* #if SP_DEBUG_MESSAGE */
 
 
 
 
 void MsSleep( int iVal );
-void _SPMSG( unsigned int iFlag, char *msgout, ... );
-long _GetTick( int iDiff );
-long _GetMicroSec( int iDiff );
 
-#if 1
+#if SP_GETTIME_TICK
+long _GetTick( int iDiff );
 #define _GetTime()		_GetTick(0)
 #define _GetTimeDiff()	_GetTick(1)
 #else
+long _GetMicroSec( int iDiff );
 #define _GetTime()		_GetMicroSec(0)
 #define _GetTimeDiff()	_GetMicroSec(1)
 #endif

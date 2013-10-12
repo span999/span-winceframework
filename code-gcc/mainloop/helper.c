@@ -12,10 +12,12 @@
 #include "helper.h"
 
 
+
 void MsSleep( int iVal ) {
 	usleep(iVal*1000);
 }
 
+#if SP_GETTIME_TICK
 long _GetTick( int iDiff ) {
 	static long priTick = 0;
 	long Tick = 0;
@@ -41,8 +43,7 @@ long _GetTick( int iDiff ) {
 	priTick = tmp;
     return Tick;
 }
-
-
+#else
 long _GetMicroSec( int iDiff ) {
 	static long priTick = 0;
 	long Tick = 0;
@@ -68,9 +69,10 @@ long _GetMicroSec( int iDiff ) {
 	priTick = tmp;
     return Tick;
 }
+#endif	/* #if SP_GETTIME_TICK */
 
-
-void _SPMSG( unsigned int iFlag, char *msgout, ... ) {
+#if SP_DEBUG_MESSAGE
+void __SPMSG( unsigned int iFlag, char *msgout, ... ) {
 	int n, size = 64;
 	char *p;
 	va_list ap;
@@ -89,3 +91,6 @@ void _SPMSG( unsigned int iFlag, char *msgout, ... ) {
 	
 	free(p);
 }
+#else
+void __NODEBUG(void) {}
+#endif
