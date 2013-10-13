@@ -5,10 +5,12 @@
 #ifndef __HELPER_H__
 #define __HELPER_H__
 
+#include "config.h"
+
+
 
 #define 	_MSGHEAD_ 				"SPD:"
-#define		SP_DEBUG_MESSAGE		1
-#define		SP_GETTIME_TICK			0
+
 
 #if SP_DEBUG_MESSAGE
 /* debug flag sets */
@@ -24,13 +26,14 @@
 #define	dINIT			0x00000001
 #define	dERR			0x00010000
 
-/* #define	DBGFSET		(dDBG|dBEGN|dERR) */
-/* #define	DBGFSET		(dDBG|dINFO|dINIT|dERR) */
+/* #define	DBGFSET			(dDBG|dBEGN|dERR) */
+/* #define	DBGFSET			(dDBG|dINFO|dINIT|dERR) */
 /* #define	DBGFSET			(dINFO|dDUMP|dERR) */
 /* #define	DBGFSET			(dDUMP|dERR) */
-#define	DBGFSET			(dTIME|dDUTY|dIST|dDUMP|dERR)
+/* #define	DBGFSET			(dTIME|dDUTY|dIST|dDUMP|dERR) */
+#define	DBGFSET			(dTIME|dBEGN|dDUTY|dIST|dERR)
 
-#define	_dF_(x)			(!(DBGFSET&x))
+#define	_dF_(x)			(DBGFSET&x)
 #endif	/* #if SP_DEBUG_MESSAGE */
 
 #if SP_DEBUG_MESSAGE

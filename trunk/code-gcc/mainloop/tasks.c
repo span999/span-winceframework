@@ -5,11 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <pthread.h>
 
-#include <signal.h>
-#include <sys/time.h>
 
 
 #include "helper.h"
@@ -22,7 +18,7 @@
 
 
 void TasksDump( TaskList *ptasklist ) {
-	
+#if _dF_(dDUMP)
 	_SPMSG(dINIT, "%s:%s ++\r\n", _MSGHEAD_, __func__);
 
 	if(ptasklist)
@@ -36,6 +32,7 @@ void TasksDump( TaskList *ptasklist ) {
 	}
 
 	_SPMSG(dINIT, "%s:%s --\r\n", _MSGHEAD_, __func__);
+#endif
 }
 
 
