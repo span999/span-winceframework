@@ -46,6 +46,7 @@ int task02_begin( int iParam ) {
 	int iRet = -1;
 	
 	_SPMSG(dINIT|dBEGN, "%s:%s ++\r\n", _MSGHEAD_, __func__);
+	_SPMSG(dINIT|dBEGN, "%s:%s Timer task start !!!\r\n", _MSGHEAD_, __func__);
 
 	MsSleep(50);
 
@@ -247,6 +248,7 @@ int task02_duty( int iParam ) {
 	int iRet = -1;
 	
 	_SPMSG(dINIT, "%s:%s ++\r\n", _MSGHEAD_, __func__);
+	_SPMSG(dINIT|dDUTY, "%s:%s Timer task duty !!!\r\n", _MSGHEAD_, __func__);
 
 	MsSleep(50);
 	iRet = TASK_IST_REQUEST;
@@ -473,6 +475,7 @@ int task02_IST( int iParam ) {
 	int iRet = -1;
 	
 	_SPMSG(dINIT, "%s:%s ++\r\n", _MSGHEAD_, __func__);
+	_SPMSG(dINIT|dIST, "%s:%s Timer task IST !!!\r\n", _MSGHEAD_, __func__);
 
 	MsSleep(50);
 	_SPMSG(dIST, "%s:%s running\r\n", _MSGHEAD_, __func__);

@@ -77,7 +77,7 @@ void __SPMSG( unsigned int iFlag, char *msgout, ... ) {
 	char *p;
 	va_list ap;
 
-	if( _dF_(iFlag) )
+	if( !_dF_(iFlag) )
 		return;
 
 	if((p = malloc(size)) == NULL)
