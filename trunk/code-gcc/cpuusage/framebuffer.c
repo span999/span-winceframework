@@ -80,7 +80,25 @@ _OKEXIT:
 	return iRet;
 }
 
+/*
+	bits565 to bits888
+*/
+static unsigned int bpp_16to32( unsigned short color16 )
+{
+	unsigned int color32 = 0;
+	unsigned int Rcolor32 = 0;
+	unsigned int Gcolor32 = 0;
+	unsigned int Bcolor32 = 0;
 
+	/// remapping with lowest bit ignored.
+	Rcolor32 = (((color16 & 0xf800) >> 11) << (24-5));	///R
+	Gcolor32 = (((color16 & 0x07e0) >> 5) << (16-6));	///G
+	Bcolor32 = (((color16 & 0x001f) >> 0) << (8-5));	///B
+
+	color32 = 0x0 | (Rcolor32 & 0x00ff0000) | (Gcolor32 & 0x0000ff00) | (Bcolor32 & 0x000000ff);
+
+	return color32;
+}
 
 
 int drawHbar( unsigned long startX, unsigned long startY, unsigned long lenth, unsigned long height, unsigned short color )
@@ -89,6 +107,8 @@ int drawHbar( unsigned long startX, unsigned long startY, unsigned long lenth, u
 	long screensize = 0;
 	int fp = 0;
 	char *fbp = 0;
+	unsigned short *fbsp = 0;
+	unsigned int *fbip = 0;
 	long x = 0, y = 0;
 	long l = 0, h = 0;
 	long location = 0;
@@ -129,16 +149,44 @@ int drawHbar( unsigned long startX, unsigned long startY, unsigned long lenth, u
 	y = startY;
 	l = 0;
 	h = 0;
-	
-	while( h++ < height )
+
+	if( 16 == g_bpp )
 	{
-		while( l++ < lenth )
+		fbsp = (unsigned short *)fbp;
+		while( h++ < height )
 		{
-			location = ((x+l)*(g_bpp/8)) + ((y+h)*g_linelen);
-			*(unsigned short *)(fbp+location) = color;
+			while( l++ < lenth )
+			{
+				location = ((x+l)*(g_bpp/8)) + ((y+h)*g_linelen);
+				///*(unsigned short *)(fbp+location) = color;
+				*(fbsp+location) = color;
+			}	/* while */
+			l = 0;
 		}	/* while */
-		l = 0;
-	}	/* while */
+	}
+	else
+	if( (32 == g_bpp) || (24 == g_bpp) )
+	{
+		unsigned int icolor = 0;
+
+		icolor = bpp_16to32(color);
+
+		fbip = (unsigned int *)fbp;
+		while( h++ < height )
+		{
+			while( l++ < lenth )
+			{
+				location = ((x+l)*(g_bpp/8)) + ((y+h)*g_linelen);
+				*(fbip+location) = icolor;
+			}	/* while */
+			l = 0;
+		}	/* while */
+
+	}
+	else
+	{
+		printf("unsupported bits_per_pixel :%ld !!!!!\n", g_bpp );
+	}
 	
 	
 
@@ -276,6 +324,7 @@ void lcd_glyph(unsigned long left, unsigned long top,
 	int fp = 0;
 	char *fbp = 0;
 	unsigned short *fbsp = 0;
+	unsigned int *fbip = 0;
 	long screensize = 0;
 
 
@@ -306,31 +355,74 @@ void lcd_glyph(unsigned long left, unsigned long top,
 	}
 
 	/* draw it !! */
-	fbsp = fbp;
-  	for( h=0; h<height; h++ )
-  	{
-		for( l=0; l<store_width; l++ )
-		{
-			m = *(glyph+(h*store_width)+l);
-			char_mask = 0x80;
-			t = 0;
-			while( char_mask>0 )
-			{
-				if( m & char_mask )
-				{
-					*( fbsp+((top+h)*g_xres)+(left)+(t)+(l*8) ) = fcolor;
-				}	
-				else
-				{
-					*( fbsp+((top+h)*g_xres)+(left)+(t)+(l*8) ) = bcolor;
-				}
-				
-				char_mask = char_mask >> 1;
-				t++;
-			}
-		}	
-	}
+	if( 16 == g_bpp )
+	{
 
+		fbsp = (unsigned short *)fbp;
+  		for( h=0; h<height; h++ )
+  		{
+			for( l=0; l<store_width; l++ )
+			{
+				m = *(glyph+(h*store_width)+l);
+				char_mask = 0x80;
+				t = 0;
+				while( char_mask>0 )
+				{
+					if( m & char_mask )
+					{
+						*( fbsp+((top+h)*g_xres)+(left)+(t)+(l*8) ) = fcolor;
+					}	
+					else
+					{
+						*( fbsp+((top+h)*g_xres)+(left)+(t)+(l*8) ) = bcolor;
+					}
+				
+					char_mask = char_mask >> 1;
+					t++;
+				}
+			}	
+		}
+
+	}
+	else
+	if( (32 == g_bpp) || (24 == g_bpp) )
+	{
+		unsigned int ifcolor = 0;
+		unsigned int ibcolor = 0;
+
+		ifcolor = bpp_16to32(fcolor);
+		ibcolor = bpp_16to32(bcolor);
+
+		fbip = (unsigned int *)fbp;
+  		for( h=0; h<height; h++ )
+  		{
+			for( l=0; l<store_width; l++ )
+			{
+				m = *(glyph+(h*store_width)+l);
+				char_mask = 0x80;
+				t = 0;
+				while( char_mask>0 )
+				{
+					if( m & char_mask )
+					{
+						*( fbip+((top+h)*g_xres)+(left)+(t)+(l*8) ) = ifcolor;
+					}	
+					else
+					{
+						*( fbip+((top+h)*g_xres)+(left)+(t)+(l*8) ) = ibcolor;
+					}
+				
+					char_mask = char_mask >> 1;
+					t++;
+				}
+			}	
+		}
+
+	}
+	else
+	{
+		printf("unsupported bits_per_pixel :%ld !!!!!\n", g_bpp );
+	}
 
 
 _OKEXIT:
