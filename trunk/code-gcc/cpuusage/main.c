@@ -60,7 +60,7 @@ static struct cpuBarCfgS V4 = \
 
 
 static struct cpuBarCfgS* pV = &V2; /* graphic mode 0 by default */
-static char verStr[] = "v8.1";
+static char verStr[] = "v8.2";
 
 static long g_loop = 5;
 static long g_interval = 1000;
