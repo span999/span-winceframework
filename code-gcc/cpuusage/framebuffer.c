@@ -159,7 +159,8 @@ int drawHbar( unsigned long startX, unsigned long startY, unsigned long lenth, u
 			{
 				location = ((x+l)*(g_bpp/8)) + ((y+h)*g_linelen);
 				///*(unsigned short *)(fbp+location) = color;
-				*(fbsp+location) = color;
+				fbsp = (unsigned short *)(fbp+location);
+				*fbsp = color;
 			}	/* while */
 			l = 0;
 		}	/* while */
@@ -177,7 +178,9 @@ int drawHbar( unsigned long startX, unsigned long startY, unsigned long lenth, u
 			while( l++ < lenth )
 			{
 				location = ((x+l)*(g_bpp/8)) + ((y+h)*g_linelen);
-				*(fbip+location) = icolor;
+				///*(fbip+location) = icolor;
+				fbip = (unsigned int *)(fbp+location);
+				*fbip = icolor;
 			}	/* while */
 			l = 0;
 		}	/* while */
