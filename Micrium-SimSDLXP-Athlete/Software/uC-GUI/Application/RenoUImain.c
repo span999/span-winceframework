@@ -220,47 +220,21 @@ void TaskUserDataHook( void * pvParameters )
 */
 
 
-/*
-  *******************************************************************
-  *
-  *              main()
-  *
-  *******************************************************************
-*/
-
-#if 0
-void MainTask(void) {
-#else
-void MainTask_RenoUItest(void) {
-#endif
-	int Cnt =0;
+static void Logo_TestPattern( void )
+{
 	int i;
-///	int YPos;
-	int LCDXSize = LCD_GET_XSIZE();
-	int LCDYSize = LCD_GET_YSIZE();
-///	const GUI_BITMAP *pBitmap;
 
-
-	SPPRINTF("GUI_Init()!!!!!!!!!!!!!!!!!!\n");
-	OS_Printf("GUI_Init()!!!!!!!!!!!!!!!!!!\n");
-	
-	///
-	GUI_Init();
-
-	///clear
+	///clear with red
 	GUI_SetBkColor(GUI_RED);
 	GUI_Clear();
-	///GUI_Delay(1000);
 	GUI_Delay(100);
 	
-	///clear
+	///clear with blue
 	GUI_SetBkColor(GUI_BLUE);
 	GUI_Clear();
-	///GUI_Delay(1000);
 	GUI_Delay(100);
-	
-	
-	///draw line
+		
+	///draw H line with white
 	GUI_SetColor(GUI_WHITE);
 
 	for (i=0; i<170; i+=10) {
@@ -271,10 +245,12 @@ void MainTask_RenoUItest(void) {
 
 	GUI_Delay(100);
 	
+	///draw V line with white
 	for (i=60; i<150; i+=10) {
 		GUI_DrawVLine(i,0,168);
 	}
 	
+	///set black on white
 	GUI_SetColor(GUI_BLACK);
 	GUI_SetBkColor(GUI_WHITE);
   
@@ -282,31 +258,40 @@ void MainTask_RenoUItest(void) {
 		int len = (i<80) ? i : 160-i;
 		GUI_DrawHLine(i,20,len+20);
 	}
+}
+
+/*
+  *******************************************************************
+  *
+  *              main()
+  *
+  *******************************************************************
+*/
+
+void MainTask_RenoUItest(void) {
+	int Cnt =0;
+	int LCDXSize = LCD_GET_XSIZE();
+	int LCDYSize = LCD_GET_YSIZE();
+
+
+	SPPRINTF("GUI_Init()!!!!!!!!!!!!!!!!!!\n");
+	OS_Printf("GUI_Init()!!!!!!!!!!!!!!!!!!\n");
+	
+	///
+	GUI_Init();
+
+#if 0 /* test pattern */
+	Logo_TestPattern();
+#endif /* test pattern */
+
+	///set black on white
+	GUI_SetColor(GUI_BLACK);
+	GUI_SetBkColor(GUI_WHITE);
 
 	GUI_Delay(100);
 	GUI_Clear();
 
 	FrameCenter();
-
-#if 0	
-	if (LCD_GET_YSIZE()>(100+bmMicriumLogo_1bpp.YSize)) {
-		pBitmap=&bmMicriumLogo;
-	} else {
-		GUI_SetColor(GUI_BLUE);
-		pBitmap=&bmMicriumLogo_1bpp;
-	}
-
-	GUI_DrawBitmap(pBitmap,(LCDXSize-pBitmap->XSize)/2,10);
-	YPos=20+pBitmap->YSize;
-	GUI_SetFont(&GUI_FontComic24B_1);
-	GUI_DispStringHCenterAt("www.micrium.com",LCDXSize/2,YPos);
-	GUI_Delay(1000);
-	GUI_SetColor(GUI_RED);
-	GUI_DispStringHCenterAt("?2004\n", LCDXSize/2,YPos+30);
-	GUI_SetFont(&GUI_Font10S_1);
-	GUI_DispStringHCenterAt("Micriµm Inc.",LCDXSize/2,YPos+60);;
-	GUI_Delay(1000);
-#endif
 
 }
 

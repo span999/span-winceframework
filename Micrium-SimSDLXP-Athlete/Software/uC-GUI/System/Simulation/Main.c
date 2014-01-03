@@ -37,6 +37,10 @@ void MainTask_DashB(void);
 #ifdef RENOUI_PROJ
 void MainTask_RenoUItest(void);
 #endif
+#ifdef ATHLETE_UI_PROJ
+void MainTask_AthleteUItest(void);
+#endif
+
 
 ///void main(void) {
 	///MainTask_test
@@ -44,34 +48,36 @@ void MainTask_RenoUItest(void);
 	///MainTask_multi();
 ///}
 
+
 #if defined(OS_PLUS_GUI)
 void MainTask_GUI(void) {
 #else
 void MainTask(void) {
 #endif
 
-#ifdef TEST_PROJ
+	#ifdef TEST_PROJ
 	MainTask_test();
-#endif
-#ifdef EYES_PROJ
+	#endif
+	#ifdef EYES_PROJ
 	MainTask_eyes();
-#endif
+	#endif
 
 	///MainTask_multi();
 
-#ifdef MEDIT_PROJ
+	#ifdef MEDIT_PROJ
 	MainTask_MultiEdit();
-#endif
-#ifdef GUIDEMO_PROJ
+	#endif
+	#ifdef GUIDEMO_PROJ
 	///GUI_Init();
 	GUIDEMO_main();
-#endif
-#ifdef DASHBOARD_PROJ	
+	#endif
+	#ifdef DASHBOARD_PROJ	
 	MainTask_DashB();
-#endif
-#ifdef RENOUI_PROJ
+	#endif
+	#ifdef RENOUI_PROJ
 	MainTask_RenoUItest();
-#endif
-
-
+	#endif
+	#ifdef ATHLETE_UI_PROJ
+	MainTask_AthleteUItest();
+	#endif
 }
