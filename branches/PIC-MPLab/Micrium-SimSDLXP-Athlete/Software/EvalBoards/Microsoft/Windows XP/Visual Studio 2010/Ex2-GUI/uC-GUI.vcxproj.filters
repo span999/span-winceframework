@@ -1,0 +1,2235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\uCOS-II\Ports\Win32\os_cpu_c.c">
+      <Filter>uCOS_II-Port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uCOS-II\Ports\Win32\os_trace.c">
+      <Filter>uCOS_II-Port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\ucos-ii\source\os_tmr.c">
+      <Filter>uCOS-II</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_core.c">
+      <Filter>uCOS-II</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_dbg_r.c">
+      <Filter>uCOS-II</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_flag.c">
+      <Filter>uCOS-II</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_mbox.c">
+      <Filter>uCOS-II</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_mem.c">
+      <Filter>uCOS-II</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_mutex.c">
+      <Filter>uCOS-II</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_q.c">
+      <Filter>uCOS-II</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_sem.c">
+      <Filter>uCOS-II</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_task.c">
+      <Filter>uCOS-II</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uCOS-II\Source\os_time.c">
+      <Filter>uCOS-II</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FD80.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F4x6.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F6x8.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F08_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F08_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F8x8.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F8x10_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F8x12_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F8x13_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F8x13_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F8x15B_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F8x15B_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F8x16.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F10_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F10_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F10S_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F10S_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F13_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F13_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F13B_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F13B_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F13H_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F13H_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F13HB_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F13HB_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F16_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F16_1HK.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F16_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F16_HK.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F16B_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F16B_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F24_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F24_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F24B_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F24B_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F32_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F32_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F32B_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\F32B_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FComic18B_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FComic18B_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FComic24B_1.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FComic24B_ASCII.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FD24x32.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FD32.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FD36x48.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FD48.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FD48x64.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FD60x80.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Font\FD64.c">
+      <Filter>uC-GUI\GUI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI2DLib.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__AddSpaceHex.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__CalcTextRect.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__DivideRound32.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__DivideRound.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__GetFontSizeY.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__GetNumChars.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__HandleEOLine.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__IntersectRect.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__IntersectRects.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__memset16.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__memset.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__Read.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__ReduceRect.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__SetText.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__strcmp.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__strlen.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI__Wrap.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_AddBin.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_AddDec.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_AddDecMin.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_AddDecShift.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_AddHex.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_AddKeyMsgHook.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_ALLOC_AllocInit.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_ALLOC_AllocZero.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_BMP.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_BMP_Serialize.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CalcColorDist.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_ClearRectEx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_Color2VisColor.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorArrowL.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorArrowLI.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorArrowLPx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorArrowM.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorArrowMI.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorArrowMPx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorArrowS.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorArrowSI.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorArrowSPx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorCrossL.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorCrossLI.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorCrossLPx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorCrossM.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorCrossMI.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorCrossMPx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorCrossS.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorCrossSI.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorCrossSPx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorHeaderM.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorHeaderMI.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorHeaderMPx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorPal.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_CursorPalI.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DispBin.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DispCEOL.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DispChar.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DispChars.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DispHex.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DispString.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DispStringAt.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DispStringAtCEOL.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DispStringHCenter.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DispStringInRect.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DispStringInRectEx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DispStringInRectMax.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DispStringLen.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DrawBitmap.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DrawBitmapEx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DrawBitmapExp.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DrawBitmapMag.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DrawFocusRect.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DrawGraph.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DrawHLine.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DrawPie.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DrawPixel.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DrawPolyline.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DrawRectEx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_DrawVLine.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_ErrorOut.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_Exec.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_FillPolygon.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_FillRect.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_FillRectEx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetBitmapPixelColor.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetBitmapPixelIndex.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetClientRect.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetColor.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetDispPos.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetFont.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetFontInfo.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetFontSizeY.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetLineStyle.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetStringDistX.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetTextAlign.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetTextExtend.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetTextMode.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetVersionString.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_GetYSizeOfFont.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_Goto.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_InitLUT.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_InvertRect.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_IsInFont.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_Log.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_MergeRect.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_MOUSE.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_MOUSE_DriverPS2.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_MoveRect.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_OnKey.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_Pen.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_PID.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_RectsIntersect.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SaveContext.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SelectLayer.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SelectLCD.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetColor.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetColorIndex.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetDecChar.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetDefault.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetDrawMode.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetFont.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetLBorder.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetLineStyle.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetLUTColor.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetLUTColorEx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetLUTEntry.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetOrg.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetPixelIndex.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetTextAlign.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetTextMode.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SetTextStyle.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SIF.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_SIF_Prop.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_TOUCH.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_TOUCH_DriverAnalog.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_TOUCH_StoreState.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_TOUCH_StoreUnstable.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_UC.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_UC_DispString.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_UC_EncodeNone.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_UC_EncodeUTF8.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_WaitEvent.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_WaitKey.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_Warn.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIAlloc.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIArc.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIChar.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUICharLine.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUICharM.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUICharP.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUICirc.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIColor2Index.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUICore.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUICurs.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIEncJS.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIIndex2Color.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIPolyE.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIPolyM.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIPolyR.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIRealloc.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIStream.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUITask.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUITime.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUITimer.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIUC0.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIVal.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIValf.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_API.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_DrawBitmap_565.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_DrawBitmap_M565.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_DrawVLine.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_GetColorIndex.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_GetEx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_GetNumDisplays.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_GetPixelColor.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_Index2ColorEx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_L0_Generic.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_Mirror.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_MixColors256.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_Rotate180.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_RotateCCW.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_RotateCW.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_SelectLCD.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_SetAPI.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_SetClipRectEx.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_UpdateColorIndices.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCDAA.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCDColor.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCDGetP.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCDInfo0.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCDInfo1.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCDInfo.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCDL0Delta.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCDL0Mag.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCDP1.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCDP565_Index2Color.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCDPM565_Index2Color.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCDRLE4.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Core\LCDRLE8.c">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__ForEachDesc.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__GetFirstSibling.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__GetFocussedChild.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__GetLastSibling.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__GetOrg_AA.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__GetPrevSibling.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__IsAncestor.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__IsChild.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__IsEnabled.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__NotifyVisChanged.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__Screen2Client.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__SendMessage.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__SendMessageIfEnabled.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__SendMessageNoPara.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM__UpdateChildPositions.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_AttachWindow.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_BringToBottom.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_BringToTop.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_Broadcast.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_CheckScrollPos.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_CriticalHandle.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_DIAG.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_EnableWindow.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_ForEachDesc.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetBkColor.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetClientRect.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetClientWindow.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetDesktopWindow.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetDesktopWindowEx.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetDiagInfo.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetDialogItem.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetFirstChild.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetFlags.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetFocussedWindow.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetId.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetInsideRect.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetInsideRectExScrollbar.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetInvalidRect.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetNextSibling.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetOrg.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetParent.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetPrevSibling.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetScrollbar.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetScrollPartner.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetScrollState.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetWindowRect.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GetWindowSize.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_HasCaptured.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_HasFocus.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_Hide.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_IsCompletelyVisible.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_IsEnabled.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_IsFocussable.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_IsVisible.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_IsWindow.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_MakeModal.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_Move.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_MoveChildTo.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_NotifyParent.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_OnKey.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_Paint.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_PID__GetPrevState.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_ResizeWindow.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_Screen2Win.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SendMessageNoPara.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SendToParent.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetAnchor.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetCallback.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetCapture.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetCaptureMove.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetCreateFlags.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetDesktopColor.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetFocus.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetFocusOnNextChild.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetFocusOnPrevChild.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetId.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetpfPollPID.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetScrollbar.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetScrollState.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetSize.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetTrans.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetTransState.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetUserClipRect.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetXSize.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_SetYSize.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_Show.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_StayOnTop.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_Timer.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_TimerExternal.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_UserData.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_Validate.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_ValidateWindow.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WMMemDev.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\WM\WMTouch.c">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_1.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_8.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_16.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_AA.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_Auto.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_Banding.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_Clear.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_CmpWithLCD.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_CopyFromLCD.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_CreateFixed.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_GetDataPtr.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_GetXSize.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_GetYSize.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_Measure.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_ReduceYSize.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_SetOrg.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_Usage.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_UsageBM.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_Write.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_WriteAlpha.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_WriteEx.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MemDev\GUIDEV_XY2PTR.c">
+      <Filter>uC-GUI\GUI\MemDev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP111.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP222.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP233.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP323.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP332.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP444_12.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP444_12_1.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP444_16.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP555.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP556.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP565.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP655.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP8666.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDP8666_1.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDPM233.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDPM323.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDPM332.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDPM444_12.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDPM444_16.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDPM555.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDPM556.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDPM565.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\ConvertColor\LCDPM655.c">
+      <Filter>uC-GUI\GUI\ConvertColor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\BUTTON.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\BUTTON__SetBitmapObj.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\BUTTON_Bitmap.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\BUTTON_BMP.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\BUTTON_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\BUTTON_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\BUTTON_Default.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\BUTTON_Get.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\BUTTON_IsPressed.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\BUTTON_SelfDraw.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\BUTTON_SetTextAlign.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\BUTTON_StreamedBitmap.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_Default.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_GetState.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_Image.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_IsChecked.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_SetBkColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_SetDefaultImage.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_SetFont.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_SetImage.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_SetNumStates.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_SetSpacing.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_SetState.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_SetText.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_SetTextAlign.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\CHECKBOX_SetTextColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\DIALOG.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\DROPDOWN.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\DROPDOWN_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\DROPDOWN_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\DROPDOWN_DeleteItem.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\DROPDOWN_InsertString.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\DROPDOWN_ItemSpacing.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\DROPDOWN_SetAutoScroll.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\DROPDOWN_SetTextAlign.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\DROPDOWN_SetTextHeight.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\EDIT.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\EDIT_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\EDIT_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\EDIT_Default.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\EDIT_GetNumChars.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\EDIT_SetCursorAtChar.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\EDIT_SetInsertMode.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\EDIT_SetpfAddKeyEx.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\EDIT_SetpfUpdateBuffer.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\EDIT_SetSel.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\EDITBin.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\EDITDec.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\EDITFloat.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\EDITHex.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN__UpdateButtons.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_AddMenu.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_Button.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_ButtonClose.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_ButtonMax.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_ButtonMin.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_Default.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_Get.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_IsMinMax.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_MinMaxRest.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_SetBorderSize.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_SetColors.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_SetFont.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_SetResizeable.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_SetTitleHeight.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\FRAMEWIN_SetTitleVis.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_ARRAY.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_ARRAY_DeleteItem.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_ARRAY_InsertItem.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_ARRAY_ResizeItem.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_DRAW.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_DRAW_BITMAP.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_DRAW_BMP.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_DRAW_Self.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_DRAW_STREAMED.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_EditBin.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_EditDec.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_EditFloat.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_EditHex.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_EditString.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\GUI_HOOK.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\HEADER.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\HEADER__SetDrawObj.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\HEADER_Bitmap.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\HEADER_BMP.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\HEADER_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\HEADER_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\HEADER_StreamedBitmap.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_Default.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_DeleteItem.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_Font.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_GetItemText.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_GetNumItems.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_InsertString.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_ItemDisabled.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_ItemSpacing.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_MultiSel.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_ScrollStep.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_SetAutoScroll.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_SetBkColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_SetOwner.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_SetOwnerDraw.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_SetScrollbarWidth.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_SetString.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTBOX_SetTextColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_Default.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_DeleteColumn.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_DeleteRow.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_GetBkColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_GetFont.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_GetHeader.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_GetNumColumns.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_GetNumRows.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_GetSel.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_GetTextColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_SetBkColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_SetColumnWidth.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_SetFont.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_SetGridVis.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_SetItemColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_SetItemText.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_SetLBorder.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_SetRBorder.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_SetRowHeight.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_SetSel.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_SetTextAlign.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\LISTVIEW_SetTextColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU__FindItem.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_Attach.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_Default.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_DeleteItem.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_DisableItem.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_EnableItem.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_GetItem.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_GetItemText.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_GetNumItems.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_InsertItem.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_Popup.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_SetBkColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_SetBorderSize.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_SetFont.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_SetItem.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MENU_SetTextColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MESSAGEBOX.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MULTIEDIT.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MULTIEDIT_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MULTIEDIT_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MULTIPAGE.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MULTIPAGE_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MULTIPAGE_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\MULTIPAGE_Default.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\PROGBAR.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\PROGBAR_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\PROGBAR_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\RADIO.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\RADIO_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\RADIO_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\RADIO_Default.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\RADIO_Image.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\RADIO_SetBkColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\RADIO_SetDefaultImage.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\RADIO_SetFont.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\RADIO_SetGroupId.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\RADIO_SetImage.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\RADIO_SetText.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\RADIO_SetTextColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\SCROLLBAR.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\SCROLLBAR_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\SCROLLBAR_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\SCROLLBAR_Defaults.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\SCROLLBAR_GetValue.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\SCROLLBAR_SetWidth.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\SLIDER.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\SLIDER_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\SLIDER_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\TEXT.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\TEXT_Create.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\TEXT_CreateIndirect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\TEXT_SetBkColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\TEXT_SetFont.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\TEXT_SetText.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\TEXT_SetTextAlign.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\TEXT_SetTextColor.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\WIDGET.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\WIDGET_Effect_3D1L.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\WIDGET_Effect_3D2L.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\WIDGET_Effect_3D.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\WIDGET_Effect_None.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\WIDGET_Effect_Simple.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\WIDGET_FillStringInRect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\WIDGET_SetEffect.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\WIDGET_SetWidth.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\WINDOW.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\Widget\WINDOW_Default.c">
+      <Filter>uC-GUI\GUI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MultiLayer\LCD_1.c">
+      <Filter>uC-GUI\GUI\MultiLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MultiLayer\LCD_2.c">
+      <Filter>uC-GUI\GUI\MultiLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MultiLayer\LCD_3.c">
+      <Filter>uC-GUI\GUI\MultiLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\MultiLayer\LCD_4.c">
+      <Filter>uC-GUI\GUI\MultiLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAArc.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAChar2.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAChar4.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAChar.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAACircle.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAALib.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAALine.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAPoly.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\AntiAlias\GUIAAPolyOut.c">
+      <Filter>uC-GUI\GUI\AntiAlias</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\Main.c">
+      <Filter>uC-GUI\System\Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Automotive.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Bitmap4bpp.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Bitmap.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Circle.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_ColorBar.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_ColorList.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Cursor.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Dialog.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Font.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_FrameWin.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Graph.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_HardwareInfo.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Intro.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_LUT.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_MemDevB.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Messagebox.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Navi.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Polygon.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_ProgBar.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Speed.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\GUIDEMO_Touch.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\GUIDemo\SeggerLogoBlue.c">
+      <Filter>uC-GUI\Application\GUIDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\GUI_X_set.c">
+      <Filter>uC-GUI\System\Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\GUI\LCDDriver\LCDSDL.c">
+      <Filter>uC-GUI\GUI\LCDDriver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\System\SDLDislpayEmulator\SDLDisplay.cpp">
+      <Filter>uC-GUI\System\SDLDislpayEmulator</Filter>
+    </ClCompile>
+    <ClCompile Include="app.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUImain.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\System\Simulation\GUI_X_Touch.c">
+      <Filter>uC-GUI\System\Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\Startup_Screen_1.c">
+      <Filter>uC-GUI\Application\res</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\GPS_1.c">
+      <Filter>uC-GUI\Application\res</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\magellan0409-bmp\Reno_Icon_20_GPS_Search.c">
+      <Filter>uC-GUI\Application\res\magellan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\magellan0409-bmp\Reno_Icon_20_GPS_Lock.c">
+      <Filter>uC-GUI\Application\res\magellan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\magellan0409-bmp\Reno_Icon_20_GPS_Off.c">
+      <Filter>uC-GUI\Application\res\magellan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\example\Dashboard.c">
+      <Filter>uC-GUI\Application\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\example\MainTask.c">
+      <Filter>uC-GUI\Application\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\example\MicriumLogo.C">
+      <Filter>uC-GUI\Application\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\example\MicriumLogo_1bpp.c">
+      <Filter>uC-GUI\Application\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\example\WIDGET_Multiedit.c">
+      <Filter>uC-GUI\Application\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\example\XEye.c">
+      <Filter>uC-GUI\Application\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUItoolhelp.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUIcommon.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUICcomm.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUICdatamode.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUIframepage.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUIClistmenu.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUICftextentry.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\RenoUICwatchmode.c">
+      <Filter>uC-GUI\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial22_14pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial32_20pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco93_48pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial18_12pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial14_8pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial16_10pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Arial17_11pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco69_36pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco45_24pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco51_26pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco53_28pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco23_12pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco27_14pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco30_16pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco34_18pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco40_20pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\uC-GUI\Application\res\font0420-ttf\Monaco42_22pt.c">
+      <Filter>uC-GUI\Application\res\font</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="app_cfg.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="includes.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="os_cfg.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uCOS-II\Ports\Win32\os_cpu.h">
+      <Filter>uCOS_II-Port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uCOS-II\Ports\Win32\os_trace.h">
+      <Filter>uCOS_II-Port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uCOS-II\Source\os_cfg_r.h">
+      <Filter>uCOS-II</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\Config\GUIConf.h">
+      <Filter>uC-GUI\config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\Config\GUITouchConf.h">
+      <Filter>uC-GUI\config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\Config\LCDConf.h">
+      <Filter>uC-GUI\config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_ConfDefaults.h">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_FontIntern.h">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_Private.h">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_Protected.h">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_VNC.h">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\Core\GUI_X.h">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIDebug.h">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIType.h">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\Core\GUIVersion.h">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD.h">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_ConfDefaults.h">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_Private.h">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\Core\LCD_Protected.h">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\Core\LCDSIM.h">
+      <Filter>uC-GUI\GUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_GUI.h">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_Intern.h">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\GUI\WM\WM_Intern_ConfDep.h">
+      <Filter>uC-GUI\GUI\WM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\uC-GUI\System\SDLDislpayEmulator\SDLDisplay.h">
+      <Filter>uC-GUI\System\SDLDislpayEmulator</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="App">
+      <UniqueIdentifier>{b11e4989-9b3b-46ee-b54d-a11a423358fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uCOS-II">
+      <UniqueIdentifier>{29636e54-b2fe-44d0-aa7d-4078feec596e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uCOS_II-Port">
+      <UniqueIdentifier>{8a418201-9b57-481e-aa0b-2a7035b5f576}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI">
+      <UniqueIdentifier>{4961b6df-35d6-4355-9be1-2aac325ed9f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\Application">
+      <UniqueIdentifier>{4ef32fd4-87dd-4b92-a42c-98128d8541e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\config">
+      <UniqueIdentifier>{6b7d2d04-18d1-4c2c-b13b-f1b5aab77149}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\GUI">
+      <UniqueIdentifier>{46093a84-7638-417b-8623-1a59e843e170}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\GUI\Font">
+      <UniqueIdentifier>{71e50ac3-1317-4aa1-85e4-0a7b0cfca796}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\GUI\Core">
+      <UniqueIdentifier>{f83760ab-2ead-43ee-a27a-60265bcd87b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\GUI\WM">
+      <UniqueIdentifier>{5d16a5e7-b6ef-4517-bb62-8dc065b6086b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\GUI\Widget">
+      <UniqueIdentifier>{e4d90de9-40ab-435d-bdb2-c1514cae5a74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\System">
+      <UniqueIdentifier>{b43457e8-d5d0-478a-ac1a-3df99c5a4421}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\System\Simulation">
+      <UniqueIdentifier>{b24586c3-cb1c-48b9-85f7-01e2986acc55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\GUI\LCDDriver">
+      <UniqueIdentifier>{7b9bbbab-eae5-4b29-80b4-e3cdd457d930}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\GUI\MemDev">
+      <UniqueIdentifier>{21aa726e-e7ec-41af-9f5f-94db4564d905}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\GUI\ConvertColor">
+      <UniqueIdentifier>{74433198-2b37-4968-a176-5aece9a60522}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\GUI\MultiLayer">
+      <UniqueIdentifier>{0e8ddeb8-dc54-4167-931a-0db78ba7bc87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\GUI\AntiAlias">
+      <UniqueIdentifier>{7c3d4e89-f98d-48fd-9904-a74efa7c6a1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\Application\GUIDemo">
+      <UniqueIdentifier>{30e025f5-2b20-4fa9-9791-6c5b126d822b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\System\SDLDislpayEmulator">
+      <UniqueIdentifier>{dd04ca64-7ec7-482b-88bd-1e2abff5fcd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\Application\res">
+      <UniqueIdentifier>{52cdb182-5b4a-4234-8edc-f7c7b5c42516}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\Application\res\magellan">
+      <UniqueIdentifier>{a4a1a40b-fbc7-41e4-9524-2171dbc01c81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\Application\example">
+      <UniqueIdentifier>{d4a9edb0-9e09-4cc6-af78-d9d2237374e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uC-GUI\Application\res\font">
+      <UniqueIdentifier>{234cd1ce-825a-404b-9c7b-24d40eed9e24}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
