@@ -30,11 +30,21 @@
 
 spVOIDt Initialize_UART(spVOIDt)
 {
+    ///PORTC = 0;
+    ///PORTCbits.RC6 = 0;
+    ///PORTCbits.RC7 = 0;
+
+    LATC = 0;
+    LATCbits.LATC6 = 0;
+    LATCbits.LATC7 = 0;
+
     TXSTA = 0b00100100;     /* 8bits, Tx enable, Async mode, high speed, */
+    TXSTA1 = 0b00100100;     /* 8bits, Tx enable, Async mode, high speed, */
     ///TXSTAbits.BRGH = 1;     /* bit 2 */
     ///TXSTAbits.SYNC = 0;     /* bit 4 */
     ///TXSTAbits.TXEN = 1;     /* bit 5 */
     RCSTA = 0b10010000;     /* serial port, 8bits, signle recv, Rx enable, non-Addr, */
+    RCSTA1 = 0b10010000;     /* serial port, 8bits, signle recv, Rx enable, non-Addr, */
     ///RCSTAbits.CREN = 1;     /* bit 4 */
     ///RCSTAbits.SPEN = 1;     /* bit 7 */
     ///RCSTAbits.SREN = 0;     /* bit 5 */
@@ -42,6 +52,7 @@ spVOIDt Initialize_UART(spVOIDt)
 
     ///BRG16 = 0;              //
     BAUDCONbits.BRG16 = 0;  /* */
+    BAUDCON1bits.BRG16 = 0;  /* */
     /*
      *  SYNC=0, BRGH=1, BRG16=0,
      *  formulas => Fosc/[16(n+1)]
@@ -49,7 +60,9 @@ spVOIDt Initialize_UART(spVOIDt)
      */
 #if UART_USE_9600
     SPBRGH = 0;
+    SPBRGH1 = 0;
     SPBRG = 162;           /* 9600, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
+    SPBRG1 = 162;           /* 9600, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
 #endif
 #if UART_USE_19200
     SPBRGH = 0;
@@ -64,11 +77,12 @@ spVOIDt Initialize_UART(spVOIDt)
     SPBRG = 13;             /* 115200, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
 #endif
 
+    RCONbits.IPEN = 0;
     INTCON = 0;
     PIE1 = 0;
     PIR1 = 0;
 
-    INTCONbits.PEIE = 1;
+    ///INTCONbits.PEIE = 1;
     ///INTCONbits.INTE = 1;
     INTCONbits.INT0E = 1;
     PIE1bits.RCIE = 1;          /* enable Rx interrupt */
@@ -76,9 +90,10 @@ spVOIDt Initialize_UART(spVOIDt)
     PIR1bits.RCIF = 0;          /* clear pending */
 
     ///TRISC6 = 0; // TXD
-    TRISCbits.TRISC6 = 0;       /* Tx: RC6 */
+    TRISCbits.TRISC6 = 0;       /* output, Tx: RC6 */
     ///TRISC7 = 1; // RXD
-    TRISCbits.TRISC7 = 1;       /* Rx: RC7 */
+    TRISCbits.TRISC7 = 1;       /* input, Rx: RC7 */
+
 
     ///INTCONbits.GIE = 1;
 }

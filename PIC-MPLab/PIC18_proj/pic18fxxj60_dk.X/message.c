@@ -41,13 +41,20 @@ extern spCHARt                  g_str[GLOBLE_STR_SIZE];
 
 
 
-#if 0
+#if 1
 spVOIDt Uart_Tx_Char(spCHARt ii)
 {
+#if 0
     while( 0 == TXSTAbits.TRMT ) /* check if shift reg full or not */
         ;
-
+    
     TXREG = ii;
+#else
+    while( 0 == TXSTA1bits.TRMT ) /* check if shift reg full or not */
+        ;
+
+    TXREG1 = ii;
+#endif
 }
 
 spVOIDt Uart_Tx_String(spCHARt* pString, DbgStrFlag flag )

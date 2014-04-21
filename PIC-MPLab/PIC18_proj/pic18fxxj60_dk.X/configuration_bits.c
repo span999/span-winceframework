@@ -63,8 +63,10 @@
 #pragma config CP0 = OFF        // Code Protection bit (Program memory is not code-protected)
 
 // CONFIG2L
-#pragma config FOSC = EC        // Oscillator Selection bits (EC oscillator, CLKO function on OSC2)
-#pragma config FOSC2 = OFF      // Default/Reset System Clock Select bit (INTRC enabled as system clock when OSCCON<1:0> = 00)
+///#pragma config FOSC = EC        // Oscillator Selection bits (EC oscillator, CLKO function on OSC2)
+///#pragma config FOSC2 = OFF      // Default/Reset System Clock Select bit (INTRC enabled as system clock when OSCCON<1:0> = 00)
+#pragma config FOSC = HSPLL     // Oscillator Selection bits (HS oscillator, PLL enabled and under software control)
+#pragma config FOSC2 = ON       // Default/Reset System Clock Select bit (Clock selected by FOSC1:FOSC0 as system clock is enabled when OSCCON<1:0> = 00)
 #pragma config FCMEN = ON       // Fail-Safe Clock Monitor Enable (Fail-Safe Clock Monitor enabled)
 #pragma config IESO = OFF       // Two-Speed Start-up (Internal/External Oscillator Switchover) Control bit (Two-Speed Start-up disabled)
 
