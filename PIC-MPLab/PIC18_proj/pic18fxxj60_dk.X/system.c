@@ -27,11 +27,16 @@ void ConfigureOscillator(void)
     /* TODO Add clock switching code if appropriate.  */
     OSCCON = 0b10001011;
     OSCCONbits.IDLEN = 1;
-    OSCCONbits.OSTS = 1;
-    OSCCONbits.SCS = 0b11;
+    ///OSCCONbits.OSTS = 1;
+    OSCCONbits.OSTS = 0;
+    ///OSCCONbits.SCS = 0b11;
+    ///OSCCONbits.SCS = 0b00;
+    OSCCONbits.SCS = 0b10;
 
     OSCTUNE = 0b00000000;
     OSCTUNEbits.PLLEN = 1;
+    OSCTUNEbits.PLLEN = 0;
+    OSCTUNEbits.PPST0 = 0;
 
 
     /* Typical actions in this function are to tweak the oscillator tuning
@@ -40,25 +45,24 @@ void ConfigureOscillator(void)
 }
 
 
-static spVOIDt __delay(spVOIDt)
+#define _XTAL_FREQ (25000000U)
+
+#if 1
+static spVOIDt __1ms_delay(spVOIDt)
 {
-    spUINT16t iLoop1 = 250;
-    spUINT16t iLoop2 = 100;
-
-    while( 0 < iLoop1 ) {
-        iLoop1--;
-        while( 0 < iLoop2 ) {
-            iLoop2--;
-            _delay(1);
-        }
-    }
+    _delay((spUINT32t)(_XTAL_FREQ/4000.0));
 }
-
 
 spVOIDt MSdelay(spUINT16t ms)
 {
     while( 0 < ms ) {
         ms--;
-        _delay(1);
+        __1ms_delay();
     }
 }
+#else
+spVOIDt MSdelay(spUINT16t ms)
+{
+    _delay( (spUINT32t)((_XTAL_FREQ/4000.0)*(ms)) );
+}
+#endif
