@@ -274,6 +274,7 @@ spVOIDt Welcome_Msg(spVOIDt)
     Uart_Tx_String((spCHARt*)welcomeSTRs, DF_CRLF);
     Uart_Tx_String((spCHARt*)welcomeSTR_, DF_CRLF);
     Uart_Tx_String((spCHARt*)welcomeSTRt, DF_CRLF);
+#if 1
     Uart_Tx_String((spCHARt*)welcomeSTRH, DF_CRLF);
     Uart_Tx_String((spCHARt*)welcomeSTRs, DF_CRLF);
     Uart_Tx_String((spCHARt*)helpSTR1, DF_CRLF);
@@ -285,7 +286,9 @@ spVOIDt Welcome_Msg(spVOIDt)
     Uart_Tx_String(g_str, DF_CRLF);
     sprintf( g_str, "                 %s-%s", __DATE__, __TIME__ );
     Uart_Tx_String(g_str, DF_CRLF);
+#endif
     Uart_Tx_String((spCHARt*)welcomeSTRt, DF_CRLF);
     Uart_Tx_String((spCHARt*)welcomeSTR_, DF_CRLF);
     Uart_Tx_String((spCHARt*)welcomeSTRs, DF_CRLF);
+
 }

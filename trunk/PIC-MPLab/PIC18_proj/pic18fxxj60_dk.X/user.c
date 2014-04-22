@@ -38,6 +38,14 @@ spVOIDt Initialize_UART(spVOIDt)
     LATCbits.LATC6 = 0;
     LATCbits.LATC7 = 0;
 
+    ///BRG16 = 0;              //
+    BAUDCONbits.BRG16 = 0;  /* */
+    BAUDCON1bits.BRG16 = 0;  /* */
+
+    SPBRG = UART_BAUDRATE_SPBRG;        /* 9600, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
+    SPBRG1 = UART_BAUDRATE_SPBRG;       /* 9600, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
+
+
     TXSTA = 0b00100100;     /* 8bits, Tx enable, Async mode, high speed, */
     TXSTA1 = 0b00100100;     /* 8bits, Tx enable, Async mode, high speed, */
     ///TXSTAbits.BRGH = 1;     /* bit 2 */
@@ -50,32 +58,12 @@ spVOIDt Initialize_UART(spVOIDt)
     ///RCSTAbits.SREN = 0;     /* bit 5 */
     ///RCSTAbits.RX9 = 0;      /* bit 6 */
 
-    ///BRG16 = 0;              //
-    BAUDCONbits.BRG16 = 0;  /* */
-    BAUDCON1bits.BRG16 = 0;  /* */
     /*
      *  SYNC=0, BRGH=1, BRG16=0,
      *  formulas => Fosc/[16(n+1)]
      *  check table 21-1
      */
-#if UART_USE_9600
-    SPBRGH = 0;
-    SPBRGH1 = 0;
-    SPBRG = 162;           /* 9600, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
-    SPBRG1 = 162;           /* 9600, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
-#endif
-#if UART_USE_19200
-    SPBRGH = 0;
-    SPBRG = 80;            /* 19200, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
-#endif
-#if UART_USE_57600
-    SPBRGH = 0;
-    SPBRG = 26;            /* 57600, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
-#endif
-#if UART_USE_115200
-    SPBRGH = 0;
-    SPBRG = 13;             /* 115200, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
-#endif
+
 
     RCONbits.IPEN = 0;
     INTCON = 0;

@@ -31,22 +31,36 @@
 
 
 /* baudrate selection */
-#define         UART_USE_9600                   (1)
+#define         UART_USE_9600                   (0)
 #define         UART_USE_19200                  (0)
 #define         UART_USE_57600                  (0)
-#define         UART_USE_115200                 (0)
+#define         UART_USE_115200                 (1)
+#define         UART_USE_USER                   (0)
 
 #if UART_USE_9600
 #define         UART_BAUDRATE                   9600
+#define         UART_BAUDRATE_SPBRG             162         /* 9600, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
+#define         UART_BAUDRATE_SPBRGH            0
 #endif
 #if UART_USE_19200
 #define         UART_BAUDRATE                   19200
+#define         UART_BAUDRATE_SPBRG             80         /* 19200, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
+#define         UART_BAUDRATE_SPBRGH            0
 #endif
 #if UART_USE_57600
 #define         UART_BAUDRATE                   57600
+#define         UART_BAUDRATE_SPBRG             26         /* 57600, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
+#define         UART_BAUDRATE_SPBRGH            0
 #endif
 #if UART_USE_115200
 #define         UART_BAUDRATE                   115200
+#define         UART_BAUDRATE_SPBRG             13         /* 9600, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
+#define         UART_BAUDRATE_SPBRGH            0
+#endif
+#if UART_USE_USER
+#define         UART_BAUDRATE                   0
+#define         UART_BAUDRATE_SPBRG             162         /* 9600, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
+#define         UART_BAUDRATE_SPBRGH            0
 #endif
 
 

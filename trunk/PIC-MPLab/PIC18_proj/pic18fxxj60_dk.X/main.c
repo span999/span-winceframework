@@ -17,6 +17,9 @@
 #include <stdbool.h>       /* For true/false definition */
 
 #endif
+#include <string.h>         /* for memset() ... */
+#include <stdarg.h>         /* for ... */
+#include <stdio.h>          /* for vsprintf() */
 
 
 #include "sp_userdef.h"
@@ -43,6 +46,8 @@ spCHARt                  g_str[GLOBLE_STR_SIZE];
 
 spVOIDt main(spVOIDt)
 {
+    spUINT16t uCounter = 0;
+
     /* Configure the oscillator for the device */
     ConfigureOscillator();
 
@@ -61,11 +66,14 @@ spVOIDt main(spVOIDt)
     while(1)
     {
         LCM_Char();
-        ///Welcome_Msg();
+        ///Uart_Tx_String((spCHARt*)"*", DF_CRLF);
+        sprintf( g_str, "%05u", uCounter );
+        Uart_Tx_String(g_str, DF_CR);
         LED1 = !LED1;
         ///LED2 = !LED2;
         ///__delay();
         MSdelay(500);
+        uCounter++;
     }
 
 }
