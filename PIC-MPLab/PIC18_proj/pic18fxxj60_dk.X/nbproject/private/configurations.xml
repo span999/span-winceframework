@@ -58,7 +58,7 @@
       </runprofile>
     </conf>
     <conf name="XC8_18F67J60" type="2">
-      <platformToolSN>:=MPLABCommUSB:=04D8:=0033:=0002:=Microchip Technology Inc.:=PICkit 2 Microcontroller Programmer:=OlHoss:=x:=h:=en</platformToolSN>
+      <platformToolSN>:=MPLABCommUSB:=04D8:=9009:=0100:=Microchip Technology, Inc. (www.microchip.com):=MPLAB ICD3 tm (www.microchip.com):=JIT100730011:=x:=b:=en</platformToolSN>
       <languageToolchainDir>C:\Program Files\Microchip\xc8\v1.30\bin</languageToolchainDir>
       <mdbdebugger version="1">
         <placeholder1>place holder 1</placeholder1>
