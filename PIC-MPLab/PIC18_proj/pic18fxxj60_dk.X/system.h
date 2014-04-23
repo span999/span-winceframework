@@ -19,3 +19,4 @@ go here. */
 void ConfigureOscillator(void); /* Handles clock switching/osc initialization */
 
 spVOIDt MSdelay(spUINT16t ms);
+spVOIDt USdelay(spUINT16t us);

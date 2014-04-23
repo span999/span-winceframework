@@ -53,11 +53,24 @@ static spVOIDt __1ms_delay(spVOIDt)
     _delay((spUINT32t)(_XTAL_FREQ/4000.0));
 }
 
+static spVOIDt __1us_delay(spVOIDt)
+{
+    _delay((spUINT32t)(_XTAL_FREQ/4000000.0));
+}
+
 spVOIDt MSdelay(spUINT16t ms)
 {
     while( 0 < ms ) {
         ms--;
         __1ms_delay();
+    }
+}
+
+spVOIDt USdelay(spUINT16t us)
+{
+    while( 0 < us ) {
+        us--;
+        __1us_delay();
     }
 }
 #else
