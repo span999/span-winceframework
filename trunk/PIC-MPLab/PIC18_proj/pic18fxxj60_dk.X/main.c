@@ -65,10 +65,12 @@ spVOIDt main(spVOIDt)
 
     while(1)
     {
-        LCM_Char();
-        ///Uart_Tx_String((spCHARt*)"*", DF_CRLF);
+        ///LCM_Char((spUINT8t)(uCounter&0x007F));
+
         sprintf( g_str, "%05u", uCounter );
         Uart_Tx_String(g_str, DF_CR);
+        LCM_String(g_str);
+        cmdLCM_CR
         LED1 = !LED1;
         ///LED2 = !LED2;
         ///__delay();

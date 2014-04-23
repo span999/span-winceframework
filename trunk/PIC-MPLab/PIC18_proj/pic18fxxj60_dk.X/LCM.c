@@ -101,10 +101,10 @@ spVOIDt LCM_Init(spVOIDt)
 {
 
     MSdelay(200);
-    MSdelay(15);
 
     /*
     reference of LCM JHD 162A
+    7x5 16 char 2 line
     http://www.8051projects.net/lcd-interfacing/lcd-4-bit.php
     http://www.geocities.com/dinceraydin/lcd/commands.htm
     */
@@ -141,32 +141,42 @@ spVOIDt LCM_Init(spVOIDt)
     ///LCM_Send_Byte(0x80);
 
 
-#if 0
-    LCM_Send_Nibble(0x02);
-
-    LCM_Send_Byte(0x28);
-
-    LCM_Send_Byte(0x01);
-
-    LCM_Send_Byte(0x06);
-
-    LCM_Send_Byte(0x08);
-
-    LCM_Send_Byte(0x0F);
-#endif
-
     MSdelay(200);
 }
 
-spVOIDt LCM_Char(spVOIDt)
+spVOIDt LCM_Cmd(spUINT8t cmd)
 {
+    LCM_RS = 0;     /* LCM, RS */
+    LCM_WR = 0;     /* LCM, WR */
+    LCM_EN = 0;     /* LCM, E */
+
+    LCM_Send_Byte(cmd);        /* return home */
+}
+
+
+spVOIDt LCM_Char(spUINT8t ch)
+{
+    static spUINT8t chCounter = 0;
+
     LCM_RS = 1;     /* LCM, RS */
     LCM_WR = 0;     /* LCM, WR */
     LCM_EN = 0;     /* LCM, E */
 
-    LCM_Send_Byte(0x61);    /* 'a' */
+    LCM_Send_Byte(ch);    /*  */
+    chCounter++;
 
+    if( chCounter >= 16 ) {
+        /* Carrier Rrturn */
+        LCM_Cmd(0x02);
+        chCounter = 0;
+    }
 }
 
 
-
+spVOIDt LCM_String(spUINT8t* pString)
+{
+    while( '\0' != *pString ) {
+        LCM_Char(*pString);
+        pString++;
+    }
+}
