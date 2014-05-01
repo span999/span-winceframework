@@ -13,9 +13,16 @@
 #if defined(__XC) || defined(HI_TECH_C)
 
 #include <stdint.h>         /* For uint8_t definition */
-#include <stdbool.h>        /* For true/false definition */
+#include <stdbool.h>
+
+#include "sp_userdef.h"        /* For true/false definition */
 
 #endif
+
+
+extern struct spSysCnt          g_SystemCounter;
+
+
 
 /******************************************************************************/
 /* Interrupt Routines                                                         */
@@ -60,6 +67,35 @@ void high_isr(void)
 
 #endif
 
+    if( 1 == INTCONbits.TMR0IF ) {
+        ///INTCONbits.TMR0IE = 0;              /* disable Timer0 interrupt */
+        INTCONbits.TMR0IF = 0;              /* clear pending flag */
+#ifdef __TMR0_USE_8BIT__   /* 8-bit */
+        TMR0 = 0xE6;                    /* 25 tick = 160ns x 25 = 40us */
+
+        g_SystemCounter.Tmr0Cnt++;
+        if( g_SystemCounter.Tmr0Cnt >= 25 ) {
+            g_SystemCounter.MsCnt++;        /* 1ms */
+            g_SystemCounter.Tmr0Cnt = 0;
+        }
+        if( g_SystemCounter.MsCnt >= 1000 ) {
+            g_SystemCounter.SecCnt++;       /* 1sec */
+            g_SystemCounter.MsCnt = 0;
+        }
+#else   /* 16-bit */
+        TMR0L = 0x95;                       /* 6250 tick = 160ns x 6250 = 1ms */
+        TMR0H = 0xE7;
+        g_SystemCounter.Tmr0Cnt++;
+        g_SystemCounter.MsCnt++;        /* 1ms */
+
+        if( g_SystemCounter.MsCnt >= 1000 ) {
+            g_SystemCounter.SecCnt++;       /* 1sec */
+            g_SystemCounter.MsCnt = 0;
+        }
+#endif
+        ///INTCONbits.TMR0IE = 1;              /* enable Timer0 interrupt */
+    }
+
 }
 
 /* Low-priority interrupt routine */
@@ -98,5 +134,6 @@ void low_isr(void)
       }
 
 #endif
+
 
 }
