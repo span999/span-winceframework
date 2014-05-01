@@ -35,6 +35,13 @@
 
 /* i.e. uint8_t <variable_name>; */
 spCHARt                  g_str[GLOBLE_STR_SIZE];
+struct spSysCnt          g_SystemCounter;
+
+
+
+spVOIDt LED_flash(spVOIDt *pParam);
+
+
 
 
 
@@ -67,16 +74,30 @@ spVOIDt main(spVOIDt)
     {
         ///LCM_Char((spUINT8t)(uCounter&0x007F));
 
-        sprintf( g_str, "%05u", uCounter );
+        sprintf( g_str, "[%05u][%05u.%03u]", uCounter, g_SystemCounter.SecCnt, g_SystemCounter.MsCnt );
         Uart_Tx_String(g_str, DF_CR);
-        LCM_String(g_str);
-        cmdLCM_CR
-        LED1 = !LED1;
-        ///LED2 = !LED2;
-        ///__delay();
-        MSdelay(500);
+        ///Uart_Tx_String(g_str, DF_CRLF);
+
+        ///LCM_String(g_str);
+        ///cmdLCM_CR
+
+        LED_flash(0);
+
         uCounter++;
     }
 
 }
 
+
+spVOIDt LED_flash(spVOIDt *pParam)
+{
+    static spUINT16t MsDelay = 0;
+
+    if( MsDelay <= g_SystemCounter.Tmr0Cnt ) {
+        LED1 = !LED1;
+        ///LED2 = !LED2;
+        ///__delay();
+        ///MSdelay(500);
+        MsDelay = g_SystemCounter.Tmr0Cnt + 500;
+    }
+}

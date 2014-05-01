@@ -53,7 +53,7 @@
 #define         UART_BAUDRATE_SPBRGH            0
 #endif
 #if UART_USE_115200
-#define         UART_BAUDRATE                   115200
+#define         UART_BAUDRATE                   11520
 #define         UART_BAUDRATE_SPBRG             13         /* 9600, FOSC = 25Mhz, SPBRG = (Fosc/Baud_Rate/16)-1 */
 #define         UART_BAUDRATE_SPBRGH            0
 #endif
@@ -105,7 +105,15 @@ typedef enum {
 
 
 
+struct  spSysCnt
+{
+    spUINT16t               Tmr0Cnt;
+    spUINT16t               MsCnt;
+    spUINT16t               SecCnt;
+};
 
+
+///#define         __TMR0_USE_8BIT__
 
 
 #define         LCM_RS                          LATDbits.LATD0

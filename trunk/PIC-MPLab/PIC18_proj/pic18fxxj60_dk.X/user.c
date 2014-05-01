@@ -28,7 +28,29 @@
 /* <Initialize variables in user.h and insert code for user algorithms.> */
 
 
-spVOIDt Initialize_UART(spVOIDt)
+static spVOIDt Initialize_Timer0(spVOIDt)
+{
+    TMR0L = 0;
+    TMR0H = 0;
+    ///TMR0 = 0;
+
+    T0CONbits.T0CS = 0;                 /* Fosc/4 =6.25MHz , 160ns tick */
+    T0CONbits.PSA = 1;                  /* no pre-scaleer */
+#ifdef  __TMR0_USE_8BIT__
+    T0CONbits.T08BIT = 1;               /* 8-bits */
+#else
+    T0CONbits.T08BIT = 0;               /* 16-bits */
+#endif
+    T0CONbits.TMR0ON = 1;               /* Timer0 ON */
+
+    INTCONbits.TMR0IE = 1;              /* enable Timer0 interrupt */
+    INTCONbits.PEIE = 1;                /* enable pheriphial interrupt */
+    INTCONbits.GIE = 1;                 /* enable globle interrupt */
+}
+
+
+
+static spVOIDt Initialize_UART(spVOIDt)
 {
     ///PORTC = 0;
     ///PORTCbits.RC6 = 0;
@@ -132,6 +154,8 @@ void InitApp(void)
 
     /* Initialize peripherals */
     Initialize_UART();
+
+    Initialize_Timer0();
     
     /* Configure the IPEN bit (1=on) in RCON to turn on/off int priorities */
 
