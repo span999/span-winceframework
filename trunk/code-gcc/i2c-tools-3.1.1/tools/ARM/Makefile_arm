@@ -1,0 +1,123 @@
+#
+#
+#
+
+TOOLCHAINPATH=/home/span/workshop/bin/toolchains
+TIMESYSCCPATH=armv7l-gnueabi-463/bin
+FSLCCPATH=freescale/gcc-4.4.4-glibc-2.11.1-multilib-1.0/arm-fsl-linux-gnueabi/bin
+
+CC	= ${TOOLCHAINPATH}/${FSLCCPATH}/arm-fsl-linux-gnueabi-gcc
+AR	= ${TOOLCHAINPATH}/${FSLCCPATH}/arm-fsl-linux-gnueabi-ar
+#CC	= ${TOOLCHAINPATH}/${TIMESYSCCPATH}/armv7l-timesys-linux-gnueabi-gcc
+#AR	= ${TOOLCHAINPATH}/${TIMESYSCCPATH}/armv7l-timesys-linux-gnueabi-ar
+
+
+DEFINES =
+CFLAGS	= -O2 -I. -L. ${DEFINES} -D__ARM_CODE__
+
+
+PROGRAM	= cpuusage
+DYNLIB  = libtest.so
+###STATIC1LIB = libcpuutil.a
+###STATIC1NAME = cpuutil
+STATIC1NAME = util
+STATIC1LIB = lib${STATIC1NAME}.a
+###STATIC2LIB = libframebuffer.a
+###STATIC2NAME = framebuffer
+STATIC2NAME = i2cbusses
+STATIC2LIB = lib${STATIC2NAME}.a
+STATIC3LIB = libfonts.a
+STATIC3NAME = fonts
+STATIC4LIB = libbattutil.a
+STATIC4NAME = battutil
+PROGRAM1 = i2cset
+PROGRAM2 = i2cget
+PROGRAM3 = i2cdump
+PROGRAM4 = i2cdetect
+
+all: clean PROGRAM PROGRAM1 PROGRAM2 PROGRAM3 PROGRAM4
+
+
+STATIC1LIB:
+	@echo 
+	@echo ================================================================
+	@echo build static ${STATIC1LIB} library
+	@echo ----------------------------------------------------------------
+	${CC} ${CFLAGS} -c ../${STATIC1NAME}.c
+	${AR} rcs ${STATIC1LIB} ${STATIC1NAME}.o
+
+STATIC2LIB:
+	@echo 
+	@echo ================================================================
+	@echo build static ${STATIC2LIB} library
+	@echo ----------------------------------------------------------------
+	${CC} ${CFLAGS} -I../../include -c ../${STATIC2NAME}.c
+	${AR} rcs ${STATIC2LIB} ${STATIC2NAME}.o
+
+STATIC3LIB:
+	@echo 
+	@echo ================================================================
+	@echo build static ${STATIC3LIB} library
+	@echo ----------------------------------------------------------------
+	${CC} ${CFLAGS} -c ../${STATIC3NAME}.c
+	${AR} rcs ${STATIC3LIB} ${STATIC3NAME}.o
+
+STATIC4LIB:
+	@echo 
+	@echo ================================================================
+	@echo build static ${STATIC4LIB} library
+	@echo ----------------------------------------------------------------
+	${CC} ${CFLAGS} -c ../${STATIC4NAME}.c
+	${AR} rcs ${STATIC4LIB} ${STATIC4NAME}.o
+
+DYNLIB:
+	@echo 
+	@echo ================================================================
+	@echo build dynamic library
+	@echo ----------------------------------------------------------------
+	${CC} ../so_test.c -fPIC -shared -o ${DYNLIB}
+
+###PROGRAM: STATIC1LIB STATIC2LIB STATIC3LIB STATIC4LIB
+PROGRAM: STATIC1LIB STATIC2LIB
+	@echo 
+	@echo ================================================================
+	@echo build ${PROGRAM} binary.
+	@echo ----------------------------------------------------------------
+###	${CC} ../main.c ${CFLAGS} -o ${PROGRAM} -lpthread -L. -l${STATIC1NAME} -l${STATIC2NAME} -l${STATIC3NAME} -l${STATIC4NAME}
+#	${CC} ../main.c ../${STATIC1NAME}.c ${CFLAGS} -o ${PROGRAM} -lpthread
+
+PROGRAM1:
+	@echo 
+	@echo ================================================================
+	@echo build ${PROGRAM1} binary.
+	@echo ----------------------------------------------------------------
+	${CC} ../${PROGRAM1}.c ${CFLAGS} -o ${PROGRAM1} -lpthread -I../../include -L. -l${STATIC1NAME} -l${STATIC2NAME}
+
+PROGRAM2:
+	@echo 
+	@echo ================================================================
+	@echo build ${PROGRAM2} binary.
+	@echo ----------------------------------------------------------------
+	${CC} ../${PROGRAM2}.c ${CFLAGS} -o ${PROGRAM2} -lpthread -I../../include -L. -l${STATIC1NAME} -l${STATIC2NAME}
+
+PROGRAM3:
+	@echo 
+	@echo ================================================================
+	@echo build ${PROGRAM3} binary.
+	@echo ----------------------------------------------------------------
+	${CC} ../${PROGRAM3}.c ${CFLAGS} -o ${PROGRAM3} -lpthread -I../../include -L. -l${STATIC1NAME} -l${STATIC2NAME}
+
+PROGRAM4:
+	@echo 
+	@echo ================================================================
+	@echo build ${PROGRAM4} binary.
+	@echo ----------------------------------------------------------------
+	${CC} ../${PROGRAM4}.c ${CFLAGS} -o ${PROGRAM4} -lpthread -I../../include -L. -l${STATIC1NAME} -l${STATIC2NAME}
+
+
+clean:
+	@echo 
+	@echo ================================================================
+	@echo Erasing objects and backup files.
+	@echo ----------------------------------------------------------------
+	rm -f ${PROGRAM} *.so *.o *.a
