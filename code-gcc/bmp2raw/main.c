@@ -45,9 +45,9 @@ int main( int argc, char *argv[] ) {
 	
 	lbheader hbmp;
 	struct{
-		unsigned char r:5;
-		unsigned char g:6;
-		unsigned char b:5;
+		unsigned short r:5;
+		unsigned short g:6;
+		unsigned short b:5;
 	} rgb16;
 
 	unsigned char rgb24[3];
