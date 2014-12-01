@@ -42,6 +42,8 @@ int main( int argc, char *argv[] ) {
 	FILE * pFileIn;
 	FILE * pFileOut;
 	size_t result;
+	unsigned int img565Size = 0;
+	unsigned int uiCnt = 0;
 	
 	lbheader hbmp;
 	struct{
@@ -51,7 +53,8 @@ int main( int argc, char *argv[] ) {
 	} rgb16;
 
 	unsigned char rgb24[3];
-
+	unsigned short *pRGB565 = NULL;
+	unsigned short *pRGBline = NULL;
 
 	_SPMSG(dINIT, "%s:%s ++\r\n", _MSGHEAD_, __func__);
 
@@ -71,9 +74,9 @@ int main( int argc, char *argv[] ) {
 	}
 /*
 	// obtain file size:
-	fseek (pFile , 0 , SEEK_END);
-	lSize = ftell (pFile);
-	rewind (pFile);
+	fseek( pFileIn, 0, SEEK_END );
+	lSize = ftell( pFile );
+	rewind( pFile );
 */
 
 	result = fread( &hbmp, sizeof(lbheader), 1, pFileIn );
@@ -82,6 +85,7 @@ int main( int argc, char *argv[] ) {
 		iRet = -3;
 		goto _EXIT;
 	}
+	img565Size = hbmp.width*hbmp.height*2;
 
 	printf("]]] BMP header::\n" );
 	printf("]]] identifier=0x%04X[%c%c]\n", hbmp.identifier, hbmp.identifier>>8, hbmp.identifier );
@@ -97,6 +101,7 @@ int main( int argc, char *argv[] ) {
 	printf("]]] vresolution=%d\n", hbmp.vresolution );
 	printf("]]] usedcolors=%d\n", hbmp.usedcolors );
 	printf("]]] palette=%d\n", hbmp.palette );
+	printf("]]] 565 Image use=%d bytes\n", img565Size );
 
 	pFileOut = fopen ( argv[2] , "wb" );
 	if( pFileOut == NULL ) {
@@ -108,12 +113,59 @@ int main( int argc, char *argv[] ) {
 	rewind( pFileIn );
 	fseek( pFileIn, hbmp.bitmap_dataoffset, SEEK_SET);
 
+#if 0
 	while( fread( rgb24, 1, 3, pFileIn ) ) {
-		rgb16.r = rgb24[2]>>3;
+		rgb16.b = rgb24[2]>>3;
 		rgb16.g = rgb24[1]>>2;
-		rgb16.b = rgb24[0]>>3;
+		rgb16.r = rgb24[0]>>3;
 		fwrite( &rgb16, 1, 2, pFileOut );
 	}	///while
+#else
+	pRGB565 = (unsigned short *)malloc( img565Size );
+	pRGBline = (unsigned short *)malloc( (hbmp.width*2) );
+	if( pRGB565 && pRGBline ) {
+		unsigned int uiCnt2 = 0;
+
+		///switch line order
+		uiCnt = 0;
+		while( uiCnt < hbmp.height ) {
+			uiCnt2 = 0;
+
+			while( fread( rgb24, 1, 3, pFileIn ) ) {
+				rgb16.b = rgb24[2]>>3;
+				rgb16.g = rgb24[1]>>2;
+				rgb16.r = rgb24[0]>>3;
+			
+				///*pRGB565 = (unsigned short)rgb16;	/// store to memory
+				///memcpy( pRGB565, &rgb16, 2 );	/// store to memory
+				///pRGB565++;
+				///printf("]]] Line %d, Pixel %d\n", uiCnt, uiCnt2 );
+				memcpy( (pRGBline + (hbmp.width-1-uiCnt2)), &rgb16, 2 );	/// store to memory
+				if( (hbmp.width-1) == uiCnt2 ) {
+					break;
+				} else {
+					uiCnt2++;
+				}
+				///fwrite( &rgb16, 1, 2, pFileOut );
+			}	///while
+			///printf("]]] Line %d\n", uiCnt );
+			/// copy line
+			memcpy( pRGB565, pRGBline, (hbmp.width*2) );
+			pRGB565 = pRGB565 + (hbmp.width);
+			uiCnt++;
+		}	///while
+
+		uiCnt = img565Size/2;
+		while( uiCnt > 0 ) {
+			fwrite( pRGB565, 2, 1, pFileOut );
+			pRGB565--;
+			uiCnt--;
+		}	///while
+	
+		free( pRGB565 );
+		free( pRGBline );
+	}	///if
+#endif
 
 _EXIT:
 	// terminate
