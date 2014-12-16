@@ -156,12 +156,14 @@ int main( int argc, char *argv[] ) {
 		}	///while
 
 		uiCnt = img565Size/2;
+		pRGB565 = pRGB565 - 1;	/* move back to last pixel */
 		while( uiCnt > 0 ) {
 			fwrite( pRGB565, 2, 1, pFileOut );
 			pRGB565--;
 			uiCnt--;
 		}	///while
 	
+		pRGB565++;				/* move back to first pixel */
 		free( pRGB565 );
 		free( pRGBline );
 	}	///if
