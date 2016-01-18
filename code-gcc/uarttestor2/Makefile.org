@@ -1,0 +1,15 @@
+
+ 
+all: serialport
+ 
+ 
+.PHONY: clean
+clean:
+	rm *.o
+	rm *.a
+	rm *.so
+	rm serialport
+
+ 
+serialport: serialport.c main.c
+    gcc -Wall -O3 serialport.c main.c -lm -o serialport
