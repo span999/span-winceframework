@@ -1,0 +1,25 @@
+
+OUT=uartestor2-arm
+CC=gcc
+GCC462=/home/span/workshop/bin/toolchains/freescale/gcc-4.6.2-glibc-2.13-linaro-multilib-2011.12
+CC=$(GCC462)/fsl-linaro-toolchain/bin/arm-fsl-linux-gnueabi-gcc
+AR=$(GCC462)/fsl-linaro-toolchain/bin/arm-fsl-linux-gnueabi-ar
+GCCLIBPATH=$(GCC462)/fsl-linaro-toolchain/lib/gcc/arm-fsl-linux-gnueabi/4.6.2
+GCCLIBA=$(GCCLIBPATH)/libgcc.a $(GCCLIBPATH)/libgcov.a $(GCCLIBPATH)/*.o
+
+
+
+build:
+	echo "build dynamic linked ........................................"
+	#$(CC) -O3 -o $(OUT) main.o serialport.o
+	echo "build static linked ........................................"
+	$(CC) -O3 -static -o receive-arm receive.c -D__ARM_ARCH__
+	$(CC) -O3 -static -o send-arm send.c -D__ARM_ARCH__
+
+all: build
+
+
+clean:
+	#rm *.a
+	#rm *.so
+	rm receive send receive-arm send-arm *.o
