@@ -1,0 +1,41 @@
+
+OUT=uartestor2-arm
+CC=gcc
+GCC462=/home/span/workshop/bin/toolchains/freescale/gcc-4.6.2-glibc-2.13-linaro-multilib-2011.12
+CC=$(GCC462)/fsl-linaro-toolchain/bin/arm-fsl-linux-gnueabi-gcc
+AR=$(GCC462)/fsl-linaro-toolchain/bin/arm-fsl-linux-gnueabi-ar
+GCCLIBPATH=$(GCC462)/fsl-linaro-toolchain/lib/gcc/arm-fsl-linux-gnueabi/4.6.2
+GCCLIBA=$(GCCLIBPATH)/libgcc.a $(GCCLIBPATH)/libgcov.a $(GCCLIBPATH)/*.o
+
+
+
+serialport.o:
+	$(CC) -c serialport.c
+	
+serialport.a:
+	$(CC) -v -Wall -fmessage-length=0 -c serialport.c $(GCCLIBA)
+	$(AR) -cvq libserialport.a serialport.o
+
+main.o:
+	$(CC) -c main.c
+
+main.a:
+	$(CC) -c main.c -static -static-libgcc -o myTest -L. -lserialport
+	
+build: main.o serialport.o
+	#$(CC) -Wall -L$(CURRPATH) -lshared -o myTest main.o staticlib.a libsIO-common.a
+	echo "build dynamic linked ........................................"
+	$(CC) -O3 -o $(OUT) main.o serialport.o
+	#$(CC) -v -Wall -fmessage-length=0 -o myTest2 main.c libserialport.a $(GCCLIBA)
+	echo "build static linked ........................................"
+	$(CC) -O3 -static -o $(OUT)2 main.c serialport.c
+
+all: build
+
+
+clean:
+	#rm *.a
+	rm *.o
+	#rm *.so
+	#rm myTest*
+	rm $(OUT)*
