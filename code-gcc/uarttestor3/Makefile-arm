@@ -15,6 +15,7 @@ build:
 	echo "build static linked ........................................"
 	$(CC) -O3 -static -o receive-arm receive.c -D__ARM_ARCH__
 	$(CC) -O3 -static -o send-arm send.c -D__ARM_ARCH__
+	$(CC) -O3 -static -o mpio-arm mpio.c -D__ARM_ARCH__
 
 all: build
 
@@ -22,4 +23,4 @@ all: build
 clean:
 	#rm *.a
 	#rm *.so
-	rm receive send receive-arm send-arm *.o
+	rm mpio-arm receive-arm send-arm *.o
