@@ -1,0 +1,30 @@
+#
+#
+#
+
+OUT=cpuusage-arm
+
+GCC462=/home/span/workshop/bin/toolchains/freescale/gcc-4.6.2-glibc-2.13-linaro-multilib-2011.12
+CC=$(GCC462)/fsl-linaro-toolchain/bin/arm-fsl-linux-gnueabi-gcc
+AR=$(GCC462)/fsl-linaro-toolchain/bin/arm-fsl-linux-gnueabi-ar
+GCCLIBPATH=$(GCC462)/fsl-linaro-toolchain/lib/gcc/arm-fsl-linux-gnueabi/4.6.2
+GCCLIBA=$(GCCLIBPATH)/libgcc.a $(GCCLIBPATH)/libgcov.a $(GCCLIBPATH)/*.o
+
+DEFINES =
+CFLAGS	= -O3 -I. -L. ${DEFINES} -D__ARM_CODE__
+
+
+build:
+	echo "build dynamic linked ........................................"
+	#$(CC) -O3 -o $(OUT) main.o serialport.o
+	echo "build static linked ........................................"
+	#$(CC) -O3 -static -o $(OUT)2 main.c serialport.c
+	${CC} ${CFLAGS} -static -o ${OUT}2 ../main.c ../battutil.c ../cpuutil.c ../fonts.c ../framebuffer.c -lpthread
+
+all: build
+
+
+clean:
+	rm *.o
+	rm $(OUT)*
+
